@@ -4,11 +4,15 @@ import com.fasterxml.jackson.core.Base64Variants;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.deser.DeserializerCache;
+import com.fasterxml.jackson.databind.ser.DefaultSerializerProvider;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 import org.rapidoid.RapidoidThing;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.Env;
+import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
 
 import java.io.OutputStream;
 import java.util.Map;
@@ -47,7 +51,11 @@ public class JSON extends RapidoidThing {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setBase64Variant(Base64Variants.MODIFIED_FOR_URL);
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		mapper.registerModule(new AfterburnerModule());
+
+		if (!Env.dev()) {
+			mapper.registerModule(new AfterburnerModule());
+		}
+
 		return mapper;
 	}
 
@@ -55,7 +63,10 @@ public class JSON extends RapidoidThing {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setBase64Variant(Base64Variants.MODIFIED_FOR_URL);
 		mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-		mapper.registerModule(new AfterburnerModule());
+
+		if (!Env.dev()) {
+			mapper.registerModule(new AfterburnerModule());
+		}
 
 		DefaultPrettyPrinter pp = new DefaultPrettyPrinter();
 		pp = pp.withObjectIndenter(new DefaultIndenter("  ", "\n"));
@@ -63,6 +74,30 @@ public class JSON extends RapidoidThing {
 		mapper.setDefaultPrettyPrinter(pp);
 
 		return mapper;
+	}
+
+	public static synchronized void reset() {
+		for (ObjectMapper mapper : U.list(MAPPER, PRETTY_MAPPER)) {
+
+			SerializerProvider serializerProvider = mapper.getSerializerProvider();
+
+			if (serializerProvider instanceof DefaultSerializerProvider) {
+				DefaultSerializerProvider provider = (DefaultSerializerProvider) serializerProvider;
+				provider.flushCachedSerializers();
+			} else {
+				Log.warn("Couldn't clear the cache of Jackson serializers!", "class", Cls.of(serializerProvider));
+			}
+
+			DeserializationContext deserializationContext = mapper.getDeserializationContext();
+			Object cache = Cls.getFieldValue(deserializationContext, "_cache");
+
+			if (cache instanceof DeserializerCache) {
+				DeserializerCache deserializerCache = (DeserializerCache) cache;
+				deserializerCache.flushCachedDeserializers();
+			} else {
+				Log.warn("Couldn't clear the cache of Jackson deserializers!", "class", Cls.of(cache));
+			}
+		}
 	}
 
 	public static String stringify(Object value) {

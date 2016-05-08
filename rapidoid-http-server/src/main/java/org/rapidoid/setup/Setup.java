@@ -536,6 +536,7 @@ public class Setup extends RapidoidThing implements Constants {
 		Conf.reload();
 		Res.reset();
 		Templates.reset();
+		JSON.reset();
 
 		for (Setup setup : instances()) {
 			setup.iocContext().reset();
