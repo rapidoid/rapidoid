@@ -1081,44 +1081,67 @@ i.btn-close:hover {
 }
 
 /***** Space-separated rows */
+.row-separated-pico>div {
+	margin-top: 2px !important;
+	padding-top: 2px !important;
+	margin-bottom: 2px !important;
+	padding-bottom: 2px !important;
+}
+
 .row-separated-nano>div {
 	margin-top: 5px !important;
 	padding-top: 5px !important;
+	margin-bottom: 5px !important;
+	padding-bottom: 5px !important;
 }
 
 .row-separated-micro>div {
 	margin-top: 10px !important;
 	padding-top: 10px !important;
+	margin-bottom: 10px !important;
+	padding-bottom: 10px !important;
 }
 
 .row-separated-mini>div {
 	margin-top: 15px !important;
 	padding-top: 15px !important;
+	margin-bottom: 15px !important;
+	padding-bottom: 15px !important;
 }
 
 .row-separated-small>div {
 	margin-top: 20px !important;
 	padding-top: 20px !important;
+	margin-bottom: 20px !important;
+	padding-bottom: 20px !important;
 }
 
 .row-separated>div {
-	margin-top: 35px !important;
-	padding-top: 35px !important;
+	margin-top: 25px !important;
+	padding-top: 25px !important;
+	margin-bottom: 25px !important;
+	padding-bottom: 25px !important;
 }
 
 .row-separated-large>div {
-	margin-top: 50px !important;
-	padding-top: 50px !important;
+	margin-top: 30px !important;
+	padding-top: 30px !important;
+	margin-bottom: 30px !important;
+	padding-bottom: 30px !important;
 }
 
 .row-separated-mega>div {
-	margin-top: 100px !important;
-	padding-top: 100px !important;
+	margin-top: 50px !important;
+	padding-top: 50px !important;
+	margin-bottom: 50px !important;
+	padding-bottom: 50px !important;
 }
 
 .row-separated-giga>div {
-	margin-top: 150px !important;
-	padding-top: 150px !important;
+	margin-top: 75px !important;
+	padding-top: 75px !important;
+	margin-bottom: 75px !important;
+	padding-bottom: 75px !important;
 }
 
 /***** Color-separated rows */
