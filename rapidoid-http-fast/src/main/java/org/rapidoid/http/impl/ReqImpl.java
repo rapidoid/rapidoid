@@ -62,7 +62,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	private volatile String query;
 
-	private volatile String segment = "main";
+	private volatile String segment;
 
 	private volatile String contextPath;
 

@@ -6,9 +6,9 @@ import org.rapidoid.buffer.Buf;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.MediaType;
-import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.BufRange;
 import org.rapidoid.data.BufRanges;
+import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.handler.HttpHandler;
 import org.rapidoid.http.impl.*;
@@ -146,12 +146,14 @@ public class FastHttp extends AbstractHttpProcessor {
 			String uri = xuri.str(buf);
 			String path = Msc.urlDecode(xpath.str(buf));
 			String query = Msc.urlDecode(xquery.str(buf));
-			String segment = "main";
+			String segment = null;
 
 			if (handler != null) {
 				contentType = handler.contentType();
 				segment = handler.options().segment();
 			}
+
+			segment = U.or(segment, "main");
 
 			params = Collections.synchronizedMap(params);
 			headers = Collections.synchronizedMap(headers);
