@@ -32,26 +32,39 @@ import org.rapidoid.u.U;
 @Since("2.3.0")
 public class VStream extends AbstractWidget<VStream> {
 
-	private Object template;
+	private volatile Object template;
 
-	private String dataUrl;
+	private volatile String dataUrl;
 
-	private int cols = 1;
+	private volatile int cols = 1;
+
+	private volatile String rowClass = "row-separated-mini row-stream";
 
 	@Override
 	protected Tag render() {
 		String url = U.or(dataUrl, defaultDataUrl());
 
-		Tag tmpla = div(div(template).attr("ng-if", "it()")).attr("ng-controller", "StreamItemController");
-		Tag columns = div(tmpla).class_("col-md-{{12 / cols}}").attr("ng-repeat", "colN in [] | rangex:0:cols");
-		Tag tmpl = div(columns).attr("ng-repeat", "rowN in items | rowCount:cols").class_("row row-separated-mini");
+		Tag tmpla = div(div(template).ng("if", "it()"))
+				.ng("controller", "StreamItemController");
 
-		Tag loading = GUI.row("Loading data...").attr("ng-show", "stream.busy");
+		Tag columns = div(tmpla)
+				.class_("col-md-{{12 / cols}}")
+				.ng("repeat", "colN in [] | rangex:0:cols");
+
+		Tag tmpl = div(columns)
+				.ng("repeat", "rowN in items | rowCount:cols")
+				.class_("row " + rowClass);
+
+		Tag loading = GUI.row("Loading data...")
+				.attr("ng-show", "stream.busy");
 
 		Tag scroll = infiniteScroll(tmpl, loading);
 
-		Tag stream = div(scroll).attr("ng-controller", "StreamController").attr("data-url", url)
-				.attr("ng-init", "cols = " + cols);
+		Tag stream = div(scroll)
+				.ng("controller", "StreamController")
+				.data("url", url)
+				.ng("init", "cols = " + cols);
+
 		return stream;
 	}
 
@@ -102,4 +115,12 @@ public class VStream extends AbstractWidget<VStream> {
 		return this;
 	}
 
+	public String rowClass() {
+		return rowClass;
+	}
+
+	public VStream rowClass(String rowClass) {
+		this.rowClass = rowClass;
+		return this;
+	}
 }
