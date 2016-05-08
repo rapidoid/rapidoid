@@ -197,7 +197,8 @@ $R = (function() {
 
     return {
             get : get,
-            post : post
+            post : post,
+            params : {}
     };
 
 })();

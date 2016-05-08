@@ -39,6 +39,12 @@ Rapidoid.initializer(function($scope) {
         var x = document.querySelectorAll("input,textarea");
 
         var inputs = {};
+
+        for (var p in $R.params) {
+            var param = $R.params[p];
+            inputs[p] = (typeof (param) == 'function') ? param() : param;
+        }
+
         for (var i = 0; i < x.length; i++) {
             var t = $(x[i]);
             var _h = t.attr('_h') || t.attr('name') || t.attr('id');
