@@ -557,6 +557,7 @@ org.rapidoid.util.MapEntry
 org.rapidoid.util.Msc
 org.rapidoid.util.MscInfo
 org.rapidoid.util.NullOutputStream
+org.rapidoid.util.Once
 org.rapidoid.util.RapidoidProcess
 org.rapidoid.util.Resetable
 org.rapidoid.util.Role

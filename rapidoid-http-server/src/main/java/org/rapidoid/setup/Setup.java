@@ -38,6 +38,7 @@ import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.MscInfo;
+import org.rapidoid.util.Once;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -124,9 +125,9 @@ public class Setup extends RapidoidThing implements Constants {
 	private volatile boolean activated;
 	private volatile boolean goodies = true;
 
-	private volatile boolean bootstrapedComponents;
-	private volatile boolean bootstrapedJPA;
-	private volatile boolean bootstrapedGoodies;
+	private final Once bootstrapedComponents = new Once();
+	private final Once bootstrapedJPA = new Once();
+	private final Once bootstrapedGoodies = new Once();
 
 	public static Setup create(String name) {
 		IoCContext ioc = IoC.createContext().name(name);
@@ -374,9 +375,9 @@ public class Setup extends RapidoidThing implements Constants {
 			MscInfo.isAdminActive = false;
 		}
 
-		bootstrapedJPA = false;
-		bootstrapedComponents = false;
-		bootstrapedGoodies = false;
+		bootstrapedJPA.reset();
+		bootstrapedComponents.reset();
+		bootstrapedGoodies.reset();
 	}
 
 	public Server server() {
@@ -452,10 +453,7 @@ public class Setup extends RapidoidThing implements Constants {
 	}
 
 	public Setup bootstrapJPA() {
-		if (bootstrapedJPA) {
-			return this;
-		}
-		bootstrapedJPA = true;
+		if (!bootstrapedJPA.go()) return this;
 
 		if (Msc.hasJPA()) {
 			JPA.bootstrap(path());
@@ -466,10 +464,7 @@ public class Setup extends RapidoidThing implements Constants {
 
 	@SuppressWarnings("unchecked")
 	public Setup bootstrapComponents() {
-		if (bootstrapedComponents) {
-			return this;
-		}
-		bootstrapedComponents = true;
+		if (!bootstrapedComponents.go()) return this;
 
 		List<Class<? extends Annotation>> annotated = U.list(Controller.class, Service.class, Main.class);
 
@@ -483,10 +478,7 @@ public class Setup extends RapidoidThing implements Constants {
 	}
 
 	public Setup bootstrapGoodies() {
-		if (bootstrapedGoodies) {
-			return this;
-		}
-		bootstrapedGoodies = true;
+		if (!bootstrapedGoodies.go()) return this;
 
 		Class<?> goodiesClass = Cls.getClassIfExists("org.rapidoid.goodies.RapidoidGoodiesModule");
 
@@ -613,9 +605,9 @@ public class Setup extends RapidoidThing implements Constants {
 	}
 
 	public void resetWithoutRestart() {
-		bootstrapedJPA = false;
-		bootstrapedComponents = false;
-		bootstrapedGoodies = false;
+		bootstrapedJPA.reset();
+		bootstrapedComponents.reset();
+		bootstrapedGoodies.reset();
 
 		ioCContext.reset();
 		http().resetConfig();

@@ -1,16 +1,14 @@
-package org.rapidoid.web;
+package org.rapidoid.util;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.Admin;
-import org.rapidoid.setup.On;
-import org.rapidoid.util.Msc;
-import org.rapidoid.util.Once;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /*
  * #%L
- * rapidoid-http-server
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -29,21 +27,21 @@ import org.rapidoid.util.Once;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.0.0")
-public class Rapidoid extends RapidoidThing {
+@Since("5.1.0")
+public class Once extends RapidoidThing {
 
-	private static final Once once = new Once();
+	private final AtomicBoolean done = new AtomicBoolean();
 
-	private Rapidoid() {
+	public boolean go() {
+		return !done.getAndSet(true);
 	}
 
-	public static synchronized void run(String... args) {
-		if (!once.go()) return;
+	public boolean isDone() {
+		return done.get();
+	}
 
-		On.bootstrap(args);
-		Admin.bootstrap(args);
-
-		Msc.logSection("Rapidoid bootstrap completed");
+	public void reset() {
+		done.set(false);
 	}
 
 }

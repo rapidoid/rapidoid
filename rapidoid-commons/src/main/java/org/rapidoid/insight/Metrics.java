@@ -9,6 +9,7 @@ import org.rapidoid.commons.TimeSeries;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Once;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
@@ -59,8 +60,11 @@ public class Metrics extends RapidoidThing implements Runnable {
 
 	private static volatile ThreadMXBean threads;
 
+	private static final Once once = new Once();
 
 	public static void bootstrap() {
+		if (!once.go()) return;
+
 		Log.info("Bootstraping metrics");
 
 		os = ManagementFactory.getOperatingSystemMXBean();
