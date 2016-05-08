@@ -551,6 +551,7 @@ org.rapidoid.util.CommonWords
 org.rapidoid.util.Constants
 org.rapidoid.util.D
 org.rapidoid.util.ErrCodeAndMsg
+org.rapidoid.util.Lorem
 org.rapidoid.util.MapEntry
 org.rapidoid.util.Msc
 org.rapidoid.util.NullOutputStream
