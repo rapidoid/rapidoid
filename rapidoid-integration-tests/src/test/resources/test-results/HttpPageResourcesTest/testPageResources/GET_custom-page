@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 2275
+Content-Length: 2344
 
 <!DOCTYPE html>
 <html lang="en">
@@ -64,7 +64,7 @@ Content-Length: 2275
 
 
 
-    <!-- CREATE A RESOURCE FILE "templates/navbar-custom.html" TO REPLACE THIS LINE -->
+    <!-- CREATE A RESOURCE FILE "templates/_navbar.html" TO REPLACE THIS LINE -->
 
     
 
@@ -75,8 +75,6 @@ Content-Length: 2275
 </nav>
 
 <div class="container">
-
-
 
 Custom page
 </div>
@@ -89,6 +87,7 @@ Custom page
 <!-- CREATE A RESOURCE FILE "templates/page-tail.html" TO REPLACE THIS LINE -->
 
 <script>Rapidoid.init();</script>
+<!-- CREATE A RESOURCE FILE "templates/_extra.html" TO REPLACE THIS LINE -->
 
 </body>
 
