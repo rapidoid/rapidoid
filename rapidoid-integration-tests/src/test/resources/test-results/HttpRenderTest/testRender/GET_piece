@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 2328
+Content-Length: 2471
 
 <!DOCTYPE html>
 <html lang="en">
@@ -26,10 +26,10 @@ Content-Length: 2328
 <link href="/img/favicon.png" rel="shortcut icon">
 <link href="/bootstrap/css/theme-default.css" type="text/css" rel="stylesheet" />
 
-<!-- CREATE A RESOURCE FILE "templates/page-head.html" TO REPLACE THIS LINE -->
+<!-- CREATE A RESOURCE FILE "templates/_head.html" TO REPLACE THIS LINE -->
 </head>
 
-<body class="rapidoid" ng-controller="Main" ng-app="app">
+<body class="rapidoid">
 
 <script src="/jquery-2.2.3.min.js"></script>
 <script src="/bootstrap/js/bootstrap-3.3.6.min.js"></script>
@@ -38,6 +38,10 @@ Content-Length: 2328
 
 <script src="/application.js"></script>
 
+<div ng-controller="Main" ng-app="app">
+<!-- CREATE A RESOURCE FILE "templates/_body.html" TO REPLACE THIS LINE -->
+
+<!-- Angular bindings start -->
 <div ng-if="!ajaxBodyContent">
 <nav role="navigation" class="navbar navbar-default">
     <div class="container">
@@ -80,14 +84,15 @@ my-title:12345
 
 
 </div>
-
 <div compile="ajaxBodyContent" ng-if="ajaxBodyContent"></div>
-
-<!-- CREATE A RESOURCE FILE "templates/page-tail.html" TO REPLACE THIS LINE -->
+<!-- Angular bindings end -->
 
 <script>Rapidoid.init();</script>
 <!-- CREATE A RESOURCE FILE "templates/_extra.html" TO REPLACE THIS LINE -->
 
+
+<!-- CREATE A RESOURCE FILE "templates/_tail.html" TO REPLACE THIS LINE -->
+</div>
 </body>
 
 

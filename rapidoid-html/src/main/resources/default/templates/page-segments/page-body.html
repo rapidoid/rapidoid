@@ -1,4 +1,4 @@
-<body class="rapidoid" ng-controller="Main" ng-app="app">
+<body class="rapidoid">
 
 {{!cdn}}
 <script src="/jquery-2.2.3.min.js"></script>
@@ -17,13 +17,18 @@
 <script src="${.}"></script>
 {{/js}}
 
+<div ng-controller="Main" ng-app="app">
+{{>_body}}
+
+<!-- Angular bindings start -->
 <div ng-if="!ajaxBodyContent">
 {{>page-segments/page-content}}
 </div>
-
 <div compile="ajaxBodyContent" ng-if="ajaxBodyContent"></div>
-
-{{>page-segments/page-tail}}
+<!-- Angular bindings end -->
 
 {{>page-segments/page-scripts}}
+
+{{>_tail}}
+</div>
 </body>
