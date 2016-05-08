@@ -37,7 +37,7 @@ public class LambdaHandlerTest extends IntegrationTestCommons {
 		TwoParamLambda<Resp, Req, Integer> oneParamLambda = new TwoParamLambda<Resp, Req, Integer>() {
 			@Override
 			public Resp execute(Req param, Integer x) throws Exception {
-				return param.response().content("x=" + x);
+				return param.response().result("x=" + x);
 			}
 		};
 
@@ -48,7 +48,7 @@ public class LambdaHandlerTest extends IntegrationTestCommons {
 
 	@Test
 	public void testLambdaHandlerWithLambda() {
-		TwoParamLambda<Resp, Req, Integer> oneParamLambda = (Req param, Integer y) -> param.response().content("y=" + y);
+		TwoParamLambda<Resp, Req, Integer> oneParamLambda = (Req param, Integer y) -> param.response().result("y=" + y);
 
 		On.get("/test").html(oneParamLambda);
 

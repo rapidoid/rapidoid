@@ -4,6 +4,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.config.Config;
 import org.rapidoid.config.ConfigAlternatives;
@@ -24,7 +25,6 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -64,11 +64,11 @@ public class RespImpl extends RapidoidThing implements Resp {
 
 	private volatile MediaType contentType = MediaType.HTML_UTF_8;
 
-	private final Map<String, String> headers = Collections.synchronizedMap(new HashMap<String, String>());
+	private final Map<String, String> headers = Coll.synchronizedMap();
 
-	private final Map<String, String> cookies = Collections.synchronizedMap(new HashMap<String, String>());
+	private final Map<String, String> cookies = Coll.synchronizedMap();
 
-	private final Map<String, Object> model = Collections.synchronizedMap(new HashMap<String, Object>());
+	private final Map<String, Object> model = Coll.synchronizedMap();
 
 	private volatile String redirect = null;
 
@@ -87,14 +87,14 @@ public class RespImpl extends RapidoidThing implements Resp {
 	}
 
 	@Override
-	public synchronized Resp content(Object content) {
+	public synchronized Resp result(Object content) {
 		ensureCanChange();
 		this.content = content;
 		return this;
 	}
 
 	@Override
-	public synchronized Object content() {
+	public synchronized Object result() {
 		return this.content;
 	}
 
@@ -202,6 +202,12 @@ public class RespImpl extends RapidoidThing implements Resp {
 	}
 
 	@Override
+	public Resp model(String name, Object value) {
+		model().put(name, value);
+		return this;
+	}
+
+	@Override
 	public synchronized Resp contentType(MediaType contentType) {
 		ensureCanChange();
 		this.contentType = contentType;
@@ -266,22 +272,22 @@ public class RespImpl extends RapidoidThing implements Resp {
 
 	@Override
 	public Resp html(Object content) {
-		return contentType(MediaType.HTML_UTF_8).content(content);
+		return contentType(MediaType.HTML_UTF_8).result(content);
 	}
 
 	@Override
 	public Resp plain(Object content) {
-		return contentType(MediaType.PLAIN_TEXT_UTF_8).content(content);
+		return contentType(MediaType.PLAIN_TEXT_UTF_8).result(content);
 	}
 
 	@Override
 	public Resp json(Object content) {
-		return contentType(MediaType.JSON_UTF_8).content(content);
+		return contentType(MediaType.JSON_UTF_8).result(content);
 	}
 
 	@Override
 	public Resp binary(Object content) {
-		return contentType(MediaType.BINARY).content(content);
+		return contentType(MediaType.BINARY).result(content);
 	}
 
 	@Override
@@ -389,7 +395,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 
 	@Override
 	public OutputStream out() {
-		U.must(content() == null, "The response content has already been set, so cannot write the response through OutputStream, too!");
+		U.must(result() == null, "The response content has already been set, so cannot write the response through OutputStream, too!");
 		U.must(body() == null, "The response body has already been set, so cannot write the response through OutputStream, too!");
 		U.must(raw() == null, "The raw response has already been set, so cannot write the response through OutputStream, too!");
 
@@ -421,7 +427,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 		if (mvc()) {
 			return ResponseRenderer.render(req, this);
 
-		} else if (content() != null) {
+		} else if (result() != null) {
 			return serializeResponseContent();
 
 		} else if (body() != null) {
@@ -433,7 +439,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 	}
 
 	private byte[] serializeResponseContent() {
-		return HttpUtils.responseToBytes(content(), contentType(), req.http().custom().jsonResponseRenderer());
+		return HttpUtils.responseToBytes(result(), contentType(), req.http().custom().jsonResponseRenderer());
 	}
 
 }

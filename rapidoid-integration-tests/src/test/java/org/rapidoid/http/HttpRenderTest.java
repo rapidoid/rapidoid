@@ -43,19 +43,19 @@ public class HttpRenderTest extends IntegrationTestCommons {
 		});
 
 		On.get("/view3").view("view1").mvc((Req req, Resp resp) -> {
-			resp.model().put("msg", "custom view: 1");
+			resp.model("msg", "custom view: 1");
 			return req;
 		});
 
 		On.get("/views/sub").html((Req req, Resp resp) -> {
-			resp.model().put("msg", "sub-view!");
+			resp.model("msg", "sub-view!");
 			return resp.mvc(true);
 		});
 
 		On.get("/abc").html((Req req, Resp resp) -> {
-			resp.model().put("a", 123);
-			resp.model().put("b", "BBB");
-			resp.model().put("req", req);
+			resp.model("a", 123);
+			resp.model("b", "BBB");
+			resp.model("req", req);
 
 			return resp.view("view1").mvc(true);
 		});
@@ -63,7 +63,7 @@ public class HttpRenderTest extends IntegrationTestCommons {
 		On.get("/piece").mvc((Resp respo, Screen screen) -> {
 			respo.screen().title("my-title");
 			screen.brand(GUI.span(GUI.fa("cog"), "The Brand!"));
-			respo.model().put("x", 12345);
+			respo.model("x", 12345);
 			return respo;
 		});
 

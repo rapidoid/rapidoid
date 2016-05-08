@@ -56,7 +56,7 @@ public class HttpErrorHandlerTest extends HttpTestCommons {
 		On.custom().errorHandler(new ErrorHandler() {
 			@Override
 			public Object handleError(Req req, Resp resp, Throwable e) {
-				return resp.code(200).content(req + ":err2:" + e);
+				return resp.code(200).result(req + ":err2:" + e);
 			}
 		});
 

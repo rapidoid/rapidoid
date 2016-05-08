@@ -286,7 +286,7 @@ public class HttpHtmlApiTest extends IntegrationTestCommons {
 		On.get("/test21").html(new ReqRespHandler() {
 			@Override
 			public Object execute(Req req, Resp resp) throws Exception {
-				return resp.content("RESULT 21");
+				return resp.result("RESULT 21");
 			}
 		});
 
@@ -298,7 +298,7 @@ public class HttpHtmlApiTest extends IntegrationTestCommons {
 		On.get("/test22").html(new ReqRespHandler() {
 			@Override
 			public Object execute(Req req, Resp resp) throws Exception {
-				return resp.content("RESULT 22").code(301);
+				return resp.result("RESULT 22").code(301);
 			}
 		});
 
@@ -310,7 +310,7 @@ public class HttpHtmlApiTest extends IntegrationTestCommons {
 		On.get("/test23").html(new ReqRespHandler() {
 			@Override
 			public Object execute(Req req, Resp resp) throws Exception {
-				return resp.content("RESULT 23").code(404);
+				return resp.result("RESULT 23").code(404);
 			}
 		});
 
@@ -322,7 +322,7 @@ public class HttpHtmlApiTest extends IntegrationTestCommons {
 		On.get("/test24").html(new ReqRespHandler() {
 			@Override
 			public Object execute(Req req, Resp resp) throws Exception {
-				return resp.content("RESULT 24").code(500);
+				return resp.result("RESULT 24").code(500);
 			}
 		});
 
@@ -334,7 +334,7 @@ public class HttpHtmlApiTest extends IntegrationTestCommons {
 		On.get("/test25").html(new ReqRespHandler() {
 			@Override
 			public Object execute(Req req, Resp resp) throws Exception {
-				return resp.content("RESULT 25").binary("B25");
+				return resp.result("RESULT 25").binary("B25");
 			}
 		});
 
@@ -346,7 +346,7 @@ public class HttpHtmlApiTest extends IntegrationTestCommons {
 		On.get("/test26").html(new ReqRespHandler() {
 			@Override
 			public Object execute(Req req, Resp resp) throws Exception {
-				return resp.content("RESULT 26").contentType(MediaType.APPLICATION_MSWORD);
+				return resp.result("RESULT 26").contentType(MediaType.APPLICATION_MSWORD);
 			}
 		});
 
@@ -360,7 +360,7 @@ public class HttpHtmlApiTest extends IntegrationTestCommons {
 			public Object execute(Req req, Resp resp) throws Exception {
 				resp.cookies().put("cookie1", "abc");
 				resp.cookies().put("cookie2", "xyz");
-				return resp.content("RESULT 27");
+				return resp.result("RESULT 27");
 			}
 		});
 
@@ -374,7 +374,7 @@ public class HttpHtmlApiTest extends IntegrationTestCommons {
 			public Object execute(Req req, Resp resp) throws Exception {
 				resp.headers().put("hdr1", "HDRX");
 				resp.headers().put("hdr2", "hdry");
-				return resp.content("RESULT 28");
+				return resp.result("RESULT 28");
 			}
 		});
 
@@ -386,7 +386,7 @@ public class HttpHtmlApiTest extends IntegrationTestCommons {
 		On.get("/test29").html(new ReqRespHandler() {
 			@Override
 			public Object execute(Req req, Resp resp) throws Exception {
-				return resp.content("RESULT 29").redirect("/abc");
+				return resp.result("RESULT 29").redirect("/abc");
 			}
 		});
 
@@ -398,7 +398,7 @@ public class HttpHtmlApiTest extends IntegrationTestCommons {
 		On.get("/test30").html(new ReqRespHandler() {
 			@Override
 			public Object execute(Req req, Resp resp) throws Exception {
-				return resp.content("RESULT 30").redirect("/xyzz").code(302);
+				return resp.result("RESULT 30").redirect("/xyzz").code(302);
 			}
 		});
 
@@ -446,7 +446,7 @@ public class HttpHtmlApiTest extends IntegrationTestCommons {
 	@Test
 	public void test35() {
 		On.get("/future").html((Req req, Resp resp) -> Jobs.after(1, TimeUnit.SECONDS).run(() -> {
-			resp.content("finished!").done();
+			resp.result("finished!").done();
 		}));
 
 		onlyGet("/future");

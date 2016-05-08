@@ -61,7 +61,7 @@ public class DynamicClientTest extends IntegrationTestCommons {
 					public void run() {
 						U.must(Current.request() == req);
 						Resp resp = req.response();
-						resp.content(req.data()).done();
+						resp.result(req.data()).done();
 					}
 				}, 1000, TimeUnit.MILLISECONDS);
 

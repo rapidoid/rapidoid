@@ -41,12 +41,12 @@ public class ResponseRenderer extends RapidoidThing {
 
 	public static byte[] render(ReqImpl req, Resp resp) {
 
-		Object content = resp.content();
+		Object result = resp.result();
 
-		if (content != null) {
-			content = wrapGuiContent(content);
-			resp.model().put("content", content);
-			resp.content(content);
+		if (result != null) {
+			result = wrapGuiContent(result);
+			resp.model().put("result", result);
+			resp.result(result);
 		}
 
 		ViewRenderer viewRenderer = req.http().custom().viewRenderer();
@@ -58,7 +58,12 @@ public class ResponseRenderer extends RapidoidThing {
 		boolean rendered;
 		String viewName = resp.view();
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		Object[] renderModel = content != null ? new Object[]{resp.screen(), resp.model(), content} : new Object[]{resp.screen(), resp.model()};
+
+		MVCModel basicModel = new MVCModel(req, resp, resp.model(), resp.screen(), result);
+
+		Object[] renderModel = result != null
+				? new Object[]{basicModel, resp.model(), result}
+				: new Object[]{basicModel, resp.model()};
 
 		try {
 			rendered = viewRenderer.render(viewName, renderModel, out);
@@ -69,13 +74,13 @@ public class ResponseRenderer extends RapidoidThing {
 		String renderResult = rendered ? new String(out.toByteArray()) : null;
 
 		if (renderResult == null) {
-			Object cnt = U.or(content, "");
+			Object cnt = U.or(result, "");
 			renderResult = new String(HttpUtils.responseToBytes(cnt, MediaType.HTML_UTF_8, null));
 		}
 
 		try {
-			Object result = U.or(pageRenderer.renderPage(req, resp, renderResult), "");
-			return HttpUtils.responseToBytes(result, MediaType.HTML_UTF_8, null);
+			Object response = U.or(pageRenderer.renderPage(req, resp, renderResult), "");
+			return HttpUtils.responseToBytes(response, MediaType.HTML_UTF_8, null);
 
 		} catch (Exception e) {
 			throw U.rte("Error while rendering page!", e);

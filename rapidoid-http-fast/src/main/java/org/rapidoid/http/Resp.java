@@ -39,12 +39,12 @@ public interface Resp {
 	/**
 	 * Sets the <b>content</b> to be serialized into a body when the HTTP response is rendered.
 	 */
-	Resp content(Object content);
+	Resp result(Object content);
 
 	/**
 	 * Gets the <b>content</b> to be serialized into a body when the HTTP response is rendered.
 	 */
-	Object content();
+	Object result();
 
 	/**
 	 * Sets the <b>HTTP response body</b> from a <b><code>byte[]</code></b> data that is written as a HTTP response body when rendered.
@@ -186,6 +186,11 @@ public interface Resp {
 	 * Provides <b>read/write access</b> to the <b>model</b> (M from MVC) that will be rendered by the view renderer.
 	 */
 	Map<String, Object> model();
+
+	/**
+	 * Sets an attribute of the <b>model</b> (M from MVC) that will be rendered by the view renderer.
+	 */
+	Resp model(String name, Object value);
 
 	/**
 	 * Informs the HTTP server that the asynchronous handling has finished and the response is complete.<br>

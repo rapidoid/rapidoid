@@ -44,7 +44,7 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 		On.get("/fileabc").html(new ReqHandler() {
 			@Override
 			public Object execute(Req x) {
-				return x.response().filename("abc.txt").content("abcde");
+				return x.response().filename("abc.txt").result("abcde");
 			}
 		});
 
@@ -75,7 +75,7 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 				Jobs.schedule(new Runnable() {
 					@Override
 					public void run() {
-						x.response().content("now").done();
+						x.response().result("now").done();
 					}
 				}, 50, TimeUnit.MILLISECONDS);
 				return x;

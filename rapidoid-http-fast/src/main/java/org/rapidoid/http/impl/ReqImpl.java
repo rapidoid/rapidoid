@@ -529,7 +529,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 			return "Response wasn't provided!";
 		}
 
-		if (response.content() == null && response.body() == null && response.redirect() == null
+		if (response.result() == null && response.body() == null && response.redirect() == null
 				&& response.file() == null && response.raw() == null && !response().mvc()) {
 			return "Response content wasn't provided!";
 		}

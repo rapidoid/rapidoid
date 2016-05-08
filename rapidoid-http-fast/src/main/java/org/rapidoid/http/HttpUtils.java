@@ -206,7 +206,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 
 			setContentTypeForFile(resp, file);
 
-			resp.content(Res.from(file).getBytes());
+			resp.result(Res.from(file).getBytes());
 		}
 	}
 
@@ -228,7 +228,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 
 			resp.headers().put(HttpHeaders.LOCATION.name(), redirect);
 
-			if (resp.content() == null && resp.body() == null) {
+			if (resp.result() == null && resp.body() == null) {
 				resp.body(EMPTY_RESPONSE);
 			}
 		}
@@ -262,16 +262,16 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 	public static void resultToResponse(Req req, Object result) {
 		if (result instanceof Req) {
 			if (req != result) {
-				req.response().content("Unknown request instance was received as result!");
+				req.response().result("Unknown request instance was received as result!");
 			}
 
 		} else if (result instanceof Resp) {
 			if (req.response() != result) {
-				req.response().content("Unknown response instance was received as result!");
+				req.response().result("Unknown response instance was received as result!");
 			}
 
 		} else {
-			req.response().content(result);
+			req.response().result(result);
 		}
 	}
 
