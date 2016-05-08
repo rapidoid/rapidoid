@@ -37,6 +37,7 @@ import org.rapidoid.security.Roles;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Msc;
+import org.rapidoid.util.MscInfo;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -221,8 +222,8 @@ public class Setup extends RapidoidThing implements Constants {
 			listen();
 		}
 
-		if (isApp()) {
-			ADMIN.activate();
+		if (isAdmin()) {
+			MscInfo.isAdminActive = true;
 		}
 	}
 
@@ -368,6 +369,10 @@ public class Setup extends RapidoidThing implements Constants {
 		goodies = true;
 		defaults = new RouteOptions();
 		defaults().segment(segment);
+
+		if (isAdmin()) {
+			MscInfo.isAdminActive = false;
+		}
 
 		bootstrapedJPA = false;
 		bootstrapedComponents = false;
@@ -623,6 +628,10 @@ public class Setup extends RapidoidThing implements Constants {
 
 	public String segment() {
 		return segment;
+	}
+
+	public boolean isActive() {
+		return activated;
 	}
 
 	public static void haltAll() {

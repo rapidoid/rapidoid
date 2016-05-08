@@ -12,6 +12,7 @@ import org.rapidoid.http.HttpVerb;
 import org.rapidoid.render.Template;
 import org.rapidoid.render.Templates;
 import org.rapidoid.u.U;
+import org.rapidoid.util.MscInfo;
 import org.rapidoid.web.ScreenBean;
 
 import java.util.List;
@@ -83,11 +84,14 @@ public class HtmlPage extends ScreenBean {
 
 		if (U.notEmpty(req.host())) {
 			String hostname = req.host().split(":")[0];
-			String appUrl = appAndAdminOnSamePort ? "/" : "http://" + hostname + ":" + appPort + "/";
-			String adminUrl = appAndAdminOnSamePort ? "/_" : "http://" + hostname + ":" + adminPort + "/_";
 
+			String appUrl = appAndAdminOnSamePort ? "/" : "http://" + hostname + ":" + appPort + "/";
 			model.put("appUrl", appUrl);
-			model.put("adminUrl", adminUrl);
+
+			if (MscInfo.isAdminActive) {
+				String adminUrl = appAndAdminOnSamePort ? "/_" : "http://" + hostname + ":" + adminPort + "/_";
+				model.put("adminUrl", adminUrl);
+			}
 		}
 
 		model.put("dev", Env.dev());

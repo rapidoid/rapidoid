@@ -174,4 +174,8 @@ public class Admin extends RapidoidThing {
 		return SETUP.defaults();
 	}
 
+	public static boolean isActive() {
+		return SETUP.isActive();
+	}
+
 }

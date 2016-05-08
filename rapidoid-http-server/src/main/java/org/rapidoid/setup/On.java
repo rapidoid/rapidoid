@@ -174,4 +174,8 @@ public class On extends RapidoidThing {
 		return SETUP.defaults();
 	}
 
+	public static boolean isActive() {
+		return SETUP.isActive();
+	}
+
 }
