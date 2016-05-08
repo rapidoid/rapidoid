@@ -8,6 +8,7 @@ import org.rapidoid.config.Config;
 import org.rapidoid.crypto.Crypto;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.http.HttpUtils;
+import org.rapidoid.insight.Metrics;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.log.Log;
 import org.rapidoid.security.Roles;
@@ -154,6 +155,8 @@ public class Goodies extends RapidoidThing {
 		}
 
 		Msc.logSection("Registering Admin goodies:");
+
+		Metrics.bootstrap();
 
 		setup.page("/_/").mvc(Goodies.overview());
 

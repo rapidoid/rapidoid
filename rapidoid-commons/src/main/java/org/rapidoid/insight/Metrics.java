@@ -59,8 +59,9 @@ public class Metrics extends RapidoidThing implements Runnable {
 
 	private static volatile ThreadMXBean threads;
 
-	static {
-		Log.info("Initializing metrics");
+
+	public static void bootstrap() {
+		Log.info("Bootstraping metrics");
 
 		os = ManagementFactory.getOperatingSystemMXBean();
 		sysCpuM = Cls.findMethod(os.getClass(), "getSystemCpuLoad");
