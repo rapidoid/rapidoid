@@ -3,8 +3,10 @@ package org.rapidoid.goodies;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
+import org.rapidoid.gui.FA;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.util.List;
 import java.util.Map;
@@ -34,23 +36,31 @@ import java.util.concurrent.Callable;
 @Since("5.1.0")
 public class ConfigHandler extends GUI implements Callable<Object> {
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Object call() throws Exception {
 
 		List<Object> grids = U.list();
 		Map<String, Object> sections = U.cast(Conf.ROOT.toMap());
+		sections = Msc.protectSensitiveInfo(sections, FA.QUESTION_CIRCLE);
+
+		Map<String, Object> root = U.map();
 
 		for (Map.Entry<String, Object> entry : sections.entrySet()) {
 			String key = entry.getKey();
-			Object section = entry.getValue();
+			Object value = entry.getValue();
 
-			grids.add(h4(span(key).class_("label " + styleOf(key))));
-
-			if (section instanceof Map<?, ?>) {
-				grids.add(grid((Map<?, ?>) section));
+			if (value instanceof Map<?, ?>) {
+				grids.add(h4(span(key).class_("label " + styleOf(key))));
+				grids.add(grid((Map<String, ?>) value));
 			} else {
-				grids.add(div(section));
+				root.put(key, value);
 			}
+		}
+
+		if (!root.isEmpty()) {
+			grids.add(0, h4(span("<root>").class_("label " + styleOf("root"))));
+			grids.add(1, grid(root));
 		}
 
 		return grids;

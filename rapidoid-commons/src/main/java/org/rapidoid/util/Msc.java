@@ -920,4 +920,25 @@ public class Msc extends RapidoidThing implements Constants {
 		return s;
 	}
 
+	@SuppressWarnings("unchecked")
+	public static Map<String, Object> protectSensitiveInfo(Map<String, Object> data, Object replacement) {
+		Map<String, Object> copy = U.map();
+
+		for (Map.Entry<String, ?> e : data.entrySet()) {
+			Object value = e.getValue();
+
+			String s = e.getKey().toLowerCase();
+			if (s.contains("password") || s.contains("secret")) {
+				value = replacement;
+
+			} else if (value instanceof Map<?, ?>) {
+				value = protectSensitiveInfo((Map<String, Object>) value, replacement);
+			}
+
+			copy.put(e.getKey(), value);
+		}
+
+		return copy;
+	}
+
 }
