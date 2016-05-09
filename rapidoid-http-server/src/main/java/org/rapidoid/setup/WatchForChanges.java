@@ -32,7 +32,7 @@ public class WatchForChanges extends RapidoidThing {
 
 	public static void activate() {
 		Set<String> classpathFolders = ClasspathUtil.getClasspathFolders();
-		Log.info("Watching classpath for changes...", "classpath", classpathFolders);
+		Log.info("!Watching classpath for changes...", "classpath", classpathFolders);
 
 		Watch.dirs(classpathFolders, new FilesystemChangeListener() {
 			@Override

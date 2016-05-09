@@ -92,7 +92,11 @@ public class Log {
 	                                 int paramsN) {
 
 		try {
-			out.append(msg);
+			boolean bold = msg.startsWith("!");
+			if (bold) {
+				msg = msg.substring(1);
+			}
+			appendStyled(out, msg, bold);
 
 			switch (paramsN) {
 				case 0:
@@ -137,9 +141,9 @@ public class Log {
 	}
 
 	private static void printKeyValue(Appendable out, String key, Object value) throws IOException {
-		boolean bold = key.endsWith("!");
+		boolean bold = key.startsWith("!");
 		if (bold) {
-			key = key.substring(0, key.length() - 1);
+			key = key.substring(1);
 		}
 
 		if (key.equalsIgnoreCase("password") || key.endsWith("password")) {
@@ -154,13 +158,7 @@ public class Log {
 		out.append(key);
 		out.append(" = ");
 
-		if (bold) {
-			out.append("\33[1m");
-		}
-		out.append(printable(value));
-		if (bold) {
-			out.append("\33[0m");
-		}
+		appendStyled(out, value, bold);
 
 		if (value instanceof Throwable) {
 			Throwable err = (Throwable) value;
@@ -168,6 +166,18 @@ public class Log {
 			err.printStackTrace(new PrintStream(stream));
 			out.append("\n");
 			out.append(stream.toString());
+		}
+	}
+
+	private static void appendStyled(Appendable out, Object value, boolean bold) throws IOException {
+		if (bold) {
+			out.append("\33[1m");
+		}
+
+		out.append(printable(value));
+
+		if (bold) {
+			out.append("\33[0m");
 		}
 	}
 

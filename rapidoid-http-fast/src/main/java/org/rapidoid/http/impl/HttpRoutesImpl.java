@@ -428,10 +428,10 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 		}
 
 		if (add) {
-			Log.info("Registering handler", "setup", this.customization.name(), "verbs!", verbs, "path!", path,
+			Log.info("Registering handler", "setup", this.customization.name(), "!verbs", verbs, "!path", path,
 					"options", handler.options(), "handler", handler);
 		} else {
-			Log.info("Deregistering handler", "setup", this.customization.name(), "verbs!", verbs, "path!", path);
+			Log.info("Deregistering handler", "setup", this.customization.name(), "!verbs", verbs, "!path", path);
 		}
 
 		for (String vrb : verbs.split(",")) {

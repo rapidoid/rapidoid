@@ -6,7 +6,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.log.Log;
 import org.rapidoid.scan.Scan;
-import org.rapidoid.util.AnsiColor;
 
 import javax.persistence.Entity;
 import java.util.List;
@@ -48,7 +47,7 @@ public class EMFUtil extends RapidoidThing {
 		}
 
 		if (!entityTypes.isEmpty()) {
-			Log.info(AnsiColor.bold("Found " + entityTypes.size() + " JPA Entities"));
+			Log.info("!Found " + entityTypes.size() + " JPA Entities");
 		}
 
 		return entityTypes;

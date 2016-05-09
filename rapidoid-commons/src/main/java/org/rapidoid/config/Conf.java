@@ -72,12 +72,12 @@ public class Conf extends RapidoidThing {
 
 		if (profiles != null) {
 			Coll.assign(Env.profiles(), profiles.split("\\s*\\,\\s*"));
-			Log.info("Configuring active profiles", "profiles", Env.profiles());
+			Log.info("Configuring active profiles", "!profiles", Env.profiles());
 			reload();
 		} else {
 			if (Env.profiles().isEmpty()) {
 				Env.profiles().add("default");
-				Log.info("No profiles were specified, configuring the 'default' profile", "profiles", Env.profiles());
+				Log.info("No profiles were specified, configuring the 'default' profile", "!profiles", Env.profiles());
 				reload();
 			}
 		}
@@ -85,7 +85,7 @@ public class Conf extends RapidoidThing {
 
 	public static synchronized void profiles(String... profiles) {
 		Coll.assign(Env.profiles(), profiles);
-		Log.info("Overriding active profiles", "profiles", Env.profiles());
+		Log.info("Overriding active profiles", "!profiles", Env.profiles());
 		reload();
 	}
 

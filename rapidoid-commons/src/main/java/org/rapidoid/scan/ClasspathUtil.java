@@ -122,9 +122,9 @@ public class ClasspathUtil extends RapidoidThing {
 		Pattern pattern = U.notEmpty(regex) ? Pattern.compile(regex) : null;
 
 		if (regex != null) {
-			Log.info("Scanning classpath", "annotated!", Msc.annotations(params.annotated()), "packages!", Arrays.toString(pkgs), "matching!", regex);
+			Log.info("Scanning classpath", "!annotated", Msc.annotations(params.annotated()), "!packages", Arrays.toString(pkgs), "!matching", regex);
 		} else {
-			Log.info("Scanning classpath", "annotated!", Msc.annotations(params.annotated()), "packages!", Arrays.toString(pkgs));
+			Log.info("Scanning classpath", "!annotated", Msc.annotations(params.annotated()), "!packages", Arrays.toString(pkgs));
 		}
 
 		AtomicInteger searched = new AtomicInteger();
@@ -135,7 +135,7 @@ public class ClasspathUtil extends RapidoidThing {
 		}
 
 		long timeMs = U.time() - startingAt;
-		Log.info("Finished classpath scan", "time", timeMs + "ms", "searched", searched.get(), "found!", Msc.classNames(classes));
+		Log.info("Finished classpath scan", "time", timeMs + "ms", "searched", searched.get(), "!found", Msc.classNames(classes));
 
 		return classes;
 	}

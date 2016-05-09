@@ -415,7 +415,7 @@ public class Setup extends RapidoidThing implements Constants {
 			}
 
 			if (mainClassName != null || pkg != null) {
-				Log.info("Inferring application root", "main!", mainClassName, "package!", pkg);
+				Log.info("Inferring application root", "!main", mainClassName, "!package", pkg);
 			}
 		}
 	}
@@ -526,7 +526,7 @@ public class Setup extends RapidoidThing implements Constants {
 	private static void restartApp() {
 		U.notNull(mainClassName, "Cannot restart, the main class is unknown!");
 
-		Msc.logSection("Restarting the web application...");
+		Msc.logSection("!Restarting the web application...");
 
 		restarted = true;
 
@@ -560,7 +560,7 @@ public class Setup extends RapidoidThing implements Constants {
 
 		Msc.invokeMain(entry, Conf.ROOT.getArgs());
 
-		Log.info("Successfully restarted the application!");
+		Log.info("!Successfully restarted the application!");
 	}
 
 	private static void initSetupDefaults() {
