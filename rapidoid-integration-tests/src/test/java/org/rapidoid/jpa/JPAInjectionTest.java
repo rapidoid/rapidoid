@@ -2,8 +2,8 @@ package org.rapidoid.jpa;
 
 import org.junit.Test;
 import org.rapidoid.annotation.*;
-import org.rapidoid.http.IntegrationTestCommons;
 import org.rapidoid.http.HttpUtils;
+import org.rapidoid.http.IntegrationTestCommons;
 import org.rapidoid.http.Req;
 import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.ioc.IoCContextWrapper;
@@ -52,6 +52,7 @@ public class JPAInjectionTest extends IntegrationTestCommons {
 		onlyGet("/del?id=1");
 		getAndPost("/del2?id=2");
 		onlyPost("/del3?id=3");
+		onlyPost("/del4?id=3");
 
 		onlyGet("/allBooks?finally");
 	}
@@ -73,6 +74,9 @@ class MyCtrl {
 	@Wired
 	private EntityManagerFactory emf;
 
+	@Wired
+	private JPATool jpa;
+
 	@GET
 	public Object allBooks() {
 		checkInjected();
@@ -83,7 +87,7 @@ class MyCtrl {
 	@Transaction
 	public Object insertBook(Book b) {
 		checkInjected();
-		return JPA.insert(b);
+		return jpa.insert(b);
 	}
 
 	@GET
@@ -93,7 +97,7 @@ class MyCtrl {
 
 		U.must(!em.getTransaction().getRollbackOnly());
 
-		em.remove(JPA.getIfExists(Book.class, id));
+		jpa.delete(jpa.get(Book.class, id));
 		em.flush(); // optional
 
 		return U.list("DEL #" + id, JPA.getAllEntities().size() + " remaining");
@@ -124,15 +128,29 @@ class MyCtrl {
 		return U.list("DEL #" + id, JPA.getAllEntities().size() + " remaining");
 	}
 
+	@POST
+	@Transaction(TransactionMode.READ_ONLY)
+	public Object del4(long id) {
+		checkInjected();
+
+		U.must(jpa.em().getTransaction().getRollbackOnly());
+
+		jpa.delete(Book.class, id); // throws R/O tx exception
+
+		return null;
+	}
+
 	private void checkInjected() {
 		U.notNull(emf, "emf");
 		U.notNull(em, "em");
 		U.notNull(em2, "em2");
 		U.notNull(ioc, "ioc");
+		U.notNull(jpa, "jpa");
 
 		U.must(emf == SharedEntityManagerFactoryProxy.INSTANCE, "wrong emf");
 		U.must(em == SharedContextAwareEntityManagerProxy.INSTANCE, "wrong em");
 		U.must(em == em2, "different EMs!");
+		U.must(jpa.em() == em, "different EMs!");
 
 		U.must(ioc.singleton(MyCtrl.class) == this);
 		U.must(ioc.singleton(EntityManager.class) == em);

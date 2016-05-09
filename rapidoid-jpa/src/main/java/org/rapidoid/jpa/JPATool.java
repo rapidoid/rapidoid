@@ -6,8 +6,10 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.u.U;
 
+import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.metamodel.EntityType;
@@ -36,11 +38,20 @@ import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
+@Named
 public class JPATool extends RapidoidThing {
 
-	private final EntityManager em;
+	@PersistenceContext
+	private volatile EntityManager em;
 
 	private final boolean managed;
+
+	/**
+	 * This constructor should be used only implicitly by the dependency injection libraries.
+	 */
+	public JPATool() {
+		this(null, true);
+	}
 
 	public JPATool(EntityManager em, boolean managed) {
 		this.em = em;
