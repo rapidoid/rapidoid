@@ -1,4 +1,4 @@
-Route GET /custom-page [segment main]: render((Req) -> ...)
-Route POST /custom-page [segment main]: render((Req) -> ...)
-Route GET /my/custom [segment main]: render(() -> ...)
-Route POST /my/custom [segment main]: render(() -> ...)
+Route GET /custom-page [segment main]: mvc((Req) -> ...)
+Route POST /custom-page [segment main]: mvc((Req) -> ...)
+Route GET /my/custom [segment main]: mvc(() -> ...)
+Route POST /my/custom [segment main]: mvc(() -> ...)
