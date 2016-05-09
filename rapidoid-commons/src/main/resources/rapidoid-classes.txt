@@ -544,6 +544,7 @@ org.rapidoid.serialize.TypeSpecificSerializer
 org.rapidoid.setup.Admin
 org.rapidoid.setup.App
 org.rapidoid.setup.AppRestartProcessor
+org.rapidoid.setup.My
 org.rapidoid.setup.On
 org.rapidoid.setup.OnChanges
 org.rapidoid.setup.OnRoute
