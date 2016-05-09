@@ -62,7 +62,7 @@ public class Pager extends AbstractWidget<Pager> {
 	}
 
 	protected boolean shouldDisplay() {
-		return U.neq(min, max) || max == null || min == null;
+		return max == null || min == null || min < max;
 	}
 
 	protected Tag pagination() {

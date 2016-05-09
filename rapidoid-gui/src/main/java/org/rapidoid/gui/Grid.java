@@ -87,7 +87,7 @@ public class Grid extends AbstractWidget<Grid> {
 		Iterator<?> it = rows.iterator();
 		boolean hasData = it.hasNext();
 
-		if (isLastPage || !hasData) {
+		if (pager != null && (isLastPage || !hasData)) {
 			pager.max(pager.pageNumber());
 		}
 
