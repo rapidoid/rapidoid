@@ -76,7 +76,10 @@ public class TagRenderer extends RapidoidThing {
 	@SuppressWarnings("unchecked")
 	public void str(Object content, int level, boolean inline, Object extra, OutputStream out) {
 
-		if (content instanceof ConstantTag) {
+		if (content == null) {
+			return;
+
+		} else if (content instanceof ConstantTag) {
 			ConstantTag constantTag = ((ConstantTag) content);
 			write(out, constantTag.bytes());
 			return;
