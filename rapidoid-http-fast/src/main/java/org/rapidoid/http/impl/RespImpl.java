@@ -54,7 +54,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 
 	private final ReqImpl req;
 
-	private volatile Object content = null;
+	private volatile Object result = null;
 
 	private volatile Object body = null;
 
@@ -89,13 +89,13 @@ public class RespImpl extends RapidoidThing implements Resp {
 	@Override
 	public synchronized Resp result(Object content) {
 		ensureCanChange();
-		this.content = content;
+		this.result = content;
 		return this;
 	}
 
 	@Override
 	public synchronized Object result() {
-		return this.content;
+		return this.result;
 	}
 
 	@Override
@@ -395,7 +395,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 
 	@Override
 	public OutputStream out() {
-		U.must(result() == null, "The response content has already been set, so cannot write the response through OutputStream, too!");
+		U.must(result() == null, "The response result has already been set, so cannot write the response through OutputStream, too!");
 		U.must(body() == null, "The response body has already been set, so cannot write the response through OutputStream, too!");
 		U.must(raw() == null, "The raw response has already been set, so cannot write the response through OutputStream, too!");
 
@@ -407,7 +407,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 	@Override
 	public String toString() {
 		return "RespImpl{" +
-				(content != null ? "content=" + content : "") +
+				(result != null ? "result=" + result : "") +
 				(body != null ? ", body=" + body : "") +
 				(raw != null ? ", raw=" + raw : "") +
 				", code=" + code +
