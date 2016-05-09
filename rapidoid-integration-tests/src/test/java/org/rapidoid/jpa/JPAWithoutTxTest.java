@@ -32,35 +32,35 @@ import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class JPATest extends IntegrationTestCommons {
+public class JPAWithoutTxTest extends IntegrationTestCommons {
 
 	@Test
-	public void testBasicCRUD() {
+	public void testBasicCRUDWithoutTx() {
 		JPA.bootstrap(path());
 
-		tx(() -> {
-			Book b1 = new Book("book 1");
-			Book b2 = new Book("book 2");
-			Movie m1 = new Movie("movie 1");
+		Book b1 = new Book("book 1");
+		Book b2 = new Book("book XY");
+		Movie m1 = new Movie("movie 1");
 
-			JPA.insert(b1);
-			JPA.insert(b2);
-			JPA.insert(m1);
+		JPA.insert(b1);
+		JPA.insert(b2);
+		JPA.insert(m1);
 
-			JPA.flush(); // not actually required
-		});
+		Book book = JPA.get(Book.class, b2.getId());
+		book.setTitle("book 2");
+		JPA.update(book);
 
-		tx(() -> {
-			eq(JPA.getAllEntities().size(), 3);
+		JPA.delete(Book.class, b1.getId());
 
-			List<Book> books = JPA.of(Book.class).all();
-			eq(Do.map(books).to(Book::getTitle), U.list("book 1", "book 2"));
+		eq(JPA.getAllEntities().size(), 2);
 
-			List<Movie> movies = JPA.of(Movie.class).all();
-			eq(Do.map(movies).to(Movie::getTitle), U.list("movie 1"));
+		List<Book> books = JPA.of(Book.class).all();
+		eq(Do.map(books).to(Book::getTitle), U.list("book 2"));
 
-			eq(JPA.jpql("select title from Book where id = ?1", 2L).all(), U.list("book 2"));
-		});
+		List<Movie> movies = JPA.of(Movie.class).all();
+		eq(Do.map(movies).to(Movie::getTitle), U.list("movie 1"));
+
+		eq(JPA.jpql("select title from Book where id = ?1", 2L).all(), U.list("book 2"));
 
 		eq(Jobs.errorCounter().get(), 0);
 	}

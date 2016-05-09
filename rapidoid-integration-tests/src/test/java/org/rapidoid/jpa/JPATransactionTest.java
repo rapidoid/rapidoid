@@ -35,14 +35,14 @@ public class JPATransactionTest extends IntegrationTestCommons {
 	public void testBasicCRUD() {
 		JPA.bootstrap(path());
 
-		JPA.transaction(this::insertData);
+		tx(this::insertData);
 
-		JPA.transaction(() -> checkData(1));
+		tx(() -> checkData(1));
 
 		int k = 1000;
-		multiThreaded(100, 1000, () -> JPA.transaction(this::insertData));
+		multiThreaded(10, k, () -> tx(this::insertData));
 
-		JPA.transaction(() -> checkData(k + 1));
+		tx(() -> checkData(k + 1));
 	}
 
 	private void checkData(int insertions) {
@@ -59,7 +59,7 @@ public class JPATransactionTest extends IntegrationTestCommons {
 		Book b1 = new Book("book");
 		Movie m1 = new Movie("movie");
 
-		JPA.insert(b1);
+		JPA.save(b1);
 		JPA.insert(m1);
 	}
 

@@ -49,75 +49,151 @@ public class JPA extends RapidoidThing {
 		return JPAUtil.currentEntityManager();
 	}
 
-	public static EM with(EntityManager em) {
-		return new EM(em);
+	public static JPATool with(EntityManager em) {
+		return new JPATool(em, true);
 	}
 
-	private static EM em_() {
-		return with(em());
+	private static JPATool tool() {
+		Ctx ctx = Ctxs.get();
+
+		if (ctx != null) {
+			EntityManager em = ctx.persister();
+			return new JPATool(em, true);
+
+		} else {
+			EntityManagerFactory emf = JPAUtil.emf();
+			U.notNull(emf, "JPA.emf");
+			EntityManager em = emf.createEntityManager();
+			return new JPATool(em, false);
+		}
 	}
 
 	public static <E> E reference(Class<E> clazz, Object id) {
-		return em_().reference(clazz, id);
+		JPATool jpa = tool();
+		try {
+			return jpa.reference(clazz, id);
+		} finally {
+			jpa.done();
+		}
 	}
 
 	public static <E> E get(Class<E> clazz, Object id) {
-		return em_().get(clazz, id);
+		JPATool jpa = tool();
+		try {
+			return jpa.get(clazz, id);
+		} finally {
+			jpa.done();
+		}
 	}
 
 	public static <T> T getIfExists(Class<T> clazz, Object id) {
-		return em_().getIfExists(clazz, id);
+		JPATool jpa = tool();
+		try {
+			return jpa.getIfExists(clazz, id);
+		} finally {
+			jpa.done();
+		}
 	}
 
 	public static <E> List<E> getAllEntities() {
-		return em_().getAllEntities();
+		JPATool jpa = tool();
+		try {
+			return jpa.getAllEntities();
+		} finally {
+			jpa.done();
+		}
 	}
 
 	public static <E> E save(E record) {
-		return em_().save(record);
+		JPATool jpa = tool();
+		try {
+			return jpa.save(record);
+		} finally {
+			jpa.done();
+		}
 	}
 
 	public static <E> E insert(E entity) {
-		return em_().insert(entity);
+		JPATool jpa = tool();
+		try {
+			return jpa.insert(entity);
+		} finally {
+			jpa.done();
+		}
 	}
 
 	public static <E> E update(E record) {
-		return em_().update(record);
+		JPATool jpa = tool();
+		try {
+			return jpa.update(record);
+		} finally {
+			jpa.done();
+		}
 	}
 
 	public static void delete(Object record) {
-		em_().delete(record);
+		JPATool jpa = tool();
+		try {
+			jpa.delete(record);
+		} finally {
+			jpa.done();
+		}
 	}
 
 	public static <E> void delete(Class<E> clazz, Object id) {
-		em_().delete(clazz, id);
+		JPATool jpa = tool();
+		try {
+			jpa.delete(clazz, id);
+		} finally {
+			jpa.done();
+		}
 	}
 
 	public static void refresh(Object entity) {
-		em_().refresh(entity);
+		JPATool jpa = tool();
+		try {
+			jpa.refresh(entity);
+		} finally {
+			jpa.done();
+		}
 	}
 
-	public static void merge(Object entity) {
-		em_().merge(entity);
+	public static <E> E merge(E entity) {
+		JPATool jpa = tool();
+		try {
+			return jpa.merge(entity);
+		} finally {
+			jpa.done();
+		}
 	}
 
 	public static void detach(Object entity) {
-		em_().detach(entity);
+		JPATool jpa = tool();
+		try {
+			jpa.detach(entity);
+		} finally {
+			jpa.done();
+		}
 	}
 
 	public static void flush() {
-		em().flush();
+		JPATool jpa = tool();
+		try {
+			jpa.flush();
+		} finally {
+			jpa.done();
+		}
+	}
+
+	public static void bootstrap(String[] path, Class<?>... providedEntities) {
+		JPAUtil.bootstrap(path, providedEntities);
 	}
 
 	public static void transaction(Runnable action) {
-		tx(action, false);
+		transaction(action, false);
 	}
 
-	public static void transactionReadOnly(Runnable action) {
-		tx(action, true);
-	}
-
-	private static void tx(Runnable action, boolean readOnly) {
+	public static void transaction(Runnable action, boolean readOnly) {
 		Ctx ctx = Ctxs.get();
 		boolean newContext = ctx == null;
 
@@ -127,7 +203,7 @@ public class JPA extends RapidoidThing {
 
 		try {
 			EntityManager em = ctx.persister();
-			with(em).transaction(action, readOnly);
+			JPA.with(em).transactional(action, readOnly);
 
 		} finally {
 			if (newContext) {
@@ -136,20 +212,31 @@ public class JPA extends RapidoidThing {
 		}
 	}
 
-	public static void bootstrap(String[] path, Class<?>... providedEntities) {
-		JPAUtil.bootstrap(path, providedEntities);
-	}
-
 	public static boolean isLoaded(Object entity) {
-		return em_().isLoaded(entity);
+		JPATool jpa = tool();
+		try {
+			return jpa.isLoaded(entity);
+		} finally {
+			jpa.done();
+		}
 	}
 
 	public static boolean isLoaded(Object entity, String attribute) {
-		return em_().isLoaded(entity, attribute);
+		JPATool jpa = tool();
+		try {
+			return jpa.isLoaded(entity, attribute);
+		} finally {
+			jpa.done();
+		}
 	}
 
 	public static Object getIdentifier(Object entity) {
-		return em_().getIdentifier(entity);
+		JPATool jpa = tool();
+		try {
+			return jpa.getIdentifier(entity);
+		} finally {
+			jpa.done();
+		}
 	}
 
 	public static boolean isEntity(Object obj) {
@@ -157,7 +244,12 @@ public class JPA extends RapidoidThing {
 	}
 
 	public static List<EntityType<?>> getEntityTypes() {
-		return em_().getEntityTypes();
+		JPATool jpa = tool();
+		try {
+			return jpa.getEntityTypes();
+		} finally {
+			jpa.done();
+		}
 	}
 
 	public static List<String> entities() {
@@ -191,15 +283,30 @@ public class JPA extends RapidoidThing {
 	}
 
 	public static <T> Entities<T> of(Class<T> clazz) {
-		return em_().of(clazz);
+		JPATool jpa = tool();
+		try {
+			return jpa.of(clazz);
+		} finally {
+			jpa.done();
+		}
 	}
 
 	public static long count(Class<?> clazz) {
-		return em_().count(clazz);
+		JPATool jpa = tool();
+		try {
+			return jpa.count(clazz);
+		} finally {
+			jpa.done();
+		}
 	}
 
 	public static <T> Entities<T> find(CriteriaQuery<T> criteria) {
-		return em_().find(criteria);
+		JPATool jpa = tool();
+		try {
+			return jpa.find(criteria);
+		} finally {
+			jpa.done();
+		}
 	}
 
 	public static void bind(Query query, Map<String, ?> namedArgs, Object... args) {

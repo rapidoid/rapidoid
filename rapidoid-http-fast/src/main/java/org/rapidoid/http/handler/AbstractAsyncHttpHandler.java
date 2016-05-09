@@ -170,11 +170,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 			return new Runnable() {
 				@Override
 				public void run() {
-					if (txMode == TransactionMode.READ_ONLY) {
-						JPA.transactionReadOnly(handleRequest);
-					} else {
-						JPA.transaction(handleRequest);
-					}
+					JPA.transaction(handleRequest, txMode == TransactionMode.READ_ONLY);
 				}
 			};
 

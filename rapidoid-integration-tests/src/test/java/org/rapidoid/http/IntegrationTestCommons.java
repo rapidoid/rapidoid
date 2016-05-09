@@ -32,6 +32,7 @@ import org.rapidoid.crypto.Crypto;
 import org.rapidoid.io.IO;
 import org.rapidoid.io.Res;
 import org.rapidoid.ioc.IoC;
+import org.rapidoid.jpa.JPA;
 import org.rapidoid.jpa.JPAUtil;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
@@ -335,6 +336,10 @@ public abstract class IntegrationTestCommons extends TestCommons {
 
 	protected void verifyNoRoutes() {
 		isTrue(On.routes().all().isEmpty());
+	}
+
+	protected void tx(Runnable action) {
+		JPA.transaction(action);
 	}
 
 }

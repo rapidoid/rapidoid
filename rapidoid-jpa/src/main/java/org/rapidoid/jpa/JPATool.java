@@ -3,6 +3,7 @@ package org.rapidoid.jpa;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.u.U;
 
 import javax.persistence.EntityManager;
@@ -11,6 +12,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.metamodel.EntityType;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 /*
  * #%L
@@ -34,12 +36,15 @@ import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class EM extends RapidoidThing {
+public class JPATool extends RapidoidThing {
 
 	private final EntityManager em;
 
-	public EM(EntityManager em) {
+	private final boolean managed;
+
+	public JPATool(EntityManager em, boolean managed) {
 		this.em = em;
+		this.managed = managed;
 	}
 
 	public <E> E save(E entity) {
@@ -53,46 +58,125 @@ public class EM extends RapidoidThing {
 		}
 	}
 
-	public <E> E insert(E entity) {
-		ensureNotInReadOnlyTransation();
+	public <E> E insert(final E entity) {
+		return transactional(new Callable<E>() {
+
+			@Override
+			public E call() throws Exception {
+				em.persist(entity);
+				return entity;
+			}
+
+		});
+	}
+
+	public <E> E update(final E entity) {
+		return transactional(new Callable<E>() {
+
+			@Override
+			public E call() throws Exception {
+				if (em.contains(entity)) {
+					em.persist(entity);
+					return entity;
+				} else {
+					return em.merge(entity);
+				}
+			}
+
+		});
+	}
+
+	public <E> E merge(final E entity) {
+		return transactional(new Callable<E>() {
+
+			@Override
+			public E call() throws Exception {
+				return em.merge(entity);
+			}
+
+		});
+	}
+
+	public <E> void delete(final Class<E> clazz, final Object id) {
+		transactional(new Callable<E>() {
+
+			@Override
+			public E call() throws Exception {
+				em.remove(get(clazz, id));
+				return null;
+			}
+
+		});
+	}
+
+	public void delete(final Object entity) {
+		transactional(new Callable<Object>() {
+
+			@Override
+			public Object call() throws Exception {
+				em.remove(entity);
+				return null;
+			}
+
+		});
+	}
+
+	public void transactional(Runnable action) {
+		transactional(action, false);
+	}
+
+	public void transactional(Runnable action, boolean readOnly) {
+		transactional(Lmbd.callable(action), readOnly);
+	}
+
+	public <E> E transactional(Callable<E> action) {
+		return transactional(action, false);
+	}
+
+	public <E> E transactional(Callable<E> action, boolean readOnly) {
+		ensureNotInRollbackOnlyTransation();
 
 		EntityTransaction tx = em.getTransaction();
+		U.notNull(tx, "transaction");
 
-		boolean txWasActive = tx.isActive();
+		boolean newTx = !tx.isActive();
 
-		if (!txWasActive) {
+		if (newTx) {
 			tx.begin();
 		}
 
-		try {
-			em.persist(entity);
-			em.flush();
+		if (readOnly) {
+			tx.setRollbackOnly();
+		}
 
-			if (!txWasActive) {
-				tx.commit();
+		try {
+			E result = action.call();
+
+			if (newTx) {
+				if (tx.getRollbackOnly()) {
+					tx.rollback();
+				} else {
+					tx.commit();
+				}
 			}
 
-			return entity;
+			return result;
 
 		} catch (Throwable e) {
-			if (!txWasActive) {
+
+			if (newTx) {
 				if (tx.isActive()) {
 					tx.rollback();
 				}
 			}
+
 			throw U.rte("Transaction execution error, rolled back!", e);
 		}
 	}
 
-	public <E> E update(E entity) {
-		ensureNotInReadOnlyTransation();
-
-		if (em.contains(entity)) {
-			em.persist(entity);
-			return entity;
-		} else {
-			return em.merge(entity);
-		}
+	private void ensureNotInRollbackOnlyTransation() {
+		EntityTransaction tx = em.getTransaction();
+		U.must(!tx.isActive() || !tx.getRollbackOnly(), "Cannot perform writes inside read-only transaction!");
 	}
 
 	public <E> E get(Class<E> clazz, Object id) {
@@ -133,82 +217,24 @@ public class EM extends RapidoidThing {
 		return em.createQuery(cq).getSingleResult();
 	}
 
-	public void refresh(Object entity) {
+	public void flush() {
+		transactional(new Callable<Object>() {
+
+			@Override
+			public Object call() throws Exception {
+				em.flush();
+				return null;
+			}
+
+		});
+	}
+
+	public void refresh(final Object entity) {
 		em.refresh(entity);
 	}
 
-	public void merge(Object entity) {
-		em.merge(entity);
-	}
-
-	public void detach(Object entity) {
+	public void detach(final Object entity) {
 		em.detach(entity);
-	}
-
-	public <E> void delete(Class<E> clazz, Object id) {
-		ensureNotInReadOnlyTransation();
-		em.remove(get(clazz, id));
-	}
-
-	public void delete(Object entity) {
-		ensureNotInReadOnlyTransation();
-		em.remove(entity);
-	}
-
-	public void transaction(Runnable action, boolean readOnly) {
-		final EntityTransaction tx = em.getTransaction();
-		U.notNull(tx, "transaction");
-
-		if (readOnly) {
-			runTxReadOnly(action, tx);
-		} else {
-			runTxRW(action, tx);
-		}
-	}
-
-	private void runTxReadOnly(Runnable action, EntityTransaction tx) {
-		boolean txWasActive = tx.isActive();
-
-		if (!txWasActive) {
-			tx.begin();
-		}
-
-		tx.setRollbackOnly();
-
-		try {
-			action.run();
-		} catch (Throwable e) {
-			tx.rollback();
-			throw U.rte("Transaction execution error, rolled back!", e);
-		}
-
-		if (!txWasActive) {
-			tx.rollback();
-		}
-	}
-
-	private void runTxRW(Runnable action, EntityTransaction tx) {
-		boolean txWasActive = tx.isActive();
-
-		if (!txWasActive) {
-			tx.begin();
-		}
-
-		try {
-			action.run();
-		} catch (Throwable e) {
-			tx.rollback();
-			throw U.rte("Transaction execution error, rolled back!", e);
-		}
-
-		if (!txWasActive) {
-			tx.commit();
-		}
-	}
-
-	private void ensureNotInReadOnlyTransation() {
-		EntityTransaction tx = em.getTransaction();
-		U.must(!tx.isActive() || !tx.getRollbackOnly(), "Cannot perform writes inside read-only transaction!");
 	}
 
 	public boolean isLoaded(Object entity) {
@@ -235,6 +261,20 @@ public class EM extends RapidoidThing {
 
 	private CriteriaBuilder cb() {
 		return JPA.provideEmf().getCriteriaBuilder();
+	}
+
+	public void close() {
+		em.close();
+	}
+
+	public void done() {
+		if (!managed) {
+			close();
+		}
+	}
+
+	public EntityManager em() {
+		return em;
 	}
 
 }
