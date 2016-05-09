@@ -1,4 +1,4 @@
-package org.rapidoid.gui;
+package org.rapidoid.gui.input;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Programmatic;
@@ -9,14 +9,13 @@ import org.rapidoid.beany.Metadata;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
 import org.rapidoid.commons.Err;
+import org.rapidoid.gui.GUI;
 import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.gui.reqinfo.IReqInfo;
 import org.rapidoid.gui.var.PostedDataVar;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.tag.InputTag;
-import org.rapidoid.html.tag.TextareaTag;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
@@ -230,48 +229,47 @@ public class Field extends AbstractWidget<Field> {
 	}
 
 	protected Object checkboxesInput(String name, Collection<?> options, Var<?> var) {
-		return GUI.checkboxes(name, options, var);
+		return GUI.checkboxes().name(name).options(options).var(var);
 	}
 
 	protected Object radiosInput(String name, Collection<?> options, Var<?> var) {
-		return GUI.radios(name, options, var);
+		return GUI.radios().name(name).options(options).var(var);
 	}
 
 	protected Object multiSelectInput(String name, Collection<?> options, Var<?> var) {
-		return GUI.multiSelect(options, var).name(name);
+		return GUI.multiSelect().options(options).var(var).name(name);
 	}
 
 	protected Object dropdownInput(String name, Collection<?> options, Var<?> var) {
-		return GUI.dropdown(options, var).name(name);
+		return GUI.dropdown().options(options).var(var).name(name);
 	}
 
 	protected Object checkboxInput(String name, Var<?> var) {
-		return GUI.checkbox(var).name(name);
+		return GUI.checkbox().var(var).name(name);
 	}
 
 	protected Object textareaInput(String name, String desc, Var<?> var) {
-		TextareaTag textarea = GUI.txtbig(var).name(name);
+		TextArea textarea = GUI.txtbig().var(var).name(name);
 		textarea = layout == FormLayout.INLINE ? textarea.placeholder(desc) : textarea;
 		return textarea;
 	}
 
 	protected Object emailInput(String name, String desc, Var<?> var) {
-		InputTag input;
-		input = GUI.email(var).name(name);
+		EmailInput input;
+		input = GUI.email().var(var).name(name);
 		input = layout == FormLayout.INLINE ? input.placeholder(desc) : input;
 		return input;
 	}
 
 	protected Object passwordInput(String name, String desc, Var<?> var) {
-		InputTag input;
-		input = GUI.password(var).name(name);
+		PasswordInput input;
+		input = GUI.password().var(var).name(name);
 		input = layout == FormLayout.INLINE ? input.placeholder(desc) : input;
 		return input;
 	}
 
 	protected Object textInput(String name, String desc, Var<?> var) {
-		InputTag input;
-		input = GUI.txt(var).name(name);
+		TextInput input = GUI.txt().var(var).name(name);
 		input = layout == FormLayout.INLINE ? input.placeholder(desc) : input;
 		return input;
 	}

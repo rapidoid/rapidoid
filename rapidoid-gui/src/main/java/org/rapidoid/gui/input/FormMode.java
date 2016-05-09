@@ -1,4 +1,4 @@
-package org.rapidoid.gui;
+package org.rapidoid.gui.input;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;

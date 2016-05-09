@@ -14,11 +14,15 @@ Rapidoid = (function() {
     function _init() {
         $(function () {
 
-          $('[data-toggle="tooltip"]').tooltip();
+        $('[data-toggle="tooltip"]').tooltip();
 
-          $('.pretty').each(function() {
+        $('.pretty').each(function() {
             $(this).prettyCheckable({ color: 'blue' });
-          });
+        });
+
+        $(document).ready(function() {
+            $("select.select2").select2();
+        });
 
           $('.copy-snippet').prepend('<button class="btn btn-default pull-right" data-copy-to-clipboard><i class="fa fa-copy"></i></button>');
 

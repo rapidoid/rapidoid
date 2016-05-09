@@ -9,6 +9,7 @@ import org.rapidoid.commons.IRange;
 import org.rapidoid.commons.Range;
 import org.rapidoid.commons.Str;
 import org.rapidoid.gui.*;
+import org.rapidoid.gui.input.Form;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.Resp;

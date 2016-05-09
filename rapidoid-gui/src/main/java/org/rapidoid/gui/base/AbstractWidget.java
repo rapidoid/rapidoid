@@ -121,4 +121,8 @@ public abstract class AbstractWidget<W extends AbstractWidget<?>> extends Rapido
 		return GUI.a(contents);
 	}
 
+	@SuppressWarnings("unchecked")
+	protected W me() {
+		return (W) this;
+	}
 }

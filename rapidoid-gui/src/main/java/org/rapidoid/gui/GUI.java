@@ -29,6 +29,7 @@ import org.rapidoid.commons.English;
 import org.rapidoid.commons.Str;
 import org.rapidoid.commons.TimeSeries;
 import org.rapidoid.gui.base.AbstractWidget;
+import org.rapidoid.gui.input.*;
 import org.rapidoid.gui.reqinfo.IReqInfo;
 import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.gui.var.LocalVar;
@@ -49,7 +50,10 @@ import org.rapidoid.util.Msc;
 import org.rapidoid.var.Var;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.NavigableMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Authors("Nikolche Mihajlovski")
@@ -510,166 +514,44 @@ public abstract class GUI extends HTML {
 		return Cls.customizable(Highlight.class, text, regex);
 	}
 
-	public static InputTag email(Var<?> var) {
-		return input().type("email").class_("form-control").value(str(var.get()));
+	public static EmailInput email() {
+		return Cls.customizable(EmailInput.class);
 	}
 
-	public static InputTag email(String var) {
-		return email(var, "");
+	public static PasswordInput password() {
+		return Cls.customizable(PasswordInput.class);
 	}
 
-	public static InputTag email(String var, String defaultValue) {
-		return email(var(var, defaultValue));
+	public static TextInput txt() {
+		return Cls.customizable(TextInput.class);
 	}
 
-	public static InputTag password(Var<?> var) {
-		return input().type("password").name(var.name()).class_("form-control").value(str(var.get()));
+	public static TextArea txtbig() {
+		return Cls.customizable(TextArea.class);
 	}
 
-	public static InputTag password(String var) {
-		return password(var, "");
+	public static Checkbox checkbox() {
+		return Cls.customizable(Checkbox.class);
 	}
 
-	public static InputTag password(String var, String defaultValue) {
-		return password(var(var, defaultValue));
+	public static Checkboxes checkboxes() {
+		return Cls.customizable(Checkboxes.class);
 	}
 
-	public static InputTag txt(Var<?> var) {
-		return input().type("text").name(var.name()).class_("form-control").value(str(var.get()));
+	public static Radio radio() {
+		return Cls.customizable(Radio.class);
 	}
 
-	public static InputTag txt(String var) {
-		return txt(var, "");
+	public static Radios radios() {
+		return Cls.customizable(Radios.class);
 	}
 
-	public static InputTag txt(String var, String defaultValue) {
-		return txt(var(var, defaultValue));
+	public static MultiSelect multiSelect() {
+		return Cls.customizable(MultiSelect.class);
 	}
 
-	public static TextareaTag txtbig(Var<?> var) {
-		return textarea().class_("form-control").contents(str(var.get()));
-	}
-
-	public static TextareaTag txtbig(String var) {
-		return txtbig(var, "");
-	}
-
-	public static TextareaTag txtbig(String var, String defaultValue) {
-		return txtbig(var(var, defaultValue));
-	}
-
-	public static InputTag checkbox(Var<?> var) {
-		String value = str(var.get());
-		return input().type("checkbox").name(var.name()).value(value).checked(has(var, value));
-	}
-
-	private static boolean has(Var<?> var, String value) {
-		return AnyObj.contains(var.get(), value);
-	}
-
-	public static InputTag checkbox(String var) {
-		return checkbox(var, false);
-	}
-
-	public static InputTag checkbox(String var, boolean defaultValue) {
-		return checkbox(var(var, defaultValue));
-	}
-
-	public static SelectTag dropdown(Collection<?> options, Var<?> var) {
-		U.notNull(options, "dropdown options");
-		SelectTag dropdown = select().class_("form-control").multiple(false);
-
-		for (Object opt : options) {
-			String value = str(var.get());
-			OptionTag op = option(opt).value(str(opt)).value(value);
-			dropdown = dropdown.append(op);
-		}
-
-		return dropdown;
-	}
-
-	public static SelectTag dropdown(Collection<?> options, String var) {
-		return dropdown(options, var, null);
-	}
-
-	public static SelectTag dropdown(Collection<?> options, String var, Object defaultValue) {
-		return dropdown(options, var(var, serializable(defaultValue)));
-	}
-
-	public static SelectTag multiSelect(Collection<?> options, Var<?> var) {
-		U.notNull(options, "multi-select options");
-		SelectTag select = select().name(var.name()).class_("form-control").multiple(true);
-
-		for (Object opt : options) {
-			String value = str(opt);
-			OptionTag op = option(opt).value(value).selected(has(var, value));
-			select = select.append(op);
-		}
-
-		return select;
-	}
-
-	public static SelectTag multiSelect(Collection<?> options, String var) {
-		return multiSelect(options, var, U.list());
-	}
-
-	public static SelectTag multiSelect(Collection<?> options, String var, Collection<?> defaultValue) {
-		return multiSelect(options, var(var, serializable(defaultValue)));
-	}
-
-	public static Tag[] radios(String name, Collection<?> options, Var<?> var) {
-		U.notNull(options, "radios options");
-		Tag[] radios = new Tag[options.size()];
-
-		int i = 0;
-		for (Object opt : options) {
-			String value = str(opt);
-			InputTag radio = input().type("radio").class_("pretty").attr("data-label", value).name(name).value(value).checked(U.eq(var.get(), value));
-			radios[i] = radio; // label(radio, opt).class_("radio-inline");
-			i++;
-		}
-		return radios;
-	}
-
-	public static Tag[] radios(Collection<?> options, Var<?> var) {
-		return radios(var.name(), options, var);
-	}
-
-	public static Tag[] checkboxes(String name, Collection<?> options, Var<?> var) {
-		U.notNull(options, "checkboxes options");
-		Tag[] checkboxes = new Tag[options.size()];
-
-		int i = 0;
-		for (Object opt : options) {
-			String value = str(opt);
-			InputTag cc = input().type("checkbox").attr("data-label", value)
-					.class_("pretty").name(name).value(value).checked(has(var, value));
-			checkboxes[i] = cc; //label(cc, opt).class_("radio-checkbox");
-			i++;
-		}
-
-		return checkboxes;
-	}
-
-	public static Tag[] checkboxes(Collection<?> options, Var<?> var) {
-		return checkboxes(var.name(), options, var);
-	}
-
-	public static Tag[] checkboxes(Collection<?> options, String var) {
-		return checkboxes(options, var, U.list());
-	}
-
-	public static Tag[] checkboxes(Collection<?> options, String var, Collection<?> defaultValue) {
-		return checkboxes(options, var(var, serializable(defaultValue)));
-	}
-
-	@SuppressWarnings("unchecked")
-	private static <T extends Serializable> T serializable(Object value) {
-		if (value == null || value instanceof Serializable) {
-			return (T) value;
-		} else {
-			throw U.rte("Not serializable: " + value);
-		}
+	public static Dropdown dropdown() {
+		return Cls.customizable(Dropdown.class);
 	}
 
 	public static Object display(Object item) {

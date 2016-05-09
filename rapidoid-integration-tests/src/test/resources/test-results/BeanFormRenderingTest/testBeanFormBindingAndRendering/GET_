@@ -3,24 +3,24 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 600
+Content-Length: 660
 
 <form class="" role="form">
   <div class="form-group">
     <label>Name: </label>
-    <input type="text" name="name" class="form-control" value="unknown">
+    <input type="text" class="form-control" name="name" value="unknown" placeholder="">
   </div>
   <div class="form-group">
     <label>Age: </label>
-    <input type="text" name="age" class="form-control" value="100">
+    <input type="text" class="form-control" name="age" value="100" placeholder="">
   </div>
   <div class="form-group">
     <label>X: </label>
-    <input type="text" name="x" class="form-control" value="">
+    <input type="text" class="form-control" name="x" value="" placeholder="">
   </div>
   <div class="form-group">
     <label>Desc: </label>
-    <input type="text" name="desc" class="form-control" value="">
+    <input type="text" class="form-control" name="desc" value="" placeholder="">
   </div>
   <div class="form-group"></div>
 </form>

@@ -1,9 +1,11 @@
-package org.rapidoid.gui;
+package org.rapidoid.gui.input;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.AnyObj;
 import org.rapidoid.commons.Err;
+import org.rapidoid.gui.Btn;
+import org.rapidoid.gui.GUI;
 import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
