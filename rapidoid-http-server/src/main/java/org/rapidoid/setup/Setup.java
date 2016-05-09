@@ -536,13 +536,7 @@ public class Setup extends RapidoidThing implements Constants {
 		JSON.reset();
 
 		for (Setup setup : instances()) {
-			setup.iocContext().reset();
-			setup.http().resetConfig();
-			setup.defaults = new RouteOptions();
-			setup.defaults.segment(setup.segment);
-			setup.activated = false;
-			setup.path((String[]) null);
-			setup.attributes().clear();
+			setup.resetWithoutRestart();
 		}
 
 		initSetupDefaults();
@@ -561,6 +555,20 @@ public class Setup extends RapidoidThing implements Constants {
 		Msc.invokeMain(entry, Conf.ROOT.getArgs());
 
 		Log.info("!Successfully restarted the application!");
+	}
+
+	public void resetWithoutRestart() {
+		bootstrapedJPA.reset();
+		bootstrapedComponents.reset();
+		bootstrapedGoodies.reset();
+
+		ioCContext.reset();
+		http().resetConfig();
+		path((String[]) null);
+		defaults = new RouteOptions();
+		defaults.segment(segment);
+		attributes().clear();
+		initSetupDefaults();
 	}
 
 	private static void initSetupDefaults() {
@@ -602,20 +610,6 @@ public class Setup extends RapidoidThing implements Constants {
 
 	public RouteOptions defaults() {
 		return defaults;
-	}
-
-	public void resetWithoutRestart() {
-		bootstrapedJPA.reset();
-		bootstrapedComponents.reset();
-		bootstrapedGoodies.reset();
-
-		ioCContext.reset();
-		http().resetConfig();
-		path((String[]) null);
-		defaults = new RouteOptions();
-		defaults.segment(segment);
-		attributes().clear();
-		initSetupDefaults();
 	}
 
 	public String segment() {
