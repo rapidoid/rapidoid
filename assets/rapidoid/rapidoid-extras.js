@@ -202,7 +202,7 @@ $R = (function() {
     return {
             get : get,
             post : post,
-            params : {}
+            data : {}
     };
 
 })();

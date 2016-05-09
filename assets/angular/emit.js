@@ -40,8 +40,8 @@ Rapidoid.initializer(function($scope) {
 
         var inputs = {};
 
-        for (var p in $R.params) {
-            var param = $R.params[p];
+        for (var p in $R.data) {
+            var param = $R.data[p];
             inputs[p] = (typeof (param) == 'function') ? param() : param;
         }
 
