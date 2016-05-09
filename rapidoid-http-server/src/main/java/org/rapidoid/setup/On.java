@@ -7,13 +7,11 @@ import org.rapidoid.config.Config;
 import org.rapidoid.http.HttpRoutes;
 import org.rapidoid.http.ReqHandler;
 import org.rapidoid.http.ReqRespHandler;
-import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.handler.HttpHandler;
+import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.http.processor.HttpProcessor;
 import org.rapidoid.ioc.IoCContext;
-
-import java.lang.annotation.Annotation;
 
 /*
  * #%L
@@ -105,24 +103,12 @@ public class On extends RapidoidThing {
 		return SETUP.address(address);
 	}
 
-	public static Setup path(String... path) {
-		return SETUP.path(path);
-	}
-
-	public static String[] path() {
-		return SETUP.path();
-	}
-
 	public static synchronized Setup processor(HttpProcessor listener) {
 		return SETUP.processor(listener);
 	}
 
-	public static Setup args(String... args) {
-		return SETUP.args(args);
-	}
-
-	public static Setup bootstrap(String... args) {
-		return SETUP.bootstrap(args);
+	public static Setup bootstrap() {
+		return SETUP.bootstrap();
 	}
 
 	public static Setup bootstrapJPA() {
@@ -133,13 +119,8 @@ public class On extends RapidoidThing {
 		return SETUP.bootstrapGoodies();
 	}
 
-	public static Setup bootstrapComponents() {
-		return SETUP.bootstrapComponents();
-	}
-
-	@SuppressWarnings({"varargs"})
-	public static OnAnnotated annotated(Class<? extends Annotation>... annotated) {
-		return SETUP.annotated(annotated);
+	public static Setup scan(String... packages) {
+		return SETUP.scan(packages);
 	}
 
 	public static Setup deregister(String verb, String path) {

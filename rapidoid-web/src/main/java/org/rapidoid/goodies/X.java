@@ -8,12 +8,16 @@ import org.rapidoid.commons.English;
 import org.rapidoid.commons.IRange;
 import org.rapidoid.commons.Range;
 import org.rapidoid.commons.Str;
-import org.rapidoid.gui.*;
+import org.rapidoid.gui.Btn;
+import org.rapidoid.gui.GUI;
+import org.rapidoid.gui.Grid;
+import org.rapidoid.gui.Pager;
 import org.rapidoid.gui.input.Form;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.Resp;
 import org.rapidoid.jpa.JPA;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
 import org.rapidoid.sql.JDBC;
@@ -268,7 +272,7 @@ public class X extends RapidoidThing {
 	}
 
 	public static void scaffold(Setup setup, String uri, Class<?> entityType) {
-		JPA.bootstrap(setup.path(), entityType);
+		JPA.bootstrap(App.path(), entityType);
 
 		scaffoldEntity(setup, uri, entityType);
 	}
@@ -278,7 +282,7 @@ public class X extends RapidoidThing {
 	}
 
 	public static void scaffold(Setup setup, Class<?>... entityTypes) {
-		JPA.bootstrap(setup.path(), entityTypes);
+		JPA.bootstrap(App.path(), entityTypes);
 
 		for (Class<?> entityType : entityTypes) {
 			scaffoldEntity(setup, GUI.typeUri(entityType), entityType);

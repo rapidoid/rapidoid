@@ -26,7 +26,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.commons.Env;
-import org.rapidoid.commons.MediaType;
 import org.rapidoid.config.Conf;
 import org.rapidoid.crypto.Crypto;
 import org.rapidoid.io.IO;
@@ -37,10 +36,9 @@ import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.setup.Admin;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.OnChanges;
-import org.rapidoid.setup.Setup;
-import org.rapidoid.sql.JDBC;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 
@@ -76,7 +74,7 @@ public abstract class HttpTestCommons extends TestCommons {
 		Log.setLogLevel(LogLevel.INFO);
 		IoC.defaultContext().reset();
 
-		Setup.resetGlobalState();
+		App.resetGlobalState();
 		OnChanges.ignore();
 
 		On.setup().resetWithoutRestart();

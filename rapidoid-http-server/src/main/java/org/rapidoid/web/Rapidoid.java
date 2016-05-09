@@ -4,6 +4,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.setup.Admin;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.Once;
@@ -40,8 +41,10 @@ public class Rapidoid extends RapidoidThing {
 	public static synchronized void run(String... args) {
 		if (!once.go()) return;
 
-		On.bootstrap(args);
-		Admin.bootstrap(args);
+		App.args(args);
+
+		On.bootstrap();
+		Admin.bootstrap();
 
 		Msc.logSection("Rapidoid bootstrap completed");
 	}

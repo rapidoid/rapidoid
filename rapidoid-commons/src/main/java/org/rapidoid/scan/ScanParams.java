@@ -3,8 +3,11 @@ package org.rapidoid.scan;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.lambda.Operation;
+import org.rapidoid.log.Log;
 
 import java.lang.annotation.Annotation;
+import java.util.Collection;
 import java.util.List;
 
 /*
@@ -62,6 +65,11 @@ public class ScanParams extends RapidoidThing {
 		return this;
 	}
 
+	@SuppressWarnings("unchecked")
+	public synchronized ScanParams annotated(Collection<Class<? extends Annotation>> annotated) {
+		return annotated(annotated.toArray(new Class[annotated.size()]));
+	}
+
 	public synchronized Class<? extends Annotation>[] annotated() {
 		return this.annotated;
 	}
@@ -83,4 +91,13 @@ public class ScanParams extends RapidoidThing {
 		return ClasspathUtil.loadClasses(this);
 	}
 
+	public synchronized void forEach(Operation<Class<?>> classOperation) {
+		for (Class<?> cls : loadAll()) {
+			try {
+				classOperation.execute(cls);
+			} catch (Exception e) {
+				Log.error("Cannot process annotated class!", e);
+			}
+		}
+	}
 }

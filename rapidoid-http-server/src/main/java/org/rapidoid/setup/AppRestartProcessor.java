@@ -40,7 +40,7 @@ public class AppRestartProcessor extends AbstractHttpProcessor {
 	public void onRequest(Channel channel, boolean isGet, boolean isKeepAlive, BufRange body,
 	                      BufRange verb, BufRange uri, BufRange path, BufRange query, BufRange protocol, BufRanges headers) {
 
-		Setup.restartIfDirty();
+		App.restartIfDirty();
 
 		next.onRequest(channel, isGet, isKeepAlive, body, verb, uri, path, query, protocol, headers);
 	}

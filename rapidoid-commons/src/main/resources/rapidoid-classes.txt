@@ -5,7 +5,6 @@ org.rapidoid.activity.LifecycleActivity
 org.rapidoid.activity.NamedActivity
 org.rapidoid.activity.RapidoidThread
 org.rapidoid.activity.RapidoidThreadFactory
-org.rapidoid.annotation.App
 org.rapidoid.annotation.Authors
 org.rapidoid.annotation.Autocreate
 org.rapidoid.annotation.Composite
@@ -543,9 +542,9 @@ org.rapidoid.serialize.Serialize
 org.rapidoid.serialize.TypeSpecificDeserializer
 org.rapidoid.serialize.TypeSpecificSerializer
 org.rapidoid.setup.Admin
+org.rapidoid.setup.App
 org.rapidoid.setup.AppRestartProcessor
 org.rapidoid.setup.On
-org.rapidoid.setup.OnAnnotated
 org.rapidoid.setup.OnChanges
 org.rapidoid.setup.OnRoute
 org.rapidoid.setup.PojoHandlersSetup

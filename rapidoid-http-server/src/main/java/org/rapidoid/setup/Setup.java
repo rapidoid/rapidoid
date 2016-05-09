@@ -21,7 +21,6 @@ import org.rapidoid.http.handler.optimized.DelegatingParamsAwareReqRespHandler;
 import org.rapidoid.http.impl.HttpRoutesImpl;
 import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.http.processor.HttpProcessor;
-import org.rapidoid.io.Res;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.job.Jobs;
@@ -30,9 +29,8 @@ import org.rapidoid.jpa.JPAPersisterProvider;
 import org.rapidoid.lambda.NParamLambda;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Server;
-import org.rapidoid.reload.Reload;
-import org.rapidoid.render.Templates;
 import org.rapidoid.scan.ClasspathUtil;
+import org.rapidoid.scan.Scan;
 import org.rapidoid.security.Roles;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
@@ -88,17 +86,6 @@ public class Setup extends RapidoidThing implements Constants {
 		}
 	}
 
-	private static volatile String mainClassName;
-	private static volatile String appPkgName;
-	private static volatile boolean dirty;
-
-	static volatile boolean restarted;
-	static volatile ClassLoader loader;
-
-	static {
-		resetGlobalState();
-	}
-
 	private final String name;
 	private final String segment;
 	private final Config appConfig;
@@ -116,7 +103,6 @@ public class Setup extends RapidoidThing implements Constants {
 
 	private volatile Integer port;
 	private volatile String address = "0.0.0.0";
-	private volatile String[] path;
 
 	private volatile HttpProcessor processor;
 
@@ -161,23 +147,14 @@ public class Setup extends RapidoidThing implements Constants {
 		this.defaults.segment(segment);
 	}
 
-	public static void resetGlobalState() {
-		mainClassName = null;
-		appPkgName = null;
-		restarted = false;
-		loader = Setup.class.getClassLoader();
-		dirty = false;
-		initSetupDefaults();
-	}
-
 	public FastHttp http() {
 		return delegateAdminToApp() ? ON.http() : http;
 	}
 
 	public synchronized Server listen() {
-		if (!listening && !restarted) {
+		if (!listening && !App.restarted) {
 
-			inferCallers();
+			App.inferCallers();
 
 			listening = true;
 
@@ -219,7 +196,7 @@ public class Setup extends RapidoidThing implements Constants {
 		}
 		activated = true;
 
-		if (!restarted) {
+		if (!App.restarted) {
 			listen();
 		}
 
@@ -363,7 +340,6 @@ public class Setup extends RapidoidThing implements Constants {
 		listening = false;
 		port = null;
 		address = null;
-		path = null;
 		processor = null;
 		activated = false;
 		ioCContext.reset();
@@ -388,55 +364,12 @@ public class Setup extends RapidoidThing implements Constants {
 		return http().attributes();
 	}
 
-	public Setup path(String... path) {
-		this.path = path;
-		return this;
-	}
-
-	public synchronized String[] path() {
-		inferCallers();
-
-		if (U.isEmpty(this.path)) {
-			this.path = new String[]{appPkgName};
-		}
-
-		return path;
-	}
-
-	private static void inferCallers() {
-		if (!restarted && appPkgName == null && mainClassName == null) {
-			String pkg = Msc.getCallingPackage();
-
-			appPkgName = pkg;
-
-			if (mainClassName == null) {
-				Class<?> mainClass = Msc.getCallingMainClass();
-				mainClassName = mainClass != null ? mainClass.getName() : null;
-			}
-
-			if (mainClassName != null || pkg != null) {
-				Log.info("Inferring application root", "!main", mainClassName, "!package", pkg);
-			}
-		}
-	}
-
-	public Setup args(String... args) {
-		if (isApp()) {
-			Conf.args(args);
-		}
-
-		serverConfig.args(args);
-		return this;
-	}
-
-	public Setup bootstrap(String... args) {
-		this.args(args);
-
+	public Setup bootstrap() {
 		setupConfig();
 
 		if (!isAdmin()) {
 			bootstrapJPA();
-			bootstrapComponents();
+			scan();
 		}
 
 		bootstrapGoodies();
@@ -456,14 +389,14 @@ public class Setup extends RapidoidThing implements Constants {
 		if (!bootstrapedJPA.go()) return this;
 
 		if (Msc.hasJPA()) {
-			JPA.bootstrap(path());
+			JPA.bootstrap(App.path());
 		}
 
 		return this;
 	}
 
 	@SuppressWarnings("unchecked")
-	public Setup bootstrapComponents() {
+	public Setup scan(String... packages) {
 		if (!bootstrapedComponents.go()) return this;
 
 		List<Class<? extends Annotation>> annotated = U.list(Controller.class, Service.class, Main.class);
@@ -473,7 +406,11 @@ public class Setup extends RapidoidThing implements Constants {
 			annotated.add(Cls.<Annotation>get("javax.inject.Singleton"));
 		}
 
-		beans(annotated(annotated.toArray(new Class[annotated.size()])).in(path()).loadAll().toArray());
+		if (U.isEmpty(packages)) {
+			packages = App.path();
+		}
+
+		beans(Scan.annotated(annotated).in(packages).loadAll().toArray());
 		return this;
 	}
 
@@ -485,10 +422,6 @@ public class Setup extends RapidoidThing implements Constants {
 		if (goodiesClass != null) Cls.newInstance(goodiesClass, this);
 
 		return this;
-	}
-
-	public OnAnnotated annotated(Class<? extends Annotation>... annotated) {
-		return new OnAnnotated(annotated, path());
 	}
 
 	public Setup deregister(String verb, String path) {
@@ -505,58 +438,6 @@ public class Setup extends RapidoidThing implements Constants {
 		return ioCContext;
 	}
 
-	public static void notifyChanges() {
-		if (!dirty) {
-			dirty = true;
-			Log.info("Detected class or resource changes");
-		}
-	}
-
-	static void restartIfDirty() {
-		if (dirty) {
-			synchronized (Setup.class) {
-				if (dirty) {
-					restartApp();
-					dirty = false;
-				}
-			}
-		}
-	}
-
-	private static void restartApp() {
-		U.notNull(mainClassName, "Cannot restart, the main class is unknown!");
-
-		Msc.logSection("!Restarting the web application...");
-
-		restarted = true;
-
-		Conf.reload();
-		Res.reset();
-		Templates.reset();
-		JSON.reset();
-
-		for (Setup setup : instances()) {
-			setup.resetWithoutRestart();
-		}
-
-		initSetupDefaults();
-
-		loader = Reload.createClassLoader();
-		ClasspathUtil.setDefaultClassLoader(loader);
-
-		Class<?> entry;
-		try {
-			entry = loader.loadClass(mainClassName);
-		} catch (ClassNotFoundException e) {
-			Log.error("Cannot restart the application, the main class (app entry point) is missing!");
-			return;
-		}
-
-		Msc.invokeMain(entry, Conf.ROOT.getArgs());
-
-		Log.info("!Successfully restarted the application!");
-	}
-
 	public void resetWithoutRestart() {
 		bootstrapedJPA.reset();
 		bootstrapedComponents.reset();
@@ -564,14 +445,13 @@ public class Setup extends RapidoidThing implements Constants {
 
 		ioCContext.reset();
 		http().resetConfig();
-		path((String[]) null);
 		defaults = new RouteOptions();
 		defaults.segment(segment);
 		attributes().clear();
-		initSetupDefaults();
+		initDefaults();
 	}
 
-	private static void initSetupDefaults() {
+	static void initDefaults() {
 		ADMIN.defaults().roles(Roles.ADMINISTRATOR);
 	}
 

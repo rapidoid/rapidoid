@@ -7,6 +7,7 @@ import org.rapidoid.http.IntegrationTestCommons;
 import org.rapidoid.http.Req;
 import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.ioc.IoCContextWrapper;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
@@ -41,7 +42,8 @@ public class JPAInjectionTest extends IntegrationTestCommons {
 	@Test
 	public void testJPAInjection() {
 		JPA.bootstrap(path());
-		On.path(path()).bootstrapComponents();
+		App.path(path());
+		On.scan();
 
 		postData("/books?title=a", U.map("title", "My Book 1"));
 		postData("/books?title=b", U.map("title", "My Book 2"));

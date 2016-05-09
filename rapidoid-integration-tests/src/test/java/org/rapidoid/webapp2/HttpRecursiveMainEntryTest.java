@@ -26,6 +26,7 @@ import org.rapidoid.annotation.Main;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.IntegrationTestCommons;
 import org.rapidoid.setup.Admin;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 import org.rapidoid.web.Rapidoid;
 
@@ -35,10 +36,9 @@ public class HttpRecursiveMainEntryTest extends IntegrationTestCommons {
 
 	@Test
 	public void testSequentialControllerRegistration() {
-		On.path(path());
-		Admin.path(path());
+		App.path(path());
 
-		On.bootstrapComponents();
+		On.scan();
 		On.get("/a").plain("A");
 
 		onlyGet("/a");
@@ -60,8 +60,9 @@ class EntryPoint1 {
 @Main
 class EntryPoint2 {
 	public static void main(String[] args) {
-		On.bootstrap(args);
-		Admin.bootstrap(args);
+		App.args(args);
+		On.bootstrap();
+		Admin.bootstrap();
 		On.get("/c").plain("C");
 	}
 }

@@ -68,6 +68,14 @@ public class Conf extends RapidoidThing {
 		ConfigHelp.processHelp(args);
 		ROOT.args(args);
 
+		configureProfiles();
+
+		if (Env.dev()) {
+			Log.setStyled(true);
+		}
+	}
+
+	private static void configureProfiles() {
 		String profiles = ROOT.entry("profiles").str().getOrNull();
 
 		if (profiles != null) {
@@ -80,10 +88,6 @@ public class Conf extends RapidoidThing {
 				Log.info("No profiles were specified, configuring the 'default' profile", "!profiles", Env.profiles());
 				reload();
 			}
-		}
-
-		if (Env.dev()) {
-			Log.setStyled(true);
 		}
 	}
 

@@ -26,6 +26,8 @@ import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ioc.IoC;
+import org.rapidoid.scan.Scan;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
@@ -36,6 +38,7 @@ import java.util.List;
 @Since("5.0.10")
 public class HttpPojoControllerTest extends IntegrationTestCommons {
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testPojoHandlers() {
 		On.beans(new Object() {
@@ -55,30 +58,31 @@ public class HttpPojoControllerTest extends IntegrationTestCommons {
 		onlyPost("/x");
 		notFound("/b");
 
-		List<String> ctrls = On.annotated(MyTestController.class).in("pkg1", "pkg2").getAll();
+		List<String> ctrls = Scan.annotated(MyTestController.class).in("pkg1", "pkg2").getAll();
 		isTrue(ctrls.isEmpty());
 
-		List<String> ctrls2 = On.annotated(MyTestController.class).in("non-existing-pkg", "").getAll();
+		List<String> ctrls2 = Scan.annotated(MyTestController.class).in("non-existing-pkg", "").getAll();
 		eq(ctrls2, U.list(Ff.class.getName()));
 
-		On.annotated(MyTestController.class, MyTestController.class).forEach(On::beans);
+		Scan.annotated(MyTestController.class, MyTestController.class).in(App.path()).forEach(On::beans);
 
 		onlyGet("/a");
 		onlyGet("/b");
 		onlyPost("/x");
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testPojoHandlersWithIoC() {
 		notFound("/b");
 
-		List<String> ctrls = On.annotated(MyTestController.class).in("pkg1", "pkg2").getAll();
+		List<String> ctrls = Scan.annotated(MyTestController.class).in("pkg1", "pkg2").getAll();
 		isTrue(ctrls.isEmpty());
 
-		List<String> ctrls2 = On.annotated(MyTestController.class, Generated.class).getAll();
+		List<String> ctrls2 = Scan.annotated(MyTestController.class, Generated.class).in(App.path()).getAll();
 		eq(ctrls2, U.list(Ff.class.getName()));
 
-		On.annotated(MyTestController.class, MyTestController.class).forEach(cls -> On.beans(IoC.singleton(cls)));
+		Scan.annotated(MyTestController.class, MyTestController.class).in(App.path()).forEach(cls -> On.beans(IoC.singleton(cls)));
 
 		onlyGet("/b");
 		onlyGet("/x");

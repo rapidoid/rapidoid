@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
 import java.lang.annotation.Annotation;
+import java.util.Collection;
 import java.util.List;
 
 /*
@@ -40,6 +41,11 @@ public class Scan extends RapidoidThing {
 	}
 
 	public static ScanParams annotated(Class<? extends Annotation>... annotated) {
+		return new ScanParams().annotated(annotated);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static ScanParams annotated(Collection<Class<? extends Annotation>> annotated) {
 		return new ScanParams().annotated(annotated);
 	}
 

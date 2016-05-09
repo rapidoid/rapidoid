@@ -53,7 +53,7 @@ public class WatchForChanges extends RapidoidThing {
 	}
 
 	private static void markAsDirty() {
-		Setup.notifyChanges();
+		App.notifyChanges();
 	}
 
 }

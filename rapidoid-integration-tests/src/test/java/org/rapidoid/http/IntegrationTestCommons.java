@@ -38,9 +38,9 @@ import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.setup.Admin;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.OnChanges;
-import org.rapidoid.setup.Setup;
 import org.rapidoid.sql.JDBC;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
@@ -77,7 +77,7 @@ public abstract class IntegrationTestCommons extends TestCommons {
 		Log.setLogLevel(LogLevel.INFO);
 		IoC.defaultContext().reset();
 
-		Setup.resetGlobalState();
+		App.resetGlobalState();
 		OnChanges.ignore();
 
 		JDBC.execute("DROP ALL OBJECTS");

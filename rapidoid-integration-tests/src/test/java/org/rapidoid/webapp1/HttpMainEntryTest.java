@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Main;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.IntegrationTestCommons;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 
 @Authors("Nikolche Mihajlovski")
@@ -33,8 +34,8 @@ public class HttpMainEntryTest extends IntegrationTestCommons {
 
 	@Test
 	public void testSequentialControllerRegistration() {
-		On.path(path());
-		On.bootstrapComponents();
+		App.path(path());
+		On.scan();
 		On.get("/a").plain("A");
 
 		onlyGet("/a");
