@@ -42,9 +42,11 @@ public class Log {
 	public static final LogLevel LEVEL_WARN = LogLevel.WARN;
 	public static final LogLevel LEVEL_ERROR = LogLevel.ERROR;
 
-	protected static LogLevel LOG_LEVEL = LEVEL_INFO;
+	protected static volatile LogLevel LOG_LEVEL = LEVEL_INFO;
 
 	private static volatile Callable<Logger> loggerFactory;
+
+	private static volatile boolean styled = false;
 
 	private Log() {
 	}
@@ -68,6 +70,14 @@ public class Log {
 
 	public static synchronized LogLevel getLogLevel() {
 		return LOG_LEVEL;
+	}
+
+	public static boolean isStyled() {
+		return styled;
+	}
+
+	public static void setStyled(boolean styled) {
+		Log.styled = styled;
 	}
 
 	public static void debugging() {
@@ -170,13 +180,15 @@ public class Log {
 	}
 
 	private static void appendStyled(Appendable out, Object value, boolean bold) throws IOException {
-		if (bold) {
+		boolean withStyle = styled;
+
+		if (bold && withStyle) {
 			out.append("\33[1m");
 		}
 
 		out.append(printable(value));
 
-		if (bold) {
+		if (bold && withStyle) {
 			out.append("\33[0m");
 		}
 	}

@@ -81,6 +81,10 @@ public class Conf extends RapidoidThing {
 				reload();
 			}
 		}
+
+		if (Env.dev()) {
+			Log.setStyled(true);
+		}
 	}
 
 	public static synchronized void profiles(String... profiles) {

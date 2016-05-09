@@ -3,6 +3,7 @@ package org.rapidoid.util;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Env;
 
 /*
  * #%L
@@ -29,71 +30,75 @@ import org.rapidoid.annotation.Since;
 public class AnsiColor extends RapidoidThing {
 
 	public static String bold(String text) {
-		return "\33[1m" + text + "\33[0m";
+		return code("1m", text);
 	}
 
 	public static String black(String text) {
-		return "\33[0;30m" + text + "\33[0m";
+		return code("0;30m", text);
 	}
 
 	public static String darkGray(String text) {
-		return "\33[1;30m" + text + "\33[0m";
+		return code("1;30m", text);
 	}
 
 	public static String red(String text) {
-		return "\33[0;31m" + text + "\33[0m";
+		return code("0;31m", text);
 	}
 
 	public static String lightRed(String text) {
-		return "\33[1;31m" + text + "\33[0m";
+		return code("1;31m", text);
 	}
 
 	public static String green(String text) {
-		return "\33[0;32m" + text + "\33[0m";
+		return code("0;32m", text);
 	}
 
 	public static String lightGreen(String text) {
-		return "\33[1;32m" + text + "\33[0m";
+		return code("1;32m", text);
 	}
 
 	public static String brownOrange(String text) {
-		return "\33[0;33m" + text + "\33[0m";
+		return code("0;33m", text);
 	}
 
 	public static String yellow(String text) {
-		return "\33[1;33m" + text + "\33[0m";
+		return code("1;33m", text);
 	}
 
 	public static String blue(String text) {
-		return "\33[0;34m" + text + "\33[0m";
+		return code("0;34m", text);
 	}
 
 	public static String lightBlue(String text) {
-		return "\33[1;34m" + text + "\33[0m";
+		return code("1;34m", text);
 	}
 
 	public static String purple(String text) {
-		return "\33[0;35m" + text + "\33[0m";
+		return code("0;35m", text);
 	}
 
 	public static String lightPurple(String text) {
-		return "\33[1;35m" + text + "\33[0m";
+		return code("1;35m", text);
 	}
 
 	public static String cyan(String text) {
-		return "\33[0;36m" + text + "\33[0m";
+		return code("0;36m", text);
 	}
 
 	public static String lightCyan(String text) {
-		return "\33[1;36m" + text + "\33[0m";
+		return code("1;36m", text);
 	}
 
 	public static String lightGray(String text) {
-		return "\33[0;37m" + text + "\33[0m";
+		return code("0;37m", text);
 	}
 
 	public static String white(String text) {
-		return "\33[1;37m" + text + "\33[0m";
+		return code("1;37m", text);
+	}
+
+	private static String code(String code, String text) {
+		return Env.dev() ? "\33[" + code + text + "\33[0m" : text;
 	}
 
 }
