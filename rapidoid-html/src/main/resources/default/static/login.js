@@ -21,10 +21,10 @@ var options = {
 	'useAJAX' : true,
 };
 
-$.get('https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.13.1/jquery.validate.min.js',function(){
+$(function (){
 // ----------------------------------------------
 // Validation
-	
+
   $("#login-form").validate({
   	rules: {
       lg_username: "required",
@@ -72,9 +72,9 @@ function form_success($form) {
 			options['msg-success']);
 }
 
-function form_failed($form) {
+function form_failed($form, msg) {
 	$form.find('[type=submit]').addClass('error').html(options['btn-error']);
-	$form.find('.login-form-main-message').addClass('show error').html(options['msg-error']);
+	$form.find('.login-form-main-message').addClass('show error').html(msg);
 }
 
 function login($form) {
@@ -93,12 +93,13 @@ function login($form) {
                 location.reload();
             }, 300);
         } else {
-            form_failed($form);
+            form_failed($form, options['msg-error']);
         }
 
         }).fail(function(data) {
             swal("Communication error!", "Couldn't connect to the server!", "error");
             console.log(data);
+            form_failed($form, "Couldn't connect to the server!");
         });
 	}
 }
