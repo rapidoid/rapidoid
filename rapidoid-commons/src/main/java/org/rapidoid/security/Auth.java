@@ -6,6 +6,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
+import org.rapidoid.crypto.Crypto;
 import org.rapidoid.u.U;
 
 import java.util.Collection;
@@ -81,9 +82,20 @@ public class Auth extends RapidoidThing {
 			return false;
 		}
 
+		if (!Conf.USERS.has(username)) {
+			return false;
+		}
+
 		Config user = Conf.USERS.sub(username);
 
-		return !user.isEmpty() && U.eq(password, user.entry("password").str().getOrNull());
+		if (user.isEmpty()) {
+			return false;
+		}
+
+		String pass = user.entry("password").str().getOrNull();
+		String hash = user.entry("hash").str().getOrNull();
+
+		return (pass != null && U.eq(password, pass)) || (hash != null && Crypto.passwordMatches(password, hash));
 	}
 
 }
