@@ -3,7 +3,7 @@ on:
   address: 0.0.0.0
 
 admin:
-  port: 0
+  port: same
   address: 0.0.0.0
 
 app:

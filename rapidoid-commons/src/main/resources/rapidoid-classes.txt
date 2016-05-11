@@ -561,6 +561,7 @@ org.rapidoid.standalone.Main
 org.rapidoid.test.TestCommons
 org.rapidoid.util.AbstractMapImpl
 org.rapidoid.util.AnsiColor
+org.rapidoid.util.AppInfo
 org.rapidoid.util.Bufs
 org.rapidoid.util.CommonWords
 org.rapidoid.util.Constants
@@ -569,7 +570,6 @@ org.rapidoid.util.ErrCodeAndMsg
 org.rapidoid.util.Lorem
 org.rapidoid.util.MapEntry
 org.rapidoid.util.Msc
-org.rapidoid.util.MscInfo
 org.rapidoid.util.NullOutputStream
 org.rapidoid.util.Once
 org.rapidoid.util.RapidoidProcess

@@ -44,6 +44,7 @@ import org.rapidoid.setup.OnChanges;
 import org.rapidoid.sql.JDBC;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
+import org.rapidoid.util.AppInfo;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -72,6 +73,7 @@ public abstract class IntegrationTestCommons extends TestCommons {
 
 		JPAUtil.reset();
 		Res.reset();
+		AppInfo.reset();
 		Conf.reset();
 		Conf.setPath(getTestName());
 		Log.setLogLevel(LogLevel.INFO);

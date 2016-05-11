@@ -26,8 +26,21 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class MscInfo extends RapidoidThing {
+public class AppInfo extends RapidoidThing {
 
-	public static volatile boolean isAdminActive = false;
+	public static volatile boolean isAppServerActive;
+
+	public static volatile boolean isAdminServerActive;
+
+	public static volatile int appPort;
+
+	public static volatile int adminPort;
+
+	public static void reset() {
+		isAppServerActive = false;
+		isAdminServerActive = false;
+		appPort = 0;
+		adminPort = 0;
+	}
 
 }

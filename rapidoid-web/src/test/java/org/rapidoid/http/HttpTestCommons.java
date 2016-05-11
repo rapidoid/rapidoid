@@ -40,6 +40,7 @@ import org.rapidoid.setup.On;
 import org.rapidoid.setup.OnChanges;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
+import org.rapidoid.util.AppInfo;
 
 import java.util.List;
 import java.util.Map;
@@ -66,6 +67,7 @@ public abstract class HttpTestCommons extends TestCommons {
 
 		JPAUtil.reset();
 		Res.reset();
+		AppInfo.reset();
 		Conf.reset();
 		Conf.setPath(getTestName());
 		Log.setLogLevel(LogLevel.INFO);

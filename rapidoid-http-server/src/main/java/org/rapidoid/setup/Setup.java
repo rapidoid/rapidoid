@@ -33,9 +33,9 @@ import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.scan.Scan;
 import org.rapidoid.security.Roles;
 import org.rapidoid.u.U;
+import org.rapidoid.util.AppInfo;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Msc;
-import org.rapidoid.util.MscInfo;
 import org.rapidoid.util.Once;
 
 import java.lang.annotation.Annotation;
@@ -67,7 +67,7 @@ import java.util.Map;
 public class Setup extends RapidoidThing implements Constants {
 
 	static final Setup ON = new Setup("app", "main", "0.0.0.0", 8888, IoC.defaultContext(), Conf.APP, Conf.ON);
-	static final Setup ADMIN = new Setup("admin", "admin", "0.0.0.0", 0, IoC.defaultContext(), Conf.APP, Conf.ADMIN);
+	static final Setup ADMIN = new Setup("admin", "admin", "0.0.0.0", 8888, IoC.defaultContext(), Conf.APP, Conf.ADMIN);
 
 	private static final List<Setup> instances = Coll.synchronizedList(ON, ADMIN);
 
@@ -186,15 +186,15 @@ public class Setup extends RapidoidThing implements Constants {
 	}
 
 	private boolean delegateAdminToApp() {
-		return isAdmin() && appAndAdminOnSameServer();
+		return isAdmin() && ON.server != null && appAndAdminOnSameServer();
 	}
 
 	private boolean delegateAppToAdmin() {
-		return isApp() && appAndAdminOnSameServer();
+		return isApp() && ADMIN.server != null && appAndAdminOnSameServer();
 	}
 
 	public static boolean appAndAdminOnSameServer() {
-		return ADMIN.port() == ON.port();
+		return U.eq(ADMIN.calcPort(), ON.calcPort());
 	}
 
 	public boolean isAdmin() {
@@ -217,8 +217,14 @@ public class Setup extends RapidoidThing implements Constants {
 			listen();
 		}
 
+		if (isApp()) {
+			AppInfo.isAppServerActive = true;
+			AppInfo.appPort = port();
+		}
+
 		if (isAdmin()) {
-			MscInfo.isAdminActive = true;
+			AppInfo.isAdminServerActive = true;
+			AppInfo.adminPort = port();
 		}
 	}
 
@@ -365,8 +371,14 @@ public class Setup extends RapidoidThing implements Constants {
 		defaults = new RouteOptions();
 		defaults().segment(segment);
 
+		if (isApp()) {
+			AppInfo.isAppServerActive = false;
+			AppInfo.appPort = 0;
+		}
+
 		if (isAdmin()) {
-			MscInfo.isAdminActive = false;
+			AppInfo.isAdminServerActive = false;
+			AppInfo.adminPort = 0;
 		}
 
 		bootstrapedJPA.reset();
@@ -538,10 +550,29 @@ public class Setup extends RapidoidThing implements Constants {
 
 	public int port() {
 		if (port == null) {
-			port = serverConfig.entry("port").or(defaultPort);
+			port = calcPort();
 		}
 
+		port = U.or(port, defaultPort);
+
+		U.must(port >= 0, "The port of server setup '%s' is negative!", name());
 		return port;
+	}
+
+	private Integer calcPort() {
+		String portCfg = serverConfig.entry("port").str().getOrNull();
+
+		if (U.notEmpty(portCfg)) {
+			if (portCfg.equalsIgnoreCase("same")) {
+				U.must(!isApp(), "Cannot configure the app port (on.port) with value = 'same'!");
+				return ON.port();
+
+			} else {
+				return U.num(portCfg);
+			}
+		}
+
+		return null;
 	}
 
 	public String address() {
