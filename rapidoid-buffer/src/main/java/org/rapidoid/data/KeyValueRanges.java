@@ -120,7 +120,7 @@ public class KeyValueRanges extends RapidoidThing {
 		return map;
 	}
 
-	public void toMap(Buf src, boolean urlDecodeKeys, boolean urlDecodeVals, Map<String, ? super String> dest) {
+	public void toMap(Buf src, boolean urlDecodeKeys, boolean urlDecodeVals, boolean lowerCaseKeys, Map<String, ? super String> dest) {
 		for (int i = 0; i < count; i++) {
 			String key = keys[i].str(src.bytes());
 			String val = values[i].str(src.bytes());
@@ -128,17 +128,22 @@ public class KeyValueRanges extends RapidoidThing {
 			if (urlDecodeKeys) {
 				key = Msc.urlDecode(key);
 			}
+
 			if (urlDecodeVals) {
 				val = Msc.urlDecode(val);
+			}
+
+			if (lowerCaseKeys) {
+				key = key.toLowerCase();
 			}
 
 			dest.put(key, val);
 		}
 	}
 
-	public Map<String, String> toMap(Buf src, boolean urlDecodeKeys, boolean urlDecodeVals) {
+	public Map<String, String> toMap(Buf src, boolean urlDecodeKeys, boolean urlDecodeVals, boolean lowerCaseKeys) {
 		Map<String, String> map = U.map();
-		toMap(src, urlDecodeKeys, urlDecodeVals, map);
+		toMap(src, urlDecodeKeys, urlDecodeVals, lowerCaseKeys, map);
 		return map;
 	}
 

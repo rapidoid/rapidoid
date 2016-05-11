@@ -5,10 +5,10 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufProvider;
+import org.rapidoid.data.BufRange;
 import org.rapidoid.data.Data;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.MultiData;
-import org.rapidoid.data.BufRange;
 
 import java.util.Map;
 
@@ -50,7 +50,7 @@ public class DefaultMultiData extends RapidoidThing implements MultiData {
 	@Override
 	public synchronized Map<String, String> get() {
 		if (values == null) {
-			values = ranges.toMap(src.buffer(), true, true);
+			values = ranges.toMap(src.buffer(), true, true, false);
 		}
 
 		return values;

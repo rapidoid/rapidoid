@@ -242,12 +242,12 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	@Override
 	public String header(String name) {
-		return U.notNull(headers().get(name), "HEADERS[%s]", name);
+		return U.notNull(headers().get(name.toLowerCase()), "HEADERS[%s]", name);
 	}
 
 	@Override
 	public String header(String name, String defaultValue) {
-		return U.or(headers().get(name), defaultValue);
+		return U.or(headers().get(name.toLowerCase()), defaultValue);
 	}
 
 	@Override

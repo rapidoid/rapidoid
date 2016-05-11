@@ -108,15 +108,15 @@ public class FastHttp extends AbstractHttpProcessor {
 			KeyValueRanges cookiesKV = helper.pairs5.reset();
 
 			HTTP_PARSER.parseParams(buf, paramsKV, xquery);
-			Map<String, String> params = U.cast(paramsKV.toMap(buf, true, true));
+			Map<String, String> params = U.cast(paramsKV.toMap(buf, true, true, false));
 
 			if (match != null && match.getParams() != null) {
 				params.putAll(match.getParams());
 			}
 
 			HTTP_PARSER.parseHeadersIntoKV(buf, hdrs, headersKV, cookiesKV, helper);
-			Map<String, String> headers = U.cast(headersKV.toMap(buf, false, false));
-			Map<String, String> cookies = U.cast(cookiesKV.toMap(buf, false, false));
+			Map<String, String> headers = U.cast(headersKV.toMap(buf, false, false, true));
+			Map<String, String> cookies = U.cast(cookiesKV.toMap(buf, false, false, false));
 
 			byte[] body;
 			Map<String, Object> posted;

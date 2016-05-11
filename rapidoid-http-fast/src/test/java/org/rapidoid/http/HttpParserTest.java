@@ -26,8 +26,8 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufGroup;
-import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.BufRange;
+import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.http.impl.HttpParser;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.RapidoidHelper;
@@ -74,7 +74,7 @@ public class HttpParserTest extends TestCommons {
 		eq(REQ1, req.rVerb, "GET");
 		eq(REQ1, req.rPath, "/foo/bar");
 		eqs(REQ1, req.params, "a", "5", "b", "", "n", "%20");
-		eq(req.params.toMap(reqbuf, true, true), U.map("a", "5", "b", "", "n", " "));
+		eq(req.params.toMap(reqbuf, true, true, false), U.map("a", "5", "b", "", "n", " "));
 		eq(REQ1, req.rProtocol, "HTTP/1.1");
 		eqs(REQ1, req.headersKV, "Host", "www.test.com", "Set-Cookie", "aaa=2");
 
