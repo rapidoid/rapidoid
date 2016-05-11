@@ -58,6 +58,8 @@ public class Conf extends RapidoidThing {
 	public static final Config ON = section("on");
 	public static final Config ADMIN = section("admin");
 
+	private static volatile String[] args;
+
 	static {
 		reload();
 	}
@@ -65,6 +67,7 @@ public class Conf extends RapidoidThing {
 	private static volatile String path = "";
 
 	public static synchronized void args(String... args) {
+		Conf.args = args;
 		ConfigHelp.processHelp(args);
 		ROOT.args(args);
 
@@ -73,6 +76,8 @@ public class Conf extends RapidoidThing {
 		if (Env.dev()) {
 			Log.setStyled(true);
 		}
+
+		ROOT.args(args);
 	}
 
 	private static void configureProfiles() {
@@ -103,6 +108,7 @@ public class Conf extends RapidoidThing {
 
 	public static void reset() {
 		ROOT.clear();
+		args = new String[0];
 	}
 
 	public static Config section(String name) {
@@ -154,6 +160,8 @@ public class Conf extends RapidoidThing {
 		for (List<String> keys : detached) {
 			autoRefresh(keys.isEmpty() ? ROOT : ROOT.sub(keys));
 		}
+
+		ROOT.args(args);
 	}
 
 	private static void autoRefresh(Config... configs) {

@@ -140,7 +140,7 @@ public class Crypto extends RapidoidThing {
 		String secret = Conf.ROOT.entry("secret").str().getOrNull();
 
 		if (secret == null) {
-			Log.warn("Application secret was not specified, generating random secret!");
+			Log.warn("!Application secret was not specified, generating random secret!");
 
 			byte[] rnd = new byte[128];
 			RANDOM.nextBytes(rnd);
