@@ -21,6 +21,7 @@ app:
       contextPath: /_
       home: /_
       brand: '<i class="fa fa-dashboard"></i> Admin'
+      search: false
       menu:
         Overview: /_
         Application:

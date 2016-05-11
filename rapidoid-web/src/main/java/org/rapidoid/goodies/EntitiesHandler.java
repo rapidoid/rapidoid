@@ -43,7 +43,7 @@ public class EntitiesHandler extends GUI implements Callable<Object> {
 
 			List<Object> data = U.list();
 
-			Grid grid = GUI.grid(recordsInfo());
+			Grid grid = GUI.grid(recordsInfo()).pageSize(0);
 
 			grid.toUri(new Mapper<Object, String>() {
 				@Override
@@ -58,7 +58,7 @@ public class EntitiesHandler extends GUI implements Callable<Object> {
 			return data;
 
 		} else {
-			return h3("Rapidoid JPA is not enabled!");
+			return h3("JPA is not enabled in Rapidoid!");
 		}
 	}
 
