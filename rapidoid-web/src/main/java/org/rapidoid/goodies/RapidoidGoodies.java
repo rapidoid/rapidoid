@@ -3,6 +3,7 @@ package org.rapidoid.goodies;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.setup.IGoodies;
 import org.rapidoid.setup.Setup;
 
 /*
@@ -27,10 +28,16 @@ import org.rapidoid.setup.Setup;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class RapidoidGoodiesModule extends RapidoidThing {
+public class RapidoidGoodies extends RapidoidThing implements IGoodies {
 
-	public RapidoidGoodiesModule(Setup setup) {
-		Goodies.bootstrap(setup);
+	@Override
+	public void adminCenter(Setup setup) {
+		Goodies.adminCenter(setup);
+	}
+
+	@Override
+	public void auth(Setup setup) {
+		Goodies.auth(setup);
 	}
 
 }

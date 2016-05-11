@@ -176,7 +176,7 @@ org.rapidoid.goodies.LoginHandler
 org.rapidoid.goodies.LogoutHandler
 org.rapidoid.goodies.MultiDetailsHandler
 org.rapidoid.goodies.OverviewHandler
-org.rapidoid.goodies.RapidoidGoodiesModule
+org.rapidoid.goodies.RapidoidGoodies
 org.rapidoid.goodies.RoutesHandler
 org.rapidoid.goodies.TerminateHandler
 org.rapidoid.goodies.X
@@ -543,7 +543,9 @@ org.rapidoid.serialize.TypeSpecificDeserializer
 org.rapidoid.serialize.TypeSpecificSerializer
 org.rapidoid.setup.Admin
 org.rapidoid.setup.App
+org.rapidoid.setup.AppBootstrap
 org.rapidoid.setup.AppRestartProcessor
+org.rapidoid.setup.IGoodies
 org.rapidoid.setup.My
 org.rapidoid.setup.On
 org.rapidoid.setup.OnChanges

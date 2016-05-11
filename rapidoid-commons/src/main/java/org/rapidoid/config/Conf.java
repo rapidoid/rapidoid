@@ -5,6 +5,7 @@ import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Env;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
+import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
@@ -162,6 +163,13 @@ public class Conf extends RapidoidThing {
 		}
 
 		ROOT.args(args);
+
+		String appJar = APP.entry("jar").str().getOrNull();
+		if (U.notEmpty(appJar)) {
+			ClasspathUtil.appJar(appJar);
+		}
+
+		Log.setStyled(Env.dev());
 	}
 
 	private static void autoRefresh(Config... configs) {

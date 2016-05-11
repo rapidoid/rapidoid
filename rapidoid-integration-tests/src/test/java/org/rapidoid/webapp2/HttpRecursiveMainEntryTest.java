@@ -25,7 +25,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Run;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.IntegrationTestCommons;
-import org.rapidoid.setup.Admin;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 import org.rapidoid.web.Rapidoid;
@@ -56,13 +55,10 @@ class EntryPoint1 {
 	}
 }
 
-
 @Run
 class EntryPoint2 {
 	public static void main(String[] args) {
-		App.args(args);
-		On.bootstrap();
-		Admin.bootstrap();
+		App.bootstrap(args);
 		On.get("/c").plain("C");
 	}
 }

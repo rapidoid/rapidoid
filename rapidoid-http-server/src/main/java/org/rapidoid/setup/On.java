@@ -97,18 +97,6 @@ public class On extends RapidoidThing {
 		return SETUP.address(address);
 	}
 
-	public static Setup bootstrap() {
-		return SETUP.bootstrap();
-	}
-
-	public static Setup bootstrapJPA() {
-		return SETUP.bootstrapJPA();
-	}
-
-	public static Setup bootstrapGoodies() {
-		return SETUP.bootstrapGoodies();
-	}
-
 	public static Setup deregister(String verb, String path) {
 		return SETUP.deregister(verb, path);
 	}

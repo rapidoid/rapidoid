@@ -26,6 +26,7 @@ import org.rapidoid.http.IntegrationTestCommons;
 import org.rapidoid.jpa.AbstractEntity;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.setup.App;
+import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
@@ -40,7 +41,7 @@ public class HttpBeanValidationTest extends IntegrationTestCommons {
 	@Test
 	public void testValidation() {
 		App.path("org.rapidoid.validation");
-		On.bootstrap();
+		App.bootstrap().jpa();
 
 		onlyGet("/echo?num=123");
 		onlyGet("/echo");
@@ -64,7 +65,7 @@ public class HttpBeanValidationTest extends IntegrationTestCommons {
 		onlyGet("/invalid1?err");
 		onlyGet("/invalid2?err");
 
-		On.custom().validator(bean -> {
+		My.validator(bean -> {
 			throw new ValidationException("Validation failed!");
 		});
 

@@ -21,6 +21,7 @@ package demo.rapidoid.reload;
  */
 
 import org.rapidoid.http.Req;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 
 /**
@@ -29,7 +30,7 @@ import org.rapidoid.setup.On;
 public class ReloadDemo {
 
 	public static void main(String[] args) {
-		On.bootstrap();
+		App.bootstrap();
 
 		On.get("/xy").json((Req req, String x, Integer y) -> x + "::" + y);
 	}

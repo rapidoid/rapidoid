@@ -848,17 +848,25 @@ public class Msc extends RapidoidThing implements Constants {
 		Cls.invokeStatic(main, new Object[]{args});
 	}
 
-	public static void filterAndInvokeMainClasses(Object... beans) {
+	public static void filterAndInvokeMainClasses(Object[] beans, Set<Class<?>> invoked) {
+		List<Class<?>> toInvoke = U.list();
+
 		for (Object bean : beans) {
 			U.notNull(bean, "bean");
 
 			if (bean instanceof Class<?>) {
 				Class<?> clazz = (Class<?>) bean;
-				if (Cls.isAnnotated(clazz, Run.class)) {
-					Msc.logSection("Invoking @Run component: " + clazz.getName());
-					Msc.invokeMain(clazz, Conf.getArgs());
+				if (Cls.isAnnotated(clazz, Run.class) && !invoked.contains(clazz)) {
+					toInvoke.add(clazz);
 				}
 			}
+		}
+
+		invoked.addAll(toInvoke);
+
+		for (Class<?> clazz : toInvoke) {
+			Msc.logSection("Invoking @Run component: " + clazz.getName());
+			Msc.invokeMain(clazz, Conf.getArgs());
 		}
 	}
 

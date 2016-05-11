@@ -3,7 +3,6 @@ package org.rapidoid.setup;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Env;
 import org.rapidoid.config.Conf;
@@ -25,17 +24,14 @@ import org.rapidoid.http.processor.HttpProcessor;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.job.Jobs;
-import org.rapidoid.jpa.JPA;
 import org.rapidoid.jpa.JPAPersisterProvider;
 import org.rapidoid.lambda.NParamLambda;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Server;
-import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.security.Roles;
 import org.rapidoid.u.U;
 import org.rapidoid.util.AppInfo;
 import org.rapidoid.util.Constants;
-import org.rapidoid.util.Msc;
 import org.rapidoid.util.Once;
 
 import java.util.List;
@@ -112,8 +108,6 @@ public class Setup extends RapidoidThing implements Constants {
 	private volatile boolean goodies = true;
 
 	private final Once bootstrapedComponents = new Once();
-	private final Once bootstrapedJPA = new Once();
-	private final Once bootstrapedGoodies = new Once();
 
 	public static Setup create(String name) {
 		IoCContext ioc = IoC.createContext().name(name);
@@ -304,7 +298,7 @@ public class Setup extends RapidoidThing implements Constants {
 			}
 		}
 
-		Msc.filterAndInvokeMainClasses(beans);
+		App.filterAndInvokeMainClasses(beans);
 
 		PojoHandlersSetup.from(this, beans).register();
 
@@ -374,9 +368,7 @@ public class Setup extends RapidoidThing implements Constants {
 			AppInfo.adminPort = 0;
 		}
 
-		bootstrapedJPA.reset();
 		bootstrapedComponents.reset();
-		bootstrapedGoodies.reset();
 
 		initDefaults();
 	}
@@ -389,52 +381,11 @@ public class Setup extends RapidoidThing implements Constants {
 		return http().attributes();
 	}
 
-	public Setup bootstrap() {
-		setupConfig();
-
-		if (!isAdmin()) {
-			bootstrapJPA();
-			scan();
-		}
-
-		bootstrapGoodies();
-
-		Log.info("Completed bootstrap", "IoC context", context());
-		return this;
-	}
-
-	private void setupConfig() {
-		String appJar = Conf.APP.entry("jar").str().getOrNull();
-		if (U.notEmpty(appJar)) {
-			ClasspathUtil.appJar(appJar);
-		}
-	}
-
-	public Setup bootstrapJPA() {
-		if (!bootstrapedJPA.go()) return this;
-
-		if (Msc.hasJPA()) {
-			JPA.bootstrap(App.path());
-		}
-
-		return this;
-	}
-
 	@SuppressWarnings("unchecked")
 	public Setup scan(String... packages) {
 		if (!bootstrapedComponents.go()) return this;
 
 		beans(App.findBeans(packages).toArray());
-
-		return this;
-	}
-
-	public Setup bootstrapGoodies() {
-		if (!bootstrapedGoodies.go()) return this;
-
-		Class<?> goodiesClass = Cls.getClassIfExists("org.rapidoid.goodies.RapidoidGoodiesModule");
-
-		if (goodiesClass != null) Cls.newInstance(goodiesClass, this);
 
 		return this;
 	}
@@ -455,11 +406,7 @@ public class Setup extends RapidoidThing implements Constants {
 
 	public void reload() {
 		reloaded = true;
-
-		bootstrapedJPA.reset();
 		bootstrapedComponents.reset();
-		bootstrapedGoodies.reset();
-
 		ioCContext.reset();
 		http().resetConfig();
 		defaults = new RouteOptions();

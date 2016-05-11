@@ -22,11 +22,13 @@ package org.rapidoid.setup;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.*;
+import org.rapidoid.commons.Coll;
 import org.rapidoid.config.Conf;
 import org.rapidoid.data.JSON;
 import org.rapidoid.io.Res;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.ioc.IoCContext;
+import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.NParamLambda;
 import org.rapidoid.log.Log;
 import org.rapidoid.reload.Reload;
@@ -40,6 +42,8 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 import java.lang.annotation.Annotation;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -54,7 +58,18 @@ public class App extends RapidoidThing {
 	private static volatile boolean dirty;
 	private static volatile boolean restarted;
 
+	private static final Set<Class<?>> invoked = Coll.synchronizedSet();
+
 	static volatile ClassLoader loader;
+
+	private static Map<List<String>, List<Class<?>>> beansCache = Coll.autoExpandingMap(new Mapper<List<String>, List<Class<?>>>() {
+		@SuppressWarnings("unchecked")
+		@Override
+		public List<Class<?>> map(List<String> packages) throws Exception {
+			String[] pkgs = packages.toArray(new String[packages.size()]);
+			return Scan.annotated((Class<? extends Annotation>[]) ANNOTATIONS).in(pkgs).loadAll();
+		}
+	});
 
 	static {
 		resetGlobalState();
@@ -86,6 +101,7 @@ public class App extends RapidoidThing {
 
 			if (mainClassName == null) {
 				Class<?> mainClass = Msc.getCallingMainClass();
+				invoked.add(mainClass);
 				mainClassName = mainClass != null ? mainClass.getName() : null;
 			}
 
@@ -134,10 +150,13 @@ public class App extends RapidoidThing {
 		mainClassName = null;
 		appPkgName = null;
 		restarted = false;
-		loader = Setup.class.getClassLoader();
 		dirty = false;
 		path = null;
+		loader = Setup.class.getClassLoader();
 		Setup.initDefaults();
+		AppBootstrap.reset();
+		beansCache.clear();
+		invoked.clear();
 	}
 
 	public static void notifyChanges() {
@@ -158,13 +177,12 @@ public class App extends RapidoidThing {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public static List<Class<?>> findBeans(String... packages) {
 		if (U.isEmpty(packages)) {
 			packages = path();
 		}
 
-		return Scan.annotated((Class<? extends Annotation>[]) ANNOTATIONS).in(packages).loadAll();
+		return beansCache.get(U.list(packages));
 	}
 
 	public static void scan(String... packages) {
@@ -180,13 +198,23 @@ public class App extends RapidoidThing {
 			}
 		}
 
-		Msc.filterAndInvokeMainClasses(beans);
+		filterAndInvokeMainClasses(beans);
 
 		PojoHandlersSetup.from(Setup.ON, beans).register();
 	}
 
 	public static IoCContext context() {
 		return IoC.defaultContext();
+	}
+
+	public static AppBootstrap bootstrap(String... args) {
+		args(args);
+		scan();
+		return new AppBootstrap();
+	}
+
+	static void filterAndInvokeMainClasses(Object[] beans) {
+		Msc.filterAndInvokeMainClasses(beans, invoked);
 	}
 
 }

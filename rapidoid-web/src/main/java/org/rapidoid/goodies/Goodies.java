@@ -130,10 +130,15 @@ public class Goodies extends RapidoidThing {
 
 	public static void bootstrap(Setup setup) {
 		if (setup.isAdmin()) {
-			bootstrapAdminGoodies(setup);
+			adminCenter(setup);
 		} else if (setup.isApp()) {
 			bootstrapAppGoodies(setup);
 		}
+	}
+
+	public static void auth(Setup setup) {
+		setup.post("/_login").roles().json(Goodies.login());
+		setup.get("/_logout").roles(Roles.LOGGED_IN).json(Goodies.logout());
 	}
 
 	public static void bootstrapAppGoodies(Setup setup) {
@@ -144,11 +149,10 @@ public class Goodies extends RapidoidThing {
 
 		Msc.logSection("Registering App goodies:");
 
-		setup.post("/_login").roles().json(Goodies.login());
-		setup.get("/_logout").roles(Roles.LOGGED_IN).json(Goodies.logout());
+		auth(setup);
 	}
 
-	public static void bootstrapAdminGoodies(Setup setup) {
+	public static void adminCenter(Setup setup) {
 		if (!setup.goodies()) {
 			Log.warn("Goodies are disabled for setup: " + setup.name());
 			return;
@@ -185,8 +189,7 @@ public class Goodies extends RapidoidThing {
 		setup.post("/_/jar").json(Goodies.jarUpload());
 		setup.page("/_/terminate").mvc(Goodies.terminate());
 
-		setup.post("/_login").roles().json(Goodies.login());
-		setup.get("/_logout").roles(Roles.LOGGED_IN).json(Goodies.logout());
+		auth(setup);
 
 		if (Conf.USERS.isEmpty()) {
 			String pass = generatedAdminPassword();

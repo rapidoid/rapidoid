@@ -1,11 +1,4 @@
-package org.rapidoid.web;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.App;
-import org.rapidoid.util.Msc;
-import org.rapidoid.util.Once;
+package org.rapidoid.setup;
 
 /*
  * #%L
@@ -27,21 +20,15 @@ import org.rapidoid.util.Once;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 @Authors("Nikolche Mihajlovski")
-@Since("4.0.0")
-public class Rapidoid extends RapidoidThing {
+@Since("5.1.0")
+public interface IGoodies {
 
-	private static final Once once = new Once();
+	void adminCenter(Setup setup);
 
-	private Rapidoid() {
-	}
-
-	public static synchronized void run(String... args) {
-		if (!once.go()) return;
-
-		App.bootstrap(args).full();
-
-		Msc.logSection("Rapidoid bootstrap completed");
-	}
+	void auth(Setup setup);
 
 }
