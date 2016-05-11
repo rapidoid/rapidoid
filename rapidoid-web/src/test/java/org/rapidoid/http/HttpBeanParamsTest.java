@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 import org.rapidoid.u.U;
 
 import java.util.List;
@@ -40,7 +40,7 @@ public class HttpBeanParamsTest extends HttpTestCommons {
 
 	@Test
 	public void testBeanParams() {
-		On.beans(new Object() {
+		App.beans(new Object() {
 
 			@GET
 			@SuppressWarnings("unchecked")

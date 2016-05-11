@@ -10,8 +10,6 @@ import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.handler.HttpHandler;
 import org.rapidoid.http.impl.RouteOptions;
-import org.rapidoid.http.processor.HttpProcessor;
-import org.rapidoid.ioc.IoCContext;
 
 /*
  * #%L
@@ -91,20 +89,12 @@ public class Admin extends RapidoidThing {
 		return SETUP.req(handler);
 	}
 
-	public static synchronized Setup beans(Object... controllers) {
-		return SETUP.beans(controllers);
-	}
-
 	public static synchronized Setup port(int port) {
 		return SETUP.port(port);
 	}
 
 	public static synchronized Setup address(String address) {
 		return SETUP.address(address);
-	}
-
-	public static synchronized Setup processor(HttpProcessor listener) {
-		return SETUP.processor(listener);
 	}
 
 	public static Setup bootstrap() {
@@ -117,10 +107,6 @@ public class Admin extends RapidoidThing {
 
 	public static Setup bootstrapGoodies() {
 		return SETUP.bootstrapGoodies();
-	}
-
-	public static Setup scan(String... packages) {
-		return SETUP.scan(packages);
 	}
 
 	public static Setup deregister(String verb, String path) {
@@ -143,20 +129,12 @@ public class Admin extends RapidoidThing {
 		return SETUP.custom();
 	}
 
-	public static IoCContext context() {
-		return SETUP.iocContext();
-	}
-
 	public static HttpRoutes routes() {
 		return SETUP.routes();
 	}
 
 	public static RouteOptions defaults() {
 		return SETUP.defaults();
-	}
-
-	public static boolean isActive() {
-		return SETUP.isActive();
 	}
 
 }

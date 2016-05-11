@@ -21,21 +21,31 @@ package org.rapidoid.setup;
  */
 
 import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.*;
 import org.rapidoid.config.Conf;
 import org.rapidoid.data.JSON;
 import org.rapidoid.io.Res;
+import org.rapidoid.ioc.IoC;
+import org.rapidoid.ioc.IoCContext;
+import org.rapidoid.lambda.NParamLambda;
 import org.rapidoid.log.Log;
 import org.rapidoid.reload.Reload;
 import org.rapidoid.render.Templates;
 import org.rapidoid.scan.ClasspathUtil;
+import org.rapidoid.scan.Scan;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
+
+import javax.inject.Named;
+import javax.inject.Singleton;
+import java.lang.annotation.Annotation;
+import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class App extends RapidoidThing {
+
+	private static final Class<?>[] ANNOTATIONS = {Controller.class, Service.class, Run.class, Named.class, Singleton.class};
 
 	private static volatile String[] path;
 
@@ -146,6 +156,37 @@ public class App extends RapidoidThing {
 				}
 			}
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Class<?>> findBeans(String... packages) {
+		if (U.isEmpty(packages)) {
+			packages = path();
+		}
+
+		return Scan.annotated((Class<? extends Annotation>[]) ANNOTATIONS).in(packages).loadAll();
+	}
+
+	public static void scan(String... packages) {
+		beans(App.findBeans(packages).toArray());
+	}
+
+	public static void beans(Object... beans) {
+		for (Object bean : beans) {
+			U.notNull(bean, "bean");
+
+			if (bean instanceof NParamLambda) {
+				throw U.rte("Expected a bean, but found lambda: " + bean);
+			}
+		}
+
+		Msc.filterAndInvokeMainClasses(beans);
+
+		PojoHandlersSetup.from(Setup.ON, beans).register();
+	}
+
+	public static IoCContext context() {
+		return IoC.defaultContext();
 	}
 
 }

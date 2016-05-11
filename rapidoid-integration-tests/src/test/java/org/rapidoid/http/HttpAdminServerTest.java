@@ -34,7 +34,6 @@ public class HttpAdminServerTest extends IntegrationTestCommons {
 		Admin.port(9898);
 		Admin.get("/").json(() -> "ok");
 		onlyGet(9898, "/");
-		Admin.setup().shutdown();
 	}
 
 }

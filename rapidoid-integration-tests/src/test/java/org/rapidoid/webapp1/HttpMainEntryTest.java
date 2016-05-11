@@ -22,7 +22,7 @@ package org.rapidoid.webapp1;
 
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Main;
+import org.rapidoid.annotation.Run;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.IntegrationTestCommons;
 import org.rapidoid.setup.App;
@@ -35,7 +35,7 @@ public class HttpMainEntryTest extends IntegrationTestCommons {
 	@Test
 	public void testSequentialControllerRegistration() {
 		App.path(path());
-		On.scan();
+		App.scan();
 		On.get("/a").plain("A");
 
 		onlyGet("/a");
@@ -44,7 +44,7 @@ public class HttpMainEntryTest extends IntegrationTestCommons {
 
 }
 
-@Main
+@Run
 class EntryPoint {
 	public static void main(String[] args) {
 		On.get("/b").plain("B");

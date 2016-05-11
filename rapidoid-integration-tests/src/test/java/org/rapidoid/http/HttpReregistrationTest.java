@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 
 @Authors("Nikolche Mihajlovski")
@@ -39,7 +40,7 @@ public class HttpReregistrationTest extends IntegrationTestCommons {
 		notFound("/inc");
 		notFound("/dec");
 
-		On.beans(ctrl1);
+		App.beans(ctrl1);
 		verifyRoutes("ctrl1");
 
 		onlyGet("/inc?x=5");
@@ -48,7 +49,7 @@ public class HttpReregistrationTest extends IntegrationTestCommons {
 		On.deregister(ctrl1);
 		verifyNoRoutes();
 
-		On.beans(ctrl2);
+		App.beans(ctrl2);
 		verifyRoutes("ctrl2");
 
 		onlyPost("/dec?x=12");
@@ -66,17 +67,17 @@ public class HttpReregistrationTest extends IntegrationTestCommons {
 		notFound("/inc");
 		notFound("/dec");
 
-		On.beans(ctrl1("nextA"));
+		App.beans(ctrl1("nextA"));
 		verifyRoutes("ctrl1");
 
 		onlyGet("/inc?x=100");
 
-		On.beans(ctrl1("nextB"));
+		App.beans(ctrl1("nextB"));
 		verifyRoutes("ctrl1");
 
 		onlyGet("/inc?x=200");
 
-		On.beans(ctrl1("nextC"));
+		App.beans(ctrl1("nextC"));
 		verifyRoutes("ctrl1");
 
 		onlyGet("/inc?x=300");

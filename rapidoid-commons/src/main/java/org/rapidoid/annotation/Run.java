@@ -32,6 +32,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 @Documented
-public @interface Main {
+public @interface Run {
 
 }

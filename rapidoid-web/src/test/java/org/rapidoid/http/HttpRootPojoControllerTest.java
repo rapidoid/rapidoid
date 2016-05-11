@@ -22,7 +22,7 @@ package org.rapidoid.http;
 
 import org.junit.Test;
 import org.rapidoid.annotation.*;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
@@ -31,7 +31,7 @@ public class HttpRootPojoControllerTest extends HttpTestCommons {
 
 	@Test
 	public void testRootPojoHandler() {
-		On.beans(new Object() {
+		App.beans(new Object() {
 
 			@GET("/a")
 			public Object theFoo() {

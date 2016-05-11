@@ -28,7 +28,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.scan.Scan;
 import org.rapidoid.setup.App;
-import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
 import javax.annotation.Generated;
@@ -41,7 +40,7 @@ public class HttpPojoControllerTest extends IntegrationTestCommons {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testPojoHandlers() {
-		On.beans(new Object() {
+		App.beans(new Object() {
 
 			@GET(uri = "/a")
 			public Object theFoo() {
@@ -64,7 +63,7 @@ public class HttpPojoControllerTest extends IntegrationTestCommons {
 		List<String> ctrls2 = Scan.annotated(MyTestController.class).in("non-existing-pkg", "").getAll();
 		eq(ctrls2, U.list(Ff.class.getName()));
 
-		Scan.annotated(MyTestController.class, MyTestController.class).in(App.path()).forEach(On::beans);
+		Scan.annotated(MyTestController.class, MyTestController.class).in(App.path()).forEach(App::beans);
 
 		onlyGet("/a");
 		onlyGet("/b");
@@ -82,7 +81,7 @@ public class HttpPojoControllerTest extends IntegrationTestCommons {
 		List<String> ctrls2 = Scan.annotated(MyTestController.class, Generated.class).in(App.path()).getAll();
 		eq(ctrls2, U.list(Ff.class.getName()));
 
-		Scan.annotated(MyTestController.class, MyTestController.class).in(App.path()).forEach(cls -> On.beans(IoC.singleton(cls)));
+		Scan.annotated(MyTestController.class, MyTestController.class).in(App.path()).forEach(cls -> App.beans(IoC.singleton(cls)));
 
 		onlyGet("/b");
 		onlyGet("/x");

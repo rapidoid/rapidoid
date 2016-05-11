@@ -27,6 +27,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.JSON;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
@@ -57,7 +58,7 @@ public class CustomizationTest extends IntegrationTestCommons {
 
 	@Test
 	public void testBeanParamFactoryConfig() {
-		On.beans(new Object() {
+		App.beans(new Object() {
 			@POST
 			Object aa(Num num) {
 				return num;

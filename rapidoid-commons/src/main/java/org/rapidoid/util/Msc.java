@@ -5,10 +5,12 @@ import org.rapidoid.activity.AbstractLoopThread;
 import org.rapidoid.activity.RapidoidThread;
 import org.rapidoid.activity.RapidoidThreadFactory;
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Run;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Str;
+import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.insight.Insights;
@@ -761,10 +763,6 @@ public class Msc extends RapidoidThing implements Constants {
 		return Cls.exists("org.rapidoid.gui.GUI");
 	}
 
-	public static boolean hasInject() {
-		return Cls.exists("javax.inject.Inject");
-	}
-
 	public static boolean hasLogback() {
 		return Cls.exists("ch.qos.logback.classic.Logger");
 	}
@@ -848,6 +846,20 @@ public class Msc extends RapidoidThing implements Constants {
 		U.must(main.getReturnType() == void.class);
 
 		Cls.invokeStatic(main, new Object[]{args});
+	}
+
+	public static void filterAndInvokeMainClasses(Object... beans) {
+		for (Object bean : beans) {
+			U.notNull(bean, "bean");
+
+			if (bean instanceof Class<?>) {
+				Class<?> clazz = (Class<?>) bean;
+				if (Cls.isAnnotated(clazz, Run.class)) {
+					Msc.logSection("Invoking @Run component: " + clazz.getName());
+					Msc.invokeMain(clazz, Conf.getArgs());
+				}
+			}
+		}
 	}
 
 	public static String annotations(Class<? extends Annotation>[] annotations) {

@@ -104,7 +104,13 @@ public abstract class IntegrationTestCommons extends TestCommons {
 	public void closeContext() {
 		System.out.println("--- STOPPING SERVER ---");
 
-		Admin.setup().shutdown();
+		if (Admin.setup().isRunning()) {
+			if (Admin.setup().port() == On.setup().port()) {
+				Admin.setup().reset();
+			} else {
+				Admin.setup().shutdown();
+			}
+		}
 
 		System.out.println("--- SERVER STOPPED ---");
 	}

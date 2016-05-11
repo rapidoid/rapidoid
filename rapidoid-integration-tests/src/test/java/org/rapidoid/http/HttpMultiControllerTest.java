@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 
 @Authors("Nikolche Mihajlovski")
@@ -34,14 +35,14 @@ public class HttpMultiControllerTest extends IntegrationTestCommons {
 	public void testSequentialControllerRegistration() {
 
 		// this will be overwritten by the third
-		On.beans(new Object() {
+		App.beans(new Object() {
 			@GET
 			public String foo(Req req) {
 				return "FOO";
 			}
 		});
 
-		On.beans(new Object() {
+		App.beans(new Object() {
 			@GET
 			public String bar(Req req, Resp resp) {
 				return "BAR";
@@ -49,7 +50,7 @@ public class HttpMultiControllerTest extends IntegrationTestCommons {
 		});
 
 		// this will overwrite the first
-		On.beans(new Object() {
+		App.beans(new Object() {
 			@GET
 			public String foo() {
 				return "FOO2";
@@ -60,7 +61,7 @@ public class HttpMultiControllerTest extends IntegrationTestCommons {
 
 		onlyGet("/baz?x=123");
 
-		On.beans(new Object() {
+		App.beans(new Object() {
 			@GET
 			public String baz() {
 				return "BAZZZZZZ";

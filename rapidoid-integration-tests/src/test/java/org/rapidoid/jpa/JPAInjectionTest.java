@@ -8,7 +8,6 @@ import org.rapidoid.http.Req;
 import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.ioc.IoCContextWrapper;
 import org.rapidoid.setup.App;
-import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
 import javax.persistence.EntityManager;
@@ -43,7 +42,7 @@ public class JPAInjectionTest extends IntegrationTestCommons {
 	public void testJPAInjection() {
 		JPA.bootstrap(path());
 		App.path(path());
-		On.scan();
+		App.scan();
 
 		postData("/books?title=a", U.map("title", "My Book 1"));
 		postData("/books?title=b", U.map("title", "My Book 2"));

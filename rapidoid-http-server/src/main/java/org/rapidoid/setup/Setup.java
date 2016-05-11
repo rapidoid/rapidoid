@@ -1,7 +1,8 @@
 package org.rapidoid.setup;
 
 import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.*;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Env;
@@ -30,7 +31,6 @@ import org.rapidoid.lambda.NParamLambda;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Server;
 import org.rapidoid.scan.ClasspathUtil;
-import org.rapidoid.scan.Scan;
 import org.rapidoid.security.Roles;
 import org.rapidoid.u.U;
 import org.rapidoid.util.AppInfo;
@@ -38,7 +38,6 @@ import org.rapidoid.util.Constants;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.Once;
 
-import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Map;
 
@@ -298,30 +297,18 @@ public class Setup extends RapidoidThing implements Constants {
 
 	public Setup beans(Object... beans) {
 		for (Object bean : beans) {
+			U.notNull(bean, "bean");
+
 			if (bean instanceof NParamLambda) {
 				throw U.rte("Expected a bean, but found lambda: " + bean);
 			}
 		}
 
-		activate();
+		Msc.filterAndInvokeMainClasses(beans);
 
 		PojoHandlersSetup.from(this, beans).register();
 
-		invokeMainComponents(beans);
-
 		return this;
-	}
-
-	private void invokeMainComponents(Object[] beans) {
-		for (Object bean : beans) {
-			if (bean instanceof Class<?>) {
-				Class<?> clazz = (Class<?>) bean;
-				if (Cls.isAnnotated(clazz, Main.class)) {
-					Msc.logSection("Invoking @Main component: " + clazz.getName());
-					Msc.invokeMain(clazz, Conf.getArgs());
-				}
-			}
-		}
 	}
 
 	public Setup port(int port) {
@@ -340,21 +327,25 @@ public class Setup extends RapidoidThing implements Constants {
 		return this;
 	}
 
-	public Setup shutdown() {
-		reset();
-		if (this.server != null && !delegateAdminToApp()) {
+	public synchronized Setup shutdown() {
+		if (this.server != null) {
 			this.server.shutdown();
 			this.server = null;
 		}
+
+		reset();
+
 		return this;
 	}
 
-	public Setup halt() {
-		reset();
-		if (this.server != null && !delegateAdminToApp()) {
+	public synchronized Setup halt() {
+		if (this.server != null) {
 			this.server.halt();
 			this.server = null;
 		}
+
+		reset();
+
 		return this;
 	}
 
@@ -368,6 +359,8 @@ public class Setup extends RapidoidThing implements Constants {
 		activated = false;
 		ioCContext.reset();
 		goodies = true;
+		server = null;
+
 		defaults = new RouteOptions();
 		defaults().segment(segment);
 
@@ -384,6 +377,8 @@ public class Setup extends RapidoidThing implements Constants {
 		bootstrapedJPA.reset();
 		bootstrapedComponents.reset();
 		bootstrapedGoodies.reset();
+
+		initDefaults();
 	}
 
 	public Server server() {
@@ -404,7 +399,7 @@ public class Setup extends RapidoidThing implements Constants {
 
 		bootstrapGoodies();
 
-		Log.info("Completed bootstrap", "IoC context", iocContext());
+		Log.info("Completed bootstrap", "IoC context", context());
 		return this;
 	}
 
@@ -429,18 +424,8 @@ public class Setup extends RapidoidThing implements Constants {
 	public Setup scan(String... packages) {
 		if (!bootstrapedComponents.go()) return this;
 
-		List<Class<? extends Annotation>> annotated = U.list(Controller.class, Service.class, Main.class);
+		beans(App.findBeans(packages).toArray());
 
-		if (Msc.hasInject()) {
-			annotated.add(Cls.<Annotation>get("javax.inject.Named"));
-			annotated.add(Cls.<Annotation>get("javax.inject.Singleton"));
-		}
-
-		if (U.isEmpty(packages)) {
-			packages = App.path();
-		}
-
-		beans(Scan.annotated(annotated).in(packages).loadAll().toArray());
 		return this;
 	}
 
@@ -464,7 +449,7 @@ public class Setup extends RapidoidThing implements Constants {
 		return this;
 	}
 
-	public IoCContext iocContext() {
+	public IoCContext context() {
 		return ioCContext;
 	}
 
@@ -528,7 +513,7 @@ public class Setup extends RapidoidThing implements Constants {
 		return segment;
 	}
 
-	public boolean isActive() {
+	public boolean isRunning() {
 		return activated;
 	}
 
@@ -560,6 +545,10 @@ public class Setup extends RapidoidThing implements Constants {
 	}
 
 	private Integer calcPort() {
+		if (port != null) {
+			return port;
+		}
+
 		String portCfg = serverConfig.entry("port").str().getOrNull();
 
 		if (U.notEmpty(portCfg)) {

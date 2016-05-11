@@ -30,6 +30,7 @@ import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
 import org.rapidoid.io.IO;
 import org.rapidoid.scan.ClasspathUtil;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 import org.rapidoid.web.Rapidoid;
@@ -44,7 +45,7 @@ public class Demo extends RapidoidThing {
 
 		On.get("/").plain("Hello, world!");
 
-		On.beans(new Object() {
+		App.beans(new Object() {
 
 			@Page("/hey")
 			public Object home(Req req) {
