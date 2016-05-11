@@ -193,8 +193,8 @@ public class Setup extends RapidoidThing implements Constants {
 		return isApp() && appAndAdminOnSameServer();
 	}
 
-	private boolean appAndAdminOnSameServer() {
-		return Conf.ADMIN.entry("port").or(0) == 0;
+	public static boolean appAndAdminOnSameServer() {
+		return ADMIN.port() == ON.port();
 	}
 
 	public boolean isAdmin() {
@@ -210,6 +210,8 @@ public class Setup extends RapidoidThing implements Constants {
 			return;
 		}
 		activated = true;
+
+		Log.setStyled(Env.dev());
 
 		if (!reloaded) {
 			listen();
@@ -381,8 +383,6 @@ public class Setup extends RapidoidThing implements Constants {
 	}
 
 	public Setup bootstrap() {
-		Log.setStyled(Env.dev());
-
 		setupConfig();
 
 		if (!isAdmin()) {

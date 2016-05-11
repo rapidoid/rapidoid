@@ -3,6 +3,7 @@ package org.rapidoid.http.impl;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.bufstruct.BufMap;
 import org.rapidoid.bufstruct.BufMapImpl;
@@ -22,6 +23,7 @@ import org.rapidoid.http.handler.ParamsAwareReqHandler;
 import org.rapidoid.http.handler.StaticResourcesHandler;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+import org.rapidoid.util.AnsiColor;
 import org.rapidoid.util.Constants;
 
 import java.util.*;
@@ -428,9 +430,13 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 		}
 
 		if (add) {
-			Log.info("Registering handler", "setup", this.customization.name(), "!verbs", verbs, "!path", path);
-			Log.info("  route info: " + handler.options());
-			Log.info("  handler info: " + handler);
+			RouteOptions opts = handler.options();
+
+			TransactionMode txm = opts.transactionMode();
+			String tx = txm != TransactionMode.NONE ? AnsiColor.bold(txm.name()) : txm.name();
+
+			Log.info("Registering handler", "!setup", this.customization.name(), "!verbs", verbs, "!path", path,
+					"!roles", opts.roles(), "tx", tx, "handler", handler);
 		} else {
 			Log.info("Deregistering handler", "setup", this.customization.name(), "!verbs", verbs, "!path", path);
 		}
