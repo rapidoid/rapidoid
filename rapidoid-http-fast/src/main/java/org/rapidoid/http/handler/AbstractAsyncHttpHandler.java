@@ -135,7 +135,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 	                            final Object extra, final TransactionMode txMode, String username, Set<String> roles) {
 
 		Runnable handleRequest = handlerWithWrappers(channel, isKeepAlive, req, extra);
-		Runnable handleRequestMaybeInTx = txWrap(txMode, handleRequest);
+		Runnable handleRequestMaybeInTx = txWrap(req, txMode, handleRequest);
 
 		With.tag(CTX_TAG_HANDLER).exchange(req).username(username).roles(roles).run(handleRequestMaybeInTx);
 	}
@@ -164,13 +164,17 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 		};
 	}
 
-	private Runnable txWrap(final TransactionMode txMode, final Runnable handleRequest) {
+	private Runnable txWrap(final Req req, final TransactionMode txMode, final Runnable handleRequest) {
 		if (txMode != null && txMode != TransactionMode.NONE) {
 
 			return new Runnable() {
 				@Override
 				public void run() {
-					JPA.transaction(handleRequest, txMode == TransactionMode.READ_ONLY);
+					try {
+						JPA.transaction(handleRequest, txMode == TransactionMode.READ_ONLY);
+					} catch (Exception e) {
+						HttpIO.errorAndDone(req, e, http.custom().errorHandler());
+					}
 				}
 			};
 
