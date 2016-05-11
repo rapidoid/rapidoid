@@ -80,10 +80,10 @@ public abstract class IntegrationTestCommons extends TestCommons {
 		App.resetGlobalState();
 		OnChanges.ignore();
 
-		JDBC.execute("DROP ALL OBJECTS");
-
-		On.setup().reload();
 		On.setup().listen();
+		On.setup().reload();
+
+		JDBC.execute("DROP ALL OBJECTS");
 
 		System.out.println("--- SERVER STARTED ---");
 

@@ -27,11 +27,10 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.commons.Env;
 import org.rapidoid.config.Conf;
-import org.rapidoid.crypto.Crypto;
 import org.rapidoid.io.IO;
 import org.rapidoid.io.Res;
 import org.rapidoid.ioc.IoC;
-import org.rapidoid.jpa.JPA;
+import org.rapidoid.jpa.JPAUtil;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.scan.ClasspathUtil;
@@ -42,8 +41,6 @@ import org.rapidoid.setup.OnChanges;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 
@@ -67,7 +64,7 @@ public abstract class HttpTestCommons extends TestCommons {
 		Env.profiles().clear();
 		Env.profiles().add("default");
 
-		JPA.entities().clear();
+		JPAUtil.reset();
 		Res.reset();
 		Conf.reset();
 		Conf.setPath(getTestName());
@@ -77,8 +74,8 @@ public abstract class HttpTestCommons extends TestCommons {
 		App.resetGlobalState();
 		OnChanges.ignore();
 
-		On.setup().reload();
 		On.setup().listen();
+		On.setup().reload();
 
 		System.out.println("--- SERVER STARTED ---");
 
@@ -108,10 +105,6 @@ public abstract class HttpTestCommons extends TestCommons {
 
 	protected String localhost(int port, String uri) {
 		return "http://localhost:" + port + uri;
-	}
-
-	protected String resourceMD5(String filename) throws IOException, URISyntaxException {
-		return Crypto.md5(IO.loadBytes(filename));
 	}
 
 	protected String get(String uri) {

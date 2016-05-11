@@ -33,7 +33,10 @@ import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.scan.Scan;
 import org.rapidoid.security.Roles;
 import org.rapidoid.u.U;
-import org.rapidoid.util.*;
+import org.rapidoid.util.Constants;
+import org.rapidoid.util.Msc;
+import org.rapidoid.util.MscInfo;
+import org.rapidoid.util.Once;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -99,7 +102,7 @@ public class Setup extends RapidoidThing implements Constants {
 	private volatile RouteOptions defaults = new RouteOptions();
 
 	private volatile Integer port;
-	private volatile String address = "0.0.0.0";
+	private volatile String address;
 
 	private volatile HttpProcessor processor;
 
@@ -156,9 +159,6 @@ public class Setup extends RapidoidThing implements Constants {
 
 			listening = true;
 
-			this.address = U.or(this.address, serverConfig.entry("address").or(defaultAddress));
-			this.port = U.or(this.port, serverConfig.entry("port").or(defaultPort));
-
 			HttpProcessor proc = processor != null ? processor : http();
 
 			if (Env.dev() && !OnChanges.isIgnored()) {
@@ -166,10 +166,19 @@ public class Setup extends RapidoidThing implements Constants {
 				OnChanges.byDefaultRestart();
 			}
 
-			if (!delegateAdminToApp()) {
-				server = proc.listen(address, port);
-			} else {
+			if (delegateAdminToApp()) {
 				server = ON.server();
+
+			} else if (delegateAppToAdmin()) {
+				server = ADMIN.server();
+			}
+
+			if (server == null) {
+				if (appAndAdminOnSameServer()) {
+					server = proc.listen(ON.address(), ON.port());
+				} else {
+					server = proc.listen(address(), port());
+				}
 			}
 		}
 
@@ -177,7 +186,15 @@ public class Setup extends RapidoidThing implements Constants {
 	}
 
 	private boolean delegateAdminToApp() {
-		return isAdmin() && Conf.ADMIN.entry("port").or(0) == 0;
+		return isAdmin() && appAndAdminOnSameServer();
+	}
+
+	private boolean delegateAppToAdmin() {
+		return isApp() && appAndAdminOnSameServer();
+	}
+
+	private boolean appAndAdminOnSameServer() {
+		return Conf.ADMIN.entry("port").or(0) == 0;
 	}
 
 	public boolean isAdmin() {
@@ -336,6 +353,7 @@ public class Setup extends RapidoidThing implements Constants {
 	public void reset() {
 		http().resetConfig();
 		listening = false;
+		reloaded = false;
 		port = null;
 		address = null;
 		processor = null;
@@ -518,4 +536,19 @@ public class Setup extends RapidoidThing implements Constants {
 		System.exit(0);
 	}
 
+	public int port() {
+		if (port == null) {
+			port = serverConfig.entry("port").or(defaultPort);
+		}
+
+		return port;
+	}
+
+	public String address() {
+		if (address == null) {
+			address = serverConfig.entry("address").or(defaultAddress);
+		}
+
+		return address;
+	}
 }
