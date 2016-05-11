@@ -115,7 +115,7 @@ public class App extends RapidoidThing {
 			return;
 		}
 
-		Msc.invokeMain(entry, Conf.ROOT.getArgs());
+		Msc.invokeMain(entry, Conf.getArgs());
 
 		Log.info("!Successfully restarted the application!");
 	}

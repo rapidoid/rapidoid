@@ -295,7 +295,7 @@ public class Setup extends RapidoidThing implements Constants {
 				Class<?> clazz = (Class<?>) bean;
 				if (Cls.isAnnotated(clazz, Main.class)) {
 					Msc.logSection("Invoking @Main component: " + clazz.getName());
-					Msc.invokeMain(clazz, Conf.ROOT.getArgs());
+					Msc.invokeMain(clazz, Conf.getArgs());
 				}
 			}
 		}

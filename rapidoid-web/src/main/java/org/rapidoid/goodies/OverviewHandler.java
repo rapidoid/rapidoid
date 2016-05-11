@@ -49,7 +49,7 @@ public class OverviewHandler extends GUI implements Callable<Object> {
 		appInfo.put("Application JAR", ClasspathUtil.appJar());
 		appInfo.put("Application path (root packages)", App.path());
 		appInfo.put("Active profiles", Env.profiles());
-		appInfo.put("Command line arguments", Conf.ROOT.getArgs());
+		appInfo.put("Command line arguments", Conf.getArgs());
 
 		info.add(grid(appInfo));
 

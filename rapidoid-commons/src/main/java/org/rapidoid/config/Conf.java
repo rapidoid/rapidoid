@@ -177,4 +177,7 @@ public class Conf extends RapidoidThing {
 		return Msc.path(path, configName + ".y?ml");
 	}
 
+	public static String[] getArgs() {
+		return args;
+	}
 }

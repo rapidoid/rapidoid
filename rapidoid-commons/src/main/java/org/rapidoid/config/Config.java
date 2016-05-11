@@ -45,8 +45,6 @@ public class Config extends RapidoidThing implements ToMap<String, Object> {
 
 	private final boolean isRoot;
 
-	private volatile String[] args;
-
 	private Config(Map<String, Object> properties, List<String> baseKeys, Config root) {
 		this.properties = properties;
 		this.root = root;
@@ -264,9 +262,7 @@ public class Config extends RapidoidThing implements ToMap<String, Object> {
 	}
 
 	public void args(String... args) {
-		this.args = args;
-
-		if (args != null) {
+		if (U.notEmpty(args)) {
 			for (String arg : args) {
 				String[] parts = arg.split("=", 2);
 
@@ -283,10 +279,6 @@ public class Config extends RapidoidThing implements ToMap<String, Object> {
 		String[] keys = key.split("\\.");
 		Config cfg = keys.length > 1 ? sub(Arr.sub(keys, 0, -1)) : this;
 		cfg.set(U.last(keys), value);
-	}
-
-	public String[] getArgs() {
-		return args;
 	}
 
 	public Config root() {
