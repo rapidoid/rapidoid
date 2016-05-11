@@ -42,8 +42,8 @@ public class App extends RapidoidThing {
 	private static volatile String mainClassName;
 	private static volatile String appPkgName;
 	private static volatile boolean dirty;
+	private static volatile boolean restarted;
 
-	static volatile boolean restarted;
 	static volatile ClassLoader loader;
 
 	static {
@@ -99,7 +99,7 @@ public class App extends RapidoidThing {
 		JSON.reset();
 
 		for (Setup setup : Setup.instances()) {
-			setup.resetWithoutRestart();
+			setup.reload();
 		}
 
 		Setup.initDefaults();

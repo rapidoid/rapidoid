@@ -82,7 +82,7 @@ public abstract class IntegrationTestCommons extends TestCommons {
 
 		JDBC.execute("DROP ALL OBJECTS");
 
-		On.setup().resetWithoutRestart();
+		On.setup().reload();
 		On.setup().listen();
 
 		System.out.println("--- SERVER STARTED ---");

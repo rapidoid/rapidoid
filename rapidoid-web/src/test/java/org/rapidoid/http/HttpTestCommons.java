@@ -77,7 +77,7 @@ public abstract class HttpTestCommons extends TestCommons {
 		App.resetGlobalState();
 		OnChanges.ignore();
 
-		On.setup().resetWithoutRestart();
+		On.setup().reload();
 		On.setup().listen();
 
 		System.out.println("--- SERVER STARTED ---");

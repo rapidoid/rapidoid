@@ -33,10 +33,7 @@ import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.scan.Scan;
 import org.rapidoid.security.Roles;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Constants;
-import org.rapidoid.util.Msc;
-import org.rapidoid.util.MscInfo;
-import org.rapidoid.util.Once;
+import org.rapidoid.util.*;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -109,6 +106,7 @@ public class Setup extends RapidoidThing implements Constants {
 	private volatile boolean listening;
 	private volatile Server server;
 	private volatile boolean activated;
+	private volatile boolean reloaded;
 	private volatile boolean goodies = true;
 
 	private final Once bootstrapedComponents = new Once();
@@ -152,7 +150,7 @@ public class Setup extends RapidoidThing implements Constants {
 	}
 
 	public synchronized Server listen() {
-		if (!listening && !App.restarted) {
+		if (!listening && !reloaded) {
 
 			App.inferCallers();
 
@@ -196,7 +194,7 @@ public class Setup extends RapidoidThing implements Constants {
 		}
 		activated = true;
 
-		if (!App.restarted) {
+		if (!reloaded) {
 			listen();
 		}
 
@@ -365,6 +363,8 @@ public class Setup extends RapidoidThing implements Constants {
 	}
 
 	public Setup bootstrap() {
+		Log.setStyled(Env.dev());
+
 		setupConfig();
 
 		if (!isAdmin()) {
@@ -438,7 +438,9 @@ public class Setup extends RapidoidThing implements Constants {
 		return ioCContext;
 	}
 
-	public void resetWithoutRestart() {
+	public void reload() {
+		reloaded = true;
+
 		bootstrapedJPA.reset();
 		bootstrapedComponents.reset();
 		bootstrapedGoodies.reset();
