@@ -220,26 +220,36 @@ public class Crypto extends RapidoidThing {
 	}
 
 	public static String passwordHash(String password) {
-		byte[] salt = randomSalt();
-		return passwordHash(password, salt);
+		return passwordHash(password, 100000);
 	}
 
-	private static String passwordHash(String password, byte[] salt) {
-		byte[] hash = pbkdf2(password, salt, 100000, 256);
-		return Str.toBase64(hash) + "$" + Str.toBase64(salt);
+	public static String passwordHash(String password, int iterations) {
+		return passwordHash(password, iterations, randomSalt());
+	}
+
+	public static String passwordHash(String password, int iterations, byte[] salt) {
+		byte[] hash = pbkdf2(password, salt, iterations, 256);
+		return Str.toBase64(hash) + "$" + Str.toBase64(salt) + "$" + iterations;
 	}
 
 	public static boolean passwordMatches(String password, String saltedHash) {
 		String[] parts = saltedHash.split("\\$");
 
-		if (parts.length != 2) {
+		if (parts.length != 3) {
 			return false;
 		}
 
 		byte[] expectedHash = Str.fromBase64(parts[0]);
 		byte[] salt = Str.fromBase64(parts[1]);
+		int iterations;
 
-		byte[] realHash = pbkdf2(password, salt, 100000, 256);
+		try {
+			iterations = U.num(parts[2]);
+		} catch (Exception e) {
+			return false;
+		}
+
+		byte[] realHash = pbkdf2(password, salt, iterations, 256);
 		return Arrays.equals(expectedHash, realHash);
 	}
 

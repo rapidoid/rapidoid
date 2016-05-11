@@ -109,7 +109,7 @@ public class CryptoTest extends AbstractCommonsTest {
 
 	@Test
 	public void testPasswordHash() {
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 10; i++) {
 			String pass = "" + i;
 			String hash = Crypto.passwordHash(pass);
 
