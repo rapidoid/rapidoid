@@ -33,7 +33,7 @@ import java.util.Map;
 @Since("2.0.0")
 public class HTTP extends RapidoidThing {
 
-	private static volatile HttpClient client = client().dontClose();
+	private static volatile HttpClient client = client();
 
 	static {
 		RapidoidInitializer.initialize();

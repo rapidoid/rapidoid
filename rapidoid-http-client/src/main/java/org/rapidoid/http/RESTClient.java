@@ -32,7 +32,7 @@ import org.rapidoid.concurrent.Futures;
 @Since("4.1.0")
 public class RESTClient extends RapidoidThing {
 
-	private final HttpClient client = HTTP.client().dontClose();
+	private final HttpClient client = HTTP.client();
 
 	/* GET */
 

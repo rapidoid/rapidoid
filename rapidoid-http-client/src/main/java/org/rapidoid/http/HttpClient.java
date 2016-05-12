@@ -58,8 +58,6 @@ public class HttpClient extends RapidoidThing {
 
 	private volatile int maxRedirects = 5;
 
-	private volatile boolean dontClose = false;
-
 	private final Map<String, String> cookies = Coll.synchronizedMap();
 
 	public Future<byte[]> executeRequest(HttpReq req, Callback<byte[]> callback) {
@@ -73,7 +71,7 @@ public class HttpClient extends RapidoidThing {
 			}
 		}
 
-		return HttpClientUtil.request(req, client, callback, !dontClose);
+		return HttpClientUtil.request(req, client, callback, false);
 	}
 
 	public HttpClient userAgent(String userAgent) {
@@ -159,11 +157,6 @@ public class HttpClient extends RapidoidThing {
 
 	public HttpClient cookie(String name, String value) {
 		cookies().put(name, value);
-		return this;
-	}
-
-	public HttpClient dontClose() {
-		this.dontClose = true;
 		return this;
 	}
 

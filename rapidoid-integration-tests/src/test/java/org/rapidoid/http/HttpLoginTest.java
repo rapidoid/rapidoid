@@ -75,8 +75,8 @@ public class HttpLoginTest extends IntegrationTestCommons {
 	}
 
 	private void loginFlow(String user, String pass, List<String> expectedRoles) {
-		HttpClient anonymous = HTTP.client().reuseConnections(true).dontClose();
-		HttpClient client = HTTP.client().keepCookies(true).reuseConnections(true).dontClose();
+		HttpClient anonymous = HTTP.client().reuseConnections(true);
+		HttpClient client = HTTP.client().keepCookies(true).reuseConnections(true);
 
 		List<Object> notLoggedIn = U.list(false, null, U.list());
 		List<Object> loggedIn = U.list(true, user, expectedRoles);
