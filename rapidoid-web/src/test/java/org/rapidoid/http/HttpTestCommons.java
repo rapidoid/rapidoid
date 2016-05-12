@@ -96,7 +96,13 @@ public abstract class HttpTestCommons extends TestCommons {
 	public void closeContext() {
 		System.out.println("--- STOPPING SERVER ---");
 
-		Admin.setup().shutdown();
+		if (Admin.setup().isRunning()) {
+			if (Admin.setup().port() == On.setup().port()) {
+				Admin.setup().reset();
+			} else {
+				Admin.setup().shutdown();
+			}
+		}
 
 		System.out.println("--- SERVER STOPPED ---");
 	}
@@ -110,7 +116,7 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	protected String get(String uri) {
-		return HTTP.get(localhost(uri)).fetch();
+		return HTTP.req().get(localhost(uri)).fetch();
 	}
 
 	protected byte[] getBytes(String uri) {
@@ -239,18 +245,17 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	protected String fetch(int port, String verb, String uri, Map<String, ?> data) {
-		HttpClient client = HTTP.verb(HttpVerb.from(verb)).url(localhost(port, uri)).data(data);
-		String result = exec(client);
-		client.close();
+		HttpReq req = HTTP.verb(HttpVerb.from(verb)).url(localhost(port, uri)).data(data);
+		String result = exec(req);
 		return result;
 	}
 
-	protected String fetch(HttpClient client, int port, String verb, String uri, Map<String, ?> data) {
+	protected String fetch(HttpReq client, int port, String verb, String uri, Map<String, ?> data) {
 		client.verb(HttpVerb.from(verb)).url(localhost(port, uri)).data(data);
 		return exec(client);
 	}
 
-	private String exec(HttpClient client) {
+	private String exec(HttpReq client) {
 		client.raw(true);
 
 		byte[] res = client.execute();
@@ -261,11 +266,11 @@ public abstract class HttpTestCommons extends TestCommons {
 		return resp;
 	}
 
-	protected String fetch(HttpClient client, String verb, String uri, Map<String, ?> data) {
+	protected String fetch(HttpReq client, String verb, String uri, Map<String, ?> data) {
 		return fetch(client, DEFAULT_PORT, verb, uri, data);
 	}
 
-	protected String fetch(HttpClient client, String verb, String uri) {
+	protected String fetch(HttpReq client, String verb, String uri) {
 		return fetch(client, DEFAULT_PORT, verb, uri, null);
 	}
 

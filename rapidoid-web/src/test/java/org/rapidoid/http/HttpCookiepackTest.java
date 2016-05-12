@@ -47,7 +47,7 @@ public class HttpCookiepackTest extends HttpTestCommons {
 			}
 		});
 
-		HttpClient client = HTTP.keepCookies(true).dontClose();
+		HttpClient client = HTTP.client().keepCookies(true).dontClose();
 
 		eq(client.get(localhost("/a")).fetch(), "1:11");
 		eq(client.get(localhost("/b")).fetch(), "2:12");
@@ -55,7 +55,7 @@ public class HttpCookiepackTest extends HttpTestCommons {
 
 		client.close();
 
-		client = HTTP.dontClose().keepCookies(true); // do it again
+		client = HTTP.client().dontClose().keepCookies(true); // do it again
 
 		eq(client.get(localhost("/a")).fetch(), "1:11");
 		eq(client.get(localhost("/b")).fetch(), "2:12");

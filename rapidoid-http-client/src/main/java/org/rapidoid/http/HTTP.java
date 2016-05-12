@@ -33,6 +33,8 @@ import java.util.Map;
 @Since("2.0.0")
 public class HTTP extends RapidoidThing {
 
+	private static volatile HttpClient client = client().dontClose();
+
 	static {
 		RapidoidInitializer.initialize();
 	}
@@ -43,124 +45,94 @@ public class HTTP extends RapidoidThing {
 	public static final String CONTENT_TYPE_XML = "application/xml";
 	public static final String CONTENT_TYPE_BINARY = "application/octet-stream";
 
-	public static HttpClient get(String url) {
-		return new HttpClient().verb(HttpVerb.GET).url(url);
+	public static HttpClient client() {
+		return new HttpClient();
 	}
 
-	public static HttpClient post(String url) {
-		return new HttpClient().verb(HttpVerb.POST).url(url);
+	public static HttpReq req() {
+		return client.req();
 	}
 
-	public static HttpClient put(String url) {
-		return new HttpClient().verb(HttpVerb.PUT).url(url);
+	public static HttpReq get(String url) {
+		return req().verb(HttpVerb.GET).url(url);
 	}
 
-	public static HttpClient delete(String url) {
-		return new HttpClient().verb(HttpVerb.DELETE).url(url);
+	public static HttpReq post(String url) {
+		return req().verb(HttpVerb.POST).url(url);
 	}
 
-	public static HttpClient patch(String url) {
-		return new HttpClient().verb(HttpVerb.PATCH).url(url);
+	public static HttpReq put(String url) {
+		return req().verb(HttpVerb.PUT).url(url);
 	}
 
-	public static HttpClient options(String url) {
-		return new HttpClient().verb(HttpVerb.OPTIONS).url(url);
+	public static HttpReq delete(String url) {
+		return req().verb(HttpVerb.DELETE).url(url);
 	}
 
-	public static HttpClient head(String url) {
-		return new HttpClient().verb(HttpVerb.HEAD).url(url);
+	public static HttpReq patch(String url) {
+		return req().verb(HttpVerb.PATCH).url(url);
 	}
 
-	public static HttpClient trace(String url) {
-		return new HttpClient().verb(HttpVerb.TRACE).url(url);
+	public static HttpReq options(String url) {
+		return req().verb(HttpVerb.OPTIONS).url(url);
 	}
 
-	public static HttpClient verb(org.rapidoid.http.HttpVerb verb) {
-		return new HttpClient().verb(verb);
+	public static HttpReq head(String url) {
+		return req().verb(HttpVerb.HEAD).url(url);
 	}
 
-	public static HttpClient url(String url) {
-		return new HttpClient().url(url);
+	public static HttpReq trace(String url) {
+		return req().verb(HttpVerb.TRACE).url(url);
 	}
 
-	public static HttpClient body(byte[] body) {
-		return new HttpClient().body(body);
+	public static HttpReq verb(org.rapidoid.http.HttpVerb verb) {
+		return req().verb(verb);
 	}
 
-	public static HttpClient cookies(Map<String, String> cookies) {
-		return new HttpClient().cookies(cookies);
+	public static HttpReq url(String url) {
+		return req().url(url);
 	}
 
-	public static HttpClient headers(Map<String, String> headers) {
-		return new HttpClient().headers(headers);
+	public static HttpReq body(byte[] body) {
+		return req().body(body);
 	}
 
-	public static HttpClient data(Map<String, String> data) {
-		return new HttpClient().data(data);
+	public static HttpReq headers(Map<String, String> headers) {
+		return req().headers(headers);
 	}
 
-	public static HttpClient files(Map<String, List<Upload>> files) {
-		return new HttpClient().files(files);
+	public static HttpReq data(Map<String, String> data) {
+		return req().data(data);
 	}
 
-	public static HttpClient contentType(String contentType) {
-		return new HttpClient().contentType(contentType);
+	public static HttpReq files(Map<String, List<Upload>> files) {
+		return req().files(files);
 	}
 
-	public static HttpClient userAgent(String userAgent) {
-		return new HttpClient().userAgent(userAgent);
+	public static HttpReq contentType(String contentType) {
+		return req().contentType(contentType);
 	}
 
-	public static HttpClient followRedirects(boolean followRedirects) {
-		return new HttpClient().followRedirects(followRedirects);
+	public static HttpReq socketTimeout(int socketTimeout) {
+		return req().socketTimeout(socketTimeout);
 	}
 
-	public static HttpClient keepAlive(boolean keepAlive) {
-		return new HttpClient().keepAlive(keepAlive);
+	public static HttpReq connectTimeout(int connectTimeout) {
+		return req().connectTimeout(connectTimeout);
 	}
 
-	public static HttpClient keepCookies(boolean keepCookies) {
-		return new HttpClient().keepCookies(keepCookies);
+	public static HttpReq connectionRequestTimeout(int connectionRequestTimeout) {
+		return req().connectionRequestTimeout(connectionRequestTimeout);
 	}
 
-	public static HttpClient reuseConnections(boolean reuseConnections) {
-		return new HttpClient().reuseConnections(reuseConnections);
+	public static HttpReq raw(boolean raw) {
+		return req().raw(raw);
 	}
 
-	public static HttpClient decompress(boolean decompress) {
-		return new HttpClient().decompress(decompress);
-	}
-
-	public static HttpClient maxConnPerRoute(int maxConnPerRoute) {
-		return new HttpClient().maxConnPerRoute(maxConnPerRoute);
-	}
-
-	public static HttpClient maxConnTotal(int maxConnTotal) {
-		return new HttpClient().maxConnTotal(maxConnTotal);
-	}
-
-	public static HttpClient socketTimeout(int socketTimeout) {
-		return new HttpClient().socketTimeout(socketTimeout);
-	}
-
-	public static HttpClient connectTimeout(int connectTimeout) {
-		return new HttpClient().connectTimeout(connectTimeout);
-	}
-
-	public static HttpClient connectionRequestTimeout(int connectionRequestTimeout) {
-		return new HttpClient().connectionRequestTimeout(connectionRequestTimeout);
-	}
-
-	public static HttpClient maxRedirects(int maxRedirects) {
-		return new HttpClient().maxRedirects(maxRedirects);
-	}
-
-	public static HttpClient raw(boolean raw) {
-		return new HttpClient().raw(raw);
-	}
-
-	public static HttpClient dontClose() {
-		return new HttpClient().dontClose();
+	public static synchronized void close() {
+		HttpClient oldClient = client;
+		client = client();
+		oldClient.close();
 	}
 
 }

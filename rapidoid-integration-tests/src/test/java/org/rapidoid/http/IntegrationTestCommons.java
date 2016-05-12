@@ -60,6 +60,8 @@ public abstract class IntegrationTestCommons extends TestCommons {
 
 	public static final int DEFAULT_PORT = 8888;
 
+	public static final String LOCALHOST = "http://localhost:8888";
+
 	@Before
 	public void openContext() {
 		Log.setLogLevel(LogLevel.INFO);
@@ -279,25 +281,22 @@ public abstract class IntegrationTestCommons extends TestCommons {
 	}
 
 	protected String fetch(int port, String verb, String uri, Map<String, ?> data) {
-		HttpClient client = HTTP.verb(HttpVerb.from(verb)).url(localhost(port, uri)).data(data);
-		String result = exec(client);
-		client.close();
-		return result;
+		HttpReq req = HTTP.verb(HttpVerb.from(verb)).url(localhost(port, uri)).data(data);
+		return exec(req);
 	}
 
 	protected String fetch(HttpClient client, int port, String verb, String uri, Map<String, ?> data) {
-		client.verb(HttpVerb.from(verb)).url(localhost(port, uri)).data(data);
-		return exec(client);
+		return exec(client.req().verb(HttpVerb.from(verb)).url(localhost(port, uri)).data(data));
 	}
 
-	private String exec(HttpClient client) {
-		client.raw(true);
+	private String exec(HttpReq req) {
+		req.raw(true);
 
-		byte[] res = client.execute();
+		byte[] res = req.execute();
 		String resp = new String(res);
 		resp = resp.replaceFirst("Date: .*? GMT", "Date: XXXXX GMT");
 
-		client.raw(false);
+		req.raw(false);
 		return resp;
 	}
 

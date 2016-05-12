@@ -7,11 +7,9 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Future;
-import org.rapidoid.data.JSON;
-import org.rapidoid.io.Upload;
-import org.rapidoid.u.U;
+import org.rapidoid.log.Log;
 
-import java.util.List;
+import java.io.IOException;
 import java.util.Map;
 
 /*
@@ -38,21 +36,9 @@ import java.util.Map;
 @Since("5.1.0")
 public class HttpClient extends RapidoidThing {
 
-	private volatile HttpVerb verb = null;
+	private volatile CloseableHttpAsyncClient client;
 
-	private volatile String url = null;
-
-	private volatile byte[] body = null;
-
-	private final Map<String, String> cookies = Coll.synchronizedMap();
-
-	private final Map<String, String> headers = Coll.synchronizedMap();
-
-	private final Map<String, Object> data = Coll.synchronizedMap();
-
-	private final Map<String, List<Upload>> files = Coll.synchronizedMap();
-
-	private volatile String contentType = null;
+	private volatile String host = null;
 
 	private volatile String userAgent = null;
 
@@ -70,90 +56,24 @@ public class HttpClient extends RapidoidThing {
 
 	private volatile int maxConnTotal = 0;
 
-	private volatile int socketTimeout = 5000;
-
-	private volatile int connectTimeout = 5000;
-
-	private volatile int connectionRequestTimeout = 5000;
-
 	private volatile int maxRedirects = 5;
-
-	private volatile boolean raw = false;
-
-	private volatile CloseableHttpAsyncClient client;
 
 	private volatile boolean dontClose = false;
 
-	public HttpClient verb(HttpVerb verb) {
-		this.verb = verb;
-		return this;
-	}
+	private final Map<String, String> cookies = Coll.synchronizedMap();
 
-	public HttpVerb verb() {
-		return this.verb;
-	}
+	public Future<byte[]> executeRequest(HttpReq req, Callback<byte[]> callback) {
 
-	public HttpClient url(String url) {
-		this.url = url;
-		return this;
-	}
+		if (client == null) {
+			synchronized (this) {
+				if (client == null) {
+					client = HttpClientUtil.client(this);
+					client.start();
+				}
+			}
+		}
 
-	public String url() {
-		return this.url;
-	}
-
-	public HttpClient body(byte[] body) {
-		this.body = body;
-		return this;
-	}
-
-	public byte[] body() {
-		return this.body;
-	}
-
-	public HttpClient cookies(Map<String, String> cookies) {
-		Coll.assign(this.cookies, cookies);
-		return this;
-	}
-
-	public Map<String, String> cookies() {
-		return this.cookies;
-	}
-
-	public HttpClient headers(Map<String, String> headers) {
-		Coll.assign(this.headers, headers);
-		return this;
-	}
-
-	public Map<String, String> headers() {
-		return this.headers;
-	}
-
-	public HttpClient data(Map<String, ?> data) {
-		Coll.assign(this.data, data);
-		return this;
-	}
-
-	public Map<String, Object> data() {
-		return this.data;
-	}
-
-	public HttpClient files(Map<String, List<Upload>> files) {
-		Coll.assign(this.files, files);
-		return this;
-	}
-
-	public Map<String, List<Upload>> files() {
-		return this.files;
-	}
-
-	public HttpClient contentType(String contentType) {
-		this.contentType = contentType;
-		return this;
-	}
-
-	public String contentType() {
-		return this.contentType;
+		return HttpClientUtil.request(req, client, callback, !dontClose);
 	}
 
 	public HttpClient userAgent(String userAgent) {
@@ -228,33 +148,6 @@ public class HttpClient extends RapidoidThing {
 		return this.maxConnTotal;
 	}
 
-	public HttpClient socketTimeout(int socketTimeout) {
-		this.socketTimeout = socketTimeout;
-		return this;
-	}
-
-	public int socketTimeout() {
-		return this.socketTimeout;
-	}
-
-	public HttpClient connectTimeout(int connectTimeout) {
-		this.connectTimeout = connectTimeout;
-		return this;
-	}
-
-	public int connectTimeout() {
-		return this.connectTimeout;
-	}
-
-	public HttpClient connectionRequestTimeout(int connectionRequestTimeout) {
-		this.connectionRequestTimeout = connectionRequestTimeout;
-		return this;
-	}
-
-	public int connectionRequestTimeout() {
-		return this.connectionRequestTimeout;
-	}
-
 	public HttpClient maxRedirects(int maxRedirects) {
 		this.maxRedirects = maxRedirects;
 		return this;
@@ -264,32 +157,8 @@ public class HttpClient extends RapidoidThing {
 		return this.maxRedirects;
 	}
 
-	public HttpClient raw(boolean raw) {
-		this.raw = raw;
-		return this;
-	}
-
-	public boolean raw() {
-		return this.raw;
-	}
-
 	public HttpClient cookie(String name, String value) {
 		cookies().put(name, value);
-		return this;
-	}
-
-	public HttpClient header(String name, String value) {
-		headers().put(name, value);
-		return this;
-	}
-
-	public HttpClient data(String name, Object value) {
-		data().put(name, value);
-		return this;
-	}
-
-	public HttpClient file(String name, List<Upload> files) {
-		files().put(name, files);
 		return this;
 	}
 
@@ -298,80 +167,71 @@ public class HttpClient extends RapidoidThing {
 		return this;
 	}
 
-	public String fetch() {
-		return new String(execute());
+	public String host() {
+		return host;
 	}
 
-	public String fetchRaw() {
-		raw(true);
-		try {
-			return new String(execute());
-		} finally {
-			raw(false);
-		}
+	public HttpClient host(String host) {
+		this.host = host;
+		return this;
 	}
 
-	public <T> T parse() {
-		return JSON.parse(fetch());
+	public HttpClient cookies(Map<String, String> cookies) {
+		Coll.assign(this.cookies, cookies);
+		return this;
 	}
 
-	public byte[] execute() {
-		return executeRequest(null).get();
+	public Map<String, String> cookies() {
+		return this.cookies;
 	}
 
-	public Future<byte[]> execute(Callback<byte[]> callback) {
-		return executeRequest(callback);
+	public HttpReq req() {
+		return new HttpReq(this);
 	}
 
-	private Future<byte[]> executeRequest(Callback<byte[]> callback) {
-		if (client == null) {
-			synchronized (this) {
-				if (client == null) {
-					client = HttpClientUtil.client(this);
-					client.start();
-				}
-			}
-		}
+	public HttpReq get(String url) {
+		return req().verb(HttpVerb.GET).url(url);
+	}
 
-		U.notNull(client, "HTTP client");
+	public HttpReq post(String url) {
+		return req().verb(HttpVerb.POST).url(url);
+	}
 
-		return HttpClientUtil.request(this, client, callback, !dontClose);
+	public HttpReq put(String url) {
+		return req().verb(HttpVerb.PUT).url(url);
+	}
+
+	public HttpReq delete(String url) {
+		return req().verb(HttpVerb.DELETE).url(url);
+	}
+
+	public HttpReq patch(String url) {
+		return req().verb(HttpVerb.PATCH).url(url);
+	}
+
+	public HttpReq options(String url) {
+		return req().verb(HttpVerb.OPTIONS).url(url);
+	}
+
+	public HttpReq head(String url) {
+		return req().verb(HttpVerb.HEAD).url(url);
+	}
+
+	public HttpReq trace(String url) {
+		return req().verb(HttpVerb.TRACE).url(url);
 	}
 
 	public synchronized void close() {
-		HttpClientUtil.close(client);
-	}
+		if (client != null) {
 
-	public HttpClient get(String url) {
-		return verb(HttpVerb.GET).url(url);
-	}
+			try {
+				client.close();
+			} catch (IOException e) {
+				Log.error("Error while closing the HTTP client!", e);
+			}
 
-	public HttpClient post(String url) {
-		return verb(HttpVerb.POST).url(url);
-	}
-
-	public HttpClient put(String url) {
-		return verb(HttpVerb.PUT).url(url);
-	}
-
-	public HttpClient delete(String url) {
-		return verb(HttpVerb.DELETE).url(url);
-	}
-
-	public HttpClient patch(String url) {
-		return verb(HttpVerb.PATCH).url(url);
-	}
-
-	public HttpClient options(String url) {
-		return verb(HttpVerb.OPTIONS).url(url);
-	}
-
-	public HttpClient head(String url) {
-		return verb(HttpVerb.HEAD).url(url);
-	}
-
-	public HttpClient trace(String url) {
-		return verb(HttpVerb.TRACE).url(url);
+			client = null;
+		}
 	}
 
 }

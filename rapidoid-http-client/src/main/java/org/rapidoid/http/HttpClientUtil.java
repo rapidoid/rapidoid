@@ -75,25 +75,29 @@ public class HttpClientUtil extends RapidoidThing {
 		}
 	};
 
-	static CloseableHttpAsyncClient client(HttpClient config) {
-		ConnectionReuseStrategy reuseStrategy = config.reuseConnections() ? new DefaultConnectionReuseStrategy() : new NoConnectionReuseStrategy();
+	static CloseableHttpAsyncClient client(HttpClient client) {
+
+		ConnectionReuseStrategy reuseStrategy = client.reuseConnections() ? new DefaultConnectionReuseStrategy() : new NoConnectionReuseStrategy();
 
 		HttpAsyncClientBuilder builder = HttpAsyncClients.custom()
 				.setThreadFactory(new RapidoidThreadFactory("http-client"))
 				.disableConnectionState()
 				.disableAuthCaching()
-				.setMaxConnPerRoute(config.maxConnPerRoute())
-				.setMaxConnTotal(config.maxConnTotal())
+				.setMaxConnPerRoute(client.maxConnPerRoute())
+				.setMaxConnTotal(client.maxConnTotal())
 				.setConnectionReuseStrategy(reuseStrategy)
-				.setRedirectStrategy(config.followRedirects() ? new DefaultRedirectStrategy() : NO_REDIRECTS);
+				.setRedirectStrategy(client.followRedirects() ? new DefaultRedirectStrategy() : NO_REDIRECTS);
 
-
-		if (!U.isEmpty(config.cookies())) {
+		if (!U.isEmpty(client.cookies())) {
 			BasicCookieStore cookieStore = new BasicCookieStore();
 
-			for (Map.Entry<String, String> e : config.cookies().entrySet()) {
+			for (Map.Entry<String, String> e : client.cookies().entrySet()) {
 				BasicClientCookie cookie = new BasicClientCookie(e.getKey(), e.getValue());
-				cookie.setDomain(getDomain(config));
+
+				String host = client.host();
+				U.notNull(host, "HTTP client host");
+
+				cookie.setDomain(getDomain(host));
 				cookie.setPath("/");
 				cookieStore.addCookie(cookie);
 			}
@@ -101,39 +105,96 @@ public class HttpClientUtil extends RapidoidThing {
 			builder = builder.setDefaultCookieStore(cookieStore);
 		}
 
-		if (config.userAgent() != null) {
-			builder = builder.setUserAgent(config.userAgent());
+		if (client.userAgent() != null) {
+			builder = builder.setUserAgent(client.userAgent());
 		}
 
-		if (!config.keepCookies() && U.isEmpty(config.cookies())) {
+		if (!client.keepCookies() && U.isEmpty(client.cookies())) {
 			builder = builder.disableCookieManagement();
 		}
 
 		return builder.build();
 	}
 
-	private static String getDomain(HttpClient config) {
-		String url = config.url();
+	private static String getDomain(String host) {
+		String url = host;
 
 		url = Str.triml(url, "http://");
 		url = Str.triml(url, "https://");
 
-		String domain = url.split("(/|:)")[0];
-
-		return domain;
+		return url.split("(/|:)")[0];
 	}
 
-	static HttpRequestBase createRequest(HttpClient config) {
+	static HttpRequestBase createRequest(HttpReq config) {
 
 		Map<String, String> headers = U.safe(config.headers());
-		Map<String, Object> data = U.safe(config.data());
-		Map<String, List<Upload>> files = U.safe(config.files());
 
 		String url = config.url();
 
-		HttpRequestBase req;
-		boolean canHaveBody = false;
+		HttpRequestBase req = createReq(config, url);
 
+		for (Map.Entry<String, String> e : headers.entrySet()) {
+			req.addHeader(e.getKey(), e.getValue());
+		}
+
+		if (config.verb() == HttpVerb.POST || config.verb() == HttpVerb.PUT || config.verb() == HttpVerb.PATCH) {
+			HttpEntityEnclosingRequestBase entityEnclosingReq = (HttpEntityEnclosingRequestBase) req;
+			entityEnclosingReq.setEntity(config.body() != null ? byteBody(config) : paramsBody(config.data(), config.files()));
+		}
+
+		req.setConfig(reqConfig(config));
+
+		return req;
+	}
+
+	private static RequestConfig reqConfig(HttpReq config) {
+		return RequestConfig.custom()
+				.setSocketTimeout(config.socketTimeout())
+				.setConnectTimeout(config.connectTimeout())
+				.setConnectionRequestTimeout(config.connectionRequestTimeout())
+				.build();
+	}
+
+	private static NByteArrayEntity paramsBody(Map<String, Object> data, Map<String, List<Upload>> files) {
+		data = U.safe(data);
+		files = U.safe(files);
+
+		MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+
+		for (Map.Entry<String, List<Upload>> entry : files.entrySet()) {
+			for (Upload file : entry.getValue()) {
+				builder = builder.addBinaryBody(entry.getKey(), file.content(), ContentType.DEFAULT_BINARY, file.filename());
+			}
+		}
+
+		for (Map.Entry<String, Object> entry : data.entrySet()) {
+			String name = entry.getKey();
+			String value = String.valueOf(entry.getValue());
+			builder = builder.addTextBody(name, value, ContentType.DEFAULT_TEXT);
+		}
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		try {
+			builder.build().writeTo(stream);
+		} catch (IOException e) {
+			throw U.rte(e);
+		}
+
+		byte[] bytes = stream.toByteArray();
+		return new NByteArrayEntity(bytes, ContentType.MULTIPART_FORM_DATA);
+	}
+
+	private static NByteArrayEntity byteBody(HttpReq config) {
+		NByteArrayEntity entity = new NByteArrayEntity(config.body());
+
+		if (config.contentType() != null) {
+			entity.setContentType(config.contentType());
+		}
+		return entity;
+	}
+
+	private static HttpRequestBase createReq(HttpReq config, String url) {
+		HttpRequestBase req;
 		switch (config.verb()) {
 			case GET:
 				req = new HttpGet(url);
@@ -141,12 +202,10 @@ public class HttpClientUtil extends RapidoidThing {
 
 			case POST:
 				req = new HttpPost(url);
-				canHaveBody = true;
 				break;
 
 			case PUT:
 				req = new HttpPut(url);
-				canHaveBody = true;
 				break;
 
 			case DELETE:
@@ -155,7 +214,6 @@ public class HttpClientUtil extends RapidoidThing {
 
 			case PATCH:
 				req = new HttpPatch(url);
-				canHaveBody = true;
 				break;
 
 			case OPTIONS:
@@ -173,65 +231,10 @@ public class HttpClientUtil extends RapidoidThing {
 			default:
 				throw Err.notExpected();
 		}
-
-		for (Map.Entry<String, String> e : headers.entrySet()) {
-			req.addHeader(e.getKey(), e.getValue());
-		}
-
-		if (canHaveBody) {
-			HttpEntityEnclosingRequestBase entityEnclosingReq = (HttpEntityEnclosingRequestBase) req;
-
-			if (config.body() != null) {
-
-				NByteArrayEntity entity = new NByteArrayEntity(config.body());
-
-				if (config.contentType() != null) {
-					entity.setContentType(config.contentType());
-				}
-
-				entityEnclosingReq.setEntity(entity);
-			} else {
-
-				MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-
-				for (Map.Entry<String, List<Upload>> entry : files.entrySet()) {
-					for (Upload file : entry.getValue()) {
-						builder = builder.addBinaryBody(entry.getKey(), file.content(), ContentType.DEFAULT_BINARY, file.filename());
-					}
-				}
-
-				for (Map.Entry<String, Object> entry : data.entrySet()) {
-					String name = entry.getKey();
-					String value = String.valueOf(entry.getValue());
-					builder = builder.addTextBody(name, value, ContentType.DEFAULT_TEXT);
-				}
-
-				ByteArrayOutputStream stream = new ByteArrayOutputStream();
-				try {
-					builder.build().writeTo(stream);
-				} catch (IOException e) {
-					throw U.rte(e);
-				}
-
-				byte[] bytes = stream.toByteArray();
-				NByteArrayEntity entity = new NByteArrayEntity(bytes, ContentType.MULTIPART_FORM_DATA);
-
-				entityEnclosingReq.setEntity(entity);
-			}
-		}
-
-		RequestConfig requestConfig = RequestConfig.custom()
-				.setSocketTimeout(config.socketTimeout())
-				.setConnectTimeout(config.connectTimeout())
-				.setConnectionRequestTimeout(config.connectionRequestTimeout())
-				.build();
-
-		req.setConfig(requestConfig);
-
 		return req;
 	}
 
-	static Future<byte[]> request(HttpClient config, CloseableHttpAsyncClient client,
+	static Future<byte[]> request(HttpReq config, CloseableHttpAsyncClient client,
 	                              Callback<byte[]> callback, boolean close) {
 
 		HttpRequestBase req = createRequest(config);

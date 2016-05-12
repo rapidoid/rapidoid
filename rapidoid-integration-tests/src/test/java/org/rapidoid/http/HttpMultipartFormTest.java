@@ -24,8 +24,8 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.crypto.Crypto;
-import org.rapidoid.io.Upload;
 import org.rapidoid.io.IO;
+import org.rapidoid.io.Upload;
 import org.rapidoid.u.U;
 
 import java.util.List;
@@ -48,14 +48,17 @@ public class HttpMultipartFormTest extends IntegrationTestCommons {
 
 		Map<String, List<Upload>> files = U.map("f1", U.list(file1), "f2", U.list(file2));
 
-		String res = HTTP.post(localhost("/upload"))
+		HttpClient client = HTTP.client().host(LOCALHOST).cookie("foo", "bar");
+
+		String res = client.post(localhost("/upload"))
 				.header("Cookie", "COOKIE1=a")
-				.cookie("foo", "bar")
 				.data("a", "bb")
 				.files(files)
 				.fetch();
 
 		eq(res, "bar:a:bb:2:" + U.join(":", hash1, hash2, hash3));
+
+		client.close();
 	}
 
 	@Test
@@ -74,13 +77,16 @@ public class HttpMultipartFormTest extends IntegrationTestCommons {
 
 		Map<String, List<Upload>> files = U.map("f1", U.list(file1), "f2", U.list(file2), "f3", U.list(file3));
 
-		String res = HTTP.post(localhost("/upload"))
-				.cookies(cookies)
+		HttpClient client = HTTP.client().host(LOCALHOST).cookies(cookies);
+
+		String res = client.post(localhost("/upload"))
 				.data("a", "d")
 				.files(files)
 				.fetch();
 
 		eq(res, "bar:a:d:3:" + U.join(":", hash1, hash2, hash3));
+
+		client.close();
 	}
 
 }
