@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 2217
+Content-Length: 2231
 
 <!DOCTYPE html>
 <html lang="en">
@@ -29,7 +29,7 @@ Content-Length: 2217
 <!-- CREATE A RESOURCE FILE "templates/_head.html" TO REPLACE THIS LINE -->
 </head>
 
-<body class="rapidoid">
+<body class="rapidoid rapidoid-main">
 
 <script src="/jquery-2.2.3.min.js"></script>
 <script src="/bootstrap/js/bootstrap-3.3.6.min.js"></script>
