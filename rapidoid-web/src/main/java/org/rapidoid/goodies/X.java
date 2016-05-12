@@ -309,4 +309,8 @@ public class X extends RapidoidThing {
 		setup.page(baseUri + "/{id}/edit").tx().mvc(X.edit(entityType, baseUri));
 	}
 
+	public static ProxyHandler proxy(String targetHost) {
+		return new ProxyHandler(targetHost);
+	}
+
 }
