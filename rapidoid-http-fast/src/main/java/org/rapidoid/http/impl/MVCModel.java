@@ -50,4 +50,15 @@ public class MVCModel extends RapidoidThing {
 		this.screen = screen;
 		this.result = result;
 	}
+
+	@Override
+	public String toString() {
+		return "{" +
+				"req=" + req +
+				", resp=" + resp +
+				", model=" + model +
+				", screen=" + screen +
+				", result=" + result +
+				'}';
+	}
 }

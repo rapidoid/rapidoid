@@ -123,7 +123,10 @@ public class App extends RapidoidThing {
 		Res.reset();
 		Templates.reset();
 		JSON.reset();
+
 		AppBootstrap.reset();
+		beansCache.clear();
+		invoked.clear();
 
 		for (Setup setup : Setup.instances()) {
 			setup.reload();

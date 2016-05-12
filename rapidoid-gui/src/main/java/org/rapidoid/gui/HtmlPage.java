@@ -202,4 +202,9 @@ public class HtmlPage extends ScreenBean {
 	public static void commonCss(String commonCss) {
 		HtmlPage.commonCss = commonCss;
 	}
+
+	@Override
+	public String toString() {
+		return render();
+	}
 }

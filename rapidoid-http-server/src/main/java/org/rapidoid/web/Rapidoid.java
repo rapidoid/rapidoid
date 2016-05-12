@@ -5,7 +5,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.setup.App;
 import org.rapidoid.util.Msc;
-import org.rapidoid.util.Once;
 
 /*
  * #%L
@@ -31,14 +30,10 @@ import org.rapidoid.util.Once;
 @Since("4.0.0")
 public class Rapidoid extends RapidoidThing {
 
-	private static final Once once = new Once();
-
 	private Rapidoid() {
 	}
 
 	public static synchronized void run(String... args) {
-		if (!once.go()) return;
-
 		App.bootstrap(args).full();
 
 		Msc.logSection("Rapidoid bootstrap completed");

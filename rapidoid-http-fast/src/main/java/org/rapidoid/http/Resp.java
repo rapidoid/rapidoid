@@ -121,14 +121,14 @@ public interface Resp {
 	 * Sets a custom name of the <b>view</b> (V from MVC) of the HTTP response. <br>
 	 * This also sets <b>mvc</b> to <code>true</code>. <br>
 	 * The default view name equals <b>the request path without the "/" prefix</b>, except for the "/" path, where the view name is "index". <br>
-	 * E.g. "/abc" -> "abc", "/" -> index, "/my/books" -> "my/books".
+	 * E.g. "/abc" -> "abc", "/" -> "index", "/my/books" -> "my/books".
 	 */
 	Resp view(String viewName);
 
 	/**
 	 * Gets the (default or customized) name of the <b>view</b> (V from MVC) of the HTTP response. <br>
 	 * The default view name equals <b>the request path without the "/" prefix</b>, except for the "/" path, where the view name is "index". <br>
-	 * E.g. "/abc" -> "abc", "/" -> index, "/my/books" -> "my/books".
+	 * E.g. "/abc" -> "abc", "/" -> "index", "/my/books" -> "my/books".
 	 */
 	String view();
 

@@ -49,18 +49,18 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 		Set<Route> adminRoutes = On.setup().routes().allAdmin();
 		adminRoutes.addAll(Admin.setup().routes().allAdmin());
 
-		routes.add(div(h3("Application routes:"), routesOf(appRoutes)));
-		routes.add(div(h3("Admin routes:"), routesOf(adminRoutes)));
+		routes.add(div(h3("Application routes:"), routesOf(appRoutes, true)));
+		routes.add(div(h3("Admin routes:"), routesOf(adminRoutes, true)));
 
 		return multi(routes);
 	}
 
-	public static TableTag routesOf(Set<Route> httpRoutes) {
+	public static TableTag routesOf(Set<Route> httpRoutes, boolean withHandler) {
 		List<Route> routes = U.list(httpRoutes);
 		sortRoutes(routes);
 
 		List<Object> rows = U.list();
-		rows.add(tr(th("Verb"), th("Path"), th("Segment"), th("Content type"), th("MVC"), th("View name"), th("Roles"), th("Handler")));
+		rows.add(tr(th("Verb"), th("Path"), th("Segment"), th("Content type"), th("MVC"), th("View name"), th("Roles"), withHandler ? th("Handler") : null));
 
 		while (!routes.isEmpty()) {
 			Route route = U.first(routes);
@@ -78,7 +78,7 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 				}
 			}
 
-			rows.add(routeRow(route, verbs));
+			rows.add(routeRow(route, verbs, withHandler));
 		}
 
 
@@ -104,7 +104,7 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 		});
 	}
 
-	private static Tag routeRow(Route route, List<HttpVerb> verbs) {
+	private static Tag routeRow(Route route, List<HttpVerb> verbs, boolean withHandler) {
 		RouteConfig config = route.config();
 
 		Tag verb = td();
@@ -124,7 +124,7 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 
 		Tag mvc = td(config.mvc() ? fa("check") : "");
 
-		return tr(verb, path, segment, ctype, mvc, view, roles, hnd);
+		return tr(verb, path, segment, ctype, mvc, view, roles, withHandler ? hnd : null);
 	}
 
 	private static String viewName(Route route, RouteConfig config) {

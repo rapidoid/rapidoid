@@ -277,15 +277,17 @@ public class IO extends RapidoidThing {
 		}
 	}
 
-	public static void findAll(File dir, List<String> found) {
+	public static void findAll(File dir, List<String> found, boolean includeFiles, boolean includeDirectories) {
 		File[] files = dir.listFiles();
 
 		if (files != null) {
 			for (File f : files) {
-				found.add(f.getAbsolutePath());
+				if ((includeFiles && f.isFile()) || (includeDirectories && f.isDirectory())) {
+					found.add(f.getAbsolutePath());
+				}
 
 				if (f.isDirectory()) {
-					findAll(f, found);
+					findAll(f, found, includeFiles, includeDirectories);
 				}
 			}
 		}
