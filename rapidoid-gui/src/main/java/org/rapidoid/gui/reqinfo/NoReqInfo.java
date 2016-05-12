@@ -4,8 +4,8 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HttpVerb;
 import org.rapidoid.io.Upload;
+import org.rapidoid.u.U;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,9 +34,6 @@ import java.util.Set;
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.5")
 public class NoReqInfo extends AbstractReqInfo {
-
-	@SuppressWarnings({"rawtypes"})
-	private static final Map EMPTY = Collections.EMPTY_MAP;
 
 	@Override
 	public boolean exists() {
@@ -70,37 +67,37 @@ public class NoReqInfo extends AbstractReqInfo {
 
 	@Override
 	public Map<String, Object> data() {
-		return EMPTY;
+		return U.map();
 	}
 
 	@Override
 	public Map<String, String> params() {
-		return EMPTY;
+		return U.map();
 	}
 
 	@Override
 	public Map<String, Object> posted() {
-		return EMPTY;
+		return U.map();
 	}
 
 	@Override
 	public Map<String, List<Upload>> files() {
-		return EMPTY;
+		return U.map();
 	}
 
 	@Override
 	public Map<String, String> headers() {
-		return EMPTY;
+		return U.map();
 	}
 
 	@Override
 	public Map<String, String> cookies() {
-		return EMPTY;
+		return U.map();
 	}
 
 	@Override
 	public Map<String, Object> attrs() {
-		return EMPTY;
+		return U.map();
 	}
 
 	@Override
@@ -110,7 +107,7 @@ public class NoReqInfo extends AbstractReqInfo {
 
 	@Override
 	public Set<String> roles() {
-		return Collections.EMPTY_SET;
+		return U.set();
 	}
 
 	@Override
