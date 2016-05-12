@@ -4,7 +4,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.setup.App;
-import org.rapidoid.util.Msc;
+import org.rapidoid.setup.AppBootstrap;
 
 /*
  * #%L
@@ -33,10 +33,8 @@ public class Rapidoid extends RapidoidThing {
 	private Rapidoid() {
 	}
 
-	public static synchronized void run(String... args) {
-		App.bootstrap(args).full();
-
-		Msc.logSection("Rapidoid bootstrap completed");
+	public static synchronized AppBootstrap run(String... args) {
+		return App.bootstrap(args);
 	}
 
 }

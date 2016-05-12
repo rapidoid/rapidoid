@@ -33,10 +33,10 @@ public class ConfigHelp extends RapidoidThing {
 	public static void processHelp(Object[] args) {
 		if (args != null && args.length == 1 && args[0].equals("--help")) {
 			show("Usage:");
-			show("  java -cp <yourapp>.jar com.yourapp.Main [option1 option2 ...]");
+			show("  java -cp <yourapp>.jar com.example.Main [option1 option2 ...]");
 
 			show("\nExample:");
-			show("  java -cp <yourapp>.jar com.yourapp.Main app.port=9090 app.address=127.0.0.1 production secret=my-secret");
+			show("  java -cp <yourapp>.jar com.example.Main on.port=9090 on.address=127.0.0.1 production secret=my-secret");
 
 			show("\nAvailable options:");
 

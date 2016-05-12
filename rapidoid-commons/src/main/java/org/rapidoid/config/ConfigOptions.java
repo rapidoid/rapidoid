@@ -38,15 +38,12 @@ public class ConfigOptions extends RapidoidThing {
 
 		opts.add(opt("dev", "configure DEV mode", "auto-detected"));
 		opts.add(opt("production", "configure PRODUCTION mode", "auto-detected"));
-		opts.add(opt("secret=<SECRET>", "configure app-specific secret token for encryption", "(random)"));
+		opts.add(opt("secret=<SECRET>", "configure app-specific secret for encryption", "(random)"));
 
-		opts.add(opt("app.port=<P>", "the default (App) server will listen at port P", 8888));
-		opts.add(opt("app.address=<ADDR>", "the default (App) server will listen at address ADDR", "0.0.0.0"));
+		opts.add(opt("on.port=<P>", "the default (App) server will listen at port P", 8888));
+		opts.add(opt("on.address=<ADDR>", "the default (App) server will listen at address ADDR", "0.0.0.0"));
 
-		opts.add(opt("dev.port=<P>", "the Dev server will listen at port P", 7777));
-		opts.add(opt("dev.address=<ADDR>", "the Dev server will listen at address ADDR", "127.0.0.1"));
-
-		opts.add(opt("admin.port=<P>", "the Admin server will listen at port P", 9999));
+		opts.add(opt("admin.port=<P>", "the Admin server will listen at port P", "same as on.port"));
 		opts.add(opt("admin.address=<ADDR>", "the Admin server will listen at address ADDR", "0.0.0.0"));
 
 		// opts.add(opt("stateless", "Run in stateless mode, session becomes cookiepack", false));
