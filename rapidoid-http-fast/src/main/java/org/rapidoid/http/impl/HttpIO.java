@@ -6,8 +6,8 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.commons.Dates;
 import org.rapidoid.commons.MediaType;
-import org.rapidoid.data.JSON;
 import org.rapidoid.data.BufRange;
+import org.rapidoid.data.JSON;
 import org.rapidoid.http.HttpResponseCodes;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Req;
@@ -131,9 +131,7 @@ public class HttpIO extends RapidoidThing {
 	public static void errorAndDone(Req req, Throwable error, ErrorHandler errorHandler) {
 		error(req, error, errorHandler);
 		// the Req object will do the rendering
-		if (!req.isAsync()) {
-			req.done();
-		}
+		req.done();
 	}
 
 	public static void writeContentLengthAndBody(Channel ctx, byte[] content) {

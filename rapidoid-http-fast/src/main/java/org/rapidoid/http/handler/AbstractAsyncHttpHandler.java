@@ -234,7 +234,9 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 		}
 
 		if (result instanceof Throwable) {
-			HttpIO.error(req, (Throwable) result, http.custom().errorHandler());
+			HttpIO.errorAndDone(req, (Throwable) result, http.custom().errorHandler());
+			return;
+
 		} else {
 			HttpUtils.resultToResponse(req, result);
 		}
