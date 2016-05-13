@@ -43,7 +43,7 @@ public class IO extends RapidoidThing {
 	}
 
 	public static InputStream resourceAsStream(String filename) {
-		return classLoader().getResourceAsStream(filename);
+		return classLoader().getResourceAsStream(filename.replace('\\', '/'));
 	}
 
 	public static ClassLoader classLoader() {
@@ -106,7 +106,7 @@ public class IO extends RapidoidThing {
 	public static byte[] loadBytes(String filename) {
 		InputStream input = null;
 		try {
-			input = classLoader().getResourceAsStream(filename);
+			input = resourceAsStream(filename);
 
 			if (input == null) {
 				File file = new File(filename);
@@ -174,7 +174,7 @@ public class IO extends RapidoidThing {
 	}
 
 	public static Map<String, String> loadMap(String filename) {
-		InputStream input = classLoader().getResourceAsStream(filename);
+		InputStream input = resourceAsStream(filename);
 		if (input == null) {
 			return null;
 		}

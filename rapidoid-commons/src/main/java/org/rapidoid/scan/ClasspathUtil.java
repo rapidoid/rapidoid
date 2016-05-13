@@ -369,7 +369,7 @@ public class ClasspathUtil extends RapidoidThing {
 			URL[] urls = ((URLClassLoader) cl).getURLs();
 
 			for (URL url : urls) {
-				String path = Str.trimr(url.getPath(), '/');
+				String path = Msc.urlDecode(Str.trimr(url.getPath(), '/'));
 				CLASSPATH.add(new File(path).getAbsolutePath());
 			}
 
