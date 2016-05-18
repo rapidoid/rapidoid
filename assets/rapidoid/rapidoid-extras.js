@@ -11,7 +11,13 @@ Rapidoid = (function() {
     // rel="stylesheet">');
     // }
 
+    var initialized = false;
     function _init() {
+        if(initialized) {
+            return;
+        }
+        initialized = true;
+
         $(function () {
 
         $('[data-toggle="tooltip"]').tooltip();
@@ -120,6 +126,8 @@ Rapidoid = (function() {
     }
 
     function _initScope($scope) {
+        Rapidoid.scope = $scope;
+
         for (var i = 0; i < scopeInitializers.length; i++) {
             scopeInitializers[i]($scope);
         }
@@ -178,7 +186,8 @@ Rapidoid = (function() {
         createApp : createApp,
         initializer : initializer,
         plugin : plugin,
-        initApp : initApp
+        initApp : initApp,
+        holder: 'ajaxBodyContent'
     };
 
 })();
