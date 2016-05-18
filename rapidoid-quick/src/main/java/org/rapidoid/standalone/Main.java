@@ -23,6 +23,12 @@ package org.rapidoid.standalone;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.GUI;
+import org.rapidoid.http.HttpVerb;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.ReqRespHandler;
+import org.rapidoid.http.Resp;
+import org.rapidoid.setup.On;
 import org.rapidoid.web.Rapidoid;
 
 @Authors("Nikolche Mihajlovski")
@@ -31,6 +37,15 @@ public class Main extends RapidoidThing {
 
 	public static void main(String[] args) {
 		Rapidoid.run(args).full();
+
+		if (On.setup().routes().find(HttpVerb.GET, "/") == null) {
+			On.page("/").mvc(new ReqRespHandler() {
+				@Override
+				public Object execute(Req req, Resp resp) throws Exception {
+					return GUI.h1("Welcome to Rapidoid!");
+				}
+			});
+		}
 	}
 
 }
