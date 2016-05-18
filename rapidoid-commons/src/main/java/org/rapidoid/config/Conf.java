@@ -74,11 +74,18 @@ public class Conf extends RapidoidThing {
 
 		configureProfiles();
 
+		applyConfig();
+	}
+
+	private static void applyConfig() {
+		String appJar = APP.entry("jar").str().getOrNull();
+		if (U.notEmpty(appJar)) {
+			ClasspathUtil.appJar(appJar);
+		}
+
 		if (Env.dev()) {
 			Log.setStyled(true);
 		}
-
-		ROOT.args(args);
 	}
 
 	private static void configureProfiles() {
@@ -164,12 +171,7 @@ public class Conf extends RapidoidThing {
 
 		ROOT.args(args);
 
-		String appJar = APP.entry("jar").str().getOrNull();
-		if (U.notEmpty(appJar)) {
-			ClasspathUtil.appJar(appJar);
-		}
-
-		Log.setStyled(Env.dev());
+		applyConfig();
 	}
 
 	private static void autoRefresh(Config... configs) {
