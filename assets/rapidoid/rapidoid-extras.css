@@ -475,3 +475,36 @@ ul.pagination {
     background-color: #95a5a6;
 }
 
+/****** split.js *******/
+
+.gutter {
+  background-color: #eee;
+  background-repeat: no-repeat;
+  background-position: 50%;
+}
+
+.gutter.gutter-horizontal {
+  background-image: url('/grips/vertical.png');
+  cursor: ew-resize;
+}
+
+.gutter.gutter-vertical {
+  background-image: url('/grips/horizontal.png');
+  cursor: ns-resize;
+}
+
+.split {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.split, .gutter.gutter-horizontal {
+  height: 100%;
+  float: left;
+}
+
+.split {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
