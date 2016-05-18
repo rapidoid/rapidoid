@@ -339,7 +339,9 @@ public class Setup extends RapidoidThing implements Constants {
 
 	public synchronized Setup shutdown() {
 		if (this.server != null) {
-			this.server.shutdown();
+			if (this.server.isActive()) {
+				this.server.shutdown();
+			}
 			this.server = null;
 		}
 
@@ -350,7 +352,9 @@ public class Setup extends RapidoidThing implements Constants {
 
 	public synchronized Setup halt() {
 		if (this.server != null) {
-			this.server.halt();
+			if (this.server.isActive()) {
+				this.server.halt();
+			}
 			this.server = null;
 		}
 
