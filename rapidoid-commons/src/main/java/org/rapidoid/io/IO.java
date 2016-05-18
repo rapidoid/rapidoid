@@ -88,7 +88,7 @@ public class IO extends RapidoidThing {
 		byte[] buffer = new byte[16 * 1024];
 
 		try {
-			int readN = 0;
+			int readN;
 			while ((readN = input.read(buffer)) != -1) {
 				output.write(buffer, 0, readN);
 			}

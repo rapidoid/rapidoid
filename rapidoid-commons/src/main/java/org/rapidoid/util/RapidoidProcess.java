@@ -7,6 +7,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -36,6 +37,7 @@ import java.util.concurrent.BlockingQueue;
 @Since("4.1.0")
 public class RapidoidProcess extends RapidoidThing {
 
+	private final File dir;
 	private final String[] command;
 
 	private final BlockingQueue<Object> input = new ArrayBlockingQueue<Object>(100000);
@@ -46,14 +48,15 @@ public class RapidoidProcess extends RapidoidThing {
 
 	private final Process process;
 
-	public RapidoidProcess(String[] command) {
+	public RapidoidProcess(File dir, String... command) {
+		this.dir = dir;
 		this.command = command;
 
 		this.process = startProcess();
 	}
 
 	private Process startProcess() {
-		ProcessBuilder builder = new ProcessBuilder().command(command);
+		ProcessBuilder builder = new ProcessBuilder().command(command).directory(dir);
 		try {
 			return builder.start();
 		} catch (IOException e) {

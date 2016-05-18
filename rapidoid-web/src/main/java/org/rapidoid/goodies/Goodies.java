@@ -162,7 +162,7 @@ public class Goodies extends RapidoidThing {
 
 		Metrics.bootstrap();
 
-		setup.page("/_/").mvc(Goodies.overview());
+		setup.page("/_").mvc(Goodies.overview());
 
 		if (Msc.hasJPA()) {
 			jpaGoodies(setup);
