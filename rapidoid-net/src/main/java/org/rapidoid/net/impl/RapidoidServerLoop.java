@@ -1,5 +1,6 @@
 package org.rapidoid.net.impl;
 
+import org.rapidoid.activity.RapidoidThread;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Rnd;
@@ -171,7 +172,7 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 
 	@Override
 	public synchronized Server start() {
-		new Thread(this, "server").start();
+		new RapidoidThread(this, "server").start();
 
 		return super.start();
 	}

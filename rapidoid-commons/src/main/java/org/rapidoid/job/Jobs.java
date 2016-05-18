@@ -46,11 +46,17 @@ public class Jobs extends RapidoidThing {
 
 	static {
 		RapidoidInitializer.initialize();
+
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			public void run() {
+				shutdownNow();
+			}
+		});
 	}
 
 	private static ScheduledExecutorService SCHEDULER;
 
-	private static Executor EXECUTOR;
+	private static ExecutorService EXECUTOR;
 
 	private Jobs() {
 	}
@@ -163,6 +169,30 @@ public class Jobs extends RapidoidThing {
 
 	public static AtomicLong errorCounter() {
 		return errorCounter;
+	}
+
+	public static synchronized void shutdown() {
+		if (EXECUTOR != null) {
+			EXECUTOR.shutdown();
+			EXECUTOR = null;
+		}
+
+		if (SCHEDULER != null) {
+			SCHEDULER.shutdown();
+			SCHEDULER = null;
+		}
+	}
+
+	public static synchronized void shutdownNow() {
+		if (EXECUTOR != null) {
+			EXECUTOR.shutdownNow();
+			EXECUTOR = null;
+		}
+
+		if (SCHEDULER != null) {
+			SCHEDULER.shutdownNow();
+			SCHEDULER = null;
+		}
 	}
 
 }

@@ -1,5 +1,6 @@
 package org.rapidoid.insight;
 
+import org.rapidoid.activity.RapidoidThread;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
@@ -27,7 +28,7 @@ import org.rapidoid.u.U;
  * @author Nikolche Mihajlovski
  * @since 4.1.0
  */
-public class InsightsThread extends Thread {
+public class InsightsThread extends RapidoidThread {
 
 	public InsightsThread() {
 		super("stats");

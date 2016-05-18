@@ -34,4 +34,12 @@ public class RapidoidThread extends Thread {
 		super(runnable);
 	}
 
+	public RapidoidThread(String name) {
+		super(name);
+	}
+
+	public <T> RapidoidThread(Runnable runnable, String name) {
+		super(runnable, name);
+	}
+
 }

@@ -35,7 +35,7 @@ public abstract class AbstractThreadActivity<T> extends LifecycleActivity<T> imp
 	public AbstractThreadActivity(String name) {
 		super(name);
 
-		this.thread = new Thread(this, name);
+		this.thread = new RapidoidThread(this, name);
 	}
 
 	@Override

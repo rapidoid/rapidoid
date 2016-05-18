@@ -79,6 +79,13 @@ public class Setup extends RapidoidThing implements Constants {
 		if (Ctxs.getPersisterProvider() == null) {
 			Ctxs.setPersisterProvider(new JPAPersisterProvider());
 		}
+
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			public void run() {
+				shutdownAll();
+				Jobs.shutdownNow();
+			}
+		});
 	}
 
 	private final String name;
@@ -489,16 +496,12 @@ public class Setup extends RapidoidThing implements Constants {
 		for (Setup setup : instances()) {
 			setup.halt();
 		}
-
-		System.exit(0);
 	}
 
 	public static void shutdownAll() {
 		for (Setup setup : instances()) {
 			setup.shutdown();
 		}
-
-		System.exit(0);
 	}
 
 	public int port() {

@@ -4,6 +4,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.Btn;
 import org.rapidoid.gui.GUI;
+import org.rapidoid.job.Jobs;
 import org.rapidoid.setup.Setup;
 import org.rapidoid.u.U;
 
@@ -64,7 +65,9 @@ public class TerminateHandler extends GUI implements Callable<Object> {
 			@Override
 			public void run() {
 				U.sleep(1000);
+				Jobs.shutdown();
 				Setup.shutdownAll();
+				System.exit(0);
 			}
 		}.start();
 	}
@@ -74,10 +77,11 @@ public class TerminateHandler extends GUI implements Callable<Object> {
 			@Override
 			public void run() {
 				U.sleep(1000);
+				Jobs.shutdownNow();
 				Setup.haltAll();
+				System.exit(0);
 			}
 		}.start();
 	}
-
 }
 

@@ -1,6 +1,7 @@
 package org.rapidoid.util;
 
 import org.rapidoid.RapidoidThing;
+import org.rapidoid.activity.RapidoidThread;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
@@ -66,7 +67,7 @@ public class RapidoidProcess extends RapidoidThing {
 
 	public void init() throws Exception {
 
-		new Thread() {
+		new RapidoidThread() {
 			public void run() {
 				while (!Thread.interrupted()) {
 					try {
@@ -90,7 +91,7 @@ public class RapidoidProcess extends RapidoidThing {
 			}
 		}.start();
 
-		new Thread() {
+		new RapidoidThread() {
 			@SuppressWarnings("unused")
 			public void run() {
 				long total = 0;
@@ -113,7 +114,7 @@ public class RapidoidProcess extends RapidoidThing {
 			;
 		}.start();
 
-		new Thread() {
+		new RapidoidThread() {
 			@SuppressWarnings("unused")
 			public void run() {
 				long total = 0;
