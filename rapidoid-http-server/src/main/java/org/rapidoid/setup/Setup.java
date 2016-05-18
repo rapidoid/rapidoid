@@ -93,7 +93,7 @@ public class Setup extends RapidoidThing implements Constants {
 
 	private final Customization customization;
 	private final HttpRoutesImpl routes;
-	private final FastHttp http;
+	private volatile FastHttp http;
 	private volatile RouteOptions defaults = new RouteOptions();
 
 	private volatile Integer port;
@@ -136,13 +136,29 @@ public class Setup extends RapidoidThing implements Constants {
 
 		this.customization = new Customization(name, appConfig, serverConfig);
 		this.routes = new HttpRoutesImpl(customization);
-		this.http = new FastHttp(routes);
 
 		this.defaults.segment(segment);
 	}
 
 	public FastHttp http() {
-		return delegateAdminToApp() ? ON.http() : http;
+		if (http != null) {
+			return http;
+		}
+
+		synchronized (this) {
+			if (isAdmin() && ON.http != null && appAndAdminOnSameServer()) {
+				return ON.http;
+
+			} else if (isApp() && ADMIN.http != null && appAndAdminOnSameServer()) {
+				return ADMIN.http;
+			}
+
+			if (http == null) {
+				http = new FastHttp(routes);
+			}
+		}
+
+		return http;
 	}
 
 	public synchronized Server listen() {
@@ -348,6 +364,7 @@ public class Setup extends RapidoidThing implements Constants {
 		listening = false;
 		reloaded = false;
 		port = null;
+		http = null;
 		address = null;
 		processor = null;
 		activated = false;
