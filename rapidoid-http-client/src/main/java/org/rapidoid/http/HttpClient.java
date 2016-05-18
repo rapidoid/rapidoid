@@ -60,7 +60,7 @@ public class HttpClient extends RapidoidThing {
 
 	private final Map<String, String> cookies = Coll.synchronizedMap();
 
-	public Future<byte[]> executeRequest(HttpReq req, Callback<byte[]> callback) {
+	public Future<HttpResp> executeRequest(HttpReq req, Callback<HttpResp> callback) {
 
 		if (client == null) {
 			synchronized (this) {

@@ -156,7 +156,7 @@ public abstract class IntegrationTestCommons extends TestCommons {
 	}
 
 	protected byte[] getBytes(String uri) {
-		return HTTP.get(localhost(uri)).execute();
+		return HTTP.get(localhost(uri)).execute().bodyBytes();
 	}
 
 	protected void onlyGet(String uri) {
@@ -292,8 +292,7 @@ public abstract class IntegrationTestCommons extends TestCommons {
 	private String exec(HttpReq req) {
 		req.raw(true);
 
-		byte[] res = req.execute();
-		String resp = new String(res);
+		String resp = new String(req.execute().raw());
 		resp = resp.replaceFirst("Date: .*? GMT", "Date: XXXXX GMT");
 
 		req.raw(false);

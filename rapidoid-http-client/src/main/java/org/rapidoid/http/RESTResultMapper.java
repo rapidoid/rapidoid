@@ -24,7 +24,7 @@ import org.rapidoid.lambda.Mapper;
  * #L%
  */
 
-public class RESTResultMapper<T> extends RapidoidThing implements Mapper<byte[], T> {
+public class RESTResultMapper<T> extends RapidoidThing implements Mapper<HttpResp, T> {
 
 	private final Class<T> resultType;
 
@@ -33,8 +33,8 @@ public class RESTResultMapper<T> extends RapidoidThing implements Mapper<byte[],
 	}
 
 	@Override
-	public T map(byte[] src) throws Exception {
-		return !resultType.equals(void.class) ? Parse.data(src, resultType) : null;
+	public T map(HttpResp resp) throws Exception {
+		return !resultType.equals(void.class) ? Parse.data(resp.bodyBytes(), resultType) : null;
 	}
 
 }

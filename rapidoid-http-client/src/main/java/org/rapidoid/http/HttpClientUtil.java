@@ -31,7 +31,6 @@ import org.rapidoid.u.U;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
@@ -234,66 +233,45 @@ public class HttpClientUtil extends RapidoidThing {
 		return req;
 	}
 
-	static Future<byte[]> request(HttpReq config, CloseableHttpAsyncClient client,
-	                              Callback<byte[]> callback, boolean close) {
+	static Future<HttpResp> request(HttpReq config, CloseableHttpAsyncClient client,
+	                                Callback<HttpResp> callback, boolean close) {
 
 		HttpRequestBase req = createRequest(config);
 		Log.debug("Starting HTTP request", "request", req.getRequestLine());
 
-		Promise<byte[]> promise = Promises.create();
-		FutureCallback<HttpResponse> cb = callback(client, callback, promise, config.raw(), close);
+		Promise<HttpResp> promise = Promises.create();
+		FutureCallback<HttpResponse> cb = callback(client, callback, promise, close);
 		client.execute(req, cb);
 
 		return promise;
 	}
 
 	private static <T> FutureCallback<HttpResponse> callback(final CloseableHttpAsyncClient client,
-	                                                         final Callback<byte[]> callback,
-	                                                         final Callback<byte[]> promise,
-	                                                         final boolean fullResponse,
+	                                                         final Callback<HttpResp> callback,
+	                                                         final Callback<HttpResp> promise,
 	                                                         final boolean close) {
 
 		return new FutureCallback<HttpResponse>() {
 
 			@Override
 			public void completed(HttpResponse response) {
-				int statusCode = response.getStatusLine().getStatusCode();
+				HttpResp resp;
 
-				if (!fullResponse && statusCode != 200) {
-					Callbacks.error(callback, new HttpException(statusCode));
-					Callbacks.error(promise, new HttpException(statusCode));
+				try {
+					resp = response(response);
+
+				} catch (Exception e) {
+					Callbacks.error(callback, e);
+					Callbacks.error(promise, e);
 					if (close) {
 						close(client);
 					}
 					return;
 				}
 
-				byte[] bytes;
+				Callbacks.success(callback, resp);
+				Callbacks.success(promise, resp);
 
-				if (response.getEntity() != null) {
-					try {
-						if (fullResponse) {
-							bytes = responseToBytes(response);
-						} else {
-							InputStream resp = response.getEntity().getContent();
-							bytes = IO.loadBytes(resp);
-							U.must(bytes != null, "Couldn't read the HTTP response!");
-						}
-
-					} catch (Exception e) {
-						Callbacks.error(callback, e);
-						Callbacks.error(promise, e);
-						if (close) {
-							close(client);
-						}
-						return;
-					}
-				} else {
-					bytes = new byte[0];
-				}
-
-				Callbacks.success(callback, bytes);
-				Callbacks.success(promise, bytes);
 				if (close) {
 					close(client);
 				}
@@ -319,31 +297,35 @@ public class HttpClientUtil extends RapidoidThing {
 		};
 	}
 
-	static byte[] responseToBytes(HttpResponse response) {
+	private static HttpResp response(HttpResponse response) throws IOException {
+
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		PrintWriter printer = new PrintWriter(baos);
 
 		printer.print(response.getStatusLine() + "");
 		printer.print("\n");
 
+		Map<String, String> headers = U.map();
+
 		for (Header hdr : response.getAllHeaders()) {
 			printer.print(hdr.getName());
 			printer.print(": ");
 			printer.print(hdr.getValue());
 			printer.print("\n");
+
+			headers.put(hdr.getName(), hdr.getValue());
 		}
 
 		printer.print("\n");
-
 		printer.flush();
 
-		try {
-			response.getEntity().writeTo(baos);
-		} catch (Exception e) {
-			throw U.rte(e);
-		}
+		HttpEntity entity = response.getEntity();
+		byte[] body = entity != null ? IO.loadBytes(response.getEntity().getContent()) : new byte[0];
 
-		return baos.toByteArray();
+		baos.write(body);
+		byte[] raw = baos.toByteArray();
+
+		return new HttpResp(raw, response.getStatusLine().getStatusCode(), headers, body);
 	}
 
 	static void close(CloseableHttpAsyncClient client) {

@@ -49,12 +49,12 @@ public class ProxyHandler extends RapidoidThing implements ReqRespHandler {
 				.headers(req.headers())
 				.body(req.body())
 				.raw(true)
-				.execute(new Callback<byte[]>() {
+				.execute(new Callback<HttpResp>() {
 
 					@Override
-					public void onDone(byte[] result, Throwable error) {
+					public void onDone(HttpResp result, Throwable error) {
 						if (error == null) {
-							resp.raw(result).done();
+							resp.raw(result.raw()).done();
 						} else {
 							HttpIO.errorAndDone(req, error, req.custom().errorHandler());
 						}

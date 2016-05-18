@@ -336,6 +336,7 @@ org.rapidoid.http.HttpException
 org.rapidoid.http.HttpHeaders
 org.rapidoid.http.HttpMetadata
 org.rapidoid.http.HttpReq
+org.rapidoid.http.HttpResp
 org.rapidoid.http.HttpResponseCodes
 org.rapidoid.http.HttpRoutes
 org.rapidoid.http.HttpStatus

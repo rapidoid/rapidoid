@@ -132,13 +132,13 @@ public class HttpReq extends RapidoidThing {
 	}
 
 	public String fetch() {
-		return new String(execute());
+		return execute().body();
 	}
 
 	public String fetchRaw() {
 		raw(true);
 		try {
-			return new String(execute());
+			return execute().body();
 		} finally {
 			raw(false);
 		}
@@ -199,11 +199,11 @@ public class HttpReq extends RapidoidThing {
 		return JSON.parse(fetch());
 	}
 
-	public byte[] execute() {
+	public HttpResp execute() {
 		return client.executeRequest(this, null).get();
 	}
 
-	public Future<byte[]> execute(Callback<byte[]> callback) {
+	public Future<HttpResp> execute(Callback<HttpResp> callback) {
 		return client.executeRequest(this, callback);
 	}
 

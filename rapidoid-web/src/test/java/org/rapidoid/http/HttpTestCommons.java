@@ -120,7 +120,7 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	protected byte[] getBytes(String uri) {
-		return HTTP.get(localhost(uri)).execute();
+		return HTTP.get(localhost(uri)).execute().bodyBytes();
 	}
 
 	protected void onlyGet(String uri) {
@@ -258,8 +258,7 @@ public abstract class HttpTestCommons extends TestCommons {
 	private String exec(HttpReq client) {
 		client.raw(true);
 
-		byte[] res = client.execute();
-		String resp = new String(res);
+		String resp = new String(client.execute().raw());
 		resp = resp.replaceFirst("Date: .*? GMT", "Date: XXXXX GMT");
 
 		client.raw(false);
