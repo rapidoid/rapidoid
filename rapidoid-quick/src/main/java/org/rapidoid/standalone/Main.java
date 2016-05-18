@@ -30,7 +30,7 @@ import org.rapidoid.web.Rapidoid;
 public class Main extends RapidoidThing {
 
 	public static void main(String[] args) {
-		Rapidoid.run(args);
+		Rapidoid.run(args).full();
 	}
 
 }
