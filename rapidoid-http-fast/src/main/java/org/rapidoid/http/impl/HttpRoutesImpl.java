@@ -517,6 +517,17 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 		return customization;
 	}
 
+	@Override
+	public Route find(HttpVerb verb, String path) {
+		for (Route route : all()) {
+			if (route.verb().equals(verb) && route.path().equals(path)) {
+				return route;
+			}
+		}
+
+		return null;
+	}
+
 	public List<HttpHandler> genericHandlers() {
 		return genericHandlers;
 	}

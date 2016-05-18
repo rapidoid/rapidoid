@@ -51,4 +51,5 @@ public interface HttpRoutes {
 
 	Customization custom();
 
+	Route find(HttpVerb verb, String path);
 }

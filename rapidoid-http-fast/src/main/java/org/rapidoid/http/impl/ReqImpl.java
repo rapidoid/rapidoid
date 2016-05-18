@@ -727,12 +727,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 			}
 		}
 
-		for (Route route : routes().all()) {
-			if (route.verb().equals(verb) && route.path().equals(uri)) {
-				return true;
-			}
-		}
-
-		return false;
+		return routes().find(verb, uri) != null;
 	}
+
 }
