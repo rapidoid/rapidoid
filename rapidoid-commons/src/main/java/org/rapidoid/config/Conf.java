@@ -3,6 +3,7 @@ package org.rapidoid.config;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Env;
+import org.rapidoid.io.Res;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.scan.ClasspathUtil;
@@ -75,16 +76,25 @@ public class Conf extends RapidoidThing {
 		configureProfiles();
 
 		applyConfig();
+
+		// the config path might be changed, so reload the config
+		reload();
+		ROOT.args(args);
 	}
 
 	private static void applyConfig() {
+		if (Env.dev()) {
+			Log.setStyled(true);
+		}
+
 		String appJar = APP.entry("jar").str().getOrNull();
 		if (U.notEmpty(appJar)) {
 			ClasspathUtil.appJar(appJar);
 		}
 
-		if (Env.dev()) {
-			Log.setStyled(true);
+		String root = ROOT.entry("root").str().getOrNull();
+		if (U.notEmpty(root)) {
+			Res.root(root);
 		}
 	}
 

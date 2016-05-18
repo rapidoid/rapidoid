@@ -47,7 +47,7 @@ public class MustacheViewRenderer extends RapidoidThing implements ViewRenderer 
 			return false;
 		}
 
-		Mustache mustache = mf.compile(template.getFileName());
+		Mustache mustache = mf.compile(template.getCachedFileName());
 		mustache.execute(new PrintWriter(out), model).flush();
 
 		return true;

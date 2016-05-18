@@ -649,7 +649,9 @@ public class Msc extends RapidoidThing implements Constants {
 	}
 
 	public static String refinePath(String path) {
-		return path(path.split("/"));
+		boolean absolute = path.startsWith("/");
+		path = path(path.split("/"));
+		return absolute ? "/" + path : path;
 	}
 
 	public static int countNonNull(Object... values) {

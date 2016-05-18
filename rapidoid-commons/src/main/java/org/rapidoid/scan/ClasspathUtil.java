@@ -466,6 +466,6 @@ public class ClasspathUtil extends RapidoidThing {
 
 	public static void appJar(String appJar) {
 		ClasspathUtil.appJar = appJar;
-		Log.info("Setting application JAR", "appJar", appJar, "exists", new File(appJar).exists());
+		Log.info("Setting application JAR", "!appJar", appJar, "exists", new File(appJar).exists());
 	}
 }

@@ -49,11 +49,11 @@ public class Templates extends RapidoidThing {
 	}
 
 	public static Res resource(String filename) {
-		return Res.from(filename, "", "templates", "default/templates");
+		return Res.from(filename, "templates", "default/templates", "");
 	}
 
 	public static Template fromRes(Res template) {
-		return fromFile(template.getFileName());
+		return fromFile(template.getName());
 	}
 
 	public static void reset() {

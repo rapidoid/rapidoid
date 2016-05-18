@@ -159,11 +159,11 @@ public class Res extends RapidoidThing {
 				byte[] foundRes = null;
 
 				if (possibleLocations.length == 0) {
-					Log.trace("Trying to load the from resource", "name", name);
+					Log.trace("Trying to load the resource", "name", name);
 
 					byte[] res = load(name);
 					if (res != null) {
-						Log.trace("Loaded the from resource", "name", name);
+						Log.debug("Loaded the resource", "name", name);
 						foundRes = res;
 						this.cachedFileName = name;
 					}
@@ -176,7 +176,7 @@ public class Res extends RapidoidThing {
 
 						byte[] res = load(filename);
 						if (res != null) {
-							Log.trace("Loaded the resource", "name", name, "file", filename);
+							Log.debug("Loaded the resource", "name", name, "file", filename);
 							foundRes = res;
 							this.cachedFileName = filename;
 							break;
@@ -310,7 +310,7 @@ public class Res extends RapidoidThing {
 		this.attachment = attachment;
 	}
 
-	public String getFileName() {
+	public String getCachedFileName() {
 		return cachedFileName;
 	}
 
@@ -319,6 +319,7 @@ public class Res extends RapidoidThing {
 			res.invalidate();
 		}
 		FILES.clear();
+		Res.ROOT = null;
 	}
 
 	public void invalidate() {
@@ -330,6 +331,8 @@ public class Res extends RapidoidThing {
 	}
 
 	public static void root(String root) {
+		File dir = new File(root);
+		Log.info("Setting root folder for the resources", "!root", root, "exists", dir.exists() && dir.isDirectory());
 		Res.ROOT = root;
 	}
 }
