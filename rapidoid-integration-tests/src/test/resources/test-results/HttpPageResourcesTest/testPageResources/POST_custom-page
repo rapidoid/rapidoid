@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 822
+Content-Length: 827
 
 
 <nav role="navigation" class="navbar navbar-default">
@@ -13,7 +13,7 @@ Content-Length: 822
             <button data-target="#collapsable" class="navbar-toggle collapsed" data-toggle="collapse" type="button">
                 <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">App</a>
+            <a class="navbar-brand" href="/">Rapidoid</a>
         </div>
 
 <div id="collapsable" class="collapse navbar-collapse">

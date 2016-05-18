@@ -8,7 +8,7 @@ admin:
 
 app:
   domain: ''
-  brand: App
+  brand: Rapidoid
   search: false
   navbar: true
   fluid: false
