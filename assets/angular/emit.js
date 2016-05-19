@@ -1,7 +1,5 @@
 Rapidoid.initializer(function($scope) {
 
-    var reqId = 0;
-
     $scope._emit = function(event, eventId, eventArgs) {
 
         var btn = $(event.currentTarget);
@@ -27,8 +25,6 @@ Rapidoid.initializer(function($scope) {
     };
 
     function doEmit(event, eventId, eventArgs) {
-
-        reqId++;
 
         var btn = $(event.currentTarget);
         var go = btn.data("go");
@@ -100,8 +96,7 @@ Rapidoid.initializer(function($scope) {
                 if (go && data.indexOf('class="field-error"') < 0) {
                     Rapidoid.goAt(go);
                 } else {
-                    $scope[Rapidoid.holder] = data + '<!--' + reqId + '-->';
-                    $scope.$apply();
+                    Rapidoid.setHtml(data);
                 }
 
                 return;

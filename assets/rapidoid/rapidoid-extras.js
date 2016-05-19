@@ -11,12 +11,11 @@ Rapidoid = (function() {
     // rel="stylesheet">');
     // }
 
-    var initialized = false;
     function _init() {
-        if(initialized) {
+        if (Rapidoid.initialized) {
             return;
         }
-        initialized = true;
+        Rapidoid.initialized = true;
 
         $(function () {
 
@@ -174,6 +173,13 @@ Rapidoid = (function() {
         return app;
     }
 
+    var idgen = 0;
+    function setHtml(html) {
+        Rapidoid.initialized = false;
+        Rapidoid.scope[Rapidoid.holder] = html + '<!--' + (idgen++) + '-->';
+        Rapidoid.scope.$apply();
+    }
+
     return {
         goAt : _goAt,
         setTheme : _setTheme,
@@ -182,6 +188,8 @@ Rapidoid = (function() {
         popup : _popup,
         modal : _modal,
         init : _init,
+        initialized : false,
+        setHtml : setHtml,
 
         createApp : createApp,
         initializer : initializer,
