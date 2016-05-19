@@ -185,7 +185,7 @@ public class Goodies extends RapidoidThing {
 		setup.get("/_/graphs/{id:.*}").json(Goodies.graphData());
 
 		setup.get("/_/classpath").mvc(Goodies.classpath());
-		setup.get("/_/deploy").mvc(Goodies.deploy());
+		setup.page("/_/deploy").mvc(Goodies.deploy());
 		setup.post("/_/jar").json(Goodies.jarUpload());
 		setup.page("/_/terminate").mvc(Goodies.terminate());
 

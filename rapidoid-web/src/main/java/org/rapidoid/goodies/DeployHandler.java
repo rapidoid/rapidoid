@@ -2,6 +2,7 @@ package org.rapidoid.goodies;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.Btn;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.http.HttpVerb;
@@ -47,8 +48,8 @@ public class DeployHandler extends GUI implements Callable<Object> {
 			String token = U.or(ReqInfo.get().cookies().get("COOKIEPACK"), "");
 
 			info.add(h2("HTTP API for Deployment:"));
-			info.add(h4(verb(HttpVerb.POST), b(" http://your-app-domain/_/jar?_token=<token>")));
-			info.add(h4(b("POST DATA: file=<your-jar>")));
+			info.add(h6(verb(HttpVerb.POST), b(" http://your-app-domain/_/jar?_token=<token>")));
+			info.add(h6(b("POST DATA: file=<your-jar>")));
 
 			info.add(h2("Building and deploying with Maven:"));
 			String cmd = "mvn clean package && cp target/*.jar target/_app_.jar && curl -F 'file=@target/_app_.jar' 'http://localhost:8888/_/jar?_token=" + token + "'";
@@ -59,6 +60,18 @@ public class DeployHandler extends GUI implements Callable<Object> {
 			info.add(h3(WARN, " No ", b("app.jar"), " file was configured on the classpath, so application deployment is disabled!"));
 			info.add(h4("Application deployment works by uploading a JAR which overwrites the file 'app.jar', and restarting the application."));
 		}
+
+		Btn shutdown = btn("Shutdown / Restart").danger()
+				.confirm("Do you really want to SHUTDOWN / RESTART the application?")
+				.onClick(new Runnable() {
+					@Override
+					public void run() {
+						TerminateHandler.shutdownSoon();
+					}
+				});
+
+		info.add(br());
+		info.add(shutdown);
 
 		return info;
 	}
