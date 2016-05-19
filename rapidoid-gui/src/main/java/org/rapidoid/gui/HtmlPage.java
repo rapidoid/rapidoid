@@ -8,11 +8,11 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.gui.menu.PageMenu;
 import org.rapidoid.gui.reqinfo.IReqInfo;
 import org.rapidoid.gui.reqinfo.ReqInfo;
+import org.rapidoid.gui.reqinfo.ReqInfoUtils;
 import org.rapidoid.http.HttpVerb;
 import org.rapidoid.render.Template;
 import org.rapidoid.render.Templates;
 import org.rapidoid.u.U;
-import org.rapidoid.util.AppInfo;
 import org.rapidoid.web.ScreenBean;
 
 import java.util.List;
@@ -77,23 +77,8 @@ public class HtmlPage extends ScreenBean {
 
 		Map<String, Object> model = U.map(req.data());
 
-		int appPort = AppInfo.appPort;
-		int adminPort = AppInfo.adminPort;
-		boolean appAndAdminOnSamePort = adminPort == appPort;
-
-		if (U.notEmpty(req.host())) {
-			String hostname = req.host().split(":")[0];
-
-			if (AppInfo.isAppServerActive) {
-				String appUrl = appAndAdminOnSamePort ? "/" : "http://" + hostname + ":" + appPort + "/";
-				model.put("appUrl", appUrl);
-			}
-
-			if (AppInfo.isAdminServerActive) {
-				String adminUrl = appAndAdminOnSamePort ? "/_" : "http://" + hostname + ":" + adminPort + "/_";
-				model.put("adminUrl", adminUrl);
-			}
-		}
+		model.put("appUrl", ReqInfoUtils.appUrl());
+		model.put("adminUrl", ReqInfoUtils.adminUrl());
 
 		model.put("dev", Env.dev());
 		model.put("admin", "admin".equalsIgnoreCase(req.segment()));

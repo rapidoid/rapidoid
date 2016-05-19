@@ -9,13 +9,9 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
-import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -159,28 +155,6 @@ public class Crypto extends RapidoidThing {
 
 	public static String randomStr(int byteCount) {
 		return DatatypeConverter.printHexBinary(randomBytes(byteCount));
-	}
-
-	public static byte[] aes(byte[] key, byte[] data, boolean encrypt) {
-		Cipher cipher = cipher("AES");
-
-		final SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
-		try {
-			cipher.init(encrypt ? Cipher.ENCRYPT_MODE : Cipher.DECRYPT_MODE, secretKey);
-		} catch (InvalidKeyException e) {
-			throw U.rte("Invalid key for the cypher!");
-		}
-
-		byte[] enc;
-		try {
-			enc = cipher.doFinal(data);
-		} catch (IllegalBlockSizeException e) {
-			throw U.rte("Illegal block size!");
-		} catch (BadPaddingException e) {
-			throw U.rte("Bad padding!");
-		}
-
-		return enc;
 	}
 
 	public static byte[] encrypt(byte[] data, byte[] secret) {

@@ -228,6 +228,7 @@ org.rapidoid.gui.reqinfo.IReqInfo
 org.rapidoid.gui.reqinfo.MockReqInfo
 org.rapidoid.gui.reqinfo.NoReqInfo
 org.rapidoid.gui.reqinfo.ReqInfo
+org.rapidoid.gui.reqinfo.ReqInfoUtils
 org.rapidoid.gui.Snippet
 org.rapidoid.gui.var.LocalVar
 org.rapidoid.gui.var.PostedDataVar
