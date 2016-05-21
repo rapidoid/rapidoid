@@ -24,7 +24,6 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.reqinfo.ReqInfoUtils;
-import org.rapidoid.http.HttpVerb;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.Resp;
@@ -39,7 +38,7 @@ public class Main extends RapidoidThing {
 	public static void main(String[] args) {
 		Rapidoid.run(args).full();
 
-		if (On.setup().routes().find(HttpVerb.GET, "/") == null) {
+		if (On.setup().routes().allNonAdmin().isEmpty()) {
 			On.page("/").view("_welcome").mvc(new ReqRespHandler() {
 				@Override
 				public Object execute(Req req, Resp resp) throws Exception {
