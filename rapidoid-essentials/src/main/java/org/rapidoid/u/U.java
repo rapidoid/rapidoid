@@ -31,7 +31,7 @@ public class U {
 
 	public static String str(Object obj) {
 		if (obj == null) {
-			return "null";
+			return null;
 		} else if (obj instanceof byte[]) {
 			return Arrays.toString((byte[]) obj);
 		} else if (obj instanceof short[]) {
@@ -515,6 +515,10 @@ public class U {
 
 	public static int num(String s) {
 		return Integer.parseInt(s);
+	}
+
+	public static boolean bool(Object o) {
+		return Boolean.TRUE.equals(o);
 	}
 
 	public static int limit(int min, int value, int max) {

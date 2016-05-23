@@ -83,4 +83,13 @@ public class Lmbd extends RapidoidThing {
 			}
 		};
 	}
+
+	public static <T> void call(Operation<T> operation, T arg) {
+		try {
+			operation.execute(arg);
+		} catch (Exception e) {
+			throw U.rte("Error occured during the call!", e);
+		}
+	}
+
 }

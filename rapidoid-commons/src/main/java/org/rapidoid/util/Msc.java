@@ -16,10 +16,7 @@ import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.insight.Insights;
 import org.rapidoid.io.IO;
 import org.rapidoid.io.Res;
-import org.rapidoid.lambda.Dynamic;
-import org.rapidoid.lambda.F2;
-import org.rapidoid.lambda.Lmbd;
-import org.rapidoid.lambda.Mapper;
+import org.rapidoid.lambda.*;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.validation.InvalidData;
@@ -29,6 +26,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.io.*;
 import java.lang.annotation.Annotation;
+import java.lang.management.ManagementFactory;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -229,6 +227,16 @@ public class Msc extends RapidoidThing implements Constants {
 
 		for (int i = 0; i < count; i++) {
 			runnable.run();
+		}
+
+		benchmarkComplete(name, count, start);
+	}
+
+	public static void benchmark(String name, int count, Operation<Integer> operation) {
+		long start = U.time();
+
+		for (int i = 0; i < count; i++) {
+			Lmbd.call(operation, i);
 		}
 
 		benchmarkComplete(name, count, start);
@@ -961,6 +969,10 @@ public class Msc extends RapidoidThing implements Constants {
 		}
 
 		return copy;
+	}
+
+	public static int processId() {
+		return U.num(ManagementFactory.getRuntimeMXBean().getName().split("@")[0]);
 	}
 
 }

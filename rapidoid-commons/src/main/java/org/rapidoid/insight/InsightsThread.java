@@ -31,7 +31,8 @@ import org.rapidoid.u.U;
 public class InsightsThread extends RapidoidThread {
 
 	public InsightsThread() {
-		super("stats");
+		super("insights");
+		setDaemon(true);
 	}
 
 	@Override
@@ -41,7 +42,7 @@ public class InsightsThread extends RapidoidThread {
 		while (!Thread.interrupted()) {
 			U.sleep(1000);
 			String stats = Insights.getCpuMemStats() + " :: " + Insights.getInfo();
-			Log.debug(stats);
+			Log.info(stats);
 		}
 
 		Log.info("Stopped Insights thread.");
