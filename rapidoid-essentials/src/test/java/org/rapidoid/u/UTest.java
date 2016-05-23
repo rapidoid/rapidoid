@@ -47,7 +47,7 @@ public class UTest extends TestCommons {
 
 	@Test
 	public void testTextObject() {
-		eq(U.str((Object) null), "null");
+		eq(U.str((Object) null), null);
 
 		eq(U.str(123), "123");
 		eq(U.str(1.23), "1.23");
