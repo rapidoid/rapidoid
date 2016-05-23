@@ -189,6 +189,8 @@ public class Goodies extends RapidoidThing {
 		setup.post("/_/jar").json(Goodies.jarUpload());
 		setup.page("/_/terminate").mvc(Goodies.terminate());
 
+		setup.get("/_ping").plain("OK");
+
 		auth(setup);
 
 		if (Conf.USERS.isEmpty()) {
