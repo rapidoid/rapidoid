@@ -45,10 +45,9 @@ public class EntitiesHandler extends GUI implements Callable<Object> {
 
 			Grid grid = GUI.grid(recordsInfo()).pageSize(0);
 
-			grid.toUri(new Mapper<Object, String>() {
+			grid.toUri(new Mapper<Map<String, ?>, String>() {
 				@Override
-				public String map(Object src) throws Exception {
-					Map<String, ?> row = U.cast(src);
+				public String map(Map<String, ?> row) throws Exception {
 					return GUI.typeUri(row.get("type") + "") + "/manage";
 				}
 			});

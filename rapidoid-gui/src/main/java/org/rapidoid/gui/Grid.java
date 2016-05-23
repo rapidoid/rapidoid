@@ -49,7 +49,7 @@ public class Grid extends AbstractWidget<Grid> {
 	private volatile String orderBy;
 	private volatile int pageSize = 10;
 	private volatile String[] columns = {};
-	private volatile String[] headers = {};
+	private volatile Object[] headers = {};
 	private volatile String rowCmd;
 
 	private volatile Mapper<Object, String> toUri;
@@ -150,7 +150,7 @@ public class Grid extends AbstractWidget<Grid> {
 			Property prop = props.get(i);
 			Tag sortIcon = null;
 
-			String caption = U.notEmpty(headers) && headers.length > i ? headers[i] : null;
+			Object caption = U.notEmpty(headers) && headers.length > i ? headers[i] : null;
 			caption = U.or(caption, prop.caption());
 
 			Object sort;
@@ -267,16 +267,17 @@ public class Grid extends AbstractWidget<Grid> {
 		return toUri;
 	}
 
-	public Grid toUri(Mapper<Object, String> toUri) {
-		this.toUri = toUri;
+	@SuppressWarnings("unchecked")
+	public <T> Grid toUri(Mapper<T, String> toUri) {
+		this.toUri = (Mapper<Object, String>) toUri;
 		return this;
 	}
 
-	public String[] headers() {
+	public Object[] headers() {
 		return headers;
 	}
 
-	public Grid headers(String... headers) {
+	public Grid headers(Object... headers) {
 		this.headers = headers;
 		return this;
 	}
