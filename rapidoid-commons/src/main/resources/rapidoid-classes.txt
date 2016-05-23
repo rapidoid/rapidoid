@@ -11,12 +11,10 @@ org.rapidoid.annotation.Composite
 org.rapidoid.annotation.Contributors
 org.rapidoid.annotation.Controller
 org.rapidoid.annotation.Cookie
-org.rapidoid.annotation.DbEntity
 org.rapidoid.annotation.DELETE
 org.rapidoid.annotation.GET
 org.rapidoid.annotation.HEAD
 org.rapidoid.annotation.Header
-org.rapidoid.annotation.Mixin
 org.rapidoid.annotation.OfType
 org.rapidoid.annotation.OPTIONS
 org.rapidoid.annotation.Order
@@ -27,7 +25,6 @@ org.rapidoid.annotation.POST
 org.rapidoid.annotation.Profiles
 org.rapidoid.annotation.Programmatic
 org.rapidoid.annotation.PUT
-org.rapidoid.annotation.Rel
 org.rapidoid.annotation.Required
 org.rapidoid.annotation.Run
 org.rapidoid.annotation.Scaffold
@@ -135,8 +132,6 @@ org.rapidoid.data.MultiData
 org.rapidoid.data.Parse
 org.rapidoid.data.XML
 org.rapidoid.data.YAML
-org.rapidoid.entity.EntitiesUtil
-org.rapidoid.entity.IEntity
 org.rapidoid.fluent.Do
 org.rapidoid.fluent.dox.DoGroup
 org.rapidoid.fluent.dox.DoGroupBi
@@ -393,7 +388,6 @@ org.rapidoid.ioc.IoCContextImpl
 org.rapidoid.ioc.IoCContextWrapper
 org.rapidoid.ioc.IoCState
 org.rapidoid.ioc.OptionalJPAUtil
-org.rapidoid.io.CustomizableClassLoader
 org.rapidoid.io.IO
 org.rapidoid.io.Res
 org.rapidoid.io.ResKey
@@ -569,7 +563,6 @@ org.rapidoid.util.AbstractMapImpl
 org.rapidoid.util.AnsiColor
 org.rapidoid.util.AppInfo
 org.rapidoid.util.Bufs
-org.rapidoid.util.CommonWords
 org.rapidoid.util.Constants
 org.rapidoid.util.D
 org.rapidoid.util.ErrCodeAndMsg
@@ -578,7 +571,6 @@ org.rapidoid.util.MapEntry
 org.rapidoid.util.Msc
 org.rapidoid.util.NullOutputStream
 org.rapidoid.util.Once
-org.rapidoid.util.RapidoidProcess
 org.rapidoid.util.Resetable
 org.rapidoid.util.Role
 org.rapidoid.util.RuntimeInfo
