@@ -190,7 +190,7 @@ public class Setup extends RapidoidThing implements Constants {
 			}
 
 			if (server == null) {
-				if (appAndAdminOnSameServer()) {
+				if (appAndAdminOnSameServer() && (isApp() || isAdmin())) {
 					server = proc.listen(ON.address(), ON.port());
 				} else {
 					server = proc.listen(address(), port());
