@@ -617,14 +617,22 @@ public abstract class GUI extends HTML {
 
 	private static Object display(Iterator<?> it) {
 		Tag wrap = div();
+		int count = 0;
+
+		Object item = null;
 
 		while (it.hasNext()) {
-			Object item = it.next();
+			count++;
+			item = it.next();
 			wrap = wrap.append(div(FA.CIRCLE_O, NBSP, display(item)).class_("value-line"));
 		}
 
-		if (wrap.isEmpty()) {
-			return span(NOTHING).class_("value-line");
+		if (count == 0) {
+			return span(NOTHING);
+		}
+
+		if (count == 1) {
+			return item;
 		}
 
 		return wrap;

@@ -47,6 +47,10 @@ public class KVGrid extends AbstractWidget<KVGrid> {
 
 	@Override
 	protected Object render() {
+		if (map.isEmpty()) {
+			return GUI.NOTHING;
+		}
+
 		TableTag tbl = headless ? GUI.table_() : GUI.table_(tr(th(headers[0]), th(headers[1])));
 
 		for (Entry<?, ?> e : map.entrySet()) {
