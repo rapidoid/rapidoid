@@ -39,11 +39,11 @@ public class Insights extends RapidoidThing {
 
 	private static final Map<String, List<Object>> RESETABLE_INFOS = Coll.autoExpandingMap(ArrayList.class);
 
-	public static void register(Insightful resource) {
+	public static synchronized void register(Insightful resource) {
 		RESOURCES.get(resource.getKind()).add(resource);
 	}
 
-	public static String getInfo() {
+	public static synchronized String getInfo() {
 		String info = RESETABLE_INFOS.toString() + " :: " + INFOS.toString() + " :: " + RESOURCES.toString();
 
 		for (List<Object> list : RESETABLE_INFOS.values()) {
@@ -71,21 +71,21 @@ public class Insights extends RapidoidThing {
 		return String.format(msg, totalMem / megs, usedMem / megs, maxMem / megs);
 	}
 
-	public static void show() {
+	public static synchronized void show() {
 		new InsightsThread().start();
 	}
 
-	public static void register(String name, Object info) {
+	public static synchronized void register(String name, Object info) {
 		INFOS.get(name).add(info);
 	}
 
-	public static StatsMeasure stats(String name) {
+	public static synchronized StatsMeasure stats(String name) {
 		StatsMeasure measure = new StatsMeasure();
 		RESETABLE_INFOS.get(name).add(measure);
 		return measure;
 	}
 
-	public static void reset() {
+	public static synchronized void reset() {
 		RESOURCES.clear();
 		INFOS.clear();
 		RESETABLE_INFOS.clear();
