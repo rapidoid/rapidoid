@@ -11,6 +11,7 @@ import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.WithContext;
+import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
 import java.util.concurrent.*;
@@ -156,7 +157,11 @@ public class Jobs extends RapidoidThing {
 	}
 
 	public static void executeInContext(WithContext context, Runnable action) {
-		executor().execute(new PredefinedContextJobWrapper(context, action));
+		try {
+			executor().execute(new PredefinedContextJobWrapper(context, action));
+		} catch (RejectedExecutionException e) {
+			Log.warn("The job was rejected by the executor/scheduler!", "context", context.tag());
+		}
 	}
 
 	public static JobsDSL after(long delay, TimeUnit unit) {

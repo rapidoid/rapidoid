@@ -262,6 +262,7 @@ public class Msc extends RapidoidThing implements Constants {
 	public static void benchmarkMT(int threadsN, final String name, final int count, final CountDownLatch outsideLatch,
 	                               final Runnable runnable) {
 
+		U.must(count % threadsN == 0, "The number of thread must be a factor of the total count!");
 		final int countPerThread = count / threadsN;
 
 		final CountDownLatch latch = outsideLatch != null ? outsideLatch : new CountDownLatch(threadsN);

@@ -227,4 +227,7 @@ public class HttpClient extends RapidoidThing {
 		}
 	}
 
+	public synchronized void reset() {
+		close();
+	}
 }
