@@ -32,6 +32,7 @@ import org.rapidoid.security.Role;
 import org.rapidoid.u.U;
 import org.rapidoid.util.AppInfo;
 import org.rapidoid.util.Constants;
+import org.rapidoid.util.Msc;
 import org.rapidoid.util.Once;
 
 import java.util.List;
@@ -86,6 +87,8 @@ public class Setup extends RapidoidThing implements Constants {
 				Jobs.shutdownNow();
 			}
 		});
+
+		initDefaults();
 	}
 
 	private final String name;
@@ -177,7 +180,7 @@ public class Setup extends RapidoidThing implements Constants {
 
 			HttpProcessor proc = processor != null ? processor : http();
 
-			if (Env.dev() && !OnChanges.isIgnored()) {
+			if (Env.dev() && !OnChanges.isIgnored() && Msc.hasRapidoidWatch()) {
 				proc = new AppRestartProcessor(this, proc);
 				OnChanges.byDefaultRestart();
 			}

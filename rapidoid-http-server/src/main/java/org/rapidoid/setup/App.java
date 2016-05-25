@@ -31,7 +31,6 @@ import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.NParamLambda;
 import org.rapidoid.log.Log;
-import org.rapidoid.reload.Reload;
 import org.rapidoid.render.Templates;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.scan.Scan;
@@ -60,7 +59,7 @@ public class App extends RapidoidThing {
 
 	private static final Set<Class<?>> invoked = Coll.synchronizedSet();
 
-	static volatile ClassLoader loader;
+	static volatile ClassLoader loader = App.class.getClassLoader();
 
 	private static Map<List<String>, List<Class<?>>> beansCache = Coll.autoExpandingMap(new Mapper<List<String>, List<Class<?>>>() {
 		@SuppressWarnings("unchecked")
@@ -70,10 +69,6 @@ public class App extends RapidoidThing {
 			return Scan.annotated((Class<? extends Annotation>[]) ANNOTATIONS).in(pkgs).loadAll();
 		}
 	});
-
-	static {
-		resetGlobalState();
-	}
 
 	public static void args(String... args) {
 		Conf.args(args);
@@ -112,7 +107,13 @@ public class App extends RapidoidThing {
 	}
 
 	private static void restartApp() {
-		U.notNull(mainClassName, "Cannot restart, the main class is unknown!");
+		if (!Msc.hasRapidoidWatch()) {
+			Log.warn("Cannot reload/restart the application, module rapidoid-watch is missing!");
+		}
+
+		if (mainClassName == null) {
+			Log.warn("Cannot reload/restart the application, the main app class couldn't be detected!");
+		}
 
 		Msc.logSection("!Restarting the web application...");
 
@@ -134,8 +135,10 @@ public class App extends RapidoidThing {
 
 		Setup.initDefaults();
 
-		loader = Reload.createClassLoader();
-		ClasspathUtil.setDefaultClassLoader(loader);
+		if (Msc.hasRapidoidJPA()) {
+			loader = ReloadUtil.reloader();
+			ClasspathUtil.setDefaultClassLoader(loader);
+		}
 
 		Class<?> entry;
 		try {
@@ -156,7 +159,7 @@ public class App extends RapidoidThing {
 		restarted = false;
 		dirty = false;
 		path = null;
-		loader = Setup.class.getClassLoader();
+		loader = App.class.getClassLoader();
 		Setup.initDefaults();
 		AppBootstrap.reset();
 		beansCache.clear();

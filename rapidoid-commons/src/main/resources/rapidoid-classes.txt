@@ -548,6 +548,7 @@ org.rapidoid.setup.On
 org.rapidoid.setup.OnChanges
 org.rapidoid.setup.OnRoute
 org.rapidoid.setup.PojoHandlersSetup
+org.rapidoid.setup.ReloadUtil
 org.rapidoid.setup.Setup
 org.rapidoid.setup.WatchForChanges
 org.rapidoid.sql.C3P0ConnectionPool
