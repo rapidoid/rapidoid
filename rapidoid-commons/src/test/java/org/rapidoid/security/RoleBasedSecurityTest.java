@@ -27,7 +27,7 @@ import org.rapidoid.u.U;
 
 import java.util.List;
 
-import static org.rapidoid.security.Roles.*;
+import static org.rapidoid.security.Role.*;
 
 class Foo {
 	public String createdBy;

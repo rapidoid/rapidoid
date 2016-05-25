@@ -26,7 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Err;
 import org.rapidoid.commons.Rnd;
 import org.rapidoid.ctx.Contextual;
-import org.rapidoid.security.Roles;
+import org.rapidoid.security.Role;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
@@ -40,7 +40,7 @@ public class HttpLoginTest extends IntegrationTestCommons {
 	public void testLogin() {
 		On.get("/user").json(() -> U.list(Contextual.username(), Contextual.roles()));
 
-		On.get("/profile").roles(Roles.LOGGED_IN).json(Contextual::username);
+		On.get("/profile").roles(Role.LOGGED_IN).json(Contextual::username);
 
 		On.post("/mylogin").json((Resp resp, String user, String pass) -> {
 			boolean success = resp.login(user, pass);

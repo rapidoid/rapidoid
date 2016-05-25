@@ -29,6 +29,7 @@ import org.rapidoid.commons.Env;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.config.Conf;
 import org.rapidoid.crypto.Crypto;
+import org.rapidoid.fluent.Do;
 import org.rapidoid.io.IO;
 import org.rapidoid.io.Res;
 import org.rapidoid.ioc.IoC;
@@ -48,6 +49,7 @@ import org.rapidoid.util.AppInfo;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -329,7 +331,9 @@ public abstract class IntegrationTestCommons extends TestCommons {
 	}
 
 	protected String appRoutes() {
-		return U.join("\n", On.routes().all());
+		List<String> routes = Do.map(On.routes().all()).to((Route r) -> r.toString());
+		Collections.sort(routes);
+		return U.join("\n", routes);
 	}
 
 	protected void verifyRoutes() {

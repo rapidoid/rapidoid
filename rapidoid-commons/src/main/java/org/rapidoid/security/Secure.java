@@ -275,18 +275,18 @@ public class Secure extends RapidoidThing implements Constants {
 			Class<? extends Annotation> type = ann.annotationType();
 
 			if (type.equals(Administrator.class)) {
-				roles.add(Roles.ADMINISTRATOR);
+				roles.add(Role.ADMINISTRATOR);
 			} else if (type.equals(Manager.class)) {
-				roles.add(Roles.MANAGER);
+				roles.add(Role.MANAGER);
 			} else if (type.equals(Moderator.class)) {
-				roles.add(Roles.MODERATOR);
+				roles.add(Role.MODERATOR);
 			} else if (type.equals(LoggedIn.class)) {
-				roles.add(Roles.LOGGED_IN);
-			} else if (type.equals(HasRole.class)) {
-				Role[] values = ((HasRole) ann).value();
+				roles.add(Role.LOGGED_IN);
+			} else if (type.equals(Roles.class)) {
+				String[] values = ((Roles) ann).value();
 				U.must(values.length > 0, "At least one role must be specified in @Roles annotation!");
-				for (Role r : values) {
-					roles.add(r.value().toLowerCase());
+				for (String r : values) {
+					roles.add(r.toLowerCase());
 				}
 			}
 		}
@@ -310,7 +310,7 @@ public class Secure extends RapidoidThing implements Constants {
 
 	public static boolean hasRole(String username, Set<String> roles, String role, Class<?> clazz, Object record) {
 
-		if (Roles.ANYBODY.equalsIgnoreCase(role)) {
+		if (Role.ANYBODY.equalsIgnoreCase(role)) {
 			return true;
 		}
 
@@ -320,11 +320,11 @@ public class Secure extends RapidoidThing implements Constants {
 
 		if (record != null) {
 
-			if (role.equalsIgnoreCase(Roles.OWNER)) {
+			if (role.equalsIgnoreCase(Role.OWNER)) {
 				return isOwnerOf(username, record);
 			}
 
-			if (role.equalsIgnoreCase(Roles.SHARED_WITH)) {
+			if (role.equalsIgnoreCase(Role.SHARED_WITH)) {
 				return isSharedWith(username, record);
 			}
 		}
@@ -341,7 +341,7 @@ public class Secure extends RapidoidThing implements Constants {
 			return true;
 		}
 
-		if (role.equalsIgnoreCase(Roles.LOGGED_IN)) {
+		if (role.equalsIgnoreCase(Role.LOGGED_IN)) {
 			return !U.isEmpty(username);
 		}
 
@@ -355,15 +355,15 @@ public class Secure extends RapidoidThing implements Constants {
 	}
 
 	public static boolean isAdministrator(String username, Set<String> roles) {
-		return hasRole(username, roles, Roles.ADMINISTRATOR, null, null);
+		return hasRole(username, roles, Role.ADMINISTRATOR, null, null);
 	}
 
 	public static boolean isManager(String username, Set<String> roles) {
-		return hasRole(username, roles, Roles.MANAGER, null, null);
+		return hasRole(username, roles, Role.MANAGER, null, null);
 	}
 
 	public static boolean isModerator(String username, Set<String> roles) {
-		return hasRole(username, roles, Roles.MODERATOR, null, null);
+		return hasRole(username, roles, Role.MODERATOR, null, null);
 	}
 
 	public static DataPermissions classPermissions(String username, Class<?> clazz) {

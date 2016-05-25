@@ -11,7 +11,7 @@ import org.rapidoid.http.HttpUtils;
 import org.rapidoid.insight.Metrics;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.log.Log;
-import org.rapidoid.security.Roles;
+import org.rapidoid.security.Role;
 import org.rapidoid.setup.Setup;
 import org.rapidoid.util.AnsiColor;
 import org.rapidoid.util.Msc;
@@ -138,7 +138,7 @@ public class Goodies extends RapidoidThing {
 
 	public static void auth(Setup setup) {
 		setup.post("/_login").roles().json(Goodies.login());
-		setup.get("/_logout").roles(Roles.LOGGED_IN).json(Goodies.logout());
+		setup.get("/_logout").roles(Role.LOGGED_IN).json(Goodies.logout());
 	}
 
 	public static void bootstrapAppGoodies(Setup setup) {

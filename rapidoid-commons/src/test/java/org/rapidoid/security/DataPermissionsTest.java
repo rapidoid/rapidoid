@@ -31,7 +31,7 @@ import org.rapidoid.u.U;
 
 import java.util.List;
 
-import static org.rapidoid.security.Roles.*;
+import static org.rapidoid.security.Role.*;
 
 @CanRead({ANYBODY})
 @CanChange({ANYBODY})

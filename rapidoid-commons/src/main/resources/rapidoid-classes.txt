@@ -526,14 +526,13 @@ org.rapidoid.security.annotation.CanInsert
 org.rapidoid.security.annotation.CanManage
 org.rapidoid.security.annotation.CanRead
 org.rapidoid.security.annotation.DevMode
-org.rapidoid.security.annotation.HasRole
 org.rapidoid.security.annotation.LoggedIn
 org.rapidoid.security.annotation.Manager
 org.rapidoid.security.annotation.Moderator
-org.rapidoid.security.annotation.Role
+org.rapidoid.security.annotation.Roles
 org.rapidoid.security.Auth
 org.rapidoid.security.DataPermissions
-org.rapidoid.security.Roles
+org.rapidoid.security.Role
 org.rapidoid.security.Secure
 org.rapidoid.serialize.Ser
 org.rapidoid.serialize.Serialize
@@ -572,7 +571,6 @@ org.rapidoid.util.Msc
 org.rapidoid.util.NullOutputStream
 org.rapidoid.util.Once
 org.rapidoid.util.Resetable
-org.rapidoid.util.Role
 org.rapidoid.util.RuntimeInfo
 org.rapidoid.util.SimpleHashTable
 org.rapidoid.util.SimpleList

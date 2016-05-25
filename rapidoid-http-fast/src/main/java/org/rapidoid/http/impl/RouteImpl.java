@@ -77,12 +77,11 @@ public class RouteImpl extends RapidoidThing implements Route {
 
 		if (verb != route.verb) return false;
 		return path.equals(route.path);
-
 	}
 
 	@Override
 	public String toString() {
-		return U.frmt("Route %s %s [segment %s]: %s", verb, path, config().segment(), handler);
+		return U.frmt("Route %s %s [segment %s] roles %s : %s", verb, path, config().segment(), config().roles(), handler);
 	}
 
 	@Override

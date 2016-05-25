@@ -45,6 +45,7 @@ import org.rapidoid.model.Item;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
 import org.rapidoid.render.Templates;
+import org.rapidoid.security.Role;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 import org.rapidoid.var.Var;
@@ -58,7 +59,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public abstract class GUI extends HTML {
+public abstract class GUI extends HTML implements Role {
 
 	public static final Tag NOTHING = span(fa("ban"), " N/A").class_("nothing");
 

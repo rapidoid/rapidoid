@@ -1,6 +1,5 @@
 package org.rapidoid.security;
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
@@ -24,9 +23,12 @@ import org.rapidoid.annotation.Since;
  * #L%
  */
 
+/**
+ * Constants for the common roles, just for convenience.
+ */
 @Authors("Nikolche Mihajlovski")
-@Since("4.4.0")
-public class Roles extends RapidoidThing {
+@Since("5.1.3")
+public interface Role {
 
 	public static final String ANYBODY = "anybody";
 

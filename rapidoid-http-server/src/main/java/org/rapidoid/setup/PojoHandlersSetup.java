@@ -158,7 +158,7 @@ public class PojoHandlersSetup extends RapidoidThing {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					OnRoute route = route(setup.page(path).roles(roles), tx);
+					OnRoute route = route(setup.page(path), tx).roles(roles);
 
 					if (U.notEmpty(page.view())) {
 						route.view(page.view());
@@ -178,7 +178,7 @@ public class PojoHandlersSetup extends RapidoidThing {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					route(setup.get(path), tx).json(method, bean);
+					route(setup.get(path), tx).roles(roles).json(method, bean);
 				} else {
 					setup.deregister(Constants.GET, path);
 				}
@@ -187,7 +187,7 @@ public class PojoHandlersSetup extends RapidoidThing {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					route(setup.post(path), tx).json(method, bean);
+					route(setup.post(path), tx).roles(roles).json(method, bean);
 				} else {
 					setup.deregister(Constants.POST, path);
 				}
@@ -196,7 +196,7 @@ public class PojoHandlersSetup extends RapidoidThing {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					route(setup.put(path), tx).json(method, bean);
+					route(setup.put(path), tx).roles(roles).json(method, bean);
 				} else {
 					setup.deregister(Constants.PUT, path);
 				}
@@ -205,7 +205,7 @@ public class PojoHandlersSetup extends RapidoidThing {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					route(setup.delete(path), tx).json(method, bean);
+					route(setup.delete(path), tx).roles(roles).json(method, bean);
 				} else {
 					setup.deregister(Constants.DELETE, path);
 				}
@@ -214,7 +214,7 @@ public class PojoHandlersSetup extends RapidoidThing {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					route(setup.patch(path), tx).json(method, bean);
+					route(setup.patch(path), tx).roles(roles).json(method, bean);
 				} else {
 					setup.deregister(Constants.PATCH, path);
 				}
@@ -223,7 +223,7 @@ public class PojoHandlersSetup extends RapidoidThing {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					route(setup.options(path), tx).json(method, bean);
+					route(setup.options(path), tx).roles(roles).json(method, bean);
 				} else {
 					setup.deregister(Constants.OPTIONS, path);
 				}
@@ -232,7 +232,7 @@ public class PojoHandlersSetup extends RapidoidThing {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					route(setup.head(path), tx).json(method, bean);
+					route(setup.head(path), tx).roles(roles).json(method, bean);
 				} else {
 					setup.deregister(Constants.HEAD, path);
 				}
@@ -241,7 +241,7 @@ public class PojoHandlersSetup extends RapidoidThing {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					route(setup.trace(path), tx).json(method, bean);
+					route(setup.trace(path), tx).roles(roles).json(method, bean);
 				} else {
 					setup.deregister(Constants.TRACE, path);
 				}

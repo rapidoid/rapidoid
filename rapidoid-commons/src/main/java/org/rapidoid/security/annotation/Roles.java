@@ -1,7 +1,13 @@
-package org.rapidoid.util;
+package org.rapidoid.security.annotation;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /*
  * #%L
@@ -23,26 +29,12 @@ import org.rapidoid.annotation.Since;
  * #L%
  */
 
+@Target({TYPE, METHOD, FIELD})
+@Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
-@Since("3.0.0")
-public interface Role {
+@Since("2.0.0")
+public @interface Roles {
 
-	String ANYBODY = "ANYBODY";
-
-	String GUEST = "GUEST";
-
-	String ADMIN = "ADMINISTRATOR";
-
-	String MANAGER = "MANAGER";
-
-	String MODERATOR = "MODERATOR";
-
-	String LOGGED_IN = "LOGGED_IN";
-
-	String OWNER = "OWNER";
-
-	String SHARED_WITH = "SHARED_WITH";
-
-	String RESTARTER = "RESTARTER";
+	String[] value();
 
 }

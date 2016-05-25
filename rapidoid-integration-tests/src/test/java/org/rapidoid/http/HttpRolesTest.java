@@ -21,8 +21,10 @@ package org.rapidoid.http;
  */
 
 import org.junit.Test;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.*;
+import org.rapidoid.security.Role;
+import org.rapidoid.security.annotation.*;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 
 @Authors("Nikolche Mihajlovski")
@@ -31,6 +33,8 @@ public class HttpRolesTest extends IntegrationTestCommons {
 
 	@Test
 	public void testRoles() {
+		App.scan(path());
+
 		On.defaults().roles("aa", "bb");
 
 		On.get("/a").json(() -> "ok");
@@ -38,6 +42,59 @@ public class HttpRolesTest extends IntegrationTestCommons {
 
 		onlyGet("/a");
 		onlyGet("/ok");
+
+		verifyRoutes();
+	}
+
+}
+
+@Controller
+class Ctrl {
+
+	@GET
+	@Administrator
+	@Roles({"manager", Role.MODERATOR})
+	public Object hi() {
+		return "hi";
+	}
+
+	@POST
+	@Administrator
+	public Object p1() {
+		return "";
+	}
+
+	@PUT
+	@Moderator
+	public Object p2() {
+		return "";
+	}
+
+	@DELETE
+	@Administrator
+	@Roles("eraser")
+	@Manager
+	public Object del() {
+		return "";
+	}
+
+	@PATCH
+	@Roles("patcher")
+	public Object p3() {
+		return "";
+	}
+
+	@HEAD
+	@Roles(Role.LOGGED_IN)
+	public Object h() {
+		return "";
+	}
+
+	@OPTIONS
+	@LoggedIn
+	@Roles({"a", "b", Role.ANYBODY})
+	public Object opt() {
+		return "";
 	}
 
 }

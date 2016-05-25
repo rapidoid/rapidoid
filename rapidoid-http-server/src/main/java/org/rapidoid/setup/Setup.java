@@ -28,7 +28,7 @@ import org.rapidoid.jpa.JPAPersisterProvider;
 import org.rapidoid.lambda.NParamLambda;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Server;
-import org.rapidoid.security.Roles;
+import org.rapidoid.security.Role;
 import org.rapidoid.u.U;
 import org.rapidoid.util.AppInfo;
 import org.rapidoid.util.Constants;
@@ -444,7 +444,7 @@ public class Setup extends RapidoidThing implements Constants {
 	}
 
 	static void initDefaults() {
-		ADMIN.defaults().roles(Roles.ADMINISTRATOR);
+		ADMIN.defaults().roles(Role.ADMINISTRATOR);
 	}
 
 	public static List<Setup> instances() {

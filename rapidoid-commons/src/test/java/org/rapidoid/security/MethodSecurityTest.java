@@ -46,12 +46,12 @@ class MyService {
 	}
 
 	@Moderator
-	@HasRole(@Role("abc"))
+	@Roles("abc")
 	public void dd() {
 	}
 
 	@Manager
-	@HasRole({@Role("abc"), @Role("xyz")})
+	@Roles({"abc", "xyz"})
 	public void ee() {
 	}
 
@@ -61,7 +61,7 @@ class MyService {
  * A ROLE MUST BE ALLOWED IN BOTH THE CLASS AND METHOD ANNOTATIONS
  */
 @Manager
-@HasRole({@Role("root"), @Role("xyz")})
+@Roles({"root", "xyz"})
 class MyService2 {
 
 	@Administrator
@@ -78,12 +78,12 @@ class MyService2 {
 	}
 
 	@Moderator
-	@HasRole(@Role("abc"))
+	@Roles("abc")
 	public void dd() {
 	}
 
 	@Manager
-	@HasRole({@Role("abc"), @Role("xyz")})
+	@Roles({"abc", "xyz"})
 	public void ee() {
 	}
 
