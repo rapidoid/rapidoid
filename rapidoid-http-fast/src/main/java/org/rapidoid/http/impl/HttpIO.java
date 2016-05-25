@@ -15,6 +15,7 @@ import org.rapidoid.http.Resp;
 import org.rapidoid.http.customize.ErrorHandler;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.render.Template;
 import org.rapidoid.render.Templates;
 import org.rapidoid.util.Constants;
 
@@ -64,6 +65,7 @@ public class HttpIO extends RapidoidThing {
 	private static final byte[] DATE_IS = "Date: ".getBytes();
 
 	private static final byte[][] CONTENT_LENGTHS = new byte[CONTENT_LENGTHS_SIZE][];
+	public static final byte[] PAGE_NOT_FOUND = "Page not found!".getBytes();
 
 	static {
 		for (int len = 0; len < CONTENT_LENGTHS.length; len++) {
@@ -181,7 +183,26 @@ public class HttpIO extends RapidoidThing {
 
 	public static void write404(Channel ctx, boolean isKeepAlive) {
 		startResponse(ctx, 404, isKeepAlive, MediaType.HTML_UTF_8);
-		writeContentLengthAndBody(ctx, Templates.fromFile("404.html").render().getBytes());
+
+		byte[] content;
+
+		Template template;
+		try {
+			template = Templates.fromFile("404.html");
+		} catch (Exception e) {
+			writeContentLengthAndBody(ctx, PAGE_NOT_FOUND);
+			return;
+		}
+
+		try {
+			content = template.render().getBytes();
+		} catch (Exception e) {
+			Log.error("Page rendering error!", e);
+			writeContentLengthAndBody(ctx, PAGE_NOT_FOUND);
+			return;
+		}
+
+		writeContentLengthAndBody(ctx, content);
 	}
 
 }
