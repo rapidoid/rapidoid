@@ -316,3 +316,7 @@ label:hover:before {
 	color: #aaaaaa;
 	font-weight: bold;
 }
+
+#login-wrapper {
+  padding:50px 0;
+}

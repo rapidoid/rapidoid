@@ -77,7 +77,7 @@ public class DefaultErrorHandler extends RapidoidThing implements ErrorHandler {
 
 	private Object page(Req req, Resp resp, Throwable error) {
 		if (error instanceof SecurityException) {
-			return resp.code(403).view("login").mvc(true);
+			return resp.code(403).view("login").mvc(true).model("embedded", req.attr("_embedded", false));
 		} else {
 
 			String seg = req.segment();
