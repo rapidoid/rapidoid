@@ -1,4 +1,4 @@
-HTTP/1.1 422 Unprocesssable Entity
+HTTP/1.1 422 Unprocessable Entity
 Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
@@ -39,7 +39,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         <div style="padding: 30px 0px; text-align: center;">
             <br>
             <div style="border: none 1px #aaa; border-radius: 25px; padding: 10px; background-color:rgba(0, 0, 0, 0.05);">
-                <h1><i class="fa fa-warning" style="color: #955; padding-bottom: 23px;"></i> <span style="font-family: 'Times New Roman', Times, serif;">Unprocesssable Entity!</span></h1>
+                <h1><i class="fa fa-warning" style="color: #955; padding-bottom: 23px;"></i> <span style="font-family: 'Times New Roman', Times, serif;">Unprocessable Entity!</span></h1>
                 <h4 style="font-family: 'Times New Roman', Times, serif;">ERROR CODE: 422</h4>
                 <h4 style="font-family: 'Times New Roman', Times, serif;">Validation failed!</h4>
                 <div style="margin-top: 35px; margin-bottom: 15px;">
