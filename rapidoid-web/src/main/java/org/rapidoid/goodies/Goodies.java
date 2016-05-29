@@ -57,7 +57,7 @@ public class Goodies extends RapidoidThing {
 	}
 
 	public static DetailsHandler threads() {
-		return new DetailsHandler("JVM Threads", ManagementFactory.getThreadMXBean(), "-objectName", "-allThreadIds");
+		return new DetailsHandler("JVM Threads", ManagementFactory.getThreadMXBean(), "-objectName", "-allThreadIds").sorted(true);
 	}
 
 	public static DetailsHandler compilation() {
@@ -73,7 +73,7 @@ public class Goodies extends RapidoidThing {
 	}
 
 	public static DetailsHandler memory() {
-		return new DetailsHandler("Memory", ManagementFactory.getMemoryMXBean(), "-objectName");
+		return new DetailsHandler("Memory", ManagementFactory.getMemoryMXBean(), "-objectName").sorted(true);
 	}
 
 	public static GraphsHandler graphs() {

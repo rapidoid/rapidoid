@@ -3,7 +3,12 @@ package org.rapidoid.goodies;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.GUI;
+import org.rapidoid.model.Models;
+import org.rapidoid.model.Property;
+import org.rapidoid.u.U;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 /*
@@ -33,6 +38,7 @@ public class DetailsHandler extends GUI implements Callable<Object> {
 	private final String title;
 	private final Object target;
 	private final String[] properties;
+	private volatile boolean sorted;
 
 	public DetailsHandler(String title, Object target, String... properties) {
 		this.title = title;
@@ -42,7 +48,31 @@ public class DetailsHandler extends GUI implements Callable<Object> {
 
 	@Override
 	public Object call() throws Exception {
-		return row(h1(title + ":"), show(target, properties));
+		String[] targetProps;
+
+		if (sorted) {
+			List<String> props = U.list();
+
+			for (Property prop : Models.item(target).properties(properties)) {
+				props.add(prop.name());
+			}
+
+			Collections.sort(props);
+			targetProps = props.toArray(new String[props.size()]);
+
+		} else {
+			targetProps = properties;
+		}
+
+		return row(h1(title + ":"), show(target, targetProps));
 	}
 
+	public boolean sorted() {
+		return sorted;
+	}
+
+	public DetailsHandler sorted(boolean sorted) {
+		this.sorted = sorted;
+		return this;
+	}
 }
