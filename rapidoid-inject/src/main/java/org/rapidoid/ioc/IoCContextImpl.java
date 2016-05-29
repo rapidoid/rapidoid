@@ -1,11 +1,13 @@
 package org.rapidoid.ioc;
 
 import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.*;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Autocreate;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.Wired;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Deep;
-import org.rapidoid.commons.Env;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
 import org.rapidoid.lambda.Lmbd;
@@ -97,7 +99,7 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 			boolean isClass = isClass(classOrInstance);
 			Class<?> clazz = Cls.toClass(classOrInstance);
 
-			if (matchingProfile(clazz)) {
+			if (Msc.matchingProfile(clazz)) {
 
 				for (Class<?> interfacee : Cls.getImplementedInterfaces(clazz)) {
 					addProvider(interfacee, classOrInstance);
@@ -126,11 +128,6 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 		for (Class<?> clazz : autoCreate) {
 			singleton(clazz);
 		}
-	}
-
-	private boolean matchingProfile(Class<?> clazz) {
-		Profiles profiles = clazz.getAnnotation(Profiles.class);
-		return profiles == null || Env.hasAnyProfile(profiles.value());
 	}
 
 	private void addProvider(Class<?> type, Object provider) {
@@ -220,7 +217,7 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 	private <T> T provideNewInstanceOf(Class<T> type, Map<String, Object> properties) {
 		// instantiation if it's real class
 		if (!type.isInterface() && !type.isEnum() && !type.isAnnotation()) {
-			if (matchingProfile(type)) {
+			if (Msc.matchingProfile(type)) {
 				return register(Cls.newInstance(type, properties), properties);
 			}
 		}

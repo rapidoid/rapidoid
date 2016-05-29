@@ -93,6 +93,10 @@ public class PojoHandlersSetup extends RapidoidThing {
 			throw new RuntimeException("Expected a bean, but found value of type: " + clazz.getName());
 		}
 
+		if (!Msc.matchingProfile(clazz)) {
+			return;
+		}
+
 		Log.debug("Processing bean", "class", clazz, "instance", bean);
 
 		List<String> componentPaths = getControllerUris(clazz);

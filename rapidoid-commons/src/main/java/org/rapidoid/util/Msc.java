@@ -5,10 +5,12 @@ import org.rapidoid.activity.AbstractLoopThread;
 import org.rapidoid.activity.RapidoidThread;
 import org.rapidoid.activity.RapidoidThreadFactory;
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Profiles;
 import org.rapidoid.annotation.Run;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Coll;
+import org.rapidoid.commons.Env;
 import org.rapidoid.commons.Str;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctx;
@@ -982,6 +984,11 @@ public class Msc extends RapidoidThing implements Constants {
 
 	public static String javaVersion() {
 		return System.getProperty("java.version");
+	}
+
+	public static boolean matchingProfile(Class<?> clazz) {
+		Profiles profiles = clazz.getAnnotation(Profiles.class);
+		return profiles == null || Env.hasAnyProfile(profiles.value());
 	}
 
 }
