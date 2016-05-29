@@ -1,6 +1,7 @@
 package org.rapidoid.cls;
 
 import javassist.*;
+import javassist.Modifier;
 import javassist.bytecode.CodeAttribute;
 import javassist.bytecode.LocalVariableAttribute;
 import javassist.bytecode.MethodInfo;
@@ -1087,23 +1088,55 @@ public class Cls extends RapidoidThing {
 			LocalVariableAttribute attr = (LocalVariableAttribute) codeAttribute
 					.getAttribute(LocalVariableAttribute.tag);
 
-			int offset = javassist.Modifier.isStatic(cm.getModifiers()) ? 0 : 1;
+			int offset = Modifier.isStatic(cm.getModifiers()) ? 0 : 1;
+
+			for (int i = 0; i < names.length; i++) {
+				names[i] = null;
+			}
 
 			for (int i = 0; i < attr.tableLength(); i++) {
 				int index = i - offset;
+
 				if (useIndexMapping) {
 					index = attr.index(index);
 				}
 
 				String var = attr.variableName(i);
 
-				if (index >= 0 && index < names.length) {
+				if (index >= 0 && index < names.length && !"this".equals(var)) {
 					names[index] = var;
 				}
 			}
+
+			if (!validNames(names)) {
+				for (int i = 0; i < names.length; i++) {
+					names[i] = null;
+				}
+
+				for (int i = 0; i < attr.tableLength(); i++) {
+					int index = i - offset;
+					String var = attr.variableName(i);
+
+					if (index >= 0 && index < names.length && !"this".equals(var)) {
+						names[index] = var;
+					}
+				}
+			}
+
+			U.must(validNames(names), "Couldn't retrieve the parameter names! Please report this problem. " +
+					"You can explicitly specify the names using @Param(\"thename\"), " +
+					"or configure the option '-parameters' on the Java 8 compiler.");
 		}
 
 		return names;
+	}
+
+	private static boolean validNames(String[] names) {
+		for (String name : names) {
+			if (name == null) return false;
+		}
+
+		return true;
 	}
 
 	public static String[] getLambdaParameterNames(Serializable lambda) {

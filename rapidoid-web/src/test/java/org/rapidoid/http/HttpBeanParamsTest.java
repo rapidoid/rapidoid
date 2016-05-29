@@ -55,5 +55,17 @@ public class HttpBeanParamsTest extends HttpTestCommons {
 		onlyGet("/pers?id=200");
 	}
 
+	@Test
+	public void testPrimitiveLambdaParams() {
+		App.beans(new Object() {
+			@GET
+			public Object foo(double a, double b, double c) {
+				return U.join(":", a, b, c);
+			}
+		});
+
+		onlyGet("/foo?a=10&b=20&c=30");
+	}
+
 }
 
