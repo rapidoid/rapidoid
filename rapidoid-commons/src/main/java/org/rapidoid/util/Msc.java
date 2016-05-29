@@ -980,4 +980,8 @@ public class Msc extends RapidoidThing implements Constants {
 		return U.num(ManagementFactory.getRuntimeMXBean().getName().split("@")[0]);
 	}
 
+	public static String javaVersion() {
+		return System.getProperty("java.version");
+	}
+
 }
