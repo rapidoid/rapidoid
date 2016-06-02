@@ -20,19 +20,23 @@ package org.rapidoid.test;
  * #L%
  */
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.management.ManagementFactory;
+import java.net.URL;
+import java.util.Map.Entry;
+import java.util.Random;
+import java.util.concurrent.CountDownLatch;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.mockito.Mockito;
 import org.mockito.stubbing.OngoingStubbing;
-
-import java.io.*;
-import java.lang.management.ManagementFactory;
-import java.net.URL;
-import java.util.Map.Entry;
-import java.util.Random;
-import java.util.concurrent.CountDownLatch;
 
 /**
  * @author Nikolche Mihajlovski
@@ -51,6 +55,8 @@ public abstract class TestCommons {
 	private long waitingFrom;
 
 	private static boolean initialized = false;
+	
+	private static String OS = System.getProperty("os.name").toLowerCase();
 
 	@BeforeClass
 	public static void beforeTests() {
@@ -526,10 +532,18 @@ public abstract class TestCommons {
 	}
 
 	protected void check(String desc, String actual, String expected) {
+		if(OS.contains("win")) {
+			// remove carriage returns to make tests platform independent
+			actual = actual.replaceAll("(\\r)", "");
+			expected = expected.replaceAll("(\\r)", "");
+			// remove the content length line to make tests pass on any platform 
+			actual = actual.replaceAll("Content-Length:([0-9\\n ]+)", "");
+			expected = expected.replaceAll("Content-Length:([0-9\\n ]+)", "");
+		}
+		
 		if (!isEq(actual, expected)) {
 			System.out.println("FAILURE: " + desc);
-		}
-
+		}		
 		eq(actual, expected);
 	}
 
