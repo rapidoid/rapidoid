@@ -7,6 +7,8 @@ import org.rapidoid.concurrent.Callback;
 import org.rapidoid.http.*;
 import org.rapidoid.http.impl.HttpIO;
 
+import java.util.Map;
+
 /*
  * #%L
  * rapidoid-web
@@ -43,10 +45,12 @@ public class ProxyHandler extends RapidoidThing implements ReqRespHandler {
 	public Object execute(final Req req, final Resp resp) throws Exception {
 		req.async();
 
+		Map<String, String> headers = req.headers();
+
 		client.req()
 				.verb(req.verb())
 				.url(host + req.uri())
-				.headers(req.headers())
+				.headers(headers)
 				.body(req.body())
 				.raw(true)
 				.execute(new Callback<HttpResp>() {
@@ -54,7 +58,15 @@ public class ProxyHandler extends RapidoidThing implements ReqRespHandler {
 					@Override
 					public void onDone(HttpResp result, Throwable error) {
 						if (error == null) {
-							resp.raw(result.raw()).done();
+							Map<String, String> hdrs = result.headers();
+							byte[] body = result.bodyBytes();
+
+							hdrs.remove("Transfer-Encoding");
+
+							resp.headers().putAll(hdrs);
+							resp.code(result.code());
+							resp.body(body);
+							resp.done();
 						} else {
 							HttpIO.errorAndDone(req, error, req.custom().errorHandler());
 						}
