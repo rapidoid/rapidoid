@@ -264,9 +264,21 @@ public class Coll extends RapidoidThing {
 		});
 	}
 
+	public static <K1, K2, K3, V> Map<K1, Map<K2, Map<K3, V>>> mapOfMapOfMaps() {
+		return autoExpandingMap(new Mapper<K1, Map<K2, Map<K3, V>>>() {
+
+			@Override
+			public Map<K2, Map<K3, V>> map(K1 src) throws Exception {
+				return mapOfMaps();
+			}
+
+		});
+	}
+
 	public static <K, V> Map<K, List<V>> mapOfLists() {
 		return autoExpandingMap(new Mapper<K, List<V>>() {
 
+			@SuppressWarnings("unchecked")
 			@Override
 			public List<V> map(K src) throws Exception {
 				return synchronizedList();
@@ -275,12 +287,35 @@ public class Coll extends RapidoidThing {
 		});
 	}
 
+	public static <K1, K2, V> Map<K1, Map<K2, List<V>>> mapOfMapOfLists() {
+		return autoExpandingMap(new Mapper<K1, Map<K2, List<V>>>() {
+
+			@Override
+			public Map<K2, List<V>> map(K1 src) throws Exception {
+				return mapOfLists();
+			}
+
+		});
+	}
+
 	public static <K, V> Map<K, Set<V>> mapOfSets() {
 		return autoExpandingMap(new Mapper<K, Set<V>>() {
 
+			@SuppressWarnings("unchecked")
 			@Override
 			public Set<V> map(K src) throws Exception {
 				return synchronizedSet();
+			}
+
+		});
+	}
+
+	public static <K1, K2, V> Map<K1, Map<K2, Set<V>>> mapOfMapOfSets() {
+		return autoExpandingMap(new Mapper<K1, Map<K2, Set<V>>>() {
+
+			@Override
+			public Map<K2, Set<V>> map(K1 src) throws Exception {
+				return mapOfSets();
 			}
 
 		});
