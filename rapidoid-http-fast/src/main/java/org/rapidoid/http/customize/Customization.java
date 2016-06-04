@@ -4,6 +4,8 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Config;
+import org.rapidoid.setup.My;
+import org.rapidoid.u.U;
 
 /*
  * #%L
@@ -28,8 +30,6 @@ import org.rapidoid.config.Config;
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class Customization extends RapidoidThing {
-
-	public static final String[] DEFAULT_STATIC_FILES_LOCATIONS = {"static", "public", "default/static", "default/public"};
 
 	private final String name;
 
@@ -63,15 +63,15 @@ public class Customization extends RapidoidThing {
 	}
 
 	public void reset() {
-		staticFilesPath = DEFAULT_STATIC_FILES_LOCATIONS;
-		errorHandler = new DefaultErrorHandler(this);
-		viewRenderer = new DefaultViewRenderer();
-		pageRenderer = new DefaultPageRenderer();
-		jsonResponseRenderer = new DefaultJsonResponseRenderer();
-		beanParameterFactory = new DefaultBeanParameterFactory();
-		loginProvider = new DefaultLoginProvider();
-		rolesProvider = new DefaultRolesProvider();
-		validator = new DefaultBeanValidator();
+		staticFilesPath = null;
+		errorHandler = null;
+		viewRenderer = null;
+		pageRenderer = null;
+		jsonResponseRenderer = null;
+		beanParameterFactory = null;
+		loginProvider = null;
+		rolesProvider = null;
+		validator = null;
 	}
 
 	public void staticFilesPath(String... staticFilesPath) {
@@ -79,11 +79,11 @@ public class Customization extends RapidoidThing {
 	}
 
 	public String[] staticFilesPath() {
-		return staticFilesPath;
+		return U.or(staticFilesPath, My.getStaticFilesPath());
 	}
 
 	public ErrorHandler errorHandler() {
-		return errorHandler;
+		return U.or(errorHandler, My.getErrorHandler());
 	}
 
 	public void errorHandler(ErrorHandler errorHandler) {
@@ -91,7 +91,7 @@ public class Customization extends RapidoidThing {
 	}
 
 	public ViewRenderer viewRenderer() {
-		return viewRenderer;
+		return U.or(viewRenderer, My.getViewRenderer());
 	}
 
 	public void viewRenderer(ViewRenderer viewRenderer) {
@@ -99,7 +99,7 @@ public class Customization extends RapidoidThing {
 	}
 
 	public JsonResponseRenderer jsonResponseRenderer() {
-		return jsonResponseRenderer;
+		return U.or(jsonResponseRenderer, My.getJsonResponseRenderer());
 	}
 
 	public void jsonResponseRenderer(JsonResponseRenderer jsonResponseRenderer) {
@@ -107,7 +107,7 @@ public class Customization extends RapidoidThing {
 	}
 
 	public BeanParameterFactory beanParameterFactory() {
-		return beanParameterFactory;
+		return U.or(beanParameterFactory, My.getBeanParameterFactory());
 	}
 
 	public void beanParameterFactory(BeanParameterFactory beanParameterFactory) {
@@ -115,7 +115,7 @@ public class Customization extends RapidoidThing {
 	}
 
 	public LoginProvider loginProvider() {
-		return loginProvider;
+		return U.or(loginProvider, My.getLoginProvider());
 	}
 
 	public void loginProvider(LoginProvider loginProvider) {
@@ -123,7 +123,7 @@ public class Customization extends RapidoidThing {
 	}
 
 	public RolesProvider rolesProvider() {
-		return rolesProvider;
+		return U.or(rolesProvider, My.getRolesProvider());
 	}
 
 	public void rolesProvider(RolesProvider rolesProvider) {
@@ -131,11 +131,19 @@ public class Customization extends RapidoidThing {
 	}
 
 	public PageRenderer pageRenderer() {
-		return pageRenderer;
+		return U.or(pageRenderer, My.getPageRenderer());
 	}
 
 	public void pageRenderer(PageRenderer pageRenderer) {
 		this.pageRenderer = pageRenderer;
+	}
+
+	public BeanValidator validator() {
+		return U.or(validator, My.getValidator());
+	}
+
+	public void validator(BeanValidator validator) {
+		this.validator = validator;
 	}
 
 	public String name() {
@@ -148,13 +156,5 @@ public class Customization extends RapidoidThing {
 
 	public Config serverConfig() {
 		return serverConfig;
-	}
-
-	public BeanValidator validator() {
-		return validator;
-	}
-
-	public void validator(BeanValidator validator) {
-		this.validator = validator;
 	}
 }

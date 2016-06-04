@@ -38,16 +38,12 @@ import java.util.Map;
 @Since("5.1.0")
 public class DefaultErrorHandler extends RapidoidThing implements ErrorHandler {
 
-	private final Config segments;
-	private final Value<String> home;
-
-	public DefaultErrorHandler(Customization customization) {
-		this.segments = customization.appConfig().sub("segments");
-		this.home = customization.appConfig().sub("app").entry("home").str();
-	}
-
 	@Override
 	public Object handleError(Req req, Resp resp, Throwable error) {
+
+		Customization customization = req.custom();
+		Config segments = customization.appConfig().sub("segments");
+		Value<String> home = customization.appConfig().sub("app").entry("home").str();
 
 		boolean validation = Msc.isValidationError(error);
 
@@ -71,17 +67,17 @@ public class DefaultErrorHandler extends RapidoidThing implements ErrorHandler {
 			return HttpUtils.getErrorMessageAndSetCode(resp, error);
 
 		} else {
-			return page(req, resp, error);
+			return page(req, resp, error, segments, home);
 		}
 	}
 
-	private Object page(Req req, Resp resp, Throwable error) {
+	private Object page(Req req, Resp resp, Throwable error, Config segments, Value<String> home) {
 		if (error instanceof SecurityException) {
 			return resp.code(403).view("login").mvc(true).model("embedded", req.attr("_embedded", false));
 		} else {
 
 			String seg = req.segment();
-			String homeUri = seg != null ? segments.sub(seg).entry("home").str().orElse(this.home).or("/") : "/";
+			String homeUri = seg != null ? segments.sub(seg).entry("home").str().orElse(home).or("/") : "/";
 
 			Map<String, ?> errorInfo = HttpUtils.getErrorInfo(resp, error);
 			resp.model().put("error", errorInfo);

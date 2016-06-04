@@ -38,10 +38,7 @@ import org.rapidoid.jpa.JPAUtil;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.scan.ClasspathUtil;
-import org.rapidoid.setup.Admin;
-import org.rapidoid.setup.App;
-import org.rapidoid.setup.On;
-import org.rapidoid.setup.OnChanges;
+import org.rapidoid.setup.*;
 import org.rapidoid.sql.JDBC;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
@@ -75,6 +72,7 @@ public abstract class IntegrationTestCommons extends TestCommons {
 		Env.profiles().clear();
 		Env.profiles().add("default");
 
+		My.reset();
 		JPAUtil.reset();
 		Res.reset();
 		AppInfo.reset();
