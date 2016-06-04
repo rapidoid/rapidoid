@@ -28,8 +28,6 @@ import org.rapidoid.domain.Movie;
 import org.rapidoid.http.IntegrationTestCommons;
 import org.rapidoid.setup.On;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class JSONRenderingTest extends IntegrationTestCommons {
@@ -42,21 +40,21 @@ public class JSONRenderingTest extends IntegrationTestCommons {
 	}
 
 	@Test
-	public void testJSONParsingWithoutJsonHeaderPOST() throws JsonProcessingException {
+	public void testJSONParsingWithoutJsonHeaderPOST() {
 		// simply return the same object
-		On.post("/movie").json((Movie m) -> m); 
+		On.post("/movie").json((Movie m) -> m);
 
 		Movie movie = new Movie("test title", 1999);
-		onlyPost("/movie", JSON.MAPPER.writeValueAsString(movie));
+		onlyPost("/movie", JSON.stringify(movie));
 	}
 
 	@Test
-	public void testJSONParsingWithoutJsonHeaderPUT() throws JsonProcessingException {
+	public void testJSONParsingWithoutJsonHeaderPUT() {
 		// simply return the same object
-		On.put("/movie").json((Movie m) -> m); 
+		On.put("/movie").json((Movie m) -> m);
 
 		Movie movie = new Movie("test title", 1999);
-		onlyPut("/movie", JSON.MAPPER.writeValueAsString(movie));
+		onlyPut("/movie", JSON.stringify(movie));
 	}
 
 }

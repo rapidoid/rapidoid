@@ -178,7 +178,7 @@ public abstract class IntegrationTestCommons extends TestCommons {
 	protected void onlyPost(int port, String uri, Map<String, ?> data) {
 		onlyReq(port, "POST", uri, data, null);
 	}
-	
+
 	protected void onlyPost(String uri, String json) {
 		onlyReq(DEFAULT_PORT, "POST", uri, null, json);
 	}
@@ -289,7 +289,7 @@ public abstract class IntegrationTestCommons extends TestCommons {
 	}
 
 	protected String fetch(int port, String verb, String uri, Map<String, ?> data, String json) {
-		HttpReq req = HTTP.verb(HttpVerb.from(verb)).url(localhost(port, uri)).data(data).body(json!=null?json.getBytes():null);
+		HttpReq req = HTTP.verb(HttpVerb.from(verb)).url(localhost(port, uri)).data(data).body(json != null ? json.getBytes() : null);
 		return exec(req);
 	}
 
