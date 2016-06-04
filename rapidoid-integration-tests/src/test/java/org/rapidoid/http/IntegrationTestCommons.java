@@ -164,7 +164,7 @@ public abstract class IntegrationTestCommons extends TestCommons {
 	}
 
 	protected void onlyGet(int port, String uri) {
-		onlyReq(port, "GET", uri, null);
+		onlyReq(port, "GET", uri, null, null);
 	}
 
 	protected void onlyPost(String uri) {
@@ -176,7 +176,11 @@ public abstract class IntegrationTestCommons extends TestCommons {
 	}
 
 	protected void onlyPost(int port, String uri, Map<String, ?> data) {
-		onlyReq(port, "POST", uri, data);
+		onlyReq(port, "POST", uri, data, null);
+	}
+	
+	protected void onlyPost(String uri, String json) {
+		onlyReq(DEFAULT_PORT, "POST", uri, null, json);
 	}
 
 	protected void onlyPut(String uri) {
@@ -184,11 +188,15 @@ public abstract class IntegrationTestCommons extends TestCommons {
 	}
 
 	protected void onlyPut(int port, String uri, Map<String, ?> data) {
-		onlyReq(port, "PUT", uri, data);
+		onlyReq(port, "PUT", uri, data, null);
 	}
 
 	protected void onlyPut(String uri, Map<String, ?> data) {
 		onlyPut(DEFAULT_PORT, uri, data);
+	}
+
+	protected void onlyPut(String uri, String json) {
+		onlyReq(DEFAULT_PORT, "PUT", uri, null, json);
 	}
 
 	protected void onlyDelete(String uri) {
@@ -196,7 +204,7 @@ public abstract class IntegrationTestCommons extends TestCommons {
 	}
 
 	protected void onlyDelete(int port, String uri) {
-		onlyReq(port, "DELETE", uri, null);
+		onlyReq(port, "DELETE", uri, null, null);
 	}
 
 	protected void getAndPost(String uri) {
@@ -204,46 +212,46 @@ public abstract class IntegrationTestCommons extends TestCommons {
 	}
 
 	protected void getAndPost(int port, String uri) {
-		testReq(port, "GET", uri, null);
-		testReq(port, "POST", uri, null);
+		testReq(port, "GET", uri, null, null);
+		testReq(port, "POST", uri, null, null);
 		notFoundExcept(port, uri, "GET", "POST");
 	}
 
 	protected void getReq(String uri) {
-		testReq(DEFAULT_PORT, "GET", uri, null);
+		testReq(DEFAULT_PORT, "GET", uri, null, null);
 	}
 
 	protected void postData(String uri, Map<String, ?> data) {
-		testReq(DEFAULT_PORT, "POST", uri, data);
+		testReq(DEFAULT_PORT, "POST", uri, data, null);
 	}
 
 	protected void postData(int port, String uri, Map<String, ?> data) {
-		testReq(port, "POST", uri, data);
+		testReq(port, "POST", uri, data, null);
 	}
 
 	protected void putData(String uri, Map<String, ?> data) {
-		testReq(DEFAULT_PORT, "PUT", uri, data);
+		testReq(DEFAULT_PORT, "PUT", uri, data, null);
 	}
 
 	protected void putData(int port, String uri, Map<String, ?> data) {
-		testReq(port, "PUT", uri, data);
+		testReq(port, "PUT", uri, data, null);
 	}
 
 	protected void patchData(String uri, Map<String, ?> data) {
-		testReq(DEFAULT_PORT, "PATCH", uri, data);
+		testReq(DEFAULT_PORT, "PATCH", uri, data, null);
 	}
 
 	protected void patchData(int port, String uri, Map<String, ?> data) {
-		testReq(port, "PATCH", uri, data);
+		testReq(port, "PATCH", uri, data, null);
 	}
 
-	private void onlyReq(int port, String verb, String uri, Map<String, ?> data) {
-		testReq(port, verb, uri, data);
+	private void onlyReq(int port, String verb, String uri, Map<String, ?> data, String json) {
+		testReq(port, verb, uri, data, json);
 		notFoundExcept(port, uri, verb);
 	}
 
 	protected void deleteReq(String uri) {
-		testReq(DEFAULT_PORT, "DELETE", uri, null);
+		testReq(DEFAULT_PORT, "DELETE", uri, null, null);
 	}
 
 	protected void notFoundExcept(String uri, String... exceptVerbs) {
@@ -267,21 +275,21 @@ public abstract class IntegrationTestCommons extends TestCommons {
 	}
 
 	protected void notFound(int port, String verb, String uri) {
-		String resp = fetch(port, verb, uri, null);
+		String resp = fetch(port, verb, uri, null, null);
 		String notFound = IO.load("404-not-found.txt");
 		U.notNull(notFound, "404-not-found");
 		check(verb + " " + uri, resp, notFound);
 	}
 
-	private void testReq(int port, String verb, String uri, Map<String, ?> data) {
-		String resp = fetch(port, verb, uri, data);
+	private void testReq(int port, String verb, String uri, Map<String, ?> data, String json) {
+		String resp = fetch(port, verb, uri, data, json);
 		String reqName = reqName(port, verb, uri);
 
 		verifyCase(port + " " + verb + " " + uri, resp, reqName);
 	}
 
-	protected String fetch(int port, String verb, String uri, Map<String, ?> data) {
-		HttpReq req = HTTP.verb(HttpVerb.from(verb)).url(localhost(port, uri)).data(data);
+	protected String fetch(int port, String verb, String uri, Map<String, ?> data, String json) {
+		HttpReq req = HTTP.verb(HttpVerb.from(verb)).url(localhost(port, uri)).data(data).body(json!=null?json.getBytes():null);
 		return exec(req);
 	}
 
@@ -308,11 +316,11 @@ public abstract class IntegrationTestCommons extends TestCommons {
 	}
 
 	protected String fetch(String verb, String uri) {
-		return fetch(DEFAULT_PORT, verb, uri, null);
+		return fetch(DEFAULT_PORT, verb, uri, null, null);
 	}
 
 	protected String fetch(String verb, String uri, Map<String, ?> data) {
-		return fetch(DEFAULT_PORT, verb, uri, data);
+		return fetch(DEFAULT_PORT, verb, uri, data, null);
 	}
 
 	private String reqName(int port, String verb, String uri) {

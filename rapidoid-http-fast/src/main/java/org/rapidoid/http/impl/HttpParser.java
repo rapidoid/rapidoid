@@ -283,7 +283,7 @@ public class HttpParser extends RapidoidThing implements Constants {
 				return true;
 
 			case NOT_FOUND:
-				return true;
+				return false; // fall back to json and try parsing the body
 
 			default:
 				throw Err.notExpected();
@@ -475,9 +475,13 @@ public class HttpParser extends RapidoidThing implements Constants {
 		posted.toUrlEncodedParams(input, dest);
 
 		if (!completed && !rBody.isEmpty()) {
-			Map<String, Object> jsonData = JSON.parse(input.get(rBody), Map.class);
-			if (jsonData != null) {
-				dest.putAll(jsonData);
+			try {
+				Map<String, Object> jsonData = JSON.parse(input.get(rBody), Map.class);
+				if (jsonData != null) {
+					dest.putAll(jsonData);
+				}
+			} catch (Exception e) {
+				throw new RuntimeException("The attempt to parse the request body as JSON failed. Please specify the correct content type in the request header!", e);
 			}
 		}
 	}

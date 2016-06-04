@@ -39,3 +39,6 @@ target
 *.iml
 
 diff.txt
+
+*/.metadata
+.metadata

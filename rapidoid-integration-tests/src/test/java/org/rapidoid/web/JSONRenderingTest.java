@@ -23,9 +23,12 @@ package org.rapidoid.web;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.data.JSON;
 import org.rapidoid.domain.Movie;
 import org.rapidoid.http.IntegrationTestCommons;
 import org.rapidoid.setup.On;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -36,6 +39,24 @@ public class JSONRenderingTest extends IntegrationTestCommons {
 		On.get("/").json(() -> new Movie("Rambo", 1990));
 
 		onlyGet("/");
+	}
+
+	@Test
+	public void testJSONParsingWithoutJsonHeaderPOST() throws JsonProcessingException {
+		// simply return the same object
+		On.post("/movie").json((Movie m) -> m); 
+
+		Movie movie = new Movie("test title", 1999);
+		onlyPost("/movie", JSON.MAPPER.writeValueAsString(movie));
+	}
+
+	@Test
+	public void testJSONParsingWithoutJsonHeaderPUT() throws JsonProcessingException {
+		// simply return the same object
+		On.put("/movie").json((Movie m) -> m); 
+
+		Movie movie = new Movie("test title", 1999);
+		onlyPut("/movie", JSON.MAPPER.writeValueAsString(movie));
 	}
 
 }
