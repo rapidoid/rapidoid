@@ -283,7 +283,8 @@ public class HttpParser extends RapidoidThing implements Constants {
 				return true;
 
 			case NOT_FOUND:
-				return false; // fall back to json and try parsing the body
+				// fall back to json and try parsing the body
+				return src.get(body.start) != '{';
 
 			default:
 				throw Err.notExpected();
