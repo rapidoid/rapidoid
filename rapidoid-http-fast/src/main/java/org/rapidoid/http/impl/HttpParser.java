@@ -482,7 +482,7 @@ public class HttpParser extends RapidoidThing implements Constants {
 					dest.putAll(jsonData);
 				}
 			} catch (Exception e) {
-				throw new RuntimeException("The attempt to parse the request body as JSON failed. Please specify the correct content type in the request header!", e);
+				Log.warn("The attempt to parse the request body as JSON failed. Please specify the correct content type in the request header!", e);
 			}
 		}
 	}
