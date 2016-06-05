@@ -118,6 +118,17 @@ public class App extends RapidoidThing {
 		Msc.logSection("!Restarting the web application...");
 
 		restarted = true;
+
+		Set<AppRestartListener> listeners = U.set(OnChanges.getRestartListeners());
+
+		for (AppRestartListener listener : listeners) {
+			try {
+				listener.beforeAppRestart();
+			} catch (Exception e) {
+				Log.error("Error occurred in the app restart listener!", e);
+			}
+		}
+
 		App.path = null;
 
 		Conf.reload();
@@ -149,6 +160,14 @@ public class App extends RapidoidThing {
 		}
 
 		Msc.invokeMain(entry, Conf.getArgs());
+
+		for (AppRestartListener listener : listeners) {
+			try {
+				listener.afterAppRestart();
+			} catch (Exception e) {
+				Log.error("Error occurred in the app restart listener!", e);
+			}
+		}
 
 		Log.info("!Successfully restarted the application!");
 	}
@@ -224,4 +243,7 @@ public class App extends RapidoidThing {
 		Msc.filterAndInvokeMainClasses(beans, invoked);
 	}
 
+	public static boolean isRestarted() {
+		return restarted;
+	}
 }

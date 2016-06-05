@@ -3,9 +3,12 @@ package org.rapidoid.setup;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Env;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.Msc;
+
+import java.util.Set;
 
 /*
  * #%L
@@ -33,6 +36,8 @@ public class OnChanges extends RapidoidThing {
 
 	static volatile boolean initialized;
 	static volatile boolean ignore;
+
+	private static final Set<AppRestartListener> restartListeners = Coll.synchronizedSet();
 
 	private OnChanges() {
 	}
@@ -70,6 +75,16 @@ public class OnChanges extends RapidoidThing {
 
 	public static boolean isInitialized() {
 		return initialized;
+	}
+
+	public static Set<AppRestartListener> getRestartListeners() {
+		return restartListeners;
+	}
+
+	public static void addRestartListener(AppRestartListener restartListener) {
+		if (!App.isRestarted()) {
+			restartListeners.add(restartListener);
+		}
 	}
 
 }

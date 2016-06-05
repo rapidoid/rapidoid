@@ -542,6 +542,7 @@ org.rapidoid.serialize.TypeSpecificSerializer
 org.rapidoid.setup.Admin
 org.rapidoid.setup.App
 org.rapidoid.setup.AppBootstrap
+org.rapidoid.setup.AppRestartListener
 org.rapidoid.setup.AppRestartProcessor
 org.rapidoid.setup.IGoodies
 org.rapidoid.setup.My
