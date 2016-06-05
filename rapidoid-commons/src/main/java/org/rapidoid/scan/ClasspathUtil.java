@@ -91,12 +91,12 @@ public class ClasspathUtil extends RapidoidThing {
 
 	private static void getFiles(Collection<File> files, File file, Predicate<File> filter) {
 		if (file.isDirectory()) {
-			Log.debug("scanning directory", "dir", file);
+			Log.trace("scanning directory", "dir", file);
 			for (File f : file.listFiles()) {
 				if (f.isDirectory()) {
 					getFiles(files, f, filter);
 				} else {
-					Log.debug("scanned file", "file", f);
+					Log.trace("scanned file", "file", f);
 					try {
 						if (filter == null || filter.eval(f)) {
 							files.add(f);
@@ -150,9 +150,9 @@ public class ClasspathUtil extends RapidoidThing {
 
 		Set<String> classpath = getClasspath();
 
-		Log.debug("Starting classpath scan", "package", packageName, "annotated", annotated, "regex", regex, "loader", classLoader);
+		Log.trace("Starting classpath scan", "package", packageName, "annotated", annotated, "regex", regex, "loader", classLoader);
 
-		Log.debug("Classpath details", "classpath", classpath);
+		Log.trace("Classpath details", "classpath", classpath);
 
 		Set<String> jars = U.set();
 
@@ -162,7 +162,7 @@ public class ClasspathUtil extends RapidoidThing {
 			if (cpEntry.exists()) {
 				if (cpEntry.isDirectory()) {
 					if (shouldScanDir(cpEntry.getAbsolutePath())) {
-						Log.debug("Scanning directory", "root", cpEntry.getAbsolutePath());
+						Log.trace("Scanning directory", "root", cpEntry.getAbsolutePath());
 
 						File startingDir;
 						if (pkgPath.isEmpty()) {
@@ -176,7 +176,7 @@ public class ClasspathUtil extends RapidoidThing {
 									classLoader, searched);
 						}
 					} else {
-						Log.debug("Skipping directory", "root", cpEntry.getAbsolutePath());
+						Log.trace("Skipping directory", "root", cpEntry.getAbsolutePath());
 					}
 				} else if (cpEntry.isFile() && cpEntry.getAbsolutePath().toLowerCase().endsWith(".jar")) {
 					jars.add(cpEntry.getAbsolutePath());
@@ -190,10 +190,10 @@ public class ClasspathUtil extends RapidoidThing {
 
 		for (String jarName : jars) {
 			if (shouldScanJAR(jarName)) {
-				Log.debug("Scanning JAR", "name", jarName);
+				Log.trace("Scanning JAR", "name", jarName);
 				getClassesFromJAR(jarName, classes, packageName, regex, annotated, classLoader, searched);
 			} else {
-				Log.debug("Skipping JAR", "name", jarName);
+				Log.trace("Skipping JAR", "name", jarName);
 			}
 		}
 
@@ -212,7 +212,7 @@ public class ClasspathUtil extends RapidoidThing {
 	                                      Class<? extends Annotation>[] annotated, ClassLoader classLoader, AtomicInteger searched) {
 
 		U.must(dir.isDirectory());
-		Log.debug("Traversing directory", "root", root, "dir", dir);
+		Log.trace("Traversing directory", "root", root, "dir", dir);
 
 		File[] files = dir.listFiles();
 		if (files == null) {
@@ -239,7 +239,7 @@ public class ClasspathUtil extends RapidoidThing {
 	                             Class<? extends Annotation>[] annotated, ClassLoader classLoader, String relName,
 	                             File file, ZipFile zip, ZipEntry entry, AtomicInteger searched) {
 
-		Log.debug("scanned file", "file", relName);
+		Log.trace("scanned file", "file", relName);
 
 		if (relName.endsWith(".class")) {
 			searched.incrementAndGet();
@@ -439,7 +439,7 @@ public class ClasspathUtil extends RapidoidThing {
 
 		for (String clsName : classNames) {
 			try {
-				Log.debug("Loading class", "name", clsName);
+				Log.trace("Loading class", "name", clsName);
 				classes.add(classLoader != null ? Class.forName(clsName, true, classLoader) : Class.forName(clsName));
 			} catch (Throwable e) {
 				Log.debug("Error while loading class", "name", clsName, "error", e);

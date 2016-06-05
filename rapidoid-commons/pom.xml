@@ -70,6 +70,12 @@
 			<version>${logback.version}</version>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<optional>true</optional>
+		</dependency>
 
 		<!-- TEST -->
 

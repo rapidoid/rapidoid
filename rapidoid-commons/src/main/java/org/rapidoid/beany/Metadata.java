@@ -113,4 +113,19 @@ public class Metadata extends RapidoidThing {
 		return get(annotations, annotationClass) != null;
 	}
 
+	public static <T extends Annotation> T getAnnotationRecursive(Class<?> clazz, Class<T> annotationClass) {
+		clazz = Cls.unproxy(clazz);
+
+		for (Class<?> c = clazz; c.getSuperclass() != null; c = c.getSuperclass()) {
+			T ann = c.getAnnotation(annotationClass);
+
+			if (ann != null) {
+				return ann;
+			}
+		}
+
+		return null;
+	}
+
+
 }

@@ -991,4 +991,18 @@ public class Msc extends RapidoidThing implements Constants {
 		return profiles == null || Env.hasAnyProfile(profiles.value());
 	}
 
+	public static boolean insideTest() {
+		StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+
+		for (StackTraceElement traceElement : trace) {
+			String cls = traceElement.getClassName();
+
+			if (cls.startsWith("org.junit.") || cls.startsWith("org.testng.")) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 }

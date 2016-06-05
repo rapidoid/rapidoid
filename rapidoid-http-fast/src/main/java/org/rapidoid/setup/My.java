@@ -2,7 +2,7 @@ package org.rapidoid.setup;
 
 /*
  * #%L
- * rapidoid-http-server
+ * rapidoid-http-fast
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%

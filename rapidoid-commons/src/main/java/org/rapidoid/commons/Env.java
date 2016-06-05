@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.scan.ClasspathUtil;
+import org.rapidoid.util.Msc;
 
 import java.util.Set;
 
@@ -38,14 +39,22 @@ public class Env extends RapidoidThing {
 		return Conf.ROOT.is("production") || Conf.ROOT.is("prod") || profile("production") || profile("prod");
 	}
 
+	public static boolean test() {
+		return Conf.ROOT.is("test") || profile("test") || Msc.insideTest();
+	}
+
 	public static boolean dev() {
-		return !production() && !ClasspathUtil.getClasspathFolders().isEmpty();
+		return !production() && !test() && !ClasspathUtil.getClasspathFolders().isEmpty();
 	}
 
 	public static Set<String> profiles() {
 		if (dev()) {
 			PROFILES.add("dev");
+
+		} else if (test()) {
+			PROFILES.add("test");
 		}
+
 		return PROFILES;
 	}
 

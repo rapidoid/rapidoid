@@ -90,6 +90,7 @@ public abstract class TestCommons {
 
 	protected void registerError(AssertionError e) {
 		hasError = true;
+		e.printStackTrace();
 	}
 
 	protected void fail(String msg) {

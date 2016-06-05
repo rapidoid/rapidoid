@@ -70,7 +70,7 @@ public class ConfigUtil extends RapidoidThing {
 					Log.info("Loading (refreshing) configuration file", "filename", filename);
 					config.update(U.safe(configData));
 				} else {
-					Log.debug("Couldn't find configuration file", "filename", filename);
+					Log.trace("Couldn't find configuration file", "filename", filename);
 				}
 			}
 		};
@@ -104,7 +104,7 @@ public class ConfigUtil extends RapidoidThing {
 				config.update(U.safe(configData));
 			}
 		} else {
-			Log.debug("Couldn't find configuration file", "filename", filename);
+			Log.trace("Couldn't find configuration file", "filename", filename);
 		}
 
 	}

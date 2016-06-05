@@ -33,7 +33,7 @@ public class ConfigurationTest extends AbstractCommonsTest {
 
 	@Test
 	public void testBasicConfig() {
-		isTrue(Env.dev());
+		isTrue(Env.test());
 
 		Conf.ROOT.set("abc", "123");
 		Conf.ROOT.set("cool", true);
@@ -49,31 +49,32 @@ public class ConfigurationTest extends AbstractCommonsTest {
 
 	@Test
 	public void testDefaultConfig() {
-		isTrue(Env.dev());
+		isTrue(Env.test());
 
 		checkDefaults();
 	}
 
 	private void checkDefaults() {
 		eq(Conf.ON.entry("port").or(0).longValue(), 8888);
-		eq(Conf.ON.entry("address").str().getOrNull(), "0.0.0.0");
+		eq(Conf.ON.entry("address").str().getOrNull(), "127.0.0.1");
 	}
 
 	@Test
 	public void testProfiles() {
-		Conf.args("port=12345", "profiles=mysql,prod");
+		Conf.args("port=12345", "profiles=mysql,p1,p2");
 
-		eq(Env.profiles(), U.set("mysql", "prod"));
+		eq(Env.profiles(), U.set("mysql", "p1", "p2", "test"));
 
+		isTrue(Env.test());
 		isFalse(Env.dev());
-		isTrue(Env.production());
+		isFalse(Env.production());
 
 		checkDefaults();
 	}
 
 	@Test
 	public void testDefaultProfiles() {
-		eq(Env.profiles(), U.set("dev", "default"));
+		eq(Env.profiles(), U.set("test", "default"));
 	}
 
 }

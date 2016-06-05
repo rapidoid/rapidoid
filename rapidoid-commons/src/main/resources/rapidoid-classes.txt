@@ -28,6 +28,7 @@ org.rapidoid.annotation.PUT
 org.rapidoid.annotation.Required
 org.rapidoid.annotation.Run
 org.rapidoid.annotation.Scaffold
+org.rapidoid.annotation.ScanPackages
 org.rapidoid.annotation.Service
 org.rapidoid.annotation.Since
 org.rapidoid.annotation.Special
@@ -558,6 +559,8 @@ org.rapidoid.sql.JdbcClient
 org.rapidoid.sql.JDBCConfig
 org.rapidoid.sql.NoConnectionPool
 org.rapidoid.standalone.Main
+org.rapidoid.test.RapidoidIntegrationTest
+org.rapidoid.test.RapidoidTest
 org.rapidoid.test.TestCommons
 org.rapidoid.util.AbstractMapImpl
 org.rapidoid.util.AnsiColor
