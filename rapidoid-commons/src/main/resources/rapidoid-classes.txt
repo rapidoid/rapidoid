@@ -133,6 +133,9 @@ org.rapidoid.data.MultiData
 org.rapidoid.data.Parse
 org.rapidoid.data.XML
 org.rapidoid.data.YAML
+org.rapidoid.expire.ExpirationCrawlerThread
+org.rapidoid.expire.Expire
+org.rapidoid.expire.Expiring
 org.rapidoid.fluent.Do
 org.rapidoid.fluent.dox.DoGroup
 org.rapidoid.fluent.dox.DoGroupBi

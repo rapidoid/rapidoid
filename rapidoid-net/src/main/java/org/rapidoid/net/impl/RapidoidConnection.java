@@ -6,6 +6,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.data.JSON;
+import org.rapidoid.expire.Expiring;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.abstracts.IRequest;
@@ -46,7 +47,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class RapidoidConnection extends RapidoidThing implements Resetable, Channel, Constants {
+public class RapidoidConnection extends RapidoidThing implements Resetable, Channel, Expiring, Constants {
 
 	private static final CtxListener IGNORE = new IgnorantConnectionListener();
 
@@ -90,6 +91,8 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 	volatile IRequest request;
 
+	private volatile long expiresAt;
+
 	public RapidoidConnection(RapidoidWorker worker, BufGroup bufs) {
 		this.worker = worker;
 		this.input = bufs.newBuf("input#" + connId());
@@ -120,6 +123,7 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 		isClient = false;
 		protocol = null;
 		requestId = 0;
+		expiresAt = 0;
 		state.reset();
 	}
 
@@ -381,6 +385,21 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 	@Override
 	public void setRequest(IRequest request) {
 		this.request = request;
+	}
+
+	@Override
+	public void setExpiresAt(long expiresAt) {
+		this.expiresAt = expiresAt;
+	}
+
+	@Override
+	public long getExpiresAt() {
+		return expiresAt;
+	}
+
+	@Override
+	public void expire() {
+		close(false);
 	}
 
 }

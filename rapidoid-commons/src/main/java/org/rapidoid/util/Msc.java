@@ -1005,4 +1005,10 @@ public class Msc extends RapidoidThing implements Constants {
 		return false;
 	}
 
+	public static Thread thread(Runnable runnable) {
+		Thread thread = new Thread(runnable);
+		thread.start();
+		return thread;
+	}
+
 }

@@ -42,6 +42,10 @@ public class Coll extends RapidoidThing {
 		return (List<T>) Collections.synchronizedList(U.list(values));
 	}
 
+	public static <T> Set<T> concurrentSet() {
+		return Collections.newSetFromMap(new ConcurrentHashMap<T, Boolean>());
+	}
+
 	public static boolean isMap(Object obj) {
 		return obj instanceof Map<?, ?>;
 	}

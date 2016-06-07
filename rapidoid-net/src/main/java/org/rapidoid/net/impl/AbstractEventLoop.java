@@ -3,6 +3,7 @@ package org.rapidoid.net.impl;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
 
 import java.io.IOException;
 import java.nio.channels.ClosedSelectorException;
@@ -36,6 +37,8 @@ import java.util.Set;
 public abstract class AbstractEventLoop<T> extends AbstractLoop<T> {
 
 	protected final Selector selector;
+
+	protected volatile long approxTime = U.time();
 
 	public AbstractEventLoop(String name) {
 		super(name);
@@ -113,6 +116,8 @@ public abstract class AbstractEventLoop<T> extends AbstractLoop<T> {
 	@Override
 	protected final void insideLoop() {
 
+		approxTime = U.time();
+
 		try {
 			doProcessing();
 		} catch (Throwable e) {
@@ -124,6 +129,8 @@ public abstract class AbstractEventLoop<T> extends AbstractLoop<T> {
 		} catch (IOException e) {
 			Log.error("Select failed!", e);
 		}
+
+		approxTime = U.time();
 
 		try {
 			Set<SelectionKey> selectedKeys = selector.selectedKeys();
