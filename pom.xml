@@ -98,6 +98,7 @@
 		<module>rapidoid-oauth</module>
 		<module>rapidoid-integrate</module>
 		<module>rapidoid-web</module>
+		<module>rapidoid-standalone</module>
 		<module>rapidoid-quick</module>
 		<module>rapidoid-watch</module>
 		<module>rapidoid-fluent</module>

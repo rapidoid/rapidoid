@@ -17,13 +17,6 @@
 			<artifactId>rapidoid-gui</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!--
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-oauth</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		 -->
 		<dependency>
 			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-http-server</artifactId>
@@ -42,6 +35,11 @@
 		<dependency>
 			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-integrate</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-oauth</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
