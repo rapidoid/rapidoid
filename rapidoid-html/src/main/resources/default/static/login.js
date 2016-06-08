@@ -87,7 +87,7 @@ function login($form) {
 
         $.post('/_login', {username: user, password: pass}).done(function(data) {
 
-        if(data) {
+        if (data.success) {
             form_success($form);
 
             setTimeout(function() {
