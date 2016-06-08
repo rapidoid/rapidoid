@@ -313,6 +313,9 @@ public class Msc extends RapidoidThing implements Constants {
 			return URLEncoder.encode(value, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			throw U.rte(e);
+		} catch (IllegalArgumentException e){
+			// TODO : This Exception Maybe Needs A Better Resolution ( Though this one keeps things going and not blowing )
+			return value;
 		}
 	}
 
@@ -321,6 +324,9 @@ public class Msc extends RapidoidThing implements Constants {
 			return URLDecoder.decode(value, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			throw U.rte(e);
+		} catch (IllegalArgumentException e) {
+			// TODO : This Exception Maybe Needs A Better Resolution ( Though this one keeps things going and not blowing )
+			return value;
 		}
 	}
 
