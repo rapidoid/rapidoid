@@ -8,6 +8,7 @@ import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Future;
 import org.rapidoid.data.JSON;
 import org.rapidoid.io.Upload;
+import org.rapidoid.u.U;
 
 import java.util.List;
 import java.util.Map;
@@ -197,6 +198,10 @@ public class HttpReq extends RapidoidThing {
 
 	public <T> T parse() {
 		return JSON.parse(fetch());
+	}
+
+	public void print() {
+		U.print(fetch());
 	}
 
 	public Map<String, Object> toMap() {

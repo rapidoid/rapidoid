@@ -22,6 +22,12 @@
 		<!-- OPTIONAL -->
 		<dependency>
 			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-http-client</artifactId>
+			<version>${project.version}</version>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-watch</artifactId>
 			<version>${project.version}</version>
 			<optional>true</optional>

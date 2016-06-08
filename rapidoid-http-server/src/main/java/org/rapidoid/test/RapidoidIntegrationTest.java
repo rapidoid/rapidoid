@@ -27,6 +27,8 @@ import org.rapidoid.annotation.ScanPackages;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.commons.Env;
+import org.rapidoid.http.HTTP;
+import org.rapidoid.http.HttpReq;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
@@ -73,6 +75,38 @@ public abstract class RapidoidIntegrationTest extends RapidoidTest {
 
 	protected String localhost(int port, String uri) {
 		return "http://localhost:" + port + uri;
+	}
+
+	protected HttpReq get(String uri) {
+		return HTTP.get(localhost(uri));
+	}
+
+	protected HttpReq post(String uri) {
+		return HTTP.post(localhost(uri));
+	}
+
+	protected HttpReq put(String uri) {
+		return HTTP.put(localhost(uri));
+	}
+
+	protected HttpReq delete(String uri) {
+		return HTTP.delete(localhost(uri));
+	}
+
+	protected HttpReq patch(String uri) {
+		return HTTP.patch(localhost(uri));
+	}
+
+	protected HttpReq options(String uri) {
+		return HTTP.options(localhost(uri));
+	}
+
+	protected HttpReq head(String uri) {
+		return HTTP.head(localhost(uri));
+	}
+
+	protected HttpReq trace(String uri) {
+		return HTTP.trace(localhost(uri));
 	}
 
 }
