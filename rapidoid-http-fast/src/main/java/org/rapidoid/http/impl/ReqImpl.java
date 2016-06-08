@@ -695,7 +695,13 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	@Override
 	public String toString() {
-		return verb() + " " + uri();
+		String info = verb() + " " + path();
+
+		if (U.notEmpty(params)) {
+			info += "?" + U.join("&", Msc.protectSensitiveInfo(params, "<...>").entrySet());
+		}
+
+		return info;
 	}
 
 	public Channel channel() {
