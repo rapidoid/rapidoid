@@ -7,9 +7,7 @@ import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.Resp;
-import org.rapidoid.u.U;
-
-import java.util.Map;
+import org.rapidoid.security.AuthResponse;
 
 /*
  * #%L
@@ -36,15 +34,17 @@ import java.util.Map;
 public class LoginHandler extends RapidoidThing implements ReqRespHandler {
 
 	@Override
-	public Map<String, ?> execute(Req req, Resp resp) throws Exception {
+	public AuthResponse execute(Req req, Resp resp) throws Exception {
+		AuthResponse auth = new AuthResponse();
+
 		String username = req.data("username");
 		String password = req.data("password");
 
-		boolean ok = resp.login(username, password);
+		auth.success = resp.login(username, password);
 
-		String token = ok ? HttpUtils.token(req.cookiepack()) : "";
+		auth.token = auth.success ? HttpUtils.token(req.cookiepack()) : "";
 
-		return U.map("success", ok, "token", token);
+		return auth;
 	}
 
 }

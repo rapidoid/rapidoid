@@ -535,6 +535,7 @@ org.rapidoid.security.annotation.Manager
 org.rapidoid.security.annotation.Moderator
 org.rapidoid.security.annotation.Roles
 org.rapidoid.security.Auth
+org.rapidoid.security.AuthResponse
 org.rapidoid.security.DataPermissions
 org.rapidoid.security.Role
 org.rapidoid.security.Secure
