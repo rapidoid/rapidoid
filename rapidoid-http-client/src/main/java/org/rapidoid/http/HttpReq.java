@@ -199,6 +199,10 @@ public class HttpReq extends RapidoidThing {
 		return JSON.parse(fetch());
 	}
 
+	public Map<String, Object> toMap() {
+		return parse();
+	}
+
 	public HttpResp execute() {
 		return client.executeRequest(this, null).get();
 	}

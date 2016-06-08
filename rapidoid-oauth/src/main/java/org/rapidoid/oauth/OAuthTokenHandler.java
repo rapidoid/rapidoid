@@ -93,7 +93,7 @@ public class OAuthTokenHandler extends RapidoidThing implements ReqHandler {
 			Log.debug("OAuth validated", "popup", popup);
 
 			String domain = oauthDomain.getOrNull();
-			String redirectUrl = U.notEmpty(domain)? domain + callbackPath : HttpUtils.constructUrl(req, callbackPath);
+			String redirectUrl = U.notEmpty(domain) ? domain + callbackPath : HttpUtils.constructUrl(req, callbackPath);
 
 			TokenRequestBuilder reqBuilder = OAuthClientRequest.tokenLocation(provider.getTokenEndpoint())
 					.setGrantType(GrantType.AUTHORIZATION_CODE).setClientId(id).setClientSecret(secret)
@@ -118,17 +118,15 @@ public class OAuthTokenHandler extends RapidoidThing implements ReqHandler {
 			Map<String, Object> auth = JSON.parseMap(res.getBody());
 
 			String email = (String) U.or(auth.get("email"), auth.get("emailAddress"));
+			String firstName = (String) U.or(auth.get("firstName"), U.or(auth.get("first_name"), auth.get("given_name")));
+			String lastName = (String) U.or(auth.get("lastName"), U.or(auth.get("last_name"), auth.get("family_name")));
+			String name = U.or((String) auth.get("name"), firstName + " " + lastName);
 
 			String username = email;
 			Set<String> roles = customization.rolesProvider().getRolesForUser(username);
 
 			UserInfo user = new UserInfo(username, roles);
-
-			String firstName = (String) U.or(auth.get("firstName"),
-					U.or(auth.get("first_name"), auth.get("given_name")));
-			String lastName = (String) U.or(auth.get("lastName"), U.or(auth.get("last_name"), auth.get("family_name")));
-			user.name = U.or((String) auth.get("name"), firstName + " " + lastName);
-
+			user.name = name;
 			user.email = email;
 			user.oauthProvider = provider.getName();
 			user.oauthId = String.valueOf(auth.get("id"));
