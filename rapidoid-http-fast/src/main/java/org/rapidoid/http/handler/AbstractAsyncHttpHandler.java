@@ -59,7 +59,12 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
 		U.notNull(req, "HTTP request");
 
-		String username = req.cookiepack(HttpUtils._USER, null);
+		String username = getUser(req);
+
+		if (username == null) {
+			req.response().logout();
+		}
+
 		Set<String> roles = userRoles(username);
 
 		TransactionMode txMode;
@@ -84,6 +89,25 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 		}
 
 		return HttpStatus.ASYNC;
+	}
+
+	private String getUser(Req req) {
+		if (req.hasCookiepack()) {
+			String username = req.cookiepack(HttpUtils._USER, null);
+
+			if (username != null) {
+				long expiresOn = req.cookiepack(HttpUtils._EXPIRES);
+
+				if (expiresOn < U.time()) {
+					username = null; // expired
+				}
+			}
+
+			return username;
+
+		} else {
+			return null;
+		}
 	}
 
 	private Set<String> userRoles(String username) {
@@ -214,9 +238,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 			}
 		};
 
-		Object result = wrapper.wrap(req, invocation);
-
-		return result;
+		return wrapper.wrap(req, invocation);
 	}
 
 	protected abstract Object handleReq(Channel ctx, boolean isKeepAlive, Req req, Object extra) throws Exception;

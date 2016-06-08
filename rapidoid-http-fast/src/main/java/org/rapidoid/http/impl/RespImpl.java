@@ -327,15 +327,20 @@ public class RespImpl extends RapidoidThing implements Resp {
 		U.must(rolesProvider != null, "A roles provider wasn't set!");
 
 		boolean success;
-		Set<String> roles;
 
 		try {
 			success = loginProvider.login(username, password);
+
 			if (success) {
-				roles = rolesProvider.getRolesForUser(username);
+				Set<String> roles = rolesProvider.getRolesForUser(username);
+				long expiresOn = U.time() + 3600 * 1000; // FIXME customize
+
 				Ctxs.ctx().setUser(new UserInfo(username, roles));
+
 				request().cookiepack().put(HttpUtils._USER, username);
+				request().cookiepack().put(HttpUtils._EXPIRES, expiresOn);
 			}
+
 		} catch (Throwable e) {
 			throw U.rte("Login error!", e);
 		}
@@ -345,8 +350,14 @@ public class RespImpl extends RapidoidThing implements Resp {
 
 	@Override
 	public void logout() {
-		Ctxs.ctx().setUser(UserInfo.ANONYMOUS);
-		request().cookiepack().remove(HttpUtils._USER);
+		if (Ctxs.hasContext()) {
+			Ctxs.ctx().setUser(UserInfo.ANONYMOUS);
+		}
+
+		if (request().hasCookiepack()) {
+			request().cookiepack().remove(HttpUtils._USER);
+			request().cookiepack().remove(HttpUtils._EXPIRES);
+		}
 	}
 
 	@Override

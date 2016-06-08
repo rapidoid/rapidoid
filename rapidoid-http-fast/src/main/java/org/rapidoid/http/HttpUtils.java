@@ -53,7 +53,8 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 
 	private static final byte[] EMPTY_RESPONSE = {};
 
-	public static final String _USER = "_USER";
+	public static final String _USER = "_user";
+	public static final String _EXPIRES = "_expires";
 
 	private static final Mapper<String[], String> PATH_PARAM_EXTRACTOR = new Mapper<String[], String>() {
 		@Override
@@ -84,17 +85,18 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 	}
 
 	public static void saveCookipackBeforeRenderingHeaders(Req req, Map<String, Serializable> cookiepack) {
-		if (cookiepack != null) {
-			String cookie;
-			if (!cookiepack.isEmpty()) {
-				byte[] cookiepackBytes = serializeCookiepack(cookiepack);
-				byte[] cookiepackEncrypted = Crypto.encrypt(cookiepackBytes);
-				cookie = Str.toBase64(cookiepackEncrypted).replace('+', '$').replace('/', '_');
-			} else {
-				cookie = "";
-			}
+		String token = token(cookiepack);
+		req.response().cookie(COOKIEPACK, token, "path=/", "HttpOnly");
+	}
 
-			req.response().cookie(COOKIEPACK, cookie, "path=/", "HttpOnly");
+	public static String token(Map<String, Serializable> cookiepack) {
+		if (U.notEmpty(cookiepack)) {
+			byte[] cookiepackBytes = serializeCookiepack(cookiepack);
+			byte[] cookiepackEncrypted = Crypto.encrypt(cookiepackBytes);
+			return Str.toBase64(cookiepackEncrypted).replace('+', '$').replace('/', '_');
+
+		} else {
+			return "";
 		}
 	}
 
