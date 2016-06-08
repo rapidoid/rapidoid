@@ -203,6 +203,10 @@ public class HttpReq extends RapidoidThing {
 		return parse();
 	}
 
+	public <T> T toBean(Class<T> beanClass) {
+		return JSON.MAPPER.convertValue(toMap(), beanClass);
+	}
+
 	public HttpResp execute() {
 		return client.executeRequest(this, null).get();
 	}
