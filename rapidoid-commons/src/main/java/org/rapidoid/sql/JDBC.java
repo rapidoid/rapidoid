@@ -35,6 +35,10 @@ public class JDBC extends RapidoidThing {
 
 	private static volatile JdbcClient DEFAULT;
 
+	public static synchronized void reset() {
+		DEFAULT = null;
+	}
+
 	public static JdbcClient newApi() {
 		return new JdbcClient();
 	}

@@ -40,6 +40,7 @@ import org.rapidoid.log.LogLevel;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.setup.*;
 import org.rapidoid.sql.JDBC;
+import org.rapidoid.test.RapidoidIntegrationTest;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 import org.rapidoid.util.AppInfo;
@@ -77,6 +78,7 @@ public abstract class IntegrationTestCommons extends TestCommons {
 		Res.reset();
 		AppInfo.reset();
 		Conf.reset();
+		JDBC.reset();
 		Conf.setPath(getTestName());
 		Log.setLogLevel(LogLevel.INFO);
 		IoC.defaultContext().reset();
@@ -87,7 +89,7 @@ public abstract class IntegrationTestCommons extends TestCommons {
 		On.setup().listen();
 		On.setup().reload();
 
-		JDBC.execute("DROP ALL OBJECTS");
+		JDBC.execute(RapidoidIntegrationTest.HSQL_TRUNCATE);
 
 		System.out.println("--- SERVER STARTED ---");
 

@@ -1,13 +1,13 @@
 jdbc:
-  driver: org.h2.Driver
-  url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
+  driver: org.hsqldb.jdbc.JDBCDriver
+  url: jdbc:hsqldb:mem:public
   username: sa
   password: ''
 
 hibernate:
-  dialect: org.hibernate.dialect.H2Dialect
+  dialect: org.hibernate.dialect.HSQLDialect
   connection:
-    driver_class: org.h2.Driver
+    driver_class: org.hsqldb.jdbc.JDBCDriver
+    url: jdbc:hsqldb:mem:public
     username: sa
     password: ''
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1

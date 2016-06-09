@@ -42,7 +42,9 @@ public abstract class RapidoidIntegrationTest extends RapidoidTest {
 
 	public static final int TEST_PORT = 8888;
 
-	private static final String H2_DRIVER = "org.h2.Driver";
+	private static final String HSQL_DRIVER = "org.hsqldb.jdbc.JDBCDriver";
+
+	public static final String HSQL_TRUNCATE = "TRUNCATE SCHEMA PUBLIC RESTART IDENTITY AND COMMIT NO CHECK";
 
 	@Before
 	public void beforeTest() {
@@ -63,9 +65,9 @@ public abstract class RapidoidIntegrationTest extends RapidoidTest {
 
 	@After
 	public void afterTest() {
-		if (H2_DRIVER.equals(JDBC.defaultApi().driver())) {
+		if (HSQL_DRIVER.equals(JDBC.defaultApi().driver())) {
 			Log.info("Dropping all objects in the H2 database");
-			JDBC.execute("DROP ALL OBJECTS");
+			JDBC.execute(HSQL_TRUNCATE);
 		}
 	}
 

@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
+import org.rapidoid.http.IntegrationTestCommons;
 import org.rapidoid.sql.JDBC;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -32,7 +33,7 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class JDBCPoolC3P0Test extends TestCommons {
+public class JDBCPoolC3P0Test extends IntegrationTestCommons {
 
 	@Test(timeout = 30000)
 	public void testJDBCPoolC3P0() {
@@ -56,6 +57,7 @@ public class JDBCPoolC3P0Test extends TestCommons {
 
 	@Test(timeout = 30000)
 	public void testJDBCWithTextconfig() {
+		JDBC.reset();
 
 		Conf.JDBC.set("url", "jdbc:h2:mem:mydb");
 		Conf.JDBC.set("username", "sa");
