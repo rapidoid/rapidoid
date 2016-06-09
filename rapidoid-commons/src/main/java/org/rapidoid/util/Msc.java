@@ -149,7 +149,8 @@ public class Msc extends RapidoidThing implements Constants {
 		return output.toString();
 	}
 
-	public static void connect(String address, int port, F2<Void, BufferedReader, DataOutputStream> protocol) {
+	public static <T> T connect(String address, int port, F2<T, BufferedReader, DataOutputStream> protocol) {
+		T resp;
 		Socket socket = null;
 
 		try {
@@ -157,7 +158,7 @@ public class Msc extends RapidoidThing implements Constants {
 			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-			protocol.execute(in, out);
+			resp = protocol.execute(in, out);
 
 			socket.close();
 		} catch (Exception e) {
@@ -171,6 +172,8 @@ public class Msc extends RapidoidThing implements Constants {
 				}
 			}
 		}
+
+		return resp;
 	}
 
 	public static short bytesToShort(String s) {
@@ -316,9 +319,6 @@ public class Msc extends RapidoidThing implements Constants {
 			return URLEncoder.encode(value, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			throw U.rte(e);
-		} catch (IllegalArgumentException e){
-			// TODO : This Exception Maybe Needs A Better Resolution ( Though this one keeps things going and not blowing )
-			return value;
 		}
 	}
 
@@ -327,9 +327,14 @@ public class Msc extends RapidoidThing implements Constants {
 			return URLDecoder.decode(value, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			throw U.rte(e);
+		}
+	}
+
+	public static String urlDecodeOrKeepOriginal(String s) {
+		try {
+			return urlDecode(s);
 		} catch (IllegalArgumentException e) {
-			// TODO : This Exception Maybe Needs A Better Resolution ( Though this one keeps things going and not blowing )
-			return value;
+			return s;
 		}
 	}
 

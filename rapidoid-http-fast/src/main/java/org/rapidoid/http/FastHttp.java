@@ -145,7 +145,7 @@ public class FastHttp extends AbstractHttpProcessor {
 			String verb = xverb.str(buf);
 			String uri = xuri.str(buf);
 			String path = Msc.urlDecode(xpath.str(buf));
-			String query = Msc.urlDecode(xquery.str(buf));
+			String query = Msc.urlDecodeOrKeepOriginal(xquery.str(buf));
 			String segment = null;
 
 			if (handler != null) {

@@ -126,11 +126,11 @@ public class KeyValueRanges extends RapidoidThing {
 			String val = values[i].str(src.bytes());
 
 			if (urlDecodeKeys) {
-				key = Msc.urlDecode(key);
+				key = Msc.urlDecodeOrKeepOriginal(key);
 			}
 
 			if (urlDecodeVals) {
-				val = Msc.urlDecode(val);
+				val = Msc.urlDecodeOrKeepOriginal(val);
 			}
 
 			if (lowerCaseKeys) {
@@ -153,8 +153,8 @@ public class KeyValueRanges extends RapidoidThing {
 			String key = keys[i].str(src.bytes());
 			String val = values[i].str(src.bytes());
 
-			key = Msc.urlDecode(key);
-			val = Msc.urlDecode(val);
+			key = Msc.urlDecodeOrKeepOriginal(key);
+			val = Msc.urlDecodeOrKeepOriginal(val);
 
 			if (key.endsWith("[]")) {
 				key = Str.sub(key, 0, -2);
@@ -181,7 +181,7 @@ public class KeyValueRanges extends RapidoidThing {
 			byte[] val = values[i].bytes(src);
 
 			if (urlDecodeKeys) {
-				key = Msc.urlDecode(key);
+				key = Msc.urlDecodeOrKeepOriginal(key);
 			}
 
 			map.put(key, val);
