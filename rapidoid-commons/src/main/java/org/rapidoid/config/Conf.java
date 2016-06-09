@@ -61,6 +61,8 @@ public class Conf extends RapidoidThing {
 	public static final Config ON = section("on");
 	public static final Config ADMIN = section("admin");
 
+	public static final Config TOKEN = section("token");
+
 	private static volatile String[] args;
 
 	static {

@@ -6,6 +6,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.MediaType;
+import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
 import org.rapidoid.config.ConfigAlternatives;
 import org.rapidoid.ctx.Ctxs;
@@ -333,7 +334,9 @@ public class RespImpl extends RapidoidThing implements Resp {
 
 			if (success) {
 				Set<String> roles = rolesProvider.getRolesForUser(username);
-				long expiresOn = U.time() + 3600 * 1000; // FIXME customize
+
+				long ttl = Conf.TOKEN.entry("ttl").or(0);
+				long expiresOn = ttl > 0 ? U.time() + ttl : Long.MAX_VALUE;
 
 				Ctxs.ctx().setUser(new UserInfo(username, roles));
 

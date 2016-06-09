@@ -82,3 +82,6 @@ http:
   timeout: 30000
   timeoutResolution: 5000
   maxPipeline: 10
+
+token:
+  ttl: 0 # unlimited
