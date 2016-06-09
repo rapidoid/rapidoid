@@ -44,15 +44,15 @@ public class My extends RapidoidThing {
 	}
 
 	public static void reset() {
-		staticFilesPath = new String[]{"static", "public", "default/static", "default/public"};
-		errorHandler = new DefaultErrorHandler();
-		viewRenderer = new DefaultViewRenderer();
-		pageRenderer = new DefaultPageRenderer();
-		jsonResponseRenderer = new DefaultJsonResponseRenderer();
-		beanParameterFactory = new DefaultBeanParameterFactory();
-		loginProvider = new DefaultLoginProvider();
-		rolesProvider = new DefaultRolesProvider();
-		validator = new DefaultBeanValidator();
+		staticFilesPath = Defaults.staticFilesPath();
+		errorHandler = Defaults.errorHandler();
+		viewRenderer = Defaults.viewRenderer();
+		pageRenderer = Defaults.pageRenderer();
+		jsonResponseRenderer = Defaults.jsonResponseRenderer();
+		beanParameterFactory = Defaults.beanParameterFactory();
+		loginProvider = Defaults.loginProvider();
+		rolesProvider = Defaults.rolesProvider();
+		validator = Defaults.validator();
 	}
 
 	public static void staticFilesPath(String... staticFilesPath) {
@@ -126,4 +126,5 @@ public class My extends RapidoidThing {
 	public static ViewRenderer getViewRenderer() {
 		return viewRenderer;
 	}
+
 }

@@ -548,6 +548,7 @@ org.rapidoid.setup.App
 org.rapidoid.setup.AppBootstrap
 org.rapidoid.setup.AppRestartListener
 org.rapidoid.setup.AppRestartProcessor
+org.rapidoid.setup.Defaults
 org.rapidoid.setup.IGoodies
 org.rapidoid.setup.My
 org.rapidoid.setup.On
