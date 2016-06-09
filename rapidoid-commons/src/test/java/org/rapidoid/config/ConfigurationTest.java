@@ -74,7 +74,7 @@ public class ConfigurationTest extends AbstractCommonsTest {
 
 	@Test
 	public void testDefaultProfiles() {
-		eq(Env.profiles(), U.set("test", "default"));
+		eq(Env.profiles(), U.set("test", Env.PROFILE_DEFAULT));
 	}
 
 }

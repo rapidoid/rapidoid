@@ -25,13 +25,11 @@ import org.junit.Before;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Arr;
-import org.rapidoid.commons.Env;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.config.Conf;
 import org.rapidoid.crypto.Crypto;
 import org.rapidoid.fluent.Do;
 import org.rapidoid.io.IO;
-import org.rapidoid.io.Res;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.jpa.JPAUtil;
@@ -43,7 +41,7 @@ import org.rapidoid.sql.JDBC;
 import org.rapidoid.test.RapidoidIntegrationTest;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
-import org.rapidoid.util.AppInfo;
+import org.rapidoid.util.Msc;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -64,21 +62,14 @@ public abstract class IntegrationTestCommons extends TestCommons {
 
 	@Before
 	public void openContext() {
-		Log.setLogLevel(LogLevel.INFO);
+		Msc.reset();
 
 		ClasspathUtil.setRootPackage("some.nonexisting.app");
 
 		System.out.println("--- STARTING SERVER ---");
 
-		Env.profiles().clear();
-		Env.profiles().add("default");
-
 		My.reset();
 		JPAUtil.reset();
-		Res.reset();
-		AppInfo.reset();
-		Conf.reset();
-		JDBC.reset();
 		Conf.setPath(getTestName());
 		Log.setLogLevel(LogLevel.INFO);
 		IoC.defaultContext().reset();

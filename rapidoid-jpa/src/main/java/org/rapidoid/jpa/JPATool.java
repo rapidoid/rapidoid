@@ -82,6 +82,8 @@ public class JPATool extends RapidoidThing {
 	}
 
 	public <E> E update(final E entity) {
+		U.notNull(getIdentifier(entity), "entity identifier");
+
 		return transactional(new Callable<E>() {
 
 			@Override

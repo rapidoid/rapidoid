@@ -20,24 +20,15 @@ package org.rapidoid.render;
  */
 
 import org.junit.Before;
-import org.rapidoid.commons.Env;
-import org.rapidoid.config.Conf;
 import org.rapidoid.data.JSON;
-import org.rapidoid.io.Res;
-import org.rapidoid.log.Log;
-import org.rapidoid.log.LogLevel;
 import org.rapidoid.test.TestCommons;
+import org.rapidoid.util.Msc;
 
 public abstract class AbstractRenderTest extends TestCommons {
 
 	@Before
 	public void openContext() {
-		Res.reset();
-		Conf.reset();
-		Conf.setPath(getTestName());
-		Log.setLogLevel(LogLevel.INFO);
-		Env.profiles().clear();
-		Env.profiles().add("default");
+		Msc.reset();
 	}
 
 	protected void verify(String name, Object actual) {

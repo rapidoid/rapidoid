@@ -33,7 +33,9 @@ import java.util.Set;
 @Since("5.1.0")
 public class Env extends RapidoidThing {
 
-	private static final Set<String> PROFILES = Coll.synchronizedSet("default");
+	public static final String PROFILE_DEFAULT = "default";
+
+	private static final Set<String> PROFILES = Coll.synchronizedSet(PROFILE_DEFAULT);
 
 	public static boolean production() {
 		return Conf.ROOT.is("production") || Conf.ROOT.is("prod") || profile("production") || profile("prod");

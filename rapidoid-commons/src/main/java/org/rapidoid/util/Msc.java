@@ -13,6 +13,7 @@ import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Env;
 import org.rapidoid.commons.Str;
 import org.rapidoid.config.Conf;
+import org.rapidoid.crypto.Crypto;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.insight.Insights;
@@ -20,6 +21,8 @@ import org.rapidoid.io.IO;
 import org.rapidoid.io.Res;
 import org.rapidoid.lambda.*;
 import org.rapidoid.log.Log;
+import org.rapidoid.log.LogLevel;
+import org.rapidoid.sql.JDBC;
 import org.rapidoid.u.U;
 import org.rapidoid.validation.InvalidData;
 import org.rapidoid.wrap.BoolWrap;
@@ -1010,6 +1013,19 @@ public class Msc extends RapidoidThing implements Constants {
 		Thread thread = new Thread(runnable);
 		thread.start();
 		return thread;
+	}
+
+	public static void reset() {
+		Log.setLogLevel(LogLevel.INFO);
+
+		Env.profiles().clear();
+		Env.profiles().add(Env.PROFILE_DEFAULT);
+
+		Crypto.reset();
+		Res.reset();
+		AppInfo.reset();
+		Conf.reset();
+		JDBC.reset();
 	}
 
 }

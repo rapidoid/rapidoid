@@ -25,14 +25,10 @@ import org.junit.Before;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Arr;
-import org.rapidoid.commons.Env;
 import org.rapidoid.config.Conf;
 import org.rapidoid.io.IO;
-import org.rapidoid.io.Res;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.jpa.JPAUtil;
-import org.rapidoid.log.Log;
-import org.rapidoid.log.LogLevel;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.setup.Admin;
 import org.rapidoid.setup.App;
@@ -40,7 +36,7 @@ import org.rapidoid.setup.On;
 import org.rapidoid.setup.OnChanges;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
-import org.rapidoid.util.AppInfo;
+import org.rapidoid.util.Msc;
 
 import java.util.List;
 import java.util.Map;
@@ -56,21 +52,14 @@ public abstract class HttpTestCommons extends TestCommons {
 
 	@Before
 	public void openContext() {
-		Log.setLogLevel(LogLevel.INFO);
+		Msc.reset();
 
 		ClasspathUtil.setRootPackage("some.nonexisting.app");
 
 		System.out.println("--- STARTING SERVER ---");
 
-		Env.profiles().clear();
-		Env.profiles().add("default");
-
 		JPAUtil.reset();
-		Res.reset();
-		AppInfo.reset();
-		Conf.reset();
 		Conf.setPath(getTestName());
-		Log.setLogLevel(LogLevel.INFO);
 		IoC.defaultContext().reset();
 
 		App.resetGlobalState();

@@ -108,7 +108,7 @@ public class Conf extends RapidoidThing {
 			reload();
 		} else {
 			if (Env.profiles().isEmpty()) {
-				Env.profiles().add("default");
+				Env.profiles().add(Env.PROFILE_DEFAULT);
 				Log.info("No profiles were specified, configuring the 'default' profile", "!profiles", Env.profiles());
 				reload();
 			}
