@@ -9,6 +9,7 @@ import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
 import java.io.File;
+import java.lang.annotation.Annotation;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collection;
@@ -120,11 +121,12 @@ public class ClassReloader extends ClassLoader {
 			return cls;
 		}
 
-		if (names.contains(classname) || (!Cls.isRapidoidClass(classname) && !Cls.isJREClass(classname)
-				&& !isEntity(classname) && findOnClasspath(classname) != null)) {
+		if (shouldReload(classname)) {
 
 			try {
-				return findClass(classname);
+				Class<?> reloaded = findClass(classname);
+
+				return !reloadVeto(reloaded) ? reloaded : super.loadClass(classname);
 
 			} catch (ClassNotFoundException e) {
 				Class<?> fallbackClass = super.loadClass(classname);
@@ -135,6 +137,24 @@ public class ClassReloader extends ClassLoader {
 		} else {
 			return super.loadClass(classname);
 		}
+	}
+
+	private boolean reloadVeto(Class<?> clazz) {
+		for (Annotation annotation : clazz.getAnnotations()) {
+			String ann = annotation.annotationType().getName();
+
+			// reloading Hibernate or Morphia entity will cause class cast exception
+			if (ann.startsWith("javax.persistence.") || ann.startsWith("org.mongodb.morphia.annotations.")) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private boolean shouldReload(String classname) {
+		return names.contains(classname) || (!Cls.isRapidoidClass(classname) && !Cls.isJREClass(classname)
+				&& !isEntity(classname) && findOnClasspath(classname) != null);
 	}
 
 	private boolean isEntity(String classname) {
