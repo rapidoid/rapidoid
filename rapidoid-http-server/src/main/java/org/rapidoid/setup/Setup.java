@@ -156,10 +156,10 @@ public class Setup extends RapidoidThing implements Constants {
 		}
 
 		synchronized (this) {
-			if (isAdmin() && ON.http != null && appAndAdminOnSameServer()) {
+			if (isAdminAndSameAsApp() && ON.http != null) {
 				return ON.http;
 
-			} else if (isApp() && ADMIN.http != null && appAndAdminOnSameServer()) {
+			} else if (isAppAndSameAsAdmin() && ADMIN.http != null) {
 				return ADMIN.http;
 			}
 
@@ -205,15 +205,23 @@ public class Setup extends RapidoidThing implements Constants {
 	}
 
 	private boolean delegateAdminToApp() {
-		return isAdmin() && ON.server != null && appAndAdminOnSameServer();
+		return isAdminAndSameAsApp() && ON.server != null;
 	}
 
 	private boolean delegateAppToAdmin() {
-		return isApp() && ADMIN.server != null && appAndAdminOnSameServer();
+		return isAppAndSameAsAdmin() && ADMIN.server != null;
 	}
 
 	public static boolean appAndAdminOnSameServer() {
 		return U.eq(ADMIN.calcPort(), ON.calcPort());
+	}
+
+	public boolean isAppAndSameAsAdmin() {
+		return isApp() && appAndAdminOnSameServer();
+	}
+
+	public boolean isAdminAndSameAsApp() {
+		return isAdmin() && appAndAdminOnSameServer();
 	}
 
 	public boolean isAdmin() {

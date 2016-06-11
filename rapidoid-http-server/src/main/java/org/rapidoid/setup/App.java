@@ -211,8 +211,10 @@ public class App extends RapidoidThing {
 		return beansCache.get(U.list(packages));
 	}
 
-	public static void scan(String... packages) {
-		beans(App.findBeans(packages).toArray());
+	public static boolean scan(String... packages) {
+		List<Class<?>> beans = App.findBeans(packages);
+		beans(beans.toArray());
+		return !beans.isEmpty();
 	}
 
 	public static void beans(Object... beans) {
