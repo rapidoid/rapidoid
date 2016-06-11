@@ -95,7 +95,7 @@ public class HttpHandlers extends RapidoidThing {
 		}
 	}
 
-	public static void register(FastHttp http, String verb, String path, RouteOptions options, byte[] response) {
+	public static void registerStatic(FastHttp http, String verb, String path, RouteOptions options, byte[] response) {
 		http.on(verb, path, new StaticHttpHandler(options, response));
 	}
 

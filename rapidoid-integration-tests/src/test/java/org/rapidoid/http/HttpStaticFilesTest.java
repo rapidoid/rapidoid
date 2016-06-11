@@ -33,7 +33,7 @@ public class HttpStaticFilesTest extends IntegrationTestCommons {
 	public void serveStaticFiles() {
 		On.custom().staticFilesPath("static1", "non-existing-location", "static2");
 
-		On.get("/c").json("override");
+		On.get("/c").staticJson("override".getBytes());
 
 		onlyGet("/"); // home page
 		onlyGet("/index"); // home page

@@ -5,7 +5,10 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.commons.MediaType;
-import org.rapidoid.http.*;
+import org.rapidoid.http.FastHttp;
+import org.rapidoid.http.HttpWrapper;
+import org.rapidoid.http.ReqHandler;
+import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.handler.HttpHandlers;
 import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.lambda.*;
@@ -57,11 +60,11 @@ public class OnRoute extends RapidoidThing {
 	/* GENERIC */
 
 	public void serve(String response) {
-		html(response.getBytes());
+		HttpHandlers.registerPredefined(http, verb, path, options, response);
 	}
 
 	public void serve(byte[] response) {
-		HttpHandlers.register(http, verb, path, options, response);
+		HttpHandlers.registerPredefined(http, verb, path, options, response);
 	}
 
 	public <T> void serve(Callable<T> handler) {
@@ -110,12 +113,16 @@ public class OnRoute extends RapidoidThing {
 
 	/* HTML */
 
+	public void staticHtml(byte[] response) {
+		HttpHandlers.registerStatic(http, verb, path, htmlOpts(), response);
+	}
+
 	public void html(String response) {
-		html(response.getBytes());
+		HttpHandlers.registerPredefined(http, verb, path, htmlOpts(), response);
 	}
 
 	public void html(byte[] response) {
-		HttpHandlers.register(http, verb, path, htmlOpts(), response);
+		HttpHandlers.registerPredefined(http, verb, path, htmlOpts(), response);
 	}
 
 	public <T> void html(Callable<T> handler) {
@@ -164,12 +171,16 @@ public class OnRoute extends RapidoidThing {
 
 	/* JSON */
 
+	public void staticJson(byte[] response) {
+		HttpHandlers.registerStatic(http, verb, path, jsonOpts(), response);
+	}
+
 	public void json(String response) {
-		json(response.getBytes());
+		HttpHandlers.registerPredefined(http, verb, path, jsonOpts(), response);
 	}
 
 	public void json(byte[] response) {
-		HttpHandlers.register(http, verb, path, jsonOpts(), response);
+		HttpHandlers.registerPredefined(http, verb, path, jsonOpts(), response);
 	}
 
 	public <T> void json(Callable<T> handler) {
@@ -218,12 +229,16 @@ public class OnRoute extends RapidoidThing {
 
 	/* PLAIN */
 
+	public void staticPlain(byte[] response) {
+		HttpHandlers.registerStatic(http, verb, path, plainOpts(), response);
+	}
+
 	public void plain(String response) {
-		plain(response.getBytes());
+		HttpHandlers.registerPredefined(http, verb, path, plainOpts(), response);
 	}
 
 	public void plain(byte[] response) {
-		HttpHandlers.register(http, verb, path, plainOpts(), response);
+		HttpHandlers.registerPredefined(http, verb, path, plainOpts(), response);
 	}
 
 	public <T> void plain(Callable<T> handler) {
