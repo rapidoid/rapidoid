@@ -80,7 +80,12 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 
 	@Override
 	public synchronized void reset() {
-		Log.info("Resetting IoC context", "context", this);
+		if (!state.isEmpty()) {
+			Log.info("Resetting IoC context", "context", this);
+		} else {
+			Log.debug("Resetting IoC context", "context", this);
+		}
+
 		state.reset();
 		metadata.clear();
 		beanProvider = null;

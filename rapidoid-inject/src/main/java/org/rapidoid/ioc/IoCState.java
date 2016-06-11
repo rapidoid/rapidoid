@@ -50,7 +50,7 @@ public class IoCState extends RapidoidThing {
 		providersByType.clear();
 	}
 
-	public IoCState copy() {
+	public synchronized IoCState copy() {
 		IoCState copy = new IoCState();
 
 		Deep.copy(copy.providedClasses, this.providedClasses, null);
@@ -66,6 +66,10 @@ public class IoCState extends RapidoidThing {
 				"Provided instances", Deep.copyOf(providedInstances, Msc.TRANSFORM_TO_SIMPLE_CLASS_NAME),
 				"Managed instances", Deep.copyOf(instances, Msc.TRANSFORM_TO_SIMPLE_CLASS_NAME),
 				"By type", Deep.copyOf(providersByType, Msc.TRANSFORM_TO_SIMPLE_CLASS_NAME));
+	}
+
+	public synchronized boolean isEmpty() {
+		return providedClasses.isEmpty() && providedInstances.isEmpty() && providersByType.isEmpty() && instances.isEmpty();
 	}
 
 }
