@@ -94,14 +94,14 @@ public class ConfigUtil extends RapidoidThing {
 		return keys;
 	}
 
-	public static synchronized void load(String filename, Config config) {
+	static synchronized void load(String filename, Config config, boolean overridenByEnv) {
 		byte[] bytes = tryToLoad(filename, config);
 
 		if (bytes != null) {
 			if (bytes.length > 0) {
-				Map<String, Object> configData = YAML_PARSER.parse(bytes);
+				Map<String, Object> configData = U.safe(YAML_PARSER.parse(bytes));
 				Log.debug("Loading configuration file", "filename", filename);
-				config.update(U.safe(configData));
+				config.update(configData, overridenByEnv);
 			}
 		} else {
 			Log.trace("Couldn't find configuration file", "filename", filename);

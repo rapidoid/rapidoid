@@ -108,6 +108,7 @@ public class Conf extends RapidoidThing {
 			Coll.assign(Env.profiles(), profiles.split("\\s*\\,\\s*"));
 			Log.info("Configuring active profiles", "!profiles", Env.profiles());
 			reload();
+
 		} else {
 			if (Env.profiles().isEmpty()) {
 				Env.profiles().add(Env.PROFILE_DEFAULT);
@@ -123,59 +124,59 @@ public class Conf extends RapidoidThing {
 		reload();
 	}
 
-	public static boolean micro() {
+	public static synchronized boolean micro() {
 		return ROOT.is("micro");
 	}
 
-	public static void reset() {
+	public static synchronized void reset() {
 		ROOT.clear();
 		args = new String[0];
 	}
 
-	public static Config section(String name) {
+	public static synchronized Config section(String name) {
 		return SECTIONS.get(name);
 	}
 
 	private static Config createSection(String name) {
 		Config config = ROOT.sub(name);
-		ConfigUtil.load(filename(config.keys()), config);
+		ConfigUtil.load(filename(config.keys()), config, false);
 		return config;
 	}
 
-	public static Config section(Class<?> clazz) {
+	public static synchronized Config section(Class<?> clazz) {
 		return section(clazz.getSimpleName());
 	}
 
-	public static int cpus() {
+	public static synchronized int cpus() {
 		return ROOT.entry("cpus").or(Runtime.getRuntime().availableProcessors());
 	}
 
-	public static void setPath(String path) {
+	public static synchronized void setPath(String path) {
 		Conf.path = path;
 		reload();
 	}
 
-	public static void reload() {
+	public static synchronized void reload() {
 		List<List<String>> detached = ConfigUtil.untrack();
 
 		reset();
 
-		ConfigUtil.load(Msc.path("default", "config.y?ml"), ROOT);
+		ConfigUtil.load(Msc.path("default", "config.y?ml"), ROOT, true);
 
 		for (String profile : Env.profiles()) {
-			ConfigUtil.load(Msc.path("default", U.frmt("profile-%s.y?ml", profile)), ROOT);
+			ConfigUtil.load(Msc.path("default", U.frmt("profile-%s.y?ml", profile)), ROOT, true);
 		}
 
-		ConfigUtil.load(Msc.path(path, "application.y?ml"), ROOT);
-		ConfigUtil.load(Msc.path(path, "config.y?ml"), ROOT);
+		ConfigUtil.load(Msc.path(path, "application.y?ml"), ROOT, false);
+		ConfigUtil.load(Msc.path(path, "config.y?ml"), ROOT, false);
 
 		for (String profile : Env.profiles()) {
-			ConfigUtil.load(Msc.path(path, U.frmt("application-%s.y?ml", profile)), ROOT);
-			ConfigUtil.load(Msc.path(path, U.frmt("profile-%s.y?ml", profile)), ROOT);
+			ConfigUtil.load(Msc.path(path, U.frmt("application-%s.y?ml", profile)), ROOT, false);
+			ConfigUtil.load(Msc.path(path, U.frmt("profile-%s.y?ml", profile)), ROOT, false);
 		}
 
 		for (Config sub : SECTIONS.values()) {
-			ConfigUtil.load(filename(sub.keys()), sub);
+			ConfigUtil.load(filename(sub.keys()), sub, false);
 		}
 
 		for (List<String> keys : detached) {
@@ -200,7 +201,7 @@ public class Conf extends RapidoidThing {
 		return Msc.path(path, configName + ".y?ml");
 	}
 
-	public static String[] getArgs() {
+	public static synchronized String[] getArgs() {
 		return args;
 	}
 }

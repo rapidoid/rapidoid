@@ -238,6 +238,11 @@ public class Config extends RapidoidThing implements ToMap<String, Object> {
 	}
 
 	public void update(Map<String, ?> entries) {
+		update(entries, false);
+	}
+
+	@SuppressWarnings("unchecked")
+	public void update(Map<String, ?> entries, boolean overridenByEnv) {
 		synchronized (properties) {
 			Map<String, Object> conf = asMap();
 
@@ -246,8 +251,13 @@ public class Config extends RapidoidThing implements ToMap<String, Object> {
 				Object value = e.getValue();
 
 				if (value instanceof Map<?, ?>) {
-					sub(name).update((Map<String, ?>) value);
+					sub(name).update((Map<String, ?>) value, overridenByEnv);
+
 				} else {
+					if (overridenByEnv) {
+						value = U.or(global(name), value);
+					}
+
 					conf.put(name, value);
 				}
 			}
