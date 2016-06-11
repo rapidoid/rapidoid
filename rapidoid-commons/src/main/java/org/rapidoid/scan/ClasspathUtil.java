@@ -205,7 +205,8 @@ public class ClasspathUtil extends RapidoidThing {
 	}
 
 	private static boolean shouldScanJAR(String jar) {
-		return !hasAppJar() || U.eq(jar, appJar);
+		String filename = new File(jar).getName();
+		return !filename.equalsIgnoreCase("rapidoid.jar") && (!hasAppJar() || U.eq(jar, appJar));
 	}
 
 	private static void getClassesFromDir(Collection<String> classes, File root, File dir, String pkg, Pattern regex,
