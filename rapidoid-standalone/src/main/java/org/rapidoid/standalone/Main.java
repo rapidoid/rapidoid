@@ -28,6 +28,7 @@ import org.rapidoid.http.HttpVerb;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.Resp;
+import org.rapidoid.setup.Admin;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
@@ -40,13 +41,21 @@ public class Main extends RapidoidThing {
 		App.bootstrap(args).jpa().adminCenter();
 
 		if (!On.setup().routes().hasRouteOrResource(HttpVerb.GET, "/")) {
-			On.get("/").view("_welcome").mvc(new ReqRespHandler() {
-				@Override
-				public Object execute(Req req, Resp resp) throws Exception {
-					return U.map("adminUrl", ReqInfoUtils.adminUrl());
-				}
-			});
+			On.get("/").view("_welcome").mvc(welcome());
 		}
+
+		if (!Admin.setup().routes().hasRouteOrResource(HttpVerb.GET, "/")) {
+			Admin.get("/").view("_welcome").mvc(welcome());
+		}
+	}
+
+	private static ReqRespHandler welcome() {
+		return new ReqRespHandler() {
+			@Override
+			public Object execute(Req req, Resp resp) throws Exception {
+				return U.map("adminUrl", ReqInfoUtils.adminUrl());
+			}
+		};
 	}
 
 }
