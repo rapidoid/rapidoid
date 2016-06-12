@@ -4,6 +4,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.Env;
 import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogbackUtil;
@@ -45,7 +46,8 @@ public class RapidoidInitializer extends RapidoidThing {
 			String proc = ManagementFactory.getRuntimeMXBean().getName();
 			String dir = System.getProperty("user.dir");
 
-			Log.info("!Starting Rapidoid...", "version", ver, "process", proc, "java", Msc.javaVersion(), "dir", dir);
+			Log.info("!Starting Rapidoid...", "version", ver, "!mode", Env.mode(), "!profiles", Env.profiles(),
+					"process", proc, "java", Msc.javaVersion(), "dir", dir);
 
 			if (Msc.hasLogback()) {
 				LogbackUtil.setupLogger();

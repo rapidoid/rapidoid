@@ -73,4 +73,7 @@ public class Env extends RapidoidThing {
 		return false;
 	}
 
+	public static String mode() {
+		return dev() ? "dev" : test() ? "test" : "production";
+	}
 }
