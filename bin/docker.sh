@@ -2,9 +2,11 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-echo Building version $1
-mvn clean install -DskipTests=true -Pfull
-cp rapidoid.jar docker/
+echo Building rapidoid/rapidoid:snapshot
+bin/quick-install.sh
+cp rapidoid-standalone/target/rapidoid-standalone-*-SNAPSHOT.jar docker/rapidoid.jar
 cd docker
 ls -l rapidoid.jar
-sudo docker build -t rapidoid/rapidoid:$1 .
+docker build -t rapidoid/rapidoid:snapshot .
+docker rmi $(docker images -f "dangling=true" -q)
+docker images -a
