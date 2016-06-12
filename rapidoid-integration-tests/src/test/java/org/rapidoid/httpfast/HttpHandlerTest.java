@@ -28,6 +28,7 @@ import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.IntegrationTestCommons;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.customize.Customization;
+import org.rapidoid.http.impl.HttpRoutesImpl;
 import org.rapidoid.net.Server;
 import org.rapidoid.u.U;
 
@@ -37,11 +38,13 @@ public class HttpHandlerTest extends IntegrationTestCommons {
 
 	@Test
 	public void testFastHttpHandler() {
-		FastHttp http = new FastHttp(new Customization("example", new Config(), new Config()));
+		Customization customization = new Customization("example", new Config(), new Config());
+		HttpRoutesImpl routes = new HttpRoutesImpl(customization);
+		FastHttp http = new FastHttp(routes);
 
-		http.on("get", "/abc", Req::data);
+		routes.on("get", "/abc", Req::data);
 
-		http.on("get,post", "/xyz", req -> U.list(req.uri(), req.data()));
+		routes.on("get,post", "/xyz", req -> U.list(req.uri(), req.data()));
 
 		Server server = http.listen(7779);
 

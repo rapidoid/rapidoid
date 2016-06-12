@@ -49,10 +49,10 @@ public class ResponseRenderer extends RapidoidThing {
 			resp.result(result);
 		}
 
-		ViewRenderer viewRenderer = req.http().custom().viewRenderer();
+		ViewRenderer viewRenderer = req.routes().custom().viewRenderer();
 		U.must(viewRenderer != null, "A view renderer wasn't configured!");
 
-		PageRenderer pageRenderer = req.http().custom().pageRenderer();
+		PageRenderer pageRenderer = req.routes().custom().pageRenderer();
 		U.must(pageRenderer != null, "A page renderer wasn't configured!");
 
 		boolean rendered;

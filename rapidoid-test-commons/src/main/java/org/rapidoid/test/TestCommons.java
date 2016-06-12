@@ -88,7 +88,7 @@ public abstract class TestCommons {
 		}
 	}
 
-	protected void registerError(AssertionError e) {
+	protected void registerError(Throwable e) {
 		hasError = true;
 		e.printStackTrace();
 	}

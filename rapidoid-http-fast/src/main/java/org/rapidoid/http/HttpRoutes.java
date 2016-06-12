@@ -52,4 +52,7 @@ public interface HttpRoutes {
 	Customization custom();
 
 	Route find(HttpVerb verb, String path);
+
+	boolean hasRouteOrResource(HttpVerb verb, String uri);
+
 }

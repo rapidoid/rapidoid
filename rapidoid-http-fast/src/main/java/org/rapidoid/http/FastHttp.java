@@ -51,28 +51,18 @@ public class FastHttp extends AbstractHttpProcessor {
 
 	private static final HttpParser HTTP_PARSER = new HttpParser();
 
-	private final HttpRoutesImpl routes;
+	private final HttpRoutesImpl[] routes;
 	private final Customization customization;
 
 	private final Map<String, Object> attributes = Coll.synchronizedMap();
 	private final Map<String, Map<String, Serializable>> sessions = Coll.mapOfMaps();
 
-	public FastHttp(HttpRoutesImpl routes) {
+	public FastHttp(HttpRoutesImpl... routes) {
 		super(null);
+		U.must(routes.length > 0, "Routes are missing!");
+
 		this.routes = routes;
-		this.customization = routes.custom();
-	}
-
-	public FastHttp(Customization customization) {
-		this(new HttpRoutesImpl(customization));
-	}
-
-	public synchronized void on(String verb, String path, HttpHandler handler) {
-		routes.on(verb, path, handler);
-	}
-
-	public synchronized void on(String verb, String path, ReqHandler handler) {
-		routes.on(verb, path, handler);
+		this.customization = routes[0].custom();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -94,7 +84,27 @@ public class FastHttp extends AbstractHttpProcessor {
 		}
 
 		HttpStatus status = HttpStatus.NOT_FOUND;
-		HandlerMatch match = routes.findHandler(buf, isGet, xverb, xpath);
+
+		HttpRoutesImpl route = null;
+		HandlerMatch match = null;
+
+		for (HttpRoutesImpl r : routes) {
+			match = r.findHandler(buf, isGet, xverb, xpath);
+			if (match != null) {
+				route = r;
+				break;
+			}
+		}
+
+		if (match == null && isGet) {
+			for (HttpRoutesImpl r : routes) {
+				match = r.staticResourcesHandler();
+				if (match != null) {
+					route = r;
+					break;
+				}
+			}
+		}
 
 		HttpHandler handler = match != null ? match.getHandler() : null;
 		boolean noReq = (handler != null && !handler.needsParams());
@@ -160,7 +170,7 @@ public class FastHttp extends AbstractHttpProcessor {
 			cookies = Collections.synchronizedMap(cookies);
 
 			req = new ReqImpl(this, channel, isKeepAlive, verb, uri, path, query, body, params, headers, cookies,
-					posted, files, contentType, segment, routes);
+					posted, files, contentType, segment, route);
 
 			if (!attributes.isEmpty()) {
 				req.attrs().putAll(attributes);
@@ -201,7 +211,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		} else {
 			Log.error("Low-level HTTP handler error!", e);
 			HttpIO.startResponse(channel, 500, isKeepAlive, contentType);
-			byte[] bytes = HttpUtils.responseToBytes("Internal Server Error!", contentType, custom().jsonResponseRenderer());
+			byte[] bytes = HttpUtils.responseToBytes("Internal Server Error!", contentType, routes()[0].custom().jsonResponseRenderer());
 			HttpIO.writeContentLengthAndBody(channel, bytes);
 			HttpIO.done(channel, isKeepAlive);
 		}
@@ -221,37 +231,53 @@ public class FastHttp extends AbstractHttpProcessor {
 		return null; // OK, no error
 	}
 
-	private HttpStatus tryGenericHandlers(Channel channel, boolean isKeepAlive, Req req) {
-		for (HttpHandler handler : routes.genericHandlers()) {
+	private HttpStatus tryGenericHandlers(Channel channel, boolean isKeepAlive, ReqImpl req) {
+		for (HttpRoutesImpl route : routes) {
 
-			HttpStatus status = handler.handle(channel, isKeepAlive, req, null);
+			// trying with different routes
+			req.routes(route);
 
-			if (status != HttpStatus.NOT_FOUND) {
-				return status;
+			for (HttpHandler handler : route.genericHandlers()) {
+				HttpStatus status = handler.handle(channel, isKeepAlive, req, null);
+
+				if (status != HttpStatus.NOT_FOUND) {
+					return status;
+				}
 			}
 		}
+
+		req.routes(null);
 
 		return HttpStatus.NOT_FOUND;
 	}
 
 	public synchronized void resetConfig() {
-		routes.reset();
-		customization.reset();
+		for (HttpRoutesImpl route : routes) {
+			route.reset();
+			route.custom().reset();
+		}
 	}
 
 	public void notFound(Channel ctx, boolean isKeepAlive, HttpHandler fromHandler, Req req) {
-		List<HttpHandler> genericHandlers = routes.genericHandlers();
-		int count = genericHandlers.size();
-
 		HttpStatus status = HttpStatus.NOT_FOUND;
 
-		for (int i = 0; i < count; i++) {
-			HttpHandler handler = genericHandlers.get(i);
-			if (handler == fromHandler) {
-				if (i < count - 1) {
-					HttpHandler nextHandler = genericHandlers.get(i + 1);
-					status = nextHandler.handle(ctx, isKeepAlive, req, null);
-					break;
+		tryRoutes:
+		for (HttpRoutesImpl route : routes) {
+			List<HttpHandler> genericHandlers = route.genericHandlers();
+			int count = genericHandlers.size();
+
+			for (int i = 0; i < count; i++) {
+				HttpHandler handler = genericHandlers.get(i);
+				if (handler == fromHandler) {
+					// a generic handler returned "not found" -> go to the next one
+					if (i < count - 1) {
+						// trying with different routes
+						((ReqImpl) req).routes(route);
+
+						HttpHandler nextHandler = genericHandlers.get(i + 1);
+						status = nextHandler.handle(ctx, isKeepAlive, req, null);
+						break tryRoutes;
+					}
 				}
 			}
 		}
@@ -270,12 +296,15 @@ public class FastHttp extends AbstractHttpProcessor {
 		return sessions.get(sessionId);
 	}
 
-	public Customization custom() {
-		return customization;
+	public HttpRoutesImpl[] routes() {
+		return routes;
 	}
 
-	public HttpRoutesImpl getRoutes() {
-		return routes;
+	public boolean hasRouteOrResource(HttpVerb verb, String uri) {
+		for (HttpRoutesImpl route : routes) {
+			if (route.hasRouteOrResource(verb, uri)) return true;
+		}
+		return false;
 	}
 
 }

@@ -23,6 +23,7 @@ package org.rapidoid.http.handler.optimized;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.FastHttp;
+import org.rapidoid.http.HttpRoutes;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
 import org.rapidoid.http.impl.RouteOptions;
@@ -37,8 +38,8 @@ public class DelegatingParamsAwareReqRespHandler extends AbstractAsyncHttpHandle
 
 	private final TwoParamLambda<Object, Req, Resp> handler;
 
-	public DelegatingParamsAwareReqRespHandler(FastHttp http, RouteOptions options, TwoParamLambda<?, ?, ?> handler) {
-		super(http, options);
+	public DelegatingParamsAwareReqRespHandler(FastHttp http, HttpRoutes routes, RouteOptions options, TwoParamLambda<?, ?, ?> handler) {
+		super(http, routes, options);
 		this.handler = U.cast(handler);
 	}
 

@@ -21,6 +21,7 @@ import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.handler.HttpHandler;
 import org.rapidoid.http.handler.ParamsAwareReqHandler;
 import org.rapidoid.http.handler.StaticResourcesHandler;
+import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.AnsiColor;
@@ -88,7 +89,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 
 	final List<HttpHandler> genericHandlers = Coll.synchronizedList();
 
-	volatile HttpHandler staticResourcesHandler;
+	private volatile HttpHandler staticResourcesHandler;
 
 	private final Set<Route> routes = Coll.synchronizedSet();
 
@@ -307,10 +308,6 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 					handler = matchByPattern(paternGetHandlers, buf.get(path));
 				}
 
-				if (handler == null) {
-					handler = staticResourcesHandler;
-				}
-
 				return handler;
 			}
 
@@ -406,7 +403,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 	}
 
 	public HttpHandler handler(ReqHandler reqHandler, RouteOptions options) {
-		return new ParamsAwareReqHandler(null, options, reqHandler);
+		return new ParamsAwareReqHandler(null, null, options, reqHandler);
 	}
 
 	@Override
@@ -528,7 +525,26 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 		return null;
 	}
 
+	@Override
+	public boolean hasRouteOrResource(HttpVerb verb, String uri) {
+		if (verb == HttpVerb.GET) {
+			String[] staticFilesLocations = custom().staticFilesPath();
+			if (U.notEmpty(staticFilesLocations)) {
+				String filename = Str.triml(uri, '/');
+				if (filename.isEmpty()) filename = "index.html";
+				if (Res.from(filename, staticFilesLocations).exists()) return true;
+			}
+		}
+
+		return find(verb, uri) != null;
+	}
+
 	public List<HttpHandler> genericHandlers() {
 		return genericHandlers;
 	}
+
+	public HttpHandler staticResourcesHandler() {
+		return staticResourcesHandler;
+	}
+
 }

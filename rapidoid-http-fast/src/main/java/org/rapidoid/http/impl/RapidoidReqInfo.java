@@ -124,7 +124,7 @@ public class RapidoidReqInfo extends AbstractReqInfo {
 	@Override
 	public boolean hasRoute(HttpVerb verb, String uri) {
 		ReqImpl reqq = (ReqImpl) req();
-		return reqq.hasRoute(verb, uri);
+		return reqq.http().hasRouteOrResource(verb, uri);
 	}
 
 	private Req req() {

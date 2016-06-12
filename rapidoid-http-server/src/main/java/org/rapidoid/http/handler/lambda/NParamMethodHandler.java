@@ -5,11 +5,12 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.http.FastHttp;
+import org.rapidoid.http.HttpRoutes;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.http.handler.AbstractAsyncHttpHandler;
 import org.rapidoid.http.handler.param.ParamRetriever;
 import org.rapidoid.http.handler.param.ParamRetrievers;
+import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.lambda.NParamLambda;
 
 import java.lang.annotation.Annotation;
@@ -45,8 +46,8 @@ public abstract class NParamMethodHandler extends AbstractAsyncHttpHandler {
 
 	private final String paramsAsStr;
 
-	public NParamMethodHandler(FastHttp http, RouteOptions options, Method method, NParamLambda lambda) {
-		super(http, options);
+	public NParamMethodHandler(FastHttp http, HttpRoutes routes, RouteOptions options, Method method, NParamLambda lambda) {
+		super(http, routes, options);
 		this.method = method;
 
 		Class<?>[] paramTypes = method.getParameterTypes();
@@ -65,7 +66,7 @@ public abstract class NParamMethodHandler extends AbstractAsyncHttpHandler {
 
 		String par = "";
 		for (int i = 0; i < paramRetrievers.length; i++) {
-			paramRetrievers[i] = ParamRetrievers.createParamRetriever(http.custom(), paramTypes[i], paramNames[i], annotations[i]);
+			paramRetrievers[i] = ParamRetrievers.createParamRetriever(routes.custom(), paramTypes[i], paramNames[i], annotations[i]);
 			if (i > 0) {
 				par += ", ";
 			}

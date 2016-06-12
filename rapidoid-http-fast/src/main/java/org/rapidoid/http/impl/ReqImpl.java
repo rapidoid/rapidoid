@@ -8,8 +8,8 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.commons.Str;
 import org.rapidoid.http.*;
+import org.rapidoid.http.customize.BeanParameterFactory;
 import org.rapidoid.http.customize.Customization;
-import org.rapidoid.io.Res;
 import org.rapidoid.io.Upload;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.abstracts.Channel;
@@ -100,7 +100,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	private final MediaType defaultContentType;
 
-	private final HttpRoutesImpl routes;
+	private volatile HttpRoutesImpl routes;
 
 	public ReqImpl(FastHttp http, Channel channel, boolean isKeepAlive, String verb, String uri, String path,
 	               String query, byte[] body, Map<String, String> params, Map<String, String> headers,
@@ -335,10 +335,13 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		return beanFrom(beanType, data());
 	}
 
+	@SuppressWarnings("unchecked")
 	private <T> T beanFrom(Class<T> beanType, Map<String, ?> properties) {
 		String paramName = Str.uncapitalized(beanType.getSimpleName());
+		BeanParameterFactory beanParameterFactory = custom().beanParameterFactory();
+
 		try {
-			return (T) http.custom().beanParameterFactory().getParamValue(this, beanType, paramName, (Map<String, Object>) properties);
+			return (T) beanParameterFactory.getParamValue(this, beanType, paramName, (Map<String, Object>) properties);
 		} catch (Exception e) {
 			throw new RuntimeException("Couldn't instantiate a bean of type: " + beanType.getName());
 		}
@@ -512,7 +515,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 			return response.renderToBytes();
 
 		} catch (Throwable e) {
-			HttpIO.error(this, e, http.custom().errorHandler());
+			HttpIO.error(this, e, custom().errorHandler());
 
 			try {
 				return response.renderToBytes();
@@ -564,6 +567,11 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	@Override
 	public HttpRoutes routes() {
 		return routes;
+	}
+
+	public ReqImpl routes(HttpRoutesImpl routes) {
+		this.routes = routes;
+		return this;
 	}
 
 	@Override
@@ -681,7 +689,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		if (contextPath == null) {
 			synchronized (this) {
 				if (contextPath == null) {
-					contextPath = HttpUtils.getContextPath(routes.custom(), segment());
+					contextPath = HttpUtils.getContextPath(custom(), segment());
 				}
 			}
 		}
@@ -720,20 +728,6 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	@Override
 	public boolean isStopped() {
 		return stopped;
-	}
-
-	public boolean hasRoute(HttpVerb verb, String uri) {
-		if (verb == HttpVerb.GET) {
-			String[] staticFilesLocations = custom().staticFilesPath();
-			if (U.notEmpty(staticFilesLocations)) {
-				String filename = Str.triml(uri, '/');
-				if (Res.from(filename, staticFilesLocations).exists()) {
-					return true;
-				}
-			}
-		}
-
-		return routes().find(verb, uri) != null;
 	}
 
 }

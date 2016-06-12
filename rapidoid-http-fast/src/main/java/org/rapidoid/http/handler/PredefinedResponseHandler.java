@@ -23,6 +23,7 @@ package org.rapidoid.http.handler;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.FastHttp;
+import org.rapidoid.http.HttpRoutes;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.net.abstracts.Channel;
@@ -33,8 +34,8 @@ public class PredefinedResponseHandler extends AbstractAsyncHttpHandler {
 
 	private final Object response;
 
-	public PredefinedResponseHandler(FastHttp http, RouteOptions options, Object response) {
-		super(http, options);
+	public PredefinedResponseHandler(FastHttp http, HttpRoutes routes, RouteOptions options, Object response) {
+		super(http, routes, options);
 		this.response = response;
 	}
 

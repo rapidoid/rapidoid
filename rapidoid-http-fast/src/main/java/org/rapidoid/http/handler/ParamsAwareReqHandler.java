@@ -23,6 +23,7 @@ package org.rapidoid.http.handler;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.FastHttp;
+import org.rapidoid.http.HttpRoutes;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
 import org.rapidoid.http.impl.RouteOptions;
@@ -34,8 +35,8 @@ public class ParamsAwareReqHandler extends AbstractAsyncHttpHandler {
 
 	private final ReqHandler handler;
 
-	public ParamsAwareReqHandler(FastHttp http, RouteOptions options, ReqHandler handler) {
-		super(http, options);
+	public ParamsAwareReqHandler(FastHttp http, HttpRoutes routes, RouteOptions options, ReqHandler handler) {
+		super(http, routes, options);
 		this.handler = handler;
 	}
 

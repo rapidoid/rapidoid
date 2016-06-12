@@ -164,7 +164,11 @@ public class Setup extends RapidoidThing implements Constants {
 			}
 
 			if (http == null) {
-				http = new FastHttp(routes);
+				if (isAppOrAdminOnSameServer()) {
+					http = new FastHttp(ON.routes, ADMIN.routes);
+				} else {
+					http = new FastHttp(routes);
+				}
 			}
 		}
 
@@ -193,7 +197,7 @@ public class Setup extends RapidoidThing implements Constants {
 			}
 
 			if (server == null) {
-				if (appAndAdminOnSameServer() && (isApp() || isAdmin())) {
+				if (isAppOrAdminOnSameServer()) {
 					server = proc.listen(ON.address(), ON.port());
 				} else {
 					server = proc.listen(address(), port());
@@ -202,6 +206,10 @@ public class Setup extends RapidoidThing implements Constants {
 		}
 
 		return server;
+	}
+
+	private boolean isAppOrAdminOnSameServer() {
+		return appAndAdminOnSameServer() && (isApp() || isAdmin());
 	}
 
 	private boolean delegateAdminToApp() {
@@ -257,63 +265,63 @@ public class Setup extends RapidoidThing implements Constants {
 
 	public OnRoute route(String verb, String path) {
 		activate();
-		return new OnRoute(http(), defaults, verb.toUpperCase(), path);
+		return new OnRoute(http(), defaults, routes, verb.toUpperCase(), path);
 	}
 
 	public OnRoute get(String path) {
 		activate();
-		return new OnRoute(http(), defaults, GET, path);
+		return new OnRoute(http(), defaults, routes, GET, path);
 	}
 
 	public OnRoute post(String path) {
 		activate();
-		return new OnRoute(http(), defaults, POST, path);
+		return new OnRoute(http(), defaults, routes, POST, path);
 	}
 
 	public OnRoute put(String path) {
 		activate();
-		return new OnRoute(http(), defaults, PUT, path);
+		return new OnRoute(http(), defaults, routes, PUT, path);
 	}
 
 	public OnRoute delete(String path) {
 		activate();
-		return new OnRoute(http(), defaults, DELETE, path);
+		return new OnRoute(http(), defaults, routes, DELETE, path);
 	}
 
 	public OnRoute patch(String path) {
 		activate();
-		return new OnRoute(http(), defaults, PATCH, path);
+		return new OnRoute(http(), defaults, routes, PATCH, path);
 	}
 
 	public OnRoute options(String path) {
 		activate();
-		return new OnRoute(http(), defaults, OPTIONS, path);
+		return new OnRoute(http(), defaults, routes, OPTIONS, path);
 	}
 
 	public OnRoute head(String path) {
 		activate();
-		return new OnRoute(http(), defaults, HEAD, path);
+		return new OnRoute(http(), defaults, routes, HEAD, path);
 	}
 
 	public OnRoute trace(String path) {
 		activate();
-		return new OnRoute(http(), defaults, TRACE, path);
+		return new OnRoute(http(), defaults, routes, TRACE, path);
 	}
 
 	public OnRoute page(String path) {
 		activate();
-		return new OnRoute(http(), defaults, GET_OR_POST, path);
+		return new OnRoute(http(), defaults, routes, GET_OR_POST, path);
 	}
 
 	public Setup req(ReqHandler handler) {
 		activate();
-		routes.addGenericHandler(new DelegatingParamsAwareReqHandler(http(), opts(), handler));
+		routes.addGenericHandler(new DelegatingParamsAwareReqHandler(http(), routes, opts(), handler));
 		return this;
 	}
 
 	public Setup req(ReqRespHandler handler) {
 		activate();
-		routes.addGenericHandler(new DelegatingParamsAwareReqRespHandler(http(), opts(), handler));
+		routes.addGenericHandler(new DelegatingParamsAwareReqRespHandler(http(), routes, opts(), handler));
 		return this;
 	}
 

@@ -48,7 +48,7 @@ public class MicroServicesTest extends HttpTestCommons {
 		eq(REST.get("http://localhost:8888/?n=7", Integer.class).intValue(), 8);
 		eq(REST.post("http://localhost:8888/?n=7", Integer.class).intValue(), 8);
 
-		int count = 10000;
+		int count = 1000;
 		final CountDownLatch latch = new CountDownLatch(count);
 		Msc.startMeasure();
 
@@ -69,7 +69,7 @@ public class MicroServicesTest extends HttpTestCommons {
 					if (result != null) {
 						eq(result.intValue(), expected);
 					} else {
-						System.out.println(error);
+						registerError(error);
 					}
 					latch.countDown();
 				}

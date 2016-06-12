@@ -24,22 +24,23 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.reqinfo.ReqInfoUtils;
+import org.rapidoid.http.HttpVerb;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.Resp;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
-import org.rapidoid.web.Rapidoid;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class Main extends RapidoidThing {
 
 	public static void main(String[] args) {
-		Rapidoid.run(args).full();
+		App.bootstrap(args).jpa().adminCenter();
 
-		if (On.setup().routes().allNonAdmin().isEmpty()) {
-			On.page("/").view("_welcome").mvc(new ReqRespHandler() {
+		if (!On.setup().routes().hasRouteOrResource(HttpVerb.GET, "/")) {
+			On.get("/").view("_welcome").mvc(new ReqRespHandler() {
 				@Override
 				public Object execute(Req req, Resp resp) throws Exception {
 					return U.map("adminUrl", ReqInfoUtils.adminUrl());

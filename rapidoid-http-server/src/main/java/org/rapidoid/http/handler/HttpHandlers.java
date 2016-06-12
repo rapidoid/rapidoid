@@ -41,12 +41,12 @@ import java.util.concurrent.Callable;
 @Since("5.1.0")
 public class HttpHandlers extends RapidoidThing {
 
-	public static HttpHandler from(FastHttp http, NParamLambda handler, RouteOptions options) {
+	public static HttpHandler from(FastHttp http, HttpRoutes routes, NParamLambda handler, RouteOptions options) {
 		if (handler instanceof ReqHandler) {
-			return new DelegatingParamsAwareReqHandler(http, options, (ReqHandler) handler);
+			return new DelegatingParamsAwareReqHandler(http, routes, options, (ReqHandler) handler);
 
 		} else if (handler instanceof ReqRespHandler) {
-			return new DelegatingParamsAwareReqRespHandler(http, options, (ReqRespHandler) handler);
+			return new DelegatingParamsAwareReqRespHandler(http, routes, options, (ReqRespHandler) handler);
 
 		} else if (handler instanceof OneParamLambda) {
 
@@ -55,11 +55,11 @@ public class HttpHandlers extends RapidoidThing {
 			Class<?> paramType = method.getParameterTypes()[0];
 
 			if (paramType.equals(Req.class)) {
-				return new DelegatingParamsAwareReqHandler(http, options, lambda);
+				return new DelegatingParamsAwareReqHandler(http, routes, options, lambda);
 			} else if (paramType.equals(Resp.class)) {
-				return new DelegatingParamsAwareRespHandler(http, options, lambda);
+				return new DelegatingParamsAwareRespHandler(http, routes, options, lambda);
 			} else {
-				return new OneParamLambdaHandler(http, options, lambda);
+				return new OneParamLambdaHandler(http, routes, options, lambda);
 			}
 
 		} else if (handler instanceof TwoParamLambda) {
@@ -70,51 +70,51 @@ public class HttpHandlers extends RapidoidThing {
 			Class<?> param2Type = method.getParameterTypes()[1];
 
 			if (param1Type.equals(Req.class) && param2Type.equals(Resp.class)) {
-				return new DelegatingParamsAwareReqRespHandler(http, options, lambda);
+				return new DelegatingParamsAwareReqRespHandler(http, routes, options, lambda);
 			} else {
-				return new TwoParamLambdaHandler(http, options, (TwoParamLambda) handler);
+				return new TwoParamLambdaHandler(http, routes, options, (TwoParamLambda) handler);
 			}
 
 		} else if (handler instanceof ThreeParamLambda) {
-			return new ThreeParamLambdaHandler(http, options, (ThreeParamLambda) handler);
+			return new ThreeParamLambdaHandler(http, routes, options, (ThreeParamLambda) handler);
 
 		} else if (handler instanceof FourParamLambda) {
-			return new FourParamLambdaHandler(http, options, (FourParamLambda) handler);
+			return new FourParamLambdaHandler(http, routes, options, (FourParamLambda) handler);
 
 		} else if (handler instanceof FiveParamLambda) {
-			return new FiveParamLambdaHandler(http, options, (FiveParamLambda) handler);
+			return new FiveParamLambdaHandler(http, routes, options, (FiveParamLambda) handler);
 
 		} else if (handler instanceof SixParamLambda) {
-			return new SixParamLambdaHandler(http, options, (SixParamLambda) handler);
+			return new SixParamLambdaHandler(http, routes, options, (SixParamLambda) handler);
 
 		} else if (handler instanceof SevenParamLambda) {
-			return new SevenParamLambdaHandler(http, options, (SevenParamLambda) handler);
+			return new SevenParamLambdaHandler(http, routes, options, (SevenParamLambda) handler);
 
 		} else {
 			throw Err.notExpected();
 		}
 	}
 
-	public static void registerStatic(FastHttp http, String verb, String path, RouteOptions options, byte[] response) {
-		http.on(verb, path, new StaticHttpHandler(options, response));
+	public static void registerStatic(FastHttp http, HttpRoutes routes, String verb, String path, RouteOptions options, byte[] response) {
+		routes.on(verb, path, new StaticHttpHandler(options, response));
 	}
 
-	public static void registerPredefined(FastHttp http, String verb, String path, RouteOptions options, Object response) {
-		http.on(verb, path, new PredefinedResponseHandler(http, options, response));
+	public static void registerPredefined(FastHttp http, HttpRoutes routes, String verb, String path, RouteOptions options, Object response) {
+		routes.on(verb, path, new PredefinedResponseHandler(http, routes, options, response));
 	}
 
 	@SuppressWarnings("unchecked")
-	public static void register(FastHttp http, String verb, String path, RouteOptions options, Callable<?> handler) {
-		http.on(verb, path, new CallableHttpHandler(http, options, (Callable<Object>) handler));
+	public static void register(FastHttp http, HttpRoutes routes, String verb, String path, RouteOptions options, Callable<?> handler) {
+		routes.on(verb, path, new CallableHttpHandler(http, routes, options, (Callable<Object>) handler));
 	}
 
-	public static void register(FastHttp http, String verb, String path, RouteOptions options, NParamLambda lambda) {
-		HttpHandler handler = HttpHandlers.from(http, lambda, options);
-		http.on(verb, path, handler);
+	public static void register(FastHttp http, HttpRoutes routes, String verb, String path, RouteOptions options, NParamLambda lambda) {
+		HttpHandler handler = HttpHandlers.from(http, routes, lambda, options);
+		routes.on(verb, path, handler);
 	}
 
-	public static void register(FastHttp http, String verb, String path, RouteOptions options, Method method, Object instance) {
-		http.on(verb, path, new MethodReqHandler(http, options, method, instance));
+	public static void register(FastHttp http, HttpRoutes routes, String verb, String path, RouteOptions options, Method method, Object instance) {
+		routes.on(verb, path, new MethodReqHandler(http, routes, options, method, instance));
 	}
 
 }

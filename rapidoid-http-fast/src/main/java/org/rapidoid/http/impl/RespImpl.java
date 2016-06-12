@@ -321,10 +321,10 @@ public class RespImpl extends RapidoidThing implements Resp {
 
 	@Override
 	public boolean login(String username, String password) {
-		LoginProvider loginProvider = req.http().custom().loginProvider();
+		LoginProvider loginProvider = req.routes().custom().loginProvider();
 		U.must(loginProvider != null, "A login provider wasn't set!");
 
-		RolesProvider rolesProvider = req.http().custom().rolesProvider();
+		RolesProvider rolesProvider = req.routes().custom().rolesProvider();
 		U.must(rolesProvider != null, "A roles provider wasn't set!");
 
 		boolean success;
@@ -453,7 +453,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 	}
 
 	private byte[] serializeResponseContent() {
-		return HttpUtils.responseToBytes(result(), contentType(), req.http().custom().jsonResponseRenderer());
+		return HttpUtils.responseToBytes(result(), contentType(), req.routes().custom().jsonResponseRenderer());
 	}
 
 }

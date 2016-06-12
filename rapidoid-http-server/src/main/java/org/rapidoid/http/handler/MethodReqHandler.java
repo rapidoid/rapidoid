@@ -4,9 +4,10 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.http.FastHttp;
+import org.rapidoid.http.HttpRoutes;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.http.handler.lambda.NParamMethodHandler;
+import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
 
@@ -38,8 +39,8 @@ public class MethodReqHandler extends NParamMethodHandler {
 
 	private final Object instance;
 
-	public MethodReqHandler(FastHttp http, RouteOptions options, Method method, Object instance) {
-		super(http, options, method, null);
+	public MethodReqHandler(FastHttp http, HttpRoutes routes, RouteOptions options, Method method, Object instance) {
+		super(http, routes, options, method, null);
 		this.instance = instance;
 	}
 

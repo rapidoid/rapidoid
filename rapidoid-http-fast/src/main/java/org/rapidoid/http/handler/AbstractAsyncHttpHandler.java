@@ -45,9 +45,12 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 
 	private final FastHttp http;
 
-	public AbstractAsyncHttpHandler(FastHttp http, RouteOptions options) {
+	private final HttpRoutes routes;
+
+	public AbstractAsyncHttpHandler(FastHttp http, HttpRoutes routes, RouteOptions options) {
 		super(options);
 		this.http = http;
+		this.routes = routes;
 	}
 
 	@Override
@@ -65,14 +68,14 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 			req.response().logout();
 		}
 
-		Set<String> roles = userRoles(username);
+		Set<String> roles = userRoles(req, username);
 
 		TransactionMode txMode;
 		try {
 			txMode = before(req, username, roles);
 
 		} catch (Throwable e) {
-			HttpIO.errorAndDone(req, e, http.custom().errorHandler());
+			HttpIO.errorAndDone(req, e, req.routes().custom().errorHandler());
 			return HttpStatus.DONE;
 		}
 
@@ -84,7 +87,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 
 		} catch (Throwable e) {
 			// if there was an error in the job scheduling:
-			HttpIO.errorAndDone(req, e, http.custom().errorHandler());
+			HttpIO.errorAndDone(req, e, req.custom().errorHandler());
 			return HttpStatus.DONE;
 		}
 
@@ -110,10 +113,10 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 		}
 	}
 
-	private Set<String> userRoles(String username) {
+	private Set<String> userRoles(Req req, String username) {
 		if (username != null) {
 			try {
-				return http.custom().rolesProvider().getRolesForUser(username);
+				return req.routes().custom().rolesProvider().getRolesForUser(username);
 			} catch (Exception e) {
 				throw U.rte(e);
 			}
@@ -197,7 +200,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 					try {
 						JPA.transaction(handleRequest, txMode == TransactionMode.READ_ONLY);
 					} catch (Exception e) {
-						HttpIO.errorAndDone(req, e, http.custom().errorHandler());
+						HttpIO.errorAndDone(req, e, req.routes().custom().errorHandler());
 					}
 				}
 			};
@@ -256,7 +259,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 		}
 
 		if (result instanceof Throwable) {
-			HttpIO.errorAndDone(req, (Throwable) result, http.custom().errorHandler());
+			HttpIO.errorAndDone(req, (Throwable) result, req.routes().custom().errorHandler());
 			return;
 
 		} else {
