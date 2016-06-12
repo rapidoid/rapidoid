@@ -45,9 +45,11 @@
             <i class="fa fa-user"></i> ${username}
         </a>
         </li>
+        {{?has.page.$_logout}}
         <li>
             <a href="/_logout" data-toggle="tooltip" data-placement="bottom" title="Logout"><i class="fa fa-sign-out"></i></a>
         </li>
+        {{/has.page.$_logout}}
     </ul>
     {{/username}}
 
