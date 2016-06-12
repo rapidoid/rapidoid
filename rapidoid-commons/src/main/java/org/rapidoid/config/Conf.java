@@ -159,7 +159,7 @@ public class Conf extends RapidoidThing {
 	public static synchronized void reload() {
 		List<List<String>> detached = ConfigUtil.untrack();
 
-		reset();
+		ROOT.clear();
 
 		ConfigUtil.load(Msc.path("default", "config.y?ml"), ROOT, true);
 
