@@ -184,7 +184,9 @@ public class ClasspathUtil extends RapidoidThing {
 					Log.warn("Invalid classpath entry: " + cpe);
 				}
 			} else {
-				Log.warn("Classpath entry doesn't exist: " + cpe);
+				if (!cpe.contains("*") && !cpe.contains("?")) {
+					Log.warn("Classpath entry doesn't exist: " + cpe);
+				}
 			}
 		}
 
