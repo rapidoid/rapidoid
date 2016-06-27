@@ -34,10 +34,13 @@ ls -l $DISTRO_JS
 ls -l $DISTRO_CSS
 
 # COPY TO DOCS
-DOCS=../rapidoid.github.io/
+for DOCS in ../rapidoid.github.io/ ../java8org.github.io/; do
 cp $DISTRO_JS $DOCS/rapidoid.min.js
 cp $DISTRO_CSS $DOCS/rapidoid.min.css
 cp rapidoid-html/src/main/resources/default/static/bootstrap/css/theme-default.css $DOCS/theme-default.css
+done
+
+# cp ../rapidoid.github.io/docs.css ../java8org.github.io/docs.css
 
 echo
 echo

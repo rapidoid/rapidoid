@@ -45,7 +45,7 @@ public class DeployHandler extends GUI implements Callable<Object> {
 			info.add(h2("Upload an application JAR to re-deploy:"));
 			info.add(hardcoded("<form action=\"/_/jar\" class=\"dropzone\" id=\"jar-upload\"></form>"));
 
-			String token = U.or(ReqInfo.get().cookies().get("COOKIEPACK"), "");
+			String token = U.or(ReqInfo.get().cookies().get("_token"), "");
 
 			info.add(h2("HTTP API for Deployment:"));
 			info.add(h6(verb(HttpVerb.POST), b(" http://your-app-domain/_/jar?_token=<token>")));

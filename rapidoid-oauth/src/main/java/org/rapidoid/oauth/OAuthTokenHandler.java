@@ -133,7 +133,7 @@ public class OAuthTokenHandler extends RapidoidThing implements ReqHandler {
 
 			Ctxs.ctx().setUser(user);
 
-			// user.saveTo(x.cookiepack()); // FIXME use cookiepack
+			// user.saveTo(x.token()); // FIXME use token
 
 			return req.response().redirect("/"); // FIXME use page stack
 		} else {

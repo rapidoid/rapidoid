@@ -42,7 +42,7 @@ public class LoginHandler extends RapidoidThing implements ReqRespHandler {
 
 		auth.success = resp.login(username, password);
 
-		auth.token = auth.success ? HttpUtils.token(req.cookiepack()) : "";
+		auth.token = auth.success ? HttpUtils.token(req.token()) : "";
 
 		return auth;
 	}

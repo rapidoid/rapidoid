@@ -175,12 +175,12 @@ public interface Resp {
 	/**
 	 * Provides <b>read/write access</b> to the <b>cookie-persisted session attributes</b> of the HTTP request.
 	 */
-	Map<String, Serializable> cookiepack();
+	Map<String, Serializable> token();
 
 	/**
-	 * Sets a <b>cookiepack attribute</b> of the HTTP response.
+	 * Sets a <b>token attribute</b> of the HTTP response.
 	 */
-	Resp cookiepack(String name, Serializable value);
+	Resp token(String name, Serializable value);
 
 	/**
 	 * Provides <b>read/write access</b> to the <b>model</b> (M from MVC) that will be rendered by the view renderer.

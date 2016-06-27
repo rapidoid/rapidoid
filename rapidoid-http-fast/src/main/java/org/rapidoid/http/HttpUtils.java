@@ -68,43 +68,43 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static Map<String, Serializable> initAndDeserializeCookiePack(Req req) {
-		String cookiepack = req.cookie(COOKIEPACK, null);
+	public static Map<String, Serializable> initAndDeserializeTOKEN(Req req) {
+		String token = req.cookie(TOKEN, null);
 
-		if (U.isEmpty(cookiepack)) {
-			cookiepack = req.data(TOKEN, null);
+		if (U.isEmpty(token)) {
+			token = req.data(TOKEN, null);
 		}
 
-		if (!U.isEmpty(cookiepack)) {
-			byte[] decoded = Str.fromBase64(cookiepack.replace('$', '+').replace('_', '/'));
-			byte[] cookiepackDecrypted = Crypto.decrypt(decoded);
-			return (Map<String, Serializable>) Serialize.deserialize(cookiepackDecrypted);
+		if (!U.isEmpty(token)) {
+			byte[] decoded = Str.fromBase64(token.replace('$', '+').replace('_', '/'));
+			byte[] tokenDecrypted = Crypto.decrypt(decoded);
+			return (Map<String, Serializable>) Serialize.deserialize(tokenDecrypted);
 		} else {
 			return null;
 		}
 	}
 
-	public static void saveCookipackBeforeRenderingHeaders(Req req, Map<String, Serializable> cookiepack) {
-		String token = token(cookiepack);
-		req.response().cookie(COOKIEPACK, token, "path=/", "HttpOnly");
+	public static void saveCookipackBeforeRenderingHeaders(Req req, Map<String, Serializable> tokenData) {
+		String token = token(tokenData);
+		req.response().cookie(TOKEN, token, "path=/", "HttpOnly");
 	}
 
-	public static String token(Map<String, Serializable> cookiepack) {
-		if (U.notEmpty(cookiepack)) {
-			byte[] cookiepackBytes = serializeCookiepack(cookiepack);
-			byte[] cookiepackEncrypted = Crypto.encrypt(cookiepackBytes);
-			return Str.toBase64(cookiepackEncrypted).replace('+', '$').replace('/', '_');
+	public static String token(Map<String, Serializable> token) {
+		if (U.notEmpty(token)) {
+			byte[] tokenBytes = serializeToken(token);
+			byte[] tokenEncrypted = Crypto.encrypt(tokenBytes);
+			return Str.toBase64(tokenEncrypted).replace('+', '$').replace('/', '_');
 
 		} else {
 			return "";
 		}
 	}
 
-	private static byte[] serializeCookiepack(Map<String, Serializable> cookiepack) {
+	private static byte[] serializeToken(Map<String, Serializable> token) {
 		byte[] dest = new byte[2500];
 
 		try {
-			int size = Serialize.serialize(dest, cookiepack);
+			int size = Serialize.serialize(dest, token);
 			dest = Arrays.copyOf(dest, size);
 		} catch (BufferOverflowException e) {
 			throw U.rte("The cookie-pack is too big!");

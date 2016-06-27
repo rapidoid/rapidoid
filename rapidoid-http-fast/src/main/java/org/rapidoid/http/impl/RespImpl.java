@@ -187,13 +187,13 @@ public class RespImpl extends RapidoidThing implements Resp {
 	}
 
 	@Override
-	public Map<String, Serializable> cookiepack() {
-		return request().cookiepack();
+	public Map<String, Serializable> token() {
+		return request().token();
 	}
 
 	@Override
-	public Resp cookiepack(String name, Serializable value) {
-		cookiepack().put(name, value);
+	public Resp token(String name, Serializable value) {
+		token().put(name, value);
 		return this;
 	}
 
@@ -340,8 +340,8 @@ public class RespImpl extends RapidoidThing implements Resp {
 
 				Ctxs.ctx().setUser(new UserInfo(username, roles));
 
-				request().cookiepack().put(HttpUtils._USER, username);
-				request().cookiepack().put(HttpUtils._EXPIRES, expiresOn);
+				request().token().put(HttpUtils._USER, username);
+				request().token().put(HttpUtils._EXPIRES, expiresOn);
 			}
 
 		} catch (Throwable e) {
@@ -357,9 +357,9 @@ public class RespImpl extends RapidoidThing implements Resp {
 			Ctxs.ctx().setUser(UserInfo.ANONYMOUS);
 		}
 
-		if (request().hasCookiepack()) {
-			request().cookiepack().remove(HttpUtils._USER);
-			request().cookiepack().remove(HttpUtils._EXPIRES);
+		if (request().hasToken()) {
+			request().token().remove(HttpUtils._USER);
+			request().token().remove(HttpUtils._EXPIRES);
 		}
 	}
 

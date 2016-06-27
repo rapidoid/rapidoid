@@ -28,20 +28,20 @@ import org.rapidoid.setup.On;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.10")
-public class HttpCookiepackTest extends HttpTestCommons {
+public class HttpTokenTest extends HttpTestCommons {
 
 	@Test
-	public void testHttpCookiepack() {
+	public void testHttpToken() {
 		On.req(new ReqRespHandler() {
 			@Override
 			public Object execute(Req req, Resp resp) throws Exception {
-				Log.info("Cookiepack", "data", req.cookiepack());
+				Log.info("Token", "data", req.token());
 
-				int n = req.cookiepack("n", 0) + 1;
-				resp.cookiepack("n", n);
+				int n = req.token("n", 0) + 1;
+				resp.token("n", n);
 
-				int m = req.cookiepack("m", 10) + 1;
-				resp.cookiepack("m", m);
+				int m = req.token("m", 10) + 1;
+				resp.token("m", m);
 
 				return n + ":" + m;
 			}

@@ -47,7 +47,6 @@ public class ConfigOptions extends RapidoidThing {
 		opts.add(opt("admin.port=<P>", "the Admin server will listen at port P", "same as on.port"));
 		opts.add(opt("admin.address=<ADDR>", "the Admin server will listen at address ADDR", "0.0.0.0"));
 
-		// opts.add(opt("stateless", "Run in stateless mode, session becomes cookiepack", false));
 		opts.add(opt("cpus=<C>", "optimize for C number of CPUs", "the actual number of the CPUs"));
 //		opts.add(opt("workers=<W>", "start W number of I/O workers", "the configured number of CPUs - cpus options"));
 //		opts.add(opt("nodelay", "set the TCP_NODELAY flag to disable Nagle's algorithm", false));

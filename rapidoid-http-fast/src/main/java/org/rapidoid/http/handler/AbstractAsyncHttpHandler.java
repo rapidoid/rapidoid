@@ -95,11 +95,11 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 	}
 
 	private String getUser(Req req) {
-		if (req.hasCookiepack()) {
-			String username = req.cookiepack(HttpUtils._USER, null);
+		if (req.hasToken()) {
+			String username = req.token(HttpUtils._USER, null);
 
 			if (username != null) {
-				long expiresOn = req.cookiepack(HttpUtils._EXPIRES);
+				long expiresOn = req.token(HttpUtils._EXPIRES);
 
 				if (expiresOn < U.time()) {
 					username = null; // expired
