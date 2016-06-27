@@ -48,6 +48,7 @@ import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -65,6 +66,8 @@ public abstract class IntegrationTestCommons extends TestCommons {
 		Msc.reset();
 
 		ClasspathUtil.setRootPackage("some.nonexisting.app");
+
+		TimeZone.setDefault(TimeZone.getTimeZone("CET"));
 
 		System.out.println("--- STARTING SERVER ---");
 
