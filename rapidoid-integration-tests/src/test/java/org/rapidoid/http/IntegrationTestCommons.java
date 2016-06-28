@@ -69,6 +69,8 @@ public abstract class IntegrationTestCommons extends TestCommons {
 
 		ClasspathUtil.setRootPackage("some.nonexisting.app");
 
+		TimeZone.setDefault(TimeZone.getTimeZone("CET"));
+
 		System.out.println("--- STARTING SERVER ---");
 
 		My.reset();

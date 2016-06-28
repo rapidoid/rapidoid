@@ -1,6 +1,7 @@
 package org.rapidoid.reload;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.DontReload;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.io.IO;
@@ -144,7 +145,9 @@ public class ClassReloader extends ClassLoader {
 			String ann = annotation.annotationType().getName();
 
 			// reloading Hibernate or Morphia entity will cause class cast exception
-			if (ann.startsWith("javax.persistence.") || ann.startsWith("org.mongodb.morphia.annotations.")) {
+			if (ann.equals(DontReload.class.getName())
+					|| ann.startsWith("javax.persistence.")
+					|| ann.startsWith("org.mongodb.morphia.annotations.")) {
 				return true;
 			}
 		}
@@ -153,8 +156,15 @@ public class ClassReloader extends ClassLoader {
 	}
 
 	private boolean shouldReload(String classname) {
-		return names.contains(classname) || (!Cls.isRapidoidClass(classname) && !Cls.isJREClass(classname)
+		boolean couldReload = names.contains(classname) || (!Cls.isRapidoidClass(classname) && !Cls.isJREClass(classname)
 				&& !isEntity(classname) && findOnClasspath(classname) != null);
+
+		return couldReload && !originalMarkedNotToReload(classname);
+	}
+
+	private boolean originalMarkedNotToReload(String classname) {
+		Class<?> cls = Cls.getClassIfExists(classname);
+		return cls != null && reloadVeto(cls);
 	}
 
 	private boolean isEntity(String classname) {
