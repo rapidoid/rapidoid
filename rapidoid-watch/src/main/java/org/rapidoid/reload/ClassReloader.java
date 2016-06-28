@@ -153,8 +153,15 @@ public class ClassReloader extends ClassLoader {
 	}
 
 	private boolean shouldReload(String classname) {
-		return names.contains(classname) || (!Cls.isRapidoidClass(classname) && !Cls.isJREClass(classname)
+		boolean couldReload = names.contains(classname) || (!Cls.isRapidoidClass(classname) && !Cls.isJREClass(classname)
 				&& !isEntity(classname) && findOnClasspath(classname) != null);
+
+		return couldReload && !originalMarkedNotToReload(classname);
+	}
+
+	private boolean originalMarkedNotToReload(String classname) {
+		Class<?> cls = Cls.getClassIfExists(classname);
+		return cls != null && reloadVeto(cls);
 	}
 
 	private boolean isEntity(String classname) {
