@@ -128,16 +128,18 @@ public class ClasspathUtil extends RapidoidThing {
 		}
 
 		AtomicInteger searched = new AtomicInteger();
-		List<String> classes = U.list();
+		Set<String> classes = U.set();
 
 		for (String pkg : pkgs) {
 			classes.addAll(retrieveClasses(pkg, params.annotated(), pattern, params.classLoader(), searched));
 		}
 
-		long timeMs = U.time() - startingAt;
-		Log.info("Finished classpath scan", "time", timeMs + "ms", "searched", searched.get(), "!found", Msc.classNames(classes));
+		List<String> classList = U.list(classes);
 
-		return classes;
+		long timeMs = U.time() - startingAt;
+		Log.info("Finished classpath scan", "time", timeMs + "ms", "searched", searched.get(), "!found", Msc.classNames(classList));
+
+		return classList;
 	}
 
 	private static List<String> retrieveClasses(String packageName, Class<? extends Annotation>[] annotated,
