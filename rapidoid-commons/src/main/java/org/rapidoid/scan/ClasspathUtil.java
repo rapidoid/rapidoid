@@ -172,8 +172,7 @@ public class ClasspathUtil extends RapidoidThing {
 						}
 
 						if (startingDir.exists()) {
-							getClassesFromDir(classes, cpEntry, startingDir, pkgName, regex, annotated,
-									classLoader, searched);
+							getClassesFromDir(classes, cpEntry, startingDir, pkgName, regex, annotated, searched);
 						}
 					} else {
 						Log.trace("Skipping directory", "root", cpEntry.getAbsolutePath());
@@ -212,7 +211,7 @@ public class ClasspathUtil extends RapidoidThing {
 	}
 
 	private static void getClassesFromDir(Collection<String> classes, File root, File dir, String pkg, Pattern regex,
-	                                      Class<? extends Annotation>[] annotated, ClassLoader classLoader, AtomicInteger searched) {
+	                                      Class<? extends Annotation>[] annotated, AtomicInteger searched) {
 
 		U.must(dir.isDirectory());
 		Log.trace("Traversing directory", "root", root, "dir", dir);
@@ -225,21 +224,21 @@ public class ClasspathUtil extends RapidoidThing {
 
 		for (File file : files) {
 			if (file.isDirectory()) {
-				getClassesFromDir(classes, root, file, pkg, regex, annotated, classLoader, searched);
+				getClassesFromDir(classes, root, file, pkg, regex, annotated, searched);
 			} else {
 				String rootPath = Str.trimr(root.getAbsolutePath(), File.separatorChar);
 				int from = rootPath.length() + 1;
 				String relName = file.getAbsolutePath().substring(from);
 
 				if (!ignore(relName)) {
-					scanFile(classes, regex, annotated, classLoader, relName, file, null, null, searched);
+					scanFile(classes, regex, annotated, relName, file, null, null, searched);
 				}
 			}
 		}
 	}
 
 	private static void scanFile(Collection<String> classes, Pattern regex,
-	                             Class<? extends Annotation>[] annotated, ClassLoader classLoader, String relName,
+	                             Class<? extends Annotation>[] annotated, String relName,
 	                             File file, ZipFile zip, ZipEntry entry, AtomicInteger searched) {
 
 		Log.trace("scanned file", "file", relName);
@@ -284,10 +283,6 @@ public class ClasspathUtil extends RapidoidThing {
 		return false;
 	}
 
-	private static String pkgToPath(String pkg) {
-		return pkg != null ? pkg.replace('.', File.separatorChar) : null;
-	}
-
 	private static Enumeration<URL> resources(String name) {
 		name = name.replace('.', '/');
 		try {
@@ -301,11 +296,12 @@ public class ClasspathUtil extends RapidoidThing {
 	                                             Class<? extends Annotation>[] annotated, ClassLoader classLoader,
 	                                             AtomicInteger searched) {
 
-		// ZipInputStream zip = null;
 		ZipFile zip = null;
 
 		try {
-			String pkgPath = pkgToPath(pkg);
+			String pkgPath = pkg != null ? pkg.replace('.', File.separatorChar) : null;
+			String pkgPath2 = pkg != null ? pkg.replace('.', '/') : null;
+
 			zip = new ZipFile(new File(jarName));
 			Enumeration<? extends ZipEntry> entries = zip.entries();
 
@@ -315,8 +311,8 @@ public class ClasspathUtil extends RapidoidThing {
 					String name = zipEntry.getName();
 
 					if (!ignore(name)) {
-						if (U.isEmpty(pkg) || name.startsWith(pkgPath)) {
-							scanFile(classes, regex, annotated, classLoader, name, null, zip, zipEntry, searched);
+						if (U.isEmpty(pkg) || name.startsWith(pkgPath) || name.startsWith(pkgPath2)) {
+							scanFile(classes, regex, annotated, name, null, zip, zipEntry, searched);
 						}
 					}
 				}
