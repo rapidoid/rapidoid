@@ -80,8 +80,8 @@ public class OAuthTokenHandler extends RapidoidThing implements ReqHandler {
 
 		if (code != null && !U.isEmpty(state)) {
 
-			String id = clientId.or(OAuth.NO_ID);
-			String secret = clientSecret.or(OAuth.NO_SECRET);
+			String id = clientId.str().get();
+			String secret = clientSecret.str().get();
 
 			char statePrefix = state.charAt(0);
 			U.must(statePrefix == 'P' || statePrefix == 'N', "Invalid OAuth state prefix!");

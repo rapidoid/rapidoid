@@ -42,7 +42,8 @@ public class OAuthLoginHandler extends RapidoidThing implements ReqHandler {
 	@Override
 	public Object execute(Req x) throws Exception {
 		String domain = this.domain.getOrNull();
-		return x.response().redirect(OAuth.getLoginURL(x, provider, domain));
+		String loginURL = OAuth.getLoginURL(x, provider, domain);
+		return x.response().redirect(loginURL);
 	}
 
 }

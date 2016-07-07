@@ -29,6 +29,8 @@ import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.Once;
 
+import java.lang.reflect.Method;
+
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class AppBootstrap extends RapidoidThing {
@@ -36,6 +38,7 @@ public class AppBootstrap extends RapidoidThing {
 	private static final Once jpa = new Once();
 	private static final Once adminCenter = new Once();
 	private static final Once auth = new Once();
+	private static final Once oauth = new Once();
 
 	public AppBootstrap jpa() {
 		if (!jpa.go()) return this;
@@ -63,10 +66,21 @@ public class AppBootstrap extends RapidoidThing {
 		return this;
 	}
 
+	public AppBootstrap oauth() {
+		if (!oauth.go()) return this;
+
+		Class<?> oauthClass = Cls.getClassIfExists("org.rapidoid.oauth.OAuth");
+		U.must(oauthClass != null, "Cannot find the OAuth components, is module 'rapidoid-oauth' missing?");
+
+		Method bootstrap = Cls.getMethod(oauthClass, "bootstrap", Setup.class);
+		Cls.invokeStatic(bootstrap, On.setup());
+
+		return this;
+	}
+
 	private IGoodies getGoodies() {
 		Class<?> goodiesClass = Cls.getClassIfExists("org.rapidoid.goodies.RapidoidGoodies");
-
-		U.must(goodiesClass != null, "Cannot find the Goodies, is the rapidoid-web module missing?");
+		U.must(goodiesClass != null, "Cannot find the Goodies, is module 'rapidoid-web' missing?");
 
 		return (IGoodies) Cls.newInstance(goodiesClass);
 	}
@@ -75,12 +89,14 @@ public class AppBootstrap extends RapidoidThing {
 		jpa();
 		adminCenter();
 		auth();
+		oauth();
 	}
 
 	static void reset() {
 		jpa.reset();
-		auth.reset();
 		adminCenter.reset();
+		auth.reset();
+		oauth.reset();
 	}
 
 }
