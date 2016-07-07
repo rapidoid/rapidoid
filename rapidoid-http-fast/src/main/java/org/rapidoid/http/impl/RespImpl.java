@@ -389,8 +389,18 @@ public class RespImpl extends RapidoidThing implements Resp {
 		ConfigAlternatives cfg = segment.or(app);
 
 		Object brand = cfg.entry("brand").str().getOrNull();
-		screen.brand(U.or(brand, ""));
-		screen.title(cfg.entry("title").str().getOrNull());
+		String title = cfg.entry("title").str().getOrNull();
+
+		String siteName = req.host();
+		if (U.isEmpty(siteName)
+				|| siteName.equals("localhost") || siteName.startsWith("localhost:")
+				|| siteName.equals("127.0.0.1") || siteName.startsWith("127.0.0.1:")) {
+			siteName = "Rapidoid";
+		}
+
+		screen.brand(U.or(brand, siteName));
+		screen.title(U.or(title, siteName));
+
 		screen.home(cfg.entry("home").str().or("/"));
 
 		screen.search(cfg.entry("search").bool().or(false));

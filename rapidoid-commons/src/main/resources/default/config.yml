@@ -7,8 +7,6 @@ admin:
   address: 0.0.0.0
 
 app:
-  domain: ''
-  brand: Rapidoid
   search: false
   navbar: true
   fluid: false
