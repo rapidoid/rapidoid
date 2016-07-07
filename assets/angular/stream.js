@@ -6,8 +6,9 @@ Rapidoid.plugin(function(app) {
             this.items = [];
             this.busy = false;
             this.page = 1;
+            this.lastId = '';
             this.dataUrl = dataUrl;
-            this.cols = 3;
+            this.cols = 1;
         };
 
         StreamData.prototype.nextPage = function() {
@@ -15,12 +16,13 @@ Rapidoid.plugin(function(app) {
                 return;
             this.busy = true;
 
-            var url = this.dataUrl.replace('{{page}}', '' + this.page);
+            var url = this.dataUrl.replace('{{page}}', '' + (this.page || 1)).replace('{{after}}', '' + (this.lastId || ''));
 
             $http.get(url).success(function(data) {
                 var items = data;
                 for (var i = 0; i < items.length; i++) {
                     this.items.push(items[i]);
+                    this.lastId = items[i].id;
                 }
                 this.page++;
                 this.busy = false;
