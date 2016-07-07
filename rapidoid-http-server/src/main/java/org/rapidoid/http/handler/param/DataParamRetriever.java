@@ -32,15 +32,17 @@ public class DataParamRetriever extends RapidoidThing implements ParamRetriever 
 
 	private final Class<?> type;
 	private final String name;
+	private final boolean required;
 
-	public DataParamRetriever(Class<?> type, String name) {
+	public DataParamRetriever(Class<?> type, String name, boolean required) {
 		this.type = type;
 		this.name = name;
+		this.required = required;
 	}
 
 	@Override
 	public Object getParamValue(Req req) {
-		Object value = type.isPrimitive() ? req.data(name) : req.data(name, null);
+		Object value = required || type.isPrimitive() ? req.data(name) : req.data(name, null);
 
 		return Cls.convert(value, type);
 	}
