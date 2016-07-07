@@ -23,6 +23,7 @@ package org.rapidoid.fluent.dox;
 import org.rapidoid.fluent.To;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -40,6 +41,10 @@ public class DoMap<T> {
 
 	public <R> List<R> to(Function<T, R> transformation) {
 		return stream.map(transformation).collect(To.list());
+	}
+
+	public <K, V> Map<K, V> to(Function<T, K> keyMapper, Function<T, V> valueMapper) {
+		return stream.collect(To.map(keyMapper, valueMapper));
 	}
 
 }
