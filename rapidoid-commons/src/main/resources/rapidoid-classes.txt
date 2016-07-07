@@ -607,6 +607,7 @@ org.rapidoid.var.impl.AbstractVar
 org.rapidoid.var.impl.DecoratorVar
 org.rapidoid.var.impl.MandatoryVar
 org.rapidoid.var.impl.SimpleVar
+org.rapidoid.var.impl.ValidatingVar
 org.rapidoid.var.Var
 org.rapidoid.var.Vars
 org.rapidoid.web.Rapidoid

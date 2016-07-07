@@ -3,8 +3,10 @@ package org.rapidoid.var;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.lambda.Predicate;
 import org.rapidoid.var.impl.MandatoryVar;
 import org.rapidoid.var.impl.SimpleVar;
+import org.rapidoid.var.impl.ValidatingVar;
 
 /*
  * #%L
@@ -57,6 +59,10 @@ public class Vars extends RapidoidThing {
 	@SuppressWarnings("unchecked")
 	public static <T> Var<T> cast(Object value) {
 		return (Var<T>) value;
+	}
+
+	public static <T> Var<T> validate(Var<T> var, Predicate<T> isValid, String message) {
+		return new ValidatingVar<T>(var, isValid, message);
 	}
 
 }
