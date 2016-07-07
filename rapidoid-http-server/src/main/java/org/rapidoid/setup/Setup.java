@@ -511,13 +511,13 @@ public class Setup extends RapidoidThing implements Constants {
 		return activated;
 	}
 
-	public static void haltAll() {
+	public static synchronized void haltAll() {
 		for (Setup setup : instances()) {
 			setup.halt();
 		}
 	}
 
-	public static void shutdownAll() {
+	public static synchronized void shutdownAll() {
 		for (Setup setup : instances()) {
 			setup.shutdown();
 		}

@@ -106,7 +106,7 @@ public class App extends RapidoidThing {
 		}
 	}
 
-	private static void restartApp() {
+	private static synchronized void restartApp() {
 		if (!Msc.hasRapidoidWatch()) {
 			Log.warn("Cannot reload/restart the application, module rapidoid-watch is missing!");
 		}
