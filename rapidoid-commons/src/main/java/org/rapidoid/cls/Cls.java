@@ -518,7 +518,19 @@ public class Cls extends RapidoidThing {
 				return (T) value;
 
 			case UNKNOWN:
-				throw U.rte("Cannot convert string value to type '%s'!", toType);
+				Constructor<T> constructor;
+
+				try {
+					constructor = toType.getConstructor(String.class);
+				} catch (Exception e) {
+					throw U.rte("Cannot convert string value to type '%s'!", toType);
+				}
+
+				try {
+					return constructor.newInstance(value);
+				} catch (Exception e) {
+					throw U.rte("Cannot invoke constructor, trying to convert string value to type '%s'!", toType);
+				}
 
 			case DATE:
 				return (T) Dates.date(value);
