@@ -5,6 +5,8 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Err;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Deleted;
+import org.rapidoid.util.None;
 
 /*
  * #%L
@@ -131,6 +133,12 @@ public abstract class AbstractTypeSpecificFactory<T> extends RapidoidThing imple
 			case UNKNOWN:
 				return unknown(context);
 
+			case NONE:
+				return noneValue(context);
+
+			case DELETED:
+				return deletedValue(context);
+
 			default:
 				throw Err.notExpected();
 		}
@@ -144,6 +152,16 @@ public abstract class AbstractTypeSpecificFactory<T> extends RapidoidThing imple
 	@Override
 	public Object nullValue(T context) {
 		return null;
+	}
+
+	@Override
+	public None noneValue(T context) {
+		return None.NONE;
+	}
+
+	@Override
+	public Deleted deletedValue(T context) {
+		return Deleted.DELETED;
 	}
 
 	@Override

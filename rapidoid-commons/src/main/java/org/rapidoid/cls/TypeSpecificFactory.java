@@ -2,6 +2,8 @@ package org.rapidoid.cls;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.util.Deleted;
+import org.rapidoid.util.None;
 
 import java.util.*;
 
@@ -98,5 +100,9 @@ public interface TypeSpecificFactory<T> {
 	Set<?> set(T context);
 
 	Map<?, ?> map(T context);
+
+	None noneValue(T context);
+
+	Deleted deletedValue(T context);
 
 }

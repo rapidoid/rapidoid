@@ -1,6 +1,8 @@
 package org.rapidoid.cls;
 
 import org.rapidoid.u.U;
+import org.rapidoid.util.Deleted;
+import org.rapidoid.util.None;
 
 import java.util.Date;
 import java.util.List;
@@ -92,7 +94,10 @@ public enum TypeKind implements TypeConstants {
 	OBJECT_ARR(Object[].class, OBJ, NAN, UNCLEAR, ARR),
 	LIST(List.class, OBJ, NAN, UNCLEAR, NOT_ARR),
 	SET(Set.class, OBJ, NAN, UNCLEAR, NOT_ARR),
-	MAP(Map.class, OBJ, NAN, UNCLEAR, NOT_ARR);
+	MAP(Map.class, OBJ, NAN, UNCLEAR, NOT_ARR),
+
+	NONE(None.class, OBJ, NAN, CONCRETE, NOT_ARR),
+	DELETED(Deleted.class, OBJ, NAN, CONCRETE, NOT_ARR);
 
 	private static final Map<Class<?>, TypeKind> KINDS = initKinds();
 
