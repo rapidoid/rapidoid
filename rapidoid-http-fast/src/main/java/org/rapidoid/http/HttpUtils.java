@@ -121,6 +121,8 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 	}
 
 	public static String resName(String path) {
+		U.must(!path.contains("/."), "Private resources (starting with '.') cannot be accessed!");
+		U.must(!path.contains(".."), "Invalid resource path (contains '..')!");
 
 		String res = Str.replace(path, PathPattern.PATH_PARAM_REGEX, PATH_PARAM_EXTRACTOR);
 
@@ -135,10 +137,6 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 		}
 
 		return res;
-	}
-
-	public static String verbAndResourceName(Req req) {
-		return req.verb().toUpperCase() + "/" + resName(req.path());
 	}
 
 	public static String defaultView(String path) {
