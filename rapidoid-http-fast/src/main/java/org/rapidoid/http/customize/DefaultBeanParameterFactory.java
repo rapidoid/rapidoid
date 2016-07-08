@@ -3,7 +3,6 @@ package org.rapidoid.http.customize;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.data.JSON;
 import org.rapidoid.http.Req;
 
 import java.util.Map;
@@ -34,7 +33,7 @@ public class DefaultBeanParameterFactory extends RapidoidThing implements BeanPa
 
 	@Override
 	public Object getParamValue(Req req, Class<?> paramType, String paramName, Map<String, Object> properties) throws Exception {
-		return JSON.MAPPER.convertValue(properties, paramType);
+		return req.custom().jackson().convertValue(properties, paramType);
 	}
 
 }

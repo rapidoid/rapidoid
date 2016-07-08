@@ -20,9 +20,11 @@ package org.rapidoid.setup;
  * #L%
  */
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.data.JSON;
 import org.rapidoid.http.customize.*;
 
 @Authors("Nikolche Mihajlovski")
@@ -38,6 +40,7 @@ public class Defaults extends RapidoidThing {
 	private static final RolesProvider rolesProvider;
 	private static final PageRenderer pageRenderer;
 	private static final ViewRenderer viewRenderer;
+	private static final ObjectMapper jackson;
 
 	static {
 		staticFilesPath = new String[]{"static", "public", "default/static", "default/public"};
@@ -49,6 +52,7 @@ public class Defaults extends RapidoidThing {
 		loginProvider = new DefaultLoginProvider();
 		rolesProvider = new DefaultRolesProvider();
 		validator = new DefaultBeanValidator();
+		jackson = JSON.newMapper();
 	}
 
 	public static String[] staticFilesPath() {
@@ -85,5 +89,9 @@ public class Defaults extends RapidoidThing {
 
 	public static ViewRenderer viewRenderer() {
 		return viewRenderer;
+	}
+
+	public static ObjectMapper jackson() {
+		return jackson;
 	}
 }

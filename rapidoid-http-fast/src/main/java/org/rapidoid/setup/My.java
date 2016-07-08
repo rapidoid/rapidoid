@@ -20,6 +20,7 @@ package org.rapidoid.setup;
  * #L%
  */
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -38,6 +39,7 @@ public class My extends RapidoidThing {
 	private static volatile RolesProvider rolesProvider;
 	private static volatile PageRenderer pageRenderer;
 	private static volatile ViewRenderer viewRenderer;
+	private static volatile ObjectMapper jackson;
 
 	static {
 		reset();
@@ -53,6 +55,7 @@ public class My extends RapidoidThing {
 		loginProvider = Defaults.loginProvider();
 		rolesProvider = Defaults.rolesProvider();
 		validator = Defaults.validator();
+		jackson = Defaults.jackson();
 	}
 
 	public static void staticFilesPath(String... staticFilesPath) {
@@ -91,6 +94,10 @@ public class My extends RapidoidThing {
 		My.viewRenderer = viewRenderer;
 	}
 
+	public static void jackson(ObjectMapper jackson) {
+		My.jackson = jackson;
+	}
+
 	public static String[] getStaticFilesPath() {
 		return staticFilesPath;
 	}
@@ -125,6 +132,10 @@ public class My extends RapidoidThing {
 
 	public static ViewRenderer getViewRenderer() {
 		return viewRenderer;
+	}
+
+	public static ObjectMapper jackson() {
+		return jackson;
 	}
 
 }

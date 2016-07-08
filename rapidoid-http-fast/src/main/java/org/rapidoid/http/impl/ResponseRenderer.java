@@ -75,12 +75,12 @@ public class ResponseRenderer extends RapidoidThing {
 
 		if (renderResult == null) {
 			Object cnt = U.or(result, "");
-			renderResult = new String(HttpUtils.responseToBytes(cnt, MediaType.HTML_UTF_8, null));
+			renderResult = new String(HttpUtils.responseToBytes(req, cnt, MediaType.HTML_UTF_8, null));
 		}
 
 		try {
 			Object response = U.or(pageRenderer.renderPage(req, resp, renderResult), "");
-			return HttpUtils.responseToBytes(response, MediaType.HTML_UTF_8, null);
+			return HttpUtils.responseToBytes(req, response, MediaType.HTML_UTF_8, null);
 
 		} catch (Exception e) {
 			throw U.rte("Error while rendering page!", e);

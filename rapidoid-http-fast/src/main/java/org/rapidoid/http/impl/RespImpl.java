@@ -463,7 +463,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 	}
 
 	private byte[] serializeResponseContent() {
-		return HttpUtils.responseToBytes(result(), contentType(), req.routes().custom().jsonResponseRenderer());
+		return HttpUtils.responseToBytes(req, result(), contentType(), req.routes().custom().jsonResponseRenderer());
 	}
 
 }

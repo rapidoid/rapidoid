@@ -37,14 +37,14 @@ public class CustomizationTest extends IntegrationTestCommons {
 
 	@Test
 	public void testSerializationConfig() {
-		On.custom().jsonResponseRenderer(JSON::prettify);
+		On.custom().jsonResponseRenderer((req, value, out) -> JSON.prettify(value, out));
 
 		On.get("/").json(() -> U.map("foo", 12, "bar", 345));
 		On.get("/a").json(() -> U.map("foo", 12, "bar", 345));
 
 		onlyGet("/");
 
-		On.custom().jsonResponseRenderer(JSON::stringify);
+		On.custom().jsonResponseRenderer((req, value, out) -> JSON.stringify(value, out));
 
 		onlyGet("/a");
 	}

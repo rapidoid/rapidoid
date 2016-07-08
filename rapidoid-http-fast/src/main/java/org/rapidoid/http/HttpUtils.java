@@ -243,12 +243,12 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 		return (Conf.ROOT.is("https") ? "https://" : "http://") + x.host() + path;
 	}
 
-	public static byte[] responseToBytes(Object result, MediaType contentType, JsonResponseRenderer jsonRenderer) {
+	public static byte[] responseToBytes(Req req, Object result, MediaType contentType, JsonResponseRenderer jsonRenderer) {
 		if (U.eq(contentType, MediaType.JSON_UTF_8)) {
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 
 			try {
-				jsonRenderer.renderJson(result, out);
+				jsonRenderer.renderJson(req, result, out);
 			} catch (Exception e) {
 				throw U.rte(e);
 			}

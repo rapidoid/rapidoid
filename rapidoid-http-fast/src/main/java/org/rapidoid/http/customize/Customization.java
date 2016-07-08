@@ -1,5 +1,6 @@
 package org.rapidoid.http.customize;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -55,6 +56,8 @@ public class Customization extends RapidoidThing {
 
 	private volatile BeanValidator validator;
 
+	private volatile ObjectMapper jackson;
+
 	public Customization(String name, Config appConfig, Config serverConfig) {
 		this.name = name;
 		this.appConfig = appConfig;
@@ -72,6 +75,7 @@ public class Customization extends RapidoidThing {
 		loginProvider = null;
 		rolesProvider = null;
 		validator = null;
+		jackson = null;
 	}
 
 	public void staticFilesPath(String... staticFilesPath) {
@@ -114,6 +118,14 @@ public class Customization extends RapidoidThing {
 		this.beanParameterFactory = beanParameterFactory;
 	}
 
+	public void validator(BeanValidator validator) {
+		this.validator = validator;
+	}
+
+	public void jackson(ObjectMapper jackson) {
+		this.jackson = jackson;
+	}
+
 	public LoginProvider loginProvider() {
 		return U.or(loginProvider, My.getLoginProvider());
 	}
@@ -142,8 +154,8 @@ public class Customization extends RapidoidThing {
 		return U.or(validator, My.getValidator());
 	}
 
-	public void validator(BeanValidator validator) {
-		this.validator = validator;
+	public ObjectMapper jackson() {
+		return U.or(jackson, My.jackson());
 	}
 
 	public String name() {

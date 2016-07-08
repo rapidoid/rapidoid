@@ -43,11 +43,11 @@ import java.util.Map;
  */
 public class JSON extends RapidoidThing {
 
-	public static final ObjectMapper MAPPER = mapper();
+	public static final ObjectMapper MAPPER = newMapper();
 
 	public static final ObjectMapper PRETTY_MAPPER = prettyMapper();
 
-	private static ObjectMapper mapper() {
+	public static ObjectMapper newMapper() {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setBase64Variant(Base64Variants.MODIFIED_FOR_URL);
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
