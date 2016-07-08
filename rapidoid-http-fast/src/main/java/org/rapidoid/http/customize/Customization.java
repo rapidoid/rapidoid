@@ -83,11 +83,11 @@ public class Customization extends RapidoidThing {
 	}
 
 	public String[] staticFilesPath() {
-		return U.or(staticFilesPath, My.getStaticFilesPath());
+		return U.or(staticFilesPath, My.staticFilesPath());
 	}
 
 	public ErrorHandler errorHandler() {
-		return U.or(errorHandler, My.getErrorHandler());
+		return U.or(errorHandler, My.errorHandler());
 	}
 
 	public void errorHandler(ErrorHandler errorHandler) {
@@ -95,7 +95,7 @@ public class Customization extends RapidoidThing {
 	}
 
 	public ViewRenderer viewRenderer() {
-		return U.or(viewRenderer, My.getViewRenderer());
+		return U.or(viewRenderer, My.viewRenderer());
 	}
 
 	public void viewRenderer(ViewRenderer viewRenderer) {
@@ -103,7 +103,7 @@ public class Customization extends RapidoidThing {
 	}
 
 	public JsonResponseRenderer jsonResponseRenderer() {
-		return U.or(jsonResponseRenderer, My.getJsonResponseRenderer());
+		return U.or(jsonResponseRenderer, My.jsonResponseRenderer());
 	}
 
 	public void jsonResponseRenderer(JsonResponseRenderer jsonResponseRenderer) {
@@ -111,7 +111,7 @@ public class Customization extends RapidoidThing {
 	}
 
 	public BeanParameterFactory beanParameterFactory() {
-		return U.or(beanParameterFactory, My.getBeanParameterFactory());
+		return U.or(beanParameterFactory, My.beanParameterFactory());
 	}
 
 	public void beanParameterFactory(BeanParameterFactory beanParameterFactory) {
@@ -127,7 +127,7 @@ public class Customization extends RapidoidThing {
 	}
 
 	public LoginProvider loginProvider() {
-		return U.or(loginProvider, My.getLoginProvider());
+		return U.or(loginProvider, My.loginProvider());
 	}
 
 	public void loginProvider(LoginProvider loginProvider) {
@@ -135,7 +135,7 @@ public class Customization extends RapidoidThing {
 	}
 
 	public RolesProvider rolesProvider() {
-		return U.or(rolesProvider, My.getRolesProvider());
+		return U.or(rolesProvider, My.rolesProvider());
 	}
 
 	public void rolesProvider(RolesProvider rolesProvider) {
@@ -143,7 +143,7 @@ public class Customization extends RapidoidThing {
 	}
 
 	public PageRenderer pageRenderer() {
-		return U.or(pageRenderer, My.getPageRenderer());
+		return U.or(pageRenderer, My.pageRenderer());
 	}
 
 	public void pageRenderer(PageRenderer pageRenderer) {
@@ -151,7 +151,7 @@ public class Customization extends RapidoidThing {
 	}
 
 	public BeanValidator validator() {
-		return U.or(validator, My.getValidator());
+		return U.or(validator, My.validator());
 	}
 
 	public ObjectMapper jackson() {

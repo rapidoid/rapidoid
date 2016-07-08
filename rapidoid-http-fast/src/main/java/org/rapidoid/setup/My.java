@@ -98,39 +98,39 @@ public class My extends RapidoidThing {
 		My.jackson = jackson;
 	}
 
-	public static String[] getStaticFilesPath() {
+	public static String[] staticFilesPath() {
 		return staticFilesPath;
 	}
 
-	public static ErrorHandler getErrorHandler() {
+	public static ErrorHandler errorHandler() {
 		return errorHandler;
 	}
 
-	public static JsonResponseRenderer getJsonResponseRenderer() {
+	public static JsonResponseRenderer jsonResponseRenderer() {
 		return jsonResponseRenderer;
 	}
 
-	public static BeanParameterFactory getBeanParameterFactory() {
+	public static BeanParameterFactory beanParameterFactory() {
 		return beanParameterFactory;
 	}
 
-	public static BeanValidator getValidator() {
+	public static BeanValidator validator() {
 		return validator;
 	}
 
-	public static LoginProvider getLoginProvider() {
+	public static LoginProvider loginProvider() {
 		return loginProvider;
 	}
 
-	public static RolesProvider getRolesProvider() {
+	public static RolesProvider rolesProvider() {
 		return rolesProvider;
 	}
 
-	public static PageRenderer getPageRenderer() {
+	public static PageRenderer pageRenderer() {
 		return pageRenderer;
 	}
 
-	public static ViewRenderer getViewRenderer() {
+	public static ViewRenderer viewRenderer() {
 		return viewRenderer;
 	}
 
