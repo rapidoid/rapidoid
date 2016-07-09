@@ -52,7 +52,7 @@ public class CustomizationTest extends IntegrationTestCommons {
 	@Test
 	public void testAuthConfig() {
 		On.custom().loginProvider((req, username, password) -> password.equals(username + "!"));
-		On.custom().rolesProvider(username -> username.equals("root") ? U.set("admin") : U.set());
+		On.custom().rolesProvider((req, username) -> username.equals("root") ? U.set("admin") : U.set());
 		// FIXME complete the test
 	}
 

@@ -29,7 +29,7 @@ public class Main {
 		My.loginProvider((req, username, password) -> username.equals(password));
 
 		// Gives the 'manager' role to every logged-in user
-		My.rolesProvider(username -> U.set("manager"));
+		My.rolesProvider((req, username) -> U.set("manager"));
 	}
 
 }

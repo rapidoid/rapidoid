@@ -123,7 +123,7 @@ public class OAuthTokenHandler extends RapidoidThing implements ReqHandler {
 			String name = U.or((String) auth.get("name"), firstName + " " + lastName);
 
 			String username = email;
-			Set<String> roles = customization.rolesProvider().getRolesForUser(username);
+			Set<String> roles = customization.rolesProvider().getRolesForUser(req, username);
 
 			UserInfo user = new UserInfo(username, roles);
 			user.name = name;

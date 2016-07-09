@@ -116,7 +116,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 	private Set<String> userRoles(Req req, String username) {
 		if (username != null) {
 			try {
-				return req.routes().custom().rolesProvider().getRolesForUser(username);
+				return req.routes().custom().rolesProvider().getRolesForUser(req, username);
 			} catch (Exception e) {
 				throw U.rte(e);
 			}

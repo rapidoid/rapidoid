@@ -333,7 +333,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 			success = loginProvider.login(req, username, password);
 
 			if (success) {
-				Set<String> roles = rolesProvider.getRolesForUser(username);
+				Set<String> roles = rolesProvider.getRolesForUser(req, username);
 
 				long ttl = Conf.TOKEN.entry("ttl").or(0);
 				long expiresOn = ttl > 0 ? U.time() + ttl : Long.MAX_VALUE;
