@@ -51,6 +51,10 @@ public class Defaults extends RapidoidThing {
 
 	private static final ObjectMapper jackson = JSON.newMapper();
 
+	private static final EntityManagerProvider entityManagerProvider = null;
+
+	private static final EntityManagerFactoryProvider entityManagerFactoryProvider = new DefaultEntityManagerFactoryProvider();
+
 	public static String[] staticFilesPath() {
 		return staticFilesPath;
 	}
@@ -89,5 +93,13 @@ public class Defaults extends RapidoidThing {
 
 	public static ObjectMapper jackson() {
 		return jackson;
+	}
+
+	public static EntityManagerProvider entityManagerProvider() {
+		return entityManagerProvider;
+	}
+
+	public static EntityManagerFactoryProvider entityManagerFactoryProvider() {
+		return entityManagerFactoryProvider;
 	}
 }

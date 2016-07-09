@@ -1,11 +1,8 @@
-package org.rapidoid.ctx;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
+package org.rapidoid.http.customize;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-http-fast
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -23,12 +20,21 @@ import org.rapidoid.annotation.Since;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
+import org.rapidoid.jpa.JPA;
+
+import javax.persistence.EntityManagerFactory;
+
 @Authors("Nikolche Mihajlovski")
-@Since("4.0.0")
-public interface PersisterProvider {
+@Since("5.2.0")
+public class DefaultEntityManagerFactoryProvider extends RapidoidThing implements EntityManagerFactoryProvider {
 
-	<P> P openPersister(Ctx ctx);
-
-	void closePersister(Ctx ctx, Object persister);
+	@Override
+	public EntityManagerFactory getEntityManagerFactory(Req req) throws Exception {
+		return JPA.provideEmf();
+	}
 
 }

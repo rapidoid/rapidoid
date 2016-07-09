@@ -30,112 +30,128 @@ import org.rapidoid.http.customize.*;
 @Since("5.1.0")
 public class My extends RapidoidThing {
 
-	private static volatile String[] staticFilesPath;
-	private static volatile ErrorHandler errorHandler;
-	private static volatile JsonResponseRenderer jsonResponseRenderer;
-	private static volatile BeanParameterFactory beanParameterFactory;
-	private static volatile BeanValidator validator;
-	private static volatile LoginProvider loginProvider;
-	private static volatile RolesProvider rolesProvider;
-	private static volatile PageRenderer pageRenderer;
-	private static volatile ViewRenderer viewRenderer;
-	private static volatile ObjectMapper jackson;
+	private static final Customization GLOBAL = new Customization("my", null, null, null);
 
 	static {
 		reset();
 	}
 
 	public static void reset() {
-		staticFilesPath = Defaults.staticFilesPath();
-		errorHandler = Defaults.errorHandler();
-		viewRenderer = Defaults.viewRenderer();
-		pageRenderer = Defaults.pageRenderer();
-		jsonResponseRenderer = Defaults.jsonResponseRenderer();
-		beanParameterFactory = Defaults.beanParameterFactory();
-		loginProvider = Defaults.loginProvider();
-		rolesProvider = Defaults.rolesProvider();
-		validator = Defaults.validator();
-		jackson = Defaults.jackson();
+		synchronized (GLOBAL) {
+			GLOBAL.reset();
+			GLOBAL.staticFilesPath(Defaults.staticFilesPath());
+			GLOBAL.errorHandler(Defaults.errorHandler());
+			GLOBAL.viewRenderer(Defaults.viewRenderer());
+			GLOBAL.pageRenderer(Defaults.pageRenderer());
+			GLOBAL.jsonResponseRenderer(Defaults.jsonResponseRenderer());
+			GLOBAL.beanParameterFactory(Defaults.beanParameterFactory());
+			GLOBAL.loginProvider(Defaults.loginProvider());
+			GLOBAL.rolesProvider(Defaults.rolesProvider());
+			GLOBAL.validator(Defaults.validator());
+			GLOBAL.jackson(Defaults.jackson());
+			GLOBAL.entityManagerFactoryProvider(Defaults.entityManagerFactoryProvider());
+			GLOBAL.entityManagerProvider(Defaults.entityManagerProvider());
+		}
+	}
+
+	public static Customization custom() {
+		return GLOBAL;
 	}
 
 	public static void staticFilesPath(String... staticFilesPath) {
-		My.staticFilesPath = staticFilesPath;
+		GLOBAL.staticFilesPath(staticFilesPath);
 	}
 
 	public static void errorHandler(ErrorHandler errorHandler) {
-		My.errorHandler = errorHandler;
+		GLOBAL.errorHandler(errorHandler);
 	}
 
 	public static void jsonResponseRenderer(JsonResponseRenderer jsonResponseRenderer) {
-		My.jsonResponseRenderer = jsonResponseRenderer;
+		GLOBAL.jsonResponseRenderer(jsonResponseRenderer);
 	}
 
 	public static void beanParameterFactory(BeanParameterFactory beanParameterFactory) {
-		My.beanParameterFactory = beanParameterFactory;
+		GLOBAL.beanParameterFactory(beanParameterFactory);
 	}
 
 	public static void validator(BeanValidator validator) {
-		My.validator = validator;
+		GLOBAL.validator(validator);
 	}
 
 	public static void loginProvider(LoginProvider loginProvider) {
-		My.loginProvider = loginProvider;
+		GLOBAL.loginProvider(loginProvider);
 	}
 
 	public static void rolesProvider(RolesProvider rolesProvider) {
-		My.rolesProvider = rolesProvider;
+		GLOBAL.rolesProvider(rolesProvider);
 	}
 
 	public static void pageRenderer(PageRenderer pageRenderer) {
-		My.pageRenderer = pageRenderer;
+		GLOBAL.pageRenderer(pageRenderer);
 	}
 
 	public static void viewRenderer(ViewRenderer viewRenderer) {
-		My.viewRenderer = viewRenderer;
+		GLOBAL.viewRenderer(viewRenderer);
 	}
 
 	public static void jackson(ObjectMapper jackson) {
-		My.jackson = jackson;
+		GLOBAL.jackson(jackson);
 	}
 
 	public static String[] staticFilesPath() {
-		return staticFilesPath;
+		return GLOBAL.staticFilesPath();
 	}
 
 	public static ErrorHandler errorHandler() {
-		return errorHandler;
+		return GLOBAL.errorHandler();
 	}
 
 	public static JsonResponseRenderer jsonResponseRenderer() {
-		return jsonResponseRenderer;
+		return GLOBAL.jsonResponseRenderer();
 	}
 
 	public static BeanParameterFactory beanParameterFactory() {
-		return beanParameterFactory;
+		return GLOBAL.beanParameterFactory();
 	}
 
 	public static BeanValidator validator() {
-		return validator;
+		return GLOBAL.validator();
 	}
 
 	public static LoginProvider loginProvider() {
-		return loginProvider;
+		return GLOBAL.loginProvider();
 	}
 
 	public static RolesProvider rolesProvider() {
-		return rolesProvider;
+		return GLOBAL.rolesProvider();
 	}
 
 	public static PageRenderer pageRenderer() {
-		return pageRenderer;
+		return GLOBAL.pageRenderer();
 	}
 
 	public static ViewRenderer viewRenderer() {
-		return viewRenderer;
+		return GLOBAL.viewRenderer();
 	}
 
 	public static ObjectMapper jackson() {
-		return jackson;
+		return GLOBAL.jackson();
+	}
+
+	public static EntityManagerProvider entityManagerProvider() {
+		return GLOBAL.entityManagerProvider();
+	}
+
+	public static void entityManagerProvider(EntityManagerProvider entityManagerProvider) {
+		GLOBAL.entityManagerProvider(entityManagerProvider);
+	}
+
+	public static EntityManagerFactoryProvider entityManagerFactoryProvider() {
+		return GLOBAL.entityManagerFactoryProvider();
+	}
+
+	public static void entityManagerFactoryProvider(EntityManagerFactoryProvider entityManagerFactoryProvider) {
+		GLOBAL.entityManagerFactoryProvider(entityManagerFactoryProvider);
 	}
 
 }

@@ -276,12 +276,15 @@ org.rapidoid.http.customize.BeanValidator
 org.rapidoid.http.customize.Customization
 org.rapidoid.http.customize.DefaultBeanParameterFactory
 org.rapidoid.http.customize.DefaultBeanValidator
+org.rapidoid.http.customize.DefaultEntityManagerFactoryProvider
 org.rapidoid.http.customize.DefaultErrorHandler
 org.rapidoid.http.customize.DefaultJsonResponseRenderer
 org.rapidoid.http.customize.DefaultLoginProvider
 org.rapidoid.http.customize.DefaultPageRenderer
 org.rapidoid.http.customize.DefaultRolesProvider
 org.rapidoid.http.customize.DefaultViewRenderer
+org.rapidoid.http.customize.EntityManagerFactoryProvider
+org.rapidoid.http.customize.EntityManagerProvider
 org.rapidoid.http.customize.ErrorHandler
 org.rapidoid.http.customize.JsonResponseRenderer
 org.rapidoid.http.customize.LoginProvider
@@ -417,7 +420,6 @@ org.rapidoid.jpa.EMFUtil
 org.rapidoid.jpa.Entities
 org.rapidoid.jpa.JPA
 org.rapidoid.jpa.JPACriteriaQueryEntities
-org.rapidoid.jpa.JPAPersisterProvider
 org.rapidoid.jpa.JPATool
 org.rapidoid.jpa.JPAUtil
 org.rapidoid.jpa.JPQL
@@ -549,6 +551,7 @@ org.rapidoid.setup.App
 org.rapidoid.setup.AppBootstrap
 org.rapidoid.setup.AppRestartListener
 org.rapidoid.setup.AppRestartProcessor
+org.rapidoid.setup.CustomizableSetupAwarePersisterProvider
 org.rapidoid.setup.Defaults
 org.rapidoid.setup.IGoodies
 org.rapidoid.setup.My

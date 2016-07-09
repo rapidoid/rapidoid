@@ -5,8 +5,8 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Config;
+import org.rapidoid.http.Req;
 import org.rapidoid.setup.My;
-import org.rapidoid.u.U;
 
 /*
  * #%L
@@ -32,10 +32,11 @@ import org.rapidoid.u.U;
 @Since("5.1.0")
 public class Customization extends RapidoidThing {
 
+	static final Customization NULL = new Customization(null, null, null, null);
+
 	private final String name;
-
+	private final Customization defaults;
 	private final Config appConfig;
-
 	private final Config serverConfig;
 
 	private volatile String[] staticFilesPath;
@@ -58,14 +59,20 @@ public class Customization extends RapidoidThing {
 
 	private volatile ObjectMapper jackson;
 
-	public Customization(String name, Config appConfig, Config serverConfig) {
+	private volatile EntityManagerProvider entityManagerProvider;
+
+	private volatile EntityManagerFactoryProvider entityManagerFactoryProvider;
+
+	public Customization(String name, Customization defaults, Config appConfig, Config serverConfig) {
 		this.name = name;
+		this.defaults = defaults;
 		this.appConfig = appConfig;
 		this.serverConfig = serverConfig;
+
 		reset();
 	}
 
-	public void reset() {
+	public synchronized void reset() {
 		staticFilesPath = null;
 		errorHandler = null;
 		viewRenderer = null;
@@ -76,90 +83,20 @@ public class Customization extends RapidoidThing {
 		rolesProvider = null;
 		validator = null;
 		jackson = null;
+		entityManagerProvider = null;
+		entityManagerFactoryProvider = null;
 	}
 
-	public void staticFilesPath(String... staticFilesPath) {
-		this.staticFilesPath = staticFilesPath;
-	}
-
-	public String[] staticFilesPath() {
-		return U.or(staticFilesPath, My.staticFilesPath());
-	}
-
-	public ErrorHandler errorHandler() {
-		return U.or(errorHandler, My.errorHandler());
-	}
-
-	public void errorHandler(ErrorHandler errorHandler) {
-		this.errorHandler = errorHandler;
-	}
-
-	public ViewRenderer viewRenderer() {
-		return U.or(viewRenderer, My.viewRenderer());
-	}
-
-	public void viewRenderer(ViewRenderer viewRenderer) {
-		this.viewRenderer = viewRenderer;
-	}
-
-	public JsonResponseRenderer jsonResponseRenderer() {
-		return U.or(jsonResponseRenderer, My.jsonResponseRenderer());
-	}
-
-	public void jsonResponseRenderer(JsonResponseRenderer jsonResponseRenderer) {
-		this.jsonResponseRenderer = jsonResponseRenderer;
-	}
-
-	public BeanParameterFactory beanParameterFactory() {
-		return U.or(beanParameterFactory, My.beanParameterFactory());
-	}
-
-	public void beanParameterFactory(BeanParameterFactory beanParameterFactory) {
-		this.beanParameterFactory = beanParameterFactory;
-	}
-
-	public void validator(BeanValidator validator) {
-		this.validator = validator;
-	}
-
-	public void jackson(ObjectMapper jackson) {
-		this.jackson = jackson;
-	}
-
-	public LoginProvider loginProvider() {
-		return U.or(loginProvider, My.loginProvider());
-	}
-
-	public void loginProvider(LoginProvider loginProvider) {
-		this.loginProvider = loginProvider;
-	}
-
-	public RolesProvider rolesProvider() {
-		return U.or(rolesProvider, My.rolesProvider());
-	}
-
-	public void rolesProvider(RolesProvider rolesProvider) {
-		this.rolesProvider = rolesProvider;
-	}
-
-	public PageRenderer pageRenderer() {
-		return U.or(pageRenderer, My.pageRenderer());
-	}
-
-	public void pageRenderer(PageRenderer pageRenderer) {
-		this.pageRenderer = pageRenderer;
-	}
-
-	public BeanValidator validator() {
-		return U.or(validator, My.validator());
-	}
-
-	public ObjectMapper jackson() {
-		return U.or(jackson, My.jackson());
+	public static Customization of(Req req) {
+		return req != null ? req.custom() : My.custom();
 	}
 
 	public String name() {
 		return name;
+	}
+
+	public Customization defaults() {
+		return defaults;
 	}
 
 	public Config appConfig() {
@@ -168,5 +105,113 @@ public class Customization extends RapidoidThing {
 
 	public Config serverConfig() {
 		return serverConfig;
+	}
+
+	public String[] staticFilesPath() {
+		return staticFilesPath != null || defaults == null ? staticFilesPath : defaults.staticFilesPath();
+	}
+
+	public Customization staticFilesPath(String... staticFilesPath) {
+		this.staticFilesPath = staticFilesPath;
+		return this;
+	}
+
+	public ErrorHandler errorHandler() {
+		return errorHandler != null || defaults == null ? errorHandler : defaults.errorHandler();
+	}
+
+	public Customization errorHandler(ErrorHandler errorHandler) {
+		this.errorHandler = errorHandler;
+		return this;
+	}
+
+	public ViewRenderer viewRenderer() {
+		return viewRenderer != null || defaults == null ? viewRenderer : defaults.viewRenderer();
+	}
+
+	public Customization viewRenderer(ViewRenderer viewRenderer) {
+		this.viewRenderer = viewRenderer;
+		return this;
+	}
+
+	public PageRenderer pageRenderer() {
+		return pageRenderer != null || defaults == null ? pageRenderer : defaults.pageRenderer();
+	}
+
+	public Customization pageRenderer(PageRenderer pageRenderer) {
+		this.pageRenderer = pageRenderer;
+		return this;
+	}
+
+	public JsonResponseRenderer jsonResponseRenderer() {
+		return jsonResponseRenderer != null || defaults == null ? jsonResponseRenderer : defaults.jsonResponseRenderer();
+	}
+
+	public Customization jsonResponseRenderer(JsonResponseRenderer jsonResponseRenderer) {
+		this.jsonResponseRenderer = jsonResponseRenderer;
+		return this;
+	}
+
+	public BeanParameterFactory beanParameterFactory() {
+		return beanParameterFactory != null || defaults == null ? beanParameterFactory : defaults.beanParameterFactory();
+	}
+
+	public Customization beanParameterFactory(BeanParameterFactory beanParameterFactory) {
+		this.beanParameterFactory = beanParameterFactory;
+		return this;
+	}
+
+	public LoginProvider loginProvider() {
+		return loginProvider != null || defaults == null ? loginProvider : defaults.loginProvider();
+	}
+
+	public Customization loginProvider(LoginProvider loginProvider) {
+		this.loginProvider = loginProvider;
+		return this;
+	}
+
+	public RolesProvider rolesProvider() {
+		return rolesProvider != null || defaults == null ? rolesProvider : defaults.rolesProvider();
+	}
+
+	public Customization rolesProvider(RolesProvider rolesProvider) {
+		this.rolesProvider = rolesProvider;
+		return this;
+	}
+
+	public BeanValidator validator() {
+		return validator != null || defaults == null ? validator : defaults.validator();
+	}
+
+	public Customization validator(BeanValidator validator) {
+		this.validator = validator;
+		return this;
+	}
+
+	public ObjectMapper jackson() {
+		return jackson != null || defaults == null ? jackson : defaults.jackson();
+	}
+
+	public Customization jackson(ObjectMapper jackson) {
+		this.jackson = jackson;
+		return this;
+	}
+
+	public EntityManagerProvider entityManagerProvider() {
+		return entityManagerProvider != null || defaults == null ? entityManagerProvider : defaults.entityManagerProvider();
+	}
+
+	public Customization entityManagerProvider(EntityManagerProvider entityManagerProvider) {
+		this.entityManagerProvider = entityManagerProvider;
+		return this;
+	}
+
+	public EntityManagerFactoryProvider entityManagerFactoryProvider() {
+		return entityManagerFactoryProvider != null || defaults == null ? entityManagerFactoryProvider : defaults.entityManagerFactoryProvider();
+	}
+
+	public Customization entityManagerFactoryProvider(EntityManagerFactoryProvider entityManagerFactoryProvider) {
+		this.entityManagerFactoryProvider = entityManagerFactoryProvider;
+		return this;
 	}
 }
