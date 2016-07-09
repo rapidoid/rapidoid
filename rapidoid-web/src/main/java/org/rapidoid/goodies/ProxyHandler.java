@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.http.*;
+import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.impl.HttpIO;
 
 import java.util.Map;
@@ -48,31 +49,31 @@ public class ProxyHandler extends RapidoidThing implements ReqRespHandler {
 		Map<String, String> headers = req.headers();
 
 		client.req()
-				.verb(req.verb())
-				.url(host + req.uri())
-				.headers(headers)
-				.body(req.body())
-				.raw(true)
-				.execute(new Callback<HttpResp>() {
+			.verb(req.verb())
+			.url(host + req.uri())
+			.headers(headers)
+			.body(req.body())
+			.raw(true)
+			.execute(new Callback<HttpResp>() {
 
-					@Override
-					public void onDone(HttpResp result, Throwable error) {
-						if (error == null) {
-							Map<String, String> hdrs = result.headers();
-							byte[] body = result.bodyBytes();
+				@Override
+				public void onDone(HttpResp result, Throwable error) {
+					if (error == null) {
+						Map<String, String> hdrs = result.headers();
+						byte[] body = result.bodyBytes();
 
-							hdrs.remove("Transfer-Encoding");
+						hdrs.remove("Transfer-Encoding");
 
-							resp.headers().putAll(hdrs);
-							resp.code(result.code());
-							resp.body(body);
-							resp.done();
-						} else {
-							HttpIO.errorAndDone(req, error, req.custom().errorHandler());
-						}
+						resp.headers().putAll(hdrs);
+						resp.code(result.code());
+						resp.body(body);
+						resp.done();
+					} else {
+						HttpIO.errorAndDone(req, error, Customization.of(req).errorHandler());
 					}
+				}
 
-				});
+			});
 
 		return req;
 	}

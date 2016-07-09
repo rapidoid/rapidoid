@@ -14,6 +14,7 @@ import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
+import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.LoginProvider;
 import org.rapidoid.http.customize.RolesProvider;
 import org.rapidoid.u.U;
@@ -321,10 +322,10 @@ public class RespImpl extends RapidoidThing implements Resp {
 
 	@Override
 	public boolean login(String username, String password) {
-		LoginProvider loginProvider = req.routes().custom().loginProvider();
+		LoginProvider loginProvider = Customization.of(req).loginProvider();
 		U.must(loginProvider != null, "A login provider wasn't set!");
 
-		RolesProvider rolesProvider = req.routes().custom().rolesProvider();
+		RolesProvider rolesProvider = Customization.of(req).rolesProvider();
 		U.must(rolesProvider != null, "A roles provider wasn't set!");
 
 		boolean success;
@@ -383,7 +384,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 	}
 
 	private void initScreen(Screen screen) {
-		Config app = request().custom().appConfig();
+		Config app = Customization.of(req).appConfig();
 		Config segments = app.sub("segments");
 		Config segment = segments.sub(req.segment());
 		ConfigAlternatives cfg = segment.or(app);
@@ -463,7 +464,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 	}
 
 	private byte[] serializeResponseContent() {
-		return HttpUtils.responseToBytes(req, result(), contentType(), req.routes().custom().jsonResponseRenderer());
+		return HttpUtils.responseToBytes(req, result(), contentType(), Customization.of(req).jsonResponseRenderer());
 	}
 
 }

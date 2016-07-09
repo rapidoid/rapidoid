@@ -338,7 +338,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	@SuppressWarnings("unchecked")
 	private <T> T beanFrom(Class<T> beanType, Map<String, ?> properties) {
 		String paramName = Str.uncapitalized(beanType.getSimpleName());
-		BeanParameterFactory beanParameterFactory = custom().beanParameterFactory();
+		BeanParameterFactory beanParameterFactory = Customization.of(this).beanParameterFactory();
 
 		try {
 			return (T) beanParameterFactory.getParamValue(this, beanType, paramName, (Map<String, Object>) properties);
@@ -515,7 +515,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 			return response.renderToBytes();
 
 		} catch (Throwable e) {
-			HttpIO.error(this, e, custom().errorHandler());
+			HttpIO.error(this, e, Customization.of(this).errorHandler());
 
 			try {
 				return response.renderToBytes();
@@ -689,7 +689,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		if (contextPath == null) {
 			synchronized (this) {
 				if (contextPath == null) {
-					contextPath = HttpUtils.getContextPath(custom(), segment());
+					contextPath = HttpUtils.getContextPath(Customization.of(this), segment());
 				}
 			}
 		}

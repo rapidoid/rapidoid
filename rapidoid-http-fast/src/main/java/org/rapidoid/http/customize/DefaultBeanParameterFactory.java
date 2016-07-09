@@ -33,7 +33,7 @@ public class DefaultBeanParameterFactory extends RapidoidThing implements BeanPa
 
 	@Override
 	public Object getParamValue(Req req, Class<?> paramType, String paramName, Map<String, Object> properties) throws Exception {
-		return req.custom().jackson().convertValue(properties, paramType);
+		return Customization.of(req).jackson().convertValue(properties, paramType);
 	}
 
 }

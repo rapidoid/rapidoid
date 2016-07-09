@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.ctx.With;
 import org.rapidoid.http.*;
+import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.impl.HttpIO;
 import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.jpa.JPA;
@@ -75,7 +76,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 			txMode = before(req, username, roles);
 
 		} catch (Throwable e) {
-			HttpIO.errorAndDone(req, e, req.routes().custom().errorHandler());
+			HttpIO.errorAndDone(req, e, Customization.of(req).errorHandler());
 			return HttpStatus.DONE;
 		}
 
@@ -87,7 +88,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 
 		} catch (Throwable e) {
 			// if there was an error in the job scheduling:
-			HttpIO.errorAndDone(req, e, req.custom().errorHandler());
+			HttpIO.errorAndDone(req, e, Customization.of(req).errorHandler());
 			return HttpStatus.DONE;
 		}
 
@@ -116,7 +117,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 	private Set<String> userRoles(Req req, String username) {
 		if (username != null) {
 			try {
-				return req.routes().custom().rolesProvider().getRolesForUser(req, username);
+				return Customization.of(req).rolesProvider().getRolesForUser(req, username);
 			} catch (Exception e) {
 				throw U.rte(e);
 			}
@@ -200,7 +201,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 					try {
 						JPA.transaction(handleRequest, txMode == TransactionMode.READ_ONLY);
 					} catch (Exception e) {
-						HttpIO.errorAndDone(req, e, req.routes().custom().errorHandler());
+						HttpIO.errorAndDone(req, e, Customization.of(req).errorHandler());
 					}
 				}
 			};
@@ -259,7 +260,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 		}
 
 		if (result instanceof Throwable) {
-			HttpIO.errorAndDone(req, (Throwable) result, req.routes().custom().errorHandler());
+			HttpIO.errorAndDone(req, (Throwable) result, Customization.of(req).errorHandler());
 			return;
 
 		} else {

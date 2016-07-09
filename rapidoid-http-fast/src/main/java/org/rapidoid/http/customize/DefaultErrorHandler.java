@@ -41,7 +41,7 @@ public class DefaultErrorHandler extends RapidoidThing implements ErrorHandler {
 	@Override
 	public Object handleError(Req req, Resp resp, Throwable error) {
 
-		Customization customization = req.custom();
+		Customization customization = Customization.of(req);
 		Config segments = customization.appConfig().sub("segments");
 		Value<String> home = customization.appConfig().sub("app").entry("home").str();
 

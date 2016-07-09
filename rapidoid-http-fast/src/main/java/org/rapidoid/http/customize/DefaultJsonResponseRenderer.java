@@ -33,7 +33,7 @@ public class DefaultJsonResponseRenderer extends RapidoidThing implements JsonRe
 
 	@Override
 	public void renderJson(Req req, Object value, OutputStream out) throws Exception {
-		req.custom().jackson().writeValue(out, value);
+		Customization.of(req).jackson().writeValue(out, value);
 	}
 
 }
