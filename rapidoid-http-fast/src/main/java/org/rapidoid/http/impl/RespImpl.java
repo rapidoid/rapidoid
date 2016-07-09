@@ -330,7 +330,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 		boolean success;
 
 		try {
-			success = loginProvider.login(username, password);
+			success = loginProvider.login(req, username, password);
 
 			if (success) {
 				Set<String> roles = rolesProvider.getRolesForUser(username);

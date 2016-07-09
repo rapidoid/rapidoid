@@ -3,6 +3,7 @@ package org.rapidoid.http.customize;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
 import org.rapidoid.security.Auth;
 
 /*
@@ -30,7 +31,7 @@ import org.rapidoid.security.Auth;
 public class DefaultLoginProvider extends RapidoidThing implements LoginProvider {
 
 	@Override
-	public boolean login(String username, String password) {
+	public boolean login(Req req, String username, String password) {
 		return Auth.login(username, password);
 	}
 

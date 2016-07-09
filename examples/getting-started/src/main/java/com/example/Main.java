@@ -26,7 +26,7 @@ public class Main {
 		});
 
 		// Dummy login: successful if the username is the same as the password
-		My.loginProvider((username, password) -> username.equals(password));
+		My.loginProvider((req, username, password) -> username.equals(password));
 
 		// Gives the 'manager' role to every logged-in user
 		My.rolesProvider(username -> U.set("manager"));
