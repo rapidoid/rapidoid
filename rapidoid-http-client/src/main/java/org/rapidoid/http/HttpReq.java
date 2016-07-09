@@ -9,6 +9,7 @@ import org.rapidoid.concurrent.Future;
 import org.rapidoid.data.JSON;
 import org.rapidoid.io.Upload;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Expectation;
 
 import java.util.List;
 import java.util.Map;
@@ -206,6 +207,10 @@ public class HttpReq extends RapidoidThing {
 
 	public Map<String, Object> toMap() {
 		return parse();
+	}
+
+	public Expectation expect() {
+		return new Expectation(parse());
 	}
 
 	public <T> T toBean(Class<T> beanClass) {
