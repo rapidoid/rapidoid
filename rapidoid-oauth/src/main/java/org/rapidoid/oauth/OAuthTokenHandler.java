@@ -80,8 +80,8 @@ public class OAuthTokenHandler extends RapidoidThing implements ReqHandler {
 
 		if (code != null && !U.isEmpty(state)) {
 
-			String id = clientId.or(OAuth.NO_ID);
-			String secret = clientSecret.or(OAuth.NO_SECRET);
+			String id = clientId.str().get();
+			String secret = clientSecret.str().get();
 
 			char statePrefix = state.charAt(0);
 			U.must(statePrefix == 'P' || statePrefix == 'N', "Invalid OAuth state prefix!");
@@ -123,7 +123,7 @@ public class OAuthTokenHandler extends RapidoidThing implements ReqHandler {
 			String name = U.or((String) auth.get("name"), firstName + " " + lastName);
 
 			String username = email;
-			Set<String> roles = customization.rolesProvider().getRolesForUser(username);
+			Set<String> roles = customization.rolesProvider().getRolesForUser(req, username);
 
 			UserInfo user = new UserInfo(username, roles);
 			user.name = name;
@@ -133,7 +133,7 @@ public class OAuthTokenHandler extends RapidoidThing implements ReqHandler {
 
 			Ctxs.ctx().setUser(user);
 
-			// user.saveTo(x.cookiepack()); // FIXME use cookiepack
+			// user.saveTo(x.token()); // FIXME use token
 
 			return req.response().redirect("/"); // FIXME use page stack
 		} else {

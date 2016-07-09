@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 1864
+Content-Length: 1888
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,6 +13,7 @@ Content-Length: 1864
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Rapidoid</title>
 
 
 

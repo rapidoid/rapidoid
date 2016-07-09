@@ -2,6 +2,7 @@ package org.rapidoid.http.customize;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
 
 import java.util.Set;
 
@@ -29,6 +30,6 @@ import java.util.Set;
 @Since("5.1.0")
 public interface RolesProvider {
 
-	Set<String> getRolesForUser(String username) throws Exception;
+	Set<String> getRolesForUser(Req req, String username) throws Exception;
 
 }

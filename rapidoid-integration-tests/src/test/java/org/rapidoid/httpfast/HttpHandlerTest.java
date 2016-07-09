@@ -30,6 +30,7 @@ import org.rapidoid.http.Req;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.impl.HttpRoutesImpl;
 import org.rapidoid.net.Server;
+import org.rapidoid.setup.My;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
@@ -38,7 +39,7 @@ public class HttpHandlerTest extends IntegrationTestCommons {
 
 	@Test
 	public void testFastHttpHandler() {
-		Customization customization = new Customization("example", new Config(), new Config());
+		Customization customization = new Customization("example", My.custom(), new Config(), new Config());
 		HttpRoutesImpl routes = new HttpRoutesImpl(customization);
 		FastHttp http = new FastHttp(routes);
 

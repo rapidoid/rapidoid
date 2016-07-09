@@ -3,7 +3,7 @@ package org.rapidoid.http.customize;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.data.JSON;
+import org.rapidoid.http.Req;
 
 import java.io.OutputStream;
 
@@ -32,8 +32,8 @@ import java.io.OutputStream;
 public class DefaultJsonResponseRenderer extends RapidoidThing implements JsonResponseRenderer {
 
 	@Override
-	public void renderJson(Object value, OutputStream out) {
-		JSON.stringify(value, out);
+	public void renderJson(Req req, Object value, OutputStream out) throws Exception {
+		Customization.of(req).jackson().writeValue(out, value);
 	}
 
 }

@@ -7,8 +7,6 @@ admin:
   address: 0.0.0.0
 
 app:
-  domain: ''
-  brand: Rapidoid
   search: false
   navbar: true
   fluid: false
@@ -63,18 +61,22 @@ hibernate:
 
 oauth:
   google:
+    scope: profile,email
     clientId: YOUR_GOOGLE_CLIENT_ID_HERE
     clientSecret: YOUR_GOOGLE_CLIENT_SECRET_HERE
 
   github:
+    scope: user:email
     clientId: YOUR_GITHUB_CLIENT_ID_HERE
     clientSecret: YOUR_GITHUB_CLIENT_SECRET_HERE
 
   facebook:
+    scope: public_profile,email
     clientId: YOUR_FACEBOOK_CLIENT_ID_HERE
     clientSecret: YOUR_FACEBOOK_CLIENT_SECRET_HERE
 
   linkedin:
+    scope: r_basicprofile,r_emailaddress
     clientId: YOUR_LINKEDIN_CLIENT_ID_HERE
     clientSecret: YOUR_LINKEDIN_CLIENT_SECRET_HERE
 

@@ -202,11 +202,24 @@ public class IO extends RapidoidThing {
 	}
 
 	public static void save(String filename, byte[] content) {
+		save(filename, content, 3);
+	}
+
+	public static void save(String filename, byte[] content, int retries) {
 		FileOutputStream out = null;
 		try {
 			out = new FileOutputStream(filename);
 			out.write(content);
 			close(out, false);
+		} catch (FileNotFoundException e) {
+			if (retries > 0) {
+				new File(filename).getParentFile().mkdirs();
+				U.sleep(200);
+				save(filename, content, retries - 1);
+			} else {
+				close(out, true);
+				throw U.rte(e);
+			}
 		} catch (Exception e) {
 			close(out, true);
 			throw U.rte(e);

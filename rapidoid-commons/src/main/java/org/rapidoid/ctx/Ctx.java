@@ -85,7 +85,7 @@ public class Ctx extends RapidoidThing implements CtxMetadata {
 		Object persister = this.persisters.get();
 
 		if (persister == null) {
-			persister = Ctxs.createPersister();
+			persister = Ctxs.createPersister(this);
 			this.persisters.set(persister);
 			persistersToClose.add(persister);
 		}
@@ -130,7 +130,7 @@ public class Ctx extends RapidoidThing implements CtxMetadata {
 		this.persisters = null;
 
 		for (Object persister : persistersToClose) {
-			Ctxs.closePersister(persister);
+			Ctxs.closePersister(this, persister);
 		}
 
 		persistersToClose.clear();

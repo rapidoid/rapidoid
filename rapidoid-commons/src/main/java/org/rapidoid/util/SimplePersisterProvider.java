@@ -1,6 +1,7 @@
 package org.rapidoid.util;
 
 import org.rapidoid.RapidoidThing;
+import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.PersisterProvider;
 import org.rapidoid.log.Log;
 
@@ -34,12 +35,12 @@ public class SimplePersisterProvider extends RapidoidThing implements PersisterP
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <P> P openPersister() {
+	public <P> P openPersister(Ctx ctx) {
 		return (P) persistor;
 	}
 
 	@Override
-	public void closePersister(Object persister) {
+	public void closePersister(Ctx ctx, Object persister) {
 		Log.info("Closing persister", "persister", persister);
 	}
 

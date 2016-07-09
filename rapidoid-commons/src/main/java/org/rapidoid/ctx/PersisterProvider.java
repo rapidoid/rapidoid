@@ -27,8 +27,8 @@ import org.rapidoid.annotation.Since;
 @Since("4.0.0")
 public interface PersisterProvider {
 
-	<P> P openPersister();
+	<P> P openPersister(Ctx ctx);
 
-	void closePersister(Object persister);
+	void closePersister(Ctx ctx, Object persister);
 
 }

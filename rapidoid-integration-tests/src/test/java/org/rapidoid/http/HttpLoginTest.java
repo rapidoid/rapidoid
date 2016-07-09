@@ -121,7 +121,7 @@ public class HttpLoginTest extends IntegrationTestCommons {
 	}
 
 	private void verifyAccessGranted(String user, HttpClient client) {
-		verify("granted-" + user, fetch(client, "get", "/profile").replaceAll("COOKIEPACK=.*?;", "COOKIEPACK=...;"));
+		verify("granted-" + user, fetch(client, "get", "/profile").replaceAll("_token=.*?;", "_token=...;"));
 	}
 
 	private void verifyAccessDenied(HttpClient client) {

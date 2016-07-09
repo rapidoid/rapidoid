@@ -137,6 +137,12 @@ public abstract class AbstractTypeSpecificVisitor<T, R> extends RapidoidThing im
 			case MAP:
 				return process(context, (Map<?, ?>) value);
 
+			case NONE:
+				return processNone(context);
+
+			case DELETED:
+				return processDeleted(context);
+
 			default:
 				throw Err.notExpected();
 		}

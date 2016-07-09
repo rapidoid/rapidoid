@@ -6,6 +6,7 @@ import com.github.mustachejava.MustacheFactory;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
 import org.rapidoid.http.customize.ViewRenderer;
 import org.rapidoid.io.Res;
 import org.rapidoid.render.Templates;
@@ -40,7 +41,7 @@ public class MustacheViewRenderer extends RapidoidThing implements ViewRenderer 
 	private final MustacheFactory mf = new DefaultMustacheFactory();
 
 	@Override
-	public boolean render(String viewName, Object[] model, OutputStream out) throws Exception {
+	public boolean render(Req req, String viewName, Object[] model, OutputStream out) throws Exception {
 		Res template = Templates.resource(viewName + ".html");
 
 		if (!template.exists()) {

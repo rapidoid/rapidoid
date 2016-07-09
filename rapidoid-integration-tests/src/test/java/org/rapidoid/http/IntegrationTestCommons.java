@@ -65,6 +65,8 @@ public abstract class IntegrationTestCommons extends TestCommons {
 	public void openContext() {
 		Msc.reset();
 
+		TimeZone.setDefault(TimeZone.getTimeZone("CET"));
+
 		ClasspathUtil.setRootPackage("some.nonexisting.app");
 
 		TimeZone.setDefault(TimeZone.getTimeZone("CET"));

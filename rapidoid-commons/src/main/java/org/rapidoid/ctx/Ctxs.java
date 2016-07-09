@@ -106,14 +106,14 @@ public class Ctxs extends RapidoidThing {
 		Ctxs.persisterProvider = persisterProvider;
 	}
 
-	public static Object createPersister() {
+	public static Object createPersister(Ctx ctx) {
 		U.notNull(persisterProvider, "Ctxs.persisterProvider");
-		return persisterProvider.openPersister();
+		return persisterProvider.openPersister(ctx);
 	}
 
-	public static void closePersister(Object persister) {
+	public static void closePersister(Ctx ctx, Object persister) {
 		U.notNull(persisterProvider, "Ctxs.persisterProvider");
-		persisterProvider.closePersister(persister);
+		persisterProvider.closePersister(ctx, persister);
 	}
 
 }

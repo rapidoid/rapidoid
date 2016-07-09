@@ -1,8 +1,12 @@
-package org.rapidoid.fluent.dox;
+package org.rapidoid.util;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 /*
  * #%L
- * rapidoid-fluent
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -20,31 +24,23 @@ package org.rapidoid.fluent.dox;
  * #L%
  */
 
-import org.rapidoid.fluent.To;
-
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Stream;
-
 /**
- * @author Nikolche Mihajlovski
- * @since 5.0.0
+ * A special singleton type, marking a deleted value.
+ * <p>
+ * Supported in the serialization.
  */
-public class DoMap<T> {
+@Authors("Nikolche Mihajlovski")
+@Since("5.2.0")
+public class Deleted extends RapidoidThing {
 
-	private final Stream<T> stream;
+	public static final Deleted DELETED = new Deleted();
 
-	public DoMap(Stream<T> stream) {
-		this.stream = stream;
+	private Deleted() {
 	}
 
-	public <R> List<R> to(Function<T, R> transformation) {
-		return stream.map(transformation).collect(To.list());
-	}
-
-	public <K, V> Map<K, V> to(Function<T, K> keyMapper, Function<T, V> valueMapper) {
-		return stream.collect(To.map(keyMapper, valueMapper));
+	@Override
+	public String toString() {
+		return "DELETED";
 	}
 
 }

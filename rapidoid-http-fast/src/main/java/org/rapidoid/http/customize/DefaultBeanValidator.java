@@ -3,6 +3,7 @@ package org.rapidoid.http.customize;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
 import org.rapidoid.util.Msc;
 import org.rapidoid.validation.Validators;
 
@@ -33,7 +34,7 @@ public class DefaultBeanValidator extends RapidoidThing implements BeanValidator
 	private final boolean supported = Msc.hasValidation();
 
 	@Override
-	public void validate(Object bean) {
+	public void validate(Req req, Object bean) {
 		if (supported) {
 			Validators.validate(bean);
 		}

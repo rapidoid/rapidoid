@@ -20,36 +20,40 @@ package org.rapidoid.setup;
  * #L%
  */
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.data.JSON;
 import org.rapidoid.http.customize.*;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.7")
 public class Defaults extends RapidoidThing {
 
-	private static final String[] staticFilesPath;
-	private static final ErrorHandler errorHandler;
-	private static final JsonResponseRenderer jsonResponseRenderer;
-	private static final BeanParameterFactory beanParameterFactory;
-	private static final BeanValidator validator;
-	private static final LoginProvider loginProvider;
-	private static final RolesProvider rolesProvider;
-	private static final PageRenderer pageRenderer;
-	private static final ViewRenderer viewRenderer;
+	private static final String[] staticFilesPath = {"static", "public", "default/static", "default/public"};
 
-	static {
-		staticFilesPath = new String[]{"static", "public", "default/static", "default/public"};
-		errorHandler = new DefaultErrorHandler();
-		viewRenderer = new DefaultViewRenderer();
-		pageRenderer = new DefaultPageRenderer();
-		jsonResponseRenderer = new DefaultJsonResponseRenderer();
-		beanParameterFactory = new DefaultBeanParameterFactory();
-		loginProvider = new DefaultLoginProvider();
-		rolesProvider = new DefaultRolesProvider();
-		validator = new DefaultBeanValidator();
-	}
+	private static final ErrorHandler errorHandler = new DefaultErrorHandler();
+
+	private static final JsonResponseRenderer jsonResponseRenderer = new DefaultJsonResponseRenderer();
+
+	private static final BeanParameterFactory beanParameterFactory = new DefaultBeanParameterFactory();
+
+	private static final BeanValidator validator = new DefaultBeanValidator();
+
+	private static final LoginProvider loginProvider = new DefaultLoginProvider();
+
+	private static final RolesProvider rolesProvider = new DefaultRolesProvider();
+
+	private static final PageRenderer pageRenderer = new DefaultPageRenderer();
+
+	private static final ViewRenderer viewRenderer = new DefaultViewRenderer();
+
+	private static final ObjectMapper jackson = JSON.newMapper();
+
+	private static final EntityManagerProvider entityManagerProvider = null;
+
+	private static final EntityManagerFactoryProvider entityManagerFactoryProvider = new DefaultEntityManagerFactoryProvider();
 
 	public static String[] staticFilesPath() {
 		return staticFilesPath;
@@ -85,5 +89,17 @@ public class Defaults extends RapidoidThing {
 
 	public static ViewRenderer viewRenderer() {
 		return viewRenderer;
+	}
+
+	public static ObjectMapper jackson() {
+		return jackson;
+	}
+
+	public static EntityManagerProvider entityManagerProvider() {
+		return entityManagerProvider;
+	}
+
+	public static EntityManagerFactoryProvider entityManagerFactoryProvider() {
+		return entityManagerFactoryProvider;
 	}
 }

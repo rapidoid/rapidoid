@@ -3,6 +3,7 @@ package org.rapidoid.http.customize;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
 import org.rapidoid.security.Auth;
 
 import java.util.Set;
@@ -32,7 +33,7 @@ import java.util.Set;
 public class DefaultRolesProvider extends RapidoidThing implements RolesProvider {
 
 	@Override
-	public Set<String> getRolesForUser(String username) {
+	public Set<String> getRolesForUser(Req req, String username) {
 		return Auth.getRolesFor(username);
 	}
 

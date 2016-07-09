@@ -2,6 +2,7 @@ package org.rapidoid.http.customize;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
 
 import java.io.OutputStream;
 
@@ -29,6 +30,6 @@ import java.io.OutputStream;
 @Since("5.1.0")
 public interface JsonResponseRenderer {
 
-	void renderJson(Object value, OutputStream out) throws Exception;
+	void renderJson(Req req, Object value, OutputStream out) throws Exception;
 
 }

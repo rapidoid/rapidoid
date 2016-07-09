@@ -46,6 +46,7 @@ public class ParamRetrievers extends RapidoidThing {
 		Header header = Metadata.get(annotations, Header.class);
 		Param param = Metadata.get(annotations, Param.class);
 		Valid valid = Metadata.get(annotations, Valid.class);
+		Required required = Metadata.get(annotations, Required.class);
 
 		int annotationsCount = Msc.countNonNull(cookie, header, param);
 		U.must(annotationsCount <= 1, "Expected maximum one of the @Cookie, @Header, @Param, @P annotations on the same parameter!");
@@ -97,13 +98,13 @@ public class ParamRetrievers extends RapidoidThing {
 				return new BeanParamRetriever(customization, type, name, valid != null);
 
 			} else if (Cls.kindOf(type).isConcrete()) {
-				return new DataParamRetriever(type, name);
+				return new DataParamRetriever(type, name, required != null);
 
 			} else if (Cls.isDataStructure(type) || Cls.isJREClass(type.getCanonicalName())) {
 				throw U.rte("Unsupported parameter type: %s", type);
 
 			} else {
-				return new DataParamRetriever(type, name);
+				return new DataParamRetriever(type, name, required != null);
 			}
 		}
 	}

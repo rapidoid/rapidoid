@@ -1,15 +1,16 @@
-package org.rapidoid.http.customize;
+package org.rapidoid.var.impl;
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.Req;
-
-import java.util.Map;
+import org.rapidoid.lambda.Lmbd;
+import org.rapidoid.lambda.Predicate;
+import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
+import org.rapidoid.var.Var;
 
 /*
  * #%L
- * rapidoid-http-fast
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -28,12 +29,32 @@ import java.util.Map;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class DefaultBeanParameterFactory extends RapidoidThing implements BeanParameterFactory {
+@Since("5.2.0")
+public class ValidatingVar<T> extends DecoratorVar<T> {
+
+	private final Predicate<T> isValid;
+	private final String message;
+
+	public ValidatingVar(Var<T> var, Predicate<T> isValid, String message) {
+		super(var);
+		this.isValid = isValid;
+		this.message = message;
+	}
 
 	@Override
-	public Object getParamValue(Req req, Class<?> paramType, String paramName, Map<String, Object> properties) throws Exception {
-		return Customization.of(req).jackson().convertValue(properties, paramType);
+	protected void doSet(T value) {
+		boolean valid;
+		try {
+			valid = Lmbd.eval(isValid, value);
+
+		} catch (Exception e) {
+			Log.error("Validator failed!", e);
+			throw U.rte("Invalid value!");
+		}
+
+		U.must(valid, message);
+
+		var.set(value);
 	}
 
 }

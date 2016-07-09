@@ -567,9 +567,9 @@ public class BytesUtil extends RapidoidThing implements Constants {
 				return false;
 			}
 
-			// disallow OR .. OR // OR ./ OR /.
+			// disallow OR .. OR //
 			if (b == '.' || b == '/') {
-				if (prev == '.' || prev == '/') {
+				if (prev == b) {
 					return false;
 				}
 			}

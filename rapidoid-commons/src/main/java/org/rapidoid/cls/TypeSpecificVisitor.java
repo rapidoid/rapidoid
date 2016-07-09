@@ -97,4 +97,8 @@ public interface TypeSpecificVisitor<T, R> {
 
 	R process(T context, Map<?, ?> map);
 
+	R processNone(T context);
+
+	R processDeleted(T context);
+
 }

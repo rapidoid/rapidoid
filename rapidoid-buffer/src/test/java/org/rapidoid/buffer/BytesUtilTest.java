@@ -41,25 +41,25 @@ public class BytesUtilTest extends BufferTestCommons {
 		isTrue(isValid("/xx%34%64/"));
 		isTrue(isValid("/abc-=-=_=+fg/"));
 		isTrue(isValid("/-=AaaaA!0!!AZazf=__/_.-=-.=_=.+/fg01.++--2AaaAa34.56789/"));
+		isTrue(isValid("/.ff"));
+		isTrue(isValid("/.some-private/"));
+		isTrue(isValid("/ok/./x"));
+		isTrue(isValid("/ok/././xyz.abc"));
 	}
 
 	@Test
 	public void testInalidURIs() {
 		isFalse(isValid(""));
 		isFalse(isValid("//"));
-		isFalse(isValid("/."));
 		isFalse(isValid("./"));
 		isFalse(isValid(".."));
 		isFalse(isValid("f"));
 		isFalse(isValid("."));
-		isFalse(isValid("/.ff/"));
-		isFalse(isValid("/.some-private/"));
+		isFalse(isValid("/."));
 		isFalse(isValid("sdfgdfg"));
 		isFalse(isValid("/Дфг"));
 		isFalse(isValid("/ok/../x"));
 		isFalse(isValid("/ok/../../xyz.abc"));
-		isFalse(isValid("/ok/./x"));
-		isFalse(isValid("/ok/././xyz.abc"));
 	}
 
 	private boolean isValid(String uri) {

@@ -14,6 +14,7 @@ import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
+import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.LoginProvider;
 import org.rapidoid.http.customize.RolesProvider;
 import org.rapidoid.u.U;
@@ -187,13 +188,13 @@ public class RespImpl extends RapidoidThing implements Resp {
 	}
 
 	@Override
-	public Map<String, Serializable> cookiepack() {
-		return request().cookiepack();
+	public Map<String, Serializable> token() {
+		return request().token();
 	}
 
 	@Override
-	public Resp cookiepack(String name, Serializable value) {
-		cookiepack().put(name, value);
+	public Resp token(String name, Serializable value) {
+		token().put(name, value);
 		return this;
 	}
 
@@ -321,27 +322,27 @@ public class RespImpl extends RapidoidThing implements Resp {
 
 	@Override
 	public boolean login(String username, String password) {
-		LoginProvider loginProvider = req.routes().custom().loginProvider();
+		LoginProvider loginProvider = Customization.of(req).loginProvider();
 		U.must(loginProvider != null, "A login provider wasn't set!");
 
-		RolesProvider rolesProvider = req.routes().custom().rolesProvider();
+		RolesProvider rolesProvider = Customization.of(req).rolesProvider();
 		U.must(rolesProvider != null, "A roles provider wasn't set!");
 
 		boolean success;
 
 		try {
-			success = loginProvider.login(username, password);
+			success = loginProvider.login(req, username, password);
 
 			if (success) {
-				Set<String> roles = rolesProvider.getRolesForUser(username);
+				Set<String> roles = rolesProvider.getRolesForUser(req, username);
 
 				long ttl = Conf.TOKEN.entry("ttl").or(0);
 				long expiresOn = ttl > 0 ? U.time() + ttl : Long.MAX_VALUE;
 
 				Ctxs.ctx().setUser(new UserInfo(username, roles));
 
-				request().cookiepack().put(HttpUtils._USER, username);
-				request().cookiepack().put(HttpUtils._EXPIRES, expiresOn);
+				request().token().put(HttpUtils._USER, username);
+				request().token().put(HttpUtils._EXPIRES, expiresOn);
 			}
 
 		} catch (Throwable e) {
@@ -357,9 +358,9 @@ public class RespImpl extends RapidoidThing implements Resp {
 			Ctxs.ctx().setUser(UserInfo.ANONYMOUS);
 		}
 
-		if (request().hasCookiepack()) {
-			request().cookiepack().remove(HttpUtils._USER);
-			request().cookiepack().remove(HttpUtils._EXPIRES);
+		if (request().hasToken()) {
+			request().token().remove(HttpUtils._USER);
+			request().token().remove(HttpUtils._EXPIRES);
 		}
 	}
 
@@ -383,14 +384,24 @@ public class RespImpl extends RapidoidThing implements Resp {
 	}
 
 	private void initScreen(Screen screen) {
-		Config app = request().custom().appConfig();
+		Config app = Customization.of(req).appConfig();
 		Config segments = app.sub("segments");
 		Config segment = segments.sub(req.segment());
 		ConfigAlternatives cfg = segment.or(app);
 
 		Object brand = cfg.entry("brand").str().getOrNull();
-		screen.brand(U.or(brand, ""));
-		screen.title(cfg.entry("title").str().getOrNull());
+		String title = cfg.entry("title").str().getOrNull();
+
+		String siteName = req.host();
+		if (U.isEmpty(siteName)
+				|| siteName.equals("localhost") || siteName.startsWith("localhost:")
+				|| siteName.equals("127.0.0.1") || siteName.startsWith("127.0.0.1:")) {
+			siteName = "Rapidoid";
+		}
+
+		screen.brand(U.or(brand, siteName));
+		screen.title(U.or(title, siteName));
+
 		screen.home(cfg.entry("home").str().or("/"));
 
 		screen.search(cfg.entry("search").bool().or(false));
@@ -453,7 +464,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 	}
 
 	private byte[] serializeResponseContent() {
-		return HttpUtils.responseToBytes(result(), contentType(), req.routes().custom().jsonResponseRenderer());
+		return HttpUtils.responseToBytes(req, result(), contentType(), Customization.of(req).jsonResponseRenderer());
 	}
 
 }

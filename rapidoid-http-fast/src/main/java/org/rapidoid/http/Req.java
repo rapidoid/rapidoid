@@ -240,24 +240,24 @@ public interface Req {
 	/**
 	 * Does the HTTP request have a cookie-persisted session attached?
 	 */
-	boolean hasCookiepack();
+	boolean hasToken();
 
 	/**
 	 * Provides <b>read/write access</b> to the <b>cookie-persisted session attributes</b> of the HTTP request.
 	 */
-	Map<String, Serializable> cookiepack();
+	Map<String, Serializable> token();
 
 	/**
 	 * Returns the value of the specified <b>cookie-persisted session attribute</b> from the HTTP request, or throws a
 	 * runtime exception if it is not found.
 	 */
-	<T extends Serializable> T cookiepack(String name);
+	<T extends Serializable> T token(String name);
 
 	/**
 	 * Returns the value of the specified <b>cookie-persisted session attribute</b> from the HTTP request, or the
 	 * specified default value, if it is not found.
 	 */
-	<T extends Serializable> T cookiepack(String name, T defaultValue);
+	<T extends Serializable> T token(String name, T defaultValue);
 
 	/* REQUEST HEADERS: */
 

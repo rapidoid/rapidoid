@@ -37,22 +37,22 @@ public class CustomizationTest extends IntegrationTestCommons {
 
 	@Test
 	public void testSerializationConfig() {
-		On.custom().jsonResponseRenderer(JSON::prettify);
+		On.custom().jsonResponseRenderer((req, value, out) -> JSON.prettify(value, out));
 
 		On.get("/").json(() -> U.map("foo", 12, "bar", 345));
 		On.get("/a").json(() -> U.map("foo", 12, "bar", 345));
 
 		onlyGet("/");
 
-		On.custom().jsonResponseRenderer(JSON::stringify);
+		On.custom().jsonResponseRenderer((req, value, out) -> JSON.stringify(value, out));
 
 		onlyGet("/a");
 	}
 
 	@Test
 	public void testAuthConfig() {
-		On.custom().loginProvider((username, password) -> password.equals(username + "!"));
-		On.custom().rolesProvider(username -> username.equals("root") ? U.set("admin") : U.set());
+		On.custom().loginProvider((req, username, password) -> password.equals(username + "!"));
+		On.custom().rolesProvider((req, username) -> username.equals("root") ? U.set("admin") : U.set());
 		// FIXME complete the test
 	}
 

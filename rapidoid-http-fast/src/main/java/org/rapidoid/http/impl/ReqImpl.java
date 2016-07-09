@@ -82,7 +82,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	private volatile Map<String, Object> data;
 
-	private volatile Map<String, Serializable> cookiepack;
+	private volatile Map<String, Serializable> token;
 
 	private volatile RespImpl response;
 
@@ -338,7 +338,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	@SuppressWarnings("unchecked")
 	private <T> T beanFrom(Class<T> beanType, Map<String, ?> properties) {
 		String paramName = Str.uncapitalized(beanType.getSimpleName());
-		BeanParameterFactory beanParameterFactory = custom().beanParameterFactory();
+		BeanParameterFactory beanParameterFactory = Customization.of(this).beanParameterFactory();
 
 		try {
 			return (T) beanParameterFactory.getParamValue(this, beanType, paramName, (Map<String, Object>) properties);
@@ -399,8 +399,8 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	private void startResponse(int code, boolean unknownContentLength) {
 		MediaType contentType = MediaType.HTML_UTF_8;
 
-		if (cookiepack != null) {
-			HttpUtils.saveCookipackBeforeRenderingHeaders(this, cookiepack);
+		if (token != null) {
+			HttpUtils.saveCookipackBeforeRenderingHeaders(this, token);
 		}
 
 		if (response != null) {
@@ -515,7 +515,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 			return response.renderToBytes();
 
 		} catch (Throwable e) {
-			HttpIO.error(this, e, custom().errorHandler());
+			HttpIO.error(this, e, Customization.of(this).errorHandler());
 
 			try {
 				return response.renderToBytes();
@@ -632,45 +632,45 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		return withDefault(value, defaultValue);
 	}
 
-	/* COOKIEPACK: */
+	/* TOKEN: */
 
 	@Override
-	public boolean hasCookiepack() {
-		return U.notEmpty(cookiepack) || cookie(COOKIEPACK, null) != null || data(TOKEN, null) != null;
+	public boolean hasToken() {
+		return U.notEmpty(token) || cookie(TOKEN, null) != null || data(TOKEN, null) != null;
 	}
 
 	@Override
-	public Map<String, Serializable> cookiepack() {
-		if (cookiepack == null) {
+	public Map<String, Serializable> token() {
+		if (token == null) {
 			synchronized (this) {
-				if (cookiepack == null) {
+				if (token == null) {
 					Map<String, Serializable> cpack = null;
 
 					try {
-						cpack = HttpUtils.initAndDeserializeCookiePack(this);
+						cpack = HttpUtils.initAndDeserializeTOKEN(this);
 					} catch (Exception e) {
 						Log.warn("Cookie-pack deserialization error! Maybe the secret was changed?");
 						Log.debug("Cookie-pack deserialization error!", e);
 					}
 
-					cookiepack = Collections.synchronizedMap(U.safe(cpack));
+					token = Collections.synchronizedMap(U.safe(cpack));
 				}
 			}
 		}
 
-		return cookiepack;
+		return token;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends Serializable> T cookiepack(String name) {
-		Serializable value = hasCookiepack() ? cookiepack().get(name) : null;
-		return (T) U.notNull(value, "COOKIEPACK[%s]", name);
+	public <T extends Serializable> T token(String name) {
+		Serializable value = hasToken() ? token().get(name) : null;
+		return (T) U.notNull(value, "TOKEN[%s]", name);
 	}
 
 	@Override
-	public <T extends Serializable> T cookiepack(String name, T defaultValue) {
-		Serializable value = hasCookiepack() ? cookiepack().get(name) : null;
+	public <T extends Serializable> T token(String name, T defaultValue) {
+		Serializable value = hasToken() ? token().get(name) : null;
 		return withDefault(value, defaultValue);
 	}
 
@@ -689,7 +689,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		if (contextPath == null) {
 			synchronized (this) {
 				if (contextPath == null) {
-					contextPath = HttpUtils.getContextPath(custom(), segment());
+					contextPath = HttpUtils.getContextPath(Customization.of(this), segment());
 				}
 			}
 		}

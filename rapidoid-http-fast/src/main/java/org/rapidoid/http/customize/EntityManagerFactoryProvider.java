@@ -1,8 +1,14 @@
-package org.rapidoid.fluent.dox;
+package org.rapidoid.http.customize;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
+
+import javax.persistence.EntityManagerFactory;
 
 /*
  * #%L
- * rapidoid-fluent
+ * rapidoid-http-fast
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -20,31 +26,10 @@ package org.rapidoid.fluent.dox;
  * #L%
  */
 
-import org.rapidoid.fluent.To;
+@Authors("Nikolche Mihajlovski")
+@Since("5.2.0")
+public interface EntityManagerFactoryProvider {
 
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Stream;
-
-/**
- * @author Nikolche Mihajlovski
- * @since 5.0.0
- */
-public class DoMap<T> {
-
-	private final Stream<T> stream;
-
-	public DoMap(Stream<T> stream) {
-		this.stream = stream;
-	}
-
-	public <R> List<R> to(Function<T, R> transformation) {
-		return stream.map(transformation).collect(To.list());
-	}
-
-	public <K, V> Map<K, V> to(Function<T, K> keyMapper, Function<T, V> valueMapper) {
-		return stream.collect(To.map(keyMapper, valueMapper));
-	}
+	EntityManagerFactory getEntityManagerFactory(Req req) throws Exception;
 
 }

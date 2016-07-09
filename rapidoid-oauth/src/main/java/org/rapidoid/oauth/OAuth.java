@@ -40,9 +40,6 @@ import org.rapidoid.value.Value;
 @Since("2.0.0")
 public class OAuth extends RapidoidThing {
 
-	static final String NO_ID = "NO-CLIENT-ID-CONFIGURED";
-	static final String NO_SECRET = "NO-CLIENT-SECRET-CONFIGURED";
-
 	private static final String LOGIN_BTN = "<div class=\"row-fluid\"><div class=\"col-md-3\"><a href=\"/_%sLogin\" class=\"btn btn-default btn-block\">Login with %s</a></div></div>";
 
 	private static OAuthStateCheck STATE_CHECK;
@@ -50,6 +47,10 @@ public class OAuth extends RapidoidThing {
 	private static final Config OAUTH = Conf.OAUTH;
 
 	private static final Value<String> DOMAIN = Conf.APP.entry("domain").str();
+
+	public static void bootstrap(Setup setup) {
+		register(setup, new DefaultOAuthStateCheck());
+	}
 
 	public static void register(Setup setup, OAuthProvider... providers) {
 		register(setup, new DefaultOAuthStateCheck(), providers);
@@ -77,8 +78,8 @@ public class OAuth extends RapidoidThing {
 			String callbackPath = "/_" + name + "OauthCallback";
 
 			Config providerConfig = OAUTH.sub(name);
-			Value<String> clientId = providerConfig.entry("id").str();
-			Value<String> clientSecret = providerConfig.entry("secret").str();
+			Value<String> clientId = providerConfig.entry("clientId").str();
+			Value<String> clientSecret = providerConfig.entry("clientSecret").str();
 
 			setup.get(loginPath).html(new OAuthLoginHandler(provider, DOMAIN));
 			setup.get(callbackPath).html(new OAuthTokenHandler(provider, setup.custom(), DOMAIN, stateCheck, clientId, clientSecret, callbackPath));
@@ -89,10 +90,10 @@ public class OAuth extends RapidoidThing {
 		loginHtml.append("</div>");
 		final String loginPage = loginHtml.toString();
 
-		setup.get("/_oauth").html(new ReqHandler() {
+		setup.get("/_oauth").mvc(new ReqHandler() {
 			@Override
 			public Object execute(Req x) throws Exception {
-				return GUI.page(GUI.hardcoded(loginPage)).title("Login with OAuth");
+				return GUI.hardcoded(loginPage);
 			}
 		});
 	}
@@ -106,8 +107,8 @@ public class OAuth extends RapidoidThing {
 		String name = provider.getName().toLowerCase();
 
 		Config providerConfig = OAUTH.sub(name);
-		Value<String> clientId = providerConfig.entry("id").str();
-		Value<String> clientSecret = providerConfig.entry("secret").str();
+		Value<String> clientId = providerConfig.entry("clientId").str();
+		Value<String> clientSecret = providerConfig.entry("clientSecret").str();
 
 		String callbackPath = "/_" + name + "OauthCallback";
 
@@ -121,7 +122,7 @@ public class OAuth extends RapidoidThing {
 
 		try {
 			OAuthClientRequest request = OAuthClientRequest.authorizationLocation(provider.getAuthEndpoint())
-					.setClientId(clientId.or(NO_ID)).setRedirectURI(redirectUrl).setScope(provider.getEmailScope())
+					.setClientId(clientId.str().get()).setRedirectURI(redirectUrl).setScope(provider.getEmailScope())
 					.setState(state).setResponseType("code").buildQueryMessage();
 			return request.getLocationUri();
 		} catch (OAuthSystemException e) {

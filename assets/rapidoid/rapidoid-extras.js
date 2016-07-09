@@ -81,7 +81,7 @@ Rapidoid = (function() {
 
     function _logout() {
         $.removeCookie('JSESSIONID', '/', '');
-        $.removeCookie('COOKIEPACK', '/', '');
+        $.removeCookie('_token', '/', '');
         location.reload();
     }
 

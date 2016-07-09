@@ -1,15 +1,14 @@
-package org.rapidoid.jpa;
+package org.rapidoid.http.customize;
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.PersisterProvider;
+import org.rapidoid.http.Req;
 
 import javax.persistence.EntityManager;
 
 /*
  * #%L
- * rapidoid-jpa
+ * rapidoid-http-fast
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -28,20 +27,9 @@ import javax.persistence.EntityManager;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-@SuppressWarnings("deprecation")
-public class JPAPersisterProvider extends RapidoidThing implements PersisterProvider {
+@Since("5.2.0")
+public interface EntityManagerProvider {
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public <P> P openPersister() {
-		return (P) JPA.provideEmf().createEntityManager();
-	}
-
-	@Override
-	public void closePersister(Object persister) {
-		EntityManager em = (EntityManager) persister;
-		em.close();
-	}
+	EntityManager getEntityManager(Req req) throws Exception;
 
 }

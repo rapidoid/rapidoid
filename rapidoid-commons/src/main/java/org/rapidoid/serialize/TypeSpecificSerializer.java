@@ -52,6 +52,16 @@ public class TypeSpecificSerializer extends AbstractTypeSpecificVisitor<ByteBuff
 	}
 
 	@Override
+	public Void processNone(ByteBuffer context) {
+		return null; // only the kind is enough
+	}
+
+	@Override
+	public Void processDeleted(ByteBuffer context) {
+		return null; // only the kind is enough
+	}
+
+	@Override
 	public Void processUnknown(ByteBuffer buf, Object value) {
 		throw U.rte("Cannot serialize a value of type: " + Cls.of(value).getName());
 	}

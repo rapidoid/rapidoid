@@ -27,6 +27,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Resp;
+import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.PageRenderer;
 import org.rapidoid.http.customize.ViewRenderer;
 import org.rapidoid.u.U;
@@ -49,10 +50,10 @@ public class ResponseRenderer extends RapidoidThing {
 			resp.result(result);
 		}
 
-		ViewRenderer viewRenderer = req.routes().custom().viewRenderer();
+		ViewRenderer viewRenderer = Customization.of(req).viewRenderer();
 		U.must(viewRenderer != null, "A view renderer wasn't configured!");
 
-		PageRenderer pageRenderer = req.routes().custom().pageRenderer();
+		PageRenderer pageRenderer = Customization.of(req).pageRenderer();
 		U.must(pageRenderer != null, "A page renderer wasn't configured!");
 
 		boolean rendered;
@@ -62,11 +63,11 @@ public class ResponseRenderer extends RapidoidThing {
 		MVCModel basicModel = new MVCModel(req, resp, resp.model(), resp.screen(), result);
 
 		Object[] renderModel = result != null
-				? new Object[]{basicModel, resp.model(), result}
-				: new Object[]{basicModel, resp.model()};
+			? new Object[]{basicModel, resp.model(), result}
+			: new Object[]{basicModel, resp.model()};
 
 		try {
-			rendered = viewRenderer.render(viewName, renderModel, out);
+			rendered = viewRenderer.render(req, viewName, renderModel, out);
 		} catch (Throwable e) {
 			throw U.rte("Error while rendering view: " + viewName, e);
 		}
@@ -75,12 +76,12 @@ public class ResponseRenderer extends RapidoidThing {
 
 		if (renderResult == null) {
 			Object cnt = U.or(result, "");
-			renderResult = new String(HttpUtils.responseToBytes(cnt, MediaType.HTML_UTF_8, null));
+			renderResult = new String(HttpUtils.responseToBytes(req, cnt, MediaType.HTML_UTF_8, null));
 		}
 
 		try {
 			Object response = U.or(pageRenderer.renderPage(req, resp, renderResult), "");
-			return HttpUtils.responseToBytes(response, MediaType.HTML_UTF_8, null);
+			return HttpUtils.responseToBytes(req, response, MediaType.HTML_UTF_8, null);
 
 		} catch (Exception e) {
 			throw U.rte("Error while rendering page!", e);

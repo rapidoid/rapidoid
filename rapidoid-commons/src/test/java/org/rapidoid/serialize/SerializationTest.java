@@ -27,6 +27,8 @@ import org.rapidoid.commons.Coll;
 import org.rapidoid.data.JSON;
 import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Deleted;
+import org.rapidoid.util.None;
 
 import java.nio.ByteBuffer;
 import java.util.Date;
@@ -40,14 +42,14 @@ public class SerializationTest extends AbstractCommonsTest {
 	@Test
 	public void testMiniSerialization() {
 		ByteBuffer buf = ByteBuffer.allocateDirect(100);
-		Map<?, ?> data = U.map("a", 213, true, "xyz");
+		Map<?, ?> data = U.map("a", 213, true, "xyz", "f", None.NONE, "g", Deleted.DELETED);
 
 		Serialize.serialize(buf, data);
 		buf.rewind();
 		Object data2 = Serialize.deserialize(buf);
 
-		String expected = JSON.prettify(data);
-		String real = JSON.prettify(data2);
+		String expected = data.toString();
+		String real = data2.toString();
 
 		eq(real, expected);
 	}

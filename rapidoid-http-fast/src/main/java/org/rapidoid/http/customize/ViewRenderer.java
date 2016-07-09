@@ -2,6 +2,7 @@ package org.rapidoid.http.customize;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
 
 import java.io.OutputStream;
 
@@ -29,6 +30,6 @@ import java.io.OutputStream;
 @Since("5.0.11")
 public interface ViewRenderer {
 
-	boolean render(String viewName, Object[] model, OutputStream out) throws Exception;
+	boolean render(Req req, String viewName, Object[] model, OutputStream out) throws Exception;
 
 }

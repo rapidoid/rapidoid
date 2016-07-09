@@ -1,15 +1,15 @@
-package org.rapidoid.http.customize;
+package org.rapidoid.util;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.Req;
+import org.rapidoid.u.U;
 
 import java.util.Map;
 
 /*
  * #%L
- * rapidoid-http-fast
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -28,12 +28,29 @@ import java.util.Map;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class DefaultBeanParameterFactory extends RapidoidThing implements BeanParameterFactory {
+@Since("5.2.0")
+public class Expectation extends RapidoidThing {
 
-	@Override
-	public Object getParamValue(Req req, Class<?> paramType, String paramName, Map<String, Object> properties) throws Exception {
-		return Customization.of(req).jackson().convertValue(properties, paramType);
+	private final Object target;
+
+	public Expectation(Object target) {
+		this.target = target;
+	}
+
+	public Expectation entry(String key, Object expectedValue) {
+		Object val = asMap().get(key);
+		U.must(U.eq(val, expectedValue), "Expected map entry '%s' to have value [%s], but found [%s]!", key, expectedValue, val);
+		return this;
+	}
+
+	private Map<String, ?> asMap() {
+		U.must(target instanceof Map<?, ?>, "Expected a Map type, but found: %s", target);
+		return U.cast(target);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> T get() {
+		return (T) target;
 	}
 
 }

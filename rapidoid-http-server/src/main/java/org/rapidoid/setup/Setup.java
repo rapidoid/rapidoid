@@ -24,7 +24,6 @@ import org.rapidoid.http.processor.HttpProcessor;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.job.Jobs;
-import org.rapidoid.jpa.JPAPersisterProvider;
 import org.rapidoid.lambda.NParamLambda;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Server;
@@ -78,7 +77,7 @@ public class Setup extends RapidoidThing implements Constants {
 		});
 
 		if (Ctxs.getPersisterProvider() == null) {
-			Ctxs.setPersisterProvider(new JPAPersisterProvider());
+			Ctxs.setPersisterProvider(new CustomizableSetupAwarePersisterProvider());
 		}
 
 		Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -144,7 +143,7 @@ public class Setup extends RapidoidThing implements Constants {
 		this.appConfig = appConfig;
 		this.serverConfig = serverConfig;
 
-		this.customization = new Customization(name, appConfig, serverConfig);
+		this.customization = new Customization(name, My.custom(), appConfig, serverConfig);
 		this.routes = new HttpRoutesImpl(customization);
 
 		this.defaults.segment(segment);
@@ -511,13 +510,13 @@ public class Setup extends RapidoidThing implements Constants {
 		return activated;
 	}
 
-	public static void haltAll() {
+	public static synchronized void haltAll() {
 		for (Setup setup : instances()) {
 			setup.halt();
 		}
 	}
 
-	public static void shutdownAll() {
+	public static synchronized void shutdownAll() {
 		for (Setup setup : instances()) {
 			setup.shutdown();
 		}
