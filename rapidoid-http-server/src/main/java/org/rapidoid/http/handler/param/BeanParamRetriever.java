@@ -54,7 +54,7 @@ public class BeanParamRetriever extends RapidoidThing implements ParamRetriever 
 		}
 
 		if (validate) {
-			customization.validator().validate(bean);
+			customization.validator().validate(req, bean);
 		}
 
 		return bean;

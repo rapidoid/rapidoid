@@ -31,7 +31,7 @@ public class HttpValidatorSetupTest extends HttpTestCommons {
 
 	@Test
 	public void testHttpServer() throws Exception {
-		On.custom().validator().validate(new Object());
+		On.custom().validator().validate(null, new Object());
 	}
 
 }

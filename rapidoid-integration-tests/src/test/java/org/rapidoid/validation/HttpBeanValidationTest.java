@@ -58,7 +58,7 @@ public class HttpBeanValidationTest extends IntegrationTestCommons {
 		On.get("/invalid1").html((@Valid Bar bar) -> "ok");
 		On.get("/invalid2").json((@Valid Bar bar) -> "ok");
 
-		On.custom().validator(bean -> {
+		On.custom().validator((req, bean) -> {
 			throw U.rte("Invalid!");
 		});
 
@@ -66,7 +66,7 @@ public class HttpBeanValidationTest extends IntegrationTestCommons {
 		onlyGet("/invalid2?err");
 
 		On.custom().validator(null);
-		My.validator(bean -> {
+		My.validator((req, bean) -> {
 			throw new ValidationException("Validation failed!");
 		});
 
@@ -74,7 +74,7 @@ public class HttpBeanValidationTest extends IntegrationTestCommons {
 		onlyGet("/invalid2?val");
 
 		My.validator(null);
-		On.custom().validator(bean -> {
+		On.custom().validator((req, bean) -> {
 			throw new InvalidData("Invalid data!");
 		});
 
