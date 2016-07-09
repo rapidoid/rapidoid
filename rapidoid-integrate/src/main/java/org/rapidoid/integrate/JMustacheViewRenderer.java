@@ -5,6 +5,7 @@ import com.samskivert.mustache.Template;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
 import org.rapidoid.http.customize.ViewRenderer;
 import org.rapidoid.io.Res;
 import org.rapidoid.render.Templates;
@@ -36,7 +37,7 @@ import java.io.Reader;
 /**
  * <p>ViewRenderer for samskivert's JMustache. <br>
  * To use this call {@code My.viewRenderer(new JMustacheViewRenderer());} </p>
- *
+ * <p>
  * <p>
  * By default template partials should be stored in /templates/partials folder and
  * should have the .mustache file extension. You can change this by setting a new
@@ -44,8 +45,8 @@ import java.io.Reader;
  * </p>
  * {{>name}} somewhere will by default look for a /templates/partials/name.mustache
  * in your resources folder and load the contents into the mustache template.
- *
- *
+ * <p>
+ * <p>
  * <p>If you want to change any compiler configurations or add partial support do e.g.:</p>
  * <pre>{@code
  *    JMustacheViewRenderer renderer = (JMustacheViewRenderer) My.getViewRenderer();
@@ -53,48 +54,48 @@ import java.io.Reader;
  * }</pre>
  */
 @Authors("kormakur")
-@Since("5.1.8")
+@Since("5.2.0")
 public class JMustacheViewRenderer extends RapidoidThing implements ViewRenderer {
 
-    private Mustache.TemplateLoader defaultPartialLoader = new Mustache.TemplateLoader() {
-        @Override
-        public Reader getTemplate(String name) throws Exception {
-            return Templates.resource("templates/partials/" + name + ".mustache").getReader();
-        }
-    };
+	private final Mustache.TemplateLoader defaultPartialLoader = new Mustache.TemplateLoader() {
+		@Override
+		public Reader getTemplate(String name) throws Exception {
+			return Templates.resource("partials/" + name + ".mustache").getReader();
+		}
+	};
 
-    private Mustache.Compiler compiler = Mustache.compiler().withLoader(defaultPartialLoader);
+	private volatile Mustache.Compiler compiler = Mustache.compiler().withLoader(defaultPartialLoader);
 
-    @Override
-    public boolean render(String viewName, Object[] model, OutputStream out) throws Exception {
-        Res template = Templates.resource(viewName + ".html");
+	@Override
+	public boolean render(Req req, String viewName, Object[] model, OutputStream out) throws Exception {
+		Res template = Templates.resource(viewName + ".html");
 
-        if (!template.exists()) {
-            return false;
-        }
+		if (!template.exists()) {
+			return false;
+		}
 
-        Template mustache = compiler.compile(template.getContent());
-        PrintWriter writer = new PrintWriter(out);
-        mustache.execute(model[model.length-1], writer);
-        writer.flush();
-        return true;
-    }
+		Template mustache = compiler.compile(template.getContent());
+		PrintWriter writer = new PrintWriter(out);
+		mustache.execute(model[model.length - 1], writer);
+		writer.flush();
+		return true;
+	}
 
-    /**
-     * Change the compiler settings e.g.
-     * <pre>
-     *     {@code
-     *        renderer.setCompiler(Mustache.compiler().defaultValue("Template not found"));
-     *     }
-     * </pre>
-     * @param compiler Usually Mustache.compiler() with supplied settings.
-     */
-    public void setCompiler(Mustache.Compiler compiler) {
-        if(Mustache.compiler().loader.equals(compiler.loader)) {
-            this.compiler = compiler.withLoader(defaultPartialLoader);
-        }
-        else {
-            this.compiler = compiler;
-        }
-    }
+	/**
+	 * Change the compiler settings e.g.
+	 * <pre>
+	 *     {@code
+	 *        renderer.setCompiler(Mustache.compiler().defaultValue("Template not found"));
+	 *     }
+	 * </pre>
+	 *
+	 * @param compiler Usually Mustache.compiler() with supplied settings.
+	 */
+	public synchronized void setCompiler(Mustache.Compiler compiler) {
+		if (Mustache.compiler().loader.equals(compiler.loader)) {
+			this.compiler = compiler.withLoader(defaultPartialLoader);
+		} else {
+			this.compiler = compiler;
+		}
+	}
 }
