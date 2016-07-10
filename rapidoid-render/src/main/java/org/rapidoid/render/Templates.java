@@ -33,6 +33,8 @@ import java.util.Map;
 @Since("4.1.0")
 public class Templates extends RapidoidThing {
 
+	public static volatile String[] PATH = {"templates", "default/templates", ""};
+
 	private static final Map<String, TemplateRenderer> TEMPLATES = Coll.autoExpandingMap(new Mapper<String, TemplateRenderer>() {
 		@Override
 		public TemplateRenderer map(String name) throws Exception {
@@ -49,7 +51,7 @@ public class Templates extends RapidoidThing {
 	}
 
 	public static Res resource(String filename) {
-		return Res.from(filename, "templates", "default/templates", "");
+		return Res.from(filename, PATH);
 	}
 
 	public static Template fromRes(Res template) {

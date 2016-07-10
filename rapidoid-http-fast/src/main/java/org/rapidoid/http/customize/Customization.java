@@ -5,6 +5,8 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Config;
+import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.Req;
 import org.rapidoid.setup.My;
 
@@ -41,6 +43,8 @@ public class Customization extends RapidoidThing {
 
 	private volatile String[] staticFilesPath;
 
+	private volatile String[] templatesPath;
+
 	private volatile ErrorHandler errorHandler;
 
 	private volatile ViewRenderer viewRenderer;
@@ -74,6 +78,7 @@ public class Customization extends RapidoidThing {
 
 	public synchronized void reset() {
 		staticFilesPath = null;
+		templatesPath = null;
 		errorHandler = null;
 		viewRenderer = null;
 		pageRenderer = null;
@@ -89,6 +94,11 @@ public class Customization extends RapidoidThing {
 
 	public static Customization of(Req req) {
 		return req != null ? req.custom() : My.custom();
+	}
+
+	public static Customization current() {
+		Ctx ctx = Ctxs.get();
+		return of(ctx != null ? (Req) ctx.exchange() : null);
 	}
 
 	public String name() {
@@ -113,6 +123,15 @@ public class Customization extends RapidoidThing {
 
 	public Customization staticFilesPath(String... staticFilesPath) {
 		this.staticFilesPath = staticFilesPath;
+		return this;
+	}
+
+	public String[] templatesPath() {
+		return templatesPath != null || defaults == null ? templatesPath : defaults.templatesPath();
+	}
+
+	public Customization templatesPath(String... templatesPath) {
+		this.templatesPath = templatesPath;
 		return this;
 	}
 
@@ -214,4 +233,5 @@ public class Customization extends RapidoidThing {
 		this.entityManagerFactoryProvider = entityManagerFactoryProvider;
 		return this;
 	}
+
 }

@@ -35,7 +35,8 @@ public class DefaultViewRenderer extends RapidoidThing implements ViewRenderer {
 
 	@Override
 	public boolean render(Req req, String viewName, Object[] model, OutputStream out) throws Exception {
-		Res template = Templates.resource(viewName + ".html");
+		String[] path = Customization.of(req).templatesPath();
+		Res template = Res.from(viewName + ".html", path);
 
 		if (!template.exists()) {
 			return false;

@@ -7,9 +7,9 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Req;
+import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.ViewRenderer;
 import org.rapidoid.io.Res;
-import org.rapidoid.render.Templates;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -42,7 +42,8 @@ public class MustacheViewRenderer extends RapidoidThing implements ViewRenderer 
 
 	@Override
 	public boolean render(Req req, String viewName, Object[] model, OutputStream out) throws Exception {
-		Res template = Templates.resource(viewName + ".html");
+		String[] path = Customization.of(req).templatesPath();
+		Res template = Res.from(viewName + ".html", path);
 
 		if (!template.exists()) {
 			return false;

@@ -51,6 +51,7 @@ public class My extends RapidoidThing {
 			GLOBAL.jackson(Defaults.jackson());
 			GLOBAL.entityManagerFactoryProvider(Defaults.entityManagerFactoryProvider());
 			GLOBAL.entityManagerProvider(Defaults.entityManagerProvider());
+			GLOBAL.templatesPath(Defaults.templatesPath());
 		}
 	}
 

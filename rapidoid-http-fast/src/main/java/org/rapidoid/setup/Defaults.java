@@ -26,6 +26,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.JSON;
 import org.rapidoid.http.customize.*;
+import org.rapidoid.render.Templates;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.7")
@@ -101,5 +102,9 @@ public class Defaults extends RapidoidThing {
 
 	public static EntityManagerFactoryProvider entityManagerFactoryProvider() {
 		return entityManagerFactoryProvider;
+	}
+
+	public static String[] templatesPath() {
+		return Templates.PATH;
 	}
 }
