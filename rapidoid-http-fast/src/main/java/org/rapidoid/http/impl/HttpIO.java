@@ -8,11 +8,9 @@ import org.rapidoid.commons.Dates;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.data.BufRange;
 import org.rapidoid.data.JSON;
-import org.rapidoid.http.HttpResponseCodes;
-import org.rapidoid.http.HttpUtils;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.Resp;
+import org.rapidoid.http.*;
 import org.rapidoid.http.customize.Customization;
+import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.render.Template;
@@ -127,10 +125,20 @@ public class HttpIO extends RapidoidThing {
 		}
 	}
 
-	public static void errorAndDone(Req req, Throwable error) {
-		error(req, error);
-		// the Req object will do the rendering
-		req.done();
+	public static HttpStatus errorAndDone(final Req req, final Throwable error) {
+		req.revert();
+		req.async();
+
+		Jobs.execute(new Runnable() {
+			@Override
+			public void run() {
+				error(req, error);
+				// the Req object will do the rendering
+				req.done();
+			}
+		});
+
+		return HttpStatus.ASYNC;
 	}
 
 	public static void writeContentLengthAndBody(Channel ctx, byte[] content) {

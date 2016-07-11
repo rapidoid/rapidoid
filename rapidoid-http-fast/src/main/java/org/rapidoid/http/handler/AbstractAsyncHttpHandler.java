@@ -76,8 +76,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 			txMode = before(req, username, roles);
 
 		} catch (Throwable e) {
-			HttpIO.errorAndDone(req, e);
-			return HttpStatus.DONE;
+			return HttpIO.errorAndDone(req, e);
 		}
 
 		U.notNull(txMode, "transactionMode");
@@ -88,8 +87,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 
 		} catch (Throwable e) {
 			// if there was an error in the job scheduling:
-			HttpIO.errorAndDone(req, e);
-			return HttpStatus.DONE;
+			return HttpIO.errorAndDone(req, e);
 		}
 
 		return HttpStatus.ASYNC;
@@ -212,7 +210,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 	}
 
 	private Object wrap(final Channel channel, final boolean isKeepAlive, final Req req, final int index, final Object extra)
-			throws Exception {
+		throws Exception {
 		HttpWrapper wrapper = wrappers[index];
 
 		HandlerInvocation invocation = new HandlerInvocation() {

@@ -340,4 +340,9 @@ public interface Req {
 	 */
 	Customization custom();
 
+	/**
+	 * Reverts the previous processing of the request, usually with intention to process the same request again.
+	 */
+	void revert();
+
 }

@@ -582,6 +582,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	@Override
 	public Req async() {
 		this.async = true;
+		channel.async();
 		return this;
 	}
 
@@ -728,6 +729,17 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	@Override
 	public boolean isStopped() {
 		return stopped;
+	}
+
+	@Override
+	public void revert() {
+		rendering = false;
+		posConLen = 0;
+		posBefore = 0;
+		async = false;
+		done = false;
+		completed = false;
+		response = null;
 	}
 
 }
