@@ -5,7 +5,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.http.*;
-import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.impl.HttpIO;
 
 import java.util.Map;
@@ -69,7 +68,7 @@ public class ProxyHandler extends RapidoidThing implements ReqRespHandler {
 						resp.body(body);
 						resp.done();
 					} else {
-						HttpIO.errorAndDone(req, error, Customization.of(req).errorHandler());
+						HttpIO.errorAndDone(req, error);
 					}
 				}
 

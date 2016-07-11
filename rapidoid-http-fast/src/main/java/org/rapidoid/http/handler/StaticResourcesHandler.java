@@ -62,7 +62,7 @@ public class StaticResourcesHandler extends AbstractHttpHandler {
 			return HttpStatus.NOT_FOUND;
 
 		} catch (Exception e) {
-			HttpIO.errorAndDone(req, e, customization.errorHandler());
+			HttpIO.errorAndDone(req, e);
 			return HttpStatus.DONE;
 		}
 	}

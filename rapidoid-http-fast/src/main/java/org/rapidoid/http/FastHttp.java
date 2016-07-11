@@ -9,7 +9,6 @@ import org.rapidoid.commons.MediaType;
 import org.rapidoid.data.BufRange;
 import org.rapidoid.data.BufRanges;
 import org.rapidoid.data.KeyValueRanges;
-import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.handler.HttpHandler;
 import org.rapidoid.http.impl.*;
 import org.rapidoid.http.processor.AbstractHttpProcessor;
@@ -52,17 +51,15 @@ public class FastHttp extends AbstractHttpProcessor {
 	private static final HttpParser HTTP_PARSER = new HttpParser();
 
 	private final HttpRoutesImpl[] routes;
-	private final Customization customization;
 
 	private final Map<String, Object> attributes = Coll.synchronizedMap();
 	private final Map<String, Map<String, Serializable>> sessions = Coll.mapOfMaps();
 
 	public FastHttp(HttpRoutesImpl... routes) {
 		super(null);
-		U.must(routes.length > 0, "Routes are missing!");
 
+		U.must(routes.length > 0, "Routes are missing!");
 		this.routes = routes;
-		this.customization = routes[0].custom();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -170,7 +167,7 @@ public class FastHttp extends AbstractHttpProcessor {
 			cookies = Collections.synchronizedMap(cookies);
 
 			req = new ReqImpl(this, channel, isKeepAlive, verb, uri, path, query, body, params, headers, cookies,
-					posted, files, contentType, segment, route);
+				posted, files, contentType, segment, route);
 
 			if (!attributes.isEmpty()) {
 				req.attrs().putAll(attributes);
@@ -204,7 +201,7 @@ public class FastHttp extends AbstractHttpProcessor {
 	private boolean handleError(Channel channel, boolean isKeepAlive, ReqImpl req, MediaType contentType, Throwable e) {
 		if (req != null) {
 			if (!req.isStopped()) {
-				HttpIO.errorAndDone(req, e, customization.errorHandler());
+				HttpIO.errorAndDone(req, e);
 			}
 			return true;
 

@@ -76,7 +76,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 			txMode = before(req, username, roles);
 
 		} catch (Throwable e) {
-			HttpIO.errorAndDone(req, e, Customization.of(req).errorHandler());
+			HttpIO.errorAndDone(req, e);
 			return HttpStatus.DONE;
 		}
 
@@ -88,7 +88,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 
 		} catch (Throwable e) {
 			// if there was an error in the job scheduling:
-			HttpIO.errorAndDone(req, e, Customization.of(req).errorHandler());
+			HttpIO.errorAndDone(req, e);
 			return HttpStatus.DONE;
 		}
 
@@ -201,7 +201,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 					try {
 						JPA.transaction(handleRequest, txMode == TransactionMode.READ_ONLY);
 					} catch (Exception e) {
-						HttpIO.errorAndDone(req, e, Customization.of(req).errorHandler());
+						HttpIO.errorAndDone(req, e);
 					}
 				}
 			};
@@ -260,7 +260,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 		}
 
 		if (result instanceof Throwable) {
-			HttpIO.errorAndDone(req, (Throwable) result, Customization.of(req).errorHandler());
+			HttpIO.errorAndDone(req, (Throwable) result);
 			return;
 
 		} else {

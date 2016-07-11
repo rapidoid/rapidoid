@@ -12,7 +12,7 @@ import org.rapidoid.http.HttpResponseCodes;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
-import org.rapidoid.http.customize.ErrorHandler;
+import org.rapidoid.http.customize.Customization;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.render.Template;
@@ -46,7 +46,7 @@ public class HttpIO extends RapidoidThing {
 	public static final byte[] HTTP_200_OK = "HTTP/1.1 200 OK\r\n".getBytes();
 
 	public static final byte[] HTTP_400_BAD_REQUEST = "HTTP/1.1 400 Bad Request\r\nContent-Length: 12\r\n\r\nBad Request!"
-			.getBytes();
+		.getBytes();
 
 	private static final byte[] HEADER_SEP = ": ".getBytes();
 
@@ -113,22 +113,22 @@ public class HttpIO extends RapidoidThing {
 		writeContentLengthAndBody(ctx, content);
 	}
 
-	public static void error(Req req, Throwable error, ErrorHandler errorHandler) {
+	public static void error(final Req req, final Throwable error) {
 		Log.debug("HTTP handler error!", "error", error);
 
 		try {
 			Resp resp = req.response().code(500);
-			Object result = errorHandler.handleError(req, resp, error);
+			Object result = Customization.of(req).errorHandler().handleError(req, resp, error);
 			HttpUtils.resultToResponse(req, result);
 
 		} catch (Exception e) {
-			Log.error("The error handler had error!", e);
+			Log.error("An error occurred inside the error handler!", e);
 			HttpUtils.resultToResponse(req, HttpUtils.getErrorInfo(req.response(), e));
 		}
 	}
 
-	public static void errorAndDone(Req req, Throwable error, ErrorHandler errorHandler) {
-		error(req, error, errorHandler);
+	public static void errorAndDone(Req req, Throwable error) {
+		error(req, error);
 		// the Req object will do the rendering
 		req.done();
 	}

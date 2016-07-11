@@ -515,7 +515,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 			return response.renderToBytes();
 
 		} catch (Throwable e) {
-			HttpIO.error(this, e, Customization.of(this).errorHandler());
+			HttpIO.error(this, e);
 
 			try {
 				return response.renderToBytes();
@@ -533,7 +533,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		}
 
 		if (response.result() == null && response.body() == null && response.redirect() == null
-				&& response.file() == null && response.raw() == null && !response().mvc()) {
+			&& response.file() == null && response.raw() == null && !response().mvc()) {
 			return "Response content wasn't provided!";
 		}
 
