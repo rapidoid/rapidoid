@@ -9,6 +9,7 @@ import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.Req;
 import org.rapidoid.setup.My;
+import org.rapidoid.u.U;
 
 /*
  * #%L
@@ -93,6 +94,9 @@ public class Customization extends RapidoidThing {
 	}
 
 	public static Customization of(Req req) {
+		Ctx ctx = Ctxs.get();
+		Req rr = ctx != null ? (Req) ctx.exchange() : null;
+		U.must(req == rr, "The customization request doesn't match the context request!");
 		return req != null ? req.custom() : My.custom();
 	}
 

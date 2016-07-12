@@ -42,7 +42,9 @@ import java.util.concurrent.Future;
 @Since("4.3.0")
 public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 
+	private static final String CTX_TAG_INIT = "init";
 	private static final String CTX_TAG_HANDLER = "handler";
+	private static final String CTX_TAG_ERROR = "error";
 
 	private final FastHttp http;
 
@@ -63,32 +65,9 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
 		U.notNull(req, "HTTP request");
 
-		String username = getUser(req);
+		ctx.async();
 
-		if (username == null) {
-			req.response().logout();
-		}
-
-		Set<String> roles = userRoles(req, username);
-
-		TransactionMode txMode;
-		try {
-			txMode = before(req, username, roles);
-
-		} catch (Throwable e) {
-			return HttpIO.errorAndDone(req, e);
-		}
-
-		U.notNull(txMode, "transactionMode");
-
-		try {
-			ctx.async();
-			execHandlerJob(ctx, isKeepAlive, req, extra, txMode, username, roles);
-
-		} catch (Throwable e) {
-			// if there was an error in the job scheduling:
-			return HttpIO.errorAndDone(req, e);
-		}
+		execHandlerJob(ctx, isKeepAlive, req, extra);
 
 		return HttpStatus.ASYNC;
 	}
@@ -157,13 +136,49 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 		}
 	}
 
-	private void execHandlerJob(final Channel channel, final boolean isKeepAlive, final Req req,
-	                            final Object extra, final TransactionMode txMode, String username, Set<String> roles) {
+	private void execHandlerJob(final Channel channel, final boolean isKeepAlive, final Req req, final Object extra) {
 
-		Runnable handleRequest = handlerWithWrappers(channel, isKeepAlive, req, extra);
-		Runnable handleRequestMaybeInTx = txWrap(req, txMode, handleRequest);
+		With.tag(CTX_TAG_INIT).exchange(req).run(new Runnable() {
 
-		With.tag(CTX_TAG_HANDLER).exchange(req).username(username).roles(roles).run(handleRequestMaybeInTx);
+			volatile String username = null;
+			volatile Set<String> roles = null;
+
+			@Override
+			public void run() {
+				try {
+					username = getUser(req);
+
+					if (username == null) {
+						req.response().logout();
+					}
+
+					roles = userRoles(req, username);
+
+					TransactionMode txMode = before(req, username, roles);
+					U.notNull(txMode, "txMode");
+
+					Runnable handleRequest = handlerWithWrappers(channel, isKeepAlive, req, extra);
+					Runnable handleRequestMaybeInTx = txWrap(req, txMode, handleRequest);
+
+					With.tag(CTX_TAG_HANDLER).exchange(req).username(username).roles(roles).run(handleRequestMaybeInTx);
+
+				} catch (Throwable e) {
+					// if there was an error in the job scheduling:
+					execErrorHandler(req, username, roles, e);
+				}
+			}
+		});
+	}
+
+	private HttpStatus execErrorHandler(final Req req, String username, Set<String> roles, final Throwable error) {
+		With.tag(CTX_TAG_ERROR).exchange(req).username(username).roles(roles).run(new Runnable() {
+			@Override
+			public void run() {
+				handleError(req, error);
+			}
+		});
+
+		return HttpStatus.ASYNC;
 	}
 
 	private Runnable handlerWithWrappers(final Channel channel, final boolean isKeepAlive, final Req req, final Object extra) {
@@ -196,11 +211,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 			return new Runnable() {
 				@Override
 				public void run() {
-					try {
-						JPA.transaction(handleRequest, txMode == TransactionMode.READ_ONLY);
-					} catch (Exception e) {
-						HttpIO.errorAndDone(req, e);
-					}
+					JPA.transaction(handleRequest, txMode == TransactionMode.READ_ONLY);
 				}
 			};
 
@@ -243,6 +254,17 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 		return wrapper.wrap(req, invocation);
 	}
 
+	private Object handleError(Req req, Throwable e) {
+		req.revert();
+		req.async();
+
+		HttpIO.error(req, e);
+		// the Req object will do the rendering
+		req.done();
+
+		return req;
+	}
+
 	protected abstract Object handleReq(Channel ctx, boolean isKeepAlive, Req req, Object extra) throws Exception;
 
 	public void complete(Channel ctx, boolean isKeepAlive, Req req, Object result) {
@@ -258,7 +280,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 		}
 
 		if (result instanceof Throwable) {
-			HttpIO.errorAndDone(req, (Throwable) result);
+			handleError(req, (Throwable) result);
 			return;
 
 		} else {
