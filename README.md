@@ -14,11 +14,7 @@ The main distribution of the framework is released under the liberal Apache Publ
 # Roadmap
 
 * Better documentation
-* URL pattern support
 * SSL support
-* Hot reloading of changed classes
-* Management/admin app for the server
-* Refactor the configuration components
 
 # Contributing
 
