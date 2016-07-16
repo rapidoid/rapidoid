@@ -56,6 +56,8 @@ public class Defaults extends RapidoidThing {
 
 	private static final EntityManagerFactoryProvider entityManagerFactoryProvider = new DefaultEntityManagerFactoryProvider();
 
+	private static final JsonRequestBodyParser jsonRequestBodyParser = new DefaultJsonRequestBodyParser();
+
 	public static String[] staticFilesPath() {
 		return staticFilesPath;
 	}
@@ -107,4 +109,9 @@ public class Defaults extends RapidoidThing {
 	public static String[] templatesPath() {
 		return Templates.PATH;
 	}
+
+	public static JsonRequestBodyParser jsonRequestBodyParser() {
+		return jsonRequestBodyParser;
+	}
+
 }

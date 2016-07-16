@@ -28,6 +28,7 @@ import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.JSON;
 import org.rapidoid.setup.App;
+import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
@@ -85,6 +86,20 @@ public class CustomizationTest extends IntegrationTestCommons {
 
 		@JsonProperty("the-name")
 		public String name;
+	}
+
+	@Test
+	public void customJsonBodyParser() {
+		My.jsonRequestBodyParser((req, body) -> U.map("uri", req.uri(), "parsed", JSON.parse(body)));
+
+		On.post("/abc").json(req -> req.data());
+		On.req(req -> req.posted());
+
+		postData("/abc?multipart", U.map("x", 13579, "foo", "bar"));
+		postData("/abc2?multipart", U.map("x", 13579, "foo", "bar"));
+
+		postJson("/abc?custom", U.map("x", 13579, "foo", "bar"));
+		postJson("/abc2?custom", U.map("x", 13579, "foo", "bar"));
 	}
 
 }

@@ -28,6 +28,7 @@ import org.rapidoid.commons.Arr;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.config.Conf;
 import org.rapidoid.crypto.Crypto;
+import org.rapidoid.data.JSON;
 import org.rapidoid.fluent.Do;
 import org.rapidoid.io.IO;
 import org.rapidoid.ioc.IoC;
@@ -221,6 +222,10 @@ public abstract class IntegrationTestCommons extends TestCommons {
 
 	protected void postData(String uri, Map<String, ?> data) {
 		testReq(DEFAULT_PORT, "POST", uri, data, null);
+	}
+
+	protected void postJson(String uri, Map<String, ?> data) {
+		testReq(DEFAULT_PORT, "POST", uri, null, JSON.stringify(data));
 	}
 
 	protected void postData(int port, String uri, Map<String, ?> data) {

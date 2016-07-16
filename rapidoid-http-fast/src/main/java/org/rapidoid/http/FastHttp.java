@@ -128,6 +128,7 @@ public class FastHttp extends AbstractHttpProcessor {
 			byte[] body;
 			Map<String, Object> posted;
 			Map<String, List<Upload>> files;
+			boolean pendingBodyParsing = false;
 
 			if (!isGet && !xbody.isEmpty()) {
 				KeyValueRanges postedKV = helper.pairs3.reset();
@@ -138,7 +139,7 @@ public class FastHttp extends AbstractHttpProcessor {
 				posted = U.map();
 				files = U.map();
 
-				HTTP_PARSER.parsePosted(buf, headersKV, xbody, postedKV, files, helper, posted);
+				pendingBodyParsing = !HTTP_PARSER.parsePosted(buf, headersKV, xbody, postedKV, files, helper, posted);
 
 				posted = Collections.synchronizedMap(posted);
 				files = Collections.synchronizedMap(files);
@@ -167,7 +168,7 @@ public class FastHttp extends AbstractHttpProcessor {
 			cookies = Collections.synchronizedMap(cookies);
 
 			req = new ReqImpl(this, channel, isKeepAlive, verb, uri, path, query, body, params, headers, cookies,
-				posted, files, contentType, segment, route);
+				posted, files, pendingBodyParsing, contentType, segment, route);
 
 			if (!attributes.isEmpty()) {
 				req.attrs().putAll(attributes);

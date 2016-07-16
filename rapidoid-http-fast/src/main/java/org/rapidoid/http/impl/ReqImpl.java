@@ -10,6 +10,7 @@ import org.rapidoid.commons.Str;
 import org.rapidoid.http.*;
 import org.rapidoid.http.customize.BeanParameterFactory;
 import org.rapidoid.http.customize.Customization;
+import org.rapidoid.http.customize.JsonRequestBodyParser;
 import org.rapidoid.io.Upload;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.abstracts.Channel;
@@ -98,6 +99,8 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	private volatile boolean completed;
 
+	private volatile boolean pendingBodyParsing;
+
 	private final MediaType defaultContentType;
 
 	private volatile HttpRoutesImpl routes;
@@ -105,7 +108,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	public ReqImpl(FastHttp http, Channel channel, boolean isKeepAlive, String verb, String uri, String path,
 	               String query, byte[] body, Map<String, String> params, Map<String, String> headers,
 	               Map<String, String> cookies, Map<String, Object> posted, Map<String, List<Upload>> files,
-	               MediaType defaultContentType, String segment, HttpRoutesImpl routes) {
+	               boolean pendingBodyParsing, MediaType defaultContentType, String segment, HttpRoutesImpl routes) {
 
 		this.http = http;
 		this.channel = channel;
@@ -120,6 +123,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		this.cookies = cookies;
 		this.posted = posted;
 		this.files = files;
+		this.pendingBodyParsing = pendingBodyParsing;
 		this.defaultContentType = defaultContentType;
 		this.segment = segment;
 		this.routes = routes;
@@ -192,6 +196,15 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	@Override
 	public Map<String, Object> posted() {
+		if (pendingBodyParsing) {
+			synchronized (this) {
+				if (pendingBodyParsing) {
+					pendingBodyParsing = false;
+					parseJsonBody();
+				}
+			}
+		}
+
 		return posted;
 	}
 
@@ -299,7 +312,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 					allData.putAll(params);
 					allData.putAll(files);
-					allData.putAll(posted);
+					allData.putAll(posted());
 
 					data = Collections.unmodifiableMap(allData);
 				}
@@ -740,6 +753,24 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		done = false;
 		completed = false;
 		response = null;
+	}
+
+	private void parseJsonBody() {
+		if (U.notEmpty(body())) {
+
+			Map<String, ?> jsonData = null;
+			JsonRequestBodyParser parser = custom().jsonRequestBodyParser();
+
+			try {
+				jsonData = parser.parseJsonBody(this, body);
+			} catch (Exception e) {
+				Log.error("The attempt to parse the request body as JSON failed. Please make sure the correct content type is specified in the request header!", e);
+			}
+
+			if (jsonData != null) {
+				posted.putAll(jsonData);
+			}
+		}
 	}
 
 }

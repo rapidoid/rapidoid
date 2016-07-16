@@ -35,8 +35,6 @@ import org.rapidoid.u.U;
 @Since("5.1.0")
 public class Customization extends RapidoidThing {
 
-	static final Customization NULL = new Customization(null, null, null, null);
-
 	private final String name;
 	private final Customization defaults;
 	private final Config appConfig;
@@ -53,6 +51,8 @@ public class Customization extends RapidoidThing {
 	private volatile PageRenderer pageRenderer;
 
 	private volatile JsonResponseRenderer jsonResponseRenderer;
+
+	private volatile JsonRequestBodyParser jsonRequestBodyParser;
 
 	private volatile BeanParameterFactory beanParameterFactory;
 
@@ -238,4 +238,12 @@ public class Customization extends RapidoidThing {
 		return this;
 	}
 
+	public JsonRequestBodyParser jsonRequestBodyParser() {
+		return jsonRequestBodyParser != null || defaults == null ? jsonRequestBodyParser : defaults.jsonRequestBodyParser();
+	}
+
+	public Customization jsonRequestBodyParser(JsonRequestBodyParser jsonRequestBodyParser) {
+		this.jsonRequestBodyParser = jsonRequestBodyParser;
+		return this;
+	}
 }

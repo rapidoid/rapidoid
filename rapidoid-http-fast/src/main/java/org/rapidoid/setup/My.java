@@ -44,6 +44,7 @@ public class My extends RapidoidThing {
 			GLOBAL.viewRenderer(Defaults.viewRenderer());
 			GLOBAL.pageRenderer(Defaults.pageRenderer());
 			GLOBAL.jsonResponseRenderer(Defaults.jsonResponseRenderer());
+			GLOBAL.jsonRequestBodyParser(Defaults.jsonRequestBodyParser());
 			GLOBAL.beanParameterFactory(Defaults.beanParameterFactory());
 			GLOBAL.loginProvider(Defaults.loginProvider());
 			GLOBAL.rolesProvider(Defaults.rolesProvider());
@@ -153,6 +154,14 @@ public class My extends RapidoidThing {
 
 	public static void entityManagerFactoryProvider(EntityManagerFactoryProvider entityManagerFactoryProvider) {
 		GLOBAL.entityManagerFactoryProvider(entityManagerFactoryProvider);
+	}
+
+	public static JsonRequestBodyParser jsonRequestBodyParser() {
+		return GLOBAL.jsonRequestBodyParser();
+	}
+
+	public static void jsonRequestBodyParser(JsonRequestBodyParser jsonRequestBodyParser) {
+		GLOBAL.jsonRequestBodyParser(jsonRequestBodyParser);
 	}
 
 }

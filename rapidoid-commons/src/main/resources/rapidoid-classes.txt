@@ -278,6 +278,7 @@ org.rapidoid.http.customize.DefaultBeanParameterFactory
 org.rapidoid.http.customize.DefaultBeanValidator
 org.rapidoid.http.customize.DefaultEntityManagerFactoryProvider
 org.rapidoid.http.customize.DefaultErrorHandler
+org.rapidoid.http.customize.DefaultJsonRequestBodyParser
 org.rapidoid.http.customize.DefaultJsonResponseRenderer
 org.rapidoid.http.customize.DefaultLoginProvider
 org.rapidoid.http.customize.DefaultPageRenderer
@@ -286,6 +287,7 @@ org.rapidoid.http.customize.DefaultViewRenderer
 org.rapidoid.http.customize.EntityManagerFactoryProvider
 org.rapidoid.http.customize.EntityManagerProvider
 org.rapidoid.http.customize.ErrorHandler
+org.rapidoid.http.customize.JsonRequestBodyParser
 org.rapidoid.http.customize.JsonResponseRenderer
 org.rapidoid.http.customize.LoginProvider
 org.rapidoid.http.customize.PageRenderer

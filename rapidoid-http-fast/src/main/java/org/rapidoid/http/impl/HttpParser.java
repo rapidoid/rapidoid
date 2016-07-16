@@ -10,7 +10,6 @@ import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Err;
 import org.rapidoid.data.BufRange;
 import org.rapidoid.data.BufRanges;
-import org.rapidoid.data.JSON;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.http.HttpContentType;
 import org.rapidoid.io.Upload;
@@ -377,9 +376,9 @@ public class HttpParser extends RapidoidThing implements Constants {
 				BytesUtil.trim(src.bytes(), charset);
 
 				if (!BytesUtil.matches(src.bytes(), charset, _UTF_8, false)
-						&& !BytesUtil.matches(src.bytes(), charset, _ISO_8859_1, false)) {
+					&& !BytesUtil.matches(src.bytes(), charset, _ISO_8859_1, false)) {
 					Log.warn("Tipically the UTF-8 and ISO-8859-1 charsets are expected, but received different!",
-							"charset", src.get(charset));
+						"charset", src.get(charset));
 				}
 			}
 		}
@@ -389,8 +388,8 @@ public class HttpParser extends RapidoidThing implements Constants {
 
 		if (encoding != null) {
 			boolean validEncoding = BytesUtil.matches(src.bytes(), encoding, _7BIT, false)
-					|| BytesUtil.matches(src.bytes(), encoding, _8BIT, false)
-					|| BytesUtil.matches(src.bytes(), encoding, BINARY, false);
+				|| BytesUtil.matches(src.bytes(), encoding, _8BIT, false)
+				|| BytesUtil.matches(src.bytes(), encoding, BINARY, false);
 			Err.rteIf(!validEncoding, "Invalid Content-transfer-encoding header value!");
 		}
 
@@ -446,13 +445,13 @@ public class HttpParser extends RapidoidThing implements Constants {
 
 			if (BytesUtil.startsWith(buf.bytes(), contType, CT_MULTIPART_FORM_DATA_BOUNDARY1, false)) {
 				multipartBoundary.setInterval(contType.start + CT_MULTIPART_FORM_DATA_BOUNDARY1.length,
-						contType.limit());
+					contType.limit());
 				return HttpContentType.MULTIPART;
 			}
 
 			if (BytesUtil.startsWith(buf.bytes(), contType, CT_MULTIPART_FORM_DATA_BOUNDARY2, false)) {
 				multipartBoundary.setInterval(contType.start + CT_MULTIPART_FORM_DATA_BOUNDARY2.length,
-						contType.limit());
+					contType.limit());
 				return HttpContentType.MULTIPART;
 			}
 
@@ -468,23 +467,14 @@ public class HttpParser extends RapidoidThing implements Constants {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void parsePosted(Buf input, KeyValueRanges headersKV, BufRange rBody, KeyValueRanges posted,
-	                        Map<String, List<Upload>> files, RapidoidHelper helper, Map<String, Object> dest) {
+	public boolean parsePosted(Buf input, KeyValueRanges headersKV, BufRange rBody, KeyValueRanges posted,
+	                           Map<String, List<Upload>> files, RapidoidHelper helper, Map<String, Object> dest) {
 
 		boolean completed = parseBody(input, headersKV, rBody, posted, files, helper);
 
 		posted.toUrlEncodedParams(input, dest);
 
-		if (!completed && !rBody.isEmpty()) {
-			try {
-				Map<String, Object> jsonData = JSON.parse(input.get(rBody), Map.class);
-				if (jsonData != null) {
-					dest.putAll(jsonData);
-				}
-			} catch (Exception e) {
-				Log.warn("The attempt to parse the request body as JSON failed. Please specify the correct content type in the request header!", e);
-			}
-		}
+		return completed;
 	}
 
 }
