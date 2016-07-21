@@ -24,6 +24,8 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Coll;
+import org.rapidoid.event.Events;
+import org.rapidoid.event.Fire;
 import org.rapidoid.http.Req;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -46,6 +48,8 @@ public class DefaultSessionManager extends RapidoidThing implements SessionManag
 
 	@Override
 	public Map<String, Serializable> loadSession(Req req, String sessionId) throws Exception {
+		Fire.event(Events.SESSION_LOAD, "id", sessionId);
+
 		SessionHolder holder = sessions.get(sessionId);
 
 		if (holder.session == null) {
@@ -53,9 +57,11 @@ public class DefaultSessionManager extends RapidoidThing implements SessionManag
 				if (holder.session == null) {
 
 					if (holder.serialized != null) {
+						Fire.event(Events.SESSION_DESERIALIZE, "id", sessionId);
 						holder.session = U.cast(Msc.deserialize(holder.serialized));
 					} else {
 						holder.session = Coll.concurrentMap();
+						Fire.event(Events.SESSION_CONCURRENT_ACCESS, "id", sessionId);
 					}
 				}
 			}
@@ -68,6 +74,8 @@ public class DefaultSessionManager extends RapidoidThing implements SessionManag
 
 	@Override
 	public void saveSession(Req req, String sessionId, Map<String, Serializable> session) throws Exception {
+		Fire.event(Events.SESSION_SAVE, "id", sessionId);
+
 		SessionHolder holder = sessions.get(sessionId);
 		long refN = holder.refCounter.decrementAndGet();
 
@@ -76,6 +84,7 @@ public class DefaultSessionManager extends RapidoidThing implements SessionManag
 		if (refN == 0) {
 			synchronized (holder) {
 				if (holder.refCounter.get() == 0) {
+					Fire.event(Events.SESSION_SERIALIZE, "id", sessionId);
 					holder.serialized = Msc.serialize(session);
 					holder.session = null;
 				}

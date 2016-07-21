@@ -26,7 +26,9 @@ package org.rapidoid.event;
  */
 public enum Events implements Event {
 
-	LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR;
+	LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR,
+
+	SESSION_LOAD, SESSION_SAVE, SESSION_SERIALIZE, SESSION_DESERIALIZE, SESSION_CONCURRENT_ACCESS;
 
 	private volatile EventListener listener;
 
