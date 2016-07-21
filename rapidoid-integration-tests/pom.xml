@@ -56,6 +56,12 @@
 			<version>${mustache.java.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.samskivert</groupId>
+			<artifactId>jmustache</artifactId>
+			<version>${jmustache.version}</version>
+			<scope>test</scope>
+		</dependency>
 
 	</dependencies>
 

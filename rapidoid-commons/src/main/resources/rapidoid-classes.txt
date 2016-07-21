@@ -387,6 +387,7 @@ org.rapidoid.insight.Metrics
 org.rapidoid.insight.PercentMeasure
 org.rapidoid.insight.StatsMeasure
 org.rapidoid.integrate.Integrate
+org.rapidoid.integrate.JMustacheViewRenderer
 org.rapidoid.integrate.MustacheViewRenderer
 org.rapidoid.integrate.SpringIntegrator
 org.rapidoid.ioc.BeanProvider
