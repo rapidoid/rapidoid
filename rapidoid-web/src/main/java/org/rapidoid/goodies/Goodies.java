@@ -3,6 +3,7 @@ package org.rapidoid.goodies;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Env;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
 import org.rapidoid.crypto.Crypto;
@@ -191,7 +192,7 @@ public class Goodies extends RapidoidThing {
 
 		auth(setup);
 
-		if (Conf.USERS.isEmpty()) {
+		if (Conf.USERS.isEmpty() && Env.dev()) {
 			String pass = generatedAdminPassword();
 			Config admin = Conf.USERS.sub("admin");
 			admin.set("roles", "administrator");
