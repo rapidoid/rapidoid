@@ -26,8 +26,6 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.log.Log;
-import org.rapidoid.log.LogLevel;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 
@@ -44,9 +42,6 @@ public class RapidoidThingsTest {
 			Class<?> clazz = Cls.get(cls);
 			if (!clazz.isInterface() && !clazz.isEnum() && !clazz.isAnnotation()) {
 				U.must(RapidoidThing.class.isAssignableFrom(clazz)
-					|| clazz == U.class
-					|| clazz == Log.class
-					|| clazz == LogLevel.class
 					|| clazz == TestCommons.class
 					|| cls.startsWith("org.rapidoid.fluent.")
 					|| Exception.class.isAssignableFrom(clazz)

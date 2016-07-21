@@ -1,11 +1,8 @@
 package org.rapidoid;
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-essentials
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -23,8 +20,10 @@ import org.rapidoid.annotation.Since;
  * #L%
  */
 
-@Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
+/**
+ * @author Nikolche Mihajlovski
+ * @since 5.1.0
+ */
 public abstract class RapidoidThing {
 
 }

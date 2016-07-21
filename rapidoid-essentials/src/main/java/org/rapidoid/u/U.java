@@ -20,6 +20,8 @@ package org.rapidoid.u;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
+
 import java.util.*;
 import java.util.concurrent.CancellationException;
 
@@ -27,7 +29,7 @@ import java.util.concurrent.CancellationException;
  * @author Nikolche Mihajlovski
  * @since 2.0.0
  */
-public class U {
+public class U extends RapidoidThing {
 
 	public static String str(Object obj) {
 		if (obj == null) {

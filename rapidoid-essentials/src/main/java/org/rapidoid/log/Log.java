@@ -34,7 +34,7 @@ import java.util.concurrent.Callable;
  * @author Nikolche Mihajlovski
  * @since 2.0.0
  */
-public class Log {
+public class Log extends RapidoidThing {
 
 	public static final LogLevel LEVEL_TRACE = LogLevel.TRACE;
 	public static final LogLevel LEVEL_DEBUG = LogLevel.DEBUG;
