@@ -30,28 +30,57 @@ import org.rapidoid.util.Msc;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
 public class DefaultSessionManager extends RapidoidThing implements SessionManager {
 
-	private final Map<String, byte[]> sessions = Coll.concurrentMap();
+	public static class SessionHolder {
+		volatile byte[] serialized;
+		volatile Map<String, Serializable> session;
+		final AtomicLong refCounter = new AtomicLong();
+	}
+
+	private final Map<String, SessionHolder> sessions = Coll.autoExpandingMap(SessionHolder.class);
 
 	@Override
 	public Map<String, Serializable> loadSession(Req req, String sessionId) throws Exception {
-		byte[] bytes = sessions.get(sessionId);
+		SessionHolder holder = sessions.get(sessionId);
 
-		if (bytes != null) {
-			return U.cast(Msc.deserialize(bytes));
-		} else {
-			return U.map();
+		if (holder.session == null) {
+			synchronized (holder) {
+				if (holder.session == null) {
+
+					if (holder.serialized != null) {
+						holder.session = U.cast(Msc.deserialize(holder.serialized));
+					} else {
+						holder.session = Coll.concurrentMap();
+					}
+				}
+			}
 		}
+
+		holder.refCounter.incrementAndGet();
+
+		return holder.session;
 	}
 
 	@Override
 	public void saveSession(Req req, String sessionId, Map<String, Serializable> session) throws Exception {
-		byte[] bytes = Msc.serialize(session);
-		sessions.put(sessionId, bytes);
+		SessionHolder holder = sessions.get(sessionId);
+		long refN = holder.refCounter.decrementAndGet();
+
+		U.must(refN >= 0, "The session has negative reference counter!");
+
+		if (refN == 0) {
+			synchronized (holder) {
+				if (holder.refCounter.get() == 0) {
+					holder.serialized = Msc.serialize(session);
+					holder.session = null;
+				}
+			}
+		}
 	}
 
 }
