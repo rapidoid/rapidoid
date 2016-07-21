@@ -25,6 +25,8 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.http.Req;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -33,16 +35,23 @@ import java.util.Map;
 @Since("5.2.0")
 public class DefaultSessionManager extends RapidoidThing implements SessionManager {
 
-	private final Map<String, Map<String, Serializable>> sessions = Coll.mapOfMaps();
+	private final Map<String, byte[]> sessions = Coll.concurrentMap();
 
 	@Override
 	public Map<String, Serializable> loadSession(Req req, String sessionId) throws Exception {
-		return sessions.get(sessionId);
+		byte[] bytes = sessions.get(sessionId);
+
+		if (bytes != null) {
+			return U.cast(Msc.deserialize(bytes));
+		} else {
+			return U.map();
+		}
 	}
 
 	@Override
 	public void saveSession(Req req, String sessionId, Map<String, Serializable> session) throws Exception {
-		// do nothing, no persistence by default
+		byte[] bytes = Msc.serialize(session);
+		sessions.put(sessionId, bytes);
 	}
 
 }
