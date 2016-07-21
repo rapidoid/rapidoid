@@ -136,6 +136,7 @@ org.rapidoid.data.XML
 org.rapidoid.data.YAML
 org.rapidoid.event.Event
 org.rapidoid.event.EventListener
+org.rapidoid.event.Events
 org.rapidoid.event.Fire
 org.rapidoid.expire.ExpirationCrawlerThread
 org.rapidoid.expire.Expire

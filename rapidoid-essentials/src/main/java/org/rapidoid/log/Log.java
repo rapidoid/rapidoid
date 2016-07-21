@@ -20,6 +20,9 @@ package org.rapidoid.log;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.event.Event;
+import org.rapidoid.event.Fire;
 import org.rapidoid.u.U;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -221,7 +224,54 @@ public class Log extends RapidoidThing {
 	                        String key3, Object value3, String key4, Object value4, String key5, Object value5,
 	                        String key6, Object value6, String key7, Object value7, int paramsN) {
 
-		if (!isEnabled(level)) {
+		boolean visible = isEnabled(level);
+
+		// fire a log event
+
+		Event ev = level.event();
+
+		switch (paramsN) {
+			case 0:
+				Fire.event(ev, "_", msg, "_visible", visible);
+				break;
+
+			case 1:
+				Fire.event(ev, "_", msg, "_visible", visible, key1, value1);
+				break;
+
+			case 2:
+				Fire.event(ev, "_", msg, "_visible", visible, key1, value1, key2, value2);
+				break;
+
+			case 3:
+				Fire.event(ev, "_", msg, "_visible", visible, key1, value1, key2, value2, key3, value3);
+				break;
+
+			case 4:
+				Fire.event(ev, "_", msg, "_visible", visible, key1, value1, key2, value2, key3, value3, key4, value4);
+				break;
+
+			case 5:
+				Fire.event(ev, "_", msg, "_visible", visible, key1, value1, key2, value2, key3, value3, key4, value4,
+					key5, value5);
+				break;
+
+			case 6:
+				Fire.event(ev, "_", msg, "_visible", visible, key1, value1, key2, value2, key3, value3, key4, value4,
+					key5, value5, key6, value6);
+				break;
+
+			case 7:
+				Fire.event(ev, "_", msg, "_visible", visible, key1, value1, key2, value2, key3, value3, key4, value4,
+					key5, value5, key6, value6, key7, value7);
+				break;
+
+			default:
+				throw new IllegalStateException();
+		}
+
+		// process only the visible logs
+		if (!visible) {
 			return;
 		}
 

@@ -1,4 +1,4 @@
-package org.rapidoid.log;
+package org.rapidoid.event;
 
 /*
  * #%L
@@ -20,24 +20,29 @@ package org.rapidoid.log;
  * #L%
  */
 
-import org.rapidoid.event.Event;
-import org.rapidoid.event.Events;
-
 /**
  * @author Nikolche Mihajlovski
- * @since 2.0.0
+ * @since 5.2.0
  */
-public enum LogLevel {
+public enum Events implements Event {
 
-	TRACE(Events.LOG_TRACE), DEBUG(Events.LOG_DEBUG), INFO(Events.LOG_INFO), WARN(Events.LOG_WARN), ERROR(Events.LOG_ERROR);
+	LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR;
 
-	private final Event event;
+	private volatile EventListener listener;
 
-	LogLevel(Event event) {
-		this.event = event;
+	@Override
+	public EventListener listener() {
+		return listener;
 	}
 
-	public Event event() {
-		return event;
+	@Override
+	public void listener(EventListener listener) {
+		this.listener = listener;
+	}
+
+	public static void reset() {
+		for (Events ev : Events.values()) {
+			ev.listener(null);
+		}
 	}
 }

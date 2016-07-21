@@ -16,6 +16,7 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.crypto.Crypto;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.event.Events;
 import org.rapidoid.insight.Insights;
 import org.rapidoid.io.IO;
 import org.rapidoid.io.Res;
@@ -1017,6 +1018,7 @@ public class Msc extends RapidoidThing implements Constants {
 	}
 
 	public static void reset() {
+		Events.reset();
 		Log.setLogLevel(LogLevel.INFO);
 
 		Env.profiles().clear();
