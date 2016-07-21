@@ -58,6 +58,8 @@ public class Defaults extends RapidoidThing {
 
 	private static final JsonRequestBodyParser jsonRequestBodyParser = new DefaultJsonRequestBodyParser();
 
+	private static final SessionManager sessionManager = new DefaultSessionManager();
+
 	public static String[] staticFilesPath() {
 		return staticFilesPath;
 	}
@@ -112,6 +114,10 @@ public class Defaults extends RapidoidThing {
 
 	public static JsonRequestBodyParser jsonRequestBodyParser() {
 		return jsonRequestBodyParser;
+	}
+
+	public static SessionManager sessionManager() {
+		return sessionManager;
 	}
 
 }

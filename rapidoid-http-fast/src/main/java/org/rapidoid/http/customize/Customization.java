@@ -71,6 +71,8 @@ public class Customization extends RapidoidThing {
 
 	private volatile EntityManagerFactoryProvider entityManagerFactoryProvider;
 
+	private volatile SessionManager sessionManager;
+
 	public Customization(String name, Customization defaults, Config appConfig, Config serverConfig) {
 		this.name = name;
 		this.defaults = defaults;
@@ -94,6 +96,7 @@ public class Customization extends RapidoidThing {
 		jackson = null;
 		entityManagerProvider = null;
 		entityManagerFactoryProvider = null;
+		sessionManager = null;
 		errorHandlers.reset();
 	}
 
@@ -248,6 +251,15 @@ public class Customization extends RapidoidThing {
 
 	public Customization jsonRequestBodyParser(JsonRequestBodyParser jsonRequestBodyParser) {
 		this.jsonRequestBodyParser = jsonRequestBodyParser;
+		return this;
+	}
+
+	public SessionManager sessionManager() {
+		return sessionManager != null || defaults == null ? sessionManager : defaults.sessionManager();
+	}
+
+	public Customization sessionManager(SessionManager sessionManager) {
+		this.sessionManager = sessionManager;
 		return this;
 	}
 

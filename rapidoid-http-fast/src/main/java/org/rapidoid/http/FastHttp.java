@@ -19,7 +19,6 @@ import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +52,6 @@ public class FastHttp extends AbstractHttpProcessor {
 	private final HttpRoutesImpl[] routes;
 
 	private final Map<String, Object> attributes = Coll.synchronizedMap();
-	private final Map<String, Map<String, Serializable>> sessions = Coll.mapOfMaps();
 
 	public FastHttp(HttpRoutesImpl... routes) {
 		super(null);
@@ -288,10 +286,6 @@ public class FastHttp extends AbstractHttpProcessor {
 
 	public Map<String, Object> attributes() {
 		return attributes;
-	}
-
-	public Map<String, Serializable> session(String sessionId) {
-		return sessions.get(sessionId);
 	}
 
 	public HttpRoutesImpl[] routes() {

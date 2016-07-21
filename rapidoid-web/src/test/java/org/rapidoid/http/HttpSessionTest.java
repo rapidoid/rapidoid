@@ -23,8 +23,15 @@ package org.rapidoid.http;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.customize.SessionManager;
 import org.rapidoid.log.Log;
+import org.rapidoid.setup.Defaults;
+import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;
+
+import java.io.Serializable;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.10")
@@ -32,6 +39,7 @@ public class HttpSessionTest extends HttpTestCommons {
 
 	@Test
 	public void testHttpSession() {
+
 		On.req(new ReqRespHandler() {
 			@Override
 			public Object execute(Req req, Resp resp) throws Exception {
@@ -45,6 +53,25 @@ public class HttpSessionTest extends HttpTestCommons {
 
 				return n + ":" + m;
 			}
+		});
+
+		final AtomicInteger loadCounter = new AtomicInteger();
+		final AtomicInteger saveCounter = new AtomicInteger();
+
+		My.sessionManager(new SessionManager() {
+
+			@Override
+			public Map<String, Serializable> loadSession(Req req, String sessionId) throws Exception {
+				loadCounter.incrementAndGet();
+				return Defaults.sessionManager().loadSession(req, sessionId);
+			}
+
+			@Override
+			public void saveSession(Req req, String sessionId, Map<String, Serializable> session) throws Exception {
+				saveCounter.incrementAndGet();
+				Defaults.sessionManager().saveSession(req, sessionId, session);
+			}
+
 		});
 
 		HttpClient client = HTTP.client().keepCookies(true);
@@ -62,6 +89,9 @@ public class HttpSessionTest extends HttpTestCommons {
 		eq(client.get(localhost("/c")).fetch(), "3:13");
 
 		client.close();
+
+		eq(loadCounter.get(), 6);
+		eq(saveCounter.get(), 6);
 	}
 
 }

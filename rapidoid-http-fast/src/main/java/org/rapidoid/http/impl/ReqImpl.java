@@ -11,6 +11,7 @@ import org.rapidoid.http.*;
 import org.rapidoid.http.customize.BeanParameterFactory;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.JsonRequestBodyParser;
+import org.rapidoid.http.customize.SessionManager;
 import org.rapidoid.io.Upload;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.abstracts.Channel;
@@ -84,6 +85,8 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	private volatile Map<String, Object> data;
 
 	private volatile Map<String, Serializable> token;
+
+	private volatile Map<String, Serializable> session;
 
 	private volatile RespImpl response;
 
@@ -416,6 +419,10 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 			HttpUtils.saveCookipackBeforeRenderingHeaders(this, token);
 		}
 
+		if (session != null) {
+			saveSession(session);
+		}
+
 		if (response != null) {
 			contentType = U.or(response.contentType(), MediaType.HTML_UTF_8);
 		}
@@ -630,7 +637,15 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	@Override
 	public Map<String, Serializable> session() {
-		return http.session(sessionId());
+		if (session == null) {
+			synchronized (this) {
+				if (session == null) {
+					session = loadSession();
+				}
+			}
+		}
+
+		return session;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -770,6 +785,26 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 			if (jsonData != null) {
 				posted.putAll(jsonData);
 			}
+		}
+	}
+
+	public Map<String, Serializable> loadSession() {
+		SessionManager sessionManager = U.notNull(custom().sessionManager(), "session manager");
+
+		try {
+			return sessionManager.loadSession(this, sessionId());
+		} catch (Exception e) {
+			throw U.rte("Error occured while loading the session!", e);
+		}
+	}
+
+	public void saveSession(Map<String, Serializable> session) {
+		SessionManager sessionManager = U.notNull(custom().sessionManager(), "session manager");
+
+		try {
+			sessionManager.saveSession(this, sessionId(), session);
+		} catch (Exception e) {
+			throw U.rte("Error occured while saving the session!", e);
 		}
 	}
 

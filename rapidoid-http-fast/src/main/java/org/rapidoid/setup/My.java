@@ -53,6 +53,7 @@ public class My extends RapidoidThing {
 			GLOBAL.entityManagerFactoryProvider(Defaults.entityManagerFactoryProvider());
 			GLOBAL.entityManagerProvider(Defaults.entityManagerProvider());
 			GLOBAL.templatesPath(Defaults.templatesPath());
+			GLOBAL.sessionManager(Defaults.sessionManager());
 		}
 	}
 
@@ -162,6 +163,14 @@ public class My extends RapidoidThing {
 
 	public static void jsonRequestBodyParser(JsonRequestBodyParser jsonRequestBodyParser) {
 		GLOBAL.jsonRequestBodyParser(jsonRequestBodyParser);
+	}
+
+	public static SessionManager sessionManager() {
+		return GLOBAL.sessionManager();
+	}
+
+	public static Customization sessionManager(SessionManager sessionManager) {
+		return GLOBAL.sessionManager(sessionManager);
 	}
 
 	public static synchronized OnError error(Class<? extends Throwable> error) {
