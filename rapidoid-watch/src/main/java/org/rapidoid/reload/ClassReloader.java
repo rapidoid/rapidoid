@@ -146,8 +146,8 @@ public class ClassReloader extends ClassLoader {
 
 			// reloading Hibernate or Morphia entity will cause class cast exception
 			if (ann.equals(DontReload.class.getName())
-					|| ann.startsWith("javax.persistence.")
-					|| ann.startsWith("org.mongodb.morphia.annotations.")) {
+				|| ann.startsWith("javax.persistence.")
+				|| ann.startsWith("org.mongodb.morphia.annotations.")) {
 				return true;
 			}
 		}
@@ -157,7 +157,7 @@ public class ClassReloader extends ClassLoader {
 
 	private boolean shouldReload(String classname) {
 		boolean couldReload = names.contains(classname) || (!Cls.isRapidoidClass(classname) && !Cls.isJREClass(classname)
-				&& !isEntity(classname) && findOnClasspath(classname) != null);
+			&& !isEntity(classname) && findOnClasspath(classname) != null);
 
 		return couldReload && !originalMarkedNotToReload(classname);
 	}

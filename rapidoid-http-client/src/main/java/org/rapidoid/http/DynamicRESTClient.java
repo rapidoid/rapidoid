@@ -74,7 +74,7 @@ public class DynamicRESTClient extends RapidoidThing implements Dynamic, Constan
 			// async result with callback
 
 			U.must(retType.equals(void.class) || Future.class.isAssignableFrom(retType)
-					|| org.rapidoid.concurrent.Future.class.isAssignableFrom(retType));
+				|| org.rapidoid.concurrent.Future.class.isAssignableFrom(retType));
 
 			Callback<Object> callback = (Callback<Object>) U.last(args);
 			U.notNull(callback, "callback");

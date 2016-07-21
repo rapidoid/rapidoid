@@ -120,7 +120,7 @@ public class Secure extends RapidoidThing implements Constants {
 		clazz = Cls.unproxy(clazz);
 
 		if (Collection.class.isAssignableFrom(clazz) || Map.class.isAssignableFrom(clazz)
-				|| Object[].class.isAssignableFrom(clazz)) {
+			|| Object[].class.isAssignableFrom(clazz)) {
 			return DataPermissions.ALL;
 		}
 
@@ -162,7 +162,7 @@ public class Secure extends RapidoidThing implements Constants {
 		clazz = Cls.unproxy(clazz);
 
 		if (Collection.class.isAssignableFrom(clazz) || Map.class.isAssignableFrom(clazz)
-				|| Object[].class.isAssignableFrom(clazz)) {
+			|| Object[].class.isAssignableFrom(clazz)) {
 			return DataPermissions.ALL;
 		}
 
@@ -200,7 +200,7 @@ public class Secure extends RapidoidThing implements Constants {
 		clazz = Cls.unproxy(clazz);
 
 		if (Collection.class.isAssignableFrom(clazz) || Map.class.isAssignableFrom(clazz)
-				|| Object[].class.isAssignableFrom(clazz)) {
+			|| Object[].class.isAssignableFrom(clazz)) {
 			return DataPermissions.ALL;
 		}
 
@@ -250,12 +250,12 @@ public class Secure extends RapidoidThing implements Constants {
 
 	public static boolean canReadProperty(String username, Set<String> roles, Object record, String property) {
 		return hasRoleBasedObjectAccess(username, roles, record) && getObjectPermissions(username, roles, record).read
-				&& getPropertyPermissions(username, roles, record.getClass(), record, property).read;
+			&& getPropertyPermissions(username, roles, record.getClass(), record, property).read;
 	}
 
 	public static boolean canUpdateProperty(String username, Set<String> roles, Object record, String property) {
 		return hasRoleBasedObjectAccess(username, roles, record) && getObjectPermissions(username, roles, record).change
-				&& getPropertyPermissions(username, roles, record.getClass(), record, property).change;
+			&& getPropertyPermissions(username, roles, record.getClass(), record, property).change;
 	}
 
 	public static void resetInvisibleProperties(String username, Set<String> roles, Object record) {

@@ -53,10 +53,10 @@ public abstract class AbstractTextInput<W extends AbstractTextInput<?>> extends 
 
 	protected Tag renderInput(String type) {
 		return GUI.input().type(type)
-				.class_("form-control")
-				.name(_name())
-				.value(_strVal(initial))
-				.placeholder(placeholder);
+			.class_("form-control")
+			.name(_name())
+			.value(_strVal(initial))
+			.placeholder(placeholder);
 	}
 
 }

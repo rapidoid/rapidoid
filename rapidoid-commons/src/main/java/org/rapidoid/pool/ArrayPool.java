@@ -72,7 +72,7 @@ public class ArrayPool<T> extends AbstractInsightful implements Pool<T> {
 			int expandFactor = free.length < 1000000 ? 10 : 2;
 			int newSize = free.length * expandFactor;
 			Log.info("The pool wasn't big enough, expanding...", "name", getName(), "old size", free.length,
-					"new size", newSize);
+				"new size", newSize);
 			free = Msc.expand(free, expandFactor);
 		}
 

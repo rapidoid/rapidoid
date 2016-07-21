@@ -48,7 +48,7 @@ public class HttpFullRawResponseTest extends IntegrationTestCommons {
 
 	@Test
 	public void testByteBufferRawResponse() {
-		On.get("/buf").html((Req req, Resp resp) ->  resp.raw(Bufs.buf(BUF_RESPONSE)));
+		On.get("/buf").html((Req req, Resp resp) -> resp.raw(Bufs.buf(BUF_RESPONSE)));
 
 		onlyGet("/buf");
 	}

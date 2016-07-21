@@ -394,8 +394,8 @@ public class RespImpl extends RapidoidThing implements Resp {
 
 		String siteName = req.host();
 		if (U.isEmpty(siteName)
-				|| siteName.equals("localhost") || siteName.startsWith("localhost:")
-				|| siteName.equals("127.0.0.1") || siteName.startsWith("127.0.0.1:")) {
+			|| siteName.equals("localhost") || siteName.startsWith("localhost:")
+			|| siteName.equals("127.0.0.1") || siteName.startsWith("127.0.0.1:")) {
 			siteName = "Rapidoid";
 		}
 
@@ -432,20 +432,20 @@ public class RespImpl extends RapidoidThing implements Resp {
 	@Override
 	public String toString() {
 		return "RespImpl{" +
-				(result != null ? "result=" + result : "") +
-				(body != null ? ", body=" + body : "") +
-				(raw != null ? ", raw=" + raw : "") +
-				", code=" + code +
-				(contentType != null ? ", contentType=" + contentType : "") +
-				", headers=" + headers +
-				", cookies=" + cookies +
-				", model=" + model +
-				(redirect != null ? ", redirect='" + redirect + '\'' : "") +
-				(filename != null ? ", filename='" + filename + '\'' : "") +
-				(file != null ? ", file=" + file : "") +
-				(view != null ? ", view='" + view + '\'' : "") +
-				", mvc=" + mvc +
-				'}';
+			(result != null ? "result=" + result : "") +
+			(body != null ? ", body=" + body : "") +
+			(raw != null ? ", raw=" + raw : "") +
+			", code=" + code +
+			(contentType != null ? ", contentType=" + contentType : "") +
+			", headers=" + headers +
+			", cookies=" + cookies +
+			", model=" + model +
+			(redirect != null ? ", redirect='" + redirect + '\'' : "") +
+			(filename != null ? ", filename='" + filename + '\'' : "") +
+			(file != null ? ", file=" + file : "") +
+			(view != null ? ", view='" + view + '\'' : "") +
+			", mvc=" + mvc +
+			'}';
 	}
 
 	public byte[] renderToBytes() {

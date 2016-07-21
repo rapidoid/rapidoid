@@ -112,7 +112,7 @@ public class JdbcClient extends RapidoidThing {
 
 			String maskedPassword = U.isEmpty(password) ? "<empty>" : "<specified>";
 			Log.info("Initialized the default JDBC API", "!url", url, "!driver", driver, "!username", username,
-					"!password", maskedPassword);
+				"!password", maskedPassword);
 
 			initialized = true;
 		}

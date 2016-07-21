@@ -32,7 +32,7 @@ import org.rapidoid.commons.Arr;
 public abstract class ModelPropertySelector extends PropertySelectorByName {
 
 	private static final String[] ORDER = {"id", "version", "createdBy", "createdOn", "lastUpdatedBy",
-			"lastUpdatedOn", "title", "name", "firstName", "lastName", "description"};
+		"lastUpdatedOn", "title", "name", "firstName", "lastName", "description"};
 
 	public ModelPropertySelector(String... propertyNames) {
 		super(propertyNames);

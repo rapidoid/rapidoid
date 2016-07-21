@@ -48,11 +48,11 @@ import java.util.regex.Pattern;
 public class Cls extends RapidoidThing {
 
 	private static Pattern JRE_CLASS_PATTERN = Pattern
-			.compile("^(java|javax|javafx|com\\.sun|sun|com\\.oracle|oracle|jdk|org\\.omg|org\\.w3c).*");
+		.compile("^(java|javax|javafx|com\\.sun|sun|com\\.oracle|oracle|jdk|org\\.omg|org\\.w3c).*");
 
 	private static final Map<Class<?>, Class<?>> PRIMITIVE_WRAPPERS = U.map(boolean.class, Boolean.class, byte.class,
-			Byte.class, char.class, Character.class, double.class, Double.class, float.class, Float.class, int.class,
-			Integer.class, long.class, Long.class, short.class, Short.class, void.class, Void.class);
+		Byte.class, char.class, Character.class, double.class, Double.class, float.class, Float.class, int.class,
+		Integer.class, long.class, Long.class, short.class, Short.class, void.class, Void.class);
 
 	private static Set<String> RAPIDOID_CLASSES = U.set(IO.loadLines("rapidoid-classes.txt"));
 
@@ -357,7 +357,7 @@ public class Cls extends RapidoidThing {
 			return (Constructor<T>) clazz.getConstructor(paramTypes);
 		} catch (Exception e) {
 			throw U.rte("Cannot find the constructor for %s with param types: %s", e, clazz,
-					Arrays.toString(paramTypes));
+				Arrays.toString(paramTypes));
 		}
 	}
 
@@ -475,12 +475,12 @@ public class Cls extends RapidoidThing {
 			case BOOLEAN:
 			case BOOLEAN_OBJ:
 				if ("y".equalsIgnoreCase(value) || "t".equalsIgnoreCase(value) || "yes".equalsIgnoreCase(value)
-						|| "true".equalsIgnoreCase(value)) {
+					|| "true".equalsIgnoreCase(value)) {
 					return (T) Boolean.TRUE;
 				}
 
 				if ("n".equalsIgnoreCase(value) || "f".equalsIgnoreCase(value) || "no".equalsIgnoreCase(value)
-						|| "false".equalsIgnoreCase(value)) {
+					|| "false".equalsIgnoreCase(value)) {
 					return (T) Boolean.FALSE;
 				}
 
@@ -911,20 +911,20 @@ public class Cls extends RapidoidThing {
 
 	public static boolean isDataStructure(Class<?> clazz) {
 		return (Collection.class.isAssignableFrom(clazz)) || (Map.class.isAssignableFrom(clazz))
-				|| (Object[].class.isAssignableFrom(clazz));
+			|| (Object[].class.isAssignableFrom(clazz));
 	}
 
 	public static boolean isBeanType(Class<?> clazz) {
 		return clazz != null && clazz != Object.class
-				&& kindOf(clazz) == TypeKind.UNKNOWN
-				&& (!clazz.getName().startsWith("java.") || clazz.getName().startsWith("java.lang.management."))
-				&& (!clazz.getName().startsWith("javax.") || clazz.getName().startsWith("javax.management."))
-				&& !clazz.isAnnotation()
-				&& !clazz.isEnum()
-				&& !clazz.isInterface()
-				&& !(Collection.class.isAssignableFrom(clazz))
-				&& !(Map.class.isAssignableFrom(clazz))
-				&& !(Object[].class.isAssignableFrom(clazz));
+			&& kindOf(clazz) == TypeKind.UNKNOWN
+			&& (!clazz.getName().startsWith("java.") || clazz.getName().startsWith("java.lang.management."))
+			&& (!clazz.getName().startsWith("javax.") || clazz.getName().startsWith("javax.management."))
+			&& !clazz.isAnnotation()
+			&& !clazz.isEnum()
+			&& !clazz.isInterface()
+			&& !(Collection.class.isAssignableFrom(clazz))
+			&& !(Map.class.isAssignableFrom(clazz))
+			&& !(Object[].class.isAssignableFrom(clazz));
 	}
 
 	public static boolean isAppBeanType(Class<?> clazz) {
@@ -1098,7 +1098,7 @@ public class Cls extends RapidoidThing {
 
 			CodeAttribute codeAttribute = methodInfo.getCodeAttribute();
 			LocalVariableAttribute attr = (LocalVariableAttribute) codeAttribute
-					.getAttribute(LocalVariableAttribute.tag);
+				.getAttribute(LocalVariableAttribute.tag);
 
 			int offset = Modifier.isStatic(cm.getModifiers()) ? 0 : 1;
 
@@ -1136,8 +1136,8 @@ public class Cls extends RapidoidThing {
 			}
 
 			U.must(validNames(names), "Couldn't retrieve the parameter names! Please report this problem. " +
-					"You can explicitly specify the names using @Param(\"thename\"), " +
-					"or configure the option '-parameters' on the Java 8 compiler.");
+				"You can explicitly specify the names using @Param(\"thename\"), " +
+				"or configure the option '-parameters' on the Java 8 compiler.");
 		}
 
 		return names;

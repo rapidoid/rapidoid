@@ -62,13 +62,13 @@ public class DeployHandler extends GUI implements Callable<Object> {
 		}
 
 		Btn shutdown = btn("Shutdown / Restart").danger()
-				.confirm("Do you really want to SHUTDOWN / RESTART the application?")
-				.onClick(new Runnable() {
-					@Override
-					public void run() {
-						TerminateHandler.shutdownSoon();
-					}
-				});
+			.confirm("Do you really want to SHUTDOWN / RESTART the application?")
+			.onClick(new Runnable() {
+				@Override
+				public void run() {
+					TerminateHandler.shutdownSoon();
+				}
+			});
 
 		info.add(br());
 		info.add(shutdown);

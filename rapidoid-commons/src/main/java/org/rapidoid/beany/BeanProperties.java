@@ -50,37 +50,37 @@ public class BeanProperties extends RapidoidThing implements Iterable<Prop> {
 	public final ConcurrentMap<String, Object> extras = Coll.concurrentMap();
 
 	public final Map<PropertySelector, BeanProperties> selections = Coll
-			.autoExpandingMap(new Mapper<PropertySelector, BeanProperties>() {
-				@Override
-				public BeanProperties map(PropertySelector selector) throws Exception {
+		.autoExpandingMap(new Mapper<PropertySelector, BeanProperties>() {
+			@Override
+			public BeanProperties map(PropertySelector selector) throws Exception {
 
-					Set<String> include = selector.include();
-					Set<String> exclude = selector.exclude();
+				Set<String> include = selector.include();
+				Set<String> exclude = selector.exclude();
 
-					List<Prop> selected = new ArrayList<Prop>(10);
+				List<Prop> selected = new ArrayList<Prop>(10);
 
-					for (String propName : include) {
-						Prop prop = map.get(propName);
-						U.must(prop != null, "Cannot find property '%s'!", propName);
+				for (String propName : include) {
+					Prop prop = map.get(propName);
+					U.must(prop != null, "Cannot find property '%s'!", propName);
 
-						if (!veto(prop) && Lmbd.eval(selector, prop) && Lmbd.eval(selector, prop)) {
+					if (!veto(prop) && Lmbd.eval(selector, prop) && Lmbd.eval(selector, prop)) {
+						selected.add(prop);
+					}
+				}
+
+				if (U.notEmpty(exclude) || U.isEmpty(include)) {
+					for (Prop prop : map.values()) {
+						if (!veto(prop) && !selected.contains(prop) && !exclude.contains(prop.getName()) && Lmbd.eval(selector, prop)) {
 							selected.add(prop);
 						}
 					}
-
-					if (U.notEmpty(exclude) || U.isEmpty(include)) {
-						for (Prop prop : map.values()) {
-							if (!veto(prop) && !selected.contains(prop) && !exclude.contains(prop.getName()) && Lmbd.eval(selector, prop)) {
-								selected.add(prop);
-							}
-						}
-					}
-
-					Collections.sort(selected, selector);
-
-					return from(selected);
 				}
-			});
+
+				Collections.sort(selected, selector);
+
+				return from(selected);
+			}
+		});
 
 	private boolean veto(Prop prop) {
 		return prop.getName().equalsIgnoreCase("clone");

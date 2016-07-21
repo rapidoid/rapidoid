@@ -61,18 +61,18 @@ public class PathPatternTest extends TestCommons {
 		// custom regex
 		match("/x/{abc:[a-zA-Z-]+}-{d}/{some_numbers:\\d+-\\d+}::{x:.*}",
 
-				"/x/"
-						+ g(1, "[a-zA-Z-]+")
-						+ "-" + g(2)
-						+ "/" + g(3, "\\d+-\\d+")
-						+ "::" + g(4, ".*"),
+			"/x/"
+				+ g(1, "[a-zA-Z-]+")
+				+ "-" + g(2)
+				+ "/" + g(3, "\\d+-\\d+")
+				+ "::" + g(4, ".*"),
 
-				"/x/Hello-World-!!!/123-4567::zzz",
+			"/x/Hello-World-!!!/123-4567::zzz",
 
-				U.map("abc", "Hello-World",
-						"d", "!!!",
-						"some_numbers", "123-4567",
-						"x", "zzz")
+			U.map("abc", "Hello-World",
+				"d", "!!!",
+				"some_numbers", "123-4567",
+				"x", "zzz")
 		);
 
 		noMatch("/{cat}", "/" + g(1), "/");

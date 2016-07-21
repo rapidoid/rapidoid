@@ -63,9 +63,9 @@ public class IoCState extends RapidoidThing {
 
 	public synchronized Map<String, Object> info() {
 		return U.map("Provided classes", Deep.copyOf(providedClasses, Msc.TRANSFORM_TO_SIMPLE_CLASS_NAME),
-				"Provided instances", Deep.copyOf(providedInstances, Msc.TRANSFORM_TO_SIMPLE_CLASS_NAME),
-				"Managed instances", Deep.copyOf(instances, Msc.TRANSFORM_TO_SIMPLE_CLASS_NAME),
-				"By type", Deep.copyOf(providersByType, Msc.TRANSFORM_TO_SIMPLE_CLASS_NAME));
+			"Provided instances", Deep.copyOf(providedInstances, Msc.TRANSFORM_TO_SIMPLE_CLASS_NAME),
+			"Managed instances", Deep.copyOf(instances, Msc.TRANSFORM_TO_SIMPLE_CLASS_NAME),
+			"By type", Deep.copyOf(providersByType, Msc.TRANSFORM_TO_SIMPLE_CLASS_NAME));
 	}
 
 	public synchronized boolean isEmpty() {

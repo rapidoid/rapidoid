@@ -87,9 +87,9 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 
 	private static boolean sameTarget(Route a, Route b) {
 		return !a.verb().equals(b.verb())
-				&& a.path().equals(b.path())
-				&& a.handler() == b.handler()
-				&& a.config().equals(b.config());
+			&& a.path().equals(b.path())
+			&& a.handler() == b.handler()
+			&& a.config().equals(b.config());
 	}
 
 	private static void sortRoutes(List<Route> routes) {
@@ -114,7 +114,7 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 
 		Tag path = td(route.path());
 		Tag segment = td(config.segment());
-		Tag roles = td(display(config.roles().isEmpty() ? "": config.roles()));
+		Tag roles = td(display(config.roles().isEmpty() ? "" : config.roles()));
 		Tag hnd = td(route.handler());
 
 		Tag ctype = td(config.contentType().info());

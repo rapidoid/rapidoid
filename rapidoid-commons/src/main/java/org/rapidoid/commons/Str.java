@@ -42,25 +42,25 @@ public class Str extends RapidoidThing {
 	private static final Pattern CAMEL_SPLITTER_PATTERN = Pattern.compile(CAMEL_REGEX);
 
 	private static final String[][] XML_ESCAPE = {
-			{"&", "&amp;"},
-			{"\"", "&quot;"},
-			{"<", "&lt;"},
-			{">", "&gt;"},
+		{"&", "&amp;"},
+		{"\"", "&quot;"},
+		{"<", "&lt;"},
+		{">", "&gt;"},
 	};
 
 	private static final String[][] HTML_ESCAPE = {
-			{"&", "&amp;"},
-			{"\"", "&quot;"},
-			{"'", "&#39;"},
-			{"<", "&lt;"},
-			{">", "&gt;"},
+		{"&", "&amp;"},
+		{"\"", "&quot;"},
+		{"'", "&#39;"},
+		{"<", "&lt;"},
+		{">", "&gt;"},
 	};
 
 	private static final String[][] JAVA_ESCAPE = {
-			{"\n", "\\\\n"},
-			{"\r", "\\\\r"},
-			{"\t", "\\\\t"},
-			{"\"", "\\\\\""},
+		{"\n", "\\\\n"},
+		{"\r", "\\\\r"},
+		{"\t", "\\\\t"},
+		{"\"", "\\\\\""},
 	};
 
 	private Str() {

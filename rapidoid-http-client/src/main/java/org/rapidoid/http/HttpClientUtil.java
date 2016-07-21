@@ -63,13 +63,13 @@ public class HttpClientUtil extends RapidoidThing {
 	private static final RedirectStrategy NO_REDIRECTS = new RedirectStrategy() {
 		@Override
 		public boolean isRedirected(HttpRequest request, HttpResponse response, HttpContext context)
-				throws ProtocolException {
+			throws ProtocolException {
 			return false;
 		}
 
 		@Override
 		public HttpUriRequest getRedirect(HttpRequest request, HttpResponse response, HttpContext context)
-				throws ProtocolException {
+			throws ProtocolException {
 			return null;
 		}
 	};
@@ -79,13 +79,13 @@ public class HttpClientUtil extends RapidoidThing {
 		ConnectionReuseStrategy reuseStrategy = client.reuseConnections() ? new DefaultConnectionReuseStrategy() : new NoConnectionReuseStrategy();
 
 		HttpAsyncClientBuilder builder = HttpAsyncClients.custom()
-				.setThreadFactory(new RapidoidThreadFactory("http-client"))
-				.disableConnectionState()
-				.disableAuthCaching()
-				.setMaxConnPerRoute(client.maxConnPerRoute())
-				.setMaxConnTotal(client.maxConnTotal())
-				.setConnectionReuseStrategy(reuseStrategy)
-				.setRedirectStrategy(client.followRedirects() ? new DefaultRedirectStrategy() : NO_REDIRECTS);
+			.setThreadFactory(new RapidoidThreadFactory("http-client"))
+			.disableConnectionState()
+			.disableAuthCaching()
+			.setMaxConnPerRoute(client.maxConnPerRoute())
+			.setMaxConnTotal(client.maxConnTotal())
+			.setConnectionReuseStrategy(reuseStrategy)
+			.setRedirectStrategy(client.followRedirects() ? new DefaultRedirectStrategy() : NO_REDIRECTS);
 
 		if (!U.isEmpty(client.cookies())) {
 			BasicCookieStore cookieStore = new BasicCookieStore();
@@ -148,10 +148,10 @@ public class HttpClientUtil extends RapidoidThing {
 
 	private static RequestConfig reqConfig(HttpReq config) {
 		return RequestConfig.custom()
-				.setSocketTimeout(config.socketTimeout())
-				.setConnectTimeout(config.connectTimeout())
-				.setConnectionRequestTimeout(config.connectionRequestTimeout())
-				.build();
+			.setSocketTimeout(config.socketTimeout())
+			.setConnectTimeout(config.connectTimeout())
+			.setConnectionRequestTimeout(config.connectionRequestTimeout())
+			.build();
 	}
 
 	private static NByteArrayEntity paramsBody(Map<String, Object> data, Map<String, List<Upload>> files) {

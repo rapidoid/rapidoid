@@ -60,7 +60,7 @@ public class Snippet extends AbstractWidget<Snippet> {
 	public static String prettify(String sourceCode, boolean escape) {
 		// ignoring "\"" => "&quot
 		String snippet = escape ? sourceCode.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-				: sourceCode;
+			: sourceCode;
 
 		final String prim = "|" + PRIMITIVE_TYPES + "|";
 

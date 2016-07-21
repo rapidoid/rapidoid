@@ -44,17 +44,17 @@ public class RapidoidThingsTest {
 			Class<?> clazz = Cls.get(cls);
 			if (!clazz.isInterface() && !clazz.isEnum() && !clazz.isAnnotation()) {
 				U.must(RapidoidThing.class.isAssignableFrom(clazz)
-						|| clazz == U.class
-						|| clazz == Log.class
-						|| clazz == LogLevel.class
-						|| clazz == TestCommons.class
-						|| cls.startsWith("org.rapidoid.fluent.")
-						|| Exception.class.isAssignableFrom(clazz)
-						|| ClassLoader.class.isAssignableFrom(clazz)
-						|| HibernatePersistenceProvider.class.isAssignableFrom(clazz)
-						|| OutputStream.class.isAssignableFrom(clazz)
-						|| Map.class.isAssignableFrom(clazz)
-						|| Thread.class.isAssignableFrom(clazz), "" + cls);
+					|| clazz == U.class
+					|| clazz == Log.class
+					|| clazz == LogLevel.class
+					|| clazz == TestCommons.class
+					|| cls.startsWith("org.rapidoid.fluent.")
+					|| Exception.class.isAssignableFrom(clazz)
+					|| ClassLoader.class.isAssignableFrom(clazz)
+					|| HibernatePersistenceProvider.class.isAssignableFrom(clazz)
+					|| OutputStream.class.isAssignableFrom(clazz)
+					|| Map.class.isAssignableFrom(clazz)
+					|| Thread.class.isAssignableFrom(clazz), "" + cls);
 			}
 		}
 	}

@@ -44,7 +44,7 @@ public class MaxHttpPerfTest {
 	protected static final byte[] PREFIX = "Connection:".getBytes();
 
 	protected static final byte[] RESP = "HTTP/1.1 200 OK\r\nConnection: keep-alive\r\nContent-Length: 1\r\n\r\nX"
-			.getBytes();
+		.getBytes();
 
 	public static void main(String[] args) {
 		Conf.args(args);
@@ -97,7 +97,7 @@ public class MaxHttpPerfTest {
 				IntWrap pos = ctx.helper().integers[0];
 
 				int poss = BytesUtil.parseLines(in.bytes(), lines, pos, in.position(), in.size(), (byte) 'v',
-						(byte) 'e');
+					(byte) 'e');
 
 				in.position(poss);
 

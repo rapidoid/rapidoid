@@ -9,8 +9,8 @@ public class AuthTest extends AbstractIntegrationTest {
 	@Test
 	public void testSuccessfulLogin() {
 		AuthResponse login = post("/_login")
-				.data(U.map("username", "foo", "password", "foo"))
-				.toBean(AuthResponse.class);
+			.data(U.map("username", "foo", "password", "foo"))
+			.toBean(AuthResponse.class);
 
 		isTrue(login.success);
 		isTrue(U.notEmpty(login.token));
@@ -19,8 +19,8 @@ public class AuthTest extends AbstractIntegrationTest {
 	@Test
 	public void testIncorrentLogin() {
 		AuthResponse login = post("/_login")
-				.data(U.map("username", "foo", "password", "wrong"))
-				.toBean(AuthResponse.class);
+			.data(U.map("username", "foo", "password", "wrong"))
+			.toBean(AuthResponse.class);
 
 		isFalse(login.success);
 		isTrue(U.isEmpty(login.token));

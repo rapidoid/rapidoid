@@ -44,8 +44,8 @@ public class HttpParserTest extends TestCommons {
 
 	private static String REQ1 = req("GET /foo/bar?a=5&b&n=%20 HTTP/1.1|Host:www.test.com|Set-Cookie: aaa=2||", CRLF);
 	private static String REQ2 = req(
-			"POST /something/else/here?x=abc%20de HTTP/STRANGE|Host:a.b.c.org|:ign|ored:|My-Header: same|My-Header: again|"
-					+ body("a"), CRLF);
+		"POST /something/else/here?x=abc%20de HTTP/STRANGE|Host:a.b.c.org|:ign|ored:|My-Header: same|My-Header: again|"
+			+ body("a"), CRLF);
 	private static String REQ3 = req("PUT /books HTTP/1.0|CoNNectioN: keep-alive | AAAAA: c = 2 |" + body("ab"), CRLF);
 	private static String REQ4 = req("DELETE /?a&bb=c&d MY-PROTOCOL|" + body("abc"), CRLF);
 	private static String REQ5 = req("ABCD ///??? HTTP/1.1|" + body("abcd"), CRLF);
@@ -90,7 +90,7 @@ public class HttpParserTest extends TestCommons {
 		eqs(REQ2, req.params, "x", "abc%20de");
 		eq(REQ2, req.rProtocol, "HTTP/STRANGE");
 		eqs(REQ2, req.headersKV, "Host", "a.b.c.org", "", "ign", "ored", "", "My-Header", "same", "My-Header", "again",
-				CONTENT_LENGTH, "5");
+			CONTENT_LENGTH, "5");
 		eq(REQ2, req.rQuery, "x=abc%20de");
 		eq(REQ2, req.rBody, "BODYa");
 	}
@@ -155,7 +155,7 @@ public class HttpParserTest extends TestCommons {
 
 		HttpParser parser = new HttpParser();
 		parser.parse(reqbuf, req.isGet, req.isKeepAlive, req.rBody, req.rVerb, req.rUri, req.rPath, req.rQuery,
-				req.rProtocol, req.headers, HELPER);
+			req.rProtocol, req.headers, HELPER);
 
 		parser.parseParams(reqbuf, req.params, req.rQuery);
 

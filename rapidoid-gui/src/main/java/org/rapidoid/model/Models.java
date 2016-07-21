@@ -43,7 +43,7 @@ import java.util.Set;
 public class Models extends RapidoidThing {
 
 	private static final Set<String> SPECIAL_PROPERTIES = U.set("id", "version", "createdby", "createdon",
-			"lastupdatedby", "lastupdatedon");
+		"lastupdatedby", "lastupdatedon");
 
 	public static <T> Items beanItems(Class<T> beanType, Object... beans) {
 		ListItems items = new BeanListItems<T>(beanType);

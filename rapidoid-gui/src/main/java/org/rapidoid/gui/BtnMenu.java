@@ -55,7 +55,7 @@ public class BtnMenu extends AbstractWidget<BtnMenu> {
 	private Tag generateButtonHtmlContent() {
 		Tag span = span().class_("caret");
 		return GUI.button().type("button").class_("btn btn-default dropdown-toggle").attr("data-toggle", "dropdown")
-				.attr("aria-haspopup", "true").attr("aria-expanded", "false").contents(title + " ", span);
+			.attr("aria-haspopup", "true").attr("aria-expanded", "false").contents(title + " ", span);
 	}
 
 	private Tag generateMenuHtmlContent() {

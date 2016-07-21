@@ -96,8 +96,8 @@ public class OAuthTokenHandler extends RapidoidThing implements ReqHandler {
 			String redirectUrl = U.notEmpty(domain) ? domain + callbackPath : HttpUtils.constructUrl(req, callbackPath);
 
 			TokenRequestBuilder reqBuilder = OAuthClientRequest.tokenLocation(provider.getTokenEndpoint())
-					.setGrantType(GrantType.AUTHORIZATION_CODE).setClientId(id).setClientSecret(secret)
-					.setRedirectURI(redirectUrl).setCode(code);
+				.setGrantType(GrantType.AUTHORIZATION_CODE).setClientId(id).setClientSecret(secret)
+				.setRedirectURI(redirectUrl).setCode(code);
 
 			OAuthClientRequest request = paramsInBody() ? reqBuilder.buildBodyMessage() : reqBuilder.buildBodyMessage();
 
@@ -108,10 +108,10 @@ public class OAuthTokenHandler extends RapidoidThing implements ReqHandler {
 			String profileUrl = Msc.fillIn(provider.getProfileEndpoint(), "token", accessToken);
 
 			OAuthClientRequest bearerClientRequest = new OAuthBearerClientRequest(profileUrl).setAccessToken(
-					accessToken).buildQueryMessage();
+				accessToken).buildQueryMessage();
 
 			OAuthResourceResponse res = oAuthClient.resource(bearerClientRequest,
-					org.apache.oltu.oauth2.common.OAuth.HttpMethod.GET, OAuthResourceResponse.class);
+				org.apache.oltu.oauth2.common.OAuth.HttpMethod.GET, OAuthResourceResponse.class);
 
 			U.must(res.getResponseCode() == 200, "OAuth response error!");
 
@@ -156,7 +156,7 @@ public class OAuthTokenHandler extends RapidoidThing implements ReqHandler {
 		} else {
 			// JSON encoded
 			OAuthJSONAccessTokenResponse oAuthResponse = oAuthClient.accessToken(request,
-					OAuthJSONAccessTokenResponse.class);
+				OAuthJSONAccessTokenResponse.class);
 			return oAuthResponse.getAccessToken();
 		}
 	}

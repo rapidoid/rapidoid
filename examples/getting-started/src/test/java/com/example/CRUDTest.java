@@ -12,8 +12,8 @@ public class CRUDTest extends AbstractIntegrationTest {
 	@Test
 	public void shouldInsertBooks() {
 		Book savedBook = post("/books")
-				.data(javaBook())
-				.toBean(Book.class);
+			.data(javaBook())
+			.toBean(Book.class);
 
 		assertBookIs(savedBook, 1, "Java Book", 2016);
 	}
@@ -25,8 +25,8 @@ public class CRUDTest extends AbstractIntegrationTest {
 		assertBookIs(savedBook, 1, "Java Book", 2016);
 
 		Book updatedBook = put("/books/" + savedBook.id)
-				.data(U.map("year", 2017, "title", "J"))
-				.toBean(Book.class);
+			.data(U.map("year", 2017, "title", "J"))
+			.toBean(Book.class);
 
 		assertBookIs(updatedBook, 1, "J", 2017);
 

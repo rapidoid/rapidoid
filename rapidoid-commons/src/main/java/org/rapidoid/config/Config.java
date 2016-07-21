@@ -161,7 +161,7 @@ public class Config extends RapidoidThing implements ToMap<String, Object> {
 						props = (Map<String, Object>) value;
 					} else {
 						throw U.rte("Expected a Map for configuration section '%s', but found value of type: %s",
-								sectionTo(key), value.getClass().getSimpleName());
+							sectionTo(key), value.getClass().getSimpleName());
 					}
 				}
 

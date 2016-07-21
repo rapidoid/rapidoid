@@ -239,7 +239,7 @@ public class Log {
 			sb.append(" | ");
 
 			formatLogMsg(sb, msg, key1, value1, key2, value2, key3, value3, key4, value4,
-					key5, value5, key6, value6, key7, value7, paramsN);
+				key5, value5, key6, value6, key7, value7, paramsN);
 
 			synchronized (System.out) {
 				System.out.println(sb.toString());
@@ -252,7 +252,7 @@ public class Log {
 				if (logger.isTraceEnabled()) {
 					StringBuilder sb = new StringBuilder();
 					formatLogMsg(sb, msg, key1, value1, key2, value2, key3, value3, key4, value4,
-							key5, value5, key6, value6, key7, value7, paramsN);
+						key5, value5, key6, value6, key7, value7, paramsN);
 					logger.trace(sb.toString());
 				}
 				break;
@@ -261,7 +261,7 @@ public class Log {
 				if (logger.isDebugEnabled()) {
 					StringBuilder sb = new StringBuilder();
 					formatLogMsg(sb, msg, key1, value1, key2, value2, key3, value3, key4, value4,
-							key5, value5, key6, value6, key7, value7, paramsN);
+						key5, value5, key6, value6, key7, value7, paramsN);
 					logger.debug(sb.toString());
 				}
 				break;
@@ -270,7 +270,7 @@ public class Log {
 				if (logger.isInfoEnabled()) {
 					StringBuilder sb = new StringBuilder();
 					formatLogMsg(sb, msg, key1, value1, key2, value2, key3, value3, key4, value4,
-							key5, value5, key6, value6, key7, value7, paramsN);
+						key5, value5, key6, value6, key7, value7, paramsN);
 					logger.info(sb.toString());
 				}
 				break;
@@ -279,7 +279,7 @@ public class Log {
 				if (logger.isWarnEnabled()) {
 					StringBuilder sb = new StringBuilder();
 					formatLogMsg(sb, msg, key1, value1, key2, value2, key3, value3, key4, value4,
-							key5, value5, key6, value6, key7, value7, paramsN);
+						key5, value5, key6, value6, key7, value7, paramsN);
 					logger.warn(sb.toString());
 				}
 				break;
@@ -288,7 +288,7 @@ public class Log {
 				if (logger.isErrorEnabled()) {
 					StringBuilder sb = new StringBuilder();
 					formatLogMsg(sb, msg, key1, value1, key2, value2, key3, value3, key4, value4,
-							key5, value5, key6, value6, key7, value7, paramsN);
+						key5, value5, key6, value6, key7, value7, paramsN);
 					logger.error(sb.toString());
 				}
 				break;

@@ -64,7 +64,7 @@ public class C3P0ConnectionPool extends RapidoidThing implements ConnectionPool 
 	@Override
 	public Connection getConnection(String jdbcUrl) throws SQLException {
 		U.must(U.eq(jdbcUrl, pool.getJdbcUrl()), "The JDBC URLs don't match: '%s' and '%s'!", jdbcUrl,
-				pool.getJdbcUrl());
+			pool.getJdbcUrl());
 		return pool.getConnection();
 	}
 

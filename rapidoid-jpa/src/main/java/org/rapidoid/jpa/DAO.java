@@ -41,13 +41,13 @@ public abstract class DAO<E> extends RapidoidThing {
 	private static Class<?> inferEntityType(Class<? extends DAO<?>> daoClass) {
 
 		U.must(daoClass.getSuperclass() == DAO.class, "Expected DAO to be superclass of %s, but found: %s!", daoClass,
-				daoClass.getSuperclass());
+			daoClass.getSuperclass());
 
 		Type type = daoClass.getGenericSuperclass();
 		ParameterizedType genericDao = (type instanceof ParameterizedType) ? ((ParameterizedType) type) : null;
 
 		U.must(genericDao != null && genericDao.getActualTypeArguments().length > 0,
-				"Cannot infer entity type for: %s", daoClass);
+			"Cannot infer entity type for: %s", daoClass);
 
 		Type arg = genericDao.getActualTypeArguments()[0];
 

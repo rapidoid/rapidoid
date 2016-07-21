@@ -64,7 +64,7 @@ public class DataPermissions extends RapidoidThing {
 	@Override
 	public String toString() {
 		return "DataPermissions [read=" + read + ", insert=" + insert + ", change=" + change + ", delete=" + delete
-				+ "]";
+			+ "]";
 	}
 
 }

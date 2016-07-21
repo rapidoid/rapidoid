@@ -39,7 +39,7 @@ public class HttpServerUTF8Test extends IntegrationTestCommons {
 		System.out.println("file.encoding = " + System.getProperty("file.encoding"));
 		System.out.println("Charset.defaultCharset() = " + Charset.defaultCharset());
 		System.out.println("default writer.encoding = "
-				+ new OutputStreamWriter(new ByteArrayOutputStream()).getEncoding());
+			+ new OutputStreamWriter(new ByteArrayOutputStream()).getEncoding());
 
 		String message = "ažфbдšгcč";
 		System.out.println("UTF-8 message = " + message);

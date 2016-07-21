@@ -77,7 +77,7 @@ public class TagProxy extends RapidoidThing implements InvocationHandler, Serial
 		}
 
 		if (methodClass.equals(Object.class) || methodClass.equals(TagBase.class)
-				|| methodClass.equals(TagInternals.class)) {
+			|| methodClass.equals(TagInternals.class)) {
 			return method.invoke(tag, args);
 		}
 

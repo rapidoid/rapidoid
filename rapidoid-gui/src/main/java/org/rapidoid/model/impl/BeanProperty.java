@@ -99,7 +99,7 @@ public class BeanProperty extends AbstractProperty {
 	@Override
 	public String toString() {
 		return "BeanProperty [name=" + name + ", type=" + type + ", genericType=" + genericType + ", caption="
-				+ caption + "]";
+			+ caption + "]";
 	}
 
 	@Override

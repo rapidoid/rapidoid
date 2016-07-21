@@ -75,10 +75,10 @@ public class HttpResp extends RapidoidThing {
 	@Override
 	public String toString() {
 		return "HttpResp{" +
-				"raw=" + Arrays.toString(raw) +
-				", code=" + code +
-				", headers=" + headers +
-				", body=" + Arrays.toString(body) +
-				'}';
+			"raw=" + Arrays.toString(raw) +
+			", code=" + code +
+			", headers=" + headers +
+			", body=" + Arrays.toString(body) +
+			'}';
 	}
 }

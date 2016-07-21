@@ -240,20 +240,20 @@ public class MockReqInfo extends AbstractReqInfo {
 	public String toString() {
 		final int maxLen = 10;
 		return "MockReqInfo [verb=" + verb
-				+ ", path=" + path
-				+ ", uri=" + uri
-				+ ", host=" + host
-				+ ", segment=" + segment
-				+ ", contextPath=" + contextPath
-				+ ", data=" + (data != null ? toString(data.entrySet(), maxLen) : null)
-				+ ", params=" + (params != null ? toString(params.entrySet(), maxLen) : null)
-				+ ", posted=" + (posted != null ? toString(posted.entrySet(), maxLen) : null)
-				+ ", files=" + (files != null ? toString(files.entrySet(), maxLen) : null)
-				+ ", headers=" + (headers != null ? toString(headers.entrySet(), maxLen) : null)
-				+ ", cookies=" + (cookies != null ? toString(cookies.entrySet(), maxLen) : null)
-				+ ", attributes=" + (attributes != null ? toString(attributes.entrySet(), maxLen) : null)
-				+ ", username=" + username
-				+ ", roles=" + (roles != null ? toString(roles, maxLen) : null) + "]";
+			+ ", path=" + path
+			+ ", uri=" + uri
+			+ ", host=" + host
+			+ ", segment=" + segment
+			+ ", contextPath=" + contextPath
+			+ ", data=" + (data != null ? toString(data.entrySet(), maxLen) : null)
+			+ ", params=" + (params != null ? toString(params.entrySet(), maxLen) : null)
+			+ ", posted=" + (posted != null ? toString(posted.entrySet(), maxLen) : null)
+			+ ", files=" + (files != null ? toString(files.entrySet(), maxLen) : null)
+			+ ", headers=" + (headers != null ? toString(headers.entrySet(), maxLen) : null)
+			+ ", cookies=" + (cookies != null ? toString(cookies.entrySet(), maxLen) : null)
+			+ ", attributes=" + (attributes != null ? toString(attributes.entrySet(), maxLen) : null)
+			+ ", username=" + username
+			+ ", roles=" + (roles != null ? toString(roles, maxLen) : null) + "]";
 	}
 
 	private String toString(Collection<?> collection, int maxLen) {

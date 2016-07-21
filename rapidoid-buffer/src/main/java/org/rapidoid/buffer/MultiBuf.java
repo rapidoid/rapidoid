@@ -353,7 +353,7 @@ public class MultiBuf extends RapidoidThing implements Buf, Constants {
 	@Override
 	public String toString() {
 		return String.format("Buf " + name + " [size=" + _size() + ", units=" + unitCount() + ", trash=" + shrinkN
-				+ ", pos=" + position() + ", limit=" + limit() + "] " + super.toString());
+			+ ", pos=" + position() + ", limit=" + limit() + "] " + super.toString());
 	}
 
 	@Override

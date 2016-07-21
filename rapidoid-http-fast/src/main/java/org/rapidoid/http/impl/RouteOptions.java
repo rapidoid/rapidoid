@@ -55,12 +55,12 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 	public String toString() {
 		String prefix = mvc ? "MVC" : "";
 		return prefix + "{" +
-				(contentType != null ? "contentType=" + contentType.info() : "") +
-				(view != null ? ", view='" + view + '\'' : "") +
-				(transactionMode != null ? ", transactionMode='" + transactionMode + '\'' : "") +
-				(U.notEmpty(roles) ? ", roles=" + roles : "") +
-				(U.notEmpty(wrappers) ? ", wrappers=" + wrappers : "") +
-				'}';
+			(contentType != null ? "contentType=" + contentType.info() : "") +
+			(view != null ? ", view='" + view + '\'' : "") +
+			(transactionMode != null ? ", transactionMode='" + transactionMode + '\'' : "") +
+			(U.notEmpty(roles) ? ", roles=" + roles : "") +
+			(U.notEmpty(wrappers) ? ", wrappers=" + wrappers : "") +
+			'}';
 	}
 
 	@Override

@@ -69,7 +69,7 @@ public class PageMenuItem extends AbstractPageMenuItem {
 	@Override
 	public String toString() {
 		return "AppMenuItem [submenu=" + submenu + ", right=" + right + ", caption=" + caption + ", target=" + target
-				+ ", javascript=" + javascript + ", icon=" + icon + ", divider=" + divider + ", extra=" + extra + "]";
+			+ ", javascript=" + javascript + ", icon=" + icon + ", divider=" + divider + ", extra=" + extra + "]";
 	}
 
 	@Override

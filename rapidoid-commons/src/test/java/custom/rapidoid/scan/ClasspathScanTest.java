@@ -67,7 +67,7 @@ public class ClasspathScanTest extends AbstractCommonsTest {
 		List<String> classes = Scan.getAll();
 
 		Set<String> expectedSubset = U.set(Foo.class.getName(), Bar.class.getName(), MyAnnot.class.getName(),
-				ClasspathScanTest.class.getName(), Aaa.class.getName(), Cls.getClassIfExists("Bbb").getName(), Ccccc.class.getName());
+			ClasspathScanTest.class.getName(), Aaa.class.getName(), Cls.getClassIfExists("Bbb").getName(), Ccccc.class.getName());
 
 		isTrue(U.set(classes).containsAll(expectedSubset));
 	}

@@ -63,11 +63,11 @@ public class Stats extends RapidoidThing {
 	@Override
 	public synchronized String toString() {
 		return "Stats{" +
-				"count=" + count +
-				", min=" + min +
-				", max=" + max +
-				", sum=" + sum +
-				", avg=" + avg() +
-				'}';
+			"count=" + count +
+			", min=" + min +
+			", max=" + max +
+			", sum=" + sum +
+			", avg=" + avg() +
+			'}';
 	}
 }

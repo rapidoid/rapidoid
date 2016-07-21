@@ -140,8 +140,8 @@ public class Hkdf {
       ...
      */
 		int n = (outputLength % hashLen == 0) ?
-				outputLength / hashLen :
-				(outputLength / hashLen) + 1;
+			outputLength / hashLen :
+			(outputLength / hashLen) + 1;
 
 		byte[] hashRound = new byte[0];
 

@@ -115,15 +115,15 @@ public class OAuth extends RapidoidThing {
 		boolean popup = req.param("popup", null) != null;
 
 		String redirectUrl = U.notEmpty(oauthDomain) ? oauthDomain + callbackPath : HttpUtils.constructUrl(req,
-				callbackPath);
+			callbackPath);
 
 		String statePrefix = popup ? "P" : "N";
 		String state = statePrefix + STATE_CHECK.generateState(clientSecret, req.sessionId());
 
 		try {
 			OAuthClientRequest request = OAuthClientRequest.authorizationLocation(provider.getAuthEndpoint())
-					.setClientId(clientId.str().get()).setRedirectURI(redirectUrl).setScope(provider.getEmailScope())
-					.setState(state).setResponseType("code").buildQueryMessage();
+				.setClientId(clientId.str().get()).setRedirectURI(redirectUrl).setScope(provider.getEmailScope())
+				.setState(state).setResponseType("code").buildQueryMessage();
 			return request.getLocationUri();
 		} catch (OAuthSystemException e) {
 			throw U.rte(e);

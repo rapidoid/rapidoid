@@ -46,7 +46,7 @@ public class Lmbd extends RapidoidThing {
 			return predicate.eval(target);
 		} catch (Exception e) {
 			throw new RuntimeException(String.format("Cannot evaluate predicate %s on target: %s", predicate, target),
-					e);
+				e);
 		}
 	}
 

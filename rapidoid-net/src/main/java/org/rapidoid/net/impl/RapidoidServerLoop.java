@@ -105,7 +105,7 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 
 	private void validate() {
 		U.must(workers <= RapidoidWorker.MAX_IO_WORKERS, "Too many workers! Maximum = %s",
-				RapidoidWorker.MAX_IO_WORKERS);
+			RapidoidWorker.MAX_IO_WORKERS);
 	}
 
 	private void openSocket() throws IOException {

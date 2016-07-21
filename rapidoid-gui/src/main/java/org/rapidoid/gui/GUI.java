@@ -201,7 +201,7 @@ public abstract class GUI extends HTML implements Role {
 		ButtonTag btn = button(span("Toggle navigation").class_("sr-only"), icon("bar"), icon("bar"), icon("bar"));
 
 		btn = btn.type("button").class_("navbar-toggle collapsed").attr("data-toggle", "collapse")
-				.attr("data-target", "#collapsable");
+			.attr("data-target", "#collapsable");
 
 		return btn;
 	}
@@ -241,7 +241,7 @@ public abstract class GUI extends HTML implements Role {
 
 		for (int i = 0; i < fields.length; i++) {
 			InputTag inp = input().type("text").class_("form-control").name(fields[i]).id("navbar-" + fields[i])
-					.placeholder(placeholders[i]);
+				.placeholder(placeholders[i]);
 			ctrls = ctrls.append(inp);
 		}
 
@@ -251,7 +251,7 @@ public abstract class GUI extends HTML implements Role {
 
 	public static FormTag navbarSearchForm(String action) {
 		return navbarForm(false, fa("search"), arr("q"), arr("Search")).attr("action", action).attr("method",
-				"GET");
+			"GET");
 	}
 
 	public static Object navbarPage(boolean fluid, Tag brand, Object[] navbarContent, Object pageContent) {
@@ -612,8 +612,8 @@ public abstract class GUI extends HTML implements Role {
 
 	private static boolean isBean(Object obj) {
 		return Cls.isBean(obj)
-				&& !(obj instanceof Tag)
-				&& !(obj instanceof AbstractWidget);
+			&& !(obj instanceof Tag)
+			&& !(obj instanceof AbstractWidget);
 	}
 
 	private static Object display(Iterator<?> it) {
@@ -779,7 +779,7 @@ public abstract class GUI extends HTML implements Role {
 		}
 
 		Map<String, ?> model = U.map("points", points, "names", U.list(ts.title()), "title", ts.title(),
-				"id", newId(), "class", divClass, "uri", Str.triml(uri, "/"));
+			"id", newId(), "class", divClass, "uri", Str.triml(uri, "/"));
 
 		Tag graph = hardcoded(Templates.fromFile("dygraphs.html").render(model));
 

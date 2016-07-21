@@ -36,7 +36,7 @@ public class RuntimeInfo extends RapidoidThing {
 	static {
 		Class<?> manFactory = Cls.getClassIfExists("java.lang.management.ManagementFactory");
 		getGarbageCollectorMXBeans = manFactory != null ? Cls.getMethod(manFactory, "getGarbageCollectorMXBeans")
-				: null;
+			: null;
 	}
 
 	public static String gcInfo() {

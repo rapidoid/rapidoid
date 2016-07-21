@@ -120,9 +120,9 @@ public class RenderCtxImpl extends RapidoidThing implements RenderCtx {
 		Object val = get(name);
 
 		return val != null
-				&& !Boolean.FALSE.equals(val)
-				&& (!Coll.isCollection(val) || !U.isEmpty((Collection<?>) val))
-				&& (!Coll.isMap(val) || !U.isEmpty((Map<?, ?>) val));
+			&& !Boolean.FALSE.equals(val)
+			&& (!Coll.isCollection(val) || !U.isEmpty((Collection<?>) val))
+			&& (!Coll.isMap(val) || !U.isEmpty((Map<?, ?>) val));
 	}
 
 	private Object get(String name) {

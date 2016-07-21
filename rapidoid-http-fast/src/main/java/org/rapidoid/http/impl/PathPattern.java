@@ -80,7 +80,7 @@ public class PathPattern extends RapidoidThing {
 				String groupId = "g" + counter.incrementAndGet();
 
 				U.must(!groups.containsKey(name), "Cannot have multiple path parameters with the same name: '%s'",
-						name);
+					name);
 				groups.put(name, groupId);
 
 				if (!groups.isEmpty()) {

@@ -38,24 +38,24 @@ public class TerminateHandler extends GUI implements Callable<Object> {
 	public Object call() throws Exception {
 
 		Btn shutdown = btn("Shutdown").danger()
-				.confirm("Do you really want to SHUTDOWN / RESTART the application?")
-				.onClick(new Runnable() {
-					         @Override
-					         public void run() {
-						         shutdownSoon();
-					         }
+			.confirm("Do you really want to SHUTDOWN / RESTART the application?")
+			.onClick(new Runnable() {
+				         @Override
+				         public void run() {
+					         shutdownSoon();
 				         }
-				);
+			         }
+			);
 
 		Btn halt = btn("Halt").danger()
-				.confirm("Do you really want to HALT / RESTART the application?")
-				.onClick(new Runnable() {
-					         @Override
-					         public void run() {
-						         haltSoon();
-					         }
+			.confirm("Do you really want to HALT / RESTART the application?")
+			.onClick(new Runnable() {
+				         @Override
+				         public void run() {
+					         haltSoon();
 				         }
-				);
+			         }
+			);
 
 		return U.list(h1("Terminate / restart the application?"), shutdown, halt);
 	}

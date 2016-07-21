@@ -138,9 +138,9 @@ public abstract class IntegrationTestCommons extends TestCommons {
 			boolean hasF3 = x.files().containsKey("f3");
 
 			return U.join(":", x.cookies().get("foo"), x.cookies().get("COOKIE1"), x.posted().get("a"), x.files().size(),
-					Crypto.md5(x.file("f1").content()),
-					Crypto.md5(x.files().get("f2").get(0).content()),
-					Crypto.md5(hasF3 ? x.file("f3").content() : new byte[0]));
+				Crypto.md5(x.file("f1").content()),
+				Crypto.md5(x.files().get("f2").get(0).content()),
+				Crypto.md5(hasF3 ? x.file("f3").content() : new byte[0]));
 		});
 
 		On.req((Req x) -> x.response().html(U.join(":", x.verb(), x.path(), x.query())));

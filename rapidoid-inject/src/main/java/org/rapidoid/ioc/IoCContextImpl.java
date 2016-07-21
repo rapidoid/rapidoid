@@ -60,12 +60,12 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 	private volatile IoCContextWrapper wrapper;
 
 	private final Map<Class<?>, ClassMetadata> metadata = Coll
-			.autoExpandingMap(new Mapper<Class<?>, ClassMetadata>() {
-				@Override
-				public ClassMetadata map(Class<?> clazz) throws Exception {
-					return new ClassMetadata(clazz);
-				}
-			});
+		.autoExpandingMap(new Mapper<Class<?>, ClassMetadata>() {
+			@Override
+			public ClassMetadata map(Class<?> clazz) throws Exception {
+				return new ClassMetadata(clazz);
+			}
+		});
 
 	@Override
 	public IoCContext name(String name) {

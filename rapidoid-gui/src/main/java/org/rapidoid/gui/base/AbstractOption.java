@@ -36,11 +36,11 @@ public abstract class AbstractOption<W extends AbstractOption<?>> extends Abstra
 
 	protected Object render(String type) {
 		return GUI.input().type(type)
-				.class_("pretty")
-				.name(_name())
-				.value(str(value))
-				.checked(picked(value, checked))
-				.data("label", label); // OLD style: label(cc, opt).class_("radio-checkbox");
+			.class_("pretty")
+			.name(_name())
+			.value(str(value))
+			.checked(picked(value, checked))
+			.data("label", label); // OLD style: label(cc, opt).class_("radio-checkbox");
 	}
 
 	public boolean checked() {

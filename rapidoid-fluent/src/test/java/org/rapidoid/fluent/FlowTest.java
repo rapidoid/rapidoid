@@ -57,7 +57,7 @@ public class FlowTest extends TestCommons {
 		eq(joined2, "@:a:bbbbb:cc");
 
 		List<String> lst = Flow.of("a", "", "bb", "ccc").filter(s -> !s.isEmpty()).map(String::toUpperCase).reverse()
-				.toList();
+			.toList();
 		eq(lst, New.list("CCC", "BB", "A"));
 	}
 

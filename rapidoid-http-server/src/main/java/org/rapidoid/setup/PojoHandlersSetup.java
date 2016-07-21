@@ -42,9 +42,9 @@ import java.util.Set;
 public class PojoHandlersSetup extends RapidoidThing {
 
 	private static final Set<String> CONTROLLER_ANNOTATIONS = U.set(
-			Page.class.getName(), GET.class.getName(), POST.class.getName(),
-			PUT.class.getName(), DELETE.class.getName(), PATCH.class.getName(),
-			OPTIONS.class.getName(), HEAD.class.getName(), TRACE.class.getName()
+		Page.class.getName(), GET.class.getName(), POST.class.getName(),
+		PUT.class.getName(), DELETE.class.getName(), PATCH.class.getName(),
+		OPTIONS.class.getName(), HEAD.class.getName(), TRACE.class.getName()
 	);
 
 	private final Setup setup;

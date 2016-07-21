@@ -149,9 +149,9 @@ public class Ctx extends RapidoidThing implements CtxMetadata {
 	public String toString() {
 		final int maxLen = 10;
 		return prefixed("Ctx [id=" + id + ", tag=" + tag + ", user=" + user + ", exchange=" + exchange
-				+ ", referenceCounter=" + referenceCounter + ", closed=" + closed
-				+ ", persistersToClose=" + toString(persistersToClose, maxLen) + ", extras="
-				+ toString(extras.entrySet(), maxLen) + "]");
+			+ ", referenceCounter=" + referenceCounter + ", closed=" + closed
+			+ ", persistersToClose=" + toString(persistersToClose, maxLen) + ", extras="
+			+ toString(extras.entrySet(), maxLen) + "]");
 	}
 
 	private String prefixed(String asStr) {

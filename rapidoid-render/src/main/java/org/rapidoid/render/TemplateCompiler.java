@@ -49,7 +49,7 @@ public class TemplateCompiler extends RapidoidThing {
 	}
 
 	private static TemplateRenderer tryToCompile(String source) throws NotFoundException, CannotCompileException,
-			InstantiationException, IllegalAccessException {
+		InstantiationException, IllegalAccessException {
 
 		ClassPool cp = ClassPool.getDefault();
 		CtClass sup = cp.get(Object.class.getCanonicalName());

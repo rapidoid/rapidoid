@@ -71,14 +71,14 @@ public class UserInfo extends RapidoidThing implements Serializable {
 	@Override
 	public String toString() {
 		return "UserInfo{" +
-				"username='" + username + '\'' +
-				", roles=" + roles +
-				", is=" + is +
-				", email='" + email + '\'' +
-				", name='" + name + '\'' +
-				", oauthId='" + oauthId + '\'' +
-				", oauthProvider='" + oauthProvider + '\'' +
-				'}';
+			"username='" + username + '\'' +
+			", roles=" + roles +
+			", is=" + is +
+			", email='" + email + '\'' +
+			", name='" + name + '\'' +
+			", oauthId='" + oauthId + '\'' +
+			", oauthProvider='" + oauthProvider + '\'' +
+			'}';
 	}
 
 	@Override

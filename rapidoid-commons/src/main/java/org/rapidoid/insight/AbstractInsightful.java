@@ -41,7 +41,7 @@ public abstract class AbstractInsightful extends RapidoidThing implements Insigh
 		this.name = name;
 
 		Log.debug("Creating object", "kind", kind, "name", name, "creatorThread", creatorThread.getName(), "class",
-				getClass().getSimpleName());
+			getClass().getSimpleName());
 
 		Insights.register(this);
 	}

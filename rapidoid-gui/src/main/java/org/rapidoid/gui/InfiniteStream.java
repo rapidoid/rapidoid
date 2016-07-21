@@ -45,25 +45,25 @@ public class InfiniteStream extends AbstractWidget<InfiniteStream> {
 		String url = U.or(dataUrl, defaultDataUrl());
 
 		Tag tmpla = div(div(template).ng("if", "it()"))
-				.ng("controller", "StreamItemController");
+			.ng("controller", "StreamItemController");
 
 		Tag columns = div(tmpla)
-				.class_("col-md-{{12 / cols}}")
-				.ng("repeat", "colN in [] | rangex:0:cols");
+			.class_("col-md-{{12 / cols}}")
+			.ng("repeat", "colN in [] | rangex:0:cols");
 
 		Tag tmpl = div(columns)
-				.ng("repeat", "rowN in items | rowCount:cols")
-				.class_("row " + rowClass);
+			.ng("repeat", "rowN in items | rowCount:cols")
+			.class_("row " + rowClass);
 
 		Tag loading = GUI.row("Loading data...")
-				.attr("ng-show", "stream.busy");
+			.attr("ng-show", "stream.busy");
 
 		Tag scroll = infiniteScroll(tmpl, loading);
 
 		Tag stream = div(scroll)
-				.ng("controller", "StreamController")
-				.data("url", url)
-				.ng("init", "cols = " + cols);
+			.ng("controller", "StreamController")
+			.data("url", url)
+			.ng("init", "cols = " + cols);
 
 		return stream;
 	}

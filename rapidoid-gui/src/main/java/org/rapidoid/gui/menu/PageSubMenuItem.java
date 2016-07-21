@@ -36,7 +36,7 @@ public class PageSubMenuItem extends AbstractPageMenuItem {
 	@Override
 	public String toString() {
 		return "AppSubMenuItem [caption=" + caption + ", target=" + target + ", javascript=" + javascript + ", icon="
-				+ icon + ", extra=" + extra + "]";
+			+ icon + ", extra=" + extra + "]";
 	}
 
 }

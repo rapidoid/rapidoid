@@ -32,10 +32,10 @@ public class TextArea extends AbstractTextInput<TextArea> {
 	@Override
 	protected Object render() {
 		return GUI.textarea()
-				.class_("form-control")
-				.name(_name())
-				.contents(_valOr(initial))
-				.placeholder(placeholder);
+			.class_("form-control")
+			.name(_name())
+			.contents(_valOr(initial))
+			.placeholder(placeholder);
 	}
 
 }

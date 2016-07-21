@@ -29,22 +29,22 @@ import org.rapidoid.annotation.Since;
 public class OAuthProvider extends RapidoidThing {
 
 	public static OAuthProvider GOOGLE = new OAuthProvider("Google", "https://accounts.google.com/o/oauth2/auth",
-			"https://accounts.google.com/o/oauth2/token", "https://www.googleapis.com/oauth2/v1/userinfo", "profile",
-			"email");
+		"https://accounts.google.com/o/oauth2/token", "https://www.googleapis.com/oauth2/v1/userinfo", "profile",
+		"email");
 
 	public static OAuthProvider FACEBOOK = new OAuthProvider("Facebook", "https://graph.facebook.com/oauth/authorize",
-			"https://graph.facebook.com/oauth/access_token", "https://graph.facebook.com/me", "public_profile", "email");
+		"https://graph.facebook.com/oauth/access_token", "https://graph.facebook.com/me", "public_profile", "email");
 
 	public static OAuthProvider LINKEDIN = new OAuthProvider(
-			"LinkedIn",
-			"https://www.linkedin.com/uas/oauth2/authorization",
-			"https://www.linkedin.com/uas/oauth2/accessToken",
-			"https://api.linkedin.com/v1/people/~:(id,first-name,last-name,maiden-name,email-address)?format=json&oauth2_access_token={{token}}",
-			"r_basicprofile", "r_emailaddress");
+		"LinkedIn",
+		"https://www.linkedin.com/uas/oauth2/authorization",
+		"https://www.linkedin.com/uas/oauth2/accessToken",
+		"https://api.linkedin.com/v1/people/~:(id,first-name,last-name,maiden-name,email-address)?format=json&oauth2_access_token={{token}}",
+		"r_basicprofile", "r_emailaddress");
 
 	public static OAuthProvider GITHUB = new OAuthProvider("GitHub", "https://github.com/login/oauth/authorize",
-			"https://github.com/login/oauth/access_token", "https://api.github.com/user", "" /* no scope */,
-			"user:email");
+		"https://github.com/login/oauth/access_token", "https://api.github.com/user", "" /* no scope */,
+		"user:email");
 
 	public static final OAuthProvider[] PROVIDERS = {GOOGLE, FACEBOOK, LINKEDIN, GITHUB};
 
