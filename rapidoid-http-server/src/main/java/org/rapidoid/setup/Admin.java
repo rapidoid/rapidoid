@@ -97,6 +97,10 @@ public class Admin extends RapidoidThing {
 		return SETUP.address(address);
 	}
 
+	public static synchronized OnError error(Class<? extends Throwable> error) {
+		return SETUP.error(error);
+	}
+
 	public static Setup deregister(String verb, String path) {
 		return SETUP.deregister(verb, path);
 	}
@@ -124,5 +128,4 @@ public class Admin extends RapidoidThing {
 	public static RouteOptions defaults() {
 		return SETUP.defaults();
 	}
-
 }

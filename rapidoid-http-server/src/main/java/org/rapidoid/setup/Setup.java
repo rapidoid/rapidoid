@@ -560,4 +560,9 @@ public class Setup extends RapidoidThing implements Constants {
 
 		return address;
 	}
+
+	public OnError error(Class<? extends Throwable> error) {
+		return new OnError(customization, error);
+	}
+
 }

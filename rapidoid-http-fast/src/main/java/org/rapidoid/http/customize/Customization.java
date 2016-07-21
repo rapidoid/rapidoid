@@ -10,6 +10,7 @@ import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.Req;
 import org.rapidoid.setup.My;
 import org.rapidoid.u.U;
+import org.rapidoid.util.ByType;
 
 /*
  * #%L
@@ -39,6 +40,8 @@ public class Customization extends RapidoidThing {
 	private final Customization defaults;
 	private final Config appConfig;
 	private final Config serverConfig;
+
+	private final ByType<Throwable, ErrorHandler> errorHandlers = ByType.create();
 
 	private volatile String[] staticFilesPath;
 
@@ -91,6 +94,7 @@ public class Customization extends RapidoidThing {
 		jackson = null;
 		entityManagerProvider = null;
 		entityManagerFactoryProvider = null;
+		errorHandlers.reset();
 	}
 
 	public static Customization of(Req req) {
@@ -245,5 +249,29 @@ public class Customization extends RapidoidThing {
 	public Customization jsonRequestBodyParser(JsonRequestBodyParser jsonRequestBodyParser) {
 		this.jsonRequestBodyParser = jsonRequestBodyParser;
 		return this;
+	}
+
+	public ByType<Throwable, ErrorHandler> errorHandlers() {
+		return errorHandlers;
+	}
+
+	public ErrorHandler findErrorHandlerByType(Class<? extends Throwable> errorType) {
+		ErrorHandler handler;
+		Customization custom = this;
+
+		do {
+			handler = custom.errorHandlers().findByType(errorType);
+			custom = custom.defaults();
+		} while (handler == null && custom != null);
+
+		return handler;
+	}
+
+	@Override
+	public String toString() {
+		return "Customization{" +
+			"name='" + name + '\'' +
+			(defaults != null ? ", defaults=" + defaults : "") +
+			'}';
 	}
 }

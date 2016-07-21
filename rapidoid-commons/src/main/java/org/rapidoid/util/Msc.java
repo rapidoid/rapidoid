@@ -68,13 +68,6 @@ import java.util.concurrent.*;
 @Since("2.0.0")
 public class Msc extends RapidoidThing implements Constants {
 
-	public static final Set<String> SPECIAL_ERRORS = Coll.synchronizedSet(
-			SecurityException.class.getName(),
-			InvalidData.class.getName(),
-			"javax.validation.ConstraintViolationException",
-			"javax.validation.ValidationException"
-	);
-
 	public static final Mapper<Object, Object> TRANSFORM_TO_STRING = new Mapper<Object, Object>() {
 		@Override
 		public Object map(Object src) throws Exception {
@@ -100,7 +93,7 @@ public class Msc extends RapidoidThing implements Constants {
 	private static long measureStart;
 
 	public static final ScheduledThreadPoolExecutor EXECUTOR = new ScheduledThreadPoolExecutor(8,
-			new RapidoidThreadFactory("utils"));
+		new RapidoidThreadFactory("utils"));
 
 	private Msc() {
 	}
@@ -360,9 +353,6 @@ public class Msc extends RapidoidThing implements Constants {
 
 	public static Throwable rootCause(Throwable e) {
 		while (e.getCause() != null) {
-			if (SPECIAL_ERRORS.contains(e.getClass().getName())) {
-				return e;
-			}
 			e = e.getCause();
 		}
 		return e;
@@ -524,7 +514,7 @@ public class Msc extends RapidoidThing implements Constants {
 				if (clazz != null) {
 					Method main = Cls.findMethod(clazz, "main", String[].class);
 					if (main != null && main.getReturnType() == void.class
-							&& !main.isVarArgs() && main.getDeclaringClass().equals(clazz)) {
+						&& !main.isVarArgs() && main.getDeclaringClass().equals(clazz)) {
 						int modif = main.getModifiers();
 						if (Modifier.isStatic(modif) && Modifier.isPublic(modif)) {
 							return clazz;

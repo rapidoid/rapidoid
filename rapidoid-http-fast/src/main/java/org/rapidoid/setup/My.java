@@ -164,4 +164,8 @@ public class My extends RapidoidThing {
 		GLOBAL.jsonRequestBodyParser(jsonRequestBodyParser);
 	}
 
+	public static synchronized OnError error(Class<? extends Throwable> error) {
+		return new OnError(GLOBAL, error);
+	}
+
 }

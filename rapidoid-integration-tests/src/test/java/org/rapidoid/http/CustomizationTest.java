@@ -27,6 +27,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.JSON;
+import org.rapidoid.setup.Admin;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;
@@ -100,6 +101,39 @@ public class CustomizationTest extends IntegrationTestCommons {
 
 		postJson("/abc?custom", U.map("x", 13579, "foo", "bar"));
 		postJson("/abc2?custom", U.map("x", 13579, "foo", "bar"));
+	}
+
+	@Test
+	public void customErrorHandlerByType() {
+		Admin.error(NullPointerException.class).handler((req1, resp, e) -> "ADMIN NPE");
+		My.error(NullPointerException.class).handler((req1, resp, e) -> "MY NPE");
+
+		My.error(RuntimeException.class).handler((req1, resp, e) -> "MY RTE");
+
+		On.error(SecurityException.class).handler((req1, resp, e) -> "ON SEC");
+		Admin.error(SecurityException.class).handler((req1, resp, e) -> "ADMIN SEC");
+		My.error(SecurityException.class).handler((req1, resp, e) -> "MY SEC");
+
+		On.get("/err1").json(req -> {
+			throw new NullPointerException();
+		});
+
+		On.post("/err2").json(req -> {
+			throw new RuntimeException();
+		});
+
+		On.get("/err3").json(req -> {
+			throw new SecurityException("denied!");
+		});
+
+		On.get("/err4").json(req -> {
+			throw new OutOfMemoryError("out of memory!");
+		});
+
+		onlyGet("/err1");
+		onlyPost("/err2");
+		onlyGet("/err3");
+		onlyGet("/err4");
 	}
 
 }

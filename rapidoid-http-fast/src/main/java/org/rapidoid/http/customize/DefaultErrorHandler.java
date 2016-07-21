@@ -9,6 +9,7 @@ import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
 import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 import org.rapidoid.value.Value;
 
@@ -41,10 +42,63 @@ public class DefaultErrorHandler extends RapidoidThing implements ErrorHandler {
 	@Override
 	public Object handleError(Req req, Resp resp, Throwable error) {
 
-		Customization customization = Customization.of(req);
-		Config segments = customization.appConfig().sub("segments");
-		Value<String> home = customization.appConfig().sub("app").entry("home").str();
+		Customization custom = Customization.of(req);
 
+		Object result = handleError(req, resp, error, custom);
+
+		if (result instanceof Throwable) {
+			Throwable errResult = (Throwable) result;
+			return renderError(req, resp, errResult, custom);
+
+		} else {
+			return result;
+		}
+	}
+
+	private Object renderError(Req req, Resp resp, Throwable error, Customization custom) {
+		if (resp.contentType() == MediaType.JSON_UTF_8) {
+			return HttpUtils.getErrorInfo(resp, error);
+
+		} else if (resp.contentType() == MediaType.PLAIN_TEXT_UTF_8) {
+			return HttpUtils.getErrorMessageAndSetCode(resp, error);
+
+		} else {
+			return page(req, resp, error, custom);
+		}
+	}
+
+	protected Object handleError(Req req, Resp resp, Throwable error, Customization custom) {
+		Throwable err = error;
+
+		// if the handler throws error -> process it
+		for (int i = 0; ; i++) {
+
+			ErrorHandler handler = custom.findErrorHandlerByType(error.getClass());
+
+			try {
+
+				if (handler != null) {
+					return handler.handleError(req, resp, err);
+				} else {
+					return defaultErrorHandling(req, err);
+				}
+
+			} catch (Exception e) {
+
+				if (i >= getMaxReThrowCount(req)) {
+					return U.rte("Too many times an error was re-thrown by the error handler(s)!");
+				}
+
+				err = e;
+			}
+		}
+	}
+
+	protected int getMaxReThrowCount(@SuppressWarnings("UnusedParameters") Req req) {
+		return 5; // override to customize
+	}
+
+	protected Object defaultErrorHandling(Req req, Throwable error) {
 		boolean validation = Msc.isValidationError(error);
 
 		if (!validation) {
@@ -54,24 +108,20 @@ public class DefaultErrorHandler extends RapidoidThing implements ErrorHandler {
 				Log.error("Error occurred when handling request: " + req, error);
 			}
 		} else {
-			Log.debug("Validation error when handling request: " + req);
 			if (Log.isDebugEnabled()) {
+				Log.debug("Validation error when handling request: " + req);
 				error.printStackTrace();
 			}
 		}
 
-		if (resp.contentType() == MediaType.JSON_UTF_8) {
-			return HttpUtils.getErrorInfo(resp, error);
-
-		} else if (resp.contentType() == MediaType.PLAIN_TEXT_UTF_8) {
-			return HttpUtils.getErrorMessageAndSetCode(resp, error);
-
-		} else {
-			return page(req, resp, error, segments, home);
-		}
+		return error;
 	}
 
-	private Object page(Req req, Resp resp, Throwable error, Config segments, Value<String> home) {
+	protected Object page(Req req, Resp resp, Throwable error, Customization custom) {
+
+		Config segments = custom.appConfig().sub("segments");
+		Value<String> home = custom.appConfig().sub("app").entry("home").str();
+
 		if (error instanceof SecurityException) {
 			return resp.code(403).view("login").mvc(true).model("embedded", req.attr("_embedded", false));
 		} else {

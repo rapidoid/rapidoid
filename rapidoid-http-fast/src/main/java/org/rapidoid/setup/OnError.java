@@ -1,4 +1,10 @@
-package org.rapidoid.http.customize;
+package org.rapidoid.setup;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.customize.Customization;
+import org.rapidoid.http.customize.ErrorHandler;
 
 /*
  * #%L
@@ -20,15 +26,20 @@ package org.rapidoid.http.customize;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.Resp;
-
 @Authors("Nikolche Mihajlovski")
-@Since("5.0.11")
-public interface ErrorHandler {
+@Since("5.2.0")
+public class OnError extends RapidoidThing {
 
-	Object handleError(Req req, Resp resp, Throwable error) throws Exception;
+	private final Class<? extends Throwable> error;
+	private final Customization custom;
+
+	public OnError(Customization custom, Class<? extends Throwable> error) {
+		this.custom = custom;
+		this.error = error;
+	}
+
+	public void handler(ErrorHandler errorHandler) {
+		custom.errorHandlers().assign(error, errorHandler);
+	}
 
 }

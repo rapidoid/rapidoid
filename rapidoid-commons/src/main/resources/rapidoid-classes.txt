@@ -560,6 +560,7 @@ org.rapidoid.setup.IGoodies
 org.rapidoid.setup.My
 org.rapidoid.setup.On
 org.rapidoid.setup.OnChanges
+org.rapidoid.setup.OnError
 org.rapidoid.setup.OnRoute
 org.rapidoid.setup.PojoHandlersSetup
 org.rapidoid.setup.ReloadUtil
@@ -579,6 +580,7 @@ org.rapidoid.util.AbstractMapImpl
 org.rapidoid.util.AnsiColor
 org.rapidoid.util.AppInfo
 org.rapidoid.util.Bufs
+org.rapidoid.util.ByType
 org.rapidoid.util.Constants
 org.rapidoid.util.D
 org.rapidoid.util.Deleted
