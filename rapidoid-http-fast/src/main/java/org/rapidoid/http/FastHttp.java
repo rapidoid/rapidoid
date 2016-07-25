@@ -6,6 +6,7 @@ import org.rapidoid.buffer.Buf;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.MediaType;
+import org.rapidoid.config.Config;
 import org.rapidoid.data.BufRange;
 import org.rapidoid.data.BufRanges;
 import org.rapidoid.data.KeyValueRanges;
@@ -54,6 +55,10 @@ public class FastHttp extends AbstractHttpProcessor {
 	private final Map<String, Object> attributes = Coll.synchronizedMap();
 
 	public FastHttp(HttpRoutesImpl... routes) {
+		this(routes, new Config());
+	}
+
+	public FastHttp(HttpRoutesImpl[] routes, Config serverConfig) {
 		super(null);
 
 		U.must(routes.length > 0, "Routes are missing!");
@@ -215,7 +220,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		return false;
 	}
 
-	private static String validateRequest(Buf input, BufRange verb, BufRange uri) {
+	private String validateRequest(Buf input, BufRange verb, BufRange uri) {
 		if (verb.isEmpty()) {
 			return "HTTP verb cannot be empty!";
 		}
