@@ -45,6 +45,17 @@ public class BytesUtilTest extends BufferTestCommons {
 		isTrue(isValid("/.some-private/"));
 		isTrue(isValid("/ok/./x"));
 		isTrue(isValid("/ok/././xyz.abc"));
+		isTrue(isValid("/."));
+		isTrue(isValid("/?/../"));
+		isTrue(isValid("/?ff/../"));
+		isTrue(isValid("/?/../"));
+		isTrue(isValid("/abc?//"));
+		isTrue(isValid("/x?."));
+		isTrue(isValid("/a/b/c?x=..&y=3d"));
+		isTrue(isValid("/?x=../..////...."));
+		isTrue(isValid("/?../..////...."));
+		isTrue(isValid("/a:b:c"));
+		isTrue(isValid("/a;b;c"));
 	}
 
 	@Test
@@ -55,7 +66,6 @@ public class BytesUtilTest extends BufferTestCommons {
 		isFalse(isValid(".."));
 		isFalse(isValid("f"));
 		isFalse(isValid("."));
-		isFalse(isValid("/."));
 		isFalse(isValid("sdfgdfg"));
 		isFalse(isValid("/Дфг"));
 		isFalse(isValid("/ok/../x"));

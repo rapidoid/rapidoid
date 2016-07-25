@@ -559,6 +559,8 @@ public class BytesUtil extends RapidoidThing implements Constants {
 			return false;
 		}
 
+		boolean inPath = true;
+
 		byte prev = '/';
 		for (int p = start + 1; p <= last; p++) {
 			byte b = bytes.get(p);
@@ -567,21 +569,18 @@ public class BytesUtil extends RapidoidThing implements Constants {
 				return false;
 			}
 
-			// disallow OR .. OR //
-			if (b == '.' || b == '/') {
-				if (prev == b) {
-					return false;
+			// disallow '..' OR '//' in the URI's PATH (before the '?')
+			if (inPath) {
+				if (b == '.' || b == '/') {
+					if (prev == b) {
+						return false;
+					}
+				} else if (b == '?') {
+					inPath = false;
 				}
 			}
 
 			prev = b;
-		}
-
-		if (len > 1) {
-			byte b = bytes.get(last);
-			if (b == '.') {
-				return false;
-			}
 		}
 
 		return true;
