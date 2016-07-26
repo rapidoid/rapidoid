@@ -604,7 +604,6 @@ org.rapidoid.util.SimpleHashTable
 org.rapidoid.util.SimpleList
 org.rapidoid.util.SimpleMap
 org.rapidoid.util.SimplePersisterProvider
-org.rapidoid.util.SuccessException
 org.rapidoid.util.Usage
 org.rapidoid.u.U
 org.rapidoid.validation.InvalidData
