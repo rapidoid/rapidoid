@@ -44,9 +44,9 @@ public class AppCtxTest extends AbstractCommonsTest {
 
 				UserInfo user = new UserInfo(rndStr(10), U.set("role1"));
 
-				Ctxs.ctx().setUser(user);
+				Ctxs.required().setUser(user);
 
-				eq(Ctxs.ctx().user(), user);
+				eq(Ctxs.required().user(), user);
 
 				Ctxs.close();
 			}

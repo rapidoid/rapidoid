@@ -102,8 +102,8 @@ public class Customization extends RapidoidThing {
 
 	public static Customization of(Req req) {
 		Ctx ctx = Ctxs.get();
-		Req rr = ctx != null ? (Req) ctx.exchange() : null;
-		U.must(req == rr, "The customization request doesn't match the context request!");
+		Req ctxReq = ctx != null ? (Req) ctx.exchange() : null;
+		U.must(req == ctxReq, "The customization request (%s) doesn't match the context request (%s)!", req, ctxReq);
 		return req != null ? req.custom() : My.custom();
 	}
 

@@ -131,7 +131,7 @@ public class OAuthTokenHandler extends RapidoidThing implements ReqHandler {
 			user.oauthProvider = provider.getName();
 			user.oauthId = String.valueOf(auth.get("id"));
 
-			Ctxs.ctx().setUser(user);
+			Ctxs.required().setUser(user);
 
 			// user.saveTo(x.token()); // FIXME use token
 

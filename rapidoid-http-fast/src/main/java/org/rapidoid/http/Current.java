@@ -57,7 +57,7 @@ public class Current extends RapidoidThing {
 	}
 
 	public static Req request() {
-		return Ctxs.ctx().exchange();
+		return Ctxs.required().exchange();
 	}
 
 }

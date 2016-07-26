@@ -49,7 +49,7 @@ public class JobsTest extends AbstractCommonsTest {
 
 				final UserInfo user = new UserInfo(rndStr(50), U.set("role1"));
 
-				Ctxs.ctx().setUser(user);
+				Ctxs.required().setUser(user);
 				ensureProperContext(user);
 
 				ScheduledFuture<?> future = Jobs.after(100, TimeUnit.MILLISECONDS).run(new Runnable() {
@@ -76,7 +76,7 @@ public class JobsTest extends AbstractCommonsTest {
 	}
 
 	private void ensureProperContext(UserInfo user) {
-		eq(Ctxs.ctx().user(), user);
+		eq(Ctxs.required().user(), user);
 	}
 
 }

@@ -339,7 +339,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 				long ttl = Conf.TOKEN.entry("ttl").or(0);
 				long expiresOn = ttl > 0 ? U.time() + ttl : Long.MAX_VALUE;
 
-				Ctxs.ctx().setUser(new UserInfo(username, roles));
+				Ctxs.required().setUser(new UserInfo(username, roles));
 
 				request().token().put(HttpUtils._USER, username);
 				request().token().put(HttpUtils._EXPIRES, expiresOn);
@@ -355,7 +355,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 	@Override
 	public void logout() {
 		if (Ctxs.hasContext()) {
-			Ctxs.ctx().setUser(UserInfo.ANONYMOUS);
+			Ctxs.required().setUser(UserInfo.ANONYMOUS);
 		}
 
 		if (request().hasToken()) {

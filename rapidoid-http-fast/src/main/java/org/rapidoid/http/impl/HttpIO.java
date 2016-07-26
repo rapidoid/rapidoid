@@ -6,6 +6,9 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.commons.Dates;
 import org.rapidoid.commons.MediaType;
+import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.ctx.With;
 import org.rapidoid.data.BufRange;
 import org.rapidoid.data.JSON;
 import org.rapidoid.http.*;
@@ -126,17 +129,26 @@ public class HttpIO extends RapidoidThing {
 	}
 
 	public static HttpStatus errorAndDone(final Req req, final Throwable error) {
+
 		req.revert();
 		req.async();
 
-		Jobs.execute(new Runnable() {
+		Runnable errorHandler = new Runnable() {
 			@Override
 			public void run() {
 				error(req, error);
 				// the Req object will do the rendering
 				req.done();
 			}
-		});
+		};
+
+		Ctx ctx = Ctxs.get();
+
+		if (ctx == null) {
+			With.exchange(req).run(errorHandler);
+		} else {
+			Jobs.execute(errorHandler);
+		}
 
 		return HttpStatus.ASYNC;
 	}

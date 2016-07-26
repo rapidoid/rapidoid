@@ -66,7 +66,7 @@ public class JPAUtil extends RapidoidThing {
 	}
 
 	public static EntityManager currentEntityManager() {
-		return Ctxs.ctx().persister();
+		return Ctxs.required().persister();
 	}
 
 	public static void bootstrap(String[] path, Class<?>... providedEntities) {

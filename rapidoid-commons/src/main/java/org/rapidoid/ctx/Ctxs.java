@@ -42,7 +42,7 @@ public class Ctxs extends RapidoidThing {
 		return CTXS.get();
 	}
 
-	public static Ctx ctx() {
+	public static Ctx required() {
 		Ctx ctx = get();
 
 		if (ctx == null) {
@@ -62,7 +62,7 @@ public class Ctxs extends RapidoidThing {
 				CTXS.set(ctx);
 			}
 		} else {
-			throw new IllegalStateException("The context was already opened: " + ctx());
+			throw new IllegalStateException("The context was already opened: " + required());
 		}
 	}
 
