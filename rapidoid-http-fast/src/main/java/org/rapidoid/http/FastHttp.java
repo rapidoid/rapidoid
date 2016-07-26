@@ -10,6 +10,7 @@ import org.rapidoid.config.Config;
 import org.rapidoid.data.BufRange;
 import org.rapidoid.data.BufRanges;
 import org.rapidoid.data.KeyValueRanges;
+import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.handler.HttpHandler;
 import org.rapidoid.http.impl.*;
 import org.rapidoid.http.processor.AbstractHttpProcessor;
@@ -205,19 +206,32 @@ public class FastHttp extends AbstractHttpProcessor {
 	private boolean handleError(Channel channel, boolean isKeepAlive, ReqImpl req, MediaType contentType, Throwable e) {
 		if (req != null) {
 			if (!req.isStopped()) {
-				HttpIO.errorAndDone(req, e);
+				try {
+					HttpIO.errorAndDone(req, e);
+				} catch (Exception e1) {
+					Log.error("HTTP error handler error!", e1);
+					internalServerError(channel, isKeepAlive, req, contentType);
+				}
 			}
 			return true;
 
 		} else {
 			Log.error("Low-level HTTP handler error!", e);
-			HttpIO.startResponse(channel, 500, isKeepAlive, contentType);
-			byte[] bytes = HttpUtils.responseToBytes(req, "Internal Server Error!", contentType, routes()[0].custom().jsonResponseRenderer());
-			HttpIO.writeContentLengthAndBody(channel, bytes);
-			HttpIO.done(channel, isKeepAlive);
+			internalServerError(channel, isKeepAlive, req, contentType);
 		}
 
 		return false;
+	}
+
+	protected void internalServerError(Channel channel, boolean isKeepAlive, ReqImpl req, MediaType contentType) {
+		HttpIO.startResponse(channel, 500, isKeepAlive, contentType);
+		byte[] bytes = HttpUtils.responseToBytes(req, "Internal Server Error!", contentType, custom().jsonResponseRenderer());
+		HttpIO.writeContentLengthAndBody(channel, bytes);
+		HttpIO.done(channel, isKeepAlive);
+	}
+
+	private Customization custom() {
+		return routes()[0].custom();
 	}
 
 	private String validateRequest(Buf input, BufRange verb, BufRange uri) {
