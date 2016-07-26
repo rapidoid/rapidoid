@@ -36,7 +36,7 @@ public class BytesUtil extends RapidoidThing implements Constants {
 
 	public static final byte[] CHARS_SWITCH_CASE = new byte[128];
 
-	private static final String URI_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._:/?#[]!$&()'+,;=%";
+	private static final String URI_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&()'*+,;=%";
 
 	private static final boolean[] URI_ALLOWED_CHARACTER = new boolean[128];
 

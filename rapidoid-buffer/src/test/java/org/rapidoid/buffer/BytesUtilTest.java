@@ -55,7 +55,9 @@ public class BytesUtilTest extends BufferTestCommons {
 		isTrue(isValid("/?x=../..////...."));
 		isTrue(isValid("/?../..////...."));
 		isTrue(isValid("/a:b:c"));
-		isTrue(isValid("/a;b;c"));
+		isTrue(isValid("/z2-._:/#[]@!$&()'*+,;=%01"));
+		isTrue(isValid("/z?2-._:/#[]@!$&()'*+,;=%01"));
+		isTrue(isValid("/document/?uri=http://user:password@example.com/?foo=bar"));
 	}
 
 	@Test
@@ -70,6 +72,13 @@ public class BytesUtilTest extends BufferTestCommons {
 		isFalse(isValid("/Дфг"));
 		isFalse(isValid("/ok/../x"));
 		isFalse(isValid("/ok/../../xyz.abc"));
+		isFalse(isValid("/f\\b"));
+		isFalse(isValid("/f\\bg"));
+		isFalse(isValid("/f\ng"));
+		isFalse(isValid("/f\rg"));
+		isFalse(isValid("/f\tg"));
+		isFalse(isValid("/\ng"));
+		isFalse(isValid("\ng"));
 	}
 
 	private boolean isValid(String uri) {

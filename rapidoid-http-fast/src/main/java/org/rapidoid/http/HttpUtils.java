@@ -123,6 +123,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 	public static String resName(String path) {
 		U.must(!path.contains("/."), "Private resources (starting with '.') cannot be accessed!");
 		U.must(!path.contains(".."), "Invalid resource path (contains '..')!");
+		U.must(!path.contains("*") && !path.contains("?"), "Wildcard characters ('*', '?') are not allowed in the resource path!");
 
 		String res = Str.replace(path, PathPattern.PATH_PARAM_REGEX, PATH_PARAM_EXTRACTOR);
 
