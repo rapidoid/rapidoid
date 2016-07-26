@@ -186,7 +186,7 @@ public class FastHttp extends AbstractHttpProcessor {
 
 		try {
 			if (handler != null) {
-				status = handler.handle(channel, isKeepAlive, req, null);
+				status = handleIfFound(channel, isKeepAlive, handler, req);
 			}
 
 			if (status == HttpStatus.NOT_FOUND) {
@@ -203,6 +203,14 @@ public class FastHttp extends AbstractHttpProcessor {
 
 		if (status != HttpStatus.ASYNC) {
 			channel.closeIf(!isKeepAlive);
+		}
+	}
+
+	private HttpStatus handleIfFound(Channel channel, boolean isKeepAlive, HttpHandler handler, ReqImpl req) {
+		try {
+			return handler.handle(channel, isKeepAlive, req, null);
+		} catch (NotFound nf) {
+			return HttpStatus.NOT_FOUND;
 		}
 	}
 
@@ -256,7 +264,7 @@ public class FastHttp extends AbstractHttpProcessor {
 			req.routes(routes);
 
 			for (HttpHandler handler : routes.genericHandlers()) {
-				HttpStatus status = handler.handle(channel, isKeepAlive, req, null);
+				HttpStatus status = handleIfFound(channel, isKeepAlive, handler, req);
 
 				if (status != HttpStatus.NOT_FOUND) {
 					return status;
@@ -290,10 +298,12 @@ public class FastHttp extends AbstractHttpProcessor {
 					// a generic handler returned "not found" -> go to the next one
 					if (i < count - 1) {
 						// trying with different routes
-						((ReqImpl) req).routes(route);
+						ReqImpl reqi = (ReqImpl) req;
+						reqi.routes(route);
 
 						HttpHandler nextHandler = genericHandlers.get(i + 1);
-						status = nextHandler.handle(ctx, isKeepAlive, req, null);
+						status = handleIfFound(ctx, isKeepAlive, nextHandler, reqi);
+
 						break tryRoutes;
 					}
 				}

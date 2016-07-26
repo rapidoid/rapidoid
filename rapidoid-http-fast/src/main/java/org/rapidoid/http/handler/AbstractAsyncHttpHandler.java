@@ -269,7 +269,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 
 	public void complete(Channel ctx, boolean isKeepAlive, Req req, Object result) {
 
-		if (result == null) {
+		if (result == null || result instanceof NotFound) {
 			http.notFound(ctx, isKeepAlive, this, req);
 			return; // not found
 		}
