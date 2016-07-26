@@ -3,6 +3,7 @@ package org.rapidoid.http.impl;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Route;
 import org.rapidoid.http.handler.HttpHandler;
 
 import java.util.Map;
@@ -35,9 +36,12 @@ public class HandlerMatchWithParams extends RapidoidThing implements HandlerMatc
 
 	public final Map<String, String> params;
 
-	public HandlerMatchWithParams(HttpHandler handler, Map<String, String> params) {
+	private final Route route;
+
+	public HandlerMatchWithParams(HttpHandler handler, Map<String, String> params, Route route) {
 		this.handler = handler;
 		this.params = params;
+		this.route = route;
 	}
 
 	@Override
@@ -48,6 +52,11 @@ public class HandlerMatchWithParams extends RapidoidThing implements HandlerMatc
 	@Override
 	public Map<String, String> getParams() {
 		return params;
+	}
+
+	@Override
+	public Route getRoute() {
+		return route;
 	}
 
 }

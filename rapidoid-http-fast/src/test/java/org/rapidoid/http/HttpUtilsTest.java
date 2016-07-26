@@ -31,13 +31,13 @@ public class HttpUtilsTest extends TestCommons {
 
 	@Test
 	public void testView() {
-		eq(HttpUtils.defaultView("/"), "index");
-		eq(HttpUtils.defaultView("/abc"), "abc");
-		eq(HttpUtils.defaultView("/x/y/z"), "x/y/z");
+		eq(HttpUtils.resName("/"), "index");
+		eq(HttpUtils.resName("/abc"), "abc");
+		eq(HttpUtils.resName("/x/y/z"), "x/y/z");
 
-		eq(HttpUtils.defaultView("/books/{x}"), "books/x");
-		eq(HttpUtils.defaultView("/books/{id:\\d+}"), "books/id");
-		eq(HttpUtils.defaultView("/books/{a:.*}-{b}/view"), "books/a-b/view");
+		eq(HttpUtils.resName("/books/{x}"), "books/x");
+		eq(HttpUtils.resName("/books/{id:\\d+}"), "books/id");
+		eq(HttpUtils.resName("/books/{a:.*}-{b}/view"), "books/a-b/view");
 	}
 
 }

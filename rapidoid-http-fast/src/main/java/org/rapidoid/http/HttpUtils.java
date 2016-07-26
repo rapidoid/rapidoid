@@ -120,12 +120,16 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 		return req.verb().equalsIgnoreCase(POST);
 	}
 
-	public static String resName(String path) {
-		U.must(!path.contains("/."), "Private resources (starting with '.') cannot be accessed!");
-		U.must(!path.contains(".."), "Invalid resource path (contains '..')!");
-		U.must(!path.contains("*") && !path.contains("?"), "Wildcard characters ('*', '?') are not allowed in the resource path!");
+	public static String resName(Req req) {
+		return resName(req.route() != null ? req.route().path() : req.path());
+	}
 
+	public static String resName(String path) {
 		String res = Str.replace(path, PathPattern.PATH_PARAM_REGEX, PATH_PARAM_EXTRACTOR);
+
+		U.must(!res.contains("/."), "Private resources (starting with '.') cannot be accessed!");
+		U.must(!res.contains(".."), "Invalid resource path (contains '..')!");
+		U.must(!res.contains("*") && !path.contains("?"), "Wildcard characters ('*', '?') are not allowed in the resource path!");
 
 		res = Str.triml(res, "/");
 
@@ -138,10 +142,6 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 		}
 
 		return res;
-	}
-
-	public static String defaultView(String path) {
-		return resName(path);
 	}
 
 	public static boolean hasExtension(String name) {
@@ -164,7 +164,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 	}
 
 	public static Res staticPage(Req req, String... possibleLocations) {
-		String resName = resName(req.path());
+		String resName = resName(req);
 
 		if (hasExtension(resName)) {
 			return Res.from(resName, possibleLocations);

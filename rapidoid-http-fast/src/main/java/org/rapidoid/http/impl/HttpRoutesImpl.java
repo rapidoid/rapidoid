@@ -102,7 +102,9 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 		boolean isPattern = isPattern(path);
 		PathPattern pathPattern = isPattern ? PathPattern.from(path) : null;
 
-		routes.add(new RouteImpl(verb, path, handler, handler.options()));
+		RouteImpl route = new RouteImpl(verb, path, handler, handler.options());
+		handler.setRoute(route);
+		routes.add(route);
 
 		switch (verb) {
 			case GET:
@@ -297,15 +299,18 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 		if (isGet) {
 			if (path1 != null && BytesUtil.matches(bytes, path, path1, true)) {
 				return handler1;
+
 			} else if (path2 != null && BytesUtil.matches(bytes, path, path2, true)) {
 				return handler2;
+
 			} else if (path3 != null && BytesUtil.matches(bytes, path, path3, true)) {
 				return handler3;
+
 			} else {
 				HandlerMatch handler = getHandlers.get(buf, path);
 
 				if (handler == null && !paternGetHandlers.isEmpty()) {
-					handler = matchByPattern(paternGetHandlers, buf.get(path));
+					handler = matchByPattern(HttpVerb.GET, paternGetHandlers, buf.get(path));
 				}
 
 				return handler;
@@ -315,7 +320,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 			HandlerMatch handler = postHandlers.get(buf, path);
 
 			if (handler == null && !paternPostHandlers.isEmpty()) {
-				handler = matchByPattern(paternPostHandlers, buf.get(path));
+				handler = matchByPattern(HttpVerb.POST, paternPostHandlers, buf.get(path));
 			}
 
 			return handler;
@@ -324,7 +329,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 			HandlerMatch handler = putHandlers.get(buf, path);
 
 			if (handler == null && !paternPutHandlers.isEmpty()) {
-				handler = matchByPattern(paternPutHandlers, buf.get(path));
+				handler = matchByPattern(HttpVerb.PUT, paternPutHandlers, buf.get(path));
 			}
 
 			return handler;
@@ -333,7 +338,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 			HandlerMatch handler = deleteHandlers.get(buf, path);
 
 			if (handler == null && !paternDeleteHandlers.isEmpty()) {
-				handler = matchByPattern(paternDeleteHandlers, buf.get(path));
+				handler = matchByPattern(HttpVerb.DELETE, paternDeleteHandlers, buf.get(path));
 			}
 
 			return handler;
@@ -342,7 +347,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 			HandlerMatch handler = patchHandlers.get(buf, path);
 
 			if (handler == null && !paternPatchHandlers.isEmpty()) {
-				handler = matchByPattern(paternPatchHandlers, buf.get(path));
+				handler = matchByPattern(HttpVerb.PATCH, paternPatchHandlers, buf.get(path));
 			}
 
 			return handler;
@@ -351,7 +356,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 			HandlerMatch handler = optionsHandlers.get(buf, path);
 
 			if (handler == null && !paternOptionsHandlers.isEmpty()) {
-				handler = matchByPattern(paternOptionsHandlers, buf.get(path));
+				handler = matchByPattern(HttpVerb.OPTIONS, paternOptionsHandlers, buf.get(path));
 			}
 
 			return handler;
@@ -360,7 +365,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 			HandlerMatch handler = headHandlers.get(buf, path);
 
 			if (handler == null && !paternHeadHandlers.isEmpty()) {
-				handler = matchByPattern(paternHeadHandlers, buf.get(path));
+				handler = matchByPattern(HttpVerb.HEAD, paternHeadHandlers, buf.get(path));
 			}
 
 			return handler;
@@ -369,7 +374,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 			HandlerMatch handler = traceHandlers.get(buf, path);
 
 			if (handler == null && !paternTraceHandlers.isEmpty()) {
-				handler = matchByPattern(paternTraceHandlers, buf.get(path));
+				handler = matchByPattern(HttpVerb.TRACE, paternTraceHandlers, buf.get(path));
 			}
 
 			return handler;
@@ -378,14 +383,15 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 		return null; // no handler
 	}
 
-	private HandlerMatch matchByPattern(Map<PathPattern, HttpHandler> handlers, String path) {
+	private HandlerMatch matchByPattern(HttpVerb verb, Map<PathPattern, HttpHandler> handlers, String path) {
 		for (Map.Entry<PathPattern, HttpHandler> e : handlers.entrySet()) {
 
 			PathPattern pattern = e.getKey();
 			Map<String, String> params = pattern.match(path);
 
 			if (params != null) {
-				return new HandlerMatchWithParams(e.getValue(), params);
+				RouteImpl route = new RouteImpl(verb, path, null, null);
+				return new HandlerMatchWithParams(e.getValue(), params, route);
 			}
 		}
 

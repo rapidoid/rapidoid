@@ -128,7 +128,7 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 	}
 
 	private static String viewName(Route route, RouteConfig config) {
-		return config.view() != null ? config.view() : HttpUtils.defaultView(route.path());
+		return config.view() != null ? config.view() : HttpUtils.resName(route.path());
 	}
 
 }

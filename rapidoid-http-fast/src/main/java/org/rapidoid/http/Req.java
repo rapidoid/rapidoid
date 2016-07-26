@@ -336,6 +336,12 @@ public interface Req {
 	HttpRoutes routes();
 
 	/**
+	 * Provides access to the <b>matching HTTP route (if any)</b> of the web application setup.<br>
+	 * In case a generic handler handles the request, or no matching route was found, <code>null</code> is returned.
+	 */
+	Route route();
+
+	/**
 	 * Provides access to the <b>customization</b> of the web application setup.
 	 */
 	Customization custom();

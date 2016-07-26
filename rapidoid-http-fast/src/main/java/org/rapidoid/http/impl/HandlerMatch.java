@@ -2,6 +2,7 @@ package org.rapidoid.http.impl;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Route;
 import org.rapidoid.http.handler.HttpHandler;
 
 import java.util.Map;
@@ -33,5 +34,7 @@ public interface HandlerMatch {
 	HttpHandler getHandler();
 
 	Map<String, String> getParams();
+
+	Route getRoute();
 
 }

@@ -42,6 +42,7 @@ import java.util.concurrent.Callable;
 public class HttpHandlers extends RapidoidThing {
 
 	public static HttpHandler from(FastHttp http, HttpRoutes routes, NParamLambda handler, RouteOptions options) {
+
 		if (handler instanceof ReqHandler) {
 			return new DelegatingParamsAwareReqHandler(http, routes, options, (ReqHandler) handler);
 
