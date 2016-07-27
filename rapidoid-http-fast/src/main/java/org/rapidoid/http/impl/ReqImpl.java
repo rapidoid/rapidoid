@@ -420,7 +420,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		MediaType contentType = MediaType.HTML_UTF_8;
 
 		if (token != null) {
-			HttpUtils.saveCookipackBeforeRenderingHeaders(this, token);
+			HttpUtils.saveTokenBeforeRenderingHeaders(this, token);
 		}
 
 		if (session != null) {

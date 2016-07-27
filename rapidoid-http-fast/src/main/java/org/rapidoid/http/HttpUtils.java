@@ -84,7 +84,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 		}
 	}
 
-	public static void saveCookipackBeforeRenderingHeaders(Req req, Map<String, Serializable> tokenData) {
+	public static void saveTokenBeforeRenderingHeaders(Req req, Map<String, Serializable> tokenData) {
 		String token = token(tokenData);
 		req.response().cookie(TOKEN, token, "path=/", "HttpOnly");
 	}
