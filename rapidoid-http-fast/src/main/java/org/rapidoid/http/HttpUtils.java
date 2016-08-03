@@ -18,12 +18,17 @@ import org.rapidoid.u.U;
 import org.rapidoid.util.ErrCodeAndMsg;
 import org.rapidoid.util.Msc;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.Serializable;
 import java.nio.BufferOverflowException;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.Future;
 
 /*
  * #%L
@@ -179,8 +184,60 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 		}
 	}
 
+	public static ErrCodeAndMsg getErrorCodeAndMsg(Throwable err) {
+		Throwable cause = Msc.rootCause(err);
+
+		int code;
+		String defaultMsg;
+		String msg = cause.getMessage();
+
+		if (cause instanceof SecurityException) {
+			code = 403;
+			defaultMsg = "Access Denied!";
+
+		} else if (cause instanceof NotFound) {
+			code = 404;
+			defaultMsg = "The requested resource could not be found!";
+
+		} else if (Msc.isValidationError(cause)) {
+			code = 422;
+			defaultMsg = "Validation Error!";
+
+			if (cause.getClass().getName().equals("javax.validation.ConstraintViolationException")) {
+				Set<ConstraintViolation<?>> violations = ((ConstraintViolationException) cause).getConstraintViolations();
+
+				StringBuilder sb = new StringBuilder();
+				sb.append("Validation failed: ");
+
+				for (Iterator<ConstraintViolation<?>> it = U.safe(violations).iterator(); it.hasNext(); ) {
+					ConstraintViolation<?> v = it.next();
+
+					sb.append(v.getRootBeanClass().getSimpleName());
+					sb.append(".");
+					sb.append(v.getPropertyPath());
+					sb.append(" (");
+					sb.append(v.getMessage());
+					sb.append(")");
+
+					if (it.hasNext()) {
+						sb.append(", ");
+					}
+				}
+
+				msg = sb.toString();
+			}
+
+		} else {
+			code = 500;
+			defaultMsg = "Internal Server Error!";
+		}
+
+		msg = U.or(msg, defaultMsg);
+		return new ErrCodeAndMsg(code, msg);
+	}
+
 	public static String getErrorMessageAndSetCode(Resp resp, Throwable err) {
-		ErrCodeAndMsg codeAndMsg = Msc.getErrorCodeAndMsg(err);
+		ErrCodeAndMsg codeAndMsg = getErrorCodeAndMsg(err);
 		resp.code(codeAndMsg.code());
 		return codeAndMsg.msg();
 	}
@@ -285,4 +342,21 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 
 		return cfg.entry("contextPath").or("/");
 	}
+
+	@SuppressWarnings("unchecked")
+	public static Object postprocessResult(Req req, Object result) throws Exception {
+		if (result instanceof Req || result instanceof Resp || result instanceof HttpStatus) {
+			return result;
+
+		} else if (result == null) {
+			return null; // not found
+
+		} else if ((result instanceof Future<?>) || (result instanceof org.rapidoid.concurrent.Future<?>)) {
+			return req.async();
+
+		} else {
+			return result;
+		}
+	}
+
 }

@@ -605,7 +605,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	@Override
 	public Customization custom() {
-		return routes.custom();
+		return routes != null ? routes.custom() : http.custom();
 	}
 
 	@Override

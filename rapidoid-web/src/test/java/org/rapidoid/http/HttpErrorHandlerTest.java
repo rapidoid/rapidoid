@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.customize.ErrorHandler;
+import org.rapidoid.setup.Defaults;
 import org.rapidoid.setup.On;
 
 @Authors("Nikolche Mihajlovski")
@@ -34,7 +35,8 @@ public class HttpErrorHandlerTest extends HttpTestCommons {
 	public void testErrorHandler1() {
 		On.custom().errorHandler(new ErrorHandler() {
 			@Override
-			public Object handleError(Req req, Resp resp, Throwable e) {
+			public Object handleError(Req req, Resp resp, Throwable e) throws Exception {
+				if (e instanceof NotFound) return Defaults.errorHandler().handleError(req, resp, e); // default error processing
 				return req + ":err:" + e;
 			}
 		});
@@ -55,12 +57,13 @@ public class HttpErrorHandlerTest extends HttpTestCommons {
 	public void testErrorHandler2() {
 		On.custom().errorHandler(new ErrorHandler() {
 			@Override
-			public Object handleError(Req req, Resp resp, Throwable e) {
+			public Object handleError(Req req, Resp resp, Throwable e) throws Exception {
+				if (e instanceof NotFound) return Defaults.errorHandler().handleError(req, resp, e); // default error processing
 				return resp.code(200).result(req + ":err2:" + e);
 			}
 		});
 
-		On.get("/err2").html(new ReqHandler() {
+		On.get("/err2").json(new ReqHandler() {
 			@SuppressWarnings("null")
 			@Override
 			public Object execute(Req req) throws Exception {

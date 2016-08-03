@@ -28,8 +28,6 @@ import org.rapidoid.u.U;
 import org.rapidoid.validation.InvalidData;
 import org.rapidoid.wrap.BoolWrap;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.management.ManagementFactory;
@@ -791,54 +789,6 @@ public class Msc extends RapidoidThing implements Constants {
 
 	public static boolean isValidationError(Throwable error) {
 		return (error instanceof InvalidData) || error.getClass().getName().startsWith("javax.validation.");
-	}
-
-	public static ErrCodeAndMsg getErrorCodeAndMsg(Throwable err) {
-		Throwable cause = rootCause(err);
-
-		int code;
-		String defaultMsg;
-		String msg = cause.getMessage();
-
-		if (cause instanceof SecurityException) {
-			code = 403;
-			defaultMsg = "Access Denied!";
-
-		} else if (Msc.isValidationError(cause)) {
-			code = 422;
-			defaultMsg = "Validation Error!";
-
-			if (cause.getClass().getName().equals("javax.validation.ConstraintViolationException")) {
-				Set<ConstraintViolation<?>> violations = ((ConstraintViolationException) cause).getConstraintViolations();
-
-				StringBuilder sb = new StringBuilder();
-				sb.append("Validation failed: ");
-
-				for (Iterator<ConstraintViolation<?>> it = U.safe(violations).iterator(); it.hasNext(); ) {
-					ConstraintViolation<?> v = it.next();
-
-					sb.append(v.getRootBeanClass().getSimpleName());
-					sb.append(".");
-					sb.append(v.getPropertyPath());
-					sb.append(" (");
-					sb.append(v.getMessage());
-					sb.append(")");
-
-					if (it.hasNext()) {
-						sb.append(", ");
-					}
-				}
-
-				msg = sb.toString();
-			}
-
-		} else {
-			code = 500;
-			defaultMsg = "Internal Server Error!";
-		}
-
-		msg = U.or(msg, defaultMsg);
-		return new ErrCodeAndMsg(code, msg);
 	}
 
 	public static <T> List<T> page(Iterable<T> items, int page, int pageSize) {

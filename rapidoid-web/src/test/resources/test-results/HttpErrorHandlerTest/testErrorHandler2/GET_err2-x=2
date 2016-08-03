@@ -2,7 +2,7 @@ HTTP/1.1 200 OK
 Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
-Content-Type: text/html; charset=utf-8
-Content-Length: 49
+Content-Type: application/json; charset=utf-8
+Content-Length: 51
 
-GET /err2?x=2:err2:java.lang.NullPointerException
+"GET /err2?x=2:err2:java.lang.NullPointerException"

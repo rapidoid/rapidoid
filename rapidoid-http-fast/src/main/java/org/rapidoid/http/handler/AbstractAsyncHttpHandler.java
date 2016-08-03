@@ -3,6 +3,7 @@ package org.rapidoid.http.handler;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.TransactionMode;
+import org.rapidoid.commons.MediaType;
 import org.rapidoid.ctx.With;
 import org.rapidoid.http.*;
 import org.rapidoid.http.customize.Customization;
@@ -16,7 +17,6 @@ import org.rapidoid.u.U;
 
 import java.util.Collections;
 import java.util.Set;
-import java.util.concurrent.Future;
 
 /*
  * #%L
@@ -67,7 +67,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 
 		ctx.async();
 
-		execHandlerJob(ctx, isKeepAlive, req, extra);
+		execHandlerJob(ctx, isKeepAlive, options.contentType(), req, extra);
 
 		return HttpStatus.ASYNC;
 	}
@@ -120,23 +120,8 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 		return txMode;
 	}
 
-	@SuppressWarnings("unchecked")
-	protected Object postprocessResult(Req req, Object result) throws Exception {
-		if (result instanceof Req || result instanceof Resp || result instanceof HttpStatus) {
-			return result;
-
-		} else if (result == null) {
-			return null; // not found
-
-		} else if ((result instanceof Future<?>) || (result instanceof org.rapidoid.concurrent.Future<?>)) {
-			return req.async();
-
-		} else {
-			return result;
-		}
-	}
-
-	private void execHandlerJob(final Channel channel, final boolean isKeepAlive, final Req req, final Object extra) {
+	private void execHandlerJob(final Channel channel, final boolean isKeepAlive, final MediaType contentType,
+	                            final Req req, final Object extra) {
 
 		With.tag(CTX_TAG_INIT).exchange(req).run(new Runnable() {
 
@@ -157,7 +142,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 					TransactionMode txMode = before(req, username, roles);
 					U.notNull(txMode, "txMode");
 
-					Runnable handleRequest = handlerWithWrappers(channel, isKeepAlive, req, extra);
+					Runnable handleRequest = handlerWithWrappers(channel, isKeepAlive, contentType, req, extra);
 					Runnable handleRequestMaybeInTx = txWrap(req, txMode, handleRequest);
 
 					With.tag(CTX_TAG_HANDLER).exchange(req).username(username).roles(roles).run(handleRequestMaybeInTx);
@@ -181,7 +166,9 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 		return HttpStatus.ASYNC;
 	}
 
-	private Runnable handlerWithWrappers(final Channel channel, final boolean isKeepAlive, final Req req, final Object extra) {
+	private Runnable handlerWithWrappers(final Channel channel, final boolean isKeepAlive, final MediaType contentType,
+	                                     final Req req, final Object extra) {
+
 		return new Runnable() {
 
 			@Override
@@ -195,12 +182,12 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 						result = handleReq(channel, isKeepAlive, req, extra);
 					}
 
-					result = postprocessResult(req, result);
+					result = HttpUtils.postprocessResult(req, result);
 				} catch (Throwable e) {
 					result = e;
 				}
 
-				complete(channel, isKeepAlive, req, result);
+				complete(channel, isKeepAlive, contentType, req, result);
 			}
 		};
 	}
@@ -267,15 +254,15 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 
 	protected abstract Object handleReq(Channel ctx, boolean isKeepAlive, Req req, Object extra) throws Exception;
 
-	public void complete(Channel ctx, boolean isKeepAlive, Req req, Object result) {
+	public void complete(Channel ctx, boolean isKeepAlive, MediaType contentType, Req req, Object result) {
 
 		if (result == null || result instanceof NotFound) {
-			http.notFound(ctx, isKeepAlive, this, req);
+			http.notFound(ctx, isKeepAlive, contentType, this, req);
 			return; // not found
 		}
 
 		if (result instanceof HttpStatus) {
-			complete(ctx, isKeepAlive, req, U.rte("HttpStatus result is not supported!"));
+			complete(ctx, isKeepAlive, contentType, req, U.rte("HttpStatus result is not supported!"));
 			return;
 		}
 

@@ -6,6 +6,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.config.Config;
 import org.rapidoid.http.HttpUtils;
+import org.rapidoid.http.NotFound;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
 import org.rapidoid.log.Log;
@@ -13,6 +14,7 @@ import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 import org.rapidoid.value.Value;
 
+import java.util.Collections;
 import java.util.Map;
 
 /*
@@ -77,11 +79,13 @@ public class DefaultErrorHandler extends RapidoidThing implements ErrorHandler {
 
 			try {
 
+				Object result = null;
+
 				if (handler != null) {
-					return handler.handleError(req, resp, err);
-				} else {
-					return defaultErrorHandling(req, err);
+					result = handler.handleError(req, resp, err);
 				}
+
+				return result != null ? result : defaultErrorHandling(req, err);
 
 			} catch (Exception e) {
 
@@ -99,6 +103,17 @@ public class DefaultErrorHandler extends RapidoidThing implements ErrorHandler {
 	}
 
 	protected Object defaultErrorHandling(Req req, Throwable error) {
+
+		if (error instanceof NotFound) {
+			Resp resp = req.response().code(404);
+
+			if (resp.contentType() == MediaType.JSON_UTF_8) {
+				return error;
+			} else {
+				return resp.view("404").result(Collections.emptyMap());
+			}
+		}
+
 		boolean validation = Msc.isValidationError(error);
 
 		if (!validation) {

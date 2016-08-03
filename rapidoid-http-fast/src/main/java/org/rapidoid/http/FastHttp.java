@@ -11,6 +11,7 @@ import org.rapidoid.data.BufRange;
 import org.rapidoid.data.BufRanges;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.http.customize.Customization;
+import org.rapidoid.http.customize.JsonResponseRenderer;
 import org.rapidoid.http.handler.HttpHandler;
 import org.rapidoid.http.impl.*;
 import org.rapidoid.http.processor.AbstractHttpProcessor;
@@ -50,6 +51,8 @@ import java.util.Map;
 public class FastHttp extends AbstractHttpProcessor {
 
 	private static final HttpParser HTTP_PARSER = new HttpParser();
+
+	private static final String INTERNAL_SERVER_ERROR = "Internal Server Error!";
 
 	private final HttpRoutesImpl[] routeGroups;
 
@@ -198,7 +201,8 @@ public class FastHttp extends AbstractHttpProcessor {
 		}
 
 		if (status == HttpStatus.NOT_FOUND) {
-			HttpIO.write404(channel, isKeepAlive);
+			handleNotFound(channel, isKeepAlive, contentType, req);
+			return;
 		}
 
 		if (status != HttpStatus.ASYNC) {
@@ -214,9 +218,19 @@ public class FastHttp extends AbstractHttpProcessor {
 		}
 	}
 
-	private boolean handleError(Channel channel, boolean isKeepAlive, ReqImpl req, MediaType contentType, Throwable e) {
+	protected void internalServerError(Channel channel, boolean isKeepAlive, Req req, MediaType contentType) {
+		HttpIO.startResponse(channel, 500, isKeepAlive, contentType);
+
+		JsonResponseRenderer jsonRenderer = Customization.of(req).jsonResponseRenderer();
+		byte[] bytes = HttpUtils.responseToBytes(req, INTERNAL_SERVER_ERROR, contentType, jsonRenderer);
+
+		HttpIO.writeContentLengthAndBody(channel, bytes);
+		HttpIO.done(channel, isKeepAlive);
+	}
+
+	private boolean handleError(Channel channel, boolean isKeepAlive, Req req, MediaType contentType, Throwable e) {
 		if (req != null) {
-			if (!req.isStopped()) {
+			if (!((ReqImpl) req).isStopped()) {
 				try {
 					HttpIO.errorAndDone(req, e);
 				} catch (Exception e1) {
@@ -234,14 +248,11 @@ public class FastHttp extends AbstractHttpProcessor {
 		return false;
 	}
 
-	protected void internalServerError(Channel channel, boolean isKeepAlive, ReqImpl req, MediaType contentType) {
-		HttpIO.startResponse(channel, 500, isKeepAlive, contentType);
-		byte[] bytes = HttpUtils.responseToBytes(req, "Internal Server Error!", contentType, custom().jsonResponseRenderer());
-		HttpIO.writeContentLengthAndBody(channel, bytes);
-		HttpIO.done(channel, isKeepAlive);
+	private void handleNotFound(Channel channel, boolean isKeepAlive, MediaType contentType, Req req) {
+		handleError(channel, isKeepAlive, req, contentType, new NotFound());
 	}
 
-	private Customization custom() {
+	public Customization custom() {
 		return routes()[0].custom();
 	}
 
@@ -284,7 +295,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		}
 	}
 
-	public void notFound(Channel ctx, boolean isKeepAlive, HttpHandler fromHandler, Req req) {
+	public void notFound(Channel ctx, boolean isKeepAlive, MediaType contentType, HttpHandler fromHandler, Req req) {
 		HttpStatus status = HttpStatus.NOT_FOUND;
 
 		tryRoutes:
@@ -311,8 +322,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		}
 
 		if (status == HttpStatus.NOT_FOUND) {
-			HttpIO.write404(ctx, isKeepAlive);
-			HttpIO.done(ctx, isKeepAlive);
+			handleNotFound(ctx, isKeepAlive, contentType, req);
 		}
 	}
 

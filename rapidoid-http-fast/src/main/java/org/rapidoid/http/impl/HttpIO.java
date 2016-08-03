@@ -16,8 +16,6 @@ import org.rapidoid.http.customize.Customization;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.abstracts.Channel;
-import org.rapidoid.render.Template;
-import org.rapidoid.render.Templates;
 import org.rapidoid.util.Constants;
 
 /*
@@ -66,6 +64,7 @@ public class HttpIO extends RapidoidThing {
 	private static final byte[] DATE_IS = "Date: ".getBytes();
 
 	private static final byte[][] CONTENT_LENGTHS = new byte[CONTENT_LENGTHS_SIZE][];
+
 	public static final byte[] PAGE_NOT_FOUND = "Page not found!".getBytes();
 
 	static {
@@ -120,6 +119,7 @@ public class HttpIO extends RapidoidThing {
 		try {
 			Resp resp = req.response().code(500);
 			Object result = Customization.of(req).errorHandler().handleError(req, resp, error);
+			result = HttpUtils.postprocessResult(req, result);
 			HttpUtils.resultToResponse(req, result);
 
 		} catch (Exception e) {
@@ -199,30 +199,6 @@ public class HttpIO extends RapidoidThing {
 	public static void done(Channel ctx, boolean isKeepAlive) {
 		ctx.done();
 		ctx.closeIf(!isKeepAlive);
-	}
-
-	public static void write404(Channel ctx, boolean isKeepAlive) {
-		startResponse(ctx, 404, isKeepAlive, MediaType.HTML_UTF_8);
-
-		byte[] content;
-
-		Template template;
-		try {
-			template = Templates.fromFile("404.html");
-		} catch (Exception e) {
-			writeContentLengthAndBody(ctx, PAGE_NOT_FOUND);
-			return;
-		}
-
-		try {
-			content = template.render().getBytes();
-		} catch (Exception e) {
-			Log.error("Page rendering error!", e);
-			writeContentLengthAndBody(ctx, PAGE_NOT_FOUND);
-			return;
-		}
-
-		writeContentLengthAndBody(ctx, content);
 	}
 
 }

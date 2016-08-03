@@ -22,10 +22,12 @@ package org.rapidoid.http.processor;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.MediaType;
 import org.rapidoid.data.BufRange;
 import org.rapidoid.data.BufRanges;
 import org.rapidoid.http.impl.HttpIO;
 import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.render.Templates;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -39,9 +41,12 @@ public class NotFoundHttpProcessor extends AbstractHttpProcessor {
 	public void onRequest(Channel channel, boolean isGet, boolean isKeepAlive, BufRange body,
 	                      BufRange verb, BufRange uri, BufRange path, BufRange query, BufRange protocol, BufRanges headers) {
 
-		HttpIO.write404(channel, isKeepAlive);
-		channel.done();
-		channel.closeIf(!isKeepAlive);
+		HttpIO.startResponse(channel, 404, isKeepAlive, MediaType.HTML_UTF_8);
+
+		String content = Templates.fromFile("404.html").render();
+		HttpIO.writeContentLengthAndBody(channel, content.getBytes());
+
+		HttpIO.done(channel, isKeepAlive);
 	}
 
 }

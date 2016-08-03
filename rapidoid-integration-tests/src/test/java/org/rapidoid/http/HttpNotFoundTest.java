@@ -46,7 +46,7 @@ public class HttpNotFoundTest extends IntegrationTestCommons {
 
 	@Test
 	public void testReturningNullAsNotFound() {
-		On.post("/bar").json(req -> {
+		On.post("/bar").html(req -> {
 			if (req.params().isEmpty()) {
 				return null;
 			}

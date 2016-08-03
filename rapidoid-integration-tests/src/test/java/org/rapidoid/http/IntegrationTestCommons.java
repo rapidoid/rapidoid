@@ -279,9 +279,11 @@ public abstract class IntegrationTestCommons extends TestCommons {
 
 	protected void notFound(int port, String verb, String uri) {
 		String resp = fetch(port, verb, uri, null, null);
-		String notFound = IO.load("404-not-found.txt");
-		U.notNull(notFound, "404-not-found");
-		check(verb + " " + uri, resp, notFound);
+
+		String notFound = U.notNull(IO.load("404-not-found.txt"), "404-not-found");
+		String notFound2 = U.notNull(IO.load("404-not-found-json.txt"), "404-not-found-json");
+
+		isTrue(resp.equals(notFound) || resp.equals(notFound2));
 	}
 
 	private void testReq(int port, String verb, String uri, Map<String, ?> data, String json) {
