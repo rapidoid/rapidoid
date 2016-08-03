@@ -53,11 +53,11 @@ public class MVCModel extends RapidoidThing {
 
 	@Override
 	public String toString() {
-		return "{" +
+		return "MVCModel{" +
 			"req=" + req +
 			", resp=" + resp +
 			", model=" + model +
-			", screen=" + screen +
+			", screen=" + (screen != null ? screen.getClass().getSimpleName() : null) +
 			", result=" + result +
 			'}';
 	}
