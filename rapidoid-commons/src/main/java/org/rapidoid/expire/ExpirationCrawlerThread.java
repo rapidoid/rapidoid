@@ -42,6 +42,7 @@ public class ExpirationCrawlerThread extends RapidoidThread {
 		super(name);
 		this.resolution = resolution;
 		setPriority(Thread.MIN_PRIORITY);
+		setDaemon(true);
 	}
 
 	public void register(Iterable<? extends Expiring> collection) {
