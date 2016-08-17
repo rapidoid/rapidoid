@@ -39,6 +39,7 @@ import java.util.stream.Stream;
 public interface Flow<T> extends Stream<T> {
 
 	@SafeVarargs
+	@SuppressWarnings("unchecked")
 	static <T> FlowImpl<T> of(T... values) {
 		return new FlowImpl<T>(Do.streamOf(values));
 	}

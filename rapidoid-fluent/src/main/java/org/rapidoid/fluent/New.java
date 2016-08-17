@@ -28,6 +28,7 @@ import java.util.*;
  */
 public class New {
 
+	@SafeVarargs
 	@SuppressWarnings({"varargs", "unchecked"})
 	public static <T> T[] array(T... items) {
 		return items;
@@ -51,6 +52,7 @@ public class New {
 		return set;
 	}
 
+	@SafeVarargs
 	@SuppressWarnings({"varargs", "unchecked"})
 	public static <T> Set<T> set(T... values) {
 		Set<T> set = set();
@@ -76,6 +78,7 @@ public class New {
 		return list;
 	}
 
+	@SafeVarargs
 	@SuppressWarnings({"varargs", "unchecked"})
 	public static <T> List<T> list(T... values) {
 		List<T> list = list();

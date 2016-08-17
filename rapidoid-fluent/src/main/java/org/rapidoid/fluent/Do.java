@@ -41,9 +41,16 @@ public class Do {
 		return stream != null ? stream : Stream.empty();
 	}
 
+	@SafeVarargs
 	@SuppressWarnings("unchecked")
 	public static <T> Stream<T> streamOf(T... items) {
 		return items != null ? Stream.of(items) : Stream.empty();
+	}
+
+	@SafeVarargs
+	@SuppressWarnings("unchecked")
+	public static <T> DoMap<T> map(T... items) {
+		return new DoMap<T>(streamOf(items));
 	}
 
 	public static <T> DoMap<T> map(Iterable<T> items) {

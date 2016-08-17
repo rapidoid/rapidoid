@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -45,6 +47,21 @@ public class To {
 	public static <T, K, U> Collector<T, ?, Map<K, U>> map(Function<? super T, ? extends K> keyMapper,
 	                                                       Function<? super T, ? extends U> valueMapper) {
 		return Collectors.toMap(keyMapper, valueMapper);
+	}
+
+	public static <T, K, U, M extends Map<K, U>> Collector<T, ?, M> map(Function<? super T, ? extends K> keyMapper,
+	                                                                    Function<? super T, ? extends U> valueMapper,
+	                                                                    BinaryOperator<U> mergeFunction,
+	                                                                    Supplier<M> mapSupplier) {
+
+		return Collectors.toMap(keyMapper, valueMapper, mergeFunction, mapSupplier);
+	}
+
+	public static <T, K, U> Collector<T, ?, Map<K, U>> map(Function<? super T, ? extends K> keyMapper,
+	                                                       Function<? super T, ? extends U> valueMapper,
+	                                                       BinaryOperator<U> mergeFunction) {
+
+		return Collectors.toMap(keyMapper, valueMapper, mergeFunction);
 	}
 
 	public static <T, K, V> Collector<Entry<K, V>, ?, Map<K, V>> map() {

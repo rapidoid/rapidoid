@@ -162,6 +162,7 @@ org.rapidoid.fluent.Flow
 org.rapidoid.fluent.flow.FlowImpl
 org.rapidoid.fluent.For
 org.rapidoid.fluent.forx.ForEach
+org.rapidoid.fluent.Mergers
 org.rapidoid.fluent.New
 org.rapidoid.fluent.To
 org.rapidoid.fluent.utils.Lambdas

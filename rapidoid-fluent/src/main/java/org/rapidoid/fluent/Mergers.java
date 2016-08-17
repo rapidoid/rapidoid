@@ -1,8 +1,6 @@
 package org.rapidoid.fluent;
 
-import org.rapidoid.fluent.forx.ForEach;
-
-import java.util.stream.Stream;
+import java.util.function.BinaryOperator;
 
 /*
  * #%L
@@ -26,22 +24,22 @@ import java.util.stream.Stream;
 
 /**
  * @author Nikolche Mihajlovski
- * @since 5.0.0
+ * @since 5.2.0
  */
-public class For {
+public class Mergers {
 
-	@SafeVarargs
-	@SuppressWarnings("unchecked")
-	public static <T> ForEach<T> each(T... items) {
-		return new ForEach<T>(Do.streamOf(items));
+	public static <T> BinaryOperator<T> thrower() {
+		return (oldValue, newValue) -> {
+			throw new IllegalStateException(String.format("Duplicate key! Values are: %s and %s", oldValue, newValue));
+		};
 	}
 
-	public static <T> ForEach<T> each(Iterable<T> items) {
-		return new ForEach<T>(Do.stream(items));
+	public static <T> BinaryOperator<T> keeper() {
+		return (oldValue, newValue) -> oldValue;
 	}
 
-	public static <T> ForEach<T> each(Stream<T> stream) {
-		return new ForEach<T>(Do.stream(stream));
+	public static <T> BinaryOperator<T> replacer() {
+		return (oldValue, newValue) -> newValue;
 	}
 
 }
