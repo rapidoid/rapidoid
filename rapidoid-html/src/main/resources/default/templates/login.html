@@ -21,10 +21,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link href="/bootstrap/css/bootstrap-3.3.6.min.css" rel="stylesheet">
-    <link href="/font-awesome/css/font-awesome-4.5.0.min.css" rel="stylesheet">
-    <link href="/rapidoid.min.css" rel="stylesheet">
-    <link href="/login.css" rel="stylesheet">
+    <link href="${req.contextPath}/bootstrap/css/bootstrap-3.3.6.min.css" rel="stylesheet">
+    <link href="${req.contextPath}/font-awesome/css/font-awesome-4.5.0.min.css" rel="stylesheet">
+    <link href="${req.contextPath}/rapidoid.min.css" rel="stylesheet">
+    <link href="${req.contextPath}/login.css" rel="stylesheet">
+
+{{>page-segments/page-globals}}
 
 </head>
 
@@ -70,7 +72,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                         -->
                         <br>
                         <p>
-                            <a href="/" class="btn btn-default btn-xs pull-right">Home page</a>
+                            <a href="${req.contextPath}/" class="btn btn-default btn-xs pull-right">Home page</a>
                         </p>
                     </form>
                 </div>
@@ -82,11 +84,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 {{!embedded}}
 </div>
 
-<script src="/jquery-2.2.3.min.js"></script>
-<script src="/bootstrap/js/bootstrap-3.3.6.min.js"></script>
-<script src="/angular-1.5.5.min.js"></script>
-<script src="/rapidoid.min.js"></script>
-<script src="/login.js"></script>
+<script src="${req.contextPath}/jquery-2.2.3.min.js"></script>
+<script src="${req.contextPath}/bootstrap/js/bootstrap-3.3.6.min.js"></script>
+<script src="${req.contextPath}/angular-1.5.5.min.js"></script>
+<script src="${req.contextPath}/rapidoid.min.js"></script>
+<script src="${req.contextPath}/login.js"></script>
 
 </body>
 </html>

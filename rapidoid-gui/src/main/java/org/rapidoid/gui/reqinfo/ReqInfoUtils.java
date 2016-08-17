@@ -40,7 +40,8 @@ public class ReqInfoUtils extends RapidoidThing {
 			String hostname = req.host().split(":")[0];
 
 			if (AppInfo.isAdminServerActive) {
-				return appAndAdminOnSamePort ? "/_" : "http://" + hostname + ":" + adminPort + "/_";
+				String path = req.contextPath() + "/_";
+				return appAndAdminOnSamePort ? path : "http://" + hostname + ":" + adminPort + path;
 			}
 		}
 
@@ -57,7 +58,8 @@ public class ReqInfoUtils extends RapidoidThing {
 			String hostname = req.host().split(":")[0];
 
 			if (AppInfo.isAppServerActive) {
-				return appAndAdminOnSamePort ? "/" : "http://" + hostname + ":" + appPort + "/";
+				String path = req.contextPath() + "/";
+				return appAndAdminOnSamePort ? path : "http://" + hostname + ":" + appPort + path;
 			}
 		}
 

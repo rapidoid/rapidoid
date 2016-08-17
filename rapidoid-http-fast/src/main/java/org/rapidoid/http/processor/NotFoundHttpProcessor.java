@@ -28,10 +28,15 @@ import org.rapidoid.data.BufRanges;
 import org.rapidoid.http.impl.HttpIO;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.render.Templates;
+import org.rapidoid.u.U;
+
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class NotFoundHttpProcessor extends AbstractHttpProcessor {
+
+	private static final Map<String, Map<String, String>> MODEL = U.map("req", U.map("contextPath", ""));
 
 	public NotFoundHttpProcessor() {
 		super(null);
@@ -43,7 +48,7 @@ public class NotFoundHttpProcessor extends AbstractHttpProcessor {
 
 		HttpIO.startResponse(channel, 404, isKeepAlive, MediaType.HTML_UTF_8);
 
-		String content = Templates.fromFile("404.html").render();
+		String content = Templates.fromFile("404.html").render(MODEL);
 		HttpIO.writeContentLengthAndBody(channel, content.getBytes());
 
 		HttpIO.done(channel, isKeepAlive);

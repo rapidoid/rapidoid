@@ -11,7 +11,7 @@ function updateGraph${id}() {
     title: '${title}',
     labels: [ "Date"{{#names}}, "${.}"{{/names}} ],
     zoomCallback : function(minDate, maxDate, yRange) {
-        var uri = '/_/graphs/${uri}?from=' + minDate + '&to=' + maxDate;
+        var uri = window.Rapidoid.contextPath + '/_/graphs/${uri}?from=' + minDate + '&to=' + maxDate;
         $R.get(uri, function(resp) {
           var data = [];
           for (var k in resp) {

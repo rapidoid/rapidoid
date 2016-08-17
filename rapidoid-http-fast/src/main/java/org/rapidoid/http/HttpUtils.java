@@ -337,10 +337,11 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 		Config cfg = customization.appConfig();
 
 		if (segment != null) {
-			cfg = cfg.sub("segments", segment);
-		}
+			return cfg.or(cfg.sub("segments", segment)).entry("contextPath").or("");
 
-		return cfg.entry("contextPath").or("/");
+		} else {
+			return cfg.entry("contextPath").or("");
+		}
 	}
 
 	@SuppressWarnings("unchecked")

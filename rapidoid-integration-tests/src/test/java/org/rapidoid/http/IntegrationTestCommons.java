@@ -283,7 +283,9 @@ public abstract class IntegrationTestCommons extends TestCommons {
 		String notFound = U.notNull(IO.load("404-not-found.txt"), "404-not-found");
 		String notFound2 = U.notNull(IO.load("404-not-found-json.txt"), "404-not-found-json");
 
-		isTrue(resp.equals(notFound) || resp.equals(notFound2));
+		if (!resp.equals(notFound) && !resp.equals(notFound2)) {
+			eq(resp, "!!! Expected (404 Not Found) HTTP response as HTML or JSON !!!!");
+		}
 	}
 
 	private void testReq(int port, String verb, String uri, Map<String, ?> data, String json) {

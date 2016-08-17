@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 1843
+Content-Length: 1946
 
 <!DOCTYPE html>
 <html lang="en">
@@ -27,6 +27,11 @@ Content-Length: 1843
 <link href="/bootstrap/css/theme-default.css" type="text/css" rel="stylesheet" />
 
 
+
+<script>
+    window.Rapidoid = window.Rapidoid || {};
+    window.Rapidoid.contextPath = '';
+</script>
 </head>
 
 <body class="rapidoid rapidoid-main">

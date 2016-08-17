@@ -4,6 +4,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Env;
 import org.rapidoid.commons.RapidoidInfo;
+import org.rapidoid.commons.Str;
 import org.rapidoid.config.Conf;
 import org.rapidoid.gui.menu.PageMenu;
 import org.rapidoid.gui.reqinfo.IReqInfo;
@@ -77,6 +78,8 @@ public class HtmlPage extends ScreenBean {
 
 		Map<String, Object> model = U.map(req.data());
 
+		model.put("req", req);
+
 		model.put("appUrl", ReqInfoUtils.appUrl());
 		model.put("adminUrl", ReqInfoUtils.adminUrl());
 
@@ -97,7 +100,7 @@ public class HtmlPage extends ScreenBean {
 		model.put("has", has());
 
 		model.put("content", GUI.multi(content()));
-		model.put("home", home());
+		model.put("home", req.contextPath() + home());
 		model.put("brand", brand());
 		model.put("title", title());
 
@@ -157,8 +160,22 @@ public class HtmlPage extends ScreenBean {
 			}
 		}
 
-		model.put("js", js());
-		model.put("css", css());
+		model.put("js", withContextPath(js(), req.contextPath()));
+		model.put("css", withContextPath(css(), req.contextPath()));
+	}
+
+	private static Set<String> withContextPath(Set<String> assets, String contextPath) {
+		Set<String> withContextPath = U.set();
+
+		for (String asset : assets) {
+			if (!asset.startsWith("http://") && !asset.startsWith("https://") && !asset.startsWith("//")) {
+				asset = contextPath + "/" + Str.triml(asset, "/");
+			}
+
+			withContextPath.add(asset);
+		}
+
+		return withContextPath;
 	}
 
 	private Map<String, Object> has() {

@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.IntegrationTestCommons;
 import org.rapidoid.integrate.Integrate;
+import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
@@ -34,11 +35,11 @@ public class MustacheViewRendererTest extends IntegrationTestCommons {
 
 	@Test
 	public void testTemplateLoading() {
-		On.custom().viewRenderer(Integrate.mustacheViewRenderer());
+		My.viewRenderer(Integrate.mustacheViewRenderer());
 
 		On.get("/").view("mtmpl").mvc(() -> U.map("x", "foo", "y", "bar"));
 
-		onlyGet("/");
+		getReq("/");
 	}
 
 }

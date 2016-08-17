@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 4352
+Content-Length: 4455
 
 
 <!--
@@ -31,6 +31,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <link href="/font-awesome/css/font-awesome-4.5.0.min.css" rel="stylesheet">
     <link href="/rapidoid.min.css" rel="stylesheet">
     <link href="/login.css" rel="stylesheet">
+
+<script>
+    window.Rapidoid = window.Rapidoid || {};
+    window.Rapidoid.contextPath = '';
+</script>
 
 </head>
 

@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 2678
+Content-Length: 2782
 
 <!--
 MIT license (see http://bootsnipp.com/license)
@@ -29,6 +29,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <link href="/bootstrap/css/bootstrap-3.3.6.min.css" rel="stylesheet">
     <link href="/font-awesome/css/font-awesome-4.5.0.min.css" rel="stylesheet">
     <link href="/rapidoid.min.css" rel="stylesheet">
+
+<script>
+    window.Rapidoid = window.Rapidoid || {};
+    window.Rapidoid.contextPath = '';
+</script>
+
 </head>
 
 <body class="bg-squares container">

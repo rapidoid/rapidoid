@@ -11,12 +11,11 @@ app:
   navbar: true
   fluid: false
   cdn: false
-  contextPath: /
+  contextPath: ''
   home: /
   menu: {}
   segments:
     admin:
-      contextPath: /_
       home: /_
       brand: '<i class="fa fa-dashboard"></i> Admin'
       search: false

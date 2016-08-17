@@ -3,6 +3,6 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: application/json; charset=utf-8
-Content-Length: 19
+Content-Length: 17
 
-"admin /b:admin:/_"
+"admin /b:admin:"

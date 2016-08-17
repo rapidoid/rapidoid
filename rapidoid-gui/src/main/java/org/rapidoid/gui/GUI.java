@@ -790,12 +790,17 @@ public abstract class GUI extends HTML implements Role {
 		return dygraph(uri, ts, "rapidoid-dygraph");
 	}
 
+	public static String uri(String... parts) {
+		return ReqInfo.get().contextPath() + Msc.uri(parts);
+	}
+
 	public static String uriFor(Object target) {
 		if (!isEntity(target)) {
 			return "";
 		}
 
-		return uriFor(typeUri(target.getClass()), target);
+		String typeUri = typeUri(target.getClass());
+		return uriFor(typeUri, target);
 	}
 
 	public static String uriFor(String baseUri, Object target) {
@@ -812,9 +817,7 @@ public abstract class GUI extends HTML implements Role {
 	}
 
 	public static String typeUri(String entityType) {
-		String contextPath = req().contextPath();
-		String typeUri = English.plural(Str.uncapitalized(entityType)).toLowerCase();
-		return Msc.uri(contextPath, typeUri);
+		return uri(English.plural(Str.uncapitalized(entityType)).toLowerCase());
 	}
 
 	private static IReqInfo req() {

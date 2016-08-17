@@ -19,9 +19,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link href="/bootstrap/css/bootstrap-3.3.6.min.css" rel="stylesheet">
-    <link href="/font-awesome/css/font-awesome-4.5.0.min.css" rel="stylesheet">
-    <link href="/rapidoid.min.css" rel="stylesheet">
+    <link href="${req.contextPath}/bootstrap/css/bootstrap-3.3.6.min.css" rel="stylesheet">
+    <link href="${req.contextPath}/font-awesome/css/font-awesome-4.5.0.min.css" rel="stylesheet">
+    <link href="${req.contextPath}/rapidoid.min.css" rel="stylesheet">
+
+{{>page-segments/page-globals}}
+
 </head>
 
 <body class="bg-squares container">
@@ -35,7 +38,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 <h1><i class="fa fa-warning" style="color: #955; padding-bottom: 23px;"></i> <span style="font-family: 'Times New Roman', Times, serif;">Page not found!</span></h1>
                 <h4 style="font-family: 'Times New Roman', Times, serif;">The requested page was not found!</h4>
                 <div style="margin-top: 35px; margin-bottom: 15px;">
-                    <a href="/" class="btn" style="background-color: #FFF;"><span class="fa fa-home"></span> Home page</a>
+                    <a href="${req.contextPath}/" class="btn" style="background-color: #FFF;"><span class="fa fa-home"></span> Home page</a>
                 </div>
             </div>
         </div>

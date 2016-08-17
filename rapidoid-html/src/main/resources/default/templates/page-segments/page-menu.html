@@ -41,13 +41,13 @@
     {{?username}}
     <ul class="nav navbar-nav navbar-right">
         <li{{?has.path.$profile}} class="active"{{/has.path.$profile}}>
-        <a {{?has.page.$profile}}href="/profile" data-toggle="tooltip" data-placement="bottom" title="My profile"{{/has.page.$profile}}{{!has.page.$profile}}href="#"{{/has.page.$profile}}>
+        <a {{?has.page.$profile}}href="${req.contextPath}/profile" data-toggle="tooltip" data-placement="bottom" title="My profile"{{/has.page.$profile}}{{!has.page.$profile}}href="#"{{/has.page.$profile}}>
             <i class="fa fa-user"></i> ${username}
         </a>
         </li>
         {{?has.page.$_logout}}
         <li>
-            <a href="/_logout" data-toggle="tooltip" data-placement="bottom" title="Logout"><i class="fa fa-sign-out"></i></a>
+            <a href="${req.contextPath}/_logout" data-toggle="tooltip" data-placement="bottom" title="Logout"><i class="fa fa-sign-out"></i></a>
         </li>
         {{/has.page.$_logout}}
     </ul>

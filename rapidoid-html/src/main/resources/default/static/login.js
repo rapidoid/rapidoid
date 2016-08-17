@@ -85,7 +85,7 @@ function login($form) {
         var user = $form.find('[name=lg_username]').val();
         var pass = $form.find('[name=lg_password]').val();
 
-        $.post('/_login', {username: user, password: pass}).done(function(data) {
+        $.post(window.Rapidoid.contextPath + '/_login', {username: user, password: pass}).done(function(data) {
 
         if (data.success) {
             form_success($form);
