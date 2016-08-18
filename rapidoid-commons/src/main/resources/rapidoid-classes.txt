@@ -79,6 +79,7 @@ org.rapidoid.commons.AbstractMapDecorator
 org.rapidoid.commons.AnyObj
 org.rapidoid.commons.Arr
 org.rapidoid.commons.AutoExpandingMap
+org.rapidoid.commons.ChangeTrackingMap
 org.rapidoid.commons.Coll
 org.rapidoid.commons.DataItems
 org.rapidoid.commons.Dates

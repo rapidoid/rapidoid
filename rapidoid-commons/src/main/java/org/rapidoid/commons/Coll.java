@@ -8,6 +8,7 @@ import org.rapidoid.u.U;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /*
  * #%L
@@ -344,6 +345,10 @@ public class Coll extends RapidoidThing {
 
 	public static Integer getSizeOrNull(Iterable<?> items) {
 		return (items instanceof Collection<?>) ? ((Collection<?>) items).size() : null;
+	}
+
+	public static <K, V> Map<K, V> trackChanges(Map<K, V> map, AtomicBoolean dirtyFlag) {
+		return new ChangeTrackingMap<K, V>(map, dirtyFlag);
 	}
 
 }
