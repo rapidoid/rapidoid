@@ -7,6 +7,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.lambda.ToMap;
+import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.value.Value;
 import org.rapidoid.value.Values;
@@ -44,6 +45,8 @@ public class Config extends RapidoidThing implements ToMap<String, Object> {
 	private final Config root;
 
 	private final boolean isRoot;
+
+	private volatile String filenameBase = "config";
 
 	private Config(Map<String, Object> properties, List<String> baseKeys, Config root) {
 		this.properties = properties;
@@ -274,12 +277,21 @@ public class Config extends RapidoidThing implements ToMap<String, Object> {
 	public void args(String... args) {
 		if (U.notEmpty(args)) {
 			for (String arg : args) {
-				String[] parts = arg.split("=", 2);
+				if (!arg.contains("->")) {
+					String[] parts = arg.split("=", 2);
+					String name = parts[0];
 
-				if (parts.length > 1) {
-					setNested(parts[0], parts[1]);
-				} else {
-					setNested(parts[0], true);
+					if (parts.length > 1) {
+						String value = parts[1];
+
+						if (name.equals("config")) {
+							filenameBase(value);
+						}
+
+						setNested(name, value);
+					} else {
+						setNested(name, true);
+					}
 				}
 			}
 		}
@@ -337,5 +349,18 @@ public class Config extends RapidoidThing implements ToMap<String, Object> {
 
 	public ConfigAlternatives or(Config alternative) {
 		return new ConfigAlternatives(this, alternative);
+	}
+
+	public String filenameBase() {
+		return filenameBase;
+	}
+
+	public synchronized Config filenameBase(String filenameBase) {
+		if (U.neq(this.filenameBase, filenameBase)) {
+			Log.info("Changing configuration filename base", "!from", this.filenameBase, "!to", filenameBase);
+		}
+
+		this.filenameBase = filenameBase;
+		return this;
 	}
 }

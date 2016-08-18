@@ -1,0 +1,18 @@
+users:
+  adm1:
+    roles: ["administrator"]
+
+  adm2:
+    roles: ["administrator"]
+
+  mng1:
+    roles: ["manager"]
+
+  mod1:
+    roles: ["moderator"]
+
+  mod2:
+    roles: ["moderator"]
+
+  abc:
+    roles: abc

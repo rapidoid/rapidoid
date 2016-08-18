@@ -123,7 +123,7 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 
 			ServerSocket socket = serverSocketChannel.socket();
 
-			Log.debug("Opening port to listen", "port", port);
+			Log.info("!Starting server", "!address", address, "!port", port, "I/O workers", workers, "accept", blockingInfo);
 
 			InetSocketAddress addr = new InetSocketAddress(address, port);
 
@@ -137,8 +137,6 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 				Log.debug("Registering accept selector");
 				serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 			}
-
-			Log.info("!Server started", "!address", address, "!port", port, "I/O workers", workers, "accept", blockingInfo);
 
 			initWorkers();
 

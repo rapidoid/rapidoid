@@ -130,6 +130,7 @@ public class Conf extends RapidoidThing {
 
 	public static synchronized void reset() {
 		ROOT.clear();
+		ROOT.filenameBase("config");
 		args = new String[0];
 	}
 
@@ -138,9 +139,7 @@ public class Conf extends RapidoidThing {
 	}
 
 	private static Config createSection(String name) {
-		Config config = ROOT.sub(name);
-		ConfigUtil.load(filename(config.keys()), config, false);
-		return config;
+		return ROOT.sub(name);
 	}
 
 	public static synchronized Config section(Class<?> clazz) {
@@ -161,22 +160,20 @@ public class Conf extends RapidoidThing {
 
 		ROOT.clear();
 
-		ConfigUtil.load(Msc.path("default", "config.y?ml"), ROOT, true);
+		String filenameBase = U.or(ROOT.filenameBase(), "config");
+		String configFilenamePattern = filenameBase + ".y?ml";
+		String configProfilePattern = filenameBase + "-%s.y?ml";
+
+		ConfigUtil.load(Msc.path("default", configFilenamePattern), ROOT, true);
 
 		for (String profile : Env.profiles()) {
-			ConfigUtil.load(Msc.path("default", U.frmt("profile-%s.y?ml", profile)), ROOT, true);
+			ConfigUtil.load(Msc.path("default", U.frmt(configProfilePattern, profile)), ROOT, true);
 		}
 
-		ConfigUtil.load(Msc.path(path, "application.y?ml"), ROOT, false);
-		ConfigUtil.load(Msc.path(path, "config.y?ml"), ROOT, false);
+		ConfigUtil.load(Msc.path(path, configFilenamePattern), ROOT, false);
 
 		for (String profile : Env.profiles()) {
-			ConfigUtil.load(Msc.path(path, U.frmt("application-%s.y?ml", profile)), ROOT, false);
-			ConfigUtil.load(Msc.path(path, U.frmt("profile-%s.y?ml", profile)), ROOT, false);
-		}
-
-		for (Config sub : SECTIONS.values()) {
-			ConfigUtil.load(filename(sub.keys()), sub, false);
+			ConfigUtil.load(Msc.path(path, U.frmt(configProfilePattern, profile)), ROOT, false);
 		}
 
 		for (List<String> keys : detached) {

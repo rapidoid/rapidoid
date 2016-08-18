@@ -36,6 +36,7 @@ public class ConfigOptions extends RapidoidThing {
 	private static List<ConfigOption> configOptions() {
 		List<ConfigOption> opts = U.list();
 
+		opts.add(opt("config", "configuration filename prefix", "config"));
 		opts.add(opt("dev", "configure DEV mode", "auto-detected"));
 		opts.add(opt("production", "configure PRODUCTION mode", "auto-detected"));
 		opts.add(opt("secret=<SECRET>", "configure app-specific secret for encryption", "(random)"));
