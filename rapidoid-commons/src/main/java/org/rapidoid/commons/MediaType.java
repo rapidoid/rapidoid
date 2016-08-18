@@ -1216,9 +1216,18 @@ public class MediaType extends RapidoidThing {
 		}
 	}
 
+	public static MediaType of(String contentType) {
+		return new MediaType(contentType);
+	}
+
 	private final byte[] bytes;
 
 	private final byte[] httpHeaderBytes;
+
+	private MediaType(String contentType) {
+		this.bytes = contentType.getBytes();
+		this.httpHeaderBytes = ("Content-Type: " + new String(bytes) + "\r\n").getBytes();
+	}
 
 	private MediaType(String name, String[] attributes) {
 		this.bytes = join(name, attributes).getBytes();
