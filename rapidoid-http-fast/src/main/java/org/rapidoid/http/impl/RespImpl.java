@@ -168,12 +168,28 @@ public class RespImpl extends RapidoidThing implements Resp {
 
 	@Override
 	public Resp cookie(String name, String value, String... extras) {
+
 		if (U.notEmpty(extras)) {
 			value += "; " + U.join("; ", extras);
 		}
 
+		if (!cookieContainsPath(extras)) {
+			value += "path=" + HttpUtils.cookiePath();
+		}
+
 		cookies().put(name, value);
+
 		return this;
+	}
+
+	private static boolean cookieContainsPath(String[] extras) {
+		for (String extra : extras) {
+			if (extra.toLowerCase().startsWith("path=")) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	@Override

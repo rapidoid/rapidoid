@@ -10,6 +10,7 @@ import org.rapidoid.config.Config;
 import org.rapidoid.crypto.Crypto;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
+import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.JsonResponseRenderer;
 import org.rapidoid.http.impl.PathPattern;
@@ -359,7 +360,12 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 	}
 
 	public static void setResponseTokenCookie(Resp resp, String token) {
-		resp.cookie(TOKEN, token, "path=/", "HttpOnly");
+		resp.cookie(TOKEN, token, "HttpOnly");
+	}
+
+	public static String cookiePath() {
+		String ctxPath = ReqInfo.get().contextPath();
+		return U.notEmpty(ctxPath) ? ctxPath : "/";
 	}
 
 	public static void clearUserData(Req req) {

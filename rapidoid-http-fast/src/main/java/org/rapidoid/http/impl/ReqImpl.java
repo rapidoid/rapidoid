@@ -637,7 +637,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 			synchronized (cookies) {
 				if (cookie(SESSION_COOKIE, null) == null) {
 					cookies.put(SESSION_COOKIE, sessionId);
-					response().cookie(SESSION_COOKIE, sessionId, "path=/", "HttpOnly");
+					response().cookie(SESSION_COOKIE, sessionId, "HttpOnly");
 				}
 			}
 		}
