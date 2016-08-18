@@ -32,6 +32,7 @@ import org.rapidoid.u.U;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CancellationException;
@@ -127,6 +128,7 @@ public class HttpClientUtil extends RapidoidThing {
 	static HttpRequestBase createRequest(HttpReq config) {
 
 		Map<String, String> headers = U.safe(config.headers());
+		Map<String, String> cookies = U.safe(config.cookies());
 
 		String url = config.url();
 
@@ -136,6 +138,8 @@ public class HttpClientUtil extends RapidoidThing {
 			req.addHeader(e.getKey(), e.getValue());
 		}
 
+		req.addHeader("Cookie", joinCookiesAsHeader(cookies));
+
 		if (config.verb() == HttpVerb.POST || config.verb() == HttpVerb.PUT || config.verb() == HttpVerb.PATCH) {
 			HttpEntityEnclosingRequestBase entityEnclosingReq = (HttpEntityEnclosingRequestBase) req;
 			entityEnclosingReq.setEntity(config.body() != null ? byteBody(config) : paramsBody(config.data(), config.files()));
@@ -144,6 +148,24 @@ public class HttpClientUtil extends RapidoidThing {
 		req.setConfig(reqConfig(config));
 
 		return req;
+	}
+
+	private static String joinCookiesAsHeader(Map<String, String> cookies) {
+		StringBuilder allCookies = new StringBuilder();
+
+		for (Iterator<Map.Entry<String, String>> it = cookies.entrySet().iterator(); it.hasNext(); ) {
+			Map.Entry<String, String> e = it.next();
+
+			allCookies.append(e.getKey());
+			allCookies.append("=");
+			allCookies.append(e.getValue());
+
+			if (it.hasNext()) {
+				allCookies.append("; ");
+			}
+		}
+
+		return allCookies.toString();
 	}
 
 	private static RequestConfig reqConfig(HttpReq config) {

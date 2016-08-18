@@ -48,6 +48,8 @@ public class HttpReq extends RapidoidThing {
 
 	private final Map<String, String> headers = Coll.synchronizedMap();
 
+	private final Map<String, String> cookies = Coll.synchronizedMap();
+
 	private final Map<String, Object> data = Coll.synchronizedMap();
 
 	private final Map<String, List<Upload>> files = Coll.synchronizedMap();
@@ -106,6 +108,15 @@ public class HttpReq extends RapidoidThing {
 		return this.headers;
 	}
 
+	public HttpReq cookies(Map<String, String> cookies) {
+		Coll.assign(this.cookies, cookies);
+		return this;
+	}
+
+	public Map<String, String> cookies() {
+		return this.cookies;
+	}
+
 	public HttpReq data(Map<String, ?> data) {
 		Coll.assign(this.data, data);
 		return this;
@@ -157,6 +168,11 @@ public class HttpReq extends RapidoidThing {
 
 	public HttpReq header(String name, String value) {
 		headers().put(name, value);
+		return this;
+	}
+
+	public HttpReq cookie(String name, String value) {
+		cookies().put(name, value);
 		return this;
 	}
 
