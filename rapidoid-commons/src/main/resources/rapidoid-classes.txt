@@ -183,7 +183,6 @@ org.rapidoid.goodies.LoginHandler
 org.rapidoid.goodies.LogoutHandler
 org.rapidoid.goodies.MultiDetailsHandler
 org.rapidoid.goodies.OverviewHandler
-org.rapidoid.goodies.ProxyHandler
 org.rapidoid.goodies.RapidoidGoodies
 org.rapidoid.goodies.RoutesHandler
 org.rapidoid.goodies.TerminateHandler
@@ -536,6 +535,9 @@ org.rapidoid.render.TemplateRenderer
 org.rapidoid.render.Templates
 org.rapidoid.render.TemplateToCode
 org.rapidoid.render.XNode
+org.rapidoid.reverseproxy.AbstractReverseProxyBean
+org.rapidoid.reverseproxy.Reverse
+org.rapidoid.reverseproxy.ReverseProxy
 org.rapidoid.scan.ClasspathUtil
 org.rapidoid.scan.Scan
 org.rapidoid.scan.ScanParams

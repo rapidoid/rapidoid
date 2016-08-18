@@ -1,8 +1,8 @@
-package org.rapidoid.goodies;
+package org.rapidoid.reverseproxy;
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.MediaType;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.http.*;
 import org.rapidoid.http.impl.HttpIO;
@@ -30,16 +30,8 @@ import java.util.Map;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class ProxyHandler extends RapidoidThing implements ReqRespHandler {
-
-	private final String host;
-
-	private final HttpClient client = HTTP.client().reuseConnections(true).maxConnTotal(100).maxConnPerRoute(100);
-
-	public ProxyHandler(String host) {
-		this.host = host;
-	}
+@Since("5.2.0")
+public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> implements ReqRespHandler {
 
 	@Override
 	public Object execute(final Req req, final Resp resp) throws Exception {
@@ -47,10 +39,16 @@ public class ProxyHandler extends RapidoidThing implements ReqRespHandler {
 
 		Map<String, String> headers = req.headers();
 
+		headers.remove("transfer-encoding");
+		headers.remove("content-length");
+
+		HttpClient client = getOrCreateClient();
+
 		client.req()
 			.verb(req.verb())
-			.url(host + req.uri())
+			.url(host() + req.uri())
 			.headers(headers)
+			.cookies(req.cookies())
 			.body(req.body())
 			.raw(true)
 			.execute(new Callback<HttpResp>() {
@@ -58,14 +56,11 @@ public class ProxyHandler extends RapidoidThing implements ReqRespHandler {
 				@Override
 				public void onDone(HttpResp result, Throwable error) {
 					if (error == null) {
-						Map<String, String> hdrs = result.headers();
-						byte[] body = result.bodyBytes();
 
-						hdrs.remove("Transfer-Encoding");
+						processResponseHeaders(result.headers(), resp);
 
-						resp.headers().putAll(hdrs);
 						resp.code(result.code());
-						resp.body(body);
+						resp.body(result.bodyBytes());
 						resp.done();
 					} else {
 						HttpIO.errorAndDone(req, error);
@@ -75,6 +70,38 @@ public class ProxyHandler extends RapidoidThing implements ReqRespHandler {
 			});
 
 		return req;
+	}
+
+	public void processResponseHeaders(Map<String, String> headers, Resp resp) {
+		for (Map.Entry<String, String> hdr : headers.entrySet()) {
+			String name = hdr.getKey();
+			String value = hdr.getValue();
+			String lowerName = name.toLowerCase();
+
+			if (lowerName.equals("content-type")) {
+				resp.contentType(MediaType.of(value));
+
+			} else if (!ignoreResponseHeader(lowerName)) {
+				resp.headers().put(name, value);
+			}
+		}
+	}
+
+	public boolean ignoreResponseHeader(String name) {
+		return name.equals("transfer-encoding")
+			|| name.equals("content-length")
+			|| name.equals("connection")
+			|| name.equals("date")
+			|| name.equals("server");
+	}
+
+	@Override
+	protected HttpClient createClient() {
+		return HTTP.client()
+			.reuseConnections(reuseConnections())
+			.keepCookies(false)
+			.maxConnTotal(maxConnTotal())
+			.maxConnPerRoute(maxConnPerRoute());
 	}
 
 }
