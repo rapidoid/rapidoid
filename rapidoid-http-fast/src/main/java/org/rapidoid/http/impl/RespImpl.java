@@ -322,11 +322,14 @@ public class RespImpl extends RapidoidThing implements Resp {
 
 	@Override
 	public boolean login(String username, String password) {
+
 		LoginProvider loginProvider = Customization.of(req).loginProvider();
 		U.must(loginProvider != null, "A login provider wasn't set!");
 
 		RolesProvider rolesProvider = Customization.of(req).rolesProvider();
 		U.must(rolesProvider != null, "A roles provider wasn't set!");
+
+		req.isTokenDirty.set(true);
 
 		boolean success;
 
@@ -356,6 +359,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 	public void logout() {
 		HttpUtils.clearUserData(request());
 		HttpUtils.setResponseTokenCookie(this, "");
+		req.isTokenDirty.set(true);
 	}
 
 	@Override

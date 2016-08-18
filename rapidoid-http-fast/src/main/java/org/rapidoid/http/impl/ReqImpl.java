@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.commons.Str;
 import org.rapidoid.http.*;
@@ -23,6 +24,7 @@ import org.rapidoid.util.Msc;
 import java.io.Serializable;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /*
  * #%L
@@ -85,6 +87,10 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	private volatile Map<String, Object> data;
 
 	private volatile Map<String, Serializable> token;
+
+	final AtomicBoolean isTokenDirty = new AtomicBoolean();
+
+	private volatile TokenStatus tokenStatus = TokenStatus.PENDING;
 
 	private volatile Map<String, Serializable> session;
 
@@ -419,7 +425,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	private void startResponse(int code, boolean unknownContentLength) {
 		MediaType contentType = MediaType.HTML_UTF_8;
 
-		if (token != null) {
+		if (isTokenDirty.get()) {
 			HttpUtils.saveTokenBeforeRenderingHeaders(this, token);
 		}
 
@@ -674,24 +680,29 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	@Override
 	public boolean hasToken() {
-		return U.notEmpty(token) || cookie(TOKEN, null) != null || data(TOKEN, null) != null;
+		token(); // try to find and deserialize the token
+		return tokenStatus != TokenStatus.NONE;
 	}
 
 	@Override
 	public Map<String, Serializable> token() {
-		if (token == null) {
+		if (tokenStatus == TokenStatus.PENDING) {
 			synchronized (this) {
-				if (token == null) {
-					Map<String, Serializable> cpack = null;
+				if (tokenStatus == TokenStatus.PENDING) {
+
+					Map<String, Serializable> tokenData = null;
 
 					try {
-						cpack = HttpUtils.initAndDeserializeToken(this);
+						tokenData = HttpUtils.initAndDeserializeToken(this);
+
+						tokenStatus(tokenData != null ? TokenStatus.LOADED : TokenStatus.NONE);
+
 					} catch (Exception e) {
-						Log.warn("Cookie-pack deserialization error! Maybe the secret was changed?");
-						Log.debug("Cookie-pack deserialization error!", e);
+						Log.debug("Token deserialization error!", e);
+						tokenStatus(TokenStatus.INVALID);
 					}
 
-					token = Collections.synchronizedMap(U.safe(cpack));
+					token = Coll.trackChanges(Collections.synchronizedMap(U.safe(tokenData)), isTokenDirty);
 				}
 			}
 		}
@@ -710,6 +721,15 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	public <T extends Serializable> T token(String name, T defaultValue) {
 		Serializable value = hasToken() ? token().get(name) : null;
 		return withDefault(value, defaultValue);
+	}
+
+	public TokenStatus tokenStatus() {
+		return tokenStatus;
+	}
+
+	public Req tokenStatus(TokenStatus tokenStatus) {
+		this.tokenStatus = tokenStatus;
+		return this;
 	}
 
 	@Override
