@@ -70,10 +70,6 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 		}
 	};
 
-	public static String[] pathSegments(Req req) {
-		return Str.triml(req.path(), "/").split("/");
-	}
-
 	@SuppressWarnings("unchecked")
 	public static Map<String, Serializable> initAndDeserializeToken(Req req) {
 		String token = req.cookie(TOKEN, null);
