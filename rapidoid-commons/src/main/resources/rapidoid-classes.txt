@@ -75,6 +75,7 @@ org.rapidoid.cls.TypeKind
 org.rapidoid.cls.TypeSpecificFactory
 org.rapidoid.cls.TypeSpecificVisitor
 org.rapidoid.commons.AbstractDataItems
+org.rapidoid.commons.AbstractMapDecorator
 org.rapidoid.commons.AnyObj
 org.rapidoid.commons.Arr
 org.rapidoid.commons.AutoExpandingMap
