@@ -133,8 +133,8 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 				try {
 					username = getUser(req);
 
-					if (username == null) {
-						req.response().logout();
+					if (U.isEmpty(username)) {
+						HttpUtils.clearUserData(req);
 					}
 
 					roles = userRoles(req, username);

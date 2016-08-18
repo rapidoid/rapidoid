@@ -354,14 +354,8 @@ public class RespImpl extends RapidoidThing implements Resp {
 
 	@Override
 	public void logout() {
-		if (Ctxs.hasContext()) {
-			Ctxs.required().setUser(UserInfo.ANONYMOUS);
-		}
-
-		if (request().hasToken()) {
-			request().token().remove(HttpUtils._USER);
-			request().token().remove(HttpUtils._EXPIRES);
-		}
+		HttpUtils.clearUserData(request());
+		HttpUtils.setResponseTokenCookie(this, "");
 	}
 
 	@Override

@@ -8,6 +8,8 @@ import org.rapidoid.commons.Str;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
 import org.rapidoid.crypto.Crypto;
+import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.JsonResponseRenderer;
 import org.rapidoid.http.impl.PathPattern;
@@ -91,7 +93,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 
 	public static void saveTokenBeforeRenderingHeaders(Req req, Map<String, Serializable> tokenData) {
 		String token = token(tokenData);
-		req.response().cookie(TOKEN, token, "path=/", "HttpOnly");
+		setResponseTokenCookie(req.response(), token);
 	}
 
 	public static String token(Map<String, Serializable> token) {
@@ -357,6 +359,22 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 
 		} else {
 			return result;
+		}
+	}
+
+	public static void setResponseTokenCookie(Resp resp, String token) {
+		resp.cookie(TOKEN, token, "path=/", "HttpOnly");
+	}
+
+	public static void clearUserData(Req req) {
+		if (Ctxs.hasContext()) {
+			Ctxs.required().setUser(UserInfo.ANONYMOUS);
+		}
+
+		if (req.hasToken()) {
+			Map<String, Serializable> token = req.token();
+			token.remove(_USER);
+			token.remove(_EXPIRES);
 		}
 	}
 
