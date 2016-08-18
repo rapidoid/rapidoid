@@ -685,7 +685,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 					Map<String, Serializable> cpack = null;
 
 					try {
-						cpack = HttpUtils.initAndDeserializeTOKEN(this);
+						cpack = HttpUtils.initAndDeserializeToken(this);
 					} catch (Exception e) {
 						Log.warn("Cookie-pack deserialization error! Maybe the secret was changed?");
 						Log.debug("Cookie-pack deserialization error!", e);

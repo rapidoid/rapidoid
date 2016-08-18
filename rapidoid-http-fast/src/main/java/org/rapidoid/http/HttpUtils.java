@@ -75,7 +75,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static Map<String, Serializable> initAndDeserializeTOKEN(Req req) {
+	public static Map<String, Serializable> initAndDeserializeToken(Req req) {
 		String token = req.cookie(TOKEN, null);
 
 		if (U.isEmpty(token)) {
