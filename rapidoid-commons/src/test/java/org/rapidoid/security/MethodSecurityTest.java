@@ -267,7 +267,7 @@ public class MethodSecurityTest extends SecurityTestCommons {
 	public void testRoleAndUsernameMatch() {
 		for (Method method : methods) {
 			if (method != noAnn) {
-				isFalse(Secure.canAccessMethod("admin", roles("admin"), method));
+				isFalse(Secure.canAccessMethod("administrator", roles("administrator"), method));
 				isFalse(Secure.canAccessMethod("manager", roles("manager"), method));
 				isFalse(Secure.canAccessMethod("moderator", roles("moderator"), method));
 				isFalse(Secure.canAccessMethod("abc", roles("abc"), method));
@@ -281,7 +281,7 @@ public class MethodSecurityTest extends SecurityTestCommons {
 	public void testRoleAndUsernameMatch2() {
 		for (Method method : methods2) {
 			if (method != noAnn) {
-				isFalse(Secure.canAccessMethod("admin", roles("admin"), method));
+				isFalse(Secure.canAccessMethod("administrator", roles("administrator"), method));
 				isFalse(Secure.canAccessMethod("manager", roles("manager"), method));
 				isFalse(Secure.canAccessMethod("moderator", roles("moderator"), method));
 				isFalse(Secure.canAccessMethod("abc", roles("abc"), method));
