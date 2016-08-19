@@ -1,4 +1,4 @@
-package org.rapidoid.commons;
+package org.rapidoid.datamodel;
 
 /*
  * #%L
@@ -20,19 +20,17 @@ package org.rapidoid.commons;
  * #L%
  */
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
-import java.util.Iterator;
+import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public abstract class AbstractDataItems extends RapidoidThing implements DataItems {
+public interface DataItems extends Iterable {
 
-	@Override
-	public Iterator iterator() {
-		return new PagingIterator(this);
-	}
+	<T> List<T> all();
+
+	<T> List<T> page(int start, int length);
 
 }

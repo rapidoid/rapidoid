@@ -20,10 +20,9 @@ package org.rapidoid.jpa;
  * #L%
  */
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.AbstractDataItems;
+import org.rapidoid.datamodel.AbstractDataItems;
 import org.rapidoid.u.U;
 
 import javax.persistence.Query;

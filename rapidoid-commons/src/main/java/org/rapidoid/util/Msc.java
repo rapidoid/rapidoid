@@ -9,7 +9,7 @@ import org.rapidoid.annotation.Profiles;
 import org.rapidoid.annotation.Run;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.commons.Coll;
+import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Env;
 import org.rapidoid.commons.Str;
 import org.rapidoid.config.Conf;

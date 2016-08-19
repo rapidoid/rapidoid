@@ -6,7 +6,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.ToString;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
-import org.rapidoid.commons.Coll;
+import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Dates;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;

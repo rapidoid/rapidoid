@@ -22,7 +22,7 @@ package org.rapidoid.setup;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.*;
-import org.rapidoid.commons.Coll;
+import org.rapidoid.collection.Coll;
 import org.rapidoid.config.Conf;
 import org.rapidoid.data.JSON;
 import org.rapidoid.io.Res;

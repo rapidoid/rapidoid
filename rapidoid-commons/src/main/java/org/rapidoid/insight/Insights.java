@@ -1,7 +1,7 @@
 package org.rapidoid.insight;
 
 import org.rapidoid.RapidoidThing;
-import org.rapidoid.commons.Coll;
+import org.rapidoid.collection.Coll;
 
 import java.util.ArrayList;
 import java.util.List;

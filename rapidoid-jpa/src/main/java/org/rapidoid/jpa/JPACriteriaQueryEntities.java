@@ -22,7 +22,7 @@ package org.rapidoid.jpa;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.AbstractDataItems;
+import org.rapidoid.datamodel.AbstractDataItems;
 
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;

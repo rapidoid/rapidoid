@@ -23,7 +23,7 @@ package org.rapidoid.expire;
 import org.rapidoid.activity.RapidoidThread;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Coll;
+import org.rapidoid.collection.Coll;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 

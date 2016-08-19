@@ -1,7 +1,7 @@
 package org.rapidoid.config;
 
 import org.rapidoid.RapidoidThing;
-import org.rapidoid.commons.Coll;
+import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Env;
 import org.rapidoid.io.Res;
 import org.rapidoid.lambda.Mapper;

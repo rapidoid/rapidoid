@@ -23,7 +23,7 @@ package org.rapidoid.serialize;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Coll;
+import org.rapidoid.collection.Coll;
 import org.rapidoid.data.JSON;
 import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.u.U;

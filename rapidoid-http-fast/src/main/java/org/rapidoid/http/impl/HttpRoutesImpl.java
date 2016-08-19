@@ -9,7 +9,7 @@ import org.rapidoid.bufstruct.BufMap;
 import org.rapidoid.bufstruct.BufMapImpl;
 import org.rapidoid.bytes.Bytes;
 import org.rapidoid.bytes.BytesUtil;
-import org.rapidoid.commons.Coll;
+import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Err;
 import org.rapidoid.commons.Str;
 import org.rapidoid.data.BufRange;

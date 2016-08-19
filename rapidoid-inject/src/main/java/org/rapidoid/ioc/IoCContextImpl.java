@@ -6,7 +6,7 @@ import org.rapidoid.annotation.Autocreate;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Wired;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.commons.Coll;
+import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Deep;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;

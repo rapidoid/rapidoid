@@ -22,7 +22,7 @@ package org.rapidoid.jpa;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.DataItems;
+import org.rapidoid.datamodel.DataItems;
 
 import java.util.List;
 

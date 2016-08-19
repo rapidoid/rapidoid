@@ -1,4 +1,4 @@
-package org.rapidoid.commons;
+package org.rapidoid.datamodel;
 
 /*
  * #%L
@@ -20,17 +20,53 @@ package org.rapidoid.commons;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
+import java.util.Iterator;
 import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public interface DataItems extends Iterable {
+public class PagingIterator extends RapidoidThing implements Iterator {
 
-	<T> List<T> all();
+	private final DataItems items;
 
-	<T> List<T> page(int start, int length);
+	private List<?> page;
+
+	private int offset;
+	private int pageLength;
+	private int index;
+
+	public PagingIterator(DataItems items) {
+		this(items, 100);
+	}
+
+	public PagingIterator(DataItems items, int pageLength) {
+		this.items = items;
+		this.pageLength = pageLength;
+	}
+
+	@Override
+	public boolean hasNext() {
+		if (page == null || index >= page.size()) {
+			page = items.page(offset, pageLength);
+			offset += page.size();
+			index = 0;
+		}
+
+		return index < page.size();
+	}
+
+	@Override
+	public Object next() {
+		return page.get(index++);
+	}
+
+	@Override
+	public void remove() {
+		throw new UnsupportedOperationException("remove");
+	}
 
 }

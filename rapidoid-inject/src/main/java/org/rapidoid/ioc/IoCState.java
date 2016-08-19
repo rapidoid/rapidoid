@@ -3,7 +3,7 @@ package org.rapidoid.ioc;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Coll;
+import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Deep;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;

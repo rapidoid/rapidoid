@@ -7,6 +7,8 @@ import javassist.bytecode.LocalVariableAttribute;
 import javassist.bytecode.MethodInfo;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.beany.Beany;
+import org.rapidoid.collection.AutoExpandingMap;
+import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.*;
 import org.rapidoid.io.IO;
 import org.rapidoid.u.U;

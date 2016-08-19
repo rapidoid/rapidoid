@@ -1,4 +1,4 @@
-package org.rapidoid.commons;
+package org.rapidoid.datamodel;
 
 /*
  * #%L
@@ -24,49 +24,30 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
-import java.util.Iterator;
-import java.util.List;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class PagingIterator extends RapidoidThing implements Iterator {
+public class Range extends RapidoidThing implements IRange {
 
-	private final DataItems items;
-
-	private List<?> page;
-
-	private int offset;
-	private int pageLength;
-	private int index;
-
-	public PagingIterator(DataItems items) {
-		this(items, 100);
+	public static Range of(int start, int length) {
+		return new Range(start, length);
 	}
 
-	public PagingIterator(DataItems items, int pageLength) {
-		this.items = items;
-		this.pageLength = pageLength;
+	private final int start;
+	private final int length;
+
+	private Range(int start, int length) {
+		this.start = start;
+		this.length = length;
 	}
 
 	@Override
-	public boolean hasNext() {
-		if (page == null || index >= page.size()) {
-			page = items.page(offset, pageLength);
-			offset += page.size();
-			index = 0;
-		}
-
-		return index < page.size();
+	public int start() {
+		return start;
 	}
 
 	@Override
-	public Object next() {
-		return page.get(index++);
-	}
-
-	@Override
-	public void remove() {
-		throw new UnsupportedOperationException("remove");
+	public int length() {
+		return length;
 	}
 
 }

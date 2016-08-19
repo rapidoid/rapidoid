@@ -1,8 +1,10 @@
-package org.rapidoid.commons;
+package org.rapidoid.collection;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Err;
+import org.rapidoid.datamodel.DataItems;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
 
