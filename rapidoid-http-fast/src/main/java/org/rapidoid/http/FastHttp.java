@@ -6,6 +6,7 @@ import org.rapidoid.buffer.Buf;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.config.Config;
+import org.rapidoid.config.ConfigImpl;
 import org.rapidoid.data.BufRange;
 import org.rapidoid.data.BufRanges;
 import org.rapidoid.data.KeyValueRanges;
@@ -58,7 +59,7 @@ public class FastHttp extends AbstractHttpProcessor {
 	private final Map<String, Object> attributes = Coll.synchronizedMap();
 
 	public FastHttp(HttpRoutesImpl... routeGroups) {
-		this(routeGroups, new Config());
+		this(routeGroups, new ConfigImpl());
 	}
 
 	public FastHttp(HttpRoutesImpl[] routeGroups, Config serverConfig) {

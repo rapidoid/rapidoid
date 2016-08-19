@@ -105,10 +105,12 @@ org.rapidoid.concurrent.impl.FutureImpl
 org.rapidoid.concurrent.impl.PromiseImpl
 org.rapidoid.concurrent.Promise
 org.rapidoid.concurrent.Promises
+org.rapidoid.config.BasicConfig
 org.rapidoid.config.Conf
 org.rapidoid.config.Config
 org.rapidoid.config.ConfigAlternatives
 org.rapidoid.config.ConfigHelp
+org.rapidoid.config.ConfigImpl
 org.rapidoid.config.ConfigOption
 org.rapidoid.config.ConfigOptions
 org.rapidoid.config.ConfigParser

@@ -750,7 +750,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		if (contextPath == null) {
 			synchronized (this) {
 				if (contextPath == null) {
-					contextPath = HttpUtils.getContextPath(Customization.of(this), segment());
+					contextPath = HttpUtils.getContextPath(this);
 				}
 			}
 		}

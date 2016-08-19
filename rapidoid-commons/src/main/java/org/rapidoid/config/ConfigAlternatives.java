@@ -23,11 +23,14 @@ package org.rapidoid.config;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
 import org.rapidoid.value.Value;
+
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class ConfigAlternatives extends RapidoidThing {
+public class ConfigAlternatives extends RapidoidThing implements BasicConfig {
 
 	private final Config primary;
 
@@ -38,15 +41,28 @@ public class ConfigAlternatives extends RapidoidThing {
 		this.alternative = alternative;
 	}
 
+	@Override
 	public Value<Object> entry(String key) {
 		return primary.entry(key).orElse(alternative.entry(key));
 	}
 
+	@Override
 	public boolean has(String key) {
 		return primary.has(key) || alternative.has(key);
 	}
 
-	public Config sub(String key) {
+	@Override
+	public BasicConfig sub(String... keys) {
+		U.must(keys.length == 1, "Currently supporting only 1 key!");
+		String key = keys[0];
+
 		return primary.has(key) ? primary.sub(key) : alternative.sub(key);
+	}
+
+	@Override
+	public Map<String, Object> toMap() {
+		Map<String, Object> map = U.map(alternative.toMap());
+		map.putAll(primary.toMap());
+		return map;
 	}
 }

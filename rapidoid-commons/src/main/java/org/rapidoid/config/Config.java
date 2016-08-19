@@ -1,19 +1,5 @@
 package org.rapidoid.config;
 
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.commons.Arr;
-import org.rapidoid.collection.Coll;
-import org.rapidoid.lambda.ToMap;
-import org.rapidoid.log.Log;
-import org.rapidoid.u.U;
-import org.rapidoid.value.Value;
-import org.rapidoid.value.Values;
-
-import java.util.*;
-
 /*
  * #%L
  * rapidoid-commons
@@ -34,333 +20,61 @@ import java.util.*;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class Config extends RapidoidThing implements ToMap<String, Object> {
-
-	private final Map<String, Object> properties;
-
-	private final List<String> baseKeys;
-
-	private final Config root;
-
-	private final boolean isRoot;
-
-	private volatile String filenameBase = "config";
-
-	private Config(Map<String, Object> properties, List<String> baseKeys, Config root) {
-		this.properties = properties;
-		this.root = root;
-		this.baseKeys = Collections.unmodifiableList(U.list(baseKeys));
-		this.isRoot = false;
-	}
-
-	public Config() {
-		this.properties = Coll.synchronizedMap();
-		this.root = this;
-		this.baseKeys = U.list();
-		this.isRoot = true;
-	}
-
-	public Value<Object> entry(String key) {
-		return Values.wrap(new ConfigValueStore<Object>(this, key));
-	}
-
-	private List<String> keyChain(Iterator<String> keys) {
-		List<String> keyChain = U.list(this.baseKeys);
-
-		while (keys.hasNext()) {
-			String key = keys.next();
-			U.notNull(key, "config key");
-			Collections.addAll(keyChain, key.split("\\."));
-		}
-
-		return keyChain;
-	}
+public interface Config extends BasicConfig {
 
 	@SuppressWarnings("unchecked")
-	public Config sub(String... keys) {
-		U.must(U.notEmpty(keys), "Keys must be specified!");
-		return new Config(properties, keyChain(U.iterator(keys)), root());
-	}
+	Config sub(String... keys);
 
-	public Config sub(List<String> keys) {
-		U.must(U.notEmpty(keys), "Keys must be specified!");
-		return new Config(properties, keyChain(keys.iterator()), root());
-	}
+	Config sub(List<String> keys);
 
-	public Object get(String key) {
-		Object value;
+	Object get(String key);
 
-		synchronized (properties) {
-			value = asMap().get(key);
-		}
-
-		return value != null ? value : global(key);
-	}
-
-	private String global(String key) {
-		String fullKey = fullKey(key, ".");
-
-		String value = System.getProperty(fullKey);
-
-		if (value == null) {
-			value = System.getenv(fullKey);
-		}
-
-		if (value == null) {
-			value = System.getenv(fullKey(key, "_").toUpperCase());
-		}
-
-		if (value == null) {
-			value = System.getenv(fullKey(key, "_").toLowerCase());
-		}
-
-		return value;
-	}
-
-	private String fullKey(String key, String separator) {
-		return U.join(separator, baseKeys) + separator + key;
-	}
-
-	public boolean has(String key) {
-		synchronized (properties) {
-			return asMap().containsKey(key);
-		}
-	}
-
-	public boolean is(String key) {
-		Object value;
-
-		synchronized (properties) {
-			value = asMap().get(key);
-		}
-
-		return Boolean.TRUE.equals(Cls.convert(value, Boolean.class));
-	}
+	boolean is(String key);
 
 	@Override
-	public Map<String, Object> toMap() {
-		return Collections.unmodifiableMap(asMap());
-	}
+	Map<String, Object> toMap();
 
-	private Map<String, Object> asMap() {
-		if (isRoot) {
-			return properties;
+	void clear();
 
-		} else {
-			synchronized (properties) {
-				Map<String, Object> props = properties;
+	void delete();
 
-				for (String key : baseKeys) {
-					Object value = props.get(key);
+	void set(String key, Object value);
 
-					if (value == null) {
-						value = Coll.synchronizedMap();
-						props.put(key, value);
-					}
+	void remove(String key);
 
-					if (value instanceof Map<?, ?>) {
-						props = (Map<String, Object>) value;
-					} else {
-						throw U.rte("Expected a Map for configuration section '%s', but found value of type: %s",
-							sectionTo(key), value.getClass().getSimpleName());
-					}
-				}
+	void assign(Map<String, Object> entries);
 
-				return props;
-			}
-		}
-	}
+	boolean isEmpty();
 
-	private String sectionTo(String toKey) {
-		String section = "";
-
-		for (String key : baseKeys) {
-			if (!section.isEmpty()) {
-				section += ".";
-			}
-
-			section += key;
-
-			if (key.equals(toKey)) {
-				break;
-			}
-		}
-
-		return section;
-	}
-
-	public void clear() {
-		if (isRoot) {
-			properties.clear();
-		} else {
-			synchronized (properties) {
-				asMap().clear();
-			}
-		}
-	}
-
-	public void delete() {
-		if (isRoot) {
-			properties.clear();
-		} else {
-			synchronized (properties) {
-				parent().remove(lastBaseKey());
-			}
-		}
-	}
-
-	private String lastBaseKey() {
-		return baseKeys.get(baseKeys.size() - 1);
-	}
-
-	public void set(String key, Object value) {
-		synchronized (properties) {
-			asMap().put(key, value);
-		}
-	}
-
-	public void remove(String key) {
-		synchronized (properties) {
-			asMap().remove(key);
-		}
-	}
-
-	public void assign(Map<String, Object> entries) {
-		synchronized (properties) {
-			clear();
-			update(entries);
-		}
-	}
-
-	public boolean isEmpty() {
-		synchronized (properties) {
-			return asMap().isEmpty();
-		}
-	}
-
-	public void update(Map<String, ?> entries) {
-		update(entries, false);
-	}
+	void update(Map<String, ?> entries);
 
 	@SuppressWarnings("unchecked")
-	public void update(Map<String, ?> entries, boolean overridenByEnv) {
-		synchronized (properties) {
-			Map<String, Object> conf = asMap();
+	void update(Map<String, ?> entries, boolean overridenByEnv);
 
-			for (Map.Entry<String, ?> e : entries.entrySet()) {
-				String name = e.getKey();
-				Object value = e.getValue();
+	void args(String... args);
 
-				if (value instanceof Map<?, ?>) {
-					sub(name).update((Map<String, ?>) value, overridenByEnv);
+	Config root();
 
-				} else {
-					if (overridenByEnv) {
-						value = U.or(global(name), value);
-					}
+	Config parent();
 
-					conf.put(name, value);
-				}
-			}
-		}
-	}
+	List<String> keys();
 
-	@Override
-	public String toString() {
-		synchronized (properties) {
-			return asMap().toString();
-		}
-	}
+	Map<String, String> toFlatMap();
 
-	public void args(String... args) {
-		if (U.notEmpty(args)) {
-			for (String arg : args) {
-				if (!arg.contains("->")) {
-					String[] parts = arg.split("=", 2);
-					String name = parts[0];
+	Properties toProperties();
 
-					if (parts.length > 1) {
-						String value = parts[1];
+	BasicConfig or(Config alternative);
 
-						if (name.equals("config")) {
-							filenameBase(value);
-						}
+	String filenameBase();
 
-						setNested(name, value);
-					} else {
-						setNested(name, true);
-					}
-				}
-			}
-		}
-	}
-
-	private void setNested(String key, Object value) {
-		String[] keys = key.split("\\.");
-		Config cfg = keys.length > 1 ? sub(Arr.sub(keys, 0, -1)) : this;
-		cfg.set(U.last(keys), value);
-	}
-
-	public Config root() {
-		return root;
-	}
-
-	public Config parent() {
-		return isRoot ? null : root.sub(baseKeys.subList(0, baseKeys.size() - 1));
-	}
-
-	public List<String> keys() {
-		return baseKeys;
-	}
-
-	public Map<String, String> toFlatMap() {
-		Map<String, String> flatMap = U.map();
-		Map<String, Object> map = toMap();
-
-		traverseToFlat(map, U.list(keys()), flatMap);
-
-		return flatMap;
-	}
-
-	private static void traverseToFlat(Map<String, Object> map, List<String> keys, Map<String, String> flatMap) {
-		for (Map.Entry<String, Object> e : map.entrySet()) {
-			String key = e.getKey();
-			Object val = e.getValue();
-
-			if (val instanceof Map<?, ?>) {
-				Map<String, Object> mapVal = (Map<String, Object>) val;
-				List<String> keys2 = U.list(keys);
-				keys2.add(key);
-				traverseToFlat(mapVal, keys2, flatMap);
-
-			} else {
-				flatMap.put(U.join(".", keys) + "." + key, String.valueOf(val));
-			}
-		}
-	}
-
-	public Properties toProperties() {
-		Properties props = new Properties();
-		props.putAll(toFlatMap());
-		return props;
-	}
-
-	public ConfigAlternatives or(Config alternative) {
-		return new ConfigAlternatives(this, alternative);
-	}
-
-	public String filenameBase() {
-		return filenameBase;
-	}
-
-	public synchronized Config filenameBase(String filenameBase) {
-		if (U.neq(this.filenameBase, filenameBase)) {
-			Log.info("Changing configuration filename base", "!from", this.filenameBase, "!to", filenameBase);
-		}
-
-		this.filenameBase = filenameBase;
-		return this;
-	}
+	Config filenameBase(String filenameBase);
 }

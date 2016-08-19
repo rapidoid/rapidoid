@@ -46,7 +46,7 @@ public class Conf extends RapidoidThing {
 		}
 	});
 
-	public static final Config ROOT = new Config();
+	public static final Config ROOT = new ConfigImpl();
 
 	public static final Config USERS = section("users");
 	public static final Config JOBS = section("jobs");
@@ -160,15 +160,19 @@ public class Conf extends RapidoidThing {
 
 		ROOT.clear();
 
+		loadDefaultConfig();
+
+		loadConfig(detached);
+
+		ROOT.args(args);
+
+		applyConfig();
+	}
+
+	public static void loadConfig(List<List<String>> detached) {
 		String filenameBase = U.or(ROOT.filenameBase(), "config");
 		String configFilenamePattern = filenameBase + ".y?ml";
 		String configProfilePattern = filenameBase + "-%s.y?ml";
-
-		ConfigUtil.load(Msc.path("default", configFilenamePattern), ROOT, true);
-
-		for (String profile : Env.profiles()) {
-			ConfigUtil.load(Msc.path("default", U.frmt(configProfilePattern, profile)), ROOT, true);
-		}
 
 		ConfigUtil.load(Msc.path(path, configFilenamePattern), ROOT, false);
 
@@ -179,10 +183,14 @@ public class Conf extends RapidoidThing {
 		for (List<String> keys : detached) {
 			autoRefresh(keys.isEmpty() ? ROOT : ROOT.sub(keys));
 		}
+	}
 
-		ROOT.args(args);
+	public static void loadDefaultConfig() {
+		ConfigUtil.load("default-config.yml", ROOT, true);
 
-		applyConfig();
+		for (String profile : Env.profiles()) {
+			ConfigUtil.load(U.frmt("default-config-%s.yml", profile), ROOT, true);
+		}
 	}
 
 	private static void autoRefresh(Config... configs) {

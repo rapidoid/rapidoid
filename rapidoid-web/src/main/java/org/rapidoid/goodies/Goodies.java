@@ -194,9 +194,10 @@ public class Goodies extends RapidoidThing {
 
 		if (Conf.USERS.isEmpty() && Env.dev()) {
 			String pass = generatedAdminPassword();
+
 			Config admin = Conf.USERS.sub("admin");
-			admin.set("roles", "administrator");
 			admin.set("password", pass);
+
 			Msc.logSection("ADMIN CREDENTIALS: username = " + AnsiColor.bold("admin") + ", password = " + AnsiColor.bold(pass));
 		}
 	}
@@ -215,7 +216,7 @@ public class Goodies extends RapidoidThing {
 		if (Msc.hasJPA()) {
 			for (Class<?> type : JPA.getEntityJavaTypes()) {
 				String uri = GUI.typeUri(type);
-				String contextPath = HttpUtils.getContextPath(setup.custom(), setup.segment());
+				String contextPath = HttpUtils.zone(setup.custom(), setup.segment()).entry("home").or("/_");
 				X.scaffold(setup, Msc.uri(contextPath, uri), type);
 			}
 		}

@@ -921,17 +921,21 @@ public class Msc extends RapidoidThing implements Constants {
 
 			String key = e.getKey().toLowerCase();
 
-			if (key.contains("password") || key.contains("secret") || key.contains("token") || key.contains("private")) {
-				value = replacement;
-
-			} else if (value instanceof Map<?, ?>) {
+			if (value instanceof Map<?, ?>) {
 				value = (T) protectSensitiveInfo((Map<String, T>) value, replacement);
+
+			} else if (sensitiveKey(key)) {
+				value = replacement;
 			}
 
 			copy.put(e.getKey(), value);
 		}
 
 		return copy;
+	}
+
+	public static boolean sensitiveKey(String key) {
+		return key.contains("password") || key.contains("secret") || key.contains("token") || key.contains("private");
 	}
 
 	public static int processId() {

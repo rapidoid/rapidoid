@@ -10,39 +10,44 @@ app:
   search: false
   navbar: true
   fluid: false
-  cdn: false
+  cdn: auto
   contextPath: ''
   home: /
   menu: {}
-  segments:
-    admin:
-      home: /_
-      brand: '<i class="fa fa-dashboard"></i> Admin'
-      search: false
-      menu:
-        Overview: /_
-        Application:
-          Routes: /_/routes
-          Beans: /_/beans
-          Configuration: /_/config
-          Deploy: /_/deploy
-          Terminate / Restart: /_/terminate
-        Data:
-          Entities: /_/entities
-        Details:
-          Metrics: /_/metrics
-          Classpath: /_/classpath
-        JMX:
-          Memory pool: /_/jmx/mempool
-          JVM Threads: /_/jmx/threads
-          Operating system: /_/jmx/os
-          Garbage collection: /_/jmx/gc
-          Memory: /_/jmx/memory
-          Runtime: /_/jmx/runtime
-          Classes: /_/jmx/classes
-          Compilation: /_/jmx/compilation
 
-users: {}
+main-zone: {}
+
+admin-zone:
+  home: /_
+  brand: '<i class="fa fa-dashboard"></i> Admin'
+  search: false
+  fluid: false
+  menu:
+    Overview: /_
+    Application:
+      Routes: /_/routes
+      Beans: /_/beans
+      Configuration: /_/config
+      Deploy: /_/deploy
+      Terminate / Restart: /_/terminate
+    Data:
+      Entities: /_/entities
+    Details:
+      Metrics: /_/metrics
+      Classpath: /_/classpath
+    JMX:
+      Memory pool: /_/jmx/mempool
+      JVM Threads: /_/jmx/threads
+      Operating system: /_/jmx/os
+      Garbage collection: /_/jmx/gc
+      Memory: /_/jmx/memory
+      Runtime: /_/jmx/runtime
+      Classes: /_/jmx/classes
+      Compilation: /_/jmx/compilation
+
+users:
+  admin:
+    roles: administrator
 
 jobs:
   executor:

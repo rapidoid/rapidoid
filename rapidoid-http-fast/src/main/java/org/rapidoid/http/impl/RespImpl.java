@@ -5,13 +5,12 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.Coll;
-import org.rapidoid.http.MediaType;
+import org.rapidoid.config.BasicConfig;
 import org.rapidoid.config.Conf;
-import org.rapidoid.config.Config;
-import org.rapidoid.config.ConfigAlternatives;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.http.HttpUtils;
+import org.rapidoid.http.MediaType;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
 import org.rapidoid.http.customize.Customization;
@@ -398,13 +397,10 @@ public class RespImpl extends RapidoidThing implements Resp {
 	}
 
 	private void initScreen(Screen screen) {
-		Config app = Customization.of(req).appConfig();
-		Config segments = app.sub("segments");
-		Config segment = segments.sub(req.segment());
-		ConfigAlternatives cfg = segment.or(app);
+		BasicConfig zone = HttpUtils.zone(req);
 
-		Object brand = cfg.entry("brand").str().getOrNull();
-		String title = cfg.entry("title").str().getOrNull();
+		String brand = zone.entry("brand").str().getOrNull();
+		String title = zone.entry("title").str().getOrNull();
 
 		String siteName = req.host();
 		if (U.isEmpty(siteName)
@@ -416,19 +412,19 @@ public class RespImpl extends RapidoidThing implements Resp {
 		screen.brand(U.or(brand, siteName));
 		screen.title(U.or(title, siteName));
 
-		screen.home(cfg.entry("home").str().or("/"));
+		screen.home(zone.entry("home").str().or("/"));
 
-		screen.search(cfg.entry("search").bool().or(false));
-		screen.navbar(cfg.entry("navbar").bool().or(brand != null));
-		screen.fluid(cfg.entry("fluid").bool().or(false));
+		screen.search(zone.entry("search").bool().or(false));
+		screen.navbar(zone.entry("navbar").bool().or(brand != null));
+		screen.fluid(zone.entry("fluid").bool().or(false));
 
-		String cdn = cfg.entry("cdn").str().or("auto");
+		String cdn = zone.entry("cdn").or("auto");
 		if (!"auto".equalsIgnoreCase(cdn)) {
 			screen.cdn(Cls.bool(cdn));
 		}
 
-		if (cfg.has("menu")) {
-			screen.menu(cfg.sub("menu").toMap());
+		if (zone.has("menu")) {
+			screen.menu(zone.sub("menu").toMap());
 		}
 	}
 

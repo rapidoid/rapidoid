@@ -4,6 +4,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Str;
+import org.rapidoid.config.BasicConfig;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
 import org.rapidoid.crypto.Crypto;
@@ -331,15 +332,18 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 		}
 	}
 
-	public static String getContextPath(Customization customization, String segment) {
-		Config cfg = customization.appConfig();
+	public static String getContextPath(Req req) {
+		return zone(req).entry("contextPath").or("");
+	}
 
-		if (segment != null) {
-			return cfg.or(cfg.sub("segments", segment)).entry("contextPath").or("");
+	public static Config zone(Customization custom, String segment) {
+		return segment != null ? custom.appConfig().root().sub(segment + "-zone") : custom.appConfig();
+	}
 
-		} else {
-			return cfg.entry("contextPath").or("");
-		}
+	public static BasicConfig zone(Req req) {
+		Customization custom = Customization.of(req);
+		Config zone = zone(custom, req.segment());
+		return zone.or(custom.appConfig());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -378,5 +382,4 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 			token.remove(_EXPIRES);
 		}
 	}
-
 }

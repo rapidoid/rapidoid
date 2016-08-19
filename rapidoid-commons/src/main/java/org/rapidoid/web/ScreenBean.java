@@ -43,7 +43,7 @@ public class ScreenBean extends RapidoidThing implements Screen {
 	private volatile boolean search;
 	private volatile boolean navbar = true;
 	private volatile boolean fluid;
-	private volatile boolean cdn = !Env.dev();
+	private volatile boolean cdn = Env.production();
 
 	private final Set<String> js = Coll.synchronizedSet();
 	private final Set<String> css = Coll.synchronizedSet();

@@ -3,18 +3,13 @@ package org.rapidoid.http.customize.defaults;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.MediaType;
-import org.rapidoid.config.Config;
-import org.rapidoid.http.HttpUtils;
-import org.rapidoid.http.NotFound;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.Resp;
+import org.rapidoid.config.BasicConfig;
+import org.rapidoid.http.*;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.ErrorHandler;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
-import org.rapidoid.value.Value;
 
 import java.util.Collections;
 import java.util.Map;
@@ -52,14 +47,15 @@ public class DefaultErrorHandler extends RapidoidThing implements ErrorHandler {
 
 		if (result instanceof Throwable) {
 			Throwable errResult = (Throwable) result;
-			return renderError(req, resp, errResult, custom);
+			return renderError(req, resp, errResult);
 
 		} else {
 			return result;
 		}
 	}
 
-	private Object renderError(Req req, Resp resp, Throwable error, Customization custom) {
+	private Object renderError(Req req, Resp resp, Throwable error) {
+
 		if (resp.contentType() == MediaType.JSON_UTF_8) {
 			return HttpUtils.getErrorInfo(resp, error);
 
@@ -67,7 +63,7 @@ public class DefaultErrorHandler extends RapidoidThing implements ErrorHandler {
 			return HttpUtils.getErrorMessageAndSetCode(resp, error);
 
 		} else {
-			return page(req, resp, error, custom);
+			return page(req, resp, error);
 		}
 	}
 
@@ -134,21 +130,19 @@ public class DefaultErrorHandler extends RapidoidThing implements ErrorHandler {
 		return error;
 	}
 
-	protected Object page(Req req, Resp resp, Throwable error, Customization custom) {
-
-		Config segments = custom.appConfig().sub("segments");
-		Value<String> home = custom.appConfig().sub("app").entry("home").str();
+	protected Object page(Req req, Resp resp, Throwable error) {
 
 		if (error instanceof SecurityException) {
 			return resp.code(403).view("login").mvc(true).model("embedded", req.attr("_embedded", false));
+
 		} else {
 
-			String seg = req.segment();
-			String homeUri = seg != null ? segments.sub(seg).entry("home").str().orElse(home).or("/") : "/";
+			BasicConfig zone = HttpUtils.zone(req);
+			String home = zone.entry("home").or("/");
 
 			Map<String, ?> errorInfo = HttpUtils.getErrorInfo(resp, error);
 			resp.model().put("error", errorInfo);
-			resp.model().put("home", homeUri);
+			resp.model().put("home", home);
 
 			return resp.mvc(true).view("error");
 		}

@@ -23,7 +23,7 @@ package org.rapidoid.httpfast;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Config;
+import org.rapidoid.config.ConfigImpl;
 import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.IntegrationTestCommons;
 import org.rapidoid.http.Req;
@@ -39,7 +39,7 @@ public class HttpHandlerTest extends IntegrationTestCommons {
 
 	@Test
 	public void testFastHttpHandler() {
-		Customization customization = new Customization("example", My.custom(), new Config(), new Config());
+		Customization customization = new Customization("example", My.custom(), new ConfigImpl(), new ConfigImpl());
 		HttpRoutesImpl routes = new HttpRoutesImpl(customization);
 		FastHttp http = new FastHttp(routes);
 
