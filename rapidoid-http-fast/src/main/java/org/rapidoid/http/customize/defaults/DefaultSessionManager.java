@@ -1,4 +1,4 @@
-package org.rapidoid.http.customize;
+package org.rapidoid.http.customize.defaults;
 
 /*
  * #%L
@@ -27,6 +27,7 @@ import org.rapidoid.collection.Coll;
 import org.rapidoid.event.Events;
 import org.rapidoid.event.Fire;
 import org.rapidoid.http.Req;
+import org.rapidoid.http.customize.SessionManager;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 

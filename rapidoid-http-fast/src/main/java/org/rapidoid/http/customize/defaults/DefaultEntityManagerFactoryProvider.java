@@ -1,11 +1,4 @@
-package org.rapidoid.http.customize;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.http.Req;
-
-import java.io.OutputStream;
+package org.rapidoid.http.customize.defaults;
 
 /*
  * #%L
@@ -27,13 +20,22 @@ import java.io.OutputStream;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.customize.EntityManagerFactoryProvider;
+import org.rapidoid.jpa.JPA;
+
+import javax.persistence.EntityManagerFactory;
+
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class DefaultJsonResponseRenderer extends RapidoidThing implements JsonResponseRenderer {
+@Since("5.2.0")
+public class DefaultEntityManagerFactoryProvider extends RapidoidThing implements EntityManagerFactoryProvider {
 
 	@Override
-	public void renderJson(Req req, Object value, OutputStream out) throws Exception {
-		Customization.of(req).jackson().writeValue(out, value);
+	public EntityManagerFactory getEntityManagerFactory(Req req) throws Exception {
+		return JPA.provideEmf();
 	}
 
 }

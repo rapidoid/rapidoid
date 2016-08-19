@@ -1,4 +1,4 @@
-package org.rapidoid.setup;
+package org.rapidoid.http.customize.defaults;
 
 /*
  * #%L

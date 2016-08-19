@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.customize.SessionManager;
 import org.rapidoid.log.Log;
-import org.rapidoid.setup.Defaults;
+import org.rapidoid.http.customize.defaults.Defaults;
 import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;
 

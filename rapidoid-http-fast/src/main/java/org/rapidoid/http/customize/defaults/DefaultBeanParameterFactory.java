@@ -1,11 +1,13 @@
-package org.rapidoid.http.customize;
+package org.rapidoid.http.customize.defaults;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Req;
-import org.rapidoid.util.Msc;
-import org.rapidoid.validation.Validators;
+import org.rapidoid.http.customize.BeanParameterFactory;
+import org.rapidoid.http.customize.Customization;
+
+import java.util.Map;
 
 /*
  * #%L
@@ -29,15 +31,11 @@ import org.rapidoid.validation.Validators;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class DefaultBeanValidator extends RapidoidThing implements BeanValidator {
-
-	private final boolean supported = Msc.hasValidation();
+public class DefaultBeanParameterFactory extends RapidoidThing implements BeanParameterFactory {
 
 	@Override
-	public void validate(Req req, Object bean) {
-		if (supported) {
-			Validators.validate(bean);
-		}
+	public Object getParamValue(Req req, Class<?> paramType, String paramName, Map<String, Object> properties) throws Exception {
+		return Customization.of(req).jackson().convertValue(properties, paramType);
 	}
 
 }

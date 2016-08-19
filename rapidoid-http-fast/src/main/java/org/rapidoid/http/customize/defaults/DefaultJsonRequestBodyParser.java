@@ -1,12 +1,4 @@
-package org.rapidoid.http.customize;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.http.Req;
-import org.rapidoid.security.Auth;
-
-import java.util.Set;
+package org.rapidoid.http.customize.defaults;
 
 /*
  * #%L
@@ -28,13 +20,23 @@ import java.util.Set;
  * #L%
  */
 
-@Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class DefaultRolesProvider extends RapidoidThing implements RolesProvider {
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.customize.Customization;
+import org.rapidoid.http.customize.JsonRequestBodyParser;
 
+import java.util.Map;
+
+@Authors("Nikolche Mihajlovski")
+@Since("5.2.0")
+public class DefaultJsonRequestBodyParser extends RapidoidThing implements JsonRequestBodyParser {
+
+	@SuppressWarnings("unchecked")
 	@Override
-	public Set<String> getRolesForUser(Req req, String username) {
-		return Auth.getRolesFor(username);
+	public Map<String, ?> parseJsonBody(Req req, byte[] body) throws Exception {
+		return Customization.of(req).jackson().readValue(body, Map.class);
 	}
 
 }

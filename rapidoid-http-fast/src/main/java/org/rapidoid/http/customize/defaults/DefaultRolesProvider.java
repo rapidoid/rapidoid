@@ -1,15 +1,13 @@
-package org.rapidoid.http.customize;
+package org.rapidoid.http.customize.defaults;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.GUI;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.Resp;
-import org.rapidoid.u.U;
-import org.rapidoid.web.Screen;
+import org.rapidoid.http.customize.RolesProvider;
+import org.rapidoid.security.Auth;
 
-import java.util.regex.Pattern;
+import java.util.Set;
 
 /*
  * #%L
@@ -33,24 +31,11 @@ import java.util.regex.Pattern;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class DefaultPageRenderer extends RapidoidThing implements PageRenderer {
-
-	private static final Pattern FULL_PAGE_PATTERN = Pattern.compile("(?s)^(?:\\s*(<!--(?:.*?)-->)*?)*?<(!DOCTYPE\\s+html|html)>");
+public class DefaultRolesProvider extends RapidoidThing implements RolesProvider {
 
 	@Override
-	public Object renderPage(Req req, Resp resp, String content) throws Exception {
-		U.notNull(content, "page content");
-
-		if (isFullPage(req, content)) return GUI.hardcoded(content);
-
-		Screen screen = resp.screen();
-		screen.content(GUI.hardcoded(content));
-
-		return screen.render();
-	}
-
-	private boolean isFullPage(Req req, String content) {
-		return (req.attr("_embedded", false) && content.startsWith("<!--EMBEDDED-->")) || FULL_PAGE_PATTERN.matcher(content).find();
+	public Set<String> getRolesForUser(Req req, String username) {
+		return Auth.getRolesFor(username);
 	}
 
 }

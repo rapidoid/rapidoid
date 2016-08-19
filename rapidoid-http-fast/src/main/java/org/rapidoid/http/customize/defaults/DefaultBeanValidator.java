@@ -1,4 +1,12 @@
-package org.rapidoid.http.customize;
+package org.rapidoid.http.customize.defaults;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.customize.BeanValidator;
+import org.rapidoid.util.Msc;
+import org.rapidoid.validation.Validators;
 
 /*
  * #%L
@@ -20,21 +28,17 @@ package org.rapidoid.http.customize;
  * #L%
  */
 
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.http.Req;
-
-import java.util.Map;
-
 @Authors("Nikolche Mihajlovski")
-@Since("5.2.0")
-public class DefaultJsonRequestBodyParser extends RapidoidThing implements JsonRequestBodyParser {
+@Since("5.1.0")
+public class DefaultBeanValidator extends RapidoidThing implements BeanValidator {
 
-	@SuppressWarnings("unchecked")
+	private final boolean supported = Msc.hasValidation();
+
 	@Override
-	public Map<String, ?> parseJsonBody(Req req, byte[] body) throws Exception {
-		return Customization.of(req).jackson().readValue(body, Map.class);
+	public void validate(Req req, Object bean) {
+		if (supported) {
+			Validators.validate(bean);
+		}
 	}
 
 }

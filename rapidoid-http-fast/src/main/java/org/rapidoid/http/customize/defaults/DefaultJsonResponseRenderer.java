@@ -1,10 +1,13 @@
-package org.rapidoid.http.customize;
+package org.rapidoid.http.customize.defaults;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Req;
-import org.rapidoid.security.Auth;
+import org.rapidoid.http.customize.Customization;
+import org.rapidoid.http.customize.JsonResponseRenderer;
+
+import java.io.OutputStream;
 
 /*
  * #%L
@@ -28,11 +31,11 @@ import org.rapidoid.security.Auth;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class DefaultLoginProvider extends RapidoidThing implements LoginProvider {
+public class DefaultJsonResponseRenderer extends RapidoidThing implements JsonResponseRenderer {
 
 	@Override
-	public boolean login(Req req, String username, String password) {
-		return Auth.login(username, password);
+	public void renderJson(Req req, Object value, OutputStream out) throws Exception {
+		Customization.of(req).jackson().writeValue(out, value);
 	}
 
 }

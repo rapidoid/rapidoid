@@ -1,4 +1,4 @@
-package org.rapidoid.http.customize;
+package org.rapidoid.http.customize.defaults;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
@@ -9,6 +9,8 @@ import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.NotFound;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
+import org.rapidoid.http.customize.Customization;
+import org.rapidoid.http.customize.ErrorHandler;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;

@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.customize.ErrorHandler;
-import org.rapidoid.setup.Defaults;
+import org.rapidoid.http.customize.defaults.Defaults;
 import org.rapidoid.setup.On;
 
 @Authors("Nikolche Mihajlovski")

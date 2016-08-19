@@ -1,11 +1,11 @@
-package org.rapidoid.http.customize;
+package org.rapidoid.http.customize.defaults;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Req;
-
-import java.util.Map;
+import org.rapidoid.http.customize.LoginProvider;
+import org.rapidoid.security.Auth;
 
 /*
  * #%L
@@ -29,11 +29,11 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class DefaultBeanParameterFactory extends RapidoidThing implements BeanParameterFactory {
+public class DefaultLoginProvider extends RapidoidThing implements LoginProvider {
 
 	@Override
-	public Object getParamValue(Req req, Class<?> paramType, String paramName, Map<String, Object> properties) throws Exception {
-		return Customization.of(req).jackson().convertValue(properties, paramType);
+	public boolean login(Req req, String username, String password) {
+		return Auth.login(username, password);
 	}
 
 }
