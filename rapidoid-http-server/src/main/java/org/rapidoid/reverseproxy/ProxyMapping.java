@@ -23,6 +23,7 @@ package org.rapidoid.reverseproxy;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Str;
 import org.rapidoid.http.Req;
 
 import java.util.List;
@@ -33,21 +34,26 @@ public class ProxyMapping extends RapidoidThing {
 
 	private final String prefix;
 
-	private final List<String> targets;
+	private volatile List<ProxyUpstream> upstreams;
 
-	private volatile LoadBalancer loadBalancer = new RoundRobinLoadBalancer(this);
+	private volatile LoadBalancer loadBalancer = new RoundRobinLoadBalancer();
 
-	public ProxyMapping(String prefix, List<String> targets) {
+	public ProxyMapping(String prefix, List<ProxyUpstream> upstreams) {
 		this.prefix = prefix;
-		this.targets = targets;
+		this.upstreams = upstreams;
 	}
 
 	public String prefix() {
 		return prefix;
 	}
 
-	public List<String> targets() {
-		return targets;
+	public List<ProxyUpstream> upstreams() {
+		return upstreams;
+	}
+
+	public ProxyMapping upstreams(List<ProxyUpstream> upstreams) {
+		this.upstreams = upstreams;
+		return this;
 	}
 
 	public boolean matches(Req req) {
@@ -55,7 +61,11 @@ public class ProxyMapping extends RapidoidThing {
 	}
 
 	public String getTargetUrl(Req req) {
-		return loadBalancer.getTargetUrl(req);
+		ProxyUpstream upstream = loadBalancer.pickUpstream(req, upstreams);
+
+		String trimmed = Str.triml(req.uri(), prefix());
+
+		return upstream.url() + trimmed;
 	}
 
 	public LoadBalancer loadBalancer() {

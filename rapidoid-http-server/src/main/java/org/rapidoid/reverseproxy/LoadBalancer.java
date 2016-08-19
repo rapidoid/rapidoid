@@ -24,10 +24,12 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Req;
 
+import java.util.List;
+
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
 public interface LoadBalancer {
 
-	String getTargetUrl(Req req);
+	ProxyUpstream pickUpstream(Req req, List<ProxyUpstream> candidates);
 
 }

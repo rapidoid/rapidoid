@@ -23,24 +23,18 @@ package org.rapidoid.reverseproxy;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.Req;
-
-import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
-public class RoundRobinLoadBalancer extends RapidoidThing implements LoadBalancer {
+public class ProxyUpstream extends RapidoidThing {
 
-	private final AtomicLong counter = new AtomicLong();
+	private final String url;
 
-	@Override
-	public ProxyUpstream pickUpstream(Req req, List<ProxyUpstream> candidates) {
-		long n = counter.getAndIncrement();
-
-		int index = (int) (n % candidates.size());
-
-		return candidates.get(index);
+	public ProxyUpstream(String url) {
+		this.url = url;
 	}
 
+	public String url() {
+		return url;
+	}
 }

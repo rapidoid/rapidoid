@@ -6,7 +6,6 @@ import org.rapidoid.commons.MediaType;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.http.*;
 import org.rapidoid.http.impl.HttpIO;
-import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
 import java.util.List;
@@ -14,7 +13,7 @@ import java.util.Map;
 
 /*
  * #%L
- * rapidoid-web
+ * rapidoid-http-server
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -124,13 +123,12 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 			.maxConnPerRoute(maxConnPerRoute());
 	}
 
-	public ProxyMapping map(String uriPrefix, List<String> targets) {
-		Log.info("Reverse proxy mapping", "!uriPrefix", uriPrefix, "!targets", targets);
+	public ReverseProxyMapDSL map(String uriPrefix) {
+		return new ReverseProxyMapDSL(this, uriPrefix);
+	}
 
-		ProxyMapping mapping = new ProxyMapping(uriPrefix, targets);
-		mappings.add(mapping);
-
-		return mapping;
+	public List<ProxyMapping> mappings() {
+		return mappings;
 	}
 
 }

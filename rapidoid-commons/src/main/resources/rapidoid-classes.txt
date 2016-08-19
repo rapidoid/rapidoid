@@ -539,8 +539,10 @@ org.rapidoid.render.XNode
 org.rapidoid.reverseproxy.AbstractReverseProxyBean
 org.rapidoid.reverseproxy.LoadBalancer
 org.rapidoid.reverseproxy.ProxyMapping
+org.rapidoid.reverseproxy.ProxyUpstream
 org.rapidoid.reverseproxy.Reverse
 org.rapidoid.reverseproxy.ReverseProxy
+org.rapidoid.reverseproxy.ReverseProxyMapDSL
 org.rapidoid.reverseproxy.RoundRobinLoadBalancer
 org.rapidoid.scan.ClasspathUtil
 org.rapidoid.scan.Scan
