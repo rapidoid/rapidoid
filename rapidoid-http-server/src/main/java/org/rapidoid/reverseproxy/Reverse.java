@@ -3,10 +3,11 @@ package org.rapidoid.reverseproxy;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.setup.On;
 
 /*
  * #%L
- * rapidoid-web
+ * rapidoid-http-server
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -28,7 +29,18 @@ import org.rapidoid.annotation.Since;
 @Since("5.2.0")
 public class Reverse extends RapidoidThing {
 
-	public static ReverseProxy proxy() {
+	private static volatile ReverseProxy DEFAULT_PROXY;
+
+	public static synchronized ReverseProxy proxy() {
+		if (DEFAULT_PROXY == null) {
+			DEFAULT_PROXY = newProxy();
+			On.req(DEFAULT_PROXY);
+		}
+
+		return DEFAULT_PROXY;
+	}
+
+	public static ReverseProxy newProxy() {
 		return new ReverseProxy();
 	}
 

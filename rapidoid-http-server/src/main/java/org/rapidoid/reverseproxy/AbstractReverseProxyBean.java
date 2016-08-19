@@ -7,7 +7,7 @@ import org.rapidoid.http.HttpClient;
 
 /*
  * #%L
- * rapidoid-web
+ * rapidoid-http-server
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -28,8 +28,6 @@ import org.rapidoid.http.HttpClient;
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
 public abstract class AbstractReverseProxyBean<T> extends RapidoidThing {
-
-	private volatile String host;
 
 	private volatile boolean reuseConnections = true;
 
@@ -56,15 +54,6 @@ public abstract class AbstractReverseProxyBean<T> extends RapidoidThing {
 	@SuppressWarnings("unchecked")
 	protected T me() {
 		return (T) this;
-	}
-
-	public String host() {
-		return host;
-	}
-
-	public T host(String host) {
-		this.host = host;
-		return me();
 	}
 
 	public boolean reuseConnections() {

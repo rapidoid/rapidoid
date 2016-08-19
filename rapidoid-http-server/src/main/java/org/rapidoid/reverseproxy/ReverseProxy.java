@@ -6,7 +6,10 @@ import org.rapidoid.commons.MediaType;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.http.*;
 import org.rapidoid.http.impl.HttpIO;
+import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
 
+import java.util.List;
 import java.util.Map;
 
 /*
@@ -33,12 +36,19 @@ import java.util.Map;
 @Since("5.2.0")
 public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> implements ReqRespHandler {
 
+	private final List<ProxyMapping> mappings = U.list();
+
 	@Override
 	public Object execute(final Req req, final Resp resp) throws Exception {
+
+		ProxyMapping mapping = findMapping(req);
+		if (mapping == null) return null; // not found!
+
 		req.async();
 
-		Map<String, String> headers = req.headers();
+		String targetUrl = mapping.getTargetUrl(req);
 
+		Map<String, String> headers = req.headers();
 		headers.remove("transfer-encoding");
 		headers.remove("content-length");
 
@@ -46,7 +56,7 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 
 		client.req()
 			.verb(req.verb())
-			.url(host() + req.uri())
+			.url(targetUrl)
 			.headers(headers)
 			.cookies(req.cookies())
 			.body(req.body())
@@ -72,7 +82,17 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 		return req;
 	}
 
-	public void processResponseHeaders(Map<String, String> headers, Resp resp) {
+	protected ProxyMapping findMapping(Req req) {
+		for (ProxyMapping mapping : mappings) {
+			if (mapping.matches(req)) {
+				return mapping;
+			}
+		}
+
+		return null;
+	}
+
+	protected void processResponseHeaders(Map<String, String> headers, Resp resp) {
 		for (Map.Entry<String, String> hdr : headers.entrySet()) {
 			String name = hdr.getKey();
 			String value = hdr.getValue();
@@ -87,7 +107,7 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 		}
 	}
 
-	public boolean ignoreResponseHeader(String name) {
+	protected boolean ignoreResponseHeader(String name) {
 		return name.equals("transfer-encoding")
 			|| name.equals("content-length")
 			|| name.equals("connection")
@@ -102,6 +122,15 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 			.keepCookies(false)
 			.maxConnTotal(maxConnTotal())
 			.maxConnPerRoute(maxConnPerRoute());
+	}
+
+	public ProxyMapping map(String uriPrefix, List<String> targets) {
+		Log.info("Reverse proxy mapping", "!uriPrefix", uriPrefix, "!targets", targets);
+
+		ProxyMapping mapping = new ProxyMapping(uriPrefix, targets);
+		mappings.add(mapping);
+
+		return mapping;
 	}
 
 }
