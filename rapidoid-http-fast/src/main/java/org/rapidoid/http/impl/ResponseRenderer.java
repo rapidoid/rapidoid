@@ -24,7 +24,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.commons.MediaType;
+import org.rapidoid.http.MediaType;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Resp;
 import org.rapidoid.http.customize.Customization;

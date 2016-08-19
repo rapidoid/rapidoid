@@ -3,7 +3,7 @@ package org.rapidoid.http.handler;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.MediaType;
+import org.rapidoid.http.MediaType;
 import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.Route;
 import org.rapidoid.http.impl.RouteOptions;

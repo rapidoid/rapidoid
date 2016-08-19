@@ -7,7 +7,7 @@ import org.rapidoid.buffer.Buf;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.ChangeTrackingMap;
 import org.rapidoid.collection.Coll;
-import org.rapidoid.commons.MediaType;
+import org.rapidoid.http.MediaType;
 import org.rapidoid.commons.Str;
 import org.rapidoid.http.*;
 import org.rapidoid.http.customize.BeanParameterFactory;

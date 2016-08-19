@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.rapidoid.NetTestCommons;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.MediaType;
+import org.rapidoid.http.MediaType;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

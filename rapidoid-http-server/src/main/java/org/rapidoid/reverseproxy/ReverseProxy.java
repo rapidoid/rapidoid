@@ -2,7 +2,7 @@ package org.rapidoid.reverseproxy;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.MediaType;
+import org.rapidoid.http.MediaType;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.http.*;
 import org.rapidoid.http.impl.HttpIO;

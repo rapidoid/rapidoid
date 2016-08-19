@@ -25,7 +25,6 @@ import org.junit.Before;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Arr;
-import org.rapidoid.commons.MediaType;
 import org.rapidoid.config.Conf;
 import org.rapidoid.crypto.Crypto;
 import org.rapidoid.data.JSON;

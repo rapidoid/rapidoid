@@ -22,7 +22,7 @@ package org.rapidoid.http.processor;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.MediaType;
+import org.rapidoid.http.MediaType;
 import org.rapidoid.data.BufRange;
 import org.rapidoid.data.BufRanges;
 import org.rapidoid.http.impl.HttpIO;

@@ -3,7 +3,6 @@ package org.rapidoid.http;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.MediaType;
 import org.rapidoid.commons.Str;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;

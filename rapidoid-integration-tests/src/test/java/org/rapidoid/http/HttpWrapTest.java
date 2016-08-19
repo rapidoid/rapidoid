@@ -23,7 +23,6 @@ package org.rapidoid.http;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.MediaType;
 import org.rapidoid.setup.On;
 
 @Authors("Nikolche Mihajlovski")

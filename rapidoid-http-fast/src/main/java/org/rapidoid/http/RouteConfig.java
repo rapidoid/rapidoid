@@ -3,7 +3,6 @@ package org.rapidoid.http;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.TransactionMode;
-import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.impl.RouteOptions;
 
 import java.util.Set;
