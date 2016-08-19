@@ -3,7 +3,9 @@ package org.rapidoid.collection;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
+import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /*
@@ -28,11 +30,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
+@SuppressWarnings("NullableProblems")
 public class ChangeTrackingMap<K, V> extends AbstractMapDecorator<K, V> {
 
-	// FIXME wrap entryset, iterator etc. to detect changes made through them
-
 	private final AtomicBoolean dirtyFlag;
+
+	private transient volatile Set<Entry<K, V>> entrySet;
+	private transient volatile Set<K> keySet;
+	private transient volatile Collection<V> values;
 
 	public ChangeTrackingMap(Map<K, V> target, AtomicBoolean dirtyFlag) {
 		super(target);
@@ -41,36 +46,60 @@ public class ChangeTrackingMap<K, V> extends AbstractMapDecorator<K, V> {
 
 	@Override
 	public V put(K k, V v) {
-		V old = target.put(k, v);
-		setDirtyIf(old != v);
+		V old = decorated.put(k, v);
+		changedIf(old != v);
 		return old;
 	}
 
 	@Override
 	public V remove(Object o) {
-		V removed = target.remove(o);
-		setDirtyIf(removed != null);
+		V removed = decorated.remove(o);
+		changedIf(removed != null);
 		return removed;
 	}
 
 	@Override
 	public void putAll(Map<? extends K, ? extends V> map) {
-		target.putAll(map);
-		setDirtyIf(!map.isEmpty());
+		decorated.putAll(map);
+		changedIf(!map.isEmpty());
 	}
 
 	@Override
 	public void clear() {
-		boolean notEmpty = !target.isEmpty();
-
-		if (notEmpty) {
-			target.clear();
+		if (!decorated.isEmpty()) {
+			decorated.clear();
+			dirtyFlag.set(true);
 		}
-
-		setDirtyIf(notEmpty);
 	}
 
-	private void setDirtyIf(boolean changed) {
+	@Override
+	public Set<Entry<K, V>> entrySet() {
+		if (entrySet == null) {
+			entrySet = new ChangeTrackingSet<Entry<K, V>>(super.entrySet(), dirtyFlag);
+		}
+
+		return entrySet;
+	}
+
+	@Override
+	public Set<K> keySet() {
+		if (keySet == null) {
+			keySet = new ChangeTrackingSet<K>(super.keySet(), dirtyFlag);
+		}
+
+		return keySet;
+	}
+
+	@Override
+	public Collection<V> values() {
+		if (values == null) {
+			values = new ChangeTrackingCollection<V>(super.values(), dirtyFlag);
+		}
+
+		return values;
+	}
+
+	private void changedIf(boolean changed) {
 		if (changed) {
 			dirtyFlag.set(true);
 		}

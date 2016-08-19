@@ -4,8 +4,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
 import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
+import java.util.Iterator;
 
 /*
  * #%L
@@ -30,50 +29,10 @@ import java.util.Set;
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
 @SuppressWarnings("NullableProblems")
-public class AbstractMapDecorator<K, V> extends AbstractDecorator<Map<K, V>> implements Map<K, V> {
+public class AbstractCollectionDecorator<E> extends AbstractDecorator<Collection<E>> implements Collection<E> {
 
-	public AbstractMapDecorator(Map<K, V> decorated) {
+	public AbstractCollectionDecorator(Collection<E> decorated) {
 		super(decorated);
-	}
-
-	@Override
-	public V get(Object key) {
-		return decorated.get(key);
-	}
-
-	@Override
-	public V put(K k, V v) {
-		return decorated.put(k, v);
-	}
-
-	@Override
-	public V remove(Object o) {
-		return decorated.remove(o);
-	}
-
-	@Override
-	public void putAll(Map<? extends K, ? extends V> map) {
-		decorated.putAll(map);
-	}
-
-	@Override
-	public void clear() {
-		decorated.clear();
-	}
-
-	@Override
-	public Set<K> keySet() {
-		return decorated.keySet();
-	}
-
-	@Override
-	public Collection<V> values() {
-		return decorated.values();
-	}
-
-	@Override
-	public Set<Entry<K, V>> entrySet() {
-		return decorated.entrySet();
 	}
 
 	@Override
@@ -87,13 +46,58 @@ public class AbstractMapDecorator<K, V> extends AbstractDecorator<Map<K, V>> imp
 	}
 
 	@Override
-	public boolean containsKey(Object o) {
-		return decorated.containsKey(o);
+	public boolean contains(Object o) {
+		return decorated.contains(o);
 	}
 
 	@Override
-	public boolean containsValue(Object o) {
-		return decorated.containsValue(o);
+	public Iterator<E> iterator() {
+		return decorated.iterator();
+	}
+
+	@Override
+	public Object[] toArray() {
+		return decorated.toArray();
+	}
+
+	@Override
+	public <T> T[] toArray(T[] a) {
+		return decorated.toArray(a);
+	}
+
+	@Override
+	public boolean add(E e) {
+		return decorated.add(e);
+	}
+
+	@Override
+	public boolean remove(Object o) {
+		return decorated.remove(o);
+	}
+
+	@Override
+	public boolean containsAll(Collection<?> c) {
+		return decorated.containsAll(c);
+	}
+
+	@Override
+	public boolean addAll(Collection<? extends E> c) {
+		return decorated.addAll(c);
+	}
+
+	@Override
+	public boolean retainAll(Collection<?> c) {
+		return decorated.retainAll(c);
+	}
+
+	@Override
+	public boolean removeAll(Collection<?> c) {
+		return decorated.removeAll(c);
+	}
+
+	@Override
+	public void clear() {
+		decorated.clear();
 	}
 
 }

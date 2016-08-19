@@ -2,8 +2,9 @@ package org.rapidoid.collection;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.lambda.Mapper;
-import org.rapidoid.u.U;
+
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /*
  * #%L
@@ -26,44 +27,11 @@ import org.rapidoid.u.U;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class AutoExpandingMap<K, V> extends AbstractMapDecorator<K, V> {
+@Since("5.2.0")
+public class ChangeTrackingSet<E> extends ChangeTrackingCollection<E> implements Set<E> {
 
-	private final Mapper<K, V> valueFactory;
-
-	public AutoExpandingMap(Mapper<K, V> valueFactory) {
-		super(Coll.<K, V>synchronizedMap());
-		this.valueFactory = valueFactory;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public V get(Object key) {
-		V val = decorated.get(key);
-
-		if (val == null) {
-			synchronized (decorated) {
-				val = decorated.get(key);
-
-				if (val == null) {
-					try {
-						val = valueFactory.map((K) key);
-					} catch (Exception e) {
-						throw U.rte(e);
-					}
-
-					decorated.put((K) key, val);
-				}
-
-				return val;
-			}
-		}
-
-		return val;
-	}
-
-	public AutoExpandingMap<K, V> copy() {
-		return new AutoExpandingMap<K, V>(valueFactory);
+	public ChangeTrackingSet(Set<E> decorated, AtomicBoolean dirtyFlag) {
+		super(decorated, dirtyFlag);
 	}
 
 }

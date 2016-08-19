@@ -74,9 +74,16 @@ org.rapidoid.cls.Proxies
 org.rapidoid.cls.TypeKind
 org.rapidoid.cls.TypeSpecificFactory
 org.rapidoid.cls.TypeSpecificVisitor
+org.rapidoid.collection.AbstractCollectionDecorator
+org.rapidoid.collection.AbstractDecorator
+org.rapidoid.collection.AbstractIteratorDecorator
 org.rapidoid.collection.AbstractMapDecorator
+org.rapidoid.collection.AbstractSetDecorator
 org.rapidoid.collection.AutoExpandingMap
+org.rapidoid.collection.ChangeTrackingCollection
+org.rapidoid.collection.ChangeTrackingIterator
 org.rapidoid.collection.ChangeTrackingMap
+org.rapidoid.collection.ChangeTrackingSet
 org.rapidoid.collection.Coll
 org.rapidoid.commons.AnyObj
 org.rapidoid.commons.Arr

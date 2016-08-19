@@ -2,8 +2,8 @@ package org.rapidoid.collection;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.lambda.Mapper;
-import org.rapidoid.u.U;
+
+import java.util.Iterator;
 
 /*
  * #%L
@@ -26,44 +26,26 @@ import org.rapidoid.u.U;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class AutoExpandingMap<K, V> extends AbstractMapDecorator<K, V> {
+@Since("5.2.0")
+public class AbstractIteratorDecorator<E> extends AbstractDecorator<Iterator<E>> implements Iterator<E> {
 
-	private final Mapper<K, V> valueFactory;
-
-	public AutoExpandingMap(Mapper<K, V> valueFactory) {
-		super(Coll.<K, V>synchronizedMap());
-		this.valueFactory = valueFactory;
+	public AbstractIteratorDecorator(Iterator<E> decorated) {
+		super(decorated);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public V get(Object key) {
-		V val = decorated.get(key);
-
-		if (val == null) {
-			synchronized (decorated) {
-				val = decorated.get(key);
-
-				if (val == null) {
-					try {
-						val = valueFactory.map((K) key);
-					} catch (Exception e) {
-						throw U.rte(e);
-					}
-
-					decorated.put((K) key, val);
-				}
-
-				return val;
-			}
-		}
-
-		return val;
+	public boolean hasNext() {
+		return decorated.hasNext();
 	}
 
-	public AutoExpandingMap<K, V> copy() {
-		return new AutoExpandingMap<K, V>(valueFactory);
+	@Override
+	public E next() {
+		return decorated.next();
+	}
+
+	@Override
+	public void remove() {
+		decorated.remove();
 	}
 
 }

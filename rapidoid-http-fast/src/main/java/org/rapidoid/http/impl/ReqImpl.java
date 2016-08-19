@@ -433,7 +433,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		}
 
 		if (sessionChanged.get()) {
-			saveSession(session.target());
+			saveSession(session.decorated());
 		}
 
 		if (response != null) {
