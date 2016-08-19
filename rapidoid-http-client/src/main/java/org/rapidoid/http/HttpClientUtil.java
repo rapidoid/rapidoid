@@ -80,7 +80,7 @@ public class HttpClientUtil extends RapidoidThing {
 		ConnectionReuseStrategy reuseStrategy = client.reuseConnections() ? new DefaultConnectionReuseStrategy() : new NoConnectionReuseStrategy();
 
 		HttpAsyncClientBuilder builder = HttpAsyncClients.custom()
-			.setThreadFactory(new RapidoidThreadFactory("http-client"))
+			.setThreadFactory(new RapidoidThreadFactory("http-client", true))
 			.disableConnectionState()
 			.disableAuthCaching()
 			.setMaxConnPerRoute(client.maxConnPerRoute())

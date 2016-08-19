@@ -92,7 +92,7 @@ public class Msc extends RapidoidThing implements Constants {
 	private static long measureStart;
 
 	public static final ScheduledThreadPoolExecutor EXECUTOR = new ScheduledThreadPoolExecutor(8,
-		new RapidoidThreadFactory("utils"));
+		new RapidoidThreadFactory("utils", true));
 
 	private Msc() {
 	}

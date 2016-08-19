@@ -65,7 +65,7 @@ public class Jobs extends RapidoidThing {
 	public static synchronized ScheduledExecutorService scheduler() {
 		if (SCHEDULER == null) {
 			int threads = JOBS.sub("scheduler").entry("threads").or(64);
-			SCHEDULER = Executors.newScheduledThreadPool(threads, new RapidoidThreadFactory("scheduler"));
+			SCHEDULER = Executors.newScheduledThreadPool(threads, new RapidoidThreadFactory("scheduler", true));
 		}
 
 		return SCHEDULER;
@@ -74,7 +74,7 @@ public class Jobs extends RapidoidThing {
 	public static synchronized Executor executor() {
 		if (EXECUTOR == null) {
 			int threads = JOBS.sub("executor").entry("threads").or(64);
-			EXECUTOR = Executors.newFixedThreadPool(threads, new RapidoidThreadFactory("executor"));
+			EXECUTOR = Executors.newFixedThreadPool(threads, new RapidoidThreadFactory("executor", true));
 		}
 
 		return EXECUTOR;

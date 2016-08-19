@@ -33,16 +33,22 @@ public class RapidoidThreadFactory extends RapidoidThing implements ThreadFactor
 
 	private final String name;
 
+	private final boolean daemons;
+
 	private final AtomicLong counter = new AtomicLong();
 
-	public RapidoidThreadFactory(String name) {
+	public RapidoidThreadFactory(String name, boolean daemons) {
 		this.name = name;
+		this.daemons = daemons;
 	}
 
 	@Override
 	public Thread newThread(Runnable runnable) {
 		RapidoidThread thread = new RapidoidThread(runnable);
+
 		thread.setName(name + counter.incrementAndGet());
+		thread.setDaemon(daemons);
+
 		return thread;
 	}
 
