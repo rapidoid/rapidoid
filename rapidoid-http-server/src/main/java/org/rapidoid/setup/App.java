@@ -32,6 +32,7 @@ import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.NParamLambda;
 import org.rapidoid.log.Log;
 import org.rapidoid.render.Templates;
+import org.rapidoid.reverseproxy.Reverse;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.scan.Scan;
 import org.rapidoid.u.U;
@@ -238,7 +239,22 @@ public class App extends RapidoidThing {
 	public static AppBootstrap bootstrap(String... args) {
 		args(args);
 		scan();
+
+		for (String arg : args) {
+			if (arg.contains("->")) {
+				processProxyArg(arg);
+			}
+		}
+
 		return new AppBootstrap();
+	}
+
+	private static void processProxyArg(String arg) {
+		String[] parts = arg.split("->");
+		U.must(parts.length == 2, "Expected /uri->target proxy mapping!");
+
+		List<String> targets = U.list(parts[1].split("\\,"));
+		Reverse.proxy().map(parts[0], targets);
 	}
 
 	static void filterAndInvokeMainClasses(Object[] beans) {
