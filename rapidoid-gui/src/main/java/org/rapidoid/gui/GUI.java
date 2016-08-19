@@ -27,7 +27,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.AnyObj;
 import org.rapidoid.commons.English;
 import org.rapidoid.commons.Str;
-import org.rapidoid.commons.TimeSeries;
+import org.rapidoid.timeseries.TimeSeries;
 import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.gui.input.*;
 import org.rapidoid.gui.reqinfo.IReqInfo;

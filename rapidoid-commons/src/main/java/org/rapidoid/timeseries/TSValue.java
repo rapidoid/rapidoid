@@ -1,4 +1,4 @@
-package org.rapidoid.commons;
+package org.rapidoid.timeseries;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;

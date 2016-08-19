@@ -1,9 +1,10 @@
-package org.rapidoid.commons;
+package org.rapidoid.timeseries;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
+import org.rapidoid.commons.Stats;
 import org.rapidoid.u.U;
 
 import java.util.*;

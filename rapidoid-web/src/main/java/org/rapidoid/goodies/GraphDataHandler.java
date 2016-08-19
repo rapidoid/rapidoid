@@ -2,7 +2,7 @@ package org.rapidoid.goodies;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.TimeSeries;
+import org.rapidoid.timeseries.TimeSeries;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.http.Req;
 import org.rapidoid.insight.Metrics;
