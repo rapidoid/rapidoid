@@ -41,9 +41,7 @@ import org.rapidoid.util.Msc;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import java.lang.annotation.Annotation;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -236,7 +234,17 @@ public class App extends RapidoidThing {
 		return IoC.defaultContext();
 	}
 
+	public static AppBootstrap bootstrap(String[] args, String... extraArgs) {
+		List<String> allArgs = U.list(args);
+		Collections.addAll(allArgs, extraArgs);
+		return appBootstrap(allArgs.toArray(new String[allArgs.size()]));
+	}
+
 	public static AppBootstrap bootstrap(String... args) {
+		return appBootstrap(args);
+	}
+
+	public static AppBootstrap appBootstrap(String[] args) {
 		args(args);
 		scan();
 
