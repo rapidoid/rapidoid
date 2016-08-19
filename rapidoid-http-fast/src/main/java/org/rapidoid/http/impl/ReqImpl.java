@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.ChangeTrackingMap;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.commons.Str;
@@ -86,13 +87,15 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	private volatile Map<String, Object> data;
 
-	private volatile Map<String, Serializable> token;
+	private volatile ChangeTrackingMap<String, Serializable> token;
 
-	final AtomicBoolean isTokenDirty = new AtomicBoolean();
+	final AtomicBoolean tokenChanged = new AtomicBoolean();
 
 	private volatile TokenStatus tokenStatus = TokenStatus.PENDING;
 
-	private volatile Map<String, Serializable> session;
+	private volatile ChangeTrackingMap<String, Serializable> session;
+
+	final AtomicBoolean sessionChanged = new AtomicBoolean();
 
 	private volatile RespImpl response;
 
@@ -425,12 +428,12 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	private void startResponse(int code, boolean unknownContentLength) {
 		MediaType contentType = MediaType.HTML_UTF_8;
 
-		if (isTokenDirty.get()) {
+		if (tokenChanged.get()) {
 			HttpUtils.saveTokenBeforeRenderingHeaders(this, token);
 		}
 
-		if (session != null) {
-			saveSession(session);
+		if (sessionChanged.get()) {
+			saveSession(session.target());
 		}
 
 		if (response != null) {
@@ -655,7 +658,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		if (session == null) {
 			synchronized (this) {
 				if (session == null) {
-					session = loadSession();
+					session = Coll.trackChanges(loadSession(), sessionChanged);
 				}
 			}
 		}
@@ -702,7 +705,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 						tokenStatus(TokenStatus.INVALID);
 					}
 
-					token = Coll.trackChanges(Collections.synchronizedMap(U.safe(tokenData)), isTokenDirty);
+					token = Coll.trackChanges(Collections.synchronizedMap(U.safe(tokenData)), tokenChanged);
 				}
 			}
 		}

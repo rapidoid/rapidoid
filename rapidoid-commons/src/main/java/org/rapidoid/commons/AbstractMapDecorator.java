@@ -118,4 +118,8 @@ public class AbstractMapDecorator<K, V> extends RapidoidThing implements Map<K, 
 		return result;
 	}
 
+	public Map<K, V> target() {
+		return target;
+	}
+
 }

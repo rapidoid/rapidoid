@@ -345,7 +345,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 		RolesProvider rolesProvider = Customization.of(req).rolesProvider();
 		U.must(rolesProvider != null, "A roles provider wasn't set!");
 
-		req.isTokenDirty.set(true);
+		req.tokenChanged.set(true);
 
 		boolean success;
 
@@ -375,7 +375,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 	public void logout() {
 		HttpUtils.clearUserData(request());
 		HttpUtils.setResponseTokenCookie(this, "");
-		req.isTokenDirty.set(true);
+		req.tokenChanged.set(true);
 	}
 
 	@Override

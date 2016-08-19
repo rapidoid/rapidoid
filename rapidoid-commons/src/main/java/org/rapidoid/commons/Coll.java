@@ -347,7 +347,7 @@ public class Coll extends RapidoidThing {
 		return (items instanceof Collection<?>) ? ((Collection<?>) items).size() : null;
 	}
 
-	public static <K, V> Map<K, V> trackChanges(Map<K, V> map, AtomicBoolean dirtyFlag) {
+	public static <K, V> ChangeTrackingMap<K, V> trackChanges(Map<K, V> map, AtomicBoolean dirtyFlag) {
 		return new ChangeTrackingMap<K, V>(map, dirtyFlag);
 	}
 
