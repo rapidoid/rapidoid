@@ -38,7 +38,7 @@ public class Customization extends RapidoidThing {
 
 	private final String name;
 	private final Customization defaults;
-	private final Config appConfig;
+	private final Config config;
 	private final Config serverConfig;
 
 	private final ByType<Throwable, ErrorHandler> errorHandlers = ByType.create();
@@ -73,10 +73,10 @@ public class Customization extends RapidoidThing {
 
 	private volatile SessionManager sessionManager;
 
-	public Customization(String name, Customization defaults, Config appConfig, Config serverConfig) {
+	public Customization(String name, Customization defaults, Config config, Config serverConfig) {
 		this.name = name;
 		this.defaults = defaults;
-		this.appConfig = appConfig;
+		this.config = config;
 		this.serverConfig = serverConfig;
 
 		reset();
@@ -120,8 +120,8 @@ public class Customization extends RapidoidThing {
 		return defaults;
 	}
 
-	public Config appConfig() {
-		return appConfig;
+	public Config config() {
+		return config;
 	}
 
 	public Config serverConfig() {

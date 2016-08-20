@@ -61,8 +61,8 @@ import java.util.Map;
 @Since("5.1.0")
 public class Setup extends RapidoidThing implements Constants {
 
-	static final Setup ON = new Setup("app", "main", "0.0.0.0", 8888, IoC.defaultContext(), Conf.APP, Conf.ON);
-	static final Setup ADMIN = new Setup("admin", "admin", "0.0.0.0", 8888, IoC.defaultContext(), Conf.APP, Conf.ADMIN);
+	static final Setup ON = new Setup("app", "main", "0.0.0.0", 8888, IoC.defaultContext(), Conf.ROOT, Conf.ON);
+	static final Setup ADMIN = new Setup("admin", "admin", "0.0.0.0", 8888, IoC.defaultContext(), Conf.ROOT, Conf.ADMIN);
 
 	private static final List<Setup> instances = Coll.synchronizedList(ON, ADMIN);
 
@@ -92,7 +92,7 @@ public class Setup extends RapidoidThing implements Constants {
 
 	private final String name;
 	private final String segment;
-	private final Config appConfig;
+	private final Config config;
 	private final Config serverConfig;
 
 	private final String defaultAddress;
@@ -131,7 +131,7 @@ public class Setup extends RapidoidThing implements Constants {
 		instances.remove(this);
 	}
 
-	private Setup(String name, String segment, String defaultAddress, int defaultPort, IoCContext ioCContext, Config appConfig, Config serverConfig) {
+	private Setup(String name, String segment, String defaultAddress, int defaultPort, IoCContext ioCContext, Config config, Config serverConfig) {
 		this.name = name;
 		this.segment = segment;
 
@@ -140,10 +140,10 @@ public class Setup extends RapidoidThing implements Constants {
 
 		this.ioCContext = ioCContext;
 
-		this.appConfig = appConfig;
+		this.config = config;
 		this.serverConfig = serverConfig;
 
-		this.customization = new Customization(name, My.custom(), appConfig, serverConfig);
+		this.customization = new Customization(name, My.custom(), config, serverConfig);
 		this.routes = new HttpRoutesImpl(customization);
 
 		this.defaults.segment(segment);
