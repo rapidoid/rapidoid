@@ -171,8 +171,8 @@ public class Conf extends RapidoidThing {
 
 	public static void loadConfig(List<List<String>> detached) {
 		String filenameBase = U.or(ROOT.filenameBase(), "config");
-		String configFilenamePattern = filenameBase + ".y?ml";
-		String configProfilePattern = filenameBase + "-%s.y?ml";
+		String configFilenamePattern = filenameBase + ConfigUtil.YML_OR_YAML;
+		String configProfilePattern = filenameBase + "-%s" + ConfigUtil.YML_OR_YAML;
 
 		ConfigUtil.load(Msc.path(path, configFilenamePattern), ROOT, false);
 
@@ -203,7 +203,7 @@ public class Conf extends RapidoidThing {
 	private static String filename(List<String> keys) {
 		U.must(keys.size() < 2);
 		String configName = keys.isEmpty() ? "config" : keys.get(0);
-		return Msc.path(path, configName + ".y?ml");
+		return Msc.path(path, configName + ConfigUtil.YML_OR_YAML);
 	}
 
 	public static synchronized String[] getArgs() {

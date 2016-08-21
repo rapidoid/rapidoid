@@ -60,6 +60,8 @@ public class Defaults extends RapidoidThing {
 
 	private static final SessionManager sessionManager = new DefaultSessionManager();
 
+	private static final StaticFilesSecurity staticFilesSecurity = new DefaultStaticFilesSecurity();
+
 	public static String[] staticFilesPath() {
 		return staticFilesPath;
 	}
@@ -120,4 +122,7 @@ public class Defaults extends RapidoidThing {
 		return sessionManager;
 	}
 
+	public static StaticFilesSecurity staticFilesSecurity() {
+		return staticFilesSecurity;
+	}
 }

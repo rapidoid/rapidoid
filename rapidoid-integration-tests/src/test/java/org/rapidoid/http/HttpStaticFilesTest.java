@@ -45,6 +45,15 @@ public class HttpStaticFilesTest extends IntegrationTestCommons {
 		onlyGet("/b");
 		onlyGet("/c");
 
+		onlyGet("/dir1/sub1.txt");
+
+		// no private files (starting with '.')
+		notFound("/dir1/.sub2.txt");
+		notFound("/.priv.txt");
+
+		// no folders
+		notFound("/dir1");
+
 		notFound("/xx");
 		notFound("/page1");
 		notFound("/page2");

@@ -73,6 +73,8 @@ public class Customization extends RapidoidThing {
 
 	private volatile SessionManager sessionManager;
 
+	private volatile StaticFilesSecurity staticFilesSecurity;
+
 	public Customization(String name, Customization defaults, Config config, Config serverConfig) {
 		this.name = name;
 		this.defaults = defaults;
@@ -277,6 +279,15 @@ public class Customization extends RapidoidThing {
 		} while (handler == null && custom != null);
 
 		return handler;
+	}
+
+	public StaticFilesSecurity staticFilesSecurity() {
+		return staticFilesSecurity != null || defaults == null ? staticFilesSecurity : defaults.staticFilesSecurity();
+	}
+
+	public Customization staticFilesSecurity(StaticFilesSecurity staticFilesSecurity) {
+		this.staticFilesSecurity = staticFilesSecurity;
+		return this;
 	}
 
 	@Override

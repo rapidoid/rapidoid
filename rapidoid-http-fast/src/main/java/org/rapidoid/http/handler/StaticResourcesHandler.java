@@ -22,9 +22,12 @@ package org.rapidoid.http.handler;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.HttpStatus;
+import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.MediaType;
-import org.rapidoid.http.*;
+import org.rapidoid.http.Req;
 import org.rapidoid.http.customize.Customization;
+import org.rapidoid.http.customize.StaticFilesSecurity;
 import org.rapidoid.http.impl.HttpIO;
 import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.io.Res;
@@ -44,18 +47,25 @@ public class StaticResourcesHandler extends AbstractHttpHandler {
 
 	@Override
 	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
+
+		if (!HttpUtils.isGetReq(req)) return HttpStatus.NOT_FOUND;
+
 		try {
 			String[] staticFilesLocations = customization.staticFilesPath();
 
 			if (!U.isEmpty(staticFilesLocations)) {
 				Res res = HttpUtils.staticPage(req, staticFilesLocations);
 
-				byte[] bytes = res.getBytesOrNull();
+				StaticFilesSecurity staticFilesSecurity = customization.staticFilesSecurity();
 
-				if (bytes != null) {
-					MediaType contentType = U.or(MediaType.getByFileName(res.getName()), MediaType.BINARY);
-					HttpIO.write200(ctx, isKeepAlive, contentType, bytes);
-					return HttpStatus.DONE;
+				if (staticFilesSecurity.canServe(req, res)) {
+					byte[] bytes = res.getBytesOrNull();
+
+					if (bytes != null) {
+						MediaType contentType = U.or(MediaType.getByFileName(res.getName()), MediaType.BINARY);
+						HttpIO.write200(ctx, isKeepAlive, contentType, bytes);
+						return HttpStatus.DONE;
+					}
 				}
 			}
 

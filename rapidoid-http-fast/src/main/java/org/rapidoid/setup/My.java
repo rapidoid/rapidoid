@@ -55,6 +55,7 @@ public class My extends RapidoidThing {
 			GLOBAL.entityManagerProvider(Defaults.entityManagerProvider());
 			GLOBAL.templatesPath(Defaults.templatesPath());
 			GLOBAL.sessionManager(Defaults.sessionManager());
+			GLOBAL.staticFilesSecurity(Defaults.staticFilesSecurity());
 		}
 	}
 
@@ -173,6 +174,15 @@ public class My extends RapidoidThing {
 	public static Customization sessionManager(SessionManager sessionManager) {
 		return GLOBAL.sessionManager(sessionManager);
 	}
+
+	public static StaticFilesSecurity staticFilesSecurity() {
+		return GLOBAL.staticFilesSecurity();
+	}
+
+	public static Customization staticFilesSecurity(StaticFilesSecurity staticFilesSecurity) {
+		return GLOBAL.staticFilesSecurity(staticFilesSecurity);
+	}
+
 
 	public static synchronized OnError error(Class<? extends Throwable> error) {
 		return new OnError(GLOBAL, error);

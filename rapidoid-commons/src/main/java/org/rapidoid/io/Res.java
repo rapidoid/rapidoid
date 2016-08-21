@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 /*
  * #%L
@@ -40,6 +41,8 @@ import java.util.concurrent.TimeUnit;
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class Res extends RapidoidThing {
+
+	public static volatile Pattern REGEX_INVALID_FILENAME = Pattern.compile("(?:[*?\\\\'\"<>|:\\x00-\\x1F]|\\.\\.)");
 
 	private static final ConcurrentMap<ResKey, Res> FILES = Coll.concurrentMap();
 
@@ -67,11 +70,19 @@ public class Res extends RapidoidThing {
 
 	private volatile Object attachment;
 
+	private volatile boolean hidden;
+
 	private final Map<String, Runnable> changeListeners = Coll.synchronizedMap();
 
 	private Res(String name, String... possibleLocations) {
 		this.name = name;
 		this.possibleLocations = possibleLocations;
+
+		validateFilename(name);
+	}
+
+	public static void validateFilename(String filename) {
+		U.must(!Res.REGEX_INVALID_FILENAME.matcher(filename).find(), "Invalid resource name: %s", filename);
 	}
 
 	public static Res from(File file, String... possibleLocations) {
@@ -209,20 +220,28 @@ public class Res extends RapidoidThing {
 
 		if (file.exists()) {
 
+			if (file.isDirectory()) {
+				return null;
+			}
+
 			// a normal file on the file system
 			Log.trace("Resource file exists", "name", name, "file", file);
 
 			if (file.lastModified() > this.lastModified || !filename.equals(cachedFileName)) {
 				Log.debug("Loading resource file", "name", name, "file", file);
 				this.lastModified = file.lastModified();
+				this.hidden = file.isHidden();
 				return IO.loadBytes(filename);
+
 			} else {
 				Log.trace("Resource file not modified", "name", name, "file", file);
 				return bytes;
 			}
+
 		} else {
 			// it might not exist or it might be on the classpath or compressed in a JAR
 			Log.trace("Trying to load classpath resource", "name", name, "file", file);
+			this.hidden = false;
 			return IO.loadBytes(filename);
 		}
 	}
@@ -334,5 +353,9 @@ public class Res extends RapidoidThing {
 		File dir = new File(root);
 		Log.info("Setting root folder for the resources", "!root", root, "exists", dir.exists() && dir.isDirectory());
 		Res.ROOT = root;
+	}
+
+	public boolean isHidden() {
+		return hidden;
 	}
 }

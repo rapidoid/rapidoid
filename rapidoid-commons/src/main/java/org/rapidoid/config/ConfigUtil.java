@@ -36,6 +36,8 @@ import java.util.Map;
 @Since("5.1.0")
 public class ConfigUtil extends RapidoidThing {
 
+	public static final String YML_OR_YAML = ".yml_or_yaml";
+
 	private static final ConfigParser YAML_PARSER = new ConfigParser() {
 		@SuppressWarnings("unchecked")
 		@Override
@@ -110,9 +112,9 @@ public class ConfigUtil extends RapidoidThing {
 	}
 
 	private static byte[] tryToLoad(String filename, Config config) {
-		if (filename.endsWith(".y?ml")) {
+		if (filename.endsWith(YML_OR_YAML)) {
 			// flexible extension: YML or YAML
-			String basename = Str.trimr(filename, ".y?ml");
+			String basename = Str.trimr(filename, YML_OR_YAML);
 
 			byte[] bytes = Res.from(basename + ".yaml").getBytesOrNull();
 

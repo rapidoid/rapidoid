@@ -125,27 +125,18 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 	}
 
 	public static String resName(Req req) {
-		return resName(req.route() != null ? req.route().path() : req.path());
+		return req.route() != null ? resNameFromRoutePath(req.route().path()) : resName(req.path());
+	}
+
+	public static String resNameFromRoutePath(String path) {
+		path = Str.replace(path, PathPattern.PATH_PARAM_REGEX, PATH_PARAM_EXTRACTOR);
+		return resName(path);
 	}
 
 	public static String resName(String path) {
-		String res = Str.replace(path, PathPattern.PATH_PARAM_REGEX, PATH_PARAM_EXTRACTOR);
-
-		U.must(!res.contains("/."), "Private resources (starting with '.') cannot be accessed!");
-		U.must(!res.contains(".."), "Invalid resource path (contains '..')!");
-		U.must(!res.contains("*") && !path.contains("?"), "Wildcard characters ('*', '?') are not allowed in the resource path!");
-
-		res = Str.triml(res, "/");
-
-		if (res.isEmpty()) {
-			res = "index";
-		} else {
-			if (res.endsWith(".html")) {
-				res = Str.sub(res, 0, -5);
-			}
-		}
-
-		return res;
+		Res.validateFilename(path);
+		String res = Str.triml(path, "/");
+		return res.isEmpty() ? "index" : Str.trimr(res, ".html");
 	}
 
 	public static boolean hasExtension(String name) {
@@ -172,6 +163,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 
 		if (hasExtension(resName)) {
 			return Res.from(resName, possibleLocations);
+
 		} else {
 			Res res = Res.from(resName, possibleLocations);
 

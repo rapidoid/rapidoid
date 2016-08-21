@@ -297,6 +297,7 @@ org.rapidoid.http.customize.defaults.DefaultPageRenderer
 org.rapidoid.http.customize.defaults.DefaultRolesProvider
 org.rapidoid.http.customize.defaults.Defaults
 org.rapidoid.http.customize.defaults.DefaultSessionManager
+org.rapidoid.http.customize.defaults.DefaultStaticFilesSecurity
 org.rapidoid.http.customize.defaults.DefaultViewRenderer
 org.rapidoid.http.customize.EntityManagerFactoryProvider
 org.rapidoid.http.customize.EntityManagerProvider
@@ -307,6 +308,7 @@ org.rapidoid.http.customize.LoginProvider
 org.rapidoid.http.customize.PageRenderer
 org.rapidoid.http.customize.RolesProvider
 org.rapidoid.http.customize.SessionManager
+org.rapidoid.http.customize.StaticFilesSecurity
 org.rapidoid.http.customize.ViewRenderer
 org.rapidoid.http.DynamicRESTClient
 org.rapidoid.http.FastHttp

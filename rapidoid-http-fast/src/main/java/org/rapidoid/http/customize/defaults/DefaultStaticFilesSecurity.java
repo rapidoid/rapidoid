@@ -1,4 +1,4 @@
-package org.rapidoid.http;
+package org.rapidoid.http.customize.defaults;
 
 /*
  * #%L
@@ -20,24 +20,25 @@ package org.rapidoid.http;
  * #L%
  */
 
-import org.junit.Test;
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.customize.StaticFilesSecurity;
+import org.rapidoid.io.Res;
+
+import java.util.regex.Pattern;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class HttpUtilsTest extends TestCommons {
+@Since("5.2.0")
+public class DefaultStaticFilesSecurity extends RapidoidThing implements StaticFilesSecurity {
 
-	@Test
-	public void testView() {
-		eq(HttpUtils.resName("/"), "index");
-		eq(HttpUtils.resName("/abc"), "abc");
-		eq(HttpUtils.resName("/x/y/z"), "x/y/z");
+	private static final Pattern PRIVATE = Pattern.compile("(^|\\\\|/)\\.");
 
-		eq(HttpUtils.resNameFromRoutePath("/books/{x}"), "books/x");
-		eq(HttpUtils.resNameFromRoutePath("/books/{id:\\d+}"), "books/id");
-		eq(HttpUtils.resNameFromRoutePath("/books/{a:.*}-{b}/view"), "books/a-b/view");
+	@Override
+	public boolean canServe(Req req, Res staticResource) throws RuntimeException {
+		String name = staticResource.getName();
+		return !staticResource.isHidden() && !PRIVATE.matcher(name).find();
 	}
 
 }
