@@ -392,8 +392,8 @@ public class OnRoute extends RapidoidThing {
 		return tx(TransactionMode.AUTO);
 	}
 
-	public OnRoute segment(String segment) {
-		options.segment(segment);
+	public OnRoute zone(String zone) {
+		options.zone(zone);
 		return this;
 	}
 

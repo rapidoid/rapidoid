@@ -63,7 +63,7 @@ public interface IReqInfo {
 
 	Set<String> roles();
 
-	String segment();
+	String zone();
 
 	String contextPath();
 

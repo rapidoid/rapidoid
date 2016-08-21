@@ -60,7 +60,7 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 		sortRoutes(routes);
 
 		List<Object> rows = U.list();
-		rows.add(tr(th("Verb"), th("Path"), th("Segment"), th("Content type"), th("MVC"), th("View name"), th("Roles"), withHandler ? th("Handler") : null));
+		rows.add(tr(th("Verb"), th("Path"), th("Zone"), th("Content type"), th("MVC"), th("View name"), th("Roles"), withHandler ? th("Handler") : null));
 
 		while (!routes.isEmpty()) {
 			Route route = U.first(routes);
@@ -113,7 +113,7 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 		}
 
 		Tag path = td(route.path());
-		Tag segment = td(config.segment());
+		Tag zone = td(config.zone());
 		Tag roles = td(display(config.roles().isEmpty() ? "" : config.roles()));
 		Tag hnd = td(route.handler());
 
@@ -124,7 +124,7 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 
 		Tag mvc = td(config.mvc() ? fa("check") : "");
 
-		return tr(verb, path, segment, ctype, mvc, view, roles, withHandler ? hnd : null);
+		return tr(verb, path, zone, ctype, mvc, view, roles, withHandler ? hnd : null);
 	}
 
 	private static String viewName(Route route, RouteConfig config) {

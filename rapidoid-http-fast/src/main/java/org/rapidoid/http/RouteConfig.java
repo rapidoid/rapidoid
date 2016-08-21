@@ -55,7 +55,7 @@ public interface RouteConfig {
 
 	RouteOptions wrap(HttpWrapper... wrappers);
 
-	String segment();
+	String zone();
 
-	RouteOptions segment(String segment);
+	RouteOptions zone(String zone);
 }

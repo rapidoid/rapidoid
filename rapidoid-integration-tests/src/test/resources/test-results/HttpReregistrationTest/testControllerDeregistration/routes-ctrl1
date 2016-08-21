@@ -1,1 +1,1 @@
-Route GET /inc [segment main] roles [] : json(AbcCtrl#inc(Integer x))
+Route GET /inc [zone main] roles [] : json(AbcCtrl#inc(Integer x))

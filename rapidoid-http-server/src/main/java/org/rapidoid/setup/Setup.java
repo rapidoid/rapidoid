@@ -91,7 +91,7 @@ public class Setup extends RapidoidThing implements Constants {
 	}
 
 	private final String name;
-	private final String segment;
+	private final String zone;
 	private final Config config;
 	private final Config serverConfig;
 
@@ -131,9 +131,9 @@ public class Setup extends RapidoidThing implements Constants {
 		instances.remove(this);
 	}
 
-	private Setup(String name, String segment, String defaultAddress, int defaultPort, IoCContext ioCContext, Config config, Config serverConfig) {
+	private Setup(String name, String zone, String defaultAddress, int defaultPort, IoCContext ioCContext, Config config, Config serverConfig) {
 		this.name = name;
-		this.segment = segment;
+		this.zone = zone;
 
 		this.defaultAddress = defaultAddress;
 		this.defaultPort = defaultPort;
@@ -146,7 +146,7 @@ public class Setup extends RapidoidThing implements Constants {
 		this.customization = new Customization(name, My.custom(), config, serverConfig);
 		this.routes = new HttpRoutesImpl(customization);
 
-		this.defaults.segment(segment);
+		this.defaults.zone(zone);
 	}
 
 	public FastHttp http() {
@@ -402,7 +402,7 @@ public class Setup extends RapidoidThing implements Constants {
 		server = null;
 
 		defaults = new RouteOptions();
-		defaults().segment(segment);
+		defaults().zone(zone);
 
 		if (isApp()) {
 			AppInfo.isAppServerActive = false;
@@ -456,7 +456,7 @@ public class Setup extends RapidoidThing implements Constants {
 		ioCContext.reset();
 		http().resetConfig();
 		defaults = new RouteOptions();
-		defaults.segment(segment);
+		defaults.zone(zone);
 		attributes().clear();
 		initDefaults();
 	}
@@ -502,8 +502,8 @@ public class Setup extends RapidoidThing implements Constants {
 		return defaults;
 	}
 
-	public String segment() {
-		return segment;
+	public String zone() {
+		return zone;
 	}
 
 	public boolean isRunning() {

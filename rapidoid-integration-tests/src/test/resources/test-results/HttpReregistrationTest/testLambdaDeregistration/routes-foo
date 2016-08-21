@@ -1,2 +1,2 @@
-Route GET /foo [segment main] roles [] : html((Req req, Integer x) -> ...)
-Route POST /foo [segment main] roles [] : html((Req req, Integer x) -> ...)
+Route GET /foo [zone main] roles [] : html((Req req, Integer x) -> ...)
+Route POST /foo [zone main] roles [] : html((Req req, Integer x) -> ...)

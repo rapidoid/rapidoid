@@ -69,13 +69,13 @@ public interface Req {
 	String host();
 
 	/**
-	 * Gets the name of the <b>application segment</b> handling the request. <br>
-	 * The default segment name is <code>main</code> for the <code>On</code> API, and <code>admin</code> for the <code>Admin</code> API.
+	 * Gets the name of the <b>application zone</b> handling the request. <br>
+	 * The default zone name is <code>main</code> for the <code>On</code> API, and <code>admin</code> for the <code>Admin</code> API.
 	 */
-	String segment();
+	String zone();
 
 	/**
-	 * Gets the <b>context path</b> of the application segment handling the request. <br>
+	 * Gets the <b>context path</b> of the application zone handling the request. <br>
 	 * The default context path is <code>/</code> for the <code>On</code> API, and <code>/_</code> for the <code>Admin</code> API.
 	 */
 	String contextPath();

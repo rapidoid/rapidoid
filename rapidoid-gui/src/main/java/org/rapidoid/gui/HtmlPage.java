@@ -84,13 +84,13 @@ public class HtmlPage extends ScreenBean {
 		model.put("adminUrl", ReqInfoUtils.adminUrl());
 
 		model.put("dev", Env.dev());
-		model.put("admin", "admin".equalsIgnoreCase(req.segment()));
+		model.put("admin", "admin".equalsIgnoreCase(req.zone()));
 
 		model.put("host", req.host());
 		model.put("verb", req.verb());
 		model.put("uri", req.uri());
 		model.put("path", req.path());
-		model.put("segment", req.segment());
+		model.put("zone", req.zone());
 
 		model.put("username", req.username());
 
@@ -183,7 +183,7 @@ public class HtmlPage extends ScreenBean {
 
 		has.put("role", HtmlPageUtils.HAS_ROLE);
 		has.put("path", HtmlPageUtils.HAS_PATH);
-		has.put("segment", HtmlPageUtils.HAS_SEGMENT);
+		has.put("zone", HtmlPageUtils.HAS_ZONE);
 		has.put("page", HtmlPageUtils.HAS_PAGE);
 
 		return has;

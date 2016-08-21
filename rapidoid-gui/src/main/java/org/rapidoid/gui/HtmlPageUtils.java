@@ -53,10 +53,10 @@ public class HtmlPageUtils extends RapidoidThing {
 		}
 	};
 
-	static final Getter HAS_SEGMENT = new Getter() {
+	static final Getter HAS_ZONE = new Getter() {
 		@Override
-		public Object get(String segment) {
-			return HtmlPageUtils.hasSegment(segment);
+		public Object get(String zone) {
+			return HtmlPageUtils.hasZone(zone);
 		}
 	};
 
@@ -70,9 +70,9 @@ public class HtmlPageUtils extends RapidoidThing {
 		return uriToStr(req.path()).equals(path);
 	}
 
-	static boolean hasSegment(String segment) {
+	static boolean hasZone(String zone) {
 		IReqInfo req = ReqInfo.get();
-		return req.segment().equals(segment);
+		return req.zone().equals(zone);
 	}
 
 	private static String uriToStr(String path) {

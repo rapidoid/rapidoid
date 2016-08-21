@@ -107,8 +107,8 @@ public class RapidoidReqInfo extends AbstractReqInfo {
 	}
 
 	@Override
-	public String segment() {
-		return req().segment();
+	public String zone() {
+		return req().zone();
 	}
 
 	@Override

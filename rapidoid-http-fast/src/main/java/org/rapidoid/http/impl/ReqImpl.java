@@ -67,7 +67,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	private volatile String query;
 
-	private volatile String segment;
+	private volatile String zone;
 
 	private volatile String contextPath;
 
@@ -122,7 +122,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	public ReqImpl(FastHttp http, Channel channel, boolean isKeepAlive, String verb, String uri, String path,
 	               String query, byte[] body, Map<String, String> params, Map<String, String> headers,
 	               Map<String, String> cookies, Map<String, Object> posted, Map<String, List<Upload>> files,
-	               boolean pendingBodyParsing, MediaType defaultContentType, String segment,
+	               boolean pendingBodyParsing, MediaType defaultContentType, String zone,
 	               HttpRoutesImpl routes, Route route) {
 
 		this.http = http;
@@ -140,7 +140,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		this.files = files;
 		this.pendingBodyParsing = pendingBodyParsing;
 		this.defaultContentType = defaultContentType;
-		this.segment = segment;
+		this.zone = zone;
 		this.routes = routes;
 		this.route = route;
 	}
@@ -736,12 +736,12 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	}
 
 	@Override
-	public String segment() {
-		return segment;
+	public String zone() {
+		return zone;
 	}
 
-	public Req segment(String segment) {
-		this.segment = segment;
+	public Req zone(String zone) {
+		this.zone = zone;
 		return this;
 	}
 

@@ -40,7 +40,7 @@ public class MockReqInfo extends AbstractReqInfo {
 
 	private String host = "localhost";
 
-	private String segment = "main";
+	private String zone = "main";
 
 	private String contextPath = "/";
 
@@ -207,12 +207,12 @@ public class MockReqInfo extends AbstractReqInfo {
 	}
 
 	@Override
-	public String segment() {
-		return segment;
+	public String zone() {
+		return zone;
 	}
 
-	public MockReqInfo segment(String segment) {
-		this.segment = segment;
+	public MockReqInfo zone(String zone) {
+		this.zone = zone;
 		return this;
 	}
 
@@ -243,7 +243,7 @@ public class MockReqInfo extends AbstractReqInfo {
 			+ ", path=" + path
 			+ ", uri=" + uri
 			+ ", host=" + host
-			+ ", segment=" + segment
+			+ ", zone=" + zone
 			+ ", contextPath=" + contextPath
 			+ ", data=" + (data != null ? toString(data.entrySet(), maxLen) : null)
 			+ ", params=" + (params != null ? toString(params.entrySet(), maxLen) : null)

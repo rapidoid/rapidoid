@@ -328,13 +328,12 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 		return zone(req).entry("contextPath").or("");
 	}
 
-	public static BasicConfig zone(Customization custom, String segment) {
+	public static BasicConfig zone(Customization custom, String zone) {
 		Config appConfig = custom.config().sub("app");
 
-		if (segment != null) {
-			String zoneKey = segment + "-zone";
-			Config zone = custom.config().sub(zoneKey);
-			return zone.or(appConfig);
+		if (zone != null) {
+			String zoneKey = zone + "-zone";
+			return custom.config().sub(zoneKey).or(appConfig);
 
 		} else {
 			return appConfig;
@@ -343,7 +342,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 
 	public static BasicConfig zone(Req req) {
 		Customization custom = Customization.of(req);
-		return zone(custom, req.segment());
+		return zone(custom, req.zone());
 	}
 
 	@SuppressWarnings("unchecked")

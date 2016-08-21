@@ -1,4 +1,4 @@
-Route GET /custom-page [segment main] roles [] : mvc((Req) -> ...)
-Route GET /my/custom [segment main] roles [] : mvc(() -> ...)
-Route POST /custom-page [segment main] roles [] : mvc((Req) -> ...)
-Route POST /my/custom [segment main] roles [] : mvc(() -> ...)
+Route GET /custom-page [zone main] roles [] : mvc((Req) -> ...)
+Route GET /my/custom [zone main] roles [] : mvc(() -> ...)
+Route POST /custom-page [zone main] roles [] : mvc((Req) -> ...)
+Route POST /my/custom [zone main] roles [] : mvc(() -> ...)

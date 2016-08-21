@@ -216,7 +216,7 @@ public class Goodies extends RapidoidThing {
 		if (Msc.hasJPA()) {
 			for (Class<?> type : JPA.getEntityJavaTypes()) {
 				String uri = GUI.typeUri(type);
-				String contextPath = HttpUtils.zone(setup.custom(), setup.segment()).entry("home").or("/_");
+				String contextPath = HttpUtils.zone(setup.custom(), setup.zone()).entry("home").or("/_");
 				X.scaffold(setup, Msc.uri(contextPath, uri), type);
 			}
 		}

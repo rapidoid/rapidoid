@@ -81,7 +81,7 @@ public class RouteImpl extends RapidoidThing implements Route {
 
 	@Override
 	public String toString() {
-		return U.frmt("Route %s %s [segment %s] roles %s : %s", verb, path, config().segment(), config().roles(), handler);
+		return U.frmt("Route %s %s [zone %s] roles %s : %s", verb, path, config().zone(), config().roles(), handler);
 	}
 
 	@Override

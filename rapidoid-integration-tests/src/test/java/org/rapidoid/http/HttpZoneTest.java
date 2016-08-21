@@ -36,8 +36,8 @@ public class HttpZoneTest extends IntegrationTestCommons {
 		ReqHandler zoneHandler = req -> new TreeMap<>(HttpUtils.zone(req).toMap());
 
 		On.get("/a").json(zoneHandler);
-		On.get("/b").segment("admin").json(zoneHandler);
-		On.get("/c").segment("other").json(zoneHandler);
+		On.get("/b").zone("admin").json(zoneHandler);
+		On.get("/c").zone("other").json(zoneHandler);
 
 		onlyGet("/a");
 		onlyGet("/b");

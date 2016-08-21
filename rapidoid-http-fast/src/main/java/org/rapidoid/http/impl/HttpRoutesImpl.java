@@ -493,7 +493,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 
 		for (Iterator<Route> it = routes.iterator(); it.hasNext(); ) {
 			Route route = it.next();
-			if (!route.config().segment().equalsIgnoreCase("admin")) {
+			if (!route.config().zone().equalsIgnoreCase("admin")) {
 				it.remove();
 			}
 		}
@@ -507,7 +507,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 
 		for (Iterator<Route> it = routes.iterator(); it.hasNext(); ) {
 			Route route = it.next();
-			if (route.config().segment().equalsIgnoreCase("admin")) {
+			if (route.config().zone().equalsIgnoreCase("admin")) {
 				it.remove();
 			}
 		}
