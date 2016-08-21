@@ -162,7 +162,7 @@ public interface Resp {
 	Resp cookie(String name, String value, String... extras);
 
 	/**
-	 * Provides <b>read/write access</b> to the <b>server-side session attributes</b> of the HTTP request.
+	 * Provides <b>read/write access</b> to the <b>server-side session attributes</b> of the HTTP request/response.
 	 */
 	Map<String, Serializable> session();
 
@@ -172,7 +172,7 @@ public interface Resp {
 	Resp session(String name, Serializable value);
 
 	/**
-	 * Provides <b>read/write access</b> to the <b>cookie-persisted session attributes</b> of the HTTP request.
+	 * Provides <b>read/write access</b> to the <b>token attributes</b> of the HTTP request/response.
 	 */
 	Map<String, Serializable> token();
 
@@ -249,13 +249,13 @@ public interface Resp {
 
 	/**
 	 * Initiates a user login process with the specified <b>username</b> and <b>password</b>.<br>
-	 * After a successful login, the username will be persisted in the cookie-pack.<br>
+	 * After a successful login, the username will be persisted in the token.<br>
 	 * Returns information whether the login was successful
 	 */
 	boolean login(String username, String password);
 
 	/**
-	 * Initiates a user logout process, clearing the login information (username) from the cookie-pack.
+	 * Initiates a user logout process, clearing the login information (username) from the token.
 	 */
 	void logout();
 

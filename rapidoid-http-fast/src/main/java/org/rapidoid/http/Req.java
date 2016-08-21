@@ -219,42 +219,42 @@ public interface Req {
 	boolean hasSession();
 
 	/**
-	 * Provides <b>read/write access</b> to the <b>server-side session attributes</b> of the HTTP request.
+	 * Provides <b>read/write access</b> to the <b>server-side session attributes</b> of the HTTP request/response.
 	 */
 	Map<String, Serializable> session();
 
 	/**
-	 * Returns the value of the specified <b>server-side session attribute</b> from the HTTP request, or throws a
+	 * Returns the value of the specified <b>server-side session attribute</b> from the HTTP request/response, or throws a
 	 * runtime exception if it is not found.
 	 */
 	<T extends Serializable> T session(String name);
 
 	/**
-	 * Returns the value of the specified <b>server-side session attribute</b> from the HTTP request, or the specified
+	 * Returns the value of the specified <b>server-side session attribute</b> from the HTTP request/response, or the specified
 	 * default value, if it is not found.
 	 */
 	<T extends Serializable> T session(String name, T defaultValue);
 
-	/* COOKIE-PERSISTED SESSION: */
+	/* TOKEN DATA: */
 
 	/**
-	 * Does the HTTP request have a cookie-persisted session attached?
+	 * Does the HTTP request have a token attached?
 	 */
 	boolean hasToken();
 
 	/**
-	 * Provides <b>read/write access</b> to the <b>cookie-persisted session attributes</b> of the HTTP request.
+	 * Provides <b>read/write access</b> to the <b>token attributes</b> of the HTTP request/response.
 	 */
 	Map<String, Serializable> token();
 
 	/**
-	 * Returns the value of the specified <b>cookie-persisted session attribute</b> from the HTTP request, or throws a
+	 * Returns the value of the specified <b>token attribute</b> from the HTTP request/response, or throws a
 	 * runtime exception if it is not found.
 	 */
 	<T extends Serializable> T token(String name);
 
 	/**
-	 * Returns the value of the specified <b>cookie-persisted session attribute</b> from the HTTP request, or the
+	 * Returns the value of the specified <b>token attribute</b> from the HTTP request/response, or the
 	 * specified default value, if it is not found.
 	 */
 	<T extends Serializable> T token(String name, T defaultValue);
