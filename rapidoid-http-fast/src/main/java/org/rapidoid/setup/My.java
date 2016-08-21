@@ -63,8 +63,20 @@ public class My extends RapidoidThing {
 		return GLOBAL;
 	}
 
+	public static String[] staticFilesPath() {
+		return GLOBAL.staticFilesPath();
+	}
+
 	public static void staticFilesPath(String... staticFilesPath) {
 		GLOBAL.staticFilesPath(staticFilesPath);
+	}
+
+	public static String[] templatesPath() {
+		return GLOBAL.templatesPath();
+	}
+
+	public static void templatesPath(String... templatesPath) {
+		GLOBAL.templatesPath(templatesPath);
 	}
 
 	public static void errorHandler(ErrorHandler errorHandler) {
@@ -101,10 +113,6 @@ public class My extends RapidoidThing {
 
 	public static void jackson(ObjectMapper jackson) {
 		GLOBAL.jackson(jackson);
-	}
-
-	public static String[] staticFilesPath() {
-		return GLOBAL.staticFilesPath();
 	}
 
 	public static ErrorHandler errorHandler() {

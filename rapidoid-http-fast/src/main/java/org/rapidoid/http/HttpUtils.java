@@ -111,7 +111,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 			int size = Serialize.serialize(dest, token);
 			dest = Arrays.copyOf(dest, size);
 		} catch (BufferOverflowException e) {
-			throw U.rte("The cookie-pack is too big!");
+			throw U.rte("The token is too big!");
 		}
 		return dest;
 	}
