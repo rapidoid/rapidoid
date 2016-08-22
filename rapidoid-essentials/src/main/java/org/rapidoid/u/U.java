@@ -22,6 +22,7 @@ package org.rapidoid.u;
 
 import org.rapidoid.RapidoidThing;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.concurrent.CancellationException;
 
@@ -186,6 +187,23 @@ public class U extends RapidoidThing {
 	@SuppressWarnings({"varargs"})
 	public static <T> T[] array(T... items) {
 		return items;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T[] arrayOf(Class<T> type, T... elements) {
+		T[] array = (T[]) Array.newInstance(type, elements.length);
+		System.arraycopy(elements, 0, array, 0, elements.length);
+		return array;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T[] arrayOf(Class<T> type, Iterable<? extends T> items) {
+		Collection<T> coll = (items instanceof Collection) ? (Collection<T>) items : list(items);
+
+		T[] array = (T[]) Array.newInstance(type, coll.size());
+
+		coll.toArray(array);
+		return array;
 	}
 
 	public static Object[] array(Iterable<?> items) {

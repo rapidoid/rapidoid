@@ -58,7 +58,7 @@ public class DetailsHandler extends GUI implements Callable<Object> {
 			}
 
 			Collections.sort(props);
-			targetProps = props.toArray(new String[props.size()]);
+			targetProps = U.arrayOf(String.class, props);
 
 		} else {
 			targetProps = properties;

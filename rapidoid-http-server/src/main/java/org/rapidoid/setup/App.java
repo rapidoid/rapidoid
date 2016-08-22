@@ -64,7 +64,7 @@ public class App extends RapidoidThing {
 		@SuppressWarnings("unchecked")
 		@Override
 		public List<Class<?>> map(List<String> packages) throws Exception {
-			String[] pkgs = packages.toArray(new String[packages.size()]);
+			String[] pkgs = U.arrayOf(String.class, packages);
 			return Scan.annotated((Class<? extends Annotation>[]) ANNOTATIONS).in(pkgs).loadAll();
 		}
 	});
@@ -81,7 +81,7 @@ public class App extends RapidoidThing {
 		inferCallers();
 
 		if (U.isEmpty(App.path)) {
-			App.path = new String[]{appPkgName};
+			App.path = U.array(appPkgName);
 		}
 
 		return path;
@@ -237,7 +237,7 @@ public class App extends RapidoidThing {
 	public static AppBootstrap bootstrap(String[] args, String... extraArgs) {
 		List<String> allArgs = U.list(args);
 		Collections.addAll(allArgs, extraArgs);
-		return appBootstrap(allArgs.toArray(new String[allArgs.size()]));
+		return appBootstrap(U.arrayOf(String.class, allArgs));
 	}
 
 	public static AppBootstrap bootstrap(String... args) {

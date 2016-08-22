@@ -63,8 +63,8 @@ public class ResponseRenderer extends RapidoidThing {
 		MVCModel basicModel = new MVCModel(req, resp, resp.model(), resp.screen(), result);
 
 		Object[] renderModel = result != null
-			? new Object[]{basicModel, resp.model(), result}
-			: new Object[]{basicModel, resp.model()};
+			? U.array(basicModel, resp.model(), result)
+			: U.array(basicModel, resp.model());
 
 		try {
 			rendered = viewRenderer.render(req, viewName, renderModel, out);

@@ -34,7 +34,7 @@ public class MediaType extends RapidoidThing {
 
 	private static final Map<String, MediaType> FILE_EXTENSISONS = U.map();
 	private static final String[] NO_ATTR = new String[0];
-	private static final String[] UTF8_ATTR = new String[]{"charset=utf-8"};
+	private static final String[] UTF8_ATTR = {"charset=utf-8"};
 
 	/*******************************************************/
 

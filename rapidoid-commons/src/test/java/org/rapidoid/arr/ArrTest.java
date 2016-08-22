@@ -23,6 +23,7 @@ package org.rapidoid.arr;
 import org.junit.Test;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.test.AbstractCommonsTest;
+import org.rapidoid.u.U;
 
 /**
  * @author Nikolche Mihajlovski
@@ -32,27 +33,27 @@ public class ArrTest extends AbstractCommonsTest {
 
 	@Test
 	public void testSubarray() {
-		String[] arr = new String[]{"aa", "bb", "c", "ddd", "e"};
+		String[] arr = {"aa", "bb", "c", "ddd", "e"};
 
 		String[] subarr = Arr.sub(arr, 0, 3);
-		eq(subarr, new String[]{"aa", "bb", "c"});
+		eq(subarr, U.array("aa", "bb", "c"));
 
 		subarr = Arr.sub(arr, 2, 5);
-		eq(subarr, new String[]{"c", "ddd", "e"});
+		eq(subarr, U.array("c", "ddd", "e"));
 
 		subarr = Arr.sub(arr, 0, 5);
-		eq(subarr, new String[]{"aa", "bb", "c", "ddd", "e"});
+		eq(subarr, U.array("aa", "bb", "c", "ddd", "e"));
 
 		subarr = Arr.sub(arr, 3, 4);
-		eq(subarr, new String[]{"ddd"});
+		eq(subarr, U.array("ddd"));
 
 		subarr = Arr.sub(arr, 1, 4);
-		eq(subarr, new String[]{"bb", "c", "ddd"});
+		eq(subarr, U.array("bb", "c", "ddd"));
 	}
 
 	@Test(expected = RuntimeException.class)
 	public void testSubarrayException() {
-		Arr.sub(new String[]{"aa", "bb", "c"}, 2, 1);
+		Arr.sub(U.array("aa", "bb", "c"), 2, 1);
 	}
 
 }

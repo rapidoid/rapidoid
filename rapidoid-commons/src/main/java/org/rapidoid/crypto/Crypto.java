@@ -45,7 +45,7 @@ public class Crypto extends RapidoidThing {
 
 	private static volatile byte[] secretKey;
 
-	private static final byte[] DEFAULT_PBKDF2_SALT = new byte[]{
+	private static final byte[] DEFAULT_PBKDF2_SALT = {
 		0, -3, -76, 48, 23, 1, 43, -41, -120, 45, -92, -113, -100, 70, -68, -46, 96, -93, 15, 99
 	};
 

@@ -26,7 +26,11 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
-import org.rapidoid.security.annotation.*;
+import org.rapidoid.security.annotation.Administrator;
+import org.rapidoid.security.annotation.Manager;
+import org.rapidoid.security.annotation.Moderator;
+import org.rapidoid.security.annotation.Roles;
+import org.rapidoid.u.U;
 
 import java.lang.reflect.Method;
 
@@ -116,7 +120,7 @@ public class MethodSecurityTest extends SecurityTestCommons {
 		dd = Cls.getMethod(MyService.class, "dd");
 		ee = Cls.getMethod(MyService.class, "ee");
 
-		methods = new Method[]{aa, bb, noAnn, dd, ee};
+		methods = U.arrayOf(Method.class, aa, bb, noAnn, dd, ee);
 
 		aa2 = Cls.getMethod(MyService2.class, "aa");
 		bb2 = Cls.getMethod(MyService2.class, "bb");
@@ -124,7 +128,7 @@ public class MethodSecurityTest extends SecurityTestCommons {
 		dd2 = Cls.getMethod(MyService2.class, "dd");
 		ee2 = Cls.getMethod(MyService2.class, "ee");
 
-		methods2 = new Method[]{aa2, bb2, noAnn2, dd2, ee2};
+		methods2 = U.arrayOf(Method.class, aa2, bb2, noAnn2, dd2, ee2);
 
 		Conf.args("mode=production");
 	}

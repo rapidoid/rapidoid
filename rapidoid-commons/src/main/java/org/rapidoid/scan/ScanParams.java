@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;
@@ -67,7 +68,7 @@ public class ScanParams extends RapidoidThing {
 
 	@SuppressWarnings("unchecked")
 	public synchronized ScanParams annotated(Collection<Class<? extends Annotation>> annotated) {
-		return annotated(annotated.toArray(new Class[annotated.size()]));
+		return annotated(U.arrayOf(Class.class, annotated));
 	}
 
 	public synchronized Class<? extends Annotation>[] annotated() {

@@ -164,9 +164,9 @@ public class Setup extends RapidoidThing implements Constants {
 
 			if (http == null) {
 				if (isAppOrAdminOnSameServer()) {
-					http = new FastHttp(new HttpRoutesImpl[]{ON.routes, ADMIN.routes}, ON.serverConfig);
+					http = new FastHttp(U.array(ON.routes, ADMIN.routes), ON.serverConfig);
 				} else {
-					http = new FastHttp(new HttpRoutesImpl[]{routes}, serverConfig);
+					http = new FastHttp(U.array(routes), serverConfig);
 				}
 			}
 		}

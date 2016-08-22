@@ -193,4 +193,28 @@ public class UTest extends TestCommons {
 		eq(U.safe((Long) null), 0L);
 	}
 
+	@Test
+	public void testArray() {
+		String[] arr = U.array("x", "y");
+		eq(arr.getClass(), String[].class);
+		eq(arr.length, 2);
+		eq(arr[0], "x");
+		eq(arr[1], "y");
+	}
+
+	@Test
+	public void testArrayOf() {
+		Number[] arr = U.arrayOf(Number.class, 123);
+		eq(arr.getClass(), Number[].class);
+		eq(arr.length, 1);
+		eq(arr[0].intValue(), 123);
+	}
+
+	@Test
+	public void testArrayOfType() {
+		Number[] arr = U.arrayOf(Number.class, U.list(1, 2, 3));
+		eq(arr.getClass(), Number[].class);
+		eq(arr, U.array(1, 2, 3));
+	}
+
 }

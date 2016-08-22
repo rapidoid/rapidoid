@@ -153,7 +153,7 @@ public class PojoHandlersSetup extends RapidoidThing {
 		TransactionMode tx = transaction != null ? transaction.value() : null;
 
 		Set<String> rolesAllowed = Secure.getRolesAllowed(method);
-		String[] roles = rolesAllowed.toArray(new String[rolesAllowed.size()]);
+		String[] roles = U.arrayOf(String.class, rolesAllowed);
 
 		for (Annotation ann : method.getAnnotations()) {
 			if (ann instanceof Page) {

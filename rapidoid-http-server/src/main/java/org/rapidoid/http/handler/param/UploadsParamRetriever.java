@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Req;
 import org.rapidoid.io.Upload;
+import org.rapidoid.u.U;
 
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class UploadsParamRetriever extends RapidoidThing implements ParamRetriev
 	@Override
 	public Upload[] getParamValue(Req req) {
 		List<Upload> uploads = req.files(name);
-		return uploads.toArray(new Upload[uploads.size()]);
+		return U.arrayOf(Upload.class, uploads);
 	}
 
 }

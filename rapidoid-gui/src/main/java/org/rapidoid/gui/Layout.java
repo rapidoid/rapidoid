@@ -59,7 +59,7 @@ public class Layout extends AbstractWidget<Layout> {
 			rows.add(row);
 		}
 
-		return rows.toArray(new Tag[rows.size()]);
+		return U.arrayOf(Tag.class, rows);
 	}
 
 	public Object[] contents() {

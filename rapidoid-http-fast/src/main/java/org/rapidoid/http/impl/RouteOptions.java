@@ -146,7 +146,7 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 		copy.view(view());
 		copy.mvc(mvc());
 		copy.transactionMode(transactionMode());
-		copy.roles(roles.toArray(new String[roles.size()]));
+		copy.roles(U.arrayOf(String.class, roles));
 		copy.wrappers(wrappers());
 		copy.zone(zone());
 
