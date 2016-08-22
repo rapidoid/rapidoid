@@ -114,7 +114,7 @@ public class Defaults extends RapidoidThing {
 	}
 
 	public static String[] templatesPath() {
-		return Templates.PATH;
+		return Templates.getPath();
 	}
 
 	public static JsonRequestBodyParser jsonRequestBodyParser() {

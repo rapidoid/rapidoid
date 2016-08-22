@@ -4,8 +4,10 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
+import org.rapidoid.commons.Arr;
 import org.rapidoid.io.Res;
 import org.rapidoid.lambda.Mapper;
+import org.rapidoid.u.U;
 
 import java.util.Map;
 
@@ -33,7 +35,9 @@ import java.util.Map;
 @Since("4.1.0")
 public class Templates extends RapidoidThing {
 
-	public static volatile String[] PATH = {"templates", "default/templates", ""};
+	private static final String DEFAULT_TEMPLATES_PATH = "default/templates";
+
+	private static volatile String[] PATH = {"templates", "", DEFAULT_TEMPLATES_PATH};
 
 	private static final Map<String, TemplateRenderer> TEMPLATES = Coll.autoExpandingMap(new Mapper<String, TemplateRenderer>() {
 		@Override
@@ -61,4 +65,17 @@ public class Templates extends RapidoidThing {
 	public static void reset() {
 		TEMPLATES.clear();
 	}
+
+	public static void setPath(String... templatesPath) {
+		if (U.isEmpty(templatesPath) || U.neq(U.last(templatesPath), DEFAULT_TEMPLATES_PATH)) {
+			templatesPath = Arr.concat(templatesPath, DEFAULT_TEMPLATES_PATH);
+		}
+
+		PATH = templatesPath;
+	}
+
+	public static String[] getPath() {
+		return PATH;
+	}
+
 }
