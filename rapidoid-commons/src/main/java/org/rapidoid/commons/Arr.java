@@ -189,4 +189,55 @@ public class Arr extends RapidoidThing {
 		return Arrays.copyOfRange(arr, start, end);
 	}
 
+	/* concat */
+
+	public static <T> T[] concat(T[] left, T... right) {
+		T[] concatenated = Arrays.copyOf(left, left.length + right.length);
+		System.arraycopy(right, 0, concatenated, left.length, right.length);
+		return concatenated;
+	}
+
+	public static boolean[] concat(boolean[] left, boolean... right) {
+		boolean[] concatenated = Arrays.copyOf(left, left.length + right.length);
+		System.arraycopy(right, 0, concatenated, left.length, right.length);
+		return concatenated;
+	}
+
+	public static byte[] concat(byte[] left, byte... right) {
+		byte[] concatenated = Arrays.copyOf(left, left.length + right.length);
+		System.arraycopy(right, 0, concatenated, left.length, right.length);
+		return concatenated;
+	}
+
+	public static char[] concat(char[] left, char... right) {
+		char[] concatenated = Arrays.copyOf(left, left.length + right.length);
+		System.arraycopy(right, 0, concatenated, left.length, right.length);
+		return concatenated;
+	}
+
+	public static int[] concat(int[] left, int... right) {
+		int[] concatenated = Arrays.copyOf(left, left.length + right.length);
+		System.arraycopy(right, 0, concatenated, left.length, right.length);
+		return concatenated;
+	}
+
+	public static long[] concat(long[] left, long... right) {
+		long[] concatenated = Arrays.copyOf(left, left.length + right.length);
+		System.arraycopy(right, 0, concatenated, left.length, right.length);
+		return concatenated;
+	}
+
+	public static float[] concat(float[] left, float... right) {
+		float[] concatenated = Arrays.copyOf(left, left.length + right.length);
+		System.arraycopy(right, 0, concatenated, left.length, right.length);
+		return concatenated;
+	}
+
+	public static double[] concat(double[] left, double... right) {
+		double[] concatenated = Arrays.copyOf(left, left.length + right.length);
+		System.arraycopy(right, 0, concatenated, left.length, right.length);
+		return concatenated;
+	}
+
+
 }
