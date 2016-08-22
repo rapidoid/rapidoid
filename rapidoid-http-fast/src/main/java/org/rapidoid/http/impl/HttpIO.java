@@ -117,7 +117,7 @@ public class HttpIO extends RapidoidThing {
 		Log.debug("HTTP handler error!", "error", error);
 
 		try {
-			Resp resp = req.response().code(500);
+			Resp resp = req.response().code(500).result(null);
 			Object result = Customization.of(req).errorHandler().handleError(req, resp, error);
 			result = HttpUtils.postprocessResult(req, result);
 			HttpUtils.resultToResponse(req, result);
