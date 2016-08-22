@@ -31,7 +31,7 @@ public class HttpWrapTest extends IntegrationTestCommons {
 
 	@Test
 	public void testWrap() {
-		On.defaults().wrap((req, invocation) -> invocation.invokeAndTransformResult(x -> x + "!"));
+		On.defaults().wrappers((req, invocation) -> invocation.invokeAndTransformResult(x -> x + "!"));
 		On.defaults().contentType(MediaType.BINARY);
 
 		On.get("/").html(() -> "a");

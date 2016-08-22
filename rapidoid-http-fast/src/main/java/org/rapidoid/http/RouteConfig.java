@@ -53,7 +53,7 @@ public interface RouteConfig {
 
 	HttpWrapper[] wrappers();
 
-	RouteOptions wrap(HttpWrapper... wrappers);
+	RouteOptions wrappers(HttpWrapper... wrappers);
 
 	String zone();
 

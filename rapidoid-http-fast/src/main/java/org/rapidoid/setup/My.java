@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.customize.*;
 import org.rapidoid.http.customize.defaults.Defaults;
 
@@ -56,6 +57,7 @@ public class My extends RapidoidThing {
 			GLOBAL.templatesPath(Defaults.templatesPath());
 			GLOBAL.sessionManager(Defaults.sessionManager());
 			GLOBAL.staticFilesSecurity(Defaults.staticFilesSecurity());
+			GLOBAL.wrappers(Defaults.wrappers());
 		}
 	}
 
@@ -77,6 +79,14 @@ public class My extends RapidoidThing {
 
 	public static void templatesPath(String... templatesPath) {
 		GLOBAL.templatesPath(templatesPath);
+	}
+
+	public static HttpWrapper[] wrappers() {
+		return GLOBAL.wrappers();
+	}
+
+	public static void wrappers(HttpWrapper... wrappers) {
+		GLOBAL.wrappers(wrappers);
 	}
 
 	public static void errorHandler(ErrorHandler errorHandler) {

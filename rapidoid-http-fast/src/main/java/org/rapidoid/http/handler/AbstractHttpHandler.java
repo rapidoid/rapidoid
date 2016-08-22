@@ -3,8 +3,8 @@ package org.rapidoid.http.handler;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.MediaType;
 import org.rapidoid.http.HttpWrapper;
+import org.rapidoid.http.MediaType;
 import org.rapidoid.http.Route;
 import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.u.U;
@@ -39,14 +39,14 @@ public abstract class AbstractHttpHandler extends RapidoidThing implements HttpH
 
 	protected final MediaType contentType;
 
-	protected final HttpWrapper[] wrappers;
+	protected final HttpWrapper[] httpWrappers;
 
 	protected volatile Route route;
 
 	public AbstractHttpHandler(RouteOptions options) {
 		this.options = options;
 		this.contentType = options.contentType();
-		this.wrappers = options.wrappers();
+		this.httpWrappers = options.wrappers();
 	}
 
 	@Override

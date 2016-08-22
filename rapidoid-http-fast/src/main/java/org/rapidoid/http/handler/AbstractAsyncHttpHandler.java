@@ -46,6 +46,8 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 	private static final String CTX_TAG_HANDLER = "handler";
 	private static final String CTX_TAG_ERROR = "error";
 
+	private static final HttpWrapper[] NO_WRAPPERS = {};
+
 	private final FastHttp http;
 
 	private final HttpRoutes routes;
@@ -142,7 +144,9 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 					TransactionMode txMode = before(req, username, roles);
 					U.notNull(txMode, "txMode");
 
-					Runnable handleRequest = handlerWithWrappers(channel, isKeepAlive, contentType, req, extra);
+					HttpWrapper[] wrappers = httpWrappers != null ? httpWrappers : U.or(req.custom().wrappers(), NO_WRAPPERS);
+
+					Runnable handleRequest = handlerWithWrappers(channel, isKeepAlive, contentType, req, extra, wrappers);
 					Runnable handleRequestMaybeInTx = txWrap(req, txMode, handleRequest);
 
 					With.tag(CTX_TAG_HANDLER).exchange(req).username(username).roles(roles).run(handleRequestMaybeInTx);
@@ -167,7 +171,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 	}
 
 	private Runnable handlerWithWrappers(final Channel channel, final boolean isKeepAlive, final MediaType contentType,
-	                                     final Req req, final Object extra) {
+	                                     final Req req, final Object extra, final HttpWrapper[] wrappers) {
 
 		return new Runnable() {
 
@@ -177,7 +181,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 				try {
 
 					if (!U.isEmpty(wrappers)) {
-						result = wrap(channel, isKeepAlive, req, 0, extra);
+						result = wrap(channel, isKeepAlive, req, 0, extra, wrappers);
 					} else {
 						result = handleReq(channel, isKeepAlive, req, extra);
 					}
@@ -207,8 +211,9 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 		}
 	}
 
-	private Object wrap(final Channel channel, final boolean isKeepAlive, final Req req, final int index, final Object extra)
-		throws Exception {
+	private Object wrap(final Channel channel, final boolean isKeepAlive, final Req req, final int index,
+	                    final Object extra, final HttpWrapper[] wrappers) throws Exception {
+
 		HttpWrapper wrapper = wrappers[index];
 
 		HandlerInvocation invocation = new HandlerInvocation() {
@@ -225,7 +230,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 
 					Object val;
 					if (next < wrappers.length) {
-						val = wrap(channel, isKeepAlive, req, next, extra);
+						val = wrap(channel, isKeepAlive, req, next, extra, wrappers);
 					} else {
 						val = handleReq(channel, isKeepAlive, req, extra);
 					}

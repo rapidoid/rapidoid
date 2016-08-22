@@ -25,6 +25,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.JSON;
+import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.customize.*;
 import org.rapidoid.render.Templates;
 
@@ -33,6 +34,8 @@ import org.rapidoid.render.Templates;
 public class Defaults extends RapidoidThing {
 
 	private static final String[] staticFilesPath = {"static", "public", "default/static", "default/public"};
+
+	private static final HttpWrapper[] wrappers = {};
 
 	private static final ErrorHandler errorHandler = new DefaultErrorHandler();
 
@@ -124,5 +127,9 @@ public class Defaults extends RapidoidThing {
 
 	public static StaticFilesSecurity staticFilesSecurity() {
 		return staticFilesSecurity;
+	}
+
+	public static HttpWrapper[] wrappers() {
+		return wrappers;
 	}
 }

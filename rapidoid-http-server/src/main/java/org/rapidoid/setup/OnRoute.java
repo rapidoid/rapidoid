@@ -368,8 +368,8 @@ public class OnRoute extends RapidoidThing {
 
 	/* ROUTE OPTIONS */
 
-	public OnRoute wrap(HttpWrapper... wrappers) {
-		options.wrap(wrappers);
+	public OnRoute wrappers(HttpWrapper... wrappers) {
+		options.wrappers(wrappers);
 		return this;
 	}
 

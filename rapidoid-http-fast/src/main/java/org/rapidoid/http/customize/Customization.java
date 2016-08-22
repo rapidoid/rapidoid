@@ -7,6 +7,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Config;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.Req;
 import org.rapidoid.setup.My;
 import org.rapidoid.u.U;
@@ -75,6 +76,8 @@ public class Customization extends RapidoidThing {
 
 	private volatile StaticFilesSecurity staticFilesSecurity;
 
+	private volatile HttpWrapper[] wrappers;
+
 	public Customization(String name, Customization defaults, Config config, Config serverConfig) {
 		this.name = name;
 		this.defaults = defaults;
@@ -100,6 +103,8 @@ public class Customization extends RapidoidThing {
 		entityManagerFactoryProvider = null;
 		sessionManager = null;
 		errorHandlers.reset();
+		staticFilesSecurity = null;
+		wrappers = null;
 	}
 
 	public static Customization of(Req req) {
@@ -287,6 +292,15 @@ public class Customization extends RapidoidThing {
 
 	public Customization staticFilesSecurity(StaticFilesSecurity staticFilesSecurity) {
 		this.staticFilesSecurity = staticFilesSecurity;
+		return this;
+	}
+
+	public HttpWrapper[] wrappers() {
+		return wrappers != null || defaults == null ? wrappers : defaults.wrappers();
+	}
+
+	public Customization wrappers(HttpWrapper... wrappers) {
+		this.wrappers = wrappers;
 		return this;
 	}
 

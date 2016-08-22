@@ -5,12 +5,11 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.collection.Coll;
-import org.rapidoid.http.MediaType;
 import org.rapidoid.http.HttpWrapper;
+import org.rapidoid.http.MediaType;
 import org.rapidoid.http.RouteConfig;
 import org.rapidoid.u.U;
 
-import java.util.List;
 import java.util.Set;
 
 /*
@@ -49,7 +48,7 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 
 	private final Set<String> roles = Coll.synchronizedSet();
 
-	private final List<HttpWrapper> wrappers = Coll.synchronizedList();
+	private volatile HttpWrapper[] wrappers;
 
 	@Override
 	public String toString() {
@@ -120,12 +119,12 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 
 	@Override
 	public HttpWrapper[] wrappers() {
-		return wrappers.toArray(new HttpWrapper[wrappers.size()]);
+		return wrappers;
 	}
 
 	@Override
-	public RouteOptions wrap(HttpWrapper... wrappers) {
-		Coll.assign(this.wrappers, wrappers);
+	public RouteOptions wrappers(HttpWrapper... wrappers) {
+		this.wrappers = wrappers;
 		return this;
 	}
 
@@ -148,7 +147,7 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 		copy.mvc(mvc());
 		copy.transactionMode(transactionMode());
 		copy.roles(roles.toArray(new String[roles.size()]));
-		copy.wrap(wrappers());
+		copy.wrappers(wrappers());
 		copy.zone(zone());
 
 		return copy;
