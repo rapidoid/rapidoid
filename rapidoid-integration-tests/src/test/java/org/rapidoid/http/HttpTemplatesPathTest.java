@@ -23,6 +23,7 @@ package org.rapidoid.http;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.render.Templates;
 import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
@@ -32,11 +33,31 @@ import org.rapidoid.u.U;
 public class HttpTemplatesPathTest extends IntegrationTestCommons {
 
 	@Test
-	public void testTemplatesPath() {
+	public void testTemplatesPath1() {
+		On.custom().templatesPath("test-templates");
+
+		Templates.setPath("something-different");
+		eq(Templates.getPath(), U.array("something-different"));
+
+		setupAndTest();
+	}
+
+	@Test
+	public void testTemplatesPath2() {
+		On.custom().templatesPath("test-templates");
+		eq(On.custom().templatesPath(), U.array("test-templates"));
+		setupAndTest();
+	}
+
+	@Test
+	public void testTemplatesPath3() {
 		My.templatesPath("test-templates");
+		eq(On.custom().templatesPath(), U.array("test-templates"));
+		setupAndTest();
+	}
 
+	private void setupAndTest() {
 		On.get("/t").mvc(req -> U.map("x", 123));
-
 		onlyGet("/t");
 	}
 
