@@ -48,7 +48,7 @@ public class NotFoundHttpProcessor extends AbstractHttpProcessor {
 
 		HttpIO.startResponse(channel, 404, isKeepAlive, MediaType.HTML_UTF_8);
 
-		String content = Templates.fromFile("404.html").render(MODEL);
+		String content = Templates.load("404.html").render(MODEL);
 		HttpIO.writeContentLengthAndBody(channel, content.getBytes());
 
 		HttpIO.done(channel, isKeepAlive);

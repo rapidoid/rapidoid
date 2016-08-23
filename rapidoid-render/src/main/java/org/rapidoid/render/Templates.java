@@ -46,23 +46,23 @@ public class Templates extends RapidoidThing {
 		}
 	});
 
-	public static Template fromFile(String filename) {
-		return new RapidoidTemplate(filename, TEMPLATES.get(filename));
+		return TemplateParser.parse(content).compile();
 	}
 
-	public static Template fromString(String source) {
-		return new RapidoidTemplate("", TemplateParser.parse(source).compile());
+	public static Template load(String filename) {
+		return load(filename, DEFAULT_STORE);
 	}
 
-	public static Res resource(String filename) {
-		return Res.from(filename, PATH);
+	public static Template load(String filename, TemplateStore templates) {
+		return new RapidoidTemplate(filename, loadTemplate(filename, templates), templates);
 	}
 
-	public static Template fromRes(Res template) {
-		return fromFile(template.getName());
+	public static Template compile(String source) {
+		return new RapidoidTemplate("", TemplateParser.parse(source).compile(), DEFAULT_STORE);
 	}
 
 	public static void reset() {
+		PATH = DEFAULT_PATH;
 		TEMPLATES.clear();
 	}
 

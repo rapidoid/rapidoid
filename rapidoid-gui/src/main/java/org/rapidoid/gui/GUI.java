@@ -781,7 +781,7 @@ public abstract class GUI extends HTML implements Role {
 		Map<String, ?> model = U.map("points", points, "names", U.list(ts.title()), "title", ts.title(),
 			"id", newId(), "class", divClass, "uri", Str.triml(uri, "/"));
 
-		Tag graph = hardcoded(Templates.fromFile("dygraphs.html").render(model));
+		Tag graph = hardcoded(Templates.load("dygraphs.html").render(model));
 
 		return div(graph);
 	}

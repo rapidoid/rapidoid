@@ -29,11 +29,15 @@ import org.rapidoid.annotation.Since;
 public class Render extends RapidoidThing {
 
 	public static RenderDSL template(String templateSource) {
-		return new RenderDSL(Templates.fromString(templateSource));
+		return new RenderDSL(Templates.compile(templateSource));
 	}
 
 	public static RenderDSL file(String filename) {
-		return new RenderDSL(Templates.fromFile(filename));
+		return file(filename, Templates.DEFAULT_STORE);
+	}
+
+	public static RenderDSL file(String filename, TemplateStore templates) {
+		return new RenderDSL(Templates.load(filename, templates));
 	}
 
 }

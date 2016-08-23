@@ -32,7 +32,7 @@ public class MultiTemplateRenderTest extends TestCommons {
 
 	@Test
 	public void testTemplateLoading() {
-		Template templ = Templates.fromFile("templ1.html");
+		Template templ = Templates.load("templ1.html");
 
 		eq(templ.render(U.map("x", "123")), "A:123:B:OK:C");
 	}

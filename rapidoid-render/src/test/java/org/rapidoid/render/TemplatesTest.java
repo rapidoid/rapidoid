@@ -45,7 +45,7 @@ public class TemplatesTest extends AbstractRenderTest {
 
 	@Test
 	public void testFileTemplatesAPI() {
-		verify("tmpl", Templates.fromFile("tmpl.html").render(tmplModel()));
+		verify("tmpl", Templates.load("tmpl.html").render(tmplModel()));
 	}
 
 	private Map<String, List<String>> tmplModel() {
@@ -54,7 +54,7 @@ public class TemplatesTest extends AbstractRenderTest {
 
 	@Test
 	public void testStringTemplatesAPI() {
-		eq(Templates.fromString("${x}-${y}").render(U.map("x", 1), U.map("y", "2")), "1-2");
+		eq(Templates.compile("${x}-${y}").render(U.map("x", 1), U.map("y", "2")), "1-2");
 	}
 
 	@Test

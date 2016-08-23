@@ -113,12 +113,12 @@ public class PageMenu extends RapidoidThing {
 		for (PageMenuItem item : items) {
 
 			if (item.getCaption().contains("{")) {
-				item.setCaption(Templates.fromString(item.getCaption()).render(model));
+				item.setCaption(Templates.compile(item.getCaption()).render(model));
 			}
 
 			if (item.getSubmenu() != null) {
 				for (PageSubMenuItem subItem : item.getSubmenu().getItems()) {
-					subItem.setCaption(Templates.fromString(subItem.getCaption()).render(model));
+					subItem.setCaption(Templates.compile(subItem.getCaption()).render(model));
 				}
 			}
 		}

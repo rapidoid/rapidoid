@@ -47,8 +47,8 @@ public class HtmlPage extends ScreenBean {
 	public static volatile String commonJs = "/application.js";
 	public static volatile String commonCss = "/application.css";
 
-	private static volatile Template PAGE_TEMPLATE = Templates.fromFile("page.html");
-	private static volatile Template PAGE_AJAX_TEMPLATE = Templates.fromFile("page-ajax.html");
+	private static volatile Template PAGE_TEMPLATE = Templates.load("page.html");
+	private static volatile Template PAGE_AJAX_TEMPLATE = Templates.load("page-ajax.html");
 
 	public HtmlPage(Object[] content) {
 		content(content);

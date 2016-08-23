@@ -112,7 +112,7 @@ public class RenderCtxImpl extends RapidoidThing implements RenderCtx {
 
 	@Override
 	public void call(String name) {
-		Templates.fromFile(name + ext).renderTo(out, model.toArray());
+		Templates.load(name + ext, templates).renderTo(out, model.toArray());
 	}
 
 	@Override
