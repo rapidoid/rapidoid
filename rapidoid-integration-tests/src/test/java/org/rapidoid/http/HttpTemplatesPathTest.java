@@ -1,8 +1,8 @@
-package org.rapidoid.render;
+package org.rapidoid.http;
 
 /*
  * #%L
- * rapidoid-render
+ * rapidoid-integration-tests
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -20,35 +20,24 @@ package org.rapidoid.render;
  * #L%
  */
 
-import org.rapidoid.RapidoidThing;
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Arr;
-import org.rapidoid.io.Res;
+import org.rapidoid.setup.My;
+import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
-public class FileSystemTemplateStore extends RapidoidThing implements TemplateStore {
+public class HttpTemplatesPathTest extends IntegrationTestCommons {
 
-	private final String[] templatesPath;
+	@Test
+	public void testTemplatesPath() {
+		My.templatesPath("test-templates");
 
-	public FileSystemTemplateStore(String[] templatesPath) {
-		this.templatesPath = withDefaultPath(templatesPath);
-	}
+		On.get("/t").mvc(req -> U.map("x", 123));
 
-	private String[] withDefaultPath(String[] templatesPath) {
-		if (U.isEmpty(templatesPath) || U.neq(U.last(templatesPath), Templates.DEFAULT_TEMPLATES_PATH)) {
-			return Arr.concat(templatesPath, Templates.DEFAULT_TEMPLATES_PATH);
-		} else {
-			return templatesPath;
-		}
-	}
-
-	@Override
-	public String loadTemplate(String name) {
-		Res res = Res.from(name, templatesPath);
-		return res.mustExist().getContent();
+		onlyGet("/t");
 	}
 
 }

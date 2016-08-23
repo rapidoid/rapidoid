@@ -35,13 +35,17 @@ public class RapidoidTemplate extends RapidoidThing implements Template {
 
 	private final TemplateRenderer template;
 
-	public RapidoidTemplate(String filename, TemplateRenderer template) {
+	private final TemplateStore templates;
+
+	public RapidoidTemplate(String filename, TemplateRenderer template, TemplateStore templates) {
 		this.filename = filename;
 		this.template = template;
+		this.templates = templates;
 	}
 
+	@Override
 	public void renderTo(OutputStream output, Object... scopes) {
-		template.render(new RenderCtxImpl(output, filename, scopes));
+		template.render(new RenderCtxImpl(output, filename, templates, scopes));
 	}
 
 	@Override

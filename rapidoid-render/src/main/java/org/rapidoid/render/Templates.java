@@ -4,9 +4,6 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
-import org.rapidoid.commons.Arr;
-import org.rapidoid.io.Res;
-import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
 
 import java.util.Map;
@@ -35,16 +32,24 @@ import java.util.Map;
 @Since("4.1.0")
 public class Templates extends RapidoidThing {
 
-	private static final String DEFAULT_TEMPLATES_PATH = "default/templates";
+	static final String DEFAULT_TEMPLATES_PATH = "default/templates";
 
-	private static volatile String[] PATH = {"templates", "", DEFAULT_TEMPLATES_PATH};
+	public static final String[] DEFAULT_PATH = {"templates", "", DEFAULT_TEMPLATES_PATH};
 
-	private static final Map<String, TemplateRenderer> TEMPLATES = Coll.autoExpandingMap(new Mapper<String, TemplateRenderer>() {
-		@Override
-		public TemplateRenderer map(String name) throws Exception {
-			return TemplateParser.parse(resource(name).mustExist().getContent()).compile();
+	public static final TemplateStore DEFAULT_STORE = new FileSystemTemplateStore(DEFAULT_PATH);
+
+	private static volatile String[] PATH = DEFAULT_PATH;
+
+	private static final Map<String, TemplateRenderer> TEMPLATES = Coll.concurrentMap();
+
+	public static TemplateRenderer loadTemplate(String name, TemplateStore store) {
+		String content;
+
+		try {
+			content = store.loadTemplate(name);
+		} catch (Exception e) {
+			throw U.rte("Couldn't load template: " + name, e);
 		}
-	});
 
 		return TemplateParser.parse(content).compile();
 	}
@@ -67,10 +72,6 @@ public class Templates extends RapidoidThing {
 	}
 
 	public static void setPath(String... templatesPath) {
-		if (U.isEmpty(templatesPath) || U.neq(U.last(templatesPath), DEFAULT_TEMPLATES_PATH)) {
-			templatesPath = Arr.concat(templatesPath, DEFAULT_TEMPLATES_PATH);
-		}
-
 		PATH = templatesPath;
 	}
 

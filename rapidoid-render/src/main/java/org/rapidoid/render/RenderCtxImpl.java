@@ -42,9 +42,11 @@ public class RenderCtxImpl extends RapidoidThing implements RenderCtx {
 	private final OutputStream out;
 	private final String ext;
 	private final List<Object> model;
+	private final TemplateStore templates;
 
-	public RenderCtxImpl(OutputStream out, String filename, Object... model) {
+	public RenderCtxImpl(OutputStream out, String filename, TemplateStore templates, Object... model) {
 		this.out = out;
+		this.templates = templates;
 		this.model = U.list(model);
 
 		String fileExt = Str.cutFromFirst(filename, ".");
