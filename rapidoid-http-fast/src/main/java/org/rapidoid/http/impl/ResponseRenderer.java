@@ -24,8 +24,9 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.http.MediaType;
+import org.rapidoid.cls.TypeKind;
 import org.rapidoid.http.HttpUtils;
+import org.rapidoid.http.MediaType;
 import org.rapidoid.http.Resp;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.PageRenderer;
@@ -50,15 +51,39 @@ public class ResponseRenderer extends RapidoidThing {
 			resp.result(result);
 		}
 
-		ViewRenderer viewRenderer = Customization.of(req).viewRenderer();
-		U.must(viewRenderer != null, "A view renderer wasn't configured!");
+		String content;
 
-		PageRenderer pageRenderer = Customization.of(req).pageRenderer();
-		U.must(pageRenderer != null, "A page renderer wasn't configured!");
+		if (shouldRenderView(resp)) {
+			content = renderView(req, resp, result);
+		} else {
+			Object cnt = U.or(result, "");
+			content = new String(HttpUtils.responseToBytes(req, cnt, MediaType.HTML_UTF_8, null));
+		}
 
-		boolean rendered;
+		return renderPage(req, resp, content);
+	}
+
+	private static boolean shouldRenderView(Resp resp) {
+		if (!resp.mvc()) return false;
+
+		if (((RespImpl) resp).hasCustomView() || resp.result() == null) return true;
+
+		TypeKind kind = Cls.kindOf(resp.result());
+
+		return !(resp.result() instanceof String)
+			&& !(resp.result() instanceof byte[])
+			&& !kind.isPrimitive()
+			&& !kind.isArray()
+			&& !kind.isNumber();
+	}
+
+	public static String renderView(ReqImpl req, Resp resp, Object result) {
+
 		String viewName = resp.view();
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+		ViewRenderer viewRenderer = Customization.of(req).viewRenderer();
+		U.must(viewRenderer != null, "A view renderer wasn't configured!");
 
 		MVCModel basicModel = new MVCModel(req, resp, resp.model(), resp.screen(), result);
 
@@ -67,20 +92,21 @@ public class ResponseRenderer extends RapidoidThing {
 			: U.array(basicModel, resp.model());
 
 		try {
-			rendered = viewRenderer.render(req, viewName, renderModel, out);
+			viewRenderer.render(req, viewName, renderModel, out);
 		} catch (Throwable e) {
 			throw U.rte("Error while rendering view: " + viewName, e);
 		}
 
-		String renderResult = rendered ? new String(out.toByteArray()) : null;
+		return new String(out.toByteArray());
+	}
 
-		if (renderResult == null) {
-			Object cnt = U.or(result, "");
-			renderResult = new String(HttpUtils.responseToBytes(req, cnt, MediaType.HTML_UTF_8, null));
-		}
+	public static byte[] renderPage(ReqImpl req, Resp resp, String content) {
+
+		PageRenderer pageRenderer = Customization.of(req).pageRenderer();
+		U.must(pageRenderer != null, "A page renderer wasn't configured!");
 
 		try {
-			Object response = U.or(pageRenderer.renderPage(req, resp, renderResult), "");
+			Object response = U.or(pageRenderer.renderPage(req, resp, content), "");
 			return HttpUtils.responseToBytes(req, response, MediaType.HTML_UTF_8, null);
 
 		} catch (Exception e) {

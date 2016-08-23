@@ -41,18 +41,12 @@ public class MustacheViewRenderer extends RapidoidThing implements ViewRenderer 
 	private final MustacheFactory mf = new DefaultMustacheFactory();
 
 	@Override
-	public boolean render(Req req, String viewName, Object[] model, OutputStream out) throws Exception {
+	public void render(Req req, String viewName, Object[] model, OutputStream out) throws Exception {
 		String[] path = Customization.of(req).templatesPath();
-		Res template = Res.from(viewName + ".html", path);
-
-		if (!template.exists()) {
-			return false;
-		}
+		Res template = Res.from(viewName + ".html", path).mustExist();
 
 		Mustache mustache = mf.compile(template.getCachedFileName());
 		mustache.execute(new PrintWriter(out), model).flush();
-
-		return true;
 	}
 
 }

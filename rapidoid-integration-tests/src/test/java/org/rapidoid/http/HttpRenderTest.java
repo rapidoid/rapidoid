@@ -67,7 +67,7 @@ public class HttpRenderTest extends IntegrationTestCommons {
 			return respo;
 		});
 
-		On.get("/defaults").mvc((Req req) -> req);
+		On.get("/defaults").mvc((Req req) -> new byte[0]);
 
 		onlyGet("/view1");
 		getAndPost("/view2");

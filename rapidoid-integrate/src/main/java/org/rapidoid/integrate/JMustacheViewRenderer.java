@@ -68,19 +68,14 @@ public class JMustacheViewRenderer extends RapidoidThing implements ViewRenderer
 	private volatile Mustache.Compiler compiler = Mustache.compiler().withLoader(defaultPartialLoader);
 
 	@Override
-	public boolean render(Req req, String viewName, Object[] model, OutputStream out) throws Exception {
+	public void render(Req req, String viewName, Object[] model, OutputStream out) throws Exception {
 		String[] path = Customization.of(req).templatesPath();
-		Res template = Res.from(viewName + ".html", path);
-
-		if (!template.exists()) {
-			return false;
-		}
-
+		Res template = Res.from(viewName + ".html", path).mustExist();
 		Template mustache = compiler.compile(template.getContent());
+
 		PrintWriter writer = new PrintWriter(out);
 		mustache.execute(model[model.length - 1], writer);
 		writer.flush();
-		return true;
 	}
 
 	/**
