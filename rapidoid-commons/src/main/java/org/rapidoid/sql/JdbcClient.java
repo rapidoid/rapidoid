@@ -95,13 +95,13 @@ public class JdbcClient extends RapidoidThing {
 		try {
 			Class.forName(driver);
 		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Cannot find JDBC driver class: " + driver);
+			throw U.rte("Cannot find JDBC driver class: " + driver);
 		}
 	}
 
 	private void validateArgNotNull(String argName, String argValue) {
 		if (argValue == null) {
-			throw new RuntimeException("The JDBC parameter '" + argName + "' must be configured!");
+			throw U.rte("The JDBC parameter '" + argName + "' must be configured!");
 		}
 	}
 
@@ -133,28 +133,28 @@ public class JdbcClient extends RapidoidThing {
 
 	private static void close(Connection conn) {
 		try {
-			if (conn != null)
-				conn.close();
+			if (conn != null) conn.close();
+
 		} catch (SQLException e) {
-			throw new RuntimeException("Error occured while closing the connection!", e);
+			throw U.rte("Error occurred while closing the connection!", e);
 		}
 	}
 
 	private static void close(PreparedStatement stmt) {
 		try {
-			if (stmt != null)
-				stmt.close();
+			if (stmt != null) stmt.close();
+
 		} catch (SQLException e) {
-			throw new RuntimeException("Error occured while closing the statement!", e);
+			throw U.rte("Error occurred while closing the statement!", e);
 		}
 	}
 
 	private static void close(ResultSet rs) {
 		try {
-			if (rs != null)
-				rs.close();
+			if (rs != null) rs.close();
+
 		} catch (SQLException e) {
-			throw new RuntimeException("Error occured while closing the ResultSet!", e);
+			throw U.rte("Error occurred while closing the ResultSet!", e);
 		}
 	}
 
@@ -167,8 +167,10 @@ public class JdbcClient extends RapidoidThing {
 		try {
 			stmt = JDBC.prepare(conn, sql, args);
 			stmt.execute();
+
 		} catch (SQLException e) {
-			throw new RuntimeException(e);
+			throw U.rte(e);
+
 		} finally {
 			close(stmt);
 			close(conn);
@@ -228,7 +230,7 @@ public class JdbcClient extends RapidoidThing {
 			return conn;
 
 		} catch (SQLException e) {
-			throw new RuntimeException("Cannot create JDBC connection!", e);
+			throw U.rte("Cannot create JDBC connection!", e);
 		}
 	}
 

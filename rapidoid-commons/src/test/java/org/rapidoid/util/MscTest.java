@@ -21,11 +21,15 @@ package org.rapidoid.util;
  */
 
 import org.junit.Test;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.test.TestCommons;
 
 import java.io.File;
 import java.util.concurrent.Callable;
 
+@Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class MscTest extends TestCommons {
 
 	@Test
