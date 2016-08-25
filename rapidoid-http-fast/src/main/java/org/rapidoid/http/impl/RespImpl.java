@@ -299,7 +299,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 
 	@Override
 	public Resp json(Object content) {
-		return contentType(MediaType.JSON_UTF_8).result(content);
+		return contentType(MediaType.JSON).result(content);
 	}
 
 	@Override

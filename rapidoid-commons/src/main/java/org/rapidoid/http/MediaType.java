@@ -86,8 +86,8 @@ public class MediaType extends RapidoidThing {
 	public static final MediaType APPLICATION_JAVA_SERIALIZED_OBJECT = create("application/java-serialized-object",
 		"ser");
 	public static final MediaType APPLICATION_JAVA_VM = create("application/java-vm", "class");
-	public static final MediaType APPLICATION_JSON_UTF8 = createUTF8("application/json", "json", "map");
-	public static final MediaType APPLICATION_JSONML_JSON_UTF8 = createUTF8("application/jsonml+json", "jsonml");
+	public static final MediaType APPLICATION_JSON = create("application/json", "json", "map");
+	public static final MediaType APPLICATION_JSONML_JSON = create("application/jsonml+json", "jsonml");
 	public static final MediaType APPLICATION_LOST_XML = create("application/lost+xml", "lostxml");
 	public static final MediaType APPLICATION_M3G = create("application/m3g", "m3g");
 	public static final MediaType APPLICATION_MAC_BINHEX40 = create("application/mac-binhex40", "hqx");
@@ -1166,7 +1166,7 @@ public class MediaType extends RapidoidThing {
 
 	public static final MediaType XHTML_XML_UTF8 = APPLICATION_XHTML_XML_UTF8;
 	public static final MediaType JAVASCRIPT_UTF8 = APPLICATION_JAVASCRIPT_UTF8;
-	public static final MediaType JSON_UTF_8 = APPLICATION_JSON_UTF8;
+	public static final MediaType JSON = APPLICATION_JSON;
 	public static final MediaType XML_UTF_8 = APPLICATION_XML_UTF8;
 
 	public static final MediaType BINARY = APPLICATION_OCTET_STREAM;
@@ -1280,7 +1280,7 @@ public class MediaType extends RapidoidThing {
 			return "html";
 		}
 
-		if (this == JSON_UTF_8) {
+		if (this == JSON) {
 			return "json";
 		}
 

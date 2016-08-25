@@ -56,7 +56,7 @@ public class DefaultErrorHandler extends RapidoidThing implements ErrorHandler {
 
 	private Object renderError(Req req, Resp resp, Throwable error) {
 
-		if (resp.contentType() == MediaType.JSON_UTF_8) {
+		if (resp.contentType() == MediaType.JSON) {
 			return HttpUtils.getErrorInfo(resp, error);
 
 		} else if (resp.contentType() == MediaType.PLAIN_TEXT_UTF_8) {
@@ -105,7 +105,7 @@ public class DefaultErrorHandler extends RapidoidThing implements ErrorHandler {
 		if (error instanceof NotFound) {
 			Resp resp = req.response().code(404);
 
-			if (resp.contentType() == MediaType.JSON_UTF_8) {
+			if (resp.contentType() == MediaType.JSON) {
 				return error;
 			} else {
 				return resp.view("404").result(Collections.emptyMap());

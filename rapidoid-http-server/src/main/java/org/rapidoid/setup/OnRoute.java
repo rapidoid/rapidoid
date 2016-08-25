@@ -350,7 +350,7 @@ public class OnRoute extends RapidoidThing {
 	}
 
 	private RouteOptions jsonOpts() {
-		return opts(MediaType.JSON_UTF_8);
+		return opts(MediaType.JSON);
 	}
 
 	private RouteOptions plainOpts() {

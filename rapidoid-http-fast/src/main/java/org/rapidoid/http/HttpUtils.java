@@ -293,7 +293,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 	}
 
 	public static byte[] responseToBytes(Req req, Object result, MediaType contentType, JsonResponseRenderer jsonRenderer) {
-		if (U.eq(contentType, MediaType.JSON_UTF_8)) {
+		if (U.eq(contentType, MediaType.JSON)) {
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 
 			try {

@@ -170,7 +170,7 @@ public class HttpIO extends RapidoidThing {
 	}
 
 	public static void writeAsJson(Channel ctx, int code, boolean isKeepAlive, Object value) {
-		startResponse(ctx, code, isKeepAlive, MediaType.JSON_UTF_8);
+		startResponse(ctx, code, isKeepAlive, MediaType.JSON);
 
 		Buf out = ctx.output();
 

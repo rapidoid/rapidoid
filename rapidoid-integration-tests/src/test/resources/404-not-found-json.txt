@@ -2,7 +2,7 @@ HTTP/1.1 404 Not Found
 Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
-Content-Type: application/json; charset=utf-8
+Content-Type: application/json
 Content-Length: 86
 
 {"error":"The requested resource could not be found!","code":404,"status":"Not Found"}

@@ -79,7 +79,7 @@ public abstract class AbstractHttpHandler extends RapidoidThing implements HttpH
 		if (contentType == MediaType.HTML_UTF_8) {
 			type = options.mvc() ? "mvc" : "html";
 
-		} else if (contentType == MediaType.JSON_UTF_8) {
+		} else if (contentType == MediaType.JSON) {
 			type = "json";
 
 		} else if (contentType == MediaType.PLAIN_TEXT_UTF_8) {
