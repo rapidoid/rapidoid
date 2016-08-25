@@ -1,6 +1,5 @@
 package org.rapidoid.buffer;
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.bytes.Bytes;
@@ -36,7 +35,7 @@ import java.nio.channels.WritableByteChannel;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class SynchronizedBuf extends RapidoidThing implements Buf {
+public class SynchronizedBuf extends OutputStream implements Buf {
 
 	private final Buf buf;
 
@@ -337,6 +336,16 @@ public class SynchronizedBuf extends RapidoidThing implements Buf {
 	@Override
 	public synchronized void checkpoint(int checkpoint) {
 		buf.checkpoint(checkpoint);
+	}
+
+	@Override
+	public synchronized void write(int byteValue) throws IOException {
+		buf.write(byteValue);
+	}
+
+	@Override
+	public synchronized void write(byte[] src, int off, int len) throws IOException {
+		buf.write(src, off, len);
 	}
 
 }

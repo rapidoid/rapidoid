@@ -157,4 +157,8 @@ public interface Buf {
 
 	void checkpoint(int checkpoint);
 
+	void write(int byteValue) throws IOException;
+
+	void write(byte[] src, int offset, int length) throws IOException;
+
 }

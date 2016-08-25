@@ -1,6 +1,5 @@
 package org.rapidoid.buffer;
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.bytes.ByteBufferBytes;
@@ -44,7 +43,7 @@ import java.nio.channels.WritableByteChannel;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class MultiBuf extends RapidoidThing implements Buf, Constants {
+public class MultiBuf extends OutputStream implements Buf, Constants {
 
 	private final byte[] HELPER = new byte[20];
 
@@ -77,8 +76,6 @@ public class MultiBuf extends RapidoidThing implements Buf, Constants {
 	private int _limit;
 
 	private int _checkpoint;
-
-	private OutputStream outputStream;
 
 	private final ByteBufferBytes singleBytes = new ByteBufferBytes();
 
@@ -1211,20 +1208,7 @@ public class MultiBuf extends RapidoidThing implements Buf, Constants {
 
 	@Override
 	public OutputStream asOutputStream() {
-		assert invariant(false);
-
-		if (outputStream == null) {
-			outputStream = new OutputStream() {
-				@Override
-				public void write(int b) throws IOException {
-					assert invariant(true);
-					append((byte) b);
-				}
-			};
-		}
-
-		assert invariant(false);
-		return outputStream;
+		return this;
 	}
 
 	@Override
@@ -1405,6 +1389,16 @@ public class MultiBuf extends RapidoidThing implements Buf, Constants {
 	@Override
 	public void checkpoint(int checkpoint) {
 		this._checkpoint = checkpoint;
+	}
+
+	@Override
+	public void write(int byteValue) throws IOException {
+		append((byte) byteValue);
+	}
+
+	@Override
+	public void write(byte[] src, int off, int len) throws IOException {
+		append(src, off, len);
 	}
 
 }
