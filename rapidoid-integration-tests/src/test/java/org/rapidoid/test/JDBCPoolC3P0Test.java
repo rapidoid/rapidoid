@@ -45,13 +45,10 @@ public class JDBCPoolC3P0Test extends IntegrationTestCommons {
 
 		final Map<String, ?> expected = U.map("id", 123, "name", "xyz");
 
-		Msc.benchmarkMT(100, "select", 100000, new Runnable() {
-			@Override
-			public void run() {
-				Map<String, Object> record = U.single(JDBC.query("select id, name from abc"));
-				record = Msc.lowercase(record);
-				eq(record, expected);
-			}
+		Msc.benchmarkMT(100, "select", 100000, () -> {
+			Map<String, Object> record = U.single(JDBC.query("select id, name from abc"));
+			record = Msc.lowercase(record);
+			eq(record, expected);
 		});
 	}
 
@@ -69,13 +66,10 @@ public class JDBCPoolC3P0Test extends IntegrationTestCommons {
 
 		final Map<String, ?> expected = U.map("id", 123, "name", "xyz");
 
-		Msc.benchmarkMT(100, "select", 100000, new Runnable() {
-			@Override
-			public void run() {
-				Map<String, Object> record = U.single(JDBC.query("select id, name from abc"));
-				record = Msc.lowercase(record);
-				eq(record, expected);
-			}
+		Msc.benchmarkMT(100, "select", 100000, () -> {
+			Map<String, Object> record = U.single(JDBC.query("select id, name from abc"));
+			record = Msc.lowercase(record);
+			eq(record, expected);
 		});
 	}
 

@@ -3,6 +3,8 @@ package org.rapidoid.sql;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.beany.Beany;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.u.U;
 
 import java.sql.*;
@@ -130,6 +132,16 @@ public class JDBC extends RapidoidThing {
 		}
 	}
 
+	public static <T> List<T> rows(Class<T> resultType, ResultSet rs) throws SQLException {
+		List<T> rows = U.list();
+
+		while (rs.next()) {
+			rows.add(row(resultType, rs));
+		}
+
+		return rows;
+	}
+
 	public static List<Map<String, Object>> rows(ResultSet rs) throws SQLException {
 		List<Map<String, Object>> rows = U.list();
 
@@ -140,6 +152,21 @@ public class JDBC extends RapidoidThing {
 		return rows;
 	}
 
+	public static <T> T row(Class<T> resultType, ResultSet rs) throws SQLException {
+		T row = Cls.newInstance(resultType);
+
+		ResultSetMetaData meta = rs.getMetaData();
+		int columnsNumber = meta.getColumnCount();
+
+		for (int i = 1; i <= columnsNumber; i++) {
+			String name = meta.getColumnLabel(i);
+			Object value = rs.getObject(i);
+			Beany.setPropValue(row, name, value);
+		}
+
+		return row;
+	}
+
 	public static Map<String, Object> row(ResultSet rs) throws SQLException {
 		Map<String, Object> row = U.map();
 
@@ -147,8 +174,9 @@ public class JDBC extends RapidoidThing {
 		int columnsNumber = meta.getColumnCount();
 
 		for (int i = 1; i <= columnsNumber; i++) {
-			Object obj = rs.getObject(i);
-			row.put(meta.getColumnLabel(i), obj);
+			String name = meta.getColumnLabel(i);
+			Object value = rs.getObject(i);
+			row.put(name, value);
 		}
 
 		return row;

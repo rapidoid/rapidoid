@@ -88,11 +88,22 @@ public class JDBCTest extends TestCommons {
 		}
 
 		List<Map<String, Object>> rows = client.query("SELECT * FROM movie WHERE id < ?", 25);
-		System.out.println(rows);
 
 		eq(rows.size(), 2);
 		eq(Msc.lowercase(rows.get(0)), U.map("id", 10, "title", "rambo"));
 		eq(Msc.lowercase(rows.get(1)), U.map("id", 20, "title", "hackers"));
+
+		List<Movie> movies = client.query(Movie.class, "SELECT * FROM movie WHERE id < ?", 25);
+
+		eq(movies.size(), 2);
+
+		Movie movie1 = movies.get(0);
+		eq(movie1.id, 10);
+		eq(movie1.getTitle(), "Rambo");
+
+		Movie movie2 = movies.get(0);
+		eq(movie2.id, 20);
+		eq(movie2.getTitle(), "Hackers");
 	}
 
 }

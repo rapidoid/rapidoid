@@ -180,13 +180,14 @@ public class JdbcClient extends RapidoidThing {
 	public void tryToExecute(String sql, Object... args) {
 		try {
 			execute(sql, args);
+
 		} catch (Exception e) {
 			// ignore the exception
 			Log.warn("Ignoring exception", "error", U.safe(e.getMessage()));
 		}
 	}
 
-	public <T> List<Map<String, Object>> query(String sql, Object... args) {
+	public <T> List<T> query(Class<T> resultType, String sql, Object... args) {
 		ensureIsInitialized();
 
 		Connection conn = provideConnection();
@@ -196,16 +197,25 @@ public class JdbcClient extends RapidoidThing {
 		try {
 			stmt = JDBC.prepare(conn, sql, args);
 			rs = stmt.executeQuery();
-			return JDBC.rows(rs);
+
+			if (resultType.equals(Map.class)) {
+				return U.cast(JDBC.rows(rs));
+			} else {
+				return JDBC.rows(resultType, rs);
+			}
 
 		} catch (SQLException e) {
-			throw new RuntimeException(e);
+			throw U.rte(e);
 
 		} finally {
 			close(rs);
 			close(stmt);
 			close(conn);
 		}
+	}
+
+	public List<Map<String, Object>> query(String sql, Object... args) {
+		return U.cast(query(Map.class, sql, args));
 	}
 
 	private Connection provideConnection() {
