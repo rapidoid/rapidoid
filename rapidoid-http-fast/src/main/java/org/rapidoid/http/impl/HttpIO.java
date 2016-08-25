@@ -5,7 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.commons.Dates;
-import org.rapidoid.http.MediaType;
+import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.With;
@@ -53,7 +53,7 @@ public class HttpIO extends RapidoidThing {
 
 	private static final byte[] CONN_CLOSE = "Connection: close\r\n".getBytes();
 
-	private static final byte[] SERVER_HEADER = "Server: Rapidoid\r\n".getBytes();
+	private static final byte[] SERVER_HEADER;
 
 	private static final byte[] CONTENT_LENGTH_IS = "Content-Length: ".getBytes();
 
@@ -65,14 +65,15 @@ public class HttpIO extends RapidoidThing {
 
 	private static final byte[][] CONTENT_LENGTHS = new byte[CONTENT_LENGTHS_SIZE][];
 
-	public static final byte[] PAGE_NOT_FOUND = "Page not found!".getBytes();
-
 	static {
 		for (int len = 0; len < CONTENT_LENGTHS.length; len++) {
 			CONTENT_LENGTHS[len] = (new String(CONTENT_LENGTH_IS) + len + new String(Constants.CR_LF)).getBytes();
 		}
 
 		HttpResponseCodes.init();
+
+		String serverName = Conf.HTTP.entry("serverName").or("Rapidoid");
+		SERVER_HEADER = ("Server: " + serverName + "\r\n").getBytes();
 	}
 
 	private HttpIO() {
