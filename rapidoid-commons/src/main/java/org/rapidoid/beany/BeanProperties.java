@@ -8,6 +8,7 @@ import org.rapidoid.collection.Coll;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
@@ -42,6 +43,8 @@ public class BeanProperties extends RapidoidThing implements Iterable<Prop> {
 	public static BeanProperties NONE = new BeanProperties(Collections.EMPTY_MAP);
 
 	public final Map<String, Prop> map;
+
+	public final Map<String, Prop> lowercaseMap;
 
 	public final List<Prop> props;
 
@@ -88,8 +91,9 @@ public class BeanProperties extends RapidoidThing implements Iterable<Prop> {
 
 	public BeanProperties(Map<String, ? extends Prop> properties) {
 		this.map = Collections.unmodifiableMap(properties);
-		this.props = Collections.unmodifiableList(new ArrayList<Prop>(properties.values()));
-		this.names = Collections.unmodifiableList(new ArrayList<String>(properties.keySet()));
+		this.lowercaseMap = Msc.lowercase(map);
+		this.props = Collections.unmodifiableList(U.list(properties.values()));
+		this.names = Collections.unmodifiableList(U.list(properties.keySet()));
 	}
 
 	@Override
@@ -98,7 +102,13 @@ public class BeanProperties extends RapidoidThing implements Iterable<Prop> {
 	}
 
 	public Prop get(String property) {
-		return map.get(property);
+		Prop prop = map.get(property);
+
+		if (prop == null) {
+			prop = lowercaseMap.get(property.toLowerCase());
+		}
+
+		return prop;
 	}
 
 	public BeanProperties select(PropertySelector selector) {
