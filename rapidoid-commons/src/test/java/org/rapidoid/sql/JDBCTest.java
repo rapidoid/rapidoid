@@ -101,7 +101,7 @@ public class JDBCTest extends TestCommons {
 		eq(movie1.id, 10);
 		eq(movie1.getTitle(), "Rambo");
 
-		Movie movie2 = movies.get(0);
+		Movie movie2 = movies.get(1);
 		eq(movie2.id, 20);
 		eq(movie2.getTitle(), "Hackers");
 	}
