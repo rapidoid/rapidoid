@@ -1,4 +1,4 @@
-package org.rapidoid.test;
+package org.rapidoid.jdbc;
 
 /*
  * #%L
