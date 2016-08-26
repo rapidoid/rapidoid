@@ -6,6 +6,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
 
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /*
@@ -36,8 +37,9 @@ public class TemplateCompiler extends RapidoidThing {
 
 	public static TemplateRenderer compile(XNode node) {
 		try {
-			String source = TemplateToCode.generate(node);
-			return tryToCompile(source);
+			Map<String, String> expressions = U.map();
+			String source = TemplateToCode.generate(node, expressions);
+			return tryToCompile(source, expressions);
 
 		} catch (NotFoundException e) {
 			throw U.rte(e);
@@ -48,7 +50,7 @@ public class TemplateCompiler extends RapidoidThing {
 		}
 	}
 
-	private static TemplateRenderer tryToCompile(String source) throws NotFoundException, CannotCompileException,
+	private static TemplateRenderer tryToCompile(String source, Map<String, String> expressions) throws NotFoundException, CannotCompileException,
 		InstantiationException, IllegalAccessException {
 
 		ClassPool cp = ClassPool.getDefault();
@@ -58,11 +60,27 @@ public class TemplateCompiler extends RapidoidThing {
 		cls.addInterface(cp.get(TemplateRenderer.class.getCanonicalName()));
 		cls.addConstructor(CtNewConstructor.defaultConstructor(cls));
 
+		for (Map.Entry<String, String> expr : expressions.entrySet()) {
+			String fld = "private static final org.rapidoid.render.ValueRetriever %s = org.rapidoid.render.ValueRetriever.of(%s);";
+
+			String retrieverId = retrieverId(expr.getKey());
+			String prop = expr.getValue();
+
+			String field = U.frmt(fld, retrieverId, prop);
+
+			cls.addField(CtField.make(field, cls));
+		}
+
 		CtClass[] params = {cp.get(RenderCtx.class.getCanonicalName())};
 		CtClass clsVoid = cp.get(void.class.getCanonicalName());
 		cls.addMethod(CtNewMethod.make(Modifier.PUBLIC, clsVoid, "render", params, new CtClass[0], source, cls));
 
 		return (TemplateRenderer) cls.toClass().newInstance();
+	}
+
+	public static String retrieverId(String expr) {
+		String id = expr.replaceAll("[^A-Za-z0-9_]", "\\$");
+		return "_$_" + id + "_$_";
 	}
 
 }

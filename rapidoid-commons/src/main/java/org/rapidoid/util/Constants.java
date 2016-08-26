@@ -89,4 +89,18 @@ public interface Constants {
 
 	String[] HTTP_VERBS = {GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD, TRACE};
 
+	// https://en.wikipedia.org/wiki/UTF-8
+
+	int UTF8_2_BYTES_LEAD = 0xc0;
+
+	int UTF8_3_BYTES_LEAD = 0xe0;
+
+	int UTF8_4_BYTES_LEAD = 0xf0;
+
+	int UTF8_CONTINUATION = 0x80;
+
+	int LAST_6 = 0x3f;
+
+	byte MALFORMED_CHAR = '?';
+
 }

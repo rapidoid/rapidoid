@@ -57,11 +57,6 @@ public class XNode extends RapidoidThing {
 		this.text = text;
 	}
 
-	@Override
-	public String toString() {
-		return TemplateToCode.generate(this);
-	}
-
 	public TemplateRenderer compile() {
 		return TemplateCompiler.compile(this);
 	}

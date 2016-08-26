@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 2836
+Content-Length: 2839
 
 <!--
 MIT license (see http://bootsnipp.com/license)
@@ -47,7 +47,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             <div style="border: none 1px #aaa; border-radius: 25px; padding: 10px; background-color:rgba(0, 0, 0, 0.05);">
                 <h1><i class="fa fa-warning" style="color: #955; padding-bottom: 23px;"></i> <span style="font-family: 'Times New Roman', Times, serif;">Internal Server Error!</span></h1>
                 <h4 style="font-family: 'Times New Roman', Times, serif;">ERROR CODE: 500</h4>
-                <h4 style="font-family: 'Times New Roman', Times, serif;">The file &#39;non-existing-res&#39; doesn&#39;t exist! Path: [abc]</h4>
+                <h4 style="font-family: 'Times New Roman', Times, serif;">The file &apos;non-existing-res&apos; doesn&apos;t exist! Path: [abc]</h4>
                 <div style="margin-top: 35px; margin-bottom: 15px;">
                     <a href="/" class="btn" style="background-color: #FFF;"><span class="fa fa-home"></span> Home page</a>
                 </div>

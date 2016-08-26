@@ -48,14 +48,6 @@ public class Str extends RapidoidThing {
 		{">", "&gt;"},
 	};
 
-	private static final String[][] HTML_ESCAPE = {
-		{"&", "&amp;"},
-		{"\"", "&quot;"},
-		{"'", "&#39;"},
-		{"<", "&lt;"},
-		{">", "&gt;"},
-	};
-
 	private static final String[][] JAVA_ESCAPE = {
 		{"\n", "\\\\n"},
 		{"\r", "\\\\r"},
@@ -67,7 +59,7 @@ public class Str extends RapidoidThing {
 	}
 
 	public static String[] camelSplit(String s) {
-		return s.split(CAMEL_REGEX);
+		return CAMEL_SPLITTER_PATTERN.split(s);
 	}
 
 	public static String camelPhrase(String s) {
@@ -211,10 +203,6 @@ public class Str extends RapidoidThing {
 
 	public static String xmlEscape(String s) {
 		return Str.replace(s, XML_ESCAPE);
-	}
-
-	public static String htmlEscape(String s) {
-		return Str.replace(s, HTML_ESCAPE);
 	}
 
 	public static String javaEscape(String s) {

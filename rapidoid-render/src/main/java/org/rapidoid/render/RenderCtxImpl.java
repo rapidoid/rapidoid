@@ -3,11 +3,10 @@ package org.rapidoid.render;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.beany.Beany;
-import org.rapidoid.beany.Prop;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Str;
 import org.rapidoid.u.U;
+import org.rapidoid.util.StreamUtils;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -54,12 +53,46 @@ public class RenderCtxImpl extends RapidoidThing implements RenderCtx {
 	}
 
 	@Override
-	public void print(String s) {
-		try {
-			out.write(s.getBytes());
-		} catch (IOException e) {
-			throw U.rte(e);
+	public void printAscii(String s) throws IOException {
+		StreamUtils.writeAscii(out, s);
+	}
+
+	@Override
+	public void printUTF8(String s) throws IOException {
+		StreamUtils.writeUTF8(out, s);
+	}
+
+	@Override
+	public void printValue(Object value, boolean escape) throws IOException {
+		if (!escape) {
+			printUTF8(U.str(value));
+			return;
 		}
+
+		if (value instanceof String) {
+			String s = (String) value;
+			StreamUtils.writeUTF8HtmlEscaped(out, s);
+			return;
+		}
+
+		if (value instanceof Number) {
+
+			if (value instanceof Integer || value instanceof Long || value instanceof Short || value instanceof Byte) {
+				long n = ((Number) value).longValue();
+				StreamUtils.putNumAsText(out, n);
+				return;
+			}
+
+			printAscii(value.toString());
+			return;
+		}
+
+		if (value == null) {
+			printAscii("null");
+			return;
+		}
+
+		StreamUtils.writeUTF8HtmlEscaped(out, U.str(value));
 	}
 
 	@Override
@@ -78,25 +111,15 @@ public class RenderCtxImpl extends RapidoidThing implements RenderCtx {
 	}
 
 	@Override
-	public void val(String name, boolean escape) {
-		valOr(name, "N/A", escape);
+	public void val(ValueRetriever retriever, boolean escape) throws IOException {
+		valOr(retriever, "N/A", escape);
 	}
 
 	@Override
-	public void valOr(String name, String or, boolean escape) {
-		Object val = name.equals(".") ? self() : get(name);
+	public void valOr(ValueRetriever retriever, String or, boolean escape) throws IOException {
+		Object val = retriever.read(model);
 		val = U.or(val, or);
-		print(str(escape, val));
-	}
-
-	private String str(boolean escape, Object val) {
-		String str = U.str(val);
-		if (escape) str = Str.htmlEscape(str);
-		return str;
-	}
-
-	private Object self() {
-		return !model.isEmpty() ? model.get(model.size() - 1) : null;
+		printValue(val, escape);
 	}
 
 	@Override
@@ -128,43 +151,7 @@ public class RenderCtxImpl extends RapidoidThing implements RenderCtx {
 	}
 
 	private Object get(String name) {
-		return propOf(name, model.toArray());
-	}
-
-	private static Object propOf(String name, Object[] scope) {
-		int p = name.indexOf(".");
-
-		if (p > 0) {
-			Object first = propOf(name.substring(0, p), scope);
-			return propOf(name.substring(p + 1), new Object[]{first});
-		}
-
-		for (int i = scope.length - 1; i >= 0; i--) {
-			Object x = scope[i];
-			if (x != null) {
-				if (x instanceof Map<?, ?>) {
-					Map<?, ?> map = (Map<?, ?>) x;
-
-					if (map.containsKey(name)) {
-						return map.get(name);
-					}
-
-				} else if (x instanceof Getter) {
-					Getter getter = (Getter) x;
-
-					return getter.get(name);
-
-				} else {
-					Prop prop = Beany.property(x, name, false);
-
-					if (prop != null) {
-						return prop.get(x);
-					}
-				}
-			}
-		}
-
-		return null;
+		return ValueRetriever.propOf(name, model);
 	}
 
 }

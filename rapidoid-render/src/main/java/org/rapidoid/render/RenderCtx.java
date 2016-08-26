@@ -23,17 +23,23 @@ package org.rapidoid.render;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
+import java.io.IOException;
+
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public interface RenderCtx {
 
-	void print(String s);
+	void printAscii(String s) throws IOException;
+
+	void printUTF8(String s) throws IOException;
+
+	void printValue(Object value, boolean escape) throws IOException;
 
 	Object[] iter(String items);
 
-	void val(String s, boolean escape);
+	void val(ValueRetriever retriever, boolean escape) throws IOException;
 
-	void valOr(String s, String or, boolean escape);
+	void valOr(ValueRetriever retriever, String or, boolean escape) throws IOException;
 
 	void push(int index, Object v);
 

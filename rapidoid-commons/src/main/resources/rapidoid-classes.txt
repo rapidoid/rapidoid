@@ -547,6 +547,7 @@ org.rapidoid.render.TemplateRenderer
 org.rapidoid.render.Templates
 org.rapidoid.render.TemplateStore
 org.rapidoid.render.TemplateToCode
+org.rapidoid.render.ValueRetriever
 org.rapidoid.render.XNode
 org.rapidoid.reverseproxy.AbstractReverseProxyBean
 org.rapidoid.reverseproxy.LoadBalancer

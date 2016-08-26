@@ -985,4 +985,11 @@ public class Msc extends RapidoidThing implements Constants {
 		JDBC.reset();
 	}
 
+	public static boolean isAscii(String s) {
+		for (int i = 0; i < s.length(); i++) {
+			if (s.charAt(i) > 127) return false;
+		}
+		return true;
+	}
+
 }
