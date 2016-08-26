@@ -4,11 +4,13 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
 import org.rapidoid.u.U;
 
 import java.beans.PropertyVetoException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Properties;
 
 /*
  * #%L
@@ -56,15 +58,15 @@ public class C3P0ConnectionPool extends RapidoidThing implements ConnectionPool 
 		pool.setUser(username);
 		pool.setPassword(password);
 
-		pool.setMinPoolSize(5);
-		pool.setAcquireIncrement(5);
-		pool.setMaxPoolSize(20);
+		Properties props = new Properties();
+		props.putAll(Conf.C3P0.toProperties());
+		props.putAll(pool.getProperties());
+		pool.setProperties(props);
 	}
 
 	@Override
 	public Connection getConnection(String jdbcUrl) throws SQLException {
-		U.must(U.eq(jdbcUrl, pool.getJdbcUrl()), "The JDBC URLs don't match: '%s' and '%s'!", jdbcUrl,
-			pool.getJdbcUrl());
+		U.must(U.eq(jdbcUrl, pool.getJdbcUrl()), "The JDBC URLs don't match: '%s' and '%s'!", jdbcUrl, pool.getJdbcUrl());
 		return pool.getConnection();
 	}
 

@@ -57,11 +57,22 @@ jobs:
 
 hibernate:
   c3p0:
-    min_size: 5
-    max_size: 100
-    timeout: 300
-    max_statements: 50
-    idle_test_period: 100
+    debug: false
+    minPoolSize: 5
+    maxPoolSize: 100
+    acquireIncrement: 5
+    maxStatements: 1000
+    maxIdleTimeExcessConnections: 10
+    idleConnectionTestPeriod: 300
+
+c3p0:
+  debug: false
+  minPoolSize: 5
+  maxPoolSize: 100
+  acquireIncrement: 5
+  maxStatements: 1000
+  maxIdleTimeExcessConnections: 10
+  idleConnectionTestPeriod: 300
 
 oauth:
   google:
