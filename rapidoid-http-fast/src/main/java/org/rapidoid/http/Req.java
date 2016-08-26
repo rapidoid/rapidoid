@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.io.Upload;
 
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -350,5 +351,11 @@ public interface Req {
 	 * Reverts the previous processing of the request, usually with intention to process the same request again.
 	 */
 	void revert();
+
+	/**
+	 * First renders the response headers, then returns an <i>OutputStream</i> representing
+	 * the <b>response body</b>. The response body will be constructed by writing to the <i>OutputStream</i>.
+	 */
+	OutputStream out();
 
 }

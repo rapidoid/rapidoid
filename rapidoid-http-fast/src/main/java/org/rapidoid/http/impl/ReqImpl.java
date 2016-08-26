@@ -22,6 +22,7 @@ import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Msc;
 
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.*;
 import java.util.Map.Entry;
@@ -837,6 +838,16 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 			sessionManager.saveSession(this, sessionId(), session);
 		} catch (Exception e) {
 			throw U.rte("Error occured while saving the session!", e);
+		}
+	}
+
+	@Override
+	public OutputStream out() {
+		if (response != null) {
+			return response.out(); // performs extra checks
+		} else {
+			startRendering(200, true);
+			return channel().output().asOutputStream();
 		}
 	}
 
