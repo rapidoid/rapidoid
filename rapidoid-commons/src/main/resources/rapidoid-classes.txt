@@ -328,6 +328,7 @@ org.rapidoid.http.handler.lambda.SixParamLambdaHandler
 org.rapidoid.http.handler.lambda.ThreeParamLambdaHandler
 org.rapidoid.http.handler.lambda.TwoParamLambdaHandler
 org.rapidoid.http.handler.MethodReqHandler
+org.rapidoid.http.handler.NonBlockingHttpHandler
 org.rapidoid.http.handler.optimized.CallableHttpHandler
 org.rapidoid.http.handler.optimized.DelegatingParamsAwareReqHandler
 org.rapidoid.http.handler.optimized.DelegatingParamsAwareReqRespHandler
