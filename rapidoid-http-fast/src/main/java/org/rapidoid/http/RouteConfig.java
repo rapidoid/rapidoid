@@ -58,4 +58,9 @@ public interface RouteConfig {
 	String zone();
 
 	RouteOptions zone(String zone);
+
+	boolean decorated();
+
+	RouteOptions decorated(boolean decorated);
+
 }

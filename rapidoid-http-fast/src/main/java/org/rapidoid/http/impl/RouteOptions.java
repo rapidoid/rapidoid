@@ -10,6 +10,7 @@ import org.rapidoid.http.MediaType;
 import org.rapidoid.http.RouteConfig;
 import org.rapidoid.u.U;
 
+import java.util.Arrays;
 import java.util.Set;
 
 /*
@@ -43,6 +44,8 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 	private volatile boolean mvc;
 
 	private volatile String zone;
+
+	private volatile boolean decorated;
 
 	private volatile TransactionMode transactionMode = TransactionMode.NONE;
 
@@ -139,6 +142,17 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 		return this;
 	}
 
+	@Override
+	public boolean decorated() {
+		return decorated;
+	}
+
+	@Override
+	public RouteOptions decorated(boolean decorated) {
+		this.decorated = decorated;
+		return this;
+	}
+
 	public RouteOptions copy() {
 		RouteOptions copy = new RouteOptions();
 
@@ -149,6 +163,7 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 		copy.roles(U.arrayOf(String.class, roles));
 		copy.wrappers(wrappers());
 		copy.zone(zone());
+		copy.decorated(decorated());
 
 		return copy;
 	}
@@ -161,12 +176,14 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 		RouteOptions that = (RouteOptions) o;
 
 		if (mvc != that.mvc) return false;
+		if (decorated != that.decorated) return false;
 		if (contentType != null ? !contentType.equals(that.contentType) : that.contentType != null) return false;
 		if (view != null ? !view.equals(that.view) : that.view != null) return false;
 		if (zone != null ? !zone.equals(that.zone) : that.zone != null) return false;
 		if (transactionMode != that.transactionMode) return false;
 		if (roles != null ? !roles.equals(that.roles) : that.roles != null) return false;
-		return wrappers != null ? wrappers.equals(that.wrappers) : that.wrappers == null;
+		return Arrays.equals(wrappers, that.wrappers);
+
 	}
 
 	@Override
@@ -175,9 +192,10 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 		result = 31 * result + (view != null ? view.hashCode() : 0);
 		result = 31 * result + (mvc ? 1 : 0);
 		result = 31 * result + (zone != null ? zone.hashCode() : 0);
+		result = 31 * result + (decorated ? 1 : 0);
 		result = 31 * result + (transactionMode != null ? transactionMode.hashCode() : 0);
 		result = 31 * result + (roles != null ? roles.hashCode() : 0);
-		result = 31 * result + (wrappers != null ? wrappers.hashCode() : 0);
+		result = 31 * result + Arrays.hashCode(wrappers);
 		return result;
 	}
 }

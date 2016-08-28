@@ -34,15 +34,15 @@ import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
-public class NonBlockingHttpHandler extends AbstractHttpHandler {
+public class NonDecoratedHttpHandler extends AbstractHttpHandler {
 
-	private final Callable<?> nonBlockingLogic;
+	private final Callable<?> logic;
 	private final boolean returnsJson;
 
-	public NonBlockingHttpHandler(RouteOptions options, Callable<?> nonBlockingLogic) {
+	public NonDecoratedHttpHandler(RouteOptions options, Callable<?> logic) {
 		super(options);
 
-		this.nonBlockingLogic = nonBlockingLogic;
+		this.logic = logic;
 		this.returnsJson = options.contentType() == MediaType.JSON;
 	}
 
@@ -51,7 +51,7 @@ public class NonBlockingHttpHandler extends AbstractHttpHandler {
 		Object result;
 
 		try {
-			result = nonBlockingLogic.call();
+			result = logic.call();
 
 		} catch (Exception e) {
 			HttpIO.write200(ctx, isKeepAlive, contentType, "Internal server error!".getBytes());

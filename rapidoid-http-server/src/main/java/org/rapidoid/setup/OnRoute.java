@@ -4,7 +4,6 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.TransactionMode;
-import org.rapidoid.http.MediaType;
 import org.rapidoid.http.*;
 import org.rapidoid.http.handler.HttpHandlers;
 import org.rapidoid.http.impl.RouteOptions;
@@ -394,6 +393,11 @@ public class OnRoute extends RapidoidThing {
 
 	public OnRoute zone(String zone) {
 		options.zone(zone);
+		return this;
+	}
+
+	public OnRoute decorated(boolean decorated) {
+		options.decorated(decorated);
 		return this;
 	}
 
