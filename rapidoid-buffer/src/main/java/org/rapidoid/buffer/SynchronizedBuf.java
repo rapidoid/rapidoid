@@ -348,4 +348,9 @@ public class SynchronizedBuf extends OutputStream implements Buf {
 		return this;
 	}
 
+	@Override
+	public Buf unwrap() {
+		return buf;
+	}
+
 }

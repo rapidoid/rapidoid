@@ -161,4 +161,6 @@ public interface Buf {
 
 	void write(byte[] src, int offset, int length) throws IOException;
 
+	Buf unwrap();
+
 }

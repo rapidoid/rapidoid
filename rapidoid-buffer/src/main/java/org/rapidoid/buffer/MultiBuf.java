@@ -1401,4 +1401,9 @@ public class MultiBuf extends OutputStream implements Buf, Constants {
 		append(src, off, len);
 	}
 
+	@Override
+	public Buf unwrap() {
+		return this;
+	}
+
 }
