@@ -17,6 +17,9 @@ import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.util.Constants;
+import org.rapidoid.util.Msc;
+
+import java.io.ByteArrayOutputStream;
 
 /*
  * #%L
@@ -173,24 +176,41 @@ public class HttpIO extends RapidoidThing {
 	public static void writeAsJson(Channel ctx, int code, boolean isKeepAlive, Object value) {
 		startResponse(ctx, code, isKeepAlive, MediaType.JSON);
 
-		Buf out = ctx.output();
+		ByteArrayOutputStream os = Msc.locals().baos1;
+		os.reset();
 
-		ctx.write(CONTENT_LENGTH_UNKNOWN);
+		JSON.stringify(value, os);
+		byte[] arr = os.toByteArray();
 
-		int posConLen = out.size() - 1;
-		ctx.write(Constants.CR_LF);
+		writeContentLengthAndBody(ctx, arr);
+	}
 
-		// finishing the headers
-		ctx.write(Constants.CR_LF);
+	@SuppressWarnings("unused")
+	private static void writeOnBufferAsJson(Channel ctx, int code, boolean isKeepAlive, Object value) {
+		startResponse(ctx, code, isKeepAlive, MediaType.JSON);
 
-		int posBefore = out.size();
+		Buf output = ctx.output();
 
-		JSON.stringify(value, out.asOutputStream());
+		synchronized (output) {
+			Buf out = output.unwrap();
 
-		int posAfter = out.size();
-		int contentLength = posAfter - posBefore;
+			ctx.write(CONTENT_LENGTH_UNKNOWN);
 
-		out.putNumAsText(posConLen, contentLength, false);
+			int posConLen = out.size() - 1;
+			ctx.write(Constants.CR_LF);
+
+			// finishing the headers
+			ctx.write(Constants.CR_LF);
+
+			int posBefore = out.size();
+
+			JSON.stringify(value, out.asOutputStream());
+
+			int posAfter = out.size();
+			int contentLength = posAfter - posBefore;
+
+			out.putNumAsText(posConLen, contentLength, false);
+		}
 	}
 
 	public static void writeContentLengthUnknown(Channel channel) {
