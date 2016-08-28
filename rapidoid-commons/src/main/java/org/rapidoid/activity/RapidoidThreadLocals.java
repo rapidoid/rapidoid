@@ -20,32 +20,33 @@ package org.rapidoid.activity;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
+import java.io.ByteArrayOutputStream;
+
 @Authors("Nikolche Mihajlovski")
-@Since("4.1.0")
-public class RapidoidThread extends Thread {
+@Since("5.2.0")
+public class RapidoidThreadLocals extends RapidoidThing {
 
-	private final RapidoidThreadLocals locals = new RapidoidThreadLocals();
+	private static final ThreadLocal<RapidoidThreadLocals> THREAD_LOCALS = new ThreadLocal<RapidoidThreadLocals>() {
+		@Override
+		protected RapidoidThreadLocals initialValue() {
+			return new RapidoidThreadLocals();
+		}
+	};
 
-	public RapidoidThread() {
+	public static RapidoidThreadLocals get() {
+		Thread thread = Thread.currentThread();
+
+		if (thread instanceof RapidoidThread) {
+			return ((RapidoidThread) thread).locals();
+		} else {
+			return THREAD_LOCALS.get();
+		}
 	}
 
-	public RapidoidThread(Runnable runnable) {
-		super(runnable);
-	}
-
-	public RapidoidThread(String name) {
-		super(name);
-	}
-
-	public <T> RapidoidThread(Runnable runnable, String name) {
-		super(runnable, name);
-	}
-
-	public RapidoidThreadLocals locals() {
-		return locals;
-	}
+	public final ByteArrayOutputStream baos1 = new ByteArrayOutputStream();
 
 }

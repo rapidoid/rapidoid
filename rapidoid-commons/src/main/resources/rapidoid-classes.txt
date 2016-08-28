@@ -5,6 +5,7 @@ org.rapidoid.activity.LifecycleActivity
 org.rapidoid.activity.NamedActivity
 org.rapidoid.activity.RapidoidThread
 org.rapidoid.activity.RapidoidThreadFactory
+org.rapidoid.activity.RapidoidThreadLocals
 org.rapidoid.annotation.Authors
 org.rapidoid.annotation.Autocreate
 org.rapidoid.annotation.Composite

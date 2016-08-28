@@ -4,6 +4,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.activity.AbstractLoopThread;
 import org.rapidoid.activity.RapidoidThread;
 import org.rapidoid.activity.RapidoidThreadFactory;
+import org.rapidoid.activity.RapidoidThreadLocals;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Profiles;
 import org.rapidoid.annotation.Run;
@@ -990,6 +991,10 @@ public class Msc extends RapidoidThing implements Constants {
 			if (s.charAt(i) > 127) return false;
 		}
 		return true;
+	}
+
+	public static RapidoidThreadLocals locals() {
+		return RapidoidThreadLocals.get();
 	}
 
 }
