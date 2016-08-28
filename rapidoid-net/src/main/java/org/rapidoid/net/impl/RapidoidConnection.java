@@ -61,11 +61,11 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 	private final ConnState state = new ConnState();
 
-	private boolean waitingToWrite = false;
+	private volatile boolean waitingToWrite = false;
 
 	public volatile SelectionKey key;
 
-	private boolean closeAfterWrite = false;
+	private volatile boolean closeAfterWrite = false;
 
 	public volatile boolean closed = true;
 
@@ -73,19 +73,19 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 	volatile int completedInputPos;
 
-	private CtxListener listener;
+	private volatile CtxListener listener;
 
-	private long id = ID_N.incrementAndGet();
+	private final long id = ID_N.incrementAndGet();
 
-	private boolean initial;
+	private volatile boolean initial;
 
-	private boolean async;
+	private volatile boolean async;
 
 	volatile boolean done;
 
-	private boolean isClient;
+	private volatile boolean isClient;
 
-	private Protocol protocol;
+	private volatile Protocol protocol;
 
 	volatile long requestId;
 
@@ -127,6 +127,7 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 		state.reset();
 	}
 
+	@Override
 	public void log(String msg) {
 		state().log(msg);
 	}
@@ -188,44 +189,44 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 	}
 
 	@Override
-	public synchronized Channel writeJSON(Object value) {
+	public Channel writeJSON(Object value) {
 		JSON.stringify(value, output.asOutputStream());
 		return this;
 	}
 
-	public synchronized boolean closeAfterWrite() {
+	public boolean closeAfterWrite() {
 		return closeAfterWrite;
 	}
 
 	@Override
-	public synchronized Channel done() {
+	public Channel done() {
 		done(null);
 		return this;
 	}
 
 	public synchronized void done(Object tag) {
 		async = false;
-		// TODO done might be obsolete, is async enough?
 		if (!done) {
 			done = true;
 			askToSend();
-			if (tag != null) {
-				listener().onDone(this, tag);
-			}
+
+//			if (tag != null) {
+//				listener().onDone(this, tag);
+//			}
 		}
 	}
 
 	@Override
-	public synchronized Channel send() {
+	public Channel send() {
 		askToSend();
 		return this;
 	}
 
-	public synchronized void error() {
+	public void error() {
 		askToSend();
 	}
 
-	private void askToSend() {
+	private synchronized void askToSend() {
 		if (!waitingToWrite && output.size() > 0) {
 			waitingToWrite = true;
 			worker.wantToWrite(this);
@@ -254,45 +255,46 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 	}
 
 	@Override
-	public synchronized Buf input() {
+	public Buf input() {
 		return input;
 	}
 
 	@Override
-	public synchronized Buf output() {
+	public Buf output() {
 		return output;
 	}
 
-	public synchronized boolean onSameThread() {
+	@Override
+	public boolean onSameThread() {
 		return worker.onSameThread();
 	}
 
 	@Override
-	public synchronized RapidoidHelper helper() {
+	public RapidoidHelper helper() {
 		return worker.helper;
 	}
 
-	public synchronized CtxListener listener() {
+	public CtxListener listener() {
 		return listener;
 	}
 
-	public synchronized void setListener(CtxListener listener) {
+	public void setListener(CtxListener listener) {
 		this.listener = listener;
 	}
 
 	@Override
-	public synchronized String address() {
+	public String address() {
 		return getAddress().getAddress().getHostAddress();
 	}
 
 	@Override
-	public synchronized Channel close() {
+	public Channel close() {
 		close(true);
 		return this;
 	}
 
 	@Override
-	public synchronized Channel closeIf(boolean condition) {
+	public Channel closeIf(boolean condition) {
 		if (condition) {
 			close();
 		}
@@ -300,30 +302,31 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 	}
 
 	@Override
-	public synchronized String readln() {
+	public String readln() {
 		return input().readLn();
 	}
 
 	@Override
-	public synchronized String readN(int count) {
+	public String readN(int count) {
 		return input().readN(count);
 	}
 
-	public synchronized ConnState state() {
+	@Override
+	public ConnState state() {
 		return state;
 	}
 
 	@Override
-	public synchronized boolean isInitial() {
+	public boolean isInitial() {
 		return initial;
 	}
 
 	@Override
-	public synchronized String toString() {
+	public String toString() {
 		return "conn#" + connId();
 	}
 
-	public synchronized void setInitial(boolean initial) {
+	public void setInitial(boolean initial) {
 		this.initial = initial;
 	}
 
@@ -339,29 +342,29 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 		return async;
 	}
 
-	public synchronized boolean isClient() {
+	public boolean isClient() {
 		return isClient;
 	}
 
-	public synchronized void setClient(boolean isClient) {
+	public void setClient(boolean isClient) {
 		this.isClient = isClient;
 	}
 
-	public synchronized void setProtocol(Protocol protocol) {
+	public void setProtocol(Protocol protocol) {
 		this.protocol = protocol;
 	}
 
-	public synchronized Protocol getProtocol() {
+	public Protocol getProtocol() {
 		return protocol;
 	}
 
 	@Override
-	public synchronized boolean isClosing() {
+	public boolean isClosing() {
 		return closing;
 	}
 
 	@Override
-	public synchronized boolean isClosed() {
+	public boolean isClosed() {
 		return closed;
 	}
 
@@ -373,7 +376,7 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 	}
 
 	@Override
-	public synchronized long connId() {
+	public long connId() {
 		return id;
 	}
 

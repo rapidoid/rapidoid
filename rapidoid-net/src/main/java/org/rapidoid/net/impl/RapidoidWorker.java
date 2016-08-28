@@ -440,9 +440,9 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		conn.key = key;
 		conn.setProtocol(protocol);
 
-		if (protocol instanceof CtxListener) {
-			conn.setListener((CtxListener) protocol);
-		}
+//		if (protocol instanceof CtxListener) {
+//			conn.setListener((CtxListener) protocol);
+//		}
 
 		key.attach(conn);
 
