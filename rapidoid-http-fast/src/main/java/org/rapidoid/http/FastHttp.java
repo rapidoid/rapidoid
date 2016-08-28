@@ -69,7 +69,6 @@ public class FastHttp extends AbstractHttpProcessor {
 		this.routeGroups = routeGroups;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void onRequest(Channel channel, boolean isGet, boolean isKeepAlive, BufRange xbody, BufRange xverb, BufRange xuri,
 	                      BufRange xpath, BufRange xquery, BufRange xprotocol, BufRanges hdrs) {
@@ -117,74 +116,10 @@ public class FastHttp extends AbstractHttpProcessor {
 		boolean noReq = (handler != null && !handler.needsParams());
 
 		ReqImpl req = null;
-		MediaType contentType = MediaType.HTML_UTF_8;
 
 		if (!noReq) {
-			KeyValueRanges paramsKV = helper.pairs1.reset();
-			KeyValueRanges headersKV = helper.pairs2.reset();
-			KeyValueRanges cookiesKV = helper.pairs5.reset();
-
-			HTTP_PARSER.parseParams(buf, paramsKV, xquery);
-			Map<String, String> params = U.cast(paramsKV.toMap(buf, true, true, false));
-
-			if (match != null && match.getParams() != null) {
-				params.putAll(match.getParams());
-			}
-
-			HTTP_PARSER.parseHeadersIntoKV(buf, hdrs, headersKV, cookiesKV, helper);
-			Map<String, String> headers = U.cast(headersKV.toMap(buf, false, false, true));
-			Map<String, String> cookies = U.cast(cookiesKV.toMap(buf, false, false, false));
-
-			byte[] body;
-			Map<String, Object> posted;
-			Map<String, List<Upload>> files;
-			boolean pendingBodyParsing = false;
-
-			if (!isGet && !xbody.isEmpty()) {
-				KeyValueRanges postedKV = helper.pairs3.reset();
-
-				body = xbody.bytes(buf);
-
-				// parse posted body as data
-				posted = U.map();
-				files = U.map();
-
-				pendingBodyParsing = !HTTP_PARSER.parsePosted(buf, headersKV, xbody, postedKV, files, helper, posted);
-
-				posted = Collections.synchronizedMap(posted);
-				files = Collections.synchronizedMap(files);
-
-			} else {
-				posted = Collections.EMPTY_MAP;
-				files = Collections.EMPTY_MAP;
-				body = null;
-			}
-
-			String verb = xverb.str(buf);
-			String uri = xuri.str(buf);
-			String path = Msc.urlDecode(xpath.str(buf));
-			String query = Msc.urlDecodeOrKeepOriginal(xquery.str(buf));
-			String zone = null;
-
-			if (handler != null) {
-				contentType = handler.contentType();
-				zone = handler.options().zone();
-			}
-
-			zone = U.or(zone, "main");
-
-			params = Collections.synchronizedMap(params);
-			headers = Collections.synchronizedMap(headers);
-			cookies = Collections.synchronizedMap(cookies);
-
-			req = new ReqImpl(this, channel, isKeepAlive, verb, uri, path, query, body, params, headers, cookies,
-				posted, files, pendingBodyParsing, contentType, zone, matchingRoutes, matchingRoute);
-
-			if (!attributes.isEmpty()) {
-				req.attrs().putAll(attributes);
-			}
-
-			channel.setRequest(req);
+			req = createReq(channel, isGet, isKeepAlive, xbody, xverb, xuri, xpath, xquery, hdrs,
+				helper, buf, matchingRoutes, matchingRoute, match, handler);
 		}
 
 		try {
@@ -197,17 +132,90 @@ public class FastHttp extends AbstractHttpProcessor {
 			}
 
 		} catch (Throwable e) {
-			if (handleError(channel, isKeepAlive, req, contentType, e)) return;
+			if (handleError(channel, isKeepAlive, req, e)) return;
 		}
 
 		if (status == HttpStatus.NOT_FOUND) {
-			handleNotFound(channel, isKeepAlive, contentType, req);
+			handleNotFound(channel, isKeepAlive, req);
 			return;
 		}
 
 		if (status != HttpStatus.ASYNC) {
 			channel.closeIf(!isKeepAlive);
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public ReqImpl createReq(Channel channel, boolean isGet, boolean isKeepAlive, BufRange xbody, BufRange xverb, BufRange xuri, BufRange xpath, BufRange xquery, BufRanges hdrs, RapidoidHelper helper, Buf buf, HttpRoutesImpl matchingRoutes, Route matchingRoute, HandlerMatch match, HttpHandler handler) {
+		ReqImpl req;
+		KeyValueRanges paramsKV = helper.pairs1.reset();
+		KeyValueRanges headersKV = helper.pairs2.reset();
+		KeyValueRanges cookiesKV = helper.pairs5.reset();
+
+		HTTP_PARSER.parseParams(buf, paramsKV, xquery);
+		Map<String, String> params = U.cast(paramsKV.toMap(buf, true, true, false));
+
+		if (match != null && match.getParams() != null) {
+			params.putAll(match.getParams());
+		}
+
+		HTTP_PARSER.parseHeadersIntoKV(buf, hdrs, headersKV, cookiesKV, helper);
+		Map<String, String> headers = U.cast(headersKV.toMap(buf, false, false, true));
+		Map<String, String> cookies = U.cast(cookiesKV.toMap(buf, false, false, false));
+
+		byte[] body;
+		Map<String, Object> posted;
+		Map<String, List<Upload>> files;
+		boolean pendingBodyParsing = false;
+
+		if (!isGet && !xbody.isEmpty()) {
+			KeyValueRanges postedKV = helper.pairs3.reset();
+
+			body = xbody.bytes(buf);
+
+			// parse posted body as data
+			posted = U.map();
+			files = U.map();
+
+			pendingBodyParsing = !HTTP_PARSER.parsePosted(buf, headersKV, xbody, postedKV, files, helper, posted);
+
+			posted = Collections.synchronizedMap(posted);
+			files = Collections.synchronizedMap(files);
+
+		} else {
+			posted = Collections.EMPTY_MAP;
+			files = Collections.EMPTY_MAP;
+			body = null;
+		}
+
+		String verb = xverb.str(buf);
+		String uri = xuri.str(buf);
+		String path = Msc.urlDecode(xpath.str(buf));
+		String query = Msc.urlDecodeOrKeepOriginal(xquery.str(buf));
+		String zone = null;
+
+		MediaType contentType = MediaType.HTML_UTF_8;
+
+		if (handler != null) {
+			contentType = handler.contentType();
+			zone = handler.options().zone();
+		}
+
+		zone = U.or(zone, "main");
+
+		params = Collections.synchronizedMap(params);
+		headers = Collections.synchronizedMap(headers);
+		cookies = Collections.synchronizedMap(cookies);
+
+		req = new ReqImpl(this, channel, isKeepAlive, verb, uri, path, query, body, params, headers, cookies,
+			posted, files, pendingBodyParsing, contentType, zone, matchingRoutes, matchingRoute);
+
+		if (!attributes.isEmpty()) {
+			req.attrs().putAll(attributes);
+		}
+
+		channel.setRequest(req);
+		return req;
 	}
 
 	private HttpStatus handleIfFound(Channel channel, boolean isKeepAlive, HttpHandler handler, ReqImpl req) {
@@ -218,7 +226,9 @@ public class FastHttp extends AbstractHttpProcessor {
 		}
 	}
 
-	protected void internalServerError(Channel channel, boolean isKeepAlive, Req req, MediaType contentType) {
+	protected void internalServerError(Channel channel, boolean isKeepAlive, Req req) {
+		MediaType contentType = req != null ? req.contentType() : MediaType.HTML_UTF_8;
+
 		HttpIO.startResponse(channel, 500, isKeepAlive, contentType);
 
 		JsonResponseRenderer jsonRenderer = Customization.of(req).jsonResponseRenderer();
@@ -228,28 +238,28 @@ public class FastHttp extends AbstractHttpProcessor {
 		HttpIO.done(channel, isKeepAlive);
 	}
 
-	private boolean handleError(Channel channel, boolean isKeepAlive, Req req, MediaType contentType, Throwable e) {
+	private boolean handleError(Channel channel, boolean isKeepAlive, Req req, Throwable e) {
 		if (req != null) {
 			if (!((ReqImpl) req).isStopped()) {
 				try {
 					HttpIO.errorAndDone(req, e);
 				} catch (Exception e1) {
 					Log.error("HTTP error handler error!", e1);
-					internalServerError(channel, isKeepAlive, req, contentType);
+					internalServerError(channel, isKeepAlive, req);
 				}
 			}
 			return true;
 
 		} else {
 			Log.error("Low-level HTTP handler error!", e);
-			internalServerError(channel, isKeepAlive, req, contentType);
+			internalServerError(channel, isKeepAlive, req);
 		}
 
 		return false;
 	}
 
-	private void handleNotFound(Channel channel, boolean isKeepAlive, MediaType contentType, Req req) {
-		handleError(channel, isKeepAlive, req, contentType, new NotFound());
+	private void handleNotFound(Channel channel, boolean isKeepAlive, Req req) {
+		handleError(channel, isKeepAlive, req, new NotFound());
 	}
 
 	public Customization custom() {
@@ -322,7 +332,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		}
 
 		if (status == HttpStatus.NOT_FOUND) {
-			handleNotFound(ctx, isKeepAlive, contentType, req);
+			handleNotFound(ctx, isKeepAlive, req);
 		}
 	}
 
