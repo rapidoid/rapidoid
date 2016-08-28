@@ -6,6 +6,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.ViewRenderer;
+import org.rapidoid.http.impl.MVCModel;
 import org.rapidoid.render.FileSystemTemplateStore;
 import org.rapidoid.render.TemplateStore;
 import org.rapidoid.render.Templates;
@@ -37,7 +38,7 @@ import java.io.OutputStream;
 public class DefaultViewRenderer extends RapidoidThing implements ViewRenderer {
 
 	@Override
-	public void render(Req req, String viewName, Object[] model, OutputStream out) throws Exception {
+	public void render(Req req, String viewName, MVCModel model, OutputStream out) throws Exception {
 		String[] path = Customization.of(req).templatesPath();
 		TemplateStore templates = new FileSystemTemplateStore(path);
 		Templates.load(viewName + ".html", templates).renderTo(out, model);

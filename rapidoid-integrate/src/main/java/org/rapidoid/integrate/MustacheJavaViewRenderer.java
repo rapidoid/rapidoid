@@ -9,6 +9,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.ViewRenderer;
+import org.rapidoid.http.impl.MVCModel;
 import org.rapidoid.io.Res;
 
 import java.io.OutputStream;
@@ -35,18 +36,29 @@ import java.io.PrintWriter;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class MustacheViewRenderer extends RapidoidThing implements ViewRenderer {
+@Since("5.2.0")
+public class MustacheJavaViewRenderer extends RapidoidThing implements ViewRenderer {
 
-	private final MustacheFactory mf = new DefaultMustacheFactory();
+	private volatile MustacheFactory factory = new DefaultMustacheFactory();
 
 	@Override
-	public void render(Req req, String viewName, Object[] model, OutputStream out) throws Exception {
+	public void render(Req req, String viewName, MVCModel model, OutputStream out) throws Exception {
 		String[] path = Customization.of(req).templatesPath();
 		Res template = Res.from(viewName + ".html", path).mustExist();
 
-		Mustache mustache = mf.compile(template.getCachedFileName());
-		mustache.execute(new PrintWriter(out), model).flush();
+		Mustache mustache = factory.compile(template.getCachedFileName());
+
+		PrintWriter writer = new PrintWriter(out);
+		mustache.execute(writer, model);
+		writer.flush();
 	}
 
+	public MustacheFactory factory() {
+		return factory;
+	}
+
+	public MustacheJavaViewRenderer factory(MustacheFactory factory) {
+		this.factory = factory;
+		return this;
+	}
 }

@@ -1,4 +1,4 @@
-package org.rapidoid.test;
+package org.rapidoid.viewrendering;
 
 /*
  * #%L
@@ -31,13 +31,17 @@ import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class MustacheViewRendererTest extends IntegrationTestCommons {
+public class MustacheJavaViewRendererTest extends IntegrationTestCommons {
 
 	@Test
-	public void testTemplateLoading() {
-		My.viewRenderer(Integrate.mustacheViewRenderer());
+	public void testRendering() {
+		My.templatesPath("view-rendering");
+		My.viewRenderer(Integrate.mustacheJavaViewRenderer());
 
-		On.get("/").view("mtmpl").mvc(() -> U.map("x", "foo", "y", "bar"));
+		On.get("/").view("mtmpl").mvc((req, resp) -> {
+			resp.model("y", "bar");
+			return U.map("x", "foo");
+		});
 
 		getReq("/");
 	}

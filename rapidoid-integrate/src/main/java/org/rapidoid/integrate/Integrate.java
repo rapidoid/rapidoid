@@ -28,8 +28,12 @@ import org.rapidoid.annotation.Since;
 @Since("5.1.0")
 public class Integrate extends RapidoidThing {
 
-	public static MustacheViewRenderer mustacheViewRenderer() {
-		return new MustacheViewRenderer();
+	public static MustacheJavaViewRenderer mustacheJavaViewRenderer() {
+		return new MustacheJavaViewRenderer();
+	}
+
+	public static JMustacheViewRenderer jMustacheViewRenderer() {
+		return new JMustacheViewRenderer();
 	}
 
 }

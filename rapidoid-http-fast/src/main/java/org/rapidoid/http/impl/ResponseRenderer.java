@@ -85,14 +85,10 @@ public class ResponseRenderer extends RapidoidThing {
 		ViewRenderer viewRenderer = Customization.of(req).viewRenderer();
 		U.must(viewRenderer != null, "A view renderer wasn't configured!");
 
-		MVCModel basicModel = new MVCModel(req, resp, resp.model(), resp.screen(), result);
-
-		Object[] renderModel = result != null
-			? U.array(basicModel, resp.model(), result)
-			: U.array(basicModel, resp.model());
+		MVCModel mvcModel = new MVCModelImpl(req, resp, resp.model(), resp.screen(), result);
 
 		try {
-			viewRenderer.render(req, viewName, renderModel, out);
+			viewRenderer.render(req, viewName, mvcModel, out);
 		} catch (Throwable e) {
 			throw U.rte("Error while rendering view: " + viewName, e);
 		}
