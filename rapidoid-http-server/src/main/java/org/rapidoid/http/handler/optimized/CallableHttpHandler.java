@@ -35,9 +35,9 @@ import java.util.concurrent.Callable;
 @Since("4.3.0")
 public class CallableHttpHandler extends AbstractAsyncHttpHandler {
 
-	private final Callable<Object> handler;
+	private final Callable<?> handler;
 
-	public CallableHttpHandler(FastHttp http, HttpRoutes routes, RouteOptions options, Callable<Object> handler) {
+	public CallableHttpHandler(FastHttp http, HttpRoutes routes, RouteOptions options, Callable<?> handler) {
 		super(http, routes, options);
 		this.handler = handler;
 	}

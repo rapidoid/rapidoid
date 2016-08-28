@@ -439,7 +439,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 			String tx = txm != TransactionMode.NONE ? AnsiColor.bold(txm.name()) : txm.name();
 
 			Log.info("Registering handler", "!setup", this.customization.name(), "!verbs", verbs, "!path", path,
-				"!roles", opts.roles(), "tx", tx, "handler", handler);
+				"!roles", opts.roles(), "tx", tx, "mvc", opts.mvc());
 		} else {
 			Log.info("Deregistering handler", "setup", this.customization.name(), "!verbs", verbs, "!path", path);
 		}

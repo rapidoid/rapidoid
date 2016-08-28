@@ -60,6 +60,8 @@ public interface ProtocolContext<T> {
 
 	void setRequest(IRequest request);
 
+	boolean onSameThread();
+
 	/* PROTOCOL */
 
 	boolean isInitial();

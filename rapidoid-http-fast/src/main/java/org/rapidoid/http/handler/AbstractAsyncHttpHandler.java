@@ -50,12 +50,10 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 
 	private final FastHttp http;
 
-	private final HttpRoutes routes;
-
+	@SuppressWarnings("UnusedParameters")
 	public AbstractAsyncHttpHandler(FastHttp http, HttpRoutes routes, RouteOptions options) {
 		super(options);
 		this.http = http;
-		this.routes = routes;
 	}
 
 	@Override

@@ -22,7 +22,6 @@ package org.rapidoid.http.handler;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.HttpStatus;
 import org.rapidoid.http.MediaType;
 import org.rapidoid.http.Req;
@@ -37,14 +36,12 @@ import java.util.concurrent.Callable;
 @Since("5.2.0")
 public class NonBlockingHttpHandler extends AbstractHttpHandler {
 
-	private final FastHttp http;
-	private final Callable<Object> nonBlockingLogic;
+	private final Callable<?> nonBlockingLogic;
 	private final boolean returnsJson;
 
-	public NonBlockingHttpHandler(FastHttp http, RouteOptions options, Callable<Object> nonBlockingLogic) {
+	public NonBlockingHttpHandler(RouteOptions options, Callable<?> nonBlockingLogic) {
 		super(options);
 
-		this.http = http;
 		this.nonBlockingLogic = nonBlockingLogic;
 		this.returnsJson = options.contentType() == MediaType.JSON;
 	}
