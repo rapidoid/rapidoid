@@ -851,4 +851,10 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		}
 	}
 
+	@Override
+	public MediaType contentType() {
+		MediaType contentType = response != null ? response.contentType() : null;
+		return U.or(contentType, defaultContentType);
+	}
+
 }

@@ -358,4 +358,10 @@ public interface Req {
 	 */
 	OutputStream out();
 
+	/**
+	 * Gets the <b><code>Content-Type</code> header</b> of the HTTP response if it has been assigned,
+	 * or the default value as configured in the HTTP route.
+	 */
+	MediaType contentType();
+
 }
