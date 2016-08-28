@@ -264,11 +264,6 @@ public class SynchronizedBuf extends OutputStream implements Buf {
 	}
 
 	@Override
-	public synchronized OutputStream asOutputStream() {
-		return buf.asOutputStream();
-	}
-
-	@Override
 	public synchronized String asText() {
 		return buf.asText();
 	}
@@ -346,6 +341,11 @@ public class SynchronizedBuf extends OutputStream implements Buf {
 	@Override
 	public synchronized void write(byte[] src, int off, int len) throws IOException {
 		buf.write(src, off, len);
+	}
+
+	@Override
+	public OutputStream asOutputStream() {
+		return this;
 	}
 
 }
