@@ -36,6 +36,7 @@ import org.rapidoid.util.Msc;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Collection;
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -44,12 +45,6 @@ public class ResponseRenderer extends RapidoidThing {
 	public static byte[] render(ReqImpl req, Resp resp) {
 
 		Object result = resp.result();
-
-		if (result != null) {
-			result = wrapGuiContent(result);
-			resp.model().put("result", result);
-			resp.result(result);
-		}
 
 		String content;
 
@@ -85,7 +80,22 @@ public class ResponseRenderer extends RapidoidThing {
 		ViewRenderer viewRenderer = Customization.of(req).viewRenderer();
 		U.must(viewRenderer != null, "A view renderer wasn't configured!");
 
-		MVCModel mvcModel = new MVCModelImpl(req, resp, resp.model(), resp.screen(), result);
+		Object mvcModel;
+
+		if (result != null) {
+			mvcModel = result;
+
+			if (result instanceof Map<?, ?>) {
+				Map<String, Object> map = U.cast(result);
+				map.putAll(resp.model());
+
+			} else {
+				U.must(resp.model().isEmpty(), "The result must be a Map when custom model properties are assigned!");
+			}
+
+		} else {
+			mvcModel = resp.model();
+		}
 
 		try {
 			viewRenderer.render(req, viewName, mvcModel, out);

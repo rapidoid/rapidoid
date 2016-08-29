@@ -11,7 +11,6 @@ import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
-import java.util.Collections;
 import java.util.Map;
 
 /*
@@ -40,6 +39,8 @@ public class DefaultErrorHandler extends RapidoidThing implements ErrorHandler {
 
 	@Override
 	public Object handleError(Req req, Resp resp, Throwable error) {
+
+		resp.result(null);
 
 		Customization custom = Customization.of(req);
 
@@ -72,6 +73,8 @@ public class DefaultErrorHandler extends RapidoidThing implements ErrorHandler {
 
 		// if the handler throws error -> process it
 		for (int i = 0; ; i++) {
+
+			resp.result(null);
 
 			ErrorHandler handler = custom.findErrorHandlerByType(error.getClass());
 
@@ -108,7 +111,7 @@ public class DefaultErrorHandler extends RapidoidThing implements ErrorHandler {
 			if (resp.contentType() == MediaType.JSON) {
 				return error;
 			} else {
-				return resp.view("404").result(Collections.emptyMap());
+				return resp.view("404").result(U.map("req", req));
 			}
 		}
 
@@ -133,7 +136,9 @@ public class DefaultErrorHandler extends RapidoidThing implements ErrorHandler {
 	protected Object page(Req req, Resp resp, Throwable error) {
 
 		if (error instanceof SecurityException) {
-			return resp.code(403).view("login").mvc(true).model("embedded", req.attr("_embedded", false));
+			resp.model("embedded", req.attr("_embedded", false));
+			resp.model("req", req);
+			return resp.code(403).view("login").mvc(true);
 
 		} else {
 
@@ -141,8 +146,9 @@ public class DefaultErrorHandler extends RapidoidThing implements ErrorHandler {
 			String home = zone.entry("home").or("/");
 
 			Map<String, ?> errorInfo = HttpUtils.getErrorInfo(resp, error);
-			resp.model().put("error", errorInfo);
-			resp.model().put("home", home);
+			resp.model("req", req);
+			resp.model("error", errorInfo);
+			resp.model("home", home);
 
 			return resp.mvc(true).view("error");
 		}

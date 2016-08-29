@@ -8,7 +8,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.ViewRenderer;
-import org.rapidoid.http.impl.MVCModel;
 import org.rapidoid.io.Res;
 
 import java.io.OutputStream;
@@ -69,7 +68,7 @@ public class JMustacheViewRenderer extends RapidoidThing implements ViewRenderer
 	private volatile Mustache.Compiler compiler = Mustache.compiler().withLoader(defaultPartialLoader);
 
 	@Override
-	public void render(Req req, String viewName, MVCModel model, OutputStream out) throws Exception {
+	public void render(Req req, String viewName, Object model, OutputStream out) throws Exception {
 		String[] path = Customization.of(req).templatesPath();
 		Res template = Res.from(viewName + ".html", path).mustExist();
 

@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.setup.On;
+import org.rapidoid.u.U;
 import org.rapidoid.web.Screen;
 
 @Authors("Nikolche Mihajlovski")
@@ -64,7 +65,7 @@ public class HttpRenderTest extends IntegrationTestCommons {
 			respo.screen().title("my-title");
 			screen.brand(GUI.span(GUI.fa("cog"), "The Brand!"));
 			respo.model("x", 12345);
-			return respo;
+			return U.map("screen", screen);
 		});
 
 		On.get("/defaults").mvc((Req req) -> new byte[0]);
