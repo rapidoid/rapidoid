@@ -111,7 +111,7 @@ public class ResponseRenderer extends RapidoidThing {
 		MasterPage masterPage = Customization.of(req).masterPage();
 		U.must(masterPage != null, "A page renderer wasn't configured!");
 
-		ByteArrayOutputStream out = Msc.locals().pageRenderingBaos;
+		ByteArrayOutputStream out = Msc.locals().pageRenderingStream;
 		out.reset();
 
 		try {
