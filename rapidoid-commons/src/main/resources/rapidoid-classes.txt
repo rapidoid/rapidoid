@@ -294,7 +294,7 @@ org.rapidoid.http.customize.defaults.DefaultErrorHandler
 org.rapidoid.http.customize.defaults.DefaultJsonRequestBodyParser
 org.rapidoid.http.customize.defaults.DefaultJsonResponseRenderer
 org.rapidoid.http.customize.defaults.DefaultLoginProvider
-org.rapidoid.http.customize.defaults.DefaultPageRenderer
+org.rapidoid.http.customize.defaults.DefaultMasterPage
 org.rapidoid.http.customize.defaults.DefaultRolesProvider
 org.rapidoid.http.customize.defaults.Defaults
 org.rapidoid.http.customize.defaults.DefaultSessionManager
@@ -306,7 +306,7 @@ org.rapidoid.http.customize.ErrorHandler
 org.rapidoid.http.customize.JsonRequestBodyParser
 org.rapidoid.http.customize.JsonResponseRenderer
 org.rapidoid.http.customize.LoginProvider
-org.rapidoid.http.customize.PageRenderer
+org.rapidoid.http.customize.MasterPage
 org.rapidoid.http.customize.RolesProvider
 org.rapidoid.http.customize.SessionManager
 org.rapidoid.http.customize.StaticFilesSecurity

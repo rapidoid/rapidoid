@@ -49,7 +49,7 @@ public class Defaults extends RapidoidThing {
 
 	private static final RolesProvider rolesProvider = new DefaultRolesProvider();
 
-	private static final PageRenderer pageRenderer = new DefaultPageRenderer();
+	private static final MasterPage masterPage = new DefaultMasterPage();
 
 	private static final ViewRenderer viewRenderer = new DefaultViewRenderer();
 
@@ -93,8 +93,8 @@ public class Defaults extends RapidoidThing {
 		return rolesProvider;
 	}
 
-	public static PageRenderer pageRenderer() {
-		return pageRenderer;
+	public static MasterPage masterPage() {
+		return masterPage;
 	}
 
 	public static ViewRenderer viewRenderer() {

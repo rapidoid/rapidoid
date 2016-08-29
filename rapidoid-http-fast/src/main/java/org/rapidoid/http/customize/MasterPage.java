@@ -26,8 +26,8 @@ import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public interface PageRenderer {
+@Since("5.2.0")
+public interface MasterPage {
 
 	Object renderPage(Req req, Resp resp, String content) throws Exception;
 

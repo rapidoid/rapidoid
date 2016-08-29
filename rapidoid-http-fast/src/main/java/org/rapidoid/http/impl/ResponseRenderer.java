@@ -29,7 +29,7 @@ import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.MediaType;
 import org.rapidoid.http.Resp;
 import org.rapidoid.http.customize.Customization;
-import org.rapidoid.http.customize.PageRenderer;
+import org.rapidoid.http.customize.MasterPage;
 import org.rapidoid.http.customize.ViewRenderer;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -108,11 +108,11 @@ public class ResponseRenderer extends RapidoidThing {
 
 	public static byte[] renderPage(ReqImpl req, Resp resp, String content) {
 
-		PageRenderer pageRenderer = Customization.of(req).pageRenderer();
-		U.must(pageRenderer != null, "A page renderer wasn't configured!");
+		MasterPage masterPage = Customization.of(req).masterPage();
+		U.must(masterPage != null, "A page renderer wasn't configured!");
 
 		try {
-			Object response = U.or(pageRenderer.renderPage(req, resp, content), "");
+			Object response = U.or(masterPage.renderPage(req, resp, content), "");
 			return HttpUtils.responseToBytes(req, response, MediaType.HTML_UTF_8, null);
 
 		} catch (Exception e) {

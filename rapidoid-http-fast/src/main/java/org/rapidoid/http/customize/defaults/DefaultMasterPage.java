@@ -6,7 +6,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
-import org.rapidoid.http.customize.PageRenderer;
+import org.rapidoid.http.customize.MasterPage;
 import org.rapidoid.u.U;
 import org.rapidoid.web.Screen;
 
@@ -33,10 +33,12 @@ import java.util.regex.Pattern;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class DefaultPageRenderer extends RapidoidThing implements PageRenderer {
+@Since("5.2.0")
+public class DefaultMasterPage extends RapidoidThing implements MasterPage {
 
-	private static final Pattern FULL_PAGE_PATTERN = Pattern.compile("(?s)^(?:\\s*(<!--(?:.*?)-->)*?)*?<(!DOCTYPE\\s+html|html)>");
+	private static final String FULL_PAGE_REGEX = "(?s)^(?:\\s*(<!--(?:.*?)-->)*?)*?<(!DOCTYPE\\s+html|html)>";
+
+	private static final Pattern FULL_PAGE_PATTERN = Pattern.compile(FULL_PAGE_REGEX);
 
 	@Override
 	public Object renderPage(Req req, Resp resp, String content) throws Exception {
@@ -51,7 +53,8 @@ public class DefaultPageRenderer extends RapidoidThing implements PageRenderer {
 	}
 
 	private boolean isFullPage(Req req, String content) {
-		return (req.attr("_embedded", false) && content.startsWith("<!--EMBEDDED-->")) || FULL_PAGE_PATTERN.matcher(content).find();
+		return (req.attr("_embedded", false) && content.startsWith("<!--EMBEDDED-->"))
+			|| FULL_PAGE_PATTERN.matcher(content).find();
 	}
 
 }
