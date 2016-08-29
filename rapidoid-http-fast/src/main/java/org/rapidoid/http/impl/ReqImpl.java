@@ -120,6 +120,8 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	private final Route route;
 
+	private volatile Customization custom;
+
 	public ReqImpl(FastHttp http, Channel channel, boolean isKeepAlive, String verb, String uri, String path,
 	               String query, byte[] body, Map<String, String> params, Map<String, String> headers,
 	               Map<String, String> cookies, Map<String, Object> posted, Map<String, List<Upload>> files,
@@ -144,6 +146,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		this.zone = zone;
 		this.routes = routes;
 		this.route = route;
+		this.custom = routes != null ? routes.custom() : http.custom();
 	}
 
 	@Override
@@ -368,7 +371,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	@SuppressWarnings("unchecked")
 	private <T> T beanFrom(Class<T> beanType, Map<String, ?> properties) {
 		String paramName = Str.uncapitalized(beanType.getSimpleName());
-		BeanParameterFactory beanParameterFactory = Customization.of(this).beanParameterFactory();
+		BeanParameterFactory beanParameterFactory = custom().beanParameterFactory();
 
 		try {
 			return (T) beanParameterFactory.getParamValue(this, beanType, paramName, (Map<String, Object>) properties);
@@ -605,6 +608,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	public ReqImpl routes(HttpRoutesImpl routes) {
 		this.routes = routes;
+		this.custom = routes != null ? routes.custom() : http.custom();
 		return this;
 	}
 
@@ -615,7 +619,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	@Override
 	public Customization custom() {
-		return routes != null ? routes.custom() : http.custom();
+		return custom;
 	}
 
 	@Override

@@ -142,7 +142,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 					TransactionMode txMode = before(req, username, roles);
 					U.notNull(txMode, "txMode");
 
-					HttpWrapper[] wrappers = httpWrappers != null ? httpWrappers : U.or(req.custom().wrappers(), NO_WRAPPERS);
+					HttpWrapper[] wrappers = httpWrappers != null ? httpWrappers : U.or(Customization.of(req).wrappers(), NO_WRAPPERS);
 
 					Runnable handleRequest = handlerWithWrappers(channel, isKeepAlive, contentType, req, extra, wrappers);
 					Runnable handleRequestMaybeInTx = txWrap(req, txMode, handleRequest);

@@ -108,10 +108,15 @@ public class Customization extends RapidoidThing {
 	}
 
 	public static Customization of(Req req) {
+		assert inValidContext(req);
+		return req != null ? req.custom() : My.custom();
+	}
+
+	private static boolean inValidContext(Req req) {
 		Ctx ctx = Ctxs.get();
 		Req ctxReq = ctx != null ? (Req) ctx.exchange() : null;
 		U.must(req == ctxReq, "The customization request (%s) doesn't match the context request (%s)!", req, ctxReq);
-		return req != null ? req.custom() : My.custom();
+		return true;
 	}
 
 	public static Customization current() {
