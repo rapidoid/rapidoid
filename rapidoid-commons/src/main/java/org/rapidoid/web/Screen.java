@@ -23,6 +23,7 @@ package org.rapidoid.web;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
+import java.io.OutputStream;
 import java.util.Map;
 import java.util.Set;
 
@@ -38,6 +39,11 @@ public interface Screen {
 	 * Renders the screen.
 	 */
 	String render();
+
+	/**
+	 * Renders the screen to the specified OutputStream.
+	 */
+	void render(OutputStream out);
 
 	/**
 	 * Sets the "<b>title</b>" attribute in the MVC model of the response, used for GUI page rendering.

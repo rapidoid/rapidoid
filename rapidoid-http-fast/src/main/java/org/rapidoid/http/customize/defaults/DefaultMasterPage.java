@@ -8,8 +8,10 @@ import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
 import org.rapidoid.http.customize.MasterPage;
 import org.rapidoid.u.U;
+import org.rapidoid.util.StreamUtils;
 import org.rapidoid.web.Screen;
 
+import java.io.OutputStream;
 import java.util.regex.Pattern;
 
 /*
@@ -41,15 +43,20 @@ public class DefaultMasterPage extends RapidoidThing implements MasterPage {
 	private static final Pattern FULL_PAGE_PATTERN = Pattern.compile(FULL_PAGE_REGEX);
 
 	@Override
-	public Object renderPage(Req req, Resp resp, String content) throws Exception {
+	public void renderPage(Req req, String content, OutputStream out) throws Exception {
 		U.notNull(content, "page content");
 
-		if (isFullPage(req, content)) return GUI.hardcoded(content);
+		Resp resp = req.response();
+
+		if (isFullPage(req, content)) {
+			StreamUtils.writeUTF8(out, content);
+			return;
+		}
 
 		Screen screen = resp.screen();
 		screen.content(GUI.hardcoded(content));
 
-		return screen.render();
+		screen.render(out);
 	}
 
 	private boolean isFullPage(Req req, String content) {

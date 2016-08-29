@@ -55,7 +55,7 @@ public class ResponseRenderer extends RapidoidThing {
 			content = new String(HttpUtils.responseToBytes(req, cnt, MediaType.HTML_UTF_8, null));
 		}
 
-		return renderPage(req, resp, content);
+		return renderPage(req, content);
 	}
 
 	private static boolean shouldRenderView(Resp resp) {
@@ -106,18 +106,22 @@ public class ResponseRenderer extends RapidoidThing {
 		return new String(out.toByteArray());
 	}
 
-	public static byte[] renderPage(ReqImpl req, Resp resp, String content) {
+	public static byte[] renderPage(ReqImpl req, String content) {
 
 		MasterPage masterPage = Customization.of(req).masterPage();
 		U.must(masterPage != null, "A page renderer wasn't configured!");
 
+		ByteArrayOutputStream out = Msc.locals().pageRenderingBaos;
+		out.reset();
+
 		try {
-			Object response = U.or(masterPage.renderPage(req, resp, content), "");
-			return HttpUtils.responseToBytes(req, response, MediaType.HTML_UTF_8, null);
+			masterPage.renderPage(req, content, out);
 
 		} catch (Exception e) {
 			throw U.rte("Error while rendering page!", e);
 		}
+
+		return out.toByteArray();
 	}
 
 	private static Object wrapGuiContent(Object content) {

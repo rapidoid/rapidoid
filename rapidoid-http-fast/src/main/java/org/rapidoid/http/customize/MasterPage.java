@@ -23,12 +23,13 @@ package org.rapidoid.http.customize;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.Resp;
+
+import java.io.OutputStream;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
 public interface MasterPage {
 
-	Object renderPage(Req req, Resp resp, String content) throws Exception;
+	void renderPage(Req req, String content, OutputStream out) throws Exception;
 
 }

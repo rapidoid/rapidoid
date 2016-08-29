@@ -7,6 +7,7 @@ import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Env;
 import org.rapidoid.u.U;
 
+import java.io.OutputStream;
 import java.util.Map;
 import java.util.Set;
 
@@ -50,6 +51,11 @@ public class ScreenBean extends RapidoidThing implements Screen {
 
 	@Override
 	public String render() {
+		throw U.rte("The Screen cannot render itself!");
+	}
+
+	@Override
+	public void render(OutputStream out) {
 		throw U.rte("The Screen cannot render itself!");
 	}
 

@@ -14,8 +14,11 @@ import org.rapidoid.http.HttpVerb;
 import org.rapidoid.render.Template;
 import org.rapidoid.render.Templates;
 import org.rapidoid.u.U;
+import org.rapidoid.util.StreamUtils;
 import org.rapidoid.web.ScreenBean;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -70,6 +73,17 @@ public class HtmlPage extends ScreenBean {
 		}
 
 		return html;
+	}
+
+	@Override
+	public void render(OutputStream out) {
+		String html = render();
+
+		try {
+			StreamUtils.writeUTF8(out, html);
+		} catch (IOException e) {
+			throw U.rte(e);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
