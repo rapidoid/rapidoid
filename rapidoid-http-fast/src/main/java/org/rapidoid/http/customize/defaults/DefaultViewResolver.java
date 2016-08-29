@@ -1,10 +1,10 @@
 package org.rapidoid.http.customize.defaults;
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.View;
-import org.rapidoid.http.customize.ViewResolver;
+import org.rapidoid.http.customize.ResourceLoader;
+import org.rapidoid.http.impl.AbstractViewResolver;
 import org.rapidoid.render.Template;
 import org.rapidoid.render.TemplateStore;
 import org.rapidoid.render.Templates;
@@ -33,13 +33,24 @@ import java.io.OutputStream;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
-public class DefaultViewResolver extends RapidoidThing implements ViewResolver {
+public class DefaultViewResolver extends AbstractViewResolver {
 
 	@Override
-	public View getView(String viewName, TemplateStore templates) throws Exception {
+	public View getView(String viewName, final ResourceLoader templateLoader) throws Exception {
 
-		final Template template = Templates.load(viewName + ".html", templates);
+		String filename = filename(viewName);
 
+		final Template template = Templates.load(filename, new TemplateStore() {
+			@Override
+			public String loadTemplate(String name) throws Exception {
+				return new String(templateLoader.load(name));
+			}
+		});
+
+		return view(template);
+	}
+
+	protected View view(final Template template) {
 		return new View() {
 			@Override
 			public void render(Object model, OutputStream out) {

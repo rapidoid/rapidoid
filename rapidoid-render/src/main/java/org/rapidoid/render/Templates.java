@@ -4,6 +4,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
+import org.rapidoid.commons.Arr;
 import org.rapidoid.u.U;
 
 import java.util.Map;
@@ -32,9 +33,9 @@ import java.util.Map;
 @Since("4.1.0")
 public class Templates extends RapidoidThing {
 
-	static final String DEFAULT_TEMPLATES_PATH = "default/templates";
+	private static final String DEFAULT_TEMPLATES = "default/templates";
 
-	public static final String[] DEFAULT_PATH = {"templates", "", DEFAULT_TEMPLATES_PATH};
+	public static final String[] DEFAULT_PATH = {"templates", "", DEFAULT_TEMPLATES};
 
 	public static final TemplateStore DEFAULT_STORE = new FileSystemTemplateStore(DEFAULT_PATH);
 
@@ -77,6 +78,14 @@ public class Templates extends RapidoidThing {
 
 	public static String[] getPath() {
 		return PATH;
+	}
+
+	public static String[] withDefaultPath(String[] templatesPath) {
+		if (U.isEmpty(templatesPath) || U.neq(U.last(templatesPath), Templates.DEFAULT_TEMPLATES)) {
+			return Arr.concat(templatesPath, Templates.DEFAULT_TEMPLATES);
+		} else {
+			return templatesPath;
+		}
 	}
 
 }

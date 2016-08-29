@@ -9,6 +9,7 @@ import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.Req;
+import org.rapidoid.http.customize.defaults.DefaultTemplateLoader;
 import org.rapidoid.setup.My;
 import org.rapidoid.u.U;
 import org.rapidoid.util.ByType;
@@ -46,8 +47,6 @@ public class Customization extends RapidoidThing {
 
 	private volatile String[] staticFilesPath;
 
-	private volatile String[] templatesPath;
-
 	private volatile ErrorHandler errorHandler;
 
 	private volatile ViewResolver viewResolver;
@@ -78,6 +77,8 @@ public class Customization extends RapidoidThing {
 
 	private volatile HttpWrapper[] wrappers;
 
+	private volatile ResourceLoader templateLoader;
+
 	public Customization(String name, Customization defaults, Config config, Config serverConfig) {
 		this.name = name;
 		this.defaults = defaults;
@@ -89,7 +90,6 @@ public class Customization extends RapidoidThing {
 
 	public synchronized void reset() {
 		staticFilesPath = null;
-		templatesPath = null;
 		errorHandler = null;
 		viewResolver = null;
 		masterPage = null;
@@ -105,6 +105,7 @@ public class Customization extends RapidoidThing {
 		errorHandlers.reset();
 		staticFilesSecurity = null;
 		wrappers = null;
+		templateLoader = null;
 	}
 
 	public static Customization of(Req req) {
@@ -150,11 +151,18 @@ public class Customization extends RapidoidThing {
 	}
 
 	public String[] templatesPath() {
-		return templatesPath != null || defaults == null ? templatesPath : defaults.templatesPath();
+
+		if (templateLoader != null || defaults == null) {
+			U.must(templateLoader instanceof DefaultTemplateLoader, "A custom template loader was configured!");
+			return ((DefaultTemplateLoader) templateLoader).templatesPath();
+
+		} else {
+			return defaults.templatesPath();
+		}
 	}
 
 	public Customization templatesPath(String... templatesPath) {
-		this.templatesPath = templatesPath;
+		this.templateLoader = new DefaultTemplateLoader(templatesPath);
 		return this;
 	}
 
@@ -306,6 +314,15 @@ public class Customization extends RapidoidThing {
 
 	public Customization wrappers(HttpWrapper... wrappers) {
 		this.wrappers = wrappers;
+		return this;
+	}
+
+	public ResourceLoader templateLoader() {
+		return templateLoader != null || defaults == null ? templateLoader : defaults.templateLoader();
+	}
+
+	public Customization templateLoader(ResourceLoader templateLoader) {
+		this.templateLoader = templateLoader;
 		return this;
 	}
 

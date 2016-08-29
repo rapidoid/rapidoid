@@ -2,12 +2,11 @@ package org.rapidoid.integrate;
 
 import com.samskivert.mustache.Mustache;
 import com.samskivert.mustache.Template;
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.View;
-import org.rapidoid.http.customize.ViewResolver;
-import org.rapidoid.render.TemplateStore;
+import org.rapidoid.http.customize.ResourceLoader;
+import org.rapidoid.http.impl.AbstractViewResolver;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -45,24 +44,29 @@ import java.io.StringReader;
  */
 @Authors({"kormakur", "Nikolche Mihajlovski"})
 @Since("5.2.0")
-public class JMustacheViewResolver extends RapidoidThing implements ViewResolver {
+public class JMustacheViewResolver extends AbstractViewResolver {
 
-	private volatile Mustache.Compiler compiler = Mustache.compiler();
+	protected volatile Mustache.Compiler compiler = Mustache.compiler();
 
 	@Override
-	public View getView(String viewName, final TemplateStore templates) throws Exception {
+	public View getView(String viewName, final ResourceLoader templateLoader) throws Exception {
 
-		final String template = templates.loadTemplate(viewName + ".html");
+		String filename = filename(viewName);
+		final String template = new String(templateLoader.load(filename));
 
 		Mustache.TemplateLoader loader = new Mustache.TemplateLoader() {
 			@Override
 			public Reader getTemplate(String name) throws Exception {
-				return new StringReader(templates.loadTemplate(name + ".html"));
+				return new StringReader(new String(templateLoader.load(filename(name))));
 			}
 		};
 
 		final Template mustache = compiler.withLoader(loader).compile(template);
 
+		return view(mustache);
+	}
+
+	protected View view(final Template mustache) {
 		return new View() {
 			@Override
 			public void render(Object model, OutputStream out) {
@@ -86,5 +90,4 @@ public class JMustacheViewResolver extends RapidoidThing implements ViewResolver
 	public synchronized void setCompiler(Mustache.Compiler compiler) {
 		this.compiler = compiler;
 	}
-
 }

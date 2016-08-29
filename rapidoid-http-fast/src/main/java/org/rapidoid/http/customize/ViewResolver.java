@@ -3,7 +3,6 @@ package org.rapidoid.http.customize;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.View;
-import org.rapidoid.render.TemplateStore;
 
 /*
  * #%L
@@ -29,6 +28,6 @@ import org.rapidoid.render.TemplateStore;
 @Since("5.2.0")
 public interface ViewResolver {
 
-	View getView(String viewName, TemplateStore templates) throws Exception;
+	View getView(String viewName, ResourceLoader templateLoader) throws Exception;
 
 }

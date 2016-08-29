@@ -32,8 +32,6 @@ import org.rapidoid.http.View;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.MasterPage;
 import org.rapidoid.http.customize.ViewResolver;
-import org.rapidoid.render.FileSystemTemplateStore;
-import org.rapidoid.render.TemplateStore;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
@@ -78,9 +76,10 @@ public class ResponseRenderer extends RapidoidThing {
 	public static String renderView(ReqImpl req, Resp resp, Object result) {
 
 		String viewName = resp.view();
+		Customization custom = Customization.of(req);
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-		ViewResolver viewResolver = Customization.of(req).viewResolver();
+		ViewResolver viewResolver = custom.viewResolver();
 		U.must(viewResolver != null, "A view renderer wasn't configured!");
 
 		Object mvcModel;
@@ -101,10 +100,7 @@ public class ResponseRenderer extends RapidoidThing {
 		}
 
 		try {
-			// FIXME optimize
-			String[] path = Customization.of(req).templatesPath();
-			TemplateStore templates = new FileSystemTemplateStore(path);
-			View view = viewResolver.getView(viewName, templates);
+			View view = viewResolver.getView(viewName, custom.templateLoader());
 			view.render(mvcModel, out);
 
 		} catch (Throwable e) {

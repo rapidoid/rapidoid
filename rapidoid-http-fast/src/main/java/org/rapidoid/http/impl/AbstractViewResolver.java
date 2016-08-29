@@ -1,8 +1,8 @@
-package org.rapidoid.render;
+package org.rapidoid.http.impl;
 
 /*
  * #%L
- * rapidoid-render
+ * rapidoid-http-fast
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -23,22 +23,14 @@ package org.rapidoid.render;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.io.Res;
+import org.rapidoid.http.customize.ViewResolver;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
-public class FileSystemTemplateStore extends RapidoidThing implements TemplateStore {
+public abstract class AbstractViewResolver extends RapidoidThing implements ViewResolver {
 
-	private final String[] templatesPath;
-
-	public FileSystemTemplateStore(String[] templatesPath) {
-		this.templatesPath = Templates.withDefaultPath(templatesPath);
-	}
-
-	@Override
-	public String loadTemplate(String name) {
-		Res res = Res.from(name, templatesPath);
-		return res.mustExist().getContent();
+	protected String filename(String viewName) {
+		return viewName + ".html";
 	}
 
 }

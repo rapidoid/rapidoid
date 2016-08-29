@@ -51,6 +51,8 @@ public class Defaults extends RapidoidThing {
 
 	private static final MasterPage masterPage = new DefaultMasterPage();
 
+	private static final ResourceLoader templateLoader = new DefaultTemplateLoader(Templates.DEFAULT_PATH);
+
 	private static final ViewResolver viewResolver = new DefaultViewResolver();
 
 	private static final ObjectMapper jackson = JSON.newMapper();
@@ -131,5 +133,9 @@ public class Defaults extends RapidoidThing {
 
 	public static HttpWrapper[] wrappers() {
 		return wrappers;
+	}
+
+	public static ResourceLoader templateLoader() {
+		return templateLoader;
 	}
 }

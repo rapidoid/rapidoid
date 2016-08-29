@@ -37,12 +37,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class Coll extends RapidoidThing {
 	@SuppressWarnings("unchecked")
 	public static <T> Set<T> synchronizedSet(T... values) {
-		return (Set<T>) Collections.synchronizedSet(U.set(values));
+		return Collections.synchronizedSet(U.set(values));
 	}
 
 	@SuppressWarnings("unchecked")
 	public static <T> List<T> synchronizedList(T... values) {
-		return (List<T>) Collections.synchronizedList(U.list(values));
+		return Collections.synchronizedList(U.list(values));
 	}
 
 	public static <T> Set<T> concurrentSet() {

@@ -54,10 +54,10 @@ public class My extends RapidoidThing {
 			GLOBAL.jackson(Defaults.jackson());
 			GLOBAL.entityManagerFactoryProvider(Defaults.entityManagerFactoryProvider());
 			GLOBAL.entityManagerProvider(Defaults.entityManagerProvider());
-			GLOBAL.templatesPath(Defaults.templatesPath());
 			GLOBAL.sessionManager(Defaults.sessionManager());
 			GLOBAL.staticFilesSecurity(Defaults.staticFilesSecurity());
 			GLOBAL.wrappers(Defaults.wrappers());
+			GLOBAL.templateLoader(Defaults.templateLoader());
 		}
 	}
 
@@ -201,9 +201,16 @@ public class My extends RapidoidThing {
 		return GLOBAL.staticFilesSecurity(staticFilesSecurity);
 	}
 
-
-	public static synchronized OnError error(Class<? extends Throwable> error) {
+	public static OnError error(Class<? extends Throwable> error) {
 		return new OnError(GLOBAL, error);
+	}
+
+	public static ResourceLoader templateLoader() {
+		return GLOBAL.templateLoader();
+	}
+
+	public static Customization templateLoader(ResourceLoader templateLoader) {
+		return GLOBAL.templateLoader(templateLoader);
 	}
 
 }
