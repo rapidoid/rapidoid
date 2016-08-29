@@ -26,10 +26,8 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.BeanProp;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
-import org.rapidoid.cls.Cls;
 import org.rapidoid.u.U;
 
-import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +39,7 @@ public class ValueRetriever extends RapidoidThing {
 	private final String property;
 
 	private volatile Class<?> cachedModelType;
-	private volatile Method cachedGetter;
+	private volatile Prop cachedProp;
 
 	public ValueRetriever(String property) {
 		this.property = property;
@@ -60,23 +58,16 @@ public class ValueRetriever extends RapidoidThing {
 		Object target = U.last(model);
 
 		Class<?> cls = target.getClass();
-		if (cls.equals(cachedModelType) && cachedGetter != null) {
-			return Cls.invoke(cachedGetter, target);
+		if (cls.equals(cachedModelType) && cachedProp != null) {
+			return cachedProp.get(target);
 		}
 
 		Prop prop = Beany.property(cls, property, false);
 
 		if (prop != null && prop instanceof BeanProp) {
-			Method getter = ((BeanProp) prop).getGetter();
-
-			if (getter != null) {
-				getter.setAccessible(true);
-				cachedGetter = getter;
-				cachedModelType = cls;
-				return Cls.invoke(getter, target);
-			}
-
-			return prop.get(target);
+			cachedProp = prop;
+			cachedModelType = cls;
+			return cachedProp.get(target);
 		}
 
 		return propOf(property, model);
@@ -96,30 +87,36 @@ public class ValueRetriever extends RapidoidThing {
 
 		for (int i = scope.size() - 1; i >= 0; i--) {
 			Object x = scope.get(i);
+
 			if (x != null) {
-				if (x instanceof Map<?, ?>) {
-					Map<?, ?> map = (Map<?, ?>) x;
-
-					if (map.containsKey(name)) {
-						return map.get(name);
-					}
-
-				} else if (x instanceof Getter) {
-					Getter getter = (Getter) x;
-
-					return getter.get(name);
-
-				} else {
-					Prop prop = Beany.property(x, name, false);
-
-					if (prop != null) {
-						return prop.get(x);
-					}
-				}
+				Object value = singleModelProp(name, x);
+				if (value != null) return value;
 			}
 		}
 
 		return null;
+	}
+
+	public static Object singleModelProp(String name, Object model) {
+
+		if (model instanceof Map<?, ?>) {
+			Map<?, ?> map = (Map<?, ?>) model;
+			return map.get(name);
+		}
+
+		if (model instanceof Getter) {
+			Getter getter = (Getter) model;
+			return getter.get(name);
+		}
+
+		// process as bean
+		Prop prop = Beany.property(model, name, false);
+
+		if (prop != null) {
+			return prop.get(model);
+		}
+
+		return null; // not found
 	}
 
 }
