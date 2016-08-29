@@ -31,7 +31,7 @@ import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class ParamsAwareReqHandler extends AbstractAsyncHttpHandler {
+public class ParamsAwareReqHandler extends AbstractDecoratingHttpHandler {
 
 	private final ReqHandler handler;
 

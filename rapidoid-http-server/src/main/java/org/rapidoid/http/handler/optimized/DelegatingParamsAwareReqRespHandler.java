@@ -27,14 +27,14 @@ import org.rapidoid.http.HttpRoutes;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
 import org.rapidoid.http.impl.RouteOptions;
-import org.rapidoid.http.handler.AbstractAsyncHttpHandler;
+import org.rapidoid.http.handler.AbstractDecoratingHttpHandler;
 import org.rapidoid.lambda.TwoParamLambda;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class DelegatingParamsAwareReqRespHandler extends AbstractAsyncHttpHandler {
+public class DelegatingParamsAwareReqRespHandler extends AbstractDecoratingHttpHandler {
 
 	private final TwoParamLambda<Object, Req, Resp> handler;
 

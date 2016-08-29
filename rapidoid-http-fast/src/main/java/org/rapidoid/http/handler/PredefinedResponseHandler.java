@@ -30,7 +30,7 @@ import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class PredefinedResponseHandler extends AbstractAsyncHttpHandler {
+public class PredefinedResponseHandler extends AbstractDecoratingHttpHandler {
 
 	private final Object response;
 

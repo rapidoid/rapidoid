@@ -3,7 +3,6 @@ package org.rapidoid.http.handler;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.TransactionMode;
-import org.rapidoid.http.MediaType;
 import org.rapidoid.ctx.With;
 import org.rapidoid.http.*;
 import org.rapidoid.http.customize.Customization;
@@ -14,6 +13,7 @@ import org.rapidoid.lambda.Mapper;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.security.Secure;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.util.Collections;
 import java.util.Set;
@@ -40,7 +40,7 @@ import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
-public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
+public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler {
 
 	private static final String CTX_TAG_INIT = "init";
 	private static final String CTX_TAG_HANDLER = "handler";
@@ -51,7 +51,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 	private final FastHttp http;
 
 	@SuppressWarnings("UnusedParameters")
-	public AbstractAsyncHttpHandler(FastHttp http, HttpRoutes routes, RouteOptions options) {
+	public AbstractDecoratingHttpHandler(FastHttp http, HttpRoutes routes, RouteOptions options) {
 		super(options);
 		this.http = http;
 	}
@@ -62,9 +62,35 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 	}
 
 	@Override
-	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
+	public final HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
 		U.notNull(req, "HTTP request");
 
+		return options.decorated()
+			? handleDecorating(ctx, isKeepAlive, req, extra)
+			: handleNonDecorating(ctx, isKeepAlive, req, extra);
+	}
+
+	private HttpStatus handleNonDecorating(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
+		Object result;
+
+		try {
+			result = handleReq(ctx, isKeepAlive, req, extra);
+
+		} catch (Exception e) {
+			HttpIO.writeResponse(ctx, isKeepAlive, 500, contentType, "Internal server error!".getBytes());
+			return HttpStatus.ERROR;
+		}
+
+		if (contentType == MediaType.JSON) {
+			HttpIO.writeAsJson(ctx, 200, isKeepAlive, result);
+		} else {
+			HttpIO.write200(ctx, isKeepAlive, contentType, Msc.toBytes(result));
+		}
+
+		return HttpStatus.DONE;
+	}
+
+	private HttpStatus handleDecorating(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
 		ctx.async();
 
 		execHandlerJob(ctx, isKeepAlive, options.contentType(), req, extra);

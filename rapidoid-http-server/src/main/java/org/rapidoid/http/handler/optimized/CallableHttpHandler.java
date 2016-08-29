@@ -5,8 +5,8 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.HttpRoutes;
 import org.rapidoid.http.Req;
+import org.rapidoid.http.handler.AbstractDecoratingHttpHandler;
 import org.rapidoid.http.impl.RouteOptions;
-import org.rapidoid.http.handler.AbstractAsyncHttpHandler;
 import org.rapidoid.net.abstracts.Channel;
 
 import java.util.concurrent.Callable;
@@ -33,7 +33,7 @@ import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
-public class CallableHttpHandler extends AbstractAsyncHttpHandler {
+public class CallableHttpHandler extends AbstractDecoratingHttpHandler {
 
 	private final Callable<?> handler;
 
@@ -50,6 +50,11 @@ public class CallableHttpHandler extends AbstractAsyncHttpHandler {
 	@Override
 	public String toString() {
 		return contentTypeInfo("() -> ...");
+	}
+
+	@Override
+	public boolean needsParams() {
+		return options.decorated();
 	}
 
 }

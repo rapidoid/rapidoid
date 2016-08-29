@@ -104,14 +104,8 @@ public class HttpHandlers extends RapidoidThing {
 		routes.on(verb, path, new PredefinedResponseHandler(http, routes, options, response));
 	}
 
-	@SuppressWarnings("unchecked")
 	public static void register(FastHttp http, HttpRoutes routes, String verb, String path, RouteOptions options, Callable<?> handler) {
-
-		HttpHandler httpHandler = options.decorated() ?
-			new CallableHttpHandler(http, routes, options, handler) :
-			new NonDecoratedHttpHandler(options, handler);
-
-		routes.on(verb, path, httpHandler);
+		routes.on(verb, path, new CallableHttpHandler(http, routes, options, handler));
 	}
 
 	public static void register(FastHttp http, HttpRoutes routes, String verb, String path, RouteOptions options, NParamLambda lambda) {

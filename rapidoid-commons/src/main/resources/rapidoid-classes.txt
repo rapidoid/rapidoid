@@ -314,7 +314,7 @@ org.rapidoid.http.customize.ViewRenderer
 org.rapidoid.http.DynamicRESTClient
 org.rapidoid.http.FastHttp
 org.rapidoid.http.FastHttpProtocol
-org.rapidoid.http.handler.AbstractAsyncHttpHandler
+org.rapidoid.http.handler.AbstractDecoratingHttpHandler
 org.rapidoid.http.handler.AbstractHttpHandler
 org.rapidoid.http.handler.HandlerInvocation
 org.rapidoid.http.handler.HttpHandler
@@ -329,7 +329,6 @@ org.rapidoid.http.handler.lambda.SixParamLambdaHandler
 org.rapidoid.http.handler.lambda.ThreeParamLambdaHandler
 org.rapidoid.http.handler.lambda.TwoParamLambdaHandler
 org.rapidoid.http.handler.MethodReqHandler
-org.rapidoid.http.handler.NonDecoratedHttpHandler
 org.rapidoid.http.handler.optimized.CallableHttpHandler
 org.rapidoid.http.handler.optimized.DelegatingParamsAwareReqHandler
 org.rapidoid.http.handler.optimized.DelegatingParamsAwareReqRespHandler

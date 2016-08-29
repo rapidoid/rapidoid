@@ -7,7 +7,7 @@ import org.rapidoid.commons.Arr;
 import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.HttpRoutes;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.handler.AbstractAsyncHttpHandler;
+import org.rapidoid.http.handler.AbstractDecoratingHttpHandler;
 import org.rapidoid.http.handler.param.ParamRetriever;
 import org.rapidoid.http.handler.param.ParamRetrievers;
 import org.rapidoid.http.impl.RouteOptions;
@@ -38,7 +38,7 @@ import java.lang.reflect.Method;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public abstract class NParamMethodHandler extends AbstractAsyncHttpHandler {
+public abstract class NParamMethodHandler extends AbstractDecoratingHttpHandler {
 
 	private final ParamRetriever[] paramRetrievers;
 

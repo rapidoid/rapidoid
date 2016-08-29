@@ -112,9 +112,13 @@ public class HttpIO extends RapidoidThing {
 		ctx.write(Constants.CR_LF);
 	}
 
-	public static void write200(Channel ctx, boolean isKeepAlive, MediaType contentTypeHeader, byte[] content) {
-		startResponse(ctx, 200, isKeepAlive, contentTypeHeader);
+	public static void writeResponse(Channel ctx, boolean isKeepAlive, int code, MediaType contentTypeHeader, byte[] content) {
+		startResponse(ctx, code, isKeepAlive, contentTypeHeader);
 		writeContentLengthAndBody(ctx, content);
+	}
+
+	public static void write200(Channel ctx, boolean isKeepAlive, MediaType contentTypeHeader, byte[] content) {
+		writeResponse(ctx, isKeepAlive, 200, contentTypeHeader, content);
 	}
 
 	public static void error(final Req req, final Throwable error) {
