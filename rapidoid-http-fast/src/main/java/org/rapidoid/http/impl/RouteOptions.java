@@ -45,7 +45,7 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 
 	private volatile String zone;
 
-	private volatile boolean decorated;
+	private volatile boolean decorated = true;
 
 	private volatile TransactionMode transactionMode = TransactionMode.NONE;
 
