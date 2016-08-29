@@ -1,16 +1,9 @@
-package org.rapidoid.http.customize.defaults;
+package org.rapidoid.http.customize;
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.customize.Customization;
-import org.rapidoid.http.customize.ViewRenderer;
-import org.rapidoid.render.FileSystemTemplateStore;
+import org.rapidoid.http.View;
 import org.rapidoid.render.TemplateStore;
-import org.rapidoid.render.Templates;
-
-import java.io.OutputStream;
 
 /*
  * #%L
@@ -33,14 +26,9 @@ import java.io.OutputStream;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class DefaultViewRenderer extends RapidoidThing implements ViewRenderer {
+@Since("5.2.0")
+public interface ViewResolver {
 
-	@Override
-	public void render(Req req, String viewName, Object model, OutputStream out) throws Exception {
-		String[] path = Customization.of(req).templatesPath();
-		TemplateStore templates = new FileSystemTemplateStore(path);
-		Templates.load(viewName + ".html", templates).renderTo(out, model);
-	}
+	View getView(String viewName, TemplateStore templates) throws Exception;
 
 }

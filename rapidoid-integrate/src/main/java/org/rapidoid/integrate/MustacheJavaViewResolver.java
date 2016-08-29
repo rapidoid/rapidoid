@@ -6,13 +6,13 @@ import com.github.mustachejava.MustacheFactory;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.customize.Customization;
-import org.rapidoid.http.customize.ViewRenderer;
-import org.rapidoid.io.Res;
+import org.rapidoid.http.View;
+import org.rapidoid.http.customize.ViewResolver;
+import org.rapidoid.render.TemplateStore;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.StringReader;
 
 /*
  * #%L
@@ -36,27 +36,33 @@ import java.io.PrintWriter;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
-public class MustacheJavaViewRenderer extends RapidoidThing implements ViewRenderer {
+public class MustacheJavaViewResolver extends RapidoidThing implements ViewResolver {
 
 	private volatile MustacheFactory factory = new DefaultMustacheFactory();
 
 	@Override
-	public void render(Req req, String viewName, Object model, OutputStream out) throws Exception {
-		String[] path = Customization.of(req).templatesPath();
-		Res template = Res.from(viewName + ".html", path).mustExist();
+	public View getView(String viewName, TemplateStore templates) throws Exception {
 
-		Mustache mustache = factory.compile(template.getCachedFileName());
+		String filename = viewName + ".html";
+		final String template = templates.loadTemplate(filename);
 
-		PrintWriter writer = new PrintWriter(out);
-		mustache.execute(writer, model);
-		writer.flush();
+		final Mustache mustache = factory.compile(new StringReader(template), filename);
+
+		return new View() {
+			@Override
+			public void render(Object model, OutputStream out) {
+				PrintWriter writer = new PrintWriter(out);
+				mustache.execute(writer, model);
+				writer.flush();
+			}
+		};
 	}
 
 	public MustacheFactory factory() {
 		return factory;
 	}
 
-	public MustacheJavaViewRenderer factory(MustacheFactory factory) {
+	public MustacheJavaViewResolver factory(MustacheFactory factory) {
 		this.factory = factory;
 		return this;
 	}

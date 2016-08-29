@@ -30,13 +30,13 @@ import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class MustacheJavaViewRendererTest extends IntegrationTestCommons {
+@Since("5.2.0")
+public class JMustacheViewResolverTest extends IntegrationTestCommons {
 
 	@Test
 	public void testRendering() {
 		My.templatesPath("view-rendering");
-		My.viewRenderer(Integrate.mustacheJavaViewRenderer());
+		My.viewResolver(Integrate.jMustacheViewResolver());
 
 		On.get("/").view("mtmpl").mvc((req, resp) -> {
 			resp.model("y", "bar");

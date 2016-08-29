@@ -28,9 +28,12 @@ import org.rapidoid.cls.TypeKind;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.MediaType;
 import org.rapidoid.http.Resp;
+import org.rapidoid.http.View;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.MasterPage;
-import org.rapidoid.http.customize.ViewRenderer;
+import org.rapidoid.http.customize.ViewResolver;
+import org.rapidoid.render.FileSystemTemplateStore;
+import org.rapidoid.render.TemplateStore;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
@@ -77,8 +80,8 @@ public class ResponseRenderer extends RapidoidThing {
 		String viewName = resp.view();
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-		ViewRenderer viewRenderer = Customization.of(req).viewRenderer();
-		U.must(viewRenderer != null, "A view renderer wasn't configured!");
+		ViewResolver viewResolver = Customization.of(req).viewResolver();
+		U.must(viewResolver != null, "A view renderer wasn't configured!");
 
 		Object mvcModel;
 
@@ -98,7 +101,12 @@ public class ResponseRenderer extends RapidoidThing {
 		}
 
 		try {
-			viewRenderer.render(req, viewName, mvcModel, out);
+			// FIXME optimize
+			String[] path = Customization.of(req).templatesPath();
+			TemplateStore templates = new FileSystemTemplateStore(path);
+			View view = viewResolver.getView(viewName, templates);
+			view.render(mvcModel, out);
+
 		} catch (Throwable e) {
 			throw U.rte("Error while rendering view: " + viewName, e);
 		}

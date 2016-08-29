@@ -43,7 +43,7 @@ public class My extends RapidoidThing {
 			GLOBAL.reset();
 			GLOBAL.staticFilesPath(Defaults.staticFilesPath());
 			GLOBAL.errorHandler(Defaults.errorHandler());
-			GLOBAL.viewRenderer(Defaults.viewRenderer());
+			GLOBAL.viewResolver(Defaults.viewResolver());
 			GLOBAL.masterPage(Defaults.masterPage());
 			GLOBAL.jsonResponseRenderer(Defaults.jsonResponseRenderer());
 			GLOBAL.jsonRequestBodyParser(Defaults.jsonRequestBodyParser());
@@ -117,8 +117,8 @@ public class My extends RapidoidThing {
 		GLOBAL.masterPage(masterPage);
 	}
 
-	public static void viewRenderer(ViewRenderer viewRenderer) {
-		GLOBAL.viewRenderer(viewRenderer);
+	public static void viewResolver(ViewResolver viewResolver) {
+		GLOBAL.viewResolver(viewResolver);
 	}
 
 	public static void jackson(ObjectMapper jackson) {
@@ -153,8 +153,8 @@ public class My extends RapidoidThing {
 		return GLOBAL.masterPage();
 	}
 
-	public static ViewRenderer viewRenderer() {
-		return GLOBAL.viewRenderer();
+	public static ViewResolver viewResolver() {
+		return GLOBAL.viewResolver();
 	}
 
 	public static ObjectMapper jackson() {

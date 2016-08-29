@@ -225,14 +225,14 @@ public interface Resp {
 	/**
 	 * Checks whether the response model and view will be rendered in a MVC fashion.<br>
 	 * A typical renderer would use <code>Resp#view</code> to get the view name, and <code>Resp#model</code> to get the model.
-	 * A custom view renderer can be configured/implemented via the <code>On.custom().viewRenderer(...)</code> method.<br>
+	 * A custom view renderer can be configured/implemented via the <code>On.custom().viewResolver(...)</code> method.<br>
 	 */
 	boolean mvc();
 
 	/**
 	 * Sets whether the response model and view will be rendered in a MVC fashion.<br>
 	 * A typical renderer would use <code>Resp#view</code> to get the view name, and <code>Resp#model</code> to get the model.
-	 * A custom view renderer can be configured/implemented via the <code>On.custom().viewRenderer(...)</code> method.<br>
+	 * A custom view renderer can be configured/implemented via the <code>On.custom().viewResolver(...)</code> method.<br>
 	 */
 	Resp mvc(boolean mvc);
 

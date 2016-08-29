@@ -299,7 +299,7 @@ org.rapidoid.http.customize.defaults.DefaultRolesProvider
 org.rapidoid.http.customize.defaults.Defaults
 org.rapidoid.http.customize.defaults.DefaultSessionManager
 org.rapidoid.http.customize.defaults.DefaultStaticFilesSecurity
-org.rapidoid.http.customize.defaults.DefaultViewRenderer
+org.rapidoid.http.customize.defaults.DefaultViewResolver
 org.rapidoid.http.customize.EntityManagerFactoryProvider
 org.rapidoid.http.customize.EntityManagerProvider
 org.rapidoid.http.customize.ErrorHandler
@@ -310,7 +310,7 @@ org.rapidoid.http.customize.MasterPage
 org.rapidoid.http.customize.RolesProvider
 org.rapidoid.http.customize.SessionManager
 org.rapidoid.http.customize.StaticFilesSecurity
-org.rapidoid.http.customize.ViewRenderer
+org.rapidoid.http.customize.ViewResolver
 org.rapidoid.http.DynamicRESTClient
 org.rapidoid.http.FastHttp
 org.rapidoid.http.FastHttpProtocol
@@ -399,6 +399,7 @@ org.rapidoid.http.RESTClient
 org.rapidoid.http.RESTResultMapper
 org.rapidoid.http.Route
 org.rapidoid.http.RouteConfig
+org.rapidoid.http.View
 org.rapidoid.insight.AbstractInsightful
 org.rapidoid.insight.CounterMeasure
 org.rapidoid.insight.Insightful
@@ -409,8 +410,8 @@ org.rapidoid.insight.Metrics
 org.rapidoid.insight.PercentMeasure
 org.rapidoid.insight.StatsMeasure
 org.rapidoid.integrate.Integrate
-org.rapidoid.integrate.JMustacheViewRenderer
-org.rapidoid.integrate.MustacheJavaViewRenderer
+org.rapidoid.integrate.JMustacheViewResolver
+org.rapidoid.integrate.MustacheJavaViewResolver
 org.rapidoid.integrate.SpringIntegrator
 org.rapidoid.ioc.BeanProvider
 org.rapidoid.ioc.ClassMetadata

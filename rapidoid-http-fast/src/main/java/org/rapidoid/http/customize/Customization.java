@@ -50,7 +50,7 @@ public class Customization extends RapidoidThing {
 
 	private volatile ErrorHandler errorHandler;
 
-	private volatile ViewRenderer viewRenderer;
+	private volatile ViewResolver viewResolver;
 
 	private volatile MasterPage masterPage;
 
@@ -91,7 +91,7 @@ public class Customization extends RapidoidThing {
 		staticFilesPath = null;
 		templatesPath = null;
 		errorHandler = null;
-		viewRenderer = null;
+		viewResolver = null;
 		masterPage = null;
 		jsonResponseRenderer = null;
 		beanParameterFactory = null;
@@ -167,12 +167,12 @@ public class Customization extends RapidoidThing {
 		return this;
 	}
 
-	public ViewRenderer viewRenderer() {
-		return viewRenderer != null || defaults == null ? viewRenderer : defaults.viewRenderer();
+	public ViewResolver viewResolver() {
+		return viewResolver != null || defaults == null ? viewResolver : defaults.viewResolver();
 	}
 
-	public Customization viewRenderer(ViewRenderer viewRenderer) {
-		this.viewRenderer = viewRenderer;
+	public Customization viewResolver(ViewResolver viewResolver) {
+		this.viewResolver = viewResolver;
 		return this;
 	}
 

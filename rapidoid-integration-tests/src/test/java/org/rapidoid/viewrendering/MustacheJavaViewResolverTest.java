@@ -1,12 +1,8 @@
-package org.rapidoid.integrate;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
+package org.rapidoid.viewrendering;
 
 /*
  * #%L
- * rapidoid-integrate
+ * rapidoid-integration-tests
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -24,16 +20,30 @@ import org.rapidoid.annotation.Since;
  * #L%
  */
 
+import org.junit.Test;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.IntegrationTestCommons;
+import org.rapidoid.integrate.Integrate;
+import org.rapidoid.setup.My;
+import org.rapidoid.setup.On;
+import org.rapidoid.u.U;
+
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class Integrate extends RapidoidThing {
+@Since("5.2.0")
+public class MustacheJavaViewResolverTest extends IntegrationTestCommons {
 
-	public static MustacheJavaViewResolver mustacheJavaViewResolver() {
-		return new MustacheJavaViewResolver();
-	}
+	@Test
+	public void testRendering() {
+		My.templatesPath("view-rendering");
+		My.viewResolver(Integrate.mustacheJavaViewResolver());
 
-	public static JMustacheViewResolver jMustacheViewResolver() {
-		return new JMustacheViewResolver();
+		On.get("/").view("mtmpl").mvc((req, resp) -> {
+			resp.model("y", "bar");
+			return U.map("x", "foo");
+		});
+
+		getReq("/");
 	}
 
 }

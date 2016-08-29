@@ -1,8 +1,13 @@
-package org.rapidoid.viewrendering;
+package org.rapidoid.http;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import java.io.OutputStream;
 
 /*
  * #%L
- * rapidoid-integration-tests
+ * rapidoid-http-fast
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -20,30 +25,13 @@ package org.rapidoid.viewrendering;
  * #L%
  */
 
-import org.junit.Test;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.http.IntegrationTestCommons;
-import org.rapidoid.integrate.Integrate;
-import org.rapidoid.setup.My;
-import org.rapidoid.setup.On;
-import org.rapidoid.u.U;
-
+/**
+ * MVC View API.
+ */
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
-public class JMustacheViewRendererTest extends IntegrationTestCommons {
+public interface View {
 
-	@Test
-	public void testRendering() {
-		My.templatesPath("view-rendering");
-		My.viewRenderer(Integrate.jMustacheViewRenderer());
-
-		On.get("/").view("mtmpl").mvc((req, resp) -> {
-			resp.model("y", "bar");
-			return U.map("x", "foo");
-		});
-
-		getReq("/");
-	}
+	void render(Object model, OutputStream out);
 
 }

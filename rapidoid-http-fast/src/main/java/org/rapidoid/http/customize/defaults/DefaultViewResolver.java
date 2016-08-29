@@ -1,8 +1,13 @@
-package org.rapidoid.http.customize;
+package org.rapidoid.http.customize.defaults;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.Req;
+import org.rapidoid.http.View;
+import org.rapidoid.http.customize.ViewResolver;
+import org.rapidoid.render.Template;
+import org.rapidoid.render.TemplateStore;
+import org.rapidoid.render.Templates;
 
 import java.io.OutputStream;
 
@@ -27,9 +32,20 @@ import java.io.OutputStream;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.0.11")
-public interface ViewRenderer {
+@Since("5.2.0")
+public class DefaultViewResolver extends RapidoidThing implements ViewResolver {
 
-	void render(Req req, String viewName, Object model, OutputStream out) throws Exception;
+	@Override
+	public View getView(String viewName, TemplateStore templates) throws Exception {
+
+		final Template template = Templates.load(viewName + ".html", templates);
+
+		return new View() {
+			@Override
+			public void render(Object model, OutputStream out) {
+				template.renderTo(out, model);
+			}
+		};
+	}
 
 }

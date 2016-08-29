@@ -51,7 +51,7 @@ public class Defaults extends RapidoidThing {
 
 	private static final MasterPage masterPage = new DefaultMasterPage();
 
-	private static final ViewRenderer viewRenderer = new DefaultViewRenderer();
+	private static final ViewResolver viewResolver = new DefaultViewResolver();
 
 	private static final ObjectMapper jackson = JSON.newMapper();
 
@@ -97,8 +97,8 @@ public class Defaults extends RapidoidThing {
 		return masterPage;
 	}
 
-	public static ViewRenderer viewRenderer() {
-		return viewRenderer;
+	public static ViewResolver viewResolver() {
+		return viewResolver;
 	}
 
 	public static ObjectMapper jackson() {
