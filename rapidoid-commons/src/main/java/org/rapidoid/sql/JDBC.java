@@ -122,14 +122,18 @@ public class JDBC extends RapidoidThing {
 		try {
 			PreparedStatement stmt = conn.prepareStatement(sql);
 
-			for (int i = 0; i < args.length; i++) {
-				Object arg = args[i];
-				stmt.setObject(i + 1, arg);
-			}
+			bind(stmt, args);
 
 			return stmt;
+
 		} catch (SQLException e) {
 			throw new RuntimeException("Cannot create prepared statement!", e);
+		}
+	}
+
+	public static void bind(PreparedStatement stmt, Object... args) throws SQLException {
+		for (int i = 0; i < args.length; i++) {
+			stmt.setObject(i + 1, args[i]);
 		}
 	}
 
