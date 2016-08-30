@@ -51,7 +51,7 @@ users:
 
 jobs:
   executor:
-    threads: 64
+    threads: 256
   scheduler:
     threads: 64
 
