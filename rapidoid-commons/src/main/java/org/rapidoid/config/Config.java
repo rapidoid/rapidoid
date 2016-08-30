@@ -77,4 +77,7 @@ public interface Config extends BasicConfig {
 	String filenameBase();
 
 	Config filenameBase(String filenameBase);
+
+	void applyTo(Object target);
+
 }

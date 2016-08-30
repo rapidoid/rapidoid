@@ -3,9 +3,10 @@ package org.rapidoid.config;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.commons.Arr;
 import org.rapidoid.collection.Coll;
+import org.rapidoid.commons.Arr;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.value.Value;
@@ -385,4 +386,10 @@ public class ConfigImpl extends RapidoidThing implements Config {
 		this.filenameBase = filenameBase;
 		return this;
 	}
+
+	@Override
+	public void applyTo(Object target) {
+		Beany.update(target, toMap());
+	}
+
 }
