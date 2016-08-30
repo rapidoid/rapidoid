@@ -6,6 +6,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.commons.Dates;
 import org.rapidoid.config.Conf;
+import org.rapidoid.config.Config;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.With;
@@ -68,6 +69,11 @@ public class HttpIO extends RapidoidThing {
 
 	private static final byte[][] CONTENT_LENGTHS = new byte[CONTENT_LENGTHS_SIZE][];
 
+	private static final boolean MANDATORY_HEADER_CONNECTION;
+	private static final boolean MANDATORY_HEADER_DATE;
+	private static final boolean MANDATORY_HEADER_SERVER;
+	private static final boolean MANDATORY_HEADER_CONTENT_TYPE;
+
 	static {
 		for (int len = 0; len < CONTENT_LENGTHS.length; len++) {
 			CONTENT_LENGTHS[len] = (new String(CONTENT_LENGTH_IS) + len + new String(Constants.CR_LF)).getBytes();
@@ -77,6 +83,13 @@ public class HttpIO extends RapidoidThing {
 
 		String serverName = Conf.HTTP.entry("serverName").or("Rapidoid");
 		SERVER_HEADER = ("Server: " + serverName + "\r\n").getBytes();
+
+		Config mandatoryHeaders = Conf.HTTP.sub("mandatoryHeaders");
+
+		MANDATORY_HEADER_CONNECTION = mandatoryHeaders.entry("connection").or(true);
+		MANDATORY_HEADER_DATE = mandatoryHeaders.entry("date").or(true);
+		MANDATORY_HEADER_SERVER = mandatoryHeaders.entry("server").or(true);
+		MANDATORY_HEADER_CONTENT_TYPE = mandatoryHeaders.entry("contentType").or(true);
 	}
 
 	private HttpIO() {
@@ -94,15 +107,24 @@ public class HttpIO extends RapidoidThing {
 	}
 
 	public static void addDefaultHeaders(Channel ctx, boolean isKeepAlive, MediaType contentType) {
-		ctx.write(isKeepAlive ? CONN_KEEP_ALIVE : CONN_CLOSE);
 
-		ctx.write(SERVER_HEADER);
+		if (!isKeepAlive || MANDATORY_HEADER_CONNECTION) {
+			ctx.write(isKeepAlive ? CONN_KEEP_ALIVE : CONN_CLOSE);
+		}
 
-		ctx.write(DATE_IS);
-		ctx.write(Dates.getDateTimeBytes());
-		ctx.write(Constants.CR_LF);
+		if (MANDATORY_HEADER_SERVER) {
+			ctx.write(SERVER_HEADER);
+		}
 
-		ctx.write(contentType.asHttpHeader());
+		if (MANDATORY_HEADER_DATE) {
+			ctx.write(DATE_IS);
+			ctx.write(Dates.getDateTimeBytes());
+			ctx.write(Constants.CR_LF);
+		}
+
+		if (MANDATORY_HEADER_CONTENT_TYPE) {
+			ctx.write(contentType.asHttpHeader());
+		}
 	}
 
 	public static void addCustomHeader(Channel ctx, byte[] name, byte[] value) {

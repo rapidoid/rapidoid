@@ -101,5 +101,11 @@ http:
   maxPipeline: 10
   serverName: Rapidoid
 
+  mandatoryHeaders:
+    connection: true
+    date: true
+    server: true
+    contentType: true
+
 token:
   ttl: 0 # unlimited
