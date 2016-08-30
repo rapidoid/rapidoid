@@ -224,13 +224,19 @@ public class Msc extends RapidoidThing implements Constants {
 	}
 
 	public static void benchmark(String name, int count, Runnable runnable) {
+		doBenchmark(name, count, runnable, false);
+	}
+
+	public static void doBenchmark(String name, int count, Runnable runnable, boolean silent) {
 		long start = U.time();
 
 		for (int i = 0; i < count; i++) {
 			runnable.run();
 		}
 
-		benchmarkComplete(name, count, start);
+		if (!silent) {
+			benchmarkComplete(name, count, start);
+		}
 	}
 
 	public static void benchmark(String name, int count, Operation<Integer> operation) {
@@ -273,12 +279,14 @@ public class Msc extends RapidoidThing implements Constants {
 		final Ctx ctx = Ctxs.get();
 
 		for (int i = 1; i <= threadsN; i++) {
-			new Thread() {
+			new RapidoidThread() {
+
+				@Override
 				public void run() {
 					Ctxs.attach(ctx != null ? ctx.span() : null);
 
 					try {
-						benchmark(name, countPerThread, runnable);
+						doBenchmark(name, countPerThread, runnable, true);
 						if (outsideLatch == null) {
 							latch.countDown();
 						}
@@ -290,7 +298,6 @@ public class Msc extends RapidoidThing implements Constants {
 					}
 				}
 
-				;
 			}.start();
 		}
 
@@ -397,6 +404,7 @@ public class Msc extends RapidoidThing implements Constants {
 		for (int i = 1; i <= threadsN; i++) {
 			final Integer n = i;
 			new Thread() {
+				@Override
 				public void run() {
 					Lmbd.eval(executable, n);
 					latch.countDown();
