@@ -20,11 +20,13 @@ package org.rapidoid.jdbc;
  * #L%
  */
 
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.http.IntegrationTestCommons;
+import org.rapidoid.sql.C3P0ConnectionPool;
 import org.rapidoid.sql.JDBC;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -39,6 +41,16 @@ public class JDBCPoolC3P0Test extends IntegrationTestCommons {
 	public void testJDBCPoolC3P0() {
 
 		JDBC.h2("test1").pooled();
+
+		C3P0ConnectionPool pool = (C3P0ConnectionPool) JDBC.defaultApi().pool();
+		ComboPooledDataSource c3p0 = pool.pool();
+
+		// validate default config
+		eq(c3p0.getMinPoolSize(), 5);
+		eq(c3p0.getInitialPoolSize(), 5);
+		eq(c3p0.getAcquireIncrement(), 5);
+		eq(c3p0.getMaxPoolSize(), 100);
+		eq(c3p0.getMaxStatementsPerConnection(), 10);
 
 		JDBC.execute("create table abc (id int, name varchar)");
 		JDBC.execute("insert into abc values (?, ?)", 123, "xyz");
@@ -58,8 +70,15 @@ public class JDBCPoolC3P0Test extends IntegrationTestCommons {
 
 		Conf.JDBC.set("url", "jdbc:h2:mem:mydb");
 		Conf.JDBC.set("username", "sa");
+		Conf.C3P0.set("maxPoolSize", "123");
 
 		JDBC.defaultApi().pooled();
+
+		C3P0ConnectionPool pool = (C3P0ConnectionPool) JDBC.defaultApi().pool();
+		ComboPooledDataSource c3p0 = pool.pool();
+
+		eq(c3p0.getMinPoolSize(), 5);
+		eq(c3p0.getMaxPoolSize(), 123);
 
 		JDBC.execute("create table abc (id int, name varchar)");
 		JDBC.execute("insert into abc values (?, ?)", 123, "xyz");
