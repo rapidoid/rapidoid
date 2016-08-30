@@ -156,4 +156,9 @@ public class MapProp extends RapidoidThing implements Prop {
 		return null;
 	}
 
+	@Override
+	public Object getFast(Object target) {
+		return getRaw(target);
+	}
+
 }

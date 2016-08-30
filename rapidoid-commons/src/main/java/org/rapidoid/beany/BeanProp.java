@@ -11,10 +11,7 @@ import org.rapidoid.util.Msc;
 import org.rapidoid.var.Var;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -80,6 +77,10 @@ public class BeanProp extends RapidoidThing implements Prop {
 
 	public void init() {
 		U.must(field != null || getter != null, "Invalid property: %s", name);
+
+		if (getter != null) getter.setAccessible(true);
+		if (setter != null) setter.setAccessible(true);
+		if (field != null) field.setAccessible(true);
 
 		// TODO: improve inference from getter and setter
 		if (getter != null) {
@@ -160,13 +161,12 @@ public class BeanProp extends RapidoidThing implements Prop {
 	@Override
 	public <T> T getRaw(Object target) {
 		// FIXME when target class isn't the property declaring class
+
 		try {
-			if (field != null) {
-				field.setAccessible(true);
-				return (T) field.get(target);
-			} else {
-				getter.setAccessible(true);
+			if (getter != null) {
 				return (T) getter.invoke(target);
+			} else {
+				return (T) field.get(target);
 			}
 
 		} catch (Exception e) {
@@ -366,6 +366,20 @@ public class BeanProp extends RapidoidThing implements Prop {
 	@Override
 	public Class<?> getDeclaringType() {
 		return declaringType;
+	}
+
+	@Override
+	public Object getFast(Object target) {
+		try {
+			if (getter != null) {
+				return getter.invoke(target);
+			} else {
+				return field.get(target);
+			}
+
+		} catch (Exception e) {
+			throw U.rte(e);
+		}
 	}
 
 	@Override

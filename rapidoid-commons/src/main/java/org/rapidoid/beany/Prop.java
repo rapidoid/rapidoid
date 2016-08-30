@@ -71,4 +71,6 @@ public interface Prop {
 
 	Class<?> getDeclaringType();
 
+	Object getFast(Object target);
+
 }
