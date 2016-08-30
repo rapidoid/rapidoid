@@ -61,7 +61,7 @@ public class TemplateCompiler extends RapidoidThing {
 		cls.addConstructor(CtNewConstructor.defaultConstructor(cls));
 
 		for (Map.Entry<String, String> expr : expressions.entrySet()) {
-			String fld = "private static final org.rapidoid.render.ValueRetriever %s = org.rapidoid.render.ValueRetriever.of(%s);";
+			String fld = "private static final org.rapidoid.render.retriever.ValueRetriever %s = org.rapidoid.render.retriever.Retriever.of(%s);";
 
 			String retrieverId = retrieverId(expr.getKey());
 			String prop = expr.getValue();

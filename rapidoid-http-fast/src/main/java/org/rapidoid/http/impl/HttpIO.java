@@ -180,8 +180,7 @@ public class HttpIO extends RapidoidThing {
 	public static void writeAsJson(Channel ctx, int code, boolean isKeepAlive, Object value) {
 		startResponse(ctx, code, isKeepAlive, MediaType.JSON);
 
-		ByteArrayOutputStream os = Msc.locals().jsonRenderingStream;
-		os.reset();
+		ByteArrayOutputStream os = Msc.locals().jsonRenderingStream();
 
 		JSON.stringify(value, os);
 		byte[] arr = os.toByteArray();

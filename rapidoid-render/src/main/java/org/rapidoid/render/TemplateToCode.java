@@ -48,7 +48,7 @@ public class TemplateToCode extends RapidoidThing {
 				return "{" + join("", x.children, expressions) + "}";
 
 			case OP_TEXT:
-				return print(literal(x.text));
+				return U.notEmpty(x.text) ? print(literal(x.text)) : "";
 
 			case OP_PRINT:
 				return val(x.text, true, expressions);
@@ -69,14 +69,52 @@ public class TemplateToCode extends RapidoidThing {
 
 			case OP_FOREACH:
 				body = join("", x.children, expressions);
-				String arr = "v" + ID_GEN.incrementAndGet();
-				String i = "v" + ID_GEN.incrementAndGet();
-				String code = "Object[] %s = $1.iter(\"%s\"); for (int %s = 0; %s < %s.length; %s++) {\n %s\n }";
-				return U.frmt(code, arr, x.text, i, i, arr, i, scoped(i, arr, body));
+				String retrId = expr(expressions, x.text);
+
+				return iterList(body, retrId);
 
 			default:
 				throw Err.notExpected();
 		}
+	}
+
+	private static String iterList(String body, String retrId) {
+		String list = "v" + ID_GEN.incrementAndGet();
+		String ind = "v" + ID_GEN.incrementAndGet();
+
+		String code = "java.util.List %s = $1.iter(%s);" +
+			" for (int %s = 0; %s < %s.size(); %s++) {\n" +
+			" %s\n }";
+
+		return U.frmt(code, list, retrId, ind, ind, list, ind, scopedList(ind, list, body));
+	}
+
+	private static String iterArr(String body, String retrId) {
+		String arr = "v" + ID_GEN.incrementAndGet();
+		String ind = "v" + ID_GEN.incrementAndGet();
+
+		String code = "Object[] %s = $1.iter(%s);" +
+			" for (int %s = 0; %s < %s.length; %s++) {\n" +
+			" %s\n }";
+
+		return U.frmt(code, arr, retrId, ind, ind, arr, ind, scopedArr(ind, arr, body));
+	}
+
+	private static String eachIter(String body, String retrId) {
+		String it = "v" + ID_GEN.incrementAndGet();
+		String var = "v" + ID_GEN.incrementAndGet();
+		String ind = "v" + ID_GEN.incrementAndGet();
+
+		String insideBody = scopedIter(ind, var, body);
+
+		String code = "java.util.Iterator %s = $1.iter(%s);\n" // it, retrId
+			+ "int %s = 0;\n " // ind
+			+ "while (%s.hasNext()) {\n" // it
+			+ "Object %s = %s.next();\n" // var, it
+			+ " %s++;\n" // ind
+			+ "%s\n }";
+
+		return U.frmt(code, it, retrId, ind, it, var, it, ind, insideBody);
 	}
 
 	private static String join(String separator, List<XNode> nodes, Map<String, String> expressions) {
@@ -94,12 +132,25 @@ public class TemplateToCode extends RapidoidThing {
 		return sb.toString();
 	}
 
-	static String scoped(String i, String arr, String code) {
+	static String scopedList(String ind, String list, String code) {
+		String var = list + ".get(" + ind + ")";
+		return U.frmt("$1.push(%s, %s); try { %s } finally { $1.pop(%s, %s); }", ind, var, code, ind, var);
+	}
+
+	static String scopedArr(String i, String arr, String code) {
 		String var = arr + "[" + i + "]";
 		return U.frmt("$1.push(%s, %s); try { %s } finally { $1.pop(%s, %s); }", i, var, code, i, var);
 	}
 
+	static String scopedIter(String ind, String var, String code) {
+		return U.frmt("$1.push(%s, %s); try { %s } finally { $1.pop(%s, %s); }", ind, var, code, ind, var);
+	}
+
 	static String print(String s) {
+		if (s.isEmpty()) {
+			return "";
+		}
+
 		if (Msc.isAscii(s)) {
 			return U.frmt("$1.printAscii(%s);\n", s);
 		} else {
@@ -113,20 +164,26 @@ public class TemplateToCode extends RapidoidThing {
 
 		if (parts.length == 2) {
 			String prop = parts[0];
-			String expr = literal(prop);
 			String orElse = literal(parts[1]);
-			expressions.put(parts[0], expr);
-			return U.frmt("$1.valOr(%s, %s, %s);\n", TemplateCompiler.retrieverId(prop), orElse, escape);
+			String retrId = expr(expressions, prop);
+
+			return U.frmt("$1.valOr(%s, %s, %s);\n", retrId, orElse, escape);
 
 		} else {
-			String expr = literal(s);
-			expressions.put(s, expr);
-			return U.frmt("$1.val(%s, %s);\n", TemplateCompiler.retrieverId(s), escape);
+			String retrId = expr(expressions, s);
+
+			return U.frmt("$1.val(%s, %s);\n", retrId, escape);
 		}
 	}
 
 	static String literal(String s) {
 		return Q + Str.javaEscape(s) + Q;
+	}
+
+	private static String expr(Map<String, String> expressions, String expr) {
+		expressions.put(expr, literal(expr));
+
+		return TemplateCompiler.retrieverId(expr);
 	}
 
 }

@@ -5,12 +5,15 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Str;
+import org.rapidoid.render.retriever.GenericValueRetriever;
+import org.rapidoid.render.retriever.ValueRetriever;
 import org.rapidoid.u.U;
 import org.rapidoid.util.StreamUtils;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -38,19 +41,11 @@ import java.util.Map;
 @Since("5.1.0")
 public class RenderCtxImpl extends RapidoidThing implements RenderCtx {
 
-	private final OutputStream out;
-	private final String ext;
-	private final List<Object> model;
-	private final TemplateStore templates;
+	private final List<Object> model = U.list();
 
-	public RenderCtxImpl(OutputStream out, String filename, TemplateStore templates, Object... model) {
-		this.out = out;
-		this.templates = templates;
-		this.model = U.list(model);
-
-		String fileExt = Str.cutFromFirst(filename, ".");
-		this.ext = fileExt != null ? "." + fileExt : "";
-	}
+	private volatile OutputStream out;
+	private volatile String ext;
+	private volatile TemplateStore templates;
 
 	@Override
 	public void printAscii(String s) throws IOException {
@@ -96,17 +91,20 @@ public class RenderCtxImpl extends RapidoidThing implements RenderCtx {
 	}
 
 	@Override
-	public Object[] iter(String name) {
-		Object val = get(name);
+	public List iter(ValueRetriever retriever) {
+		Object val = retriever.retrieve(model);
 
-		if (val instanceof Collection<?>) {
-			return ((Collection<?>) val).toArray();
+		if (val instanceof List<?>) {
+			return ((List) val);
 
 		} else if (val instanceof Object[]) {
-			return (Object[]) val;
+			return U.list((Object[]) val);
+
+		} else if (val instanceof Iterable<?>) {
+			return U.list((Iterable<?>) val);
 
 		} else {
-			return val != null && !Boolean.FALSE.equals(val) ? U.array(val) : U.array();
+			return val != null && !Boolean.FALSE.equals(val) ? U.list(val) : Collections.emptyList();
 		}
 	}
 
@@ -117,7 +115,7 @@ public class RenderCtxImpl extends RapidoidThing implements RenderCtx {
 
 	@Override
 	public void valOr(ValueRetriever retriever, String or, boolean escape) throws IOException {
-		Object val = retriever.read(model);
+		Object val = retriever.retrieve(model);
 		val = U.or(val, or);
 		printValue(val, escape);
 	}
@@ -137,7 +135,8 @@ public class RenderCtxImpl extends RapidoidThing implements RenderCtx {
 
 	@Override
 	public void call(String name) {
-		Templates.load(name + ext, templates).renderTo(out, model.toArray());
+		RapidoidTemplate template = (RapidoidTemplate) Templates.load(name + ext, templates);
+		template.renderInContext(this);
 	}
 
 	@Override
@@ -151,7 +150,42 @@ public class RenderCtxImpl extends RapidoidThing implements RenderCtx {
 	}
 
 	private Object get(String name) {
-		return ValueRetriever.propOf(name, model);
+		return GenericValueRetriever.propOf(name, model);
+	}
+
+	public RenderCtxImpl out(OutputStream out) {
+		this.out = out;
+		return this;
+	}
+
+	public RenderCtxImpl multiModel(List<Object> model) {
+		Coll.assign(this.model, model);
+		return this;
+	}
+
+	public RenderCtxImpl model(Object model) {
+		this.model.clear();
+		this.model.add(model);
+		return this;
+	}
+
+	public RenderCtxImpl templates(TemplateStore templates) {
+		this.templates = templates;
+		return this;
+	}
+
+	private String calcFileExt(String filename) {
+		String fileExt = Str.cutFromFirst(filename, ".");
+		return fileExt != null ? "." + fileExt : "";
+	}
+
+	public RenderCtxImpl filename(String filename) {
+		this.ext = calcFileExt(filename);
+		return this;
+	}
+
+	public void reset() {
+		this.model.clear();
 	}
 
 }

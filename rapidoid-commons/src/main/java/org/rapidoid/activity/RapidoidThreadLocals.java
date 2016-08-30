@@ -47,8 +47,27 @@ public class RapidoidThreadLocals extends RapidoidThing {
 		}
 	}
 
-	public final ByteArrayOutputStream jsonRenderingStream = new ByteArrayOutputStream();
+	private final ByteArrayOutputStream jsonRenderingStream = new ByteArrayOutputStream();
 
-	public final ByteArrayOutputStream pageRenderingStream = new ByteArrayOutputStream();
+	private final ByteArrayOutputStream pageRenderingStream = new ByteArrayOutputStream();
+
+	private final ByteArrayOutputStream templateRenderingStream = new ByteArrayOutputStream();
+
+	public Object renderContext;
+
+	public ByteArrayOutputStream jsonRenderingStream() {
+		jsonRenderingStream.reset();
+		return jsonRenderingStream;
+	}
+
+	public ByteArrayOutputStream pageRenderingStream() {
+		pageRenderingStream.reset();
+		return pageRenderingStream;
+	}
+
+	public ByteArrayOutputStream templateRenderingStream() {
+		templateRenderingStream.reset();
+		return templateRenderingStream;
+	}
 
 }

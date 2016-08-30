@@ -29,7 +29,7 @@ import org.rapidoid.annotation.Since;
 public class Render extends RapidoidThing {
 
 	public static RenderDSL template(String templateSource) {
-		return new RenderDSL(Templates.compile(templateSource));
+		return new RenderDSL((RapidoidTemplate) Templates.compile(templateSource));
 	}
 
 	public static RenderDSL file(String filename) {
@@ -37,7 +37,7 @@ public class Render extends RapidoidThing {
 	}
 
 	public static RenderDSL file(String filename, TemplateStore templates) {
-		return new RenderDSL(Templates.load(filename, templates));
+		return new RenderDSL((RapidoidTemplate) Templates.load(filename, templates));
 	}
 
 }

@@ -89,12 +89,17 @@ public class RenderTest extends AbstractRenderTest {
 	}
 
 	@Test
-	public void testScopes() {
-		eq(Render.template("${x}").model(U.map("x", 1), U.map("x", 2)), "2");
+	public void testIteration() {
+		eq(Render.template("{{#.}}(${length}){{/.}}").model(U.list("aaa", "bb")), "(3)(2)");
+	}
 
-		eq(Render.template("${x}").model(U.map("x", 1), U.map("y", 2)), "1");
-		eq(Render.template("${y}").model(U.map("x", 1), U.map("y", 2)), "2");
-		eq(Render.template("${z}").model(U.map("x", 1), U.map("y", 2)), view(null));
+	@Test
+	public void testScopes() {
+		eq(Render.template("${x}").multiModel(U.map("x", 1), U.map("x", 2)), "2");
+
+		eq(Render.template("${x}").multiModel(U.map("x", 1), U.map("y", 2)), "1");
+		eq(Render.template("${y}").multiModel(U.map("x", 1), U.map("y", 2)), "2");
+		eq(Render.template("${z}").multiModel(U.map("x", 1), U.map("y", 2)), view(null));
 	}
 
 	@Test

@@ -54,7 +54,7 @@ public class TemplatesTest extends AbstractRenderTest {
 
 	@Test
 	public void testStringTemplatesAPI() {
-		eq(Templates.compile("${x}-${y}").render(U.map("x", 1), U.map("y", "2")), "1-2");
+		eq(Templates.compile("${x}-${y}").render(U.map("x", 1, "y", "2")), "1-2");
 	}
 
 	@Test

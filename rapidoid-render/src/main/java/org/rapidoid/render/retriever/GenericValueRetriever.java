@@ -1,4 +1,4 @@
-package org.rapidoid.render;
+package org.rapidoid.render.retriever;
 
 /*
  * #%L
@@ -26,6 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.BeanProp;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
+import org.rapidoid.render.Getter;
 import org.rapidoid.u.U;
 
 import java.util.Collections;
@@ -34,24 +35,21 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
-public class ValueRetriever extends RapidoidThing {
+public class GenericValueRetriever extends RapidoidThing implements ValueRetriever {
 
 	private final String property;
 
 	private volatile Class<?> cachedModelType;
 	private volatile Prop cachedProp;
 
-	public ValueRetriever(String property) {
+	public GenericValueRetriever(String property) {
 		this.property = property;
 	}
 
-	public static ValueRetriever of(String property) {
-		return new ValueRetriever(property);
-	}
-
-	public Object read(List<Object> model) {
+	@Override
+	public Object retrieve(List<Object> model) {
 		if (U.isEmpty(model)) return null;
-		return property.equals(".") ? self(model) : getProp(model);
+		return getProp(model);
 	}
 
 	private Object getProp(List<Object> model) {
@@ -59,7 +57,7 @@ public class ValueRetriever extends RapidoidThing {
 
 		Class<?> cls = target.getClass();
 		if (cls.equals(cachedModelType) && cachedProp != null) {
-			return cachedProp.get(target);
+			return cachedProp.getFast(target);
 		}
 
 		Prop prop = Beany.property(cls, property, false);
@@ -67,18 +65,23 @@ public class ValueRetriever extends RapidoidThing {
 		if (prop != null && prop instanceof BeanProp) {
 			cachedProp = prop;
 			cachedModelType = cls;
-			return cachedProp.get(target);
+			return cachedProp.getFast(target);
 		}
 
 		return propOf(property, model);
 	}
 
-	private static Object self(List<Object> model) {
+	public static Object self(List<Object> model) {
 		return model.get(model.size() - 1);
 	}
 
 	public static Object propOf(String name, List<Object> scope) {
 		int p = name.indexOf(".");
+
+		if (p == 0) {
+			U.must(name.length() == 1, "Invalid expression!");
+			return self(scope);
+		}
 
 		if (p > 0) {
 			Object first = propOf(name.substring(0, p), scope);

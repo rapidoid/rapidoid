@@ -22,8 +22,10 @@ package org.rapidoid.render;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.render.retriever.ValueRetriever;
 
 import java.io.IOException;
+import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -35,7 +37,7 @@ public interface RenderCtx {
 
 	void printValue(Object value, boolean escape) throws IOException;
 
-	Object[] iter(String items);
+	List iter(ValueRetriever retriever);
 
 	void val(ValueRetriever retriever, boolean escape) throws IOException;
 

@@ -1,9 +1,4 @@
-package org.rapidoid.render;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import java.io.OutputStream;
+package org.rapidoid.render.retriever;
 
 /*
  * #%L
@@ -25,14 +20,20 @@ import java.io.OutputStream;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public interface Template {
+@Since("5.2.0")
+public class Retriever extends RapidoidThing {
 
-	void renderTo(OutputStream output, Object model);
+	public static ValueRetriever of(String property) {
+		if (property.equals(".")) {
+			return new SelfRetriever();
+		}
 
-	byte[] renderToBytes(Object model);
-
-	String render(Object model);
+		return new GenericValueRetriever(property);
+	}
 
 }

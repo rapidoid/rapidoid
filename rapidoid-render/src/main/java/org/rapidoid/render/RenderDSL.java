@@ -4,6 +4,8 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
+import java.io.ByteArrayOutputStream;
+
 /*
  * #%L
  * rapidoid-render
@@ -28,14 +30,26 @@ import org.rapidoid.annotation.Since;
 @Since("5.1.0")
 public class RenderDSL extends RapidoidThing {
 
-	private final Template template;
+	private final RapidoidTemplate template;
 
-	public RenderDSL(Template template) {
+	public RenderDSL(RapidoidTemplate template) {
 		this.template = template;
 	}
 
-	public String model(Object... model) {
-		return template.render(model);
+	public String model(Object model) {
+
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		template.renderTo(out, model);
+
+		return new String(out.toByteArray());
+	}
+
+	public String multiModel(Object... model) {
+
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		template.renderMultiModel(out, model);
+
+		return new String(out.toByteArray());
 	}
 
 }
