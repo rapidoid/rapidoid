@@ -31,8 +31,8 @@ public abstract class AbstractInjectTest extends TestCommons {
 	@Before
 	public void openContext() {
 		Msc.reset();
-		Conf.setPath(getTestName());
-		IoC.defaultContext().reset();
+		Conf.ROOT.setPath(getTestName());
+		IoC.reset();
 	}
 
 	protected void verify(String name, Object actual) {

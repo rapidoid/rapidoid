@@ -60,7 +60,7 @@ public abstract class TestCommons {
 	}
 
 	@Before
-	public void init() {
+	public final void initTest() {
 		System.out.println("--------------------------------------------------------------------------------");
 		System.out.println(" @" + ManagementFactory.getRuntimeMXBean().getName() + " TEST " + getClass().getCanonicalName());
 		System.out.println("--------------------------------------------------------------------------------");

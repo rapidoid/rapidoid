@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.bytes.BytesUtil;
+import org.rapidoid.commons.Env;
 import org.rapidoid.config.Conf;
 import org.rapidoid.data.BufRange;
 import org.rapidoid.data.BufRanges;
@@ -47,7 +48,7 @@ public class MaxHttpPerfTest {
 		.getBytes();
 
 	public static void main(String[] args) {
-		Conf.args(args);
+		Env.setArgs(args);
 
 		String req = "GET /plaintext HTTP/1.1\r\nHost:www.test.com\r\n\r\n";
 

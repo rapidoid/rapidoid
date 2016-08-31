@@ -3,11 +3,8 @@ package org.rapidoid.commons;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.collection.Coll;
-import org.rapidoid.config.Conf;
-import org.rapidoid.scan.ClasspathUtil;
-import org.rapidoid.util.Msc;
 
+import java.util.List;
 import java.util.Set;
 
 /*
@@ -34,47 +31,54 @@ import java.util.Set;
 @Since("5.1.0")
 public class Env extends RapidoidThing {
 
-	public static final String PROFILE_DEFAULT = "default";
+	private static final Environment env = new Environment();
 
-	private static final Set<String> PROFILES = Coll.synchronizedSet(PROFILE_DEFAULT);
+	public static void reset() {
+		env.reset();
+	}
 
 	public static boolean production() {
-		return Conf.ROOT.is("production") || Conf.ROOT.is("prod") || profile("production") || profile("prod");
+		return mode() == EnvMode.PRODUCTION;
 	}
 
 	public static boolean test() {
-		return Conf.ROOT.is("test") || profile("test") || Msc.insideTest();
+		return mode() == EnvMode.TEST;
 	}
 
 	public static boolean dev() {
-		return !production() && !test() && !ClasspathUtil.getClasspathFolders().isEmpty();
+		return mode() == EnvMode.DEV;
+	}
+
+	public static boolean isInitialized() {
+		return env.isInitialized();
+	}
+
+	public static EnvMode mode() {
+		return env.mode();
 	}
 
 	public static Set<String> profiles() {
-		if (dev()) {
-			PROFILES.add("dev");
-
-		} else if (test()) {
-			PROFILES.add("test");
-		}
-
-		return PROFILES;
+		return env.profiles();
 	}
 
-	public static boolean profile(String profileName) {
-		return PROFILES.contains(profileName);
+	public static void setProfiles(String... profiles) {
+		env.setProfiles(profiles);
+	}
+
+	public static void setArgs(String... args) {
+		env.setArgs(args);
+	}
+
+	public static List<String> args() {
+		return env.args();
+	}
+
+	public static boolean hasProfile(String profileName) {
+		return env.hasProfile(profileName);
 	}
 
 	public static boolean hasAnyProfile(String... profileNames) {
-		for (String profileName : profileNames) {
-			if (profile(profileName)) {
-				return true;
-			}
-		}
-		return false;
+		return env.hasAnyProfile(profileNames);
 	}
 
-	public static String mode() {
-		return dev() ? "dev" : test() ? "test" : "production";
-	}
 }

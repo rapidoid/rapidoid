@@ -32,6 +32,7 @@ import java.util.Properties;
 public interface Config extends BasicConfig {
 
 	@SuppressWarnings("unchecked")
+	@Override
 	Config sub(String... keys);
 
 	Config sub(List<String> keys);
@@ -44,8 +45,6 @@ public interface Config extends BasicConfig {
 	Map<String, Object> toMap();
 
 	void clear();
-
-	void delete();
 
 	void set(String key, Object value);
 
@@ -60,8 +59,6 @@ public interface Config extends BasicConfig {
 	@SuppressWarnings("unchecked")
 	void update(Map<String, ?> entries, boolean overridenByEnv);
 
-	void args(String... args);
-
 	Config root();
 
 	Config parent();
@@ -74,10 +71,19 @@ public interface Config extends BasicConfig {
 
 	BasicConfig or(Config alternative);
 
-	String filenameBase();
+	String getFilenameBase();
 
-	Config filenameBase(String filenameBase);
+	Config setFilenameBase(String filenameBase);
+
+	String getPath();
+
+	Config setPath(String path);
+
+	void args(List<String> args);
 
 	void applyTo(Object target);
 
+	void reset();
+
+	boolean useBuiltInDefaults();
 }

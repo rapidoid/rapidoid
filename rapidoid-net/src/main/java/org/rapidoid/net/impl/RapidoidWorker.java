@@ -6,6 +6,7 @@ import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.buffer.IncompleteReadException;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.config.Conf;
+import org.rapidoid.config.ConfigUtil;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.expire.ExpirationCrawlerThread;
 import org.rapidoid.expire.Expire;
@@ -105,8 +106,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 		this.maxPipelineSize = Conf.HTTP.entry("maxPipeline").or(10);
 
-		final int queueSize = Conf.micro() ? 1000 : 1000000;
-		final int growFactor = Conf.micro() ? 2 : 10;
+		final int queueSize = ConfigUtil.micro() ? 1000 : 1000000;
+		final int growFactor = ConfigUtil.micro() ? 2 : 10;
 
 		this.connected = new ArrayBlockingQueue<SocketChannel>(queueSize);
 		this.done = new SimpleList<RapidoidConnection>(queueSize / 10, growFactor);

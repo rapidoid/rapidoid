@@ -92,6 +92,8 @@ org.rapidoid.commons.Dates
 org.rapidoid.commons.Deep
 org.rapidoid.commons.English
 org.rapidoid.commons.Env
+org.rapidoid.commons.Environment
+org.rapidoid.commons.EnvMode
 org.rapidoid.commons.Err
 org.rapidoid.commons.JS
 org.rapidoid.commons.RapidoidInfo
@@ -110,8 +112,10 @@ org.rapidoid.config.BasicConfig
 org.rapidoid.config.Conf
 org.rapidoid.config.Config
 org.rapidoid.config.ConfigAlternatives
+org.rapidoid.config.ConfigBase
 org.rapidoid.config.ConfigHelp
 org.rapidoid.config.ConfigImpl
+org.rapidoid.config.ConfigLoaderUtil
 org.rapidoid.config.ConfigOption
 org.rapidoid.config.ConfigOptions
 org.rapidoid.config.ConfigParser

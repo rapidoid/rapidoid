@@ -32,6 +32,9 @@ import java.util.concurrent.CancellationException;
  */
 public class U extends RapidoidThing {
 
+	private static final int PRINTABLE_ARR_MAX_SIZE = 30;
+
+	@SuppressWarnings("ImplicitArrayToString")
 	public static String str(Object obj) {
 
 		if (obj instanceof String) {
@@ -41,31 +44,40 @@ public class U extends RapidoidThing {
 			return null;
 
 		} else if (obj instanceof byte[]) {
-			return Arrays.toString((byte[]) obj);
+			byte[] arr = (byte[]) obj;
+			return arr.length < PRINTABLE_ARR_MAX_SIZE ? Arrays.toString(arr) : arr.toString();
 
 		} else if (obj instanceof short[]) {
-			return Arrays.toString((short[]) obj);
+			short[] arr = (short[]) obj;
+			return arr.length < PRINTABLE_ARR_MAX_SIZE ? Arrays.toString(arr) : arr.toString();
 
 		} else if (obj instanceof int[]) {
-			return Arrays.toString((int[]) obj);
+			int[] arr = (int[]) obj;
+			return arr.length < PRINTABLE_ARR_MAX_SIZE ? Arrays.toString(arr) : arr.toString();
 
 		} else if (obj instanceof long[]) {
-			return Arrays.toString((long[]) obj);
+			long[] arr = (long[]) obj;
+			return arr.length < PRINTABLE_ARR_MAX_SIZE ? Arrays.toString(arr) : arr.toString();
 
 		} else if (obj instanceof float[]) {
-			return Arrays.toString((float[]) obj);
+			float[] arr = (float[]) obj;
+			return arr.length < PRINTABLE_ARR_MAX_SIZE ? Arrays.toString(arr) : arr.toString();
 
 		} else if (obj instanceof double[]) {
-			return Arrays.toString((double[]) obj);
+			double[] arr = (double[]) obj;
+			return arr.length < PRINTABLE_ARR_MAX_SIZE ? Arrays.toString(arr) : arr.toString();
 
 		} else if (obj instanceof boolean[]) {
-			return Arrays.toString((boolean[]) obj);
+			boolean[] arr = (boolean[]) obj;
+			return arr.length < PRINTABLE_ARR_MAX_SIZE ? Arrays.toString(arr) : arr.toString();
 
 		} else if (obj instanceof char[]) {
-			return Arrays.toString((char[]) obj);
+			char[] arr = (char[]) obj;
+			return arr.length < PRINTABLE_ARR_MAX_SIZE ? Arrays.toString(arr) : arr.toString();
 
 		} else if (obj instanceof Object[]) {
-			return str((Object[]) obj);
+			Object[] arr = (Object[]) obj;
+			return arr.length < PRINTABLE_ARR_MAX_SIZE ? str(arr) : arr.toString();
 
 		} else {
 			return String.valueOf(obj);

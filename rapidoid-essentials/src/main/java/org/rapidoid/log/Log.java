@@ -217,7 +217,7 @@ public class Log extends RapidoidThing {
 	}
 
 	private static String printable(Object value) {
-		return String.valueOf(value);
+		return U.str(value);
 	}
 
 	private static void log(LogLevel level, String msg, String key1, Object value1, String key2, Object value2,

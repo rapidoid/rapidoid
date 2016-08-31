@@ -75,9 +75,9 @@ public abstract class IntegrationTestCommons extends TestCommons {
 
 		My.reset();
 		JPAUtil.reset();
-		Conf.setPath(getTestName());
+		Conf.ROOT.setPath(getTestName());
 		Log.setLogLevel(LogLevel.INFO);
-		IoC.defaultContext().reset();
+		IoC.reset();
 
 		App.resetGlobalState();
 		OnChanges.ignore();

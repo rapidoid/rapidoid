@@ -1,10 +1,7 @@
-package org.rapidoid.config;
+package org.rapidoid.commons;
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
-import org.rapidoid.value.ValueStore;
 
 /*
  * #%L
@@ -27,32 +24,9 @@ import org.rapidoid.value.ValueStore;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class ConfigValueStore<T> extends RapidoidThing implements ValueStore<T> {
+@Since("5.2.0")
+public enum EnvMode {
 
-	private final Config config;
-
-	private final String key;
-
-	public ConfigValueStore(Config config, String key) {
-		this.config = config;
-		this.key = key;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public T get() {
-		return (T) config.get(key);
-	}
-
-	@Override
-	public void set(T value) {
-		config.set(key, value);
-	}
-
-	@Override
-	public String desc() {
-		return U.join(".", config.keys()) + "." + key;
-	}
+	DEV, TEST, PRODUCTION;
 
 }

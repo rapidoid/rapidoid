@@ -23,7 +23,9 @@ package org.rapidoid.setup;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.*;
 import org.rapidoid.collection.Coll;
+import org.rapidoid.commons.Env;
 import org.rapidoid.config.Conf;
+import org.rapidoid.config.ConfigHelp;
 import org.rapidoid.data.JSON;
 import org.rapidoid.io.Res;
 import org.rapidoid.ioc.IoC;
@@ -41,7 +43,10 @@ import org.rapidoid.util.Msc;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import java.lang.annotation.Annotation;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -70,7 +75,13 @@ public class App extends RapidoidThing {
 	});
 
 	public static void args(String... args) {
-		Conf.args(args);
+		ConfigHelp.processHelp(args);
+		Env.setArgs(args);
+	}
+
+	public static void profiles(String... profiles) {
+		Env.setProfiles(profiles);
+		Conf.reset();
 	}
 
 	public static void path(String... path) {
@@ -130,7 +141,8 @@ public class App extends RapidoidThing {
 
 		App.path = null;
 
-		Conf.reload();
+		Conf.reset();
+		Env.reset();
 		Res.reset();
 		Templates.reset();
 		JSON.reset();
@@ -158,7 +170,7 @@ public class App extends RapidoidThing {
 			return;
 		}
 
-		Msc.invokeMain(entry, Conf.getArgs());
+		Msc.invokeMain(entry, U.arrayOf(String.class, Env.args()));
 
 		for (AppRestartListener listener : listeners) {
 			try {

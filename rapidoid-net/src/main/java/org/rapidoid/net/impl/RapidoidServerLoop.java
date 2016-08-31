@@ -4,7 +4,7 @@ import org.rapidoid.activity.RapidoidThread;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Rnd;
-import org.rapidoid.config.Conf;
+import org.rapidoid.config.ConfigUtil;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.Server;
@@ -52,7 +52,7 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 
 	private final int port;
 
-	private int workers = Conf.cpus();
+	private int workers = ConfigUtil.cpus();
 
 	private boolean blockingAccept = false;
 

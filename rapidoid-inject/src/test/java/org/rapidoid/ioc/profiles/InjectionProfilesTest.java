@@ -87,14 +87,14 @@ public class InjectionProfilesTest extends AbstractInjectTest {
 
 	private void addProfile(String profile) {
 		withoutABCProfiles();
-		Env.profiles().add(profile);
-		isTrue(Env.profile(profile));
+		Env.setProfiles(profile);
+		isTrue(Env.hasProfile(profile));
 	}
 
 	private void withoutABCProfiles() {
-		isFalse(Env.profile("aaa"));
-		isFalse(Env.profile("bbb"));
-		isFalse(Env.profile("ccc"));
+		isFalse(Env.hasProfile("aaa"));
+		isFalse(Env.hasProfile("bbb"));
+		isFalse(Env.hasProfile("ccc"));
 	}
 
 }

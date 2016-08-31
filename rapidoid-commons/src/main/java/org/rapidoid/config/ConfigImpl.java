@@ -7,6 +7,7 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Arr;
+import org.rapidoid.commons.Env;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.value.Value;
@@ -38,28 +39,40 @@ import java.util.*;
 @Since("4.1.0")
 public class ConfigImpl extends RapidoidThing implements Config {
 
-	private final Map<String, Object> properties;
-
 	private final List<String> baseKeys;
 
-	private final Config root;
+	private final ConfigImpl root;
+
+	private final ConfigBase base;
 
 	private final boolean isRoot;
 
-	private volatile String filenameBase = "config";
+	public ConfigImpl() {
+		this(null, false);
+	}
 
-	private ConfigImpl(Map<String, Object> properties, List<String> baseKeys, Config root) {
-		this.properties = properties;
+	public ConfigImpl(String defaultFilenameBase) {
+		this(defaultFilenameBase, false);
+	}
+
+	public ConfigImpl(String defaultFilenameBase, boolean useBuiltInDefaults) {
+		this.base = new ConfigBase(defaultFilenameBase, useBuiltInDefaults);
+		this.root = this;
+		this.baseKeys = U.list();
+		this.isRoot = true;
+	}
+
+	private ConfigImpl(ConfigBase base, List<String> baseKeys, ConfigImpl root) {
+		this.base = base;
 		this.root = root;
 		this.baseKeys = Collections.unmodifiableList(U.list(baseKeys));
 		this.isRoot = false;
 	}
 
-	public ConfigImpl() {
-		this.properties = Coll.synchronizedMap();
-		this.root = this;
-		this.baseKeys = U.list();
-		this.isRoot = true;
+	@Override
+	public synchronized void reset() {
+		clear();
+		base.reset();
 	}
 
 	@Override
@@ -83,20 +96,22 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	@SuppressWarnings("unchecked")
 	public Config sub(String... keys) {
 		U.must(U.notEmpty(keys), "Keys must be specified!");
-		return new ConfigImpl(properties, keyChain(U.iterator(keys)), root());
+		return new ConfigImpl(base, keyChain(U.iterator(keys)), root());
 	}
 
 	@Override
 	public Config sub(List<String> keys) {
 		U.must(U.notEmpty(keys), "Keys must be specified!");
-		return new ConfigImpl(properties, keyChain(keys.iterator()), root());
+		return new ConfigImpl(base, keyChain(keys.iterator()), root());
 	}
 
 	@Override
 	public Object get(String key) {
+		makeSureIsInitialized();
+
 		Object value;
 
-		synchronized (properties) {
+		synchronized (base.properties) {
 			value = asMap().get(key);
 		}
 
@@ -129,16 +144,20 @@ public class ConfigImpl extends RapidoidThing implements Config {
 
 	@Override
 	public boolean has(String key) {
-		synchronized (properties) {
+		makeSureIsInitialized();
+
+		synchronized (base.properties) {
 			return asMap().containsKey(key);
 		}
 	}
 
 	@Override
 	public boolean is(String key) {
+		makeSureIsInitialized();
+
 		Object value;
 
-		synchronized (properties) {
+		synchronized (base.properties) {
 			value = asMap().get(key);
 		}
 
@@ -147,16 +166,20 @@ public class ConfigImpl extends RapidoidThing implements Config {
 
 	@Override
 	public Map<String, Object> toMap() {
+		makeSureIsInitialized();
+
 		return Collections.unmodifiableMap(asMap());
 	}
 
 	private Map<String, Object> asMap() {
+		makeSureIsInitialized();
+
 		if (isRoot) {
-			return properties;
+			return base.properties;
 
 		} else {
-			synchronized (properties) {
-				Map<String, Object> props = properties;
+			synchronized (base.properties) {
+				Map<String, Object> props = base.properties;
 
 				for (String key : baseKeys) {
 					Object value = props.get(key);
@@ -200,20 +223,9 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	@Override
 	public void clear() {
 		if (isRoot) {
-			properties.clear();
+			base.properties.clear();
 		} else {
-			synchronized (properties) {
-				asMap().clear();
-			}
-		}
-	}
-
-	@Override
-	public void delete() {
-		if (isRoot) {
-			properties.clear();
-		} else {
-			synchronized (properties) {
+			synchronized (base.properties) {
 				parent().remove(lastBaseKey());
 			}
 		}
@@ -225,21 +237,27 @@ public class ConfigImpl extends RapidoidThing implements Config {
 
 	@Override
 	public void set(String key, Object value) {
-		synchronized (properties) {
+		makeSureIsInitialized();
+
+		synchronized (base.properties) {
 			asMap().put(key, value);
 		}
 	}
 
 	@Override
 	public void remove(String key) {
-		synchronized (properties) {
+		makeSureIsInitialized();
+
+		synchronized (base.properties) {
 			asMap().remove(key);
 		}
 	}
 
 	@Override
 	public void assign(Map<String, Object> entries) {
-		synchronized (properties) {
+		makeSureIsInitialized();
+
+		synchronized (base.properties) {
 			clear();
 			update(entries);
 		}
@@ -247,20 +265,26 @@ public class ConfigImpl extends RapidoidThing implements Config {
 
 	@Override
 	public boolean isEmpty() {
-		synchronized (properties) {
+		makeSureIsInitialized();
+
+		synchronized (base.properties) {
 			return asMap().isEmpty();
 		}
 	}
 
 	@Override
 	public void update(Map<String, ?> entries) {
+		makeSureIsInitialized();
+
 		update(entries, false);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public void update(Map<String, ?> entries, boolean overridenByEnv) {
-		synchronized (properties) {
+		makeSureIsInitialized();
+
+		synchronized (base.properties) {
 			Map<String, Object> conf = asMap();
 
 			for (Map.Entry<String, ?> e : entries.entrySet()) {
@@ -283,13 +307,17 @@ public class ConfigImpl extends RapidoidThing implements Config {
 
 	@Override
 	public String toString() {
-		synchronized (properties) {
+		makeSureIsInitialized();
+
+		synchronized (base.properties) {
 			return asMap().toString();
 		}
 	}
 
 	@Override
-	public void args(String... args) {
+	public void args(List<String> args) {
+		makeSureIsInitialized();
+
 		if (U.notEmpty(args)) {
 			for (String arg : args) {
 				if (!arg.contains("->")) {
@@ -300,7 +328,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 						String value = parts[1];
 
 						if (name.equals("config")) {
-							filenameBase(value);
+							setFilenameBase(value);
 						}
 
 						setNested(name, value);
@@ -319,7 +347,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	}
 
 	@Override
-	public Config root() {
+	public ConfigImpl root() {
 		return root;
 	}
 
@@ -335,6 +363,8 @@ public class ConfigImpl extends RapidoidThing implements Config {
 
 	@Override
 	public Map<String, String> toFlatMap() {
+		makeSureIsInitialized();
+
 		Map<String, String> flatMap = U.map();
 		Map<String, Object> map = toMap();
 
@@ -362,6 +392,8 @@ public class ConfigImpl extends RapidoidThing implements Config {
 
 	@Override
 	public Properties toProperties() {
+		makeSureIsInitialized();
+
 		Properties props = new Properties();
 		props.putAll(toFlatMap());
 		return props;
@@ -373,23 +405,72 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	}
 
 	@Override
-	public String filenameBase() {
-		return filenameBase;
+	public String getFilenameBase() {
+		return base.getFilenameBase();
 	}
 
 	@Override
-	public synchronized Config filenameBase(String filenameBase) {
-		if (U.neq(this.filenameBase, filenameBase)) {
-			Log.info("Changing configuration filename base", "!from", this.filenameBase, "!to", filenameBase);
-		}
+	public Config setFilenameBase(String filenameBase) {
 
-		this.filenameBase = filenameBase;
+		base.setFilenameBase(filenameBase);
+		reset(); // reset to apply changes
+
+		return this;
+	}
+
+	@Override
+	public String getPath() {
+		return base.getPath();
+	}
+
+	@Override
+	public Config setPath(String path) {
+
+		base.setPath(path);
+		reset(); // reset to apply changes
+
 		return this;
 	}
 
 	@Override
 	public void applyTo(Object target) {
+		makeSureIsInitialized();
 		Beany.update(target, toMap());
+	}
+
+	private void makeSureIsInitialized() {
+		if (!base.initialized) {
+			synchronized (this) {
+				if (!base.initialized) {
+					base.initialized = true;
+					root.initialize();
+				}
+			}
+		}
+	}
+
+	protected synchronized void initialize() {
+		List<List<String>> detached = ConfigUtil.untrack();
+
+		List<String> loaded = U.list();
+
+		ConfigLoaderUtil.loadDefaultConfig(this, loaded);
+		ConfigLoaderUtil.loadConfig(this, detached, loaded);
+
+		args(Env.args());
+
+		Conf.applyConfig(this);
+
+		if (!loaded.isEmpty()) {
+			Log.info("Loaded configuration", "!files", loaded);
+		} else {
+			Log.warn("Didn't find any configuration files", "path", getPath());
+		}
+	}
+
+	@Override
+	public boolean useBuiltInDefaults() {
+		return base.useBuiltInDefaults();
 	}
 
 }

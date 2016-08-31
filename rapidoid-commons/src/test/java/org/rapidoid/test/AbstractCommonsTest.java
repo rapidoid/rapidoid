@@ -28,9 +28,9 @@ import org.rapidoid.util.Msc;
 public abstract class AbstractCommonsTest extends TestCommons {
 
 	@Before
-	public void openContext() {
+	public final void resetContext() {
 		Msc.reset();
-		Conf.setPath(getTestName());
+		Conf.ROOT.setPath(getTestName());
 	}
 
 	protected void verify(String name, Object actual) {

@@ -847,7 +847,8 @@ public class Msc extends RapidoidThing implements Constants {
 
 		for (Class<?> clazz : toInvoke) {
 			Msc.logSection("Invoking @Run component: " + clazz.getName());
-			Msc.invokeMain(clazz, Conf.getArgs());
+			String[] args = U.arrayOf(String.class, Env.args());
+			Msc.invokeMain(clazz, args);
 		}
 	}
 
@@ -960,7 +961,7 @@ public class Msc extends RapidoidThing implements Constants {
 		return profiles == null || Env.hasAnyProfile(profiles.value());
 	}
 
-	public static boolean insideTest() {
+	public static boolean isInsideTest() {
 		StackTraceElement[] trace = Thread.currentThread().getStackTrace();
 
 		for (StackTraceElement traceElement : trace) {
@@ -981,17 +982,15 @@ public class Msc extends RapidoidThing implements Constants {
 	}
 
 	public static void reset() {
+		Env.reset();
 		Events.reset();
 		Log.setLogLevel(LogLevel.INFO);
-
-		Env.profiles().clear();
-		Env.profiles().add(Env.PROFILE_DEFAULT);
-
 		Crypto.reset();
 		Res.reset();
 		AppInfo.reset();
 		Conf.reset();
 		JDBC.reset();
+		Env.reset();
 	}
 
 	public static boolean isAscii(String s) {

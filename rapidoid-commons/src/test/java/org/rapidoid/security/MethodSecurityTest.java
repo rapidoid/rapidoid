@@ -25,7 +25,7 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.config.Conf;
+import org.rapidoid.commons.Env;
 import org.rapidoid.security.annotation.Administrator;
 import org.rapidoid.security.annotation.Manager;
 import org.rapidoid.security.annotation.Moderator;
@@ -130,7 +130,7 @@ public class MethodSecurityTest extends SecurityTestCommons {
 
 		methods2 = U.arrayOf(Method.class, aa2, bb2, noAnn2, dd2, ee2);
 
-		Conf.args("mode=production");
+		Env.setArgs("mode=production");
 	}
 
 	@Test

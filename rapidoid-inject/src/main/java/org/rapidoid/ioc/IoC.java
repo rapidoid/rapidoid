@@ -64,4 +64,7 @@ public class IoC extends RapidoidThing {
 		return new IoCContextWrapper(new IoCContextImpl());
 	}
 
+	public static void reset() {
+		defaultContext().reset();
+	}
 }
