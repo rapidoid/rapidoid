@@ -20,7 +20,6 @@ package org.rapidoid.config;
  * #L%
  */
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
@@ -31,11 +30,7 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
-public class ConfigBase extends RapidoidThing {
-
-	static {
-		RapidoidInitializer.initialize();
-	}
+public class ConfigBase extends RapidoidInitializer {
 
 	private final String defaultFilenameBase;
 

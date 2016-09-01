@@ -59,7 +59,7 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class Setup extends RapidoidThing implements Constants {
+public class Setup extends RapidoidInitializer implements Constants {
 
 	static final Setup ON = new Setup("app", "main", "0.0.0.0", 8888, IoC.defaultContext(), Conf.ROOT, Conf.ON);
 	static final Setup ADMIN = new Setup("admin", "admin", "0.0.0.0", 8888, IoC.defaultContext(), Conf.ROOT, Conf.ADMIN);
@@ -67,8 +67,6 @@ public class Setup extends RapidoidThing implements Constants {
 	private static final List<Setup> instances = Coll.synchronizedList(ON, ADMIN);
 
 	static {
-		RapidoidInitializer.initialize();
-
 		Jobs.execute(new Runnable() {
 			@Override
 			public void run() {

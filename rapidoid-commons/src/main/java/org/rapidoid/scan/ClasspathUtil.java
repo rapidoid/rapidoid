@@ -2,11 +2,11 @@ package org.rapidoid.scan;
 
 import javassist.bytecode.AnnotationsAttribute;
 import javassist.bytecode.ClassFile;
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Str;
+import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
@@ -44,7 +44,7 @@ import java.util.zip.ZipFile;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class ClasspathUtil extends RapidoidThing {
+public class ClasspathUtil extends RapidoidInitializer {
 
 	private static final Set<String> CLASSPATH = new TreeSet<String>();
 

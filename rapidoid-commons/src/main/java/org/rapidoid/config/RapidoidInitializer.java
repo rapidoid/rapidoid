@@ -35,6 +35,10 @@ import java.lang.management.ManagementFactory;
 @Since("5.1.0")
 public class RapidoidInitializer extends RapidoidThing {
 
+	static {
+		initialize();
+	}
+
 	private static volatile boolean initialized;
 
 	public static synchronized void initialize() {

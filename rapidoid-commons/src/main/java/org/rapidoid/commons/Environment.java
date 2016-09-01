@@ -1,6 +1,5 @@
 package org.rapidoid.commons;
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
@@ -36,7 +35,7 @@ import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
-public class Environment extends RapidoidThing {
+public class Environment extends RapidoidInitializer {
 
 	private volatile Set<String> profiles;
 
@@ -80,10 +79,6 @@ public class Environment extends RapidoidThing {
 
 	@SuppressWarnings("ConstantConditions")
 	private void initModeAndProfiles() {
-
-		if (mode == null) {
-			RapidoidInitializer.initialize();
-		}
 
 		if (U.isEmpty(profiles)) {
 			profiles = Coll.synchronizedSet();

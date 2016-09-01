@@ -1,6 +1,5 @@
 package org.rapidoid.job;
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.activity.RapidoidThreadFactory;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -39,15 +38,13 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class Jobs extends RapidoidThing {
+public class Jobs extends RapidoidInitializer {
 
 	public static final Config JOBS = Conf.JOBS;
 
 	private static final AtomicLong errorCounter = new AtomicLong();
 
 	static {
-		RapidoidInitializer.initialize();
-
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
 				shutdownNow();

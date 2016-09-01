@@ -1,6 +1,5 @@
 package org.rapidoid.http;
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.RapidoidInitializer;
@@ -31,13 +30,9 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class HTTP extends RapidoidThing {
+public class HTTP extends RapidoidInitializer {
 
 	private static volatile HttpClient client = client();
-
-	static {
-		RapidoidInitializer.initialize();
-	}
 
 	public static final String CONTENT_TYPE_MULTIPART = "multipart/form-data";
 	public static final String CONTENT_TYPE_FORM_URLENCODED = "application/x-www-form-urlencoded";

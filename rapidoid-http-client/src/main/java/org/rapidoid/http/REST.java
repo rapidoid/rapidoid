@@ -1,6 +1,5 @@
 package org.rapidoid.http;
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Err;
@@ -32,11 +31,7 @@ import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class REST extends RapidoidThing {
-
-	static {
-		RapidoidInitializer.initialize();
-	}
+public class REST extends RapidoidInitializer {
 
 	public static final RESTClient DEFAULT_CLIENT = new RESTClient();
 
