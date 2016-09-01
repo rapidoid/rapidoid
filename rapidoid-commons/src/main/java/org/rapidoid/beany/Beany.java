@@ -191,10 +191,13 @@ public class Beany extends RapidoidThing {
 	public static BeanProperties propertiesOf(Object obj) {
 		if (obj == null) {
 			return BeanProperties.NONE;
+
 		} else if (obj instanceof Map) {
 			return BeanProperties.from(((Map) obj));
+
 		} else if (obj instanceof Class) {
 			return propertiesOf((Class) obj);
+
 		} else {
 			return propertiesOf(obj.getClass());
 		}

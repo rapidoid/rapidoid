@@ -60,12 +60,14 @@ public class GenericValueRetriever extends RapidoidThing implements ValueRetriev
 			return cachedProp.getFast(target);
 		}
 
-		Prop prop = Beany.property(cls, property, false);
+		if (!(target instanceof Map)) {
+			Prop prop = Beany.property(target, property, false);
 
-		if (prop != null && prop instanceof BeanProp) {
-			cachedProp = prop;
-			cachedModelType = cls;
-			return cachedProp.getFast(target);
+			if (prop != null && prop instanceof BeanProp) {
+				cachedProp = prop;
+				cachedModelType = cls;
+				return cachedProp.getFast(target);
+			}
 		}
 
 		return propOf(property, model);
