@@ -64,8 +64,6 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 
 	@Override
 	public final HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
-		U.notNull(req, "HTTP request");
-
 		return options.managed()
 			? handleDecorating(ctx, isKeepAlive, req, extra)
 			: handleNonDecorating(ctx, isKeepAlive, req, extra);
