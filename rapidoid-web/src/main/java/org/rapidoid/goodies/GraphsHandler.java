@@ -38,10 +38,10 @@ public class GraphsHandler extends GUI implements Callable<Object> {
 
 	@Override
 	public Object call() throws Exception {
-		return graphs(2);
+		return multi(graphs(2));
 	}
 
-	public static Object graphs(int perRow) {
+	public static List<Tag> graphs(int perRow) {
 		List<Tag> rows = U.list();
 		Map<String, TimeSeries> metrics = Metrics.all();
 
