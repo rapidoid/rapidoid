@@ -39,6 +39,10 @@ public class ConfigBase extends RapidoidThing {
 
 	final Map<String, Object> properties = Coll.synchronizedMap();
 
+	final Map<String, Object> args = Coll.synchronizedMap();
+
+	volatile boolean initializing;
+
 	volatile boolean initialized;
 
 	volatile String path = "";
@@ -53,24 +57,48 @@ public class ConfigBase extends RapidoidThing {
 
 	synchronized void reset() {
 		this.properties.clear();
+		this.args.clear();
+
 		this.filenameBase = this.defaultFilenameBase;
+		this.path = "";
+
 		this.initialized = false;
+		this.initializing = false;
+	}
+
+	synchronized void invalidate() {
+		this.properties.clear();
+
+		this.initialized = false;
+		this.initializing = false;
 	}
 
 	String getFilenameBase() {
 		return filenameBase;
 	}
 
-	synchronized void setFilenameBase(String filenameBase) {
+	synchronized boolean setFilenameBase(String filenameBase) {
+
 		if (U.neq(this.filenameBase, filenameBase)) {
 			Log.info("Changing configuration filename base", "!from", this.filenameBase, "!to", filenameBase);
+
+			this.filenameBase = filenameBase;
+			return true;
 		}
 
-		this.filenameBase = filenameBase;
+		return false;
 	}
 
-	void setPath(String path) {
-		this.path = path;
+	boolean setPath(String path) {
+
+		if (U.neq(this.path, path)) {
+			Log.info("Changing configuration path", "!from", this.path, "!to", path);
+
+			this.path = path;
+			return true;
+		}
+
+		return false;
 	}
 
 	String getPath() {
@@ -79,6 +107,14 @@ public class ConfigBase extends RapidoidThing {
 
 	public boolean useBuiltInDefaults() {
 		return useBuiltInDefaults;
+	}
+
+	void putArg(String name, Object value) {
+		args.put(name, value);
+	}
+
+	void applyArgsTo(Config config) {
+		config.updateNested(args);
 	}
 
 }

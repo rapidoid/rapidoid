@@ -76,6 +76,12 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	}
 
 	@Override
+	public void invalidate() {
+		clear();
+		base.invalidate();
+	}
+
+	@Override
 	public Value<Object> entry(String key) {
 		return Values.wrap(new ConfigValueStore<Object>(this, key));
 	}
@@ -316,6 +322,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 
 	@Override
 	public void args(List<String> args) {
+		mustBeRoot();
 		makeSureIsInitialized();
 
 		if (U.notEmpty(args)) {
@@ -331,16 +338,21 @@ public class ConfigImpl extends RapidoidThing implements Config {
 							setFilenameBase(value);
 						}
 
-						setNested(name, value);
+						base.putArg(name, value);
 					} else {
-						setNested(name, true);
+						base.putArg(name, true);
 					}
 				}
 			}
 		}
 	}
 
-	private void setNested(String key, Object value) {
+	private void mustBeRoot() {
+		U.must(isRoot, "Must be Config's root!");
+	}
+
+	@Override
+	public void setNested(String key, Object value) {
 		String[] keys = key.split("\\.");
 		Config cfg = keys.length > 1 ? sub(Arr.sub(keys, 0, -1)) : this;
 		cfg.set(U.last(keys), value);
@@ -412,8 +424,9 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	@Override
 	public Config setFilenameBase(String filenameBase) {
 
-		base.setFilenameBase(filenameBase);
-		reset(); // reset to apply changes
+		if (base.setFilenameBase(filenameBase)) {
+			invalidate(); // clear to apply changes
+		}
 
 		return this;
 	}
@@ -426,8 +439,9 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	@Override
 	public Config setPath(String path) {
 
-		base.setPath(path);
-		reset(); // reset to apply changes
+		if (base.setPath(path)) {
+			invalidate(); // clear to apply changes
+		}
 
 		return this;
 	}
@@ -439,26 +453,38 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	}
 
 	private void makeSureIsInitialized() {
+		if (base.initializing) {
+			return;
+		}
+
 		if (!base.initialized) {
 			synchronized (this) {
 				if (!base.initialized) {
-					base.initialized = true;
+					base.initializing = true;
 					root.initialize();
+					base.initialized = true;
 				}
 			}
 		}
 	}
 
 	protected synchronized void initialize() {
-		List<List<String>> detached = ConfigUtil.untrack();
+		mustBeRoot();
 
+		List<List<String>> detached = ConfigUtil.untrack();
 		List<String> loaded = U.list();
+
+		args(Env.args());
+		base.applyArgsTo(this);
+
+		if (useBuiltInDefaults()) {
+			ConfigLoaderUtil.loadBuiltInConfig(this, loaded);
+		}
 
 		ConfigLoaderUtil.loadDefaultConfig(this, loaded);
 		ConfigLoaderUtil.loadConfig(this, detached, loaded);
 
-		args(Env.args());
-
+		base.applyArgsTo(this);
 		Conf.applyConfig(this);
 
 		if (!loaded.isEmpty()) {
@@ -471,6 +497,13 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	@Override
 	public boolean useBuiltInDefaults() {
 		return base.useBuiltInDefaults();
+	}
+
+	@Override
+	public void updateNested(Map<String, Object> properties) {
+		for (Map.Entry<String, Object> prop : properties.entrySet()) {
+			setNested(prop.getKey(), prop.getValue());
+		}
 	}
 
 }

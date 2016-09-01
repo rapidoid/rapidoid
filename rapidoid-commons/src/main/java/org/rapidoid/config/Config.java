@@ -59,6 +59,8 @@ public interface Config extends BasicConfig {
 	@SuppressWarnings("unchecked")
 	void update(Map<String, ?> entries, boolean overridenByEnv);
 
+	void setNested(String key, Object value);
+
 	Config root();
 
 	Config parent();
@@ -85,5 +87,10 @@ public interface Config extends BasicConfig {
 
 	void reset();
 
+	void invalidate();
+
 	boolean useBuiltInDefaults();
+
+	void updateNested(Map<String, Object> properties);
+
 }

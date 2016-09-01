@@ -88,4 +88,25 @@ public class ConfigurationTest extends AbstractCommonsTest {
 		eq(Env.profiles(), U.set("test", "default"));
 	}
 
+	@Test
+	public void testPathChange() {
+		Env.setArgs("config=myconfig");
+
+		checkDefaults();
+	}
+
+	@Test
+	public void testUsersConfigWithArgs() {
+		String pswd = "m-i_h?1f~@121";
+		Env.setArgs("users.admin.password=abc123", "users.nick.password=" + pswd, "users.nick.roles=moderator");
+
+		checkDefaults();
+
+		eq(Conf.USERS.toMap().keySet(), U.set("admin", "nick"));
+
+		eq(Conf.USERS.sub("admin").toMap(), U.map("roles", "administrator", "password", "abc123"));
+
+		eq(Conf.USERS.sub("nick").toMap(), U.map("roles", "moderator", "password", pswd));
+	}
+
 }
