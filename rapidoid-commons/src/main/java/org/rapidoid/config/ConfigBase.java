@@ -33,6 +33,10 @@ import java.util.Map;
 @Since("5.2.0")
 public class ConfigBase extends RapidoidThing {
 
+	static {
+		RapidoidInitializer.initialize();
+	}
+
 	private final String defaultFilenameBase;
 
 	private final boolean useBuiltInDefaults;

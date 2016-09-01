@@ -119,6 +119,8 @@ public class Environment extends RapidoidThing {
 
 		String modeProfile = mode.name().toLowerCase();
 		profiles.add(modeProfile);
+
+		Log.info("Initialized environment", "!mode", mode, "!profiles", profiles);
 	}
 
 	private static EnvMode inferMode() {
