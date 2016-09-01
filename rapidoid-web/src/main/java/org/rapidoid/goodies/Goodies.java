@@ -192,13 +192,15 @@ public class Goodies extends RapidoidThing {
 
 		auth(setup);
 
-		if (Conf.USERS.isEmpty() && Env.dev()) {
-			String pass = generatedAdminPassword();
-
+		if (Env.dev()) {
 			Config admin = Conf.USERS.sub("admin");
-			admin.set("password", pass);
 
-			Msc.logSection("ADMIN CREDENTIALS: username = " + AnsiColor.bold("admin") + ", password = " + AnsiColor.bold(pass));
+			if (!admin.has("password") && !admin.has("hash")) {
+				String pass = generatedAdminPassword();
+				admin.set("password", pass);
+
+				Msc.logSection("ADMIN CREDENTIALS: username = " + AnsiColor.bold("admin") + ", password = " + AnsiColor.bold(pass));
+			}
 		}
 	}
 
