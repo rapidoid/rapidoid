@@ -10,6 +10,7 @@ import org.rapidoid.http.impl.HttpIO;
 import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.lambda.Mapper;
+import org.rapidoid.log.LogLevel;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.security.Secure;
 import org.rapidoid.u.U;
@@ -274,7 +275,7 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 		req.revert();
 		req.async();
 
-		HttpIO.error(req, e);
+		HttpIO.error(req, e, LogLevel.ERROR);
 		// the Req object will do the rendering
 		req.done();
 

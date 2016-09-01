@@ -16,6 +16,7 @@ import org.rapidoid.http.*;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
+import org.rapidoid.log.LogLevel;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Msc;
@@ -143,12 +144,13 @@ public class HttpIO extends RapidoidThing {
 		writeResponse(ctx, isKeepAlive, 200, contentTypeHeader, content);
 	}
 
-	public static void error(final Req req, final Throwable error) {
-		Log.debug("HTTP handler error!", "error", error);
-
+	public static void error(final Req req, final Throwable error, LogLevel logLevel) {
 		try {
+			logError(req, error, logLevel);
+
 			Resp resp = req.response().code(500).result(null);
 			Object result = Customization.of(req).errorHandler().handleError(req, resp, error);
+
 			result = HttpUtils.postprocessResult(req, result);
 			HttpUtils.resultToResponse(req, result);
 
@@ -158,7 +160,52 @@ public class HttpIO extends RapidoidThing {
 		}
 	}
 
-	public static HttpStatus errorAndDone(final Req req, final Throwable error) {
+	private static void logError(Req req, Throwable error, LogLevel logLevel) {
+
+		if (error instanceof NotFound) return;
+
+		if (Msc.isValidationError(error)) {
+			if (Log.isDebugEnabled()) {
+				Log.debug("Validation error when handling request: " + req);
+				error.printStackTrace();
+			}
+			return;
+		}
+
+		if (error instanceof SecurityException) {
+			Log.warn("Access denied for request: " + req, "client", req.clientIpAddress());
+			return;
+		}
+
+		String msg = "Error occurred when handling request!";
+
+		switch (logLevel) {
+
+			// FIXME add proper support e.g. Log.msg(logLevel...)
+
+			case TRACE:
+				Log.trace(msg, "error", error);
+				break;
+
+			case DEBUG:
+				Log.debug(msg, "error", error);
+				break;
+
+			case INFO:
+				Log.info(msg, "error", error);
+				break;
+
+			case WARN:
+				Log.warn(msg, "error", error);
+				break;
+
+			case ERROR:
+				Log.error(msg, "error", error);
+				break;
+		}
+	}
+
+	public static HttpStatus errorAndDone(final Req req, final Throwable error, final LogLevel logLevel) {
 
 		req.revert();
 		req.async();
@@ -166,7 +213,7 @@ public class HttpIO extends RapidoidThing {
 		Runnable errorHandler = new Runnable() {
 			@Override
 			public void run() {
-				error(req, error);
+				error(req, error, logLevel);
 				// the Req object will do the rendering
 				req.done();
 			}

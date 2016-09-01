@@ -2,12 +2,13 @@ package org.rapidoid.reverseproxy;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.MediaType;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.http.*;
 import org.rapidoid.http.impl.HttpIO;
+import org.rapidoid.log.LogLevel;
 import org.rapidoid.u.U;
 
+import java.net.ConnectException;
 import java.util.List;
 import java.util.Map;
 
@@ -45,7 +46,7 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 
 		req.async();
 
-		String targetUrl = mapping.getTargetUrl(req);
+		final String targetUrl = mapping.getTargetUrl(req);
 
 		Map<String, String> headers = req.headers();
 		headers.remove("transfer-encoding");
@@ -71,8 +72,14 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 						resp.code(result.code());
 						resp.body(result.bodyBytes());
 						resp.done();
+
 					} else {
-						HttpIO.errorAndDone(req, error);
+
+						if (error instanceof ConnectException) {
+							HttpIO.errorAndDone(req, U.rte("Couldn't connect to the upstream!", error), LogLevel.DEBUG);
+						} else {
+							HttpIO.errorAndDone(req, error, LogLevel.ERROR);
+						}
 					}
 				}
 

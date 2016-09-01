@@ -31,6 +31,7 @@ import org.rapidoid.http.customize.StaticFilesSecurity;
 import org.rapidoid.http.impl.HttpIO;
 import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.io.Res;
+import org.rapidoid.log.LogLevel;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
 
@@ -72,7 +73,7 @@ public class StaticResourcesHandler extends AbstractHttpHandler {
 			return HttpStatus.NOT_FOUND;
 
 		} catch (Exception e) {
-			return HttpIO.errorAndDone(req, e);
+			return HttpIO.errorAndDone(req, e, LogLevel.ERROR);
 		}
 	}
 

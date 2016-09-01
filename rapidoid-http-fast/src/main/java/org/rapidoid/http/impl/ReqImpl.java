@@ -16,6 +16,7 @@ import org.rapidoid.http.customize.JsonRequestBodyParser;
 import org.rapidoid.http.customize.SessionManager;
 import org.rapidoid.io.Upload;
 import org.rapidoid.log.Log;
+import org.rapidoid.log.LogLevel;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.abstracts.IRequest;
 import org.rapidoid.u.U;
@@ -552,7 +553,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 			return response.renderToBytes();
 
 		} catch (Throwable e) {
-			HttpIO.error(this, e);
+			HttpIO.error(this, e, LogLevel.ERROR);
 
 			try {
 				return response.renderToBytes();

@@ -17,6 +17,7 @@ import org.rapidoid.http.impl.*;
 import org.rapidoid.http.processor.AbstractHttpProcessor;
 import org.rapidoid.io.Upload;
 import org.rapidoid.log.Log;
+import org.rapidoid.log.LogLevel;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.u.U;
@@ -242,7 +243,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		if (req != null) {
 			if (!((ReqImpl) req).isStopped()) {
 				try {
-					HttpIO.errorAndDone(req, e);
+					HttpIO.errorAndDone(req, e, LogLevel.ERROR);
 				} catch (Exception e1) {
 					Log.error("HTTP error handler error!", e1);
 					internalServerError(channel, isKeepAlive, req);

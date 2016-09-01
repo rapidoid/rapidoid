@@ -7,9 +7,7 @@ import org.rapidoid.config.BasicConfig;
 import org.rapidoid.http.*;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.ErrorHandler;
-import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
 
 import java.util.Map;
 
@@ -112,21 +110,6 @@ public class DefaultErrorHandler extends RapidoidThing implements ErrorHandler {
 				return error;
 			} else {
 				return resp.view("404").result(U.map("req", req));
-			}
-		}
-
-		boolean validation = Msc.isValidationError(error);
-
-		if (!validation) {
-			if (error instanceof SecurityException) {
-				Log.warn("Access denied for request: " + req, "client", req.clientIpAddress());
-			} else {
-				Log.error("Error occurred when handling request: " + req, error);
-			}
-		} else {
-			if (Log.isDebugEnabled()) {
-				Log.debug("Validation error when handling request: " + req);
-				error.printStackTrace();
 			}
 		}
 
