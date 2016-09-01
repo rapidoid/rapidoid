@@ -23,6 +23,7 @@ package org.rapidoid.setup;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.*;
 import org.rapidoid.collection.Coll;
+import org.rapidoid.commons.Arr;
 import org.rapidoid.commons.Env;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.ConfigHelp;
@@ -43,7 +44,6 @@ import org.rapidoid.util.Msc;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import java.lang.annotation.Annotation;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -74,9 +74,30 @@ public class App extends RapidoidThing {
 		}
 	});
 
+	public static void args(String[] args, String... extraArgs) {
+		args(Arr.concat(args, extraArgs));
+	}
+
 	public static void args(String... args) {
 		ConfigHelp.processHelp(args);
 		Env.setArgs(args);
+
+		for (String arg : args) {
+			if (arg.contains("->")) {
+				processProxyArg(arg);
+			}
+		}
+	}
+
+	public static AppBootstrap bootstrap(String[] args, String... extraArgs) {
+		return bootstrap(Arr.concat(args, extraArgs));
+	}
+
+	public static AppBootstrap bootstrap(String... args) {
+		args(args);
+		scan();
+
+		return new AppBootstrap();
 	}
 
 	public static void profiles(String... profiles) {
@@ -244,29 +265,6 @@ public class App extends RapidoidThing {
 
 	public static IoCContext context() {
 		return IoC.defaultContext();
-	}
-
-	public static AppBootstrap bootstrap(String[] args, String... extraArgs) {
-		List<String> allArgs = U.list(args);
-		Collections.addAll(allArgs, extraArgs);
-		return appBootstrap(U.arrayOf(String.class, allArgs));
-	}
-
-	public static AppBootstrap bootstrap(String... args) {
-		return appBootstrap(args);
-	}
-
-	public static AppBootstrap appBootstrap(String[] args) {
-		args(args);
-		scan();
-
-		for (String arg : args) {
-			if (arg.contains("->")) {
-				processProxyArg(arg);
-			}
-		}
-
-		return new AppBootstrap();
 	}
 
 	private static void processProxyArg(String arg) {
