@@ -76,6 +76,11 @@ public class Conf extends RapidoidThing {
 			if (U.notEmpty(root)) {
 				Res.root(root);
 			}
+
+			boolean fancy = ROOT.entry("fancy").bool().or(false);
+			if (fancy) {
+				Log.setStyled(true);
+			}
 		}
 	}
 

@@ -46,7 +46,7 @@ public class ReverseProxyMapDSL extends RapidoidThing {
 	}
 
 	public ProxyMapping to(List<String> upstreams) {
-		Log.info("Reverse proxy mapping", "!uriPrefix", uriPrefix, "!upstreams", upstreams);
+		Log.info("!Reverse proxy mapping", "!uriPrefix", uriPrefix, "!upstreams", upstreams);
 
 		List<ProxyUpstream> proxyUpstreams = U.list();
 

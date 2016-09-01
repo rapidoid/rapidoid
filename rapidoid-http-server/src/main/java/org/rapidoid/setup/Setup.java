@@ -245,8 +245,6 @@ public class Setup extends RapidoidThing implements Constants {
 		}
 		activated = true;
 
-		Log.setStyled(Env.dev());
-
 		if (!reloaded) {
 			listen();
 		}
