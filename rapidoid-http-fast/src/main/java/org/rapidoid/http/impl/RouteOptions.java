@@ -45,7 +45,7 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 
 	private volatile String zone;
 
-	private volatile boolean decorated = true;
+	private volatile boolean managed = true;
 
 	private volatile TransactionMode transactionMode = TransactionMode.NONE;
 
@@ -143,13 +143,13 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 	}
 
 	@Override
-	public boolean decorated() {
-		return decorated;
+	public boolean managed() {
+		return managed;
 	}
 
 	@Override
-	public RouteOptions decorated(boolean decorated) {
-		this.decorated = decorated;
+	public RouteOptions managed(boolean managed) {
+		this.managed = managed;
 		return this;
 	}
 
@@ -163,7 +163,7 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 		copy.roles(U.arrayOf(String.class, roles));
 		copy.wrappers(wrappers());
 		copy.zone(zone());
-		copy.decorated(decorated());
+		copy.managed(managed());
 
 		return copy;
 	}
@@ -176,7 +176,7 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 		RouteOptions that = (RouteOptions) o;
 
 		if (mvc != that.mvc) return false;
-		if (decorated != that.decorated) return false;
+		if (managed != that.managed) return false;
 		if (contentType != null ? !contentType.equals(that.contentType) : that.contentType != null) return false;
 		if (view != null ? !view.equals(that.view) : that.view != null) return false;
 		if (zone != null ? !zone.equals(that.zone) : that.zone != null) return false;
@@ -192,7 +192,7 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 		result = 31 * result + (view != null ? view.hashCode() : 0);
 		result = 31 * result + (mvc ? 1 : 0);
 		result = 31 * result + (zone != null ? zone.hashCode() : 0);
-		result = 31 * result + (decorated ? 1 : 0);
+		result = 31 * result + (managed ? 1 : 0);
 		result = 31 * result + (transactionMode != null ? transactionMode.hashCode() : 0);
 		result = 31 * result + (roles != null ? roles.hashCode() : 0);
 		result = 31 * result + Arrays.hashCode(wrappers);

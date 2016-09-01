@@ -396,8 +396,8 @@ public class OnRoute extends RapidoidThing {
 		return this;
 	}
 
-	public OnRoute decorated(boolean decorated) {
-		options.decorated(decorated);
+	public OnRoute managed(boolean managed) {
+		options.managed(managed);
 		return this;
 	}
 

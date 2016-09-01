@@ -54,7 +54,7 @@ public class CallableHttpHandler extends AbstractDecoratingHttpHandler {
 
 	@Override
 	public boolean needsParams() {
-		return options.decorated();
+		return options.managed();
 	}
 
 }
