@@ -42,7 +42,7 @@ public class JarUploadHandler extends GUI implements ReqHandler {
 		if (appJar != null) {
 			Upload jar = req.file("file");
 			IO.save(appJar, jar.content());
-			Log.info("Saved new JAR", "size", jar.content().length);
+			Log.info("Saved new JAR", "size", jar.content().length, "destination", appJar);
 
 			if (req.header("User-Agent", "").toLowerCase().startsWith("curl/")) {
 				return req.response().plain(AnsiColor.green("Successfully uploaded the JAR.\n"));

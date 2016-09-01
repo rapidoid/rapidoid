@@ -351,7 +351,17 @@ public class Res extends RapidoidThing {
 
 	public static void root(String root) {
 		File dir = new File(root);
-		Log.info("Setting root folder for the resources", "!root", root, "exists", dir.exists() && dir.isDirectory());
+
+		if (dir.exists()) {
+			if (dir.isDirectory()) {
+				Log.info("Setting application root", "!root", root, "!content", dir.listFiles());
+			} else {
+				Log.error("The configured application root must be a folder!", "!root", root);
+			}
+		} else {
+			Log.error("The configured application root folder doesn't exist!", "!root", root);
+		}
+
 		Res.ROOT = root;
 	}
 

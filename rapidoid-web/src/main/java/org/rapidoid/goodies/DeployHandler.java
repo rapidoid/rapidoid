@@ -56,22 +56,22 @@ public class DeployHandler extends GUI implements Callable<Object> {
 
 			info.add(h6(copy(b(cmd))));
 
+			Btn shutdown = btn("Shutdown / Restart").danger()
+				.confirm("Do you really want to SHUTDOWN / RESTART the application?")
+				.onClick(new Runnable() {
+					@Override
+					public void run() {
+						TerminateHandler.shutdownSoon();
+					}
+				});
+
+			info.add(br());
+			info.add(shutdown);
+
 		} else {
 			info.add(h3(WARN, " No ", b("app.jar"), " file was configured on the classpath, so application deployment is disabled!"));
 			info.add(h4("Application deployment works by uploading a JAR which overwrites the file 'app.jar', and restarting the application."));
 		}
-
-		Btn shutdown = btn("Shutdown / Restart").danger()
-			.confirm("Do you really want to SHUTDOWN / RESTART the application?")
-			.onClick(new Runnable() {
-				@Override
-				public void run() {
-					TerminateHandler.shutdownSoon();
-				}
-			});
-
-		info.add(br());
-		info.add(shutdown);
 
 		return multi(info);
 	}
