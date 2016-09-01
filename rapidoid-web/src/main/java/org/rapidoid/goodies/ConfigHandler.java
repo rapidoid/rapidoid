@@ -63,7 +63,7 @@ public class ConfigHandler extends GUI implements Callable<Object> {
 			grids.add(1, grid(root));
 		}
 
-		return grids;
+		return multi(grids);
 	}
 
 	private String styleOf(String key) {

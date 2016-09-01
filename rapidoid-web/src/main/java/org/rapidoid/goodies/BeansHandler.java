@@ -40,7 +40,7 @@ public class BeansHandler extends GUI implements Callable<Object> {
 		routes.add(h3("Application context of managed beans:"));
 		routes.add(grid(IoC.defaultContext().info()));
 
-		return routes;
+		return multi(routes);
 	}
 
 }

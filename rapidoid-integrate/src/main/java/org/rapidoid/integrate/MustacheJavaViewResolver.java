@@ -2,22 +2,18 @@ package org.rapidoid.integrate;
 
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
-import com.github.mustachejava.MustacheFactory;
 import com.github.mustachejava.MustacheResolver;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.collection.Coll;
 import org.rapidoid.http.View;
 import org.rapidoid.http.customize.ResourceLoader;
 import org.rapidoid.http.impl.AbstractViewResolver;
-import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.Map;
 
 /*
  * #%L
@@ -41,26 +37,21 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
-public class MustacheJavaViewResolver extends AbstractViewResolver {
-
-	protected final Map<ResourceLoader, MustacheFactory> factoriesPerLoader = Coll.autoExpandingMap(
-		new Mapper<ResourceLoader, MustacheFactory>() {
-			@Override
-			public MustacheFactory map(ResourceLoader templateLoader) throws Exception {
-				return new DefaultMustacheFactory(mustacheResolver(templateLoader));
-			}
-		});
+public class MustacheJavaViewResolver extends AbstractViewResolver<DefaultMustacheFactory> {
 
 	@Override
 	public View getView(String viewName, ResourceLoader templateLoader) throws Exception {
 
-		String filename = filename(viewName);
-		final String template = new String(templateLoader.load(filename));
+		DefaultMustacheFactory mf = getViewFactory(templateLoader);
 
-		MustacheFactory mf = factoriesPerLoader.get(templateLoader);
-		final Mustache mustache = mf.compile(new StringReader(template), filename);
+		Mustache mustache = mf.compile(filename(viewName));
 
 		return view(mustache);
+	}
+
+	@Override
+	protected DefaultMustacheFactory createViewFactory(ResourceLoader templateLoader) {
+		return new DefaultMustacheFactory(mustacheResolver(templateLoader));
 	}
 
 	protected View view(final Mustache mustache) {

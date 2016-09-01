@@ -39,18 +39,18 @@ public class RapidoidTemplate extends RapidoidThing implements Template {
 
 	private final TemplateRenderer template;
 
-	private final TemplateStore templates;
+	private final TemplateFactory factory;
 
-	public RapidoidTemplate(String filename, TemplateRenderer template, TemplateStore templates) {
+	public RapidoidTemplate(String filename, TemplateRenderer template, TemplateFactory factory) {
 		this.filename = filename;
 		this.template = template;
-		this.templates = templates;
+		this.factory = factory;
 	}
 
 	void doRenderMulti(RapidoidThreadLocals locals, OutputStream output, List<Object> model) {
 		RenderCtxImpl renderCtx = initRenderCtx(locals);
 
-		renderCtx.out(output).templates(templates).filename(filename).multiModel(model);
+		renderCtx.out(output).factory(factory).filename(filename).multiModel(model);
 
 		template.render(renderCtx);
 
@@ -60,7 +60,7 @@ public class RapidoidTemplate extends RapidoidThing implements Template {
 	void doRender(RapidoidThreadLocals locals, OutputStream output, Object model) {
 		RenderCtxImpl renderCtx = initRenderCtx(locals);
 
-		renderCtx.out(output).templates(templates).filename(filename).model(model);
+		renderCtx.out(output).factory(factory).filename(filename).model(model);
 
 		template.render(renderCtx);
 

@@ -27,6 +27,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.AnyObj;
 import org.rapidoid.commons.English;
 import org.rapidoid.commons.Str;
+import org.rapidoid.html.ElementGroup;
 import org.rapidoid.timeseries.TimeSeries;
 import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.gui.input.*;
@@ -864,6 +865,13 @@ public abstract class GUI extends HTML implements Role {
 
 	public static Tag copy(Object... content) {
 		return div(content).class_("copy-snippet");
+	}
+
+	public static boolean isGUI(Object result) {
+		return (result instanceof Tag)
+			|| (result instanceof HtmlPage)
+			|| (result instanceof TagWidget)
+			|| (result instanceof ElementGroup);
 	}
 
 }

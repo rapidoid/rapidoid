@@ -45,7 +45,7 @@ public class RenderCtxImpl extends RapidoidThing implements RenderCtx {
 
 	private volatile OutputStream out;
 	private volatile String ext;
-	private volatile TemplateStore templates;
+	private volatile TemplateFactory factory;
 
 	@Override
 	public void printAscii(String s) throws IOException {
@@ -135,7 +135,7 @@ public class RenderCtxImpl extends RapidoidThing implements RenderCtx {
 
 	@Override
 	public void call(String name) {
-		RapidoidTemplate template = (RapidoidTemplate) Templates.load(name + ext, templates);
+		RapidoidTemplate template = (RapidoidTemplate) factory.load(name + ext);
 		template.renderInContext(this);
 	}
 
@@ -169,14 +169,18 @@ public class RenderCtxImpl extends RapidoidThing implements RenderCtx {
 		return this;
 	}
 
-	public RenderCtxImpl templates(TemplateStore templates) {
-		this.templates = templates;
+	public RenderCtxImpl factory(TemplateFactory factory) {
+		this.factory = factory;
 		return this;
 	}
 
 	private String calcFileExt(String filename) {
-		String fileExt = Str.cutFromFirst(filename, ".");
-		return fileExt != null ? "." + fileExt : "";
+		if (U.notEmpty(filename)) {
+			String fileExt = Str.cutFromFirst(filename, ".");
+			return fileExt != null ? "." + fileExt : "";
+		} else {
+			return "";
+		}
 	}
 
 	public RenderCtxImpl filename(String filename) {

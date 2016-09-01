@@ -312,6 +312,11 @@ public class RespImpl extends RapidoidThing implements Resp {
 		return view != null ? view : HttpUtils.resName(req);
 	}
 
+	@Override
+	public Resp noView() {
+		return view("");
+	}
+
 	public boolean hasCustomView() {
 		return view != null;
 	}

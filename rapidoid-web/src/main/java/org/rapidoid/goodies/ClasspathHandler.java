@@ -53,7 +53,7 @@ public class ClasspathHandler extends GUI implements Callable<Object> {
 
 		info.add(grid(ClasspathUtil.getClasspathJars()).columns("trim").headers("Classpath entries (JARs)").pageSize(0));
 
-		return info;
+		return multi(info);
 	}
 
 }

@@ -461,6 +461,7 @@ org.rapidoid.jpa.Results
 org.rapidoid.jpa.SharedContextAwareEntityManagerProxy
 org.rapidoid.jpa.SharedEntityManagerFactoryProxy
 org.rapidoid.lambda.Calc
+org.rapidoid.lambda.Customizer
 org.rapidoid.lambda.Dynamic
 org.rapidoid.lambda.F2
 org.rapidoid.lambda.F3
@@ -546,6 +547,7 @@ org.rapidoid.reload.Reload
 org.rapidoid.render.FileSystemTemplateStore
 org.rapidoid.render.Getter
 org.rapidoid.render.RapidoidTemplate
+org.rapidoid.render.RapidoidTemplateFactory
 org.rapidoid.render.Render
 org.rapidoid.render.RenderCtx
 org.rapidoid.render.RenderCtxImpl
@@ -556,6 +558,7 @@ org.rapidoid.render.retriever.SelfRetriever
 org.rapidoid.render.retriever.ValueRetriever
 org.rapidoid.render.Template
 org.rapidoid.render.TemplateCompiler
+org.rapidoid.render.TemplateFactory
 org.rapidoid.render.TemplateParser
 org.rapidoid.render.TemplateRenderer
 org.rapidoid.render.Templates

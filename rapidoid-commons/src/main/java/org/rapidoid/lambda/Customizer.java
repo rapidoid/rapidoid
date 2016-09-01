@@ -1,8 +1,8 @@
-package org.rapidoid.viewrendering;
+package org.rapidoid.lambda;
 
 /*
  * #%L
- * rapidoid-integration-tests
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -20,35 +20,13 @@ package org.rapidoid.viewrendering;
  * #L%
  */
 
-import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.IntegrationTestCommons;
-import org.rapidoid.integrate.Integrate;
-import org.rapidoid.integrate.JMustacheViewResolver;
-import org.rapidoid.setup.My;
-import org.rapidoid.setup.On;
-import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
-public class JMustacheViewResolverTest extends IntegrationTestCommons {
+public interface Customizer<T> {
 
-	@Test
-	public void testRendering() {
-		My.templatesPath("view-rendering");
-
-		JMustacheViewResolver viewResolver = Integrate.jMustacheViewResolver();
-		viewResolver.setCustomizer(compiler -> compiler.defaultValue("DEFAULT"));
-
-		My.viewResolver(viewResolver);
-
-		On.get("/").view("mtmpl").mvc((req, resp) -> {
-			resp.model("y", "bar");
-			return U.map("x", "foo");
-		});
-
-		getReq("/");
-	}
+	T customize(T target);
 
 }

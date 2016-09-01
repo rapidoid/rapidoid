@@ -54,7 +54,7 @@ public class EntitiesHandler extends GUI implements Callable<Object> {
 
 			data.add(div(h3("Database records:"), grid));
 
-			return data;
+			return multi(data);
 
 		} else {
 			return h3("JPA is not enabled in Rapidoid!");

@@ -23,14 +23,57 @@ package org.rapidoid.http.impl;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.collection.Coll;
+import org.rapidoid.http.customize.ResourceLoader;
 import org.rapidoid.http.customize.ViewResolver;
+import org.rapidoid.lambda.Customizer;
+import org.rapidoid.lambda.Mapper;
+
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
-public abstract class AbstractViewResolver extends RapidoidThing implements ViewResolver {
+public abstract class AbstractViewResolver<T> extends RapidoidThing implements ViewResolver {
 
-	protected String filename(String viewName) {
-		return viewName + ".html";
+	private volatile Customizer<T> customizer;
+
+	private volatile String extension = ".html";
+
+	protected abstract T createViewFactory(ResourceLoader templateLoader);
+
+	private final Map<ResourceLoader, T> factoriesPerLoader = Coll.autoExpandingMap(
+		new Mapper<ResourceLoader, T>() {
+			@Override
+			public T map(ResourceLoader templateLoader) throws Exception {
+				return customize(createViewFactory(templateLoader));
+			}
+		});
+
+	protected T getViewFactory(ResourceLoader templateLoader) {
+		return factoriesPerLoader.get(templateLoader);
 	}
 
+	protected String filename(String viewName) {
+		return viewName + extension;
+	}
+
+	public T customize(T target) {
+		return customizer != null ? customizer.customize(target) : target;
+	}
+
+	public Customizer<T> getCustomizer() {
+		return customizer;
+	}
+
+	public void setCustomizer(Customizer<T> customizer) {
+		this.customizer = customizer;
+	}
+
+	public String getExtension() {
+		return extension;
+	}
+
+	public void setExtension(String extension) {
+		this.extension = extension;
+	}
 }

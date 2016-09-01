@@ -3,9 +3,10 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 35
+Content-Length: 44
 
 <html>
-foo:bar
-SUB(foo:bar)
+[foo]:[bar]
+SUB([foo]:[bar])
+
 </html>

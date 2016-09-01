@@ -20,11 +20,13 @@ package org.rapidoid.viewrendering;
  * #L%
  */
 
+import com.github.mustachejava.reflect.ReflectionObjectHandler;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.IntegrationTestCommons;
 import org.rapidoid.integrate.Integrate;
+import org.rapidoid.integrate.MustacheJavaViewResolver;
 import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
@@ -36,7 +38,22 @@ public class MustacheJavaViewResolverTest extends IntegrationTestCommons {
 	@Test
 	public void testRendering() {
 		My.templatesPath("view-rendering");
-		My.viewResolver(Integrate.mustacheJavaViewResolver());
+
+		MustacheJavaViewResolver viewResolver = Integrate.mustacheJavaViewResolver();
+
+		viewResolver.setCustomizer(compiler -> {
+
+			compiler.setObjectHandler(new ReflectionObjectHandler() {
+				@Override
+				public String stringify(Object object) {
+					return "[" + object + "]";
+				}
+			});
+
+			return compiler;
+		});
+
+		My.viewResolver(viewResolver);
 
 		On.get("/").view("mtmpl").mvc((req, resp) -> {
 			resp.model("y", "bar");

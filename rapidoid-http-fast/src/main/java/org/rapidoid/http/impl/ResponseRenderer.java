@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
+import org.rapidoid.gui.GUI;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.MediaType;
 import org.rapidoid.http.Resp;
@@ -36,6 +37,7 @@ import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
 import java.io.ByteArrayOutputStream;
+import java.nio.ByteBuffer;
 import java.util.Collection;
 import java.util.Map;
 
@@ -62,15 +64,24 @@ public class ResponseRenderer extends RapidoidThing {
 	private static boolean shouldRenderView(Resp resp) {
 		if (!resp.mvc()) return false;
 
-		if (((RespImpl) resp).hasCustomView() || resp.result() == null) return true;
+		Object result = resp.result();
+		if (result == null) return true;
 
-		TypeKind kind = Cls.kindOf(resp.result());
+		if (((RespImpl) resp).hasCustomView()) return U.notEmpty(resp.view());
 
-		return !(resp.result() instanceof String)
-			&& !(resp.result() instanceof byte[])
-			&& !kind.isPrimitive()
-			&& !kind.isArray()
-			&& !kind.isNumber();
+		return shouldRenderViewForResult(result);
+	}
+
+	private static boolean shouldRenderViewForResult(Object result) {
+
+		if ((result instanceof String)
+			|| (result instanceof byte[])
+			|| (result instanceof ByteBuffer)) return false;
+
+		if (GUI.isGUI(result)) return false;
+
+		TypeKind kind = Cls.kindOf(result);
+		return !(kind.isPrimitive() || kind.isNumber());
 	}
 
 	public static String renderView(ReqImpl req, Resp resp, Object result) {

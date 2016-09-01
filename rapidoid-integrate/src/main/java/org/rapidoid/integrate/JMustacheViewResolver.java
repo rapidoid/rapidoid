@@ -36,34 +36,42 @@ import java.io.StringReader;
 /**
  * <p>ViewResolver for samskivert's JMustache. <br>
  * To use this call {@code My.viewResolver(new JMustacheViewResolver());} </p>
- * <p>If you want to change any compiler configurations or add partial support do e.g.:</p>
+ * <p>If you want to customize any compiler configurations do e.g.:</p>
  * <pre>{@code
- *    JMustacheViewResolver resolver = ...;
- *    resolver.setCompiler(Mustache.compiler().defaultValue("Template not found!"));
+ *    JMustacheViewResolver resolver = new JMustacheViewResolver();
+ *    resolver.setCustomizer(compiler -> compiler.defaultValue("N/A"));
  * }</pre>
  */
 @Authors({"kormakur", "Nikolche Mihajlovski"})
 @Since("5.2.0")
-public class JMustacheViewResolver extends AbstractViewResolver {
-
-	protected volatile Mustache.Compiler compiler = Mustache.compiler();
+public class JMustacheViewResolver extends AbstractViewResolver<Mustache.Compiler> {
 
 	@Override
 	public View getView(String viewName, final ResourceLoader templateLoader) throws Exception {
 
-		String filename = filename(viewName);
-		final String template = new String(templateLoader.load(filename));
+		Mustache.TemplateLoader loader = loader(templateLoader);
 
-		Mustache.TemplateLoader loader = new Mustache.TemplateLoader() {
+		String template = new String(templateLoader.load(filename(viewName)));
+
+		Mustache.Compiler compiler = getViewFactory(templateLoader);
+
+		Template mustache = compiler.withLoader(loader).compile(template);
+
+		return view(mustache);
+	}
+
+	@Override
+	protected Mustache.Compiler createViewFactory(ResourceLoader templateLoader) {
+		return Mustache.compiler().withLoader(loader(templateLoader));
+	}
+
+	protected Mustache.TemplateLoader loader(final ResourceLoader templateLoader) {
+		return new Mustache.TemplateLoader() {
 			@Override
 			public Reader getTemplate(String name) throws Exception {
 				return new StringReader(new String(templateLoader.load(filename(name))));
 			}
 		};
-
-		final Template mustache = compiler.withLoader(loader).compile(template);
-
-		return view(mustache);
 	}
 
 	protected View view(final Template mustache) {
@@ -75,19 +83,5 @@ public class JMustacheViewResolver extends AbstractViewResolver {
 				writer.flush();
 			}
 		};
-	}
-
-	/**
-	 * Change the compiler settings e.g.
-	 * <pre>
-	 *     {@code
-	 *        resolver.setCompiler(Mustache.compiler().defaultValue("Template not found"));
-	 *     }
-	 * </pre>
-	 *
-	 * @param compiler Usually Mustache.compiler() with supplied settings.
-	 */
-	public synchronized void setCompiler(Mustache.Compiler compiler) {
-		this.compiler = compiler;
 	}
 }

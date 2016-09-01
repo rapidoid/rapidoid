@@ -5,9 +5,10 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.http.View;
 import org.rapidoid.http.customize.ResourceLoader;
 import org.rapidoid.http.impl.AbstractViewResolver;
+import org.rapidoid.render.RapidoidTemplateFactory;
 import org.rapidoid.render.Template;
+import org.rapidoid.render.TemplateFactory;
 import org.rapidoid.render.TemplateStore;
-import org.rapidoid.render.Templates;
 
 import java.io.OutputStream;
 
@@ -33,21 +34,21 @@ import java.io.OutputStream;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
-public class DefaultViewResolver extends AbstractViewResolver {
+public class DefaultViewResolver extends AbstractViewResolver<TemplateFactory> {
 
 	@Override
 	public View getView(String viewName, final ResourceLoader templateLoader) throws Exception {
 
-		String filename = filename(viewName);
+		TemplateFactory templateFactory = getViewFactory(templateLoader);
 
-		final Template template = Templates.load(filename, new TemplateStore() {
-			@Override
-			public String loadTemplate(String name) throws Exception {
-				return new String(templateLoader.load(name));
-			}
-		});
+		Template template = templateFactory.load(filename(viewName));
 
 		return view(template);
+	}
+
+	@Override
+	protected TemplateFactory createViewFactory(final ResourceLoader templateLoader) {
+		return new RapidoidTemplateFactory(store(templateLoader));
 	}
 
 	protected View view(final Template template) {
@@ -55,6 +56,15 @@ public class DefaultViewResolver extends AbstractViewResolver {
 			@Override
 			public void render(Object model, OutputStream out) {
 				template.renderTo(out, model);
+			}
+		};
+	}
+
+	protected TemplateStore store(final ResourceLoader templateLoader) {
+		return new TemplateStore() {
+			@Override
+			public String loadTemplate(String name) throws Exception {
+				return new String(templateLoader.load(name));
 			}
 		};
 	}

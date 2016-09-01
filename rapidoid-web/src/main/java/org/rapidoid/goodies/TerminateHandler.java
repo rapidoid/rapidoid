@@ -57,7 +57,7 @@ public class TerminateHandler extends GUI implements Callable<Object> {
 			         }
 			);
 
-		return U.list(h1("Terminate / restart the application?"), shutdown, halt);
+		return multi(h1("Terminate / restart the application?"), shutdown, halt);
 	}
 
 	public static void shutdownSoon() {

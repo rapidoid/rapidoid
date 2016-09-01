@@ -73,7 +73,7 @@ public class DeployHandler extends GUI implements Callable<Object> {
 		info.add(br());
 		info.add(shutdown);
 
-		return info;
+		return multi(info);
 	}
 
 }

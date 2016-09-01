@@ -3,11 +3,8 @@ package org.rapidoid.render;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.u.U;
-
-import java.util.Map;
 
 /*
  * #%L
@@ -39,37 +36,21 @@ public class Templates extends RapidoidThing {
 
 	public static final TemplateStore DEFAULT_STORE = new FileSystemTemplateStore(DEFAULT_PATH);
 
+	public static final RapidoidTemplateFactory DEFAULT_FACTORY = new RapidoidTemplateFactory(DEFAULT_STORE);
+
 	private static volatile String[] PATH = DEFAULT_PATH;
 
-	private static final Map<String, TemplateRenderer> TEMPLATES = Coll.concurrentMap();
-
-	public static TemplateRenderer loadTemplate(String name, TemplateStore store) {
-		String content;
-
-		try {
-			content = store.loadTemplate(name);
-		} catch (Exception e) {
-			throw U.rte("Couldn't load template: " + name, e);
-		}
-
-		return TemplateParser.parse(content).compile();
-	}
-
 	public static Template load(String filename) {
-		return load(filename, DEFAULT_STORE);
-	}
-
-	public static Template load(String filename, TemplateStore templates) {
-		return new RapidoidTemplate(filename, loadTemplate(filename, templates), templates);
+		return DEFAULT_FACTORY.load(filename);
 	}
 
 	public static Template compile(String source) {
-		return new RapidoidTemplate("", TemplateParser.parse(source).compile(), DEFAULT_STORE);
+		return DEFAULT_FACTORY.compile(source);
 	}
 
 	public static void reset() {
 		PATH = DEFAULT_PATH;
-		TEMPLATES.clear();
+		DEFAULT_FACTORY.reset();
 	}
 
 	public static void setPath(String... templatesPath) {

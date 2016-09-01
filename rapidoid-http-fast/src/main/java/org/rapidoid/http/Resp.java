@@ -132,6 +132,11 @@ public interface Resp {
 	String view();
 
 	/**
+	 * Disables the view rendering for the target MVC route. The master page rendering remains enabled.
+	 */
+	Resp noView();
+
+	/**
 	 * Sets the <b>file</b> to be served when the HTTP response is rendered.
 	 */
 	Resp file(File file);
