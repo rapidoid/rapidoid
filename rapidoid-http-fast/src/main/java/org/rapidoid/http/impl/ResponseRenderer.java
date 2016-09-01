@@ -31,7 +31,7 @@ import org.rapidoid.http.MediaType;
 import org.rapidoid.http.Resp;
 import org.rapidoid.http.View;
 import org.rapidoid.http.customize.Customization;
-import org.rapidoid.http.customize.MasterPage;
+import org.rapidoid.http.customize.PageDecorator;
 import org.rapidoid.http.customize.ViewResolver;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -123,13 +123,13 @@ public class ResponseRenderer extends RapidoidThing {
 
 	public static byte[] renderPage(ReqImpl req, String content) {
 
-		MasterPage masterPage = Customization.of(req).masterPage();
-		U.must(masterPage != null, "A page renderer wasn't configured!");
+		PageDecorator pageDecorator = Customization.of(req).pageDecorator();
+		U.must(pageDecorator != null, "A page decorator wasn't configured!");
 
 		ByteArrayOutputStream out = Msc.locals().pageRenderingStream();
 
 		try {
-			masterPage.renderPage(req, content, out);
+			pageDecorator.renderPage(req, content, out);
 
 		} catch (Exception e) {
 			throw U.rte("Error while rendering page!", e);

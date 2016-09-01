@@ -28,7 +28,7 @@ import java.io.OutputStream;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
-public interface MasterPage {
+public interface PageDecorator {
 
 	void renderPage(Req req, String content, OutputStream out) throws Exception;
 

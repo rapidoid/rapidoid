@@ -51,7 +51,7 @@ public class Customization extends RapidoidThing {
 
 	private volatile ViewResolver viewResolver;
 
-	private volatile MasterPage masterPage;
+	private volatile PageDecorator pageDecorator;
 
 	private volatile JsonResponseRenderer jsonResponseRenderer;
 
@@ -92,7 +92,7 @@ public class Customization extends RapidoidThing {
 		staticFilesPath = null;
 		errorHandler = null;
 		viewResolver = null;
-		masterPage = null;
+		pageDecorator = null;
 		jsonResponseRenderer = null;
 		beanParameterFactory = null;
 		loginProvider = null;
@@ -184,12 +184,12 @@ public class Customization extends RapidoidThing {
 		return this;
 	}
 
-	public MasterPage masterPage() {
-		return masterPage != null || defaults == null ? masterPage : defaults.masterPage();
+	public PageDecorator pageDecorator() {
+		return pageDecorator != null || defaults == null ? pageDecorator : defaults.pageDecorator();
 	}
 
-	public Customization masterPage(MasterPage masterPage) {
-		this.masterPage = masterPage;
+	public Customization pageDecorator(PageDecorator pageDecorator) {
+		this.pageDecorator = pageDecorator;
 		return this;
 	}
 

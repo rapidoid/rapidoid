@@ -49,7 +49,7 @@ public class Defaults extends RapidoidThing {
 
 	private static final RolesProvider rolesProvider = new DefaultRolesProvider();
 
-	private static final MasterPage masterPage = new DefaultMasterPage();
+	private static final PageDecorator pageDecorator = new DefaultPageDecorator();
 
 	private static final ResourceLoader templateLoader = new DefaultTemplateLoader(Templates.DEFAULT_PATH);
 
@@ -95,8 +95,8 @@ public class Defaults extends RapidoidThing {
 		return rolesProvider;
 	}
 
-	public static MasterPage masterPage() {
-		return masterPage;
+	public static PageDecorator pageDecorator() {
+		return pageDecorator;
 	}
 
 	public static ViewResolver viewResolver() {

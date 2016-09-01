@@ -44,7 +44,7 @@ public class My extends RapidoidThing {
 			GLOBAL.staticFilesPath(Defaults.staticFilesPath());
 			GLOBAL.errorHandler(Defaults.errorHandler());
 			GLOBAL.viewResolver(Defaults.viewResolver());
-			GLOBAL.masterPage(Defaults.masterPage());
+			GLOBAL.pageDecorator(Defaults.pageDecorator());
 			GLOBAL.jsonResponseRenderer(Defaults.jsonResponseRenderer());
 			GLOBAL.jsonRequestBodyParser(Defaults.jsonRequestBodyParser());
 			GLOBAL.beanParameterFactory(Defaults.beanParameterFactory());
@@ -113,8 +113,8 @@ public class My extends RapidoidThing {
 		GLOBAL.rolesProvider(rolesProvider);
 	}
 
-	public static void masterPage(MasterPage masterPage) {
-		GLOBAL.masterPage(masterPage);
+	public static void pageDecorator(PageDecorator pageDecorator) {
+		GLOBAL.pageDecorator(pageDecorator);
 	}
 
 	public static void viewResolver(ViewResolver viewResolver) {
@@ -149,8 +149,8 @@ public class My extends RapidoidThing {
 		return GLOBAL.rolesProvider();
 	}
 
-	public static MasterPage masterPage() {
-		return GLOBAL.masterPage();
+	public static PageDecorator pageDecorator() {
+		return GLOBAL.pageDecorator();
 	}
 
 	public static ViewResolver viewResolver() {

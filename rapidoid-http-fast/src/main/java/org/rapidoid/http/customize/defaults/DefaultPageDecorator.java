@@ -6,7 +6,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
-import org.rapidoid.http.customize.MasterPage;
+import org.rapidoid.http.customize.PageDecorator;
 import org.rapidoid.u.U;
 import org.rapidoid.util.StreamUtils;
 import org.rapidoid.web.Screen;
@@ -36,7 +36,7 @@ import java.util.regex.Pattern;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
-public class DefaultMasterPage extends RapidoidThing implements MasterPage {
+public class DefaultPageDecorator extends RapidoidThing implements PageDecorator {
 
 	private static final String FULL_PAGE_REGEX = "(?s)^(?:\\s*(<!--(?:.*?)-->)*?)*?<(!DOCTYPE\\s+html|html)>";
 

@@ -132,7 +132,7 @@ public interface Resp {
 	String view();
 
 	/**
-	 * Disables the view rendering for the target MVC route. The master page rendering remains enabled.
+	 * Disables the view rendering for the target MVC route. The page decorator remains enabled.
 	 */
 	Resp noView();
 
