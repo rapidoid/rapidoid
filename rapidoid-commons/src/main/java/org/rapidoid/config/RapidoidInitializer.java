@@ -48,9 +48,12 @@ public class RapidoidInitializer extends RapidoidThing {
 			String ver = RapidoidInfo.version();
 			String proc = ManagementFactory.getRuntimeMXBean().getName();
 			String dir = System.getProperty("user.dir");
+			String maxMem = (Runtime.getRuntime().maxMemory() / 1024 / 1024) + " MB";
 
 			Log.info("!Starting Rapidoid...", "!version", ver);
-			Log.info("!System info", "os", Msc.OS_NAME, "java", Msc.javaVersion(), "process", proc, "dir", dir);
+
+			Log.info("!System info", "os", Msc.OS_NAME, "java", Msc.javaVersion(),
+				"process", proc, "max memory", maxMem, "dir", dir);
 
 			if (Msc.hasLogback()) {
 				LogbackUtil.setupLogger();
