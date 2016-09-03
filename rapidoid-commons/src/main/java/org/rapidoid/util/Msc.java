@@ -991,6 +991,7 @@ public class Msc extends RapidoidThing implements Constants {
 		Conf.reset();
 		JDBC.reset();
 		Env.reset();
+		Ctxs.reset();
 	}
 
 	public static boolean isAscii(String s) {
