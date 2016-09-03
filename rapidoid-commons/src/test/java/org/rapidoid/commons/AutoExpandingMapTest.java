@@ -36,7 +36,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Since("5.0.4")
 public class AutoExpandingMapTest extends AbstractCommonsTest {
 
-	@Test
+	@Test(timeout = 60000)
 	public void testConcurrentMapAccess() {
 		final AtomicInteger counter = new AtomicInteger();
 		final Map<Object, Object> map = autoToStr(counter);
