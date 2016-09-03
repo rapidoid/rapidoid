@@ -32,7 +32,10 @@ public abstract class AbstractCommonsTest extends TestCommons {
 	@Before
 	public final void resetContext() {
 		Msc.reset();
+
+		Ctxs.reset();
 		U.must(Ctxs.get() == null);
+
 		Conf.ROOT.setPath(getTestName());
 	}
 
