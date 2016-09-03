@@ -49,7 +49,8 @@ public class RapidoidInitializer extends RapidoidThing {
 			String proc = ManagementFactory.getRuntimeMXBean().getName();
 			String dir = System.getProperty("user.dir");
 
-			Log.info("!Starting Rapidoid...", "version", ver, "process", proc, "java", Msc.javaVersion(), "dir", dir);
+			Log.info("!Starting Rapidoid...", "!version", ver);
+			Log.info("!System info", "os", Msc.OS_NAME, "java", Msc.javaVersion(), "process", proc, "dir", dir);
 
 			if (Msc.hasLogback()) {
 				LogbackUtil.setupLogger();

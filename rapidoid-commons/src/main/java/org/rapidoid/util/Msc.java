@@ -68,6 +68,13 @@ import java.util.concurrent.*;
 @Since("2.0.0")
 public class Msc extends RapidoidThing implements Constants {
 
+	public static final String OS_NAME = System.getProperty("os.name");
+
+	private static long measureStart;
+
+	public static final ScheduledThreadPoolExecutor EXECUTOR = new ScheduledThreadPoolExecutor(8,
+		new RapidoidThreadFactory("utils", true));
+
 	public static final Mapper<Object, Object> TRANSFORM_TO_STRING = new Mapper<Object, Object>() {
 		@Override
 		public Object map(Object src) throws Exception {
@@ -89,11 +96,6 @@ public class Msc extends RapidoidThing implements Constants {
 			}
 		}
 	};
-
-	private static long measureStart;
-
-	public static final ScheduledThreadPoolExecutor EXECUTOR = new ScheduledThreadPoolExecutor(8,
-		new RapidoidThreadFactory("utils", true));
 
 	private Msc() {
 	}

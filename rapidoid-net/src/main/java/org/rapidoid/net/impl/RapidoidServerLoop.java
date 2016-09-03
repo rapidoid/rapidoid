@@ -116,7 +116,7 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 		U.notNull(helperClass, "helperClass");
 
 		String blockingInfo = blockingAccept ? "blocking" : "non-blocking";
-		Log.debug("Initializing server", "address", address, "port", port, "accept", blockingInfo);
+		Log.debug("Initializing server", "address", address, "port", port, "sync", syncBufs, "accept", blockingInfo);
 
 		serverSocketChannel = ServerSocketChannel.open();
 
@@ -126,7 +126,7 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 
 			ServerSocket socket = serverSocketChannel.socket();
 
-			Log.info("!Starting server", "!address", address, "!port", port, "I/O workers", workers, "accept", blockingInfo);
+			Log.info("!Starting server", "!address", address, "!port", port, "I/O workers", workers, "sync", syncBufs, "accept", blockingInfo);
 
 			InetSocketAddress addr = new InetSocketAddress(address, port);
 
