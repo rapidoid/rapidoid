@@ -7,3 +7,7 @@ jdk:
 
 before_install:
   - echo "MAVEN_OPTS='-Xmx2g -XX:MaxPermSize=512m'" > ~/.mavenrc
+
+env:
+  global:
+    - JAVA_OPTS="-Xmx2g"
