@@ -23,6 +23,7 @@ package org.rapidoid.http;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.io.Res;
 import org.rapidoid.setup.On;
 
 @Authors("Nikolche Mihajlovski")
@@ -52,6 +53,8 @@ public class HttpStaticFilesTest extends IntegrationTestCommons {
 		notFound("/.priv.txt");
 
 		// no folders
+		Res dir1 = Res.from("dir1", "static2");
+		isFalse(dir1.exists());
 		notFound("/dir1");
 
 		notFound("/xx");

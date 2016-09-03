@@ -81,4 +81,14 @@ public class ResTest extends AbstractCommonsTest {
 		isFalse(file.exists());
 	}
 
+	@Test
+	public void shouldNotReadFolders() {
+		Res dir = Res.from("res1");
+
+		isFalse(dir.exists());
+		isFalse(dir.isHidden());
+
+		eq(dir.getBytesOrNull(), null);
+	}
+
 }
