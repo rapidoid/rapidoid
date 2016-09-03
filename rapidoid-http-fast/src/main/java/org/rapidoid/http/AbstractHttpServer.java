@@ -221,10 +221,26 @@ public abstract class AbstractHttpServer extends RapidoidThing implements Protoc
 		output.putNumAsText(posConLen, posAfter - posBefore, false);
 	}
 
-	protected HttpStatus plain(Channel ctx, boolean isKeepAlive, byte[] body) {
+	protected HttpStatus ok(Channel ctx, boolean isKeepAlive, byte[] body, MediaType contentType) {
 		startResponse(ctx, isKeepAlive);
-		writeBody(ctx, body, MediaType.PLAIN_TEXT_UTF_8);
+		writeBody(ctx, body, contentType);
 		return HttpStatus.DONE;
+	}
+
+	protected HttpStatus plain(Channel ctx, boolean isKeepAlive, byte[] body) {
+		return ok(ctx, isKeepAlive, body, MediaType.PLAIN_TEXT_UTF_8);
+	}
+
+	protected HttpStatus json(Channel ctx, boolean isKeepAlive, byte[] body) {
+		return ok(ctx, isKeepAlive, body, MediaType.JSON);
+	}
+
+	protected HttpStatus html(Channel ctx, boolean isKeepAlive, byte[] body) {
+		return ok(ctx, isKeepAlive, body, MediaType.HTML_UTF_8);
+	}
+
+	protected HttpStatus binary(Channel ctx, boolean isKeepAlive, byte[] body) {
+		return ok(ctx, isKeepAlive, body, MediaType.APPLICATION_OCTET_STREAM);
 	}
 
 	protected boolean matches(Buf buf, BufRange range, byte[] value) {
