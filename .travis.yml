@@ -4,3 +4,6 @@ script: mvn clean verify
 
 jdk:
   - oraclejdk8
+
+script:
+  - echo "MAVEN_OPTS='-Xmx2g -XX:MaxPermSize=512m'" > ~/.mavenrc
