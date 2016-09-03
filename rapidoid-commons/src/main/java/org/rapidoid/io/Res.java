@@ -162,7 +162,7 @@ public class Res extends RapidoidThing {
 	protected void loadResource() {
 		// micro-caching the file content, expires after 500ms
 		if (U.time() - lastUpdatedOn >= 500) {
-			boolean hasChanged = false;
+			boolean hasChanged;
 
 			synchronized (this) {
 
@@ -220,7 +220,7 @@ public class Res extends RapidoidThing {
 
 		if (file.exists()) {
 
-			if (file.isDirectory()) {
+			if (!file.isFile() || file.isDirectory()) {
 				return null;
 			}
 
