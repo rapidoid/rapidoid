@@ -46,6 +46,8 @@ public class ServerBuilder extends RapidoidThing {
 
 	private volatile boolean noNelay = false;
 
+	private volatile boolean syncBufs = true;
+
 	public ServerBuilder address(String address) {
 		this.address = address;
 		return this;
@@ -116,8 +118,17 @@ public class ServerBuilder extends RapidoidThing {
 		this.noNelay = noNelay;
 	}
 
+	public boolean syncBufs() {
+		return syncBufs;
+	}
+
+	public ServerBuilder syncBufs(boolean syncBufs) {
+		this.syncBufs = syncBufs;
+		return this;
+	}
+
 	public Server build() {
-		return new RapidoidServerLoop(protocol, exchangeClass, helperClass, address, port, workers, bufSizeKB, noNelay);
+		return new RapidoidServerLoop(protocol, exchangeClass, helperClass, address, port, workers, bufSizeKB, noNelay, syncBufs);
 	}
 
 }

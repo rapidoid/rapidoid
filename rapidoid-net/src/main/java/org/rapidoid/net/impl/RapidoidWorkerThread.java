@@ -45,15 +45,19 @@ public class RapidoidWorkerThread extends RapidoidThread {
 
 	private final boolean noDelay;
 
+	private final boolean syncBufs;
+
 	public RapidoidWorkerThread(int workerIndex, Protocol protocol, Class<? extends DefaultExchange<?>> exchangeClass,
-	                            Class<? extends RapidoidHelper> helperClass, int bufSizeKB, boolean noNelay) {
+	                            Class<? extends RapidoidHelper> helperClass, int bufSizeKB, boolean noNelay, boolean syncBufs) {
 		super("server" + (workerIndex + 1));
+
 		this.workerIndex = workerIndex;
 		this.protocol = protocol;
 		this.exchangeClass = exchangeClass;
 		this.helperClass = helperClass;
 		this.bufSizeKB = bufSizeKB;
 		this.noDelay = noNelay;
+		this.syncBufs = syncBufs;
 	}
 
 	@Override
@@ -61,7 +65,7 @@ public class RapidoidWorkerThread extends RapidoidThread {
 		RapidoidHelper helper = Cls.newInstance(helperClass, exchangeClass);
 		helper.requestIdGen = workerIndex; // to generate UNIQUE request ID (+= MAX_IO_WORKERS)
 
-		worker = new RapidoidWorker("server" + (workerIndex + 1), protocol, helper, bufSizeKB, noDelay);
+		worker = new RapidoidWorker("server" + (workerIndex + 1), protocol, helper, bufSizeKB, noDelay, syncBufs);
 
 		worker.run();
 	}

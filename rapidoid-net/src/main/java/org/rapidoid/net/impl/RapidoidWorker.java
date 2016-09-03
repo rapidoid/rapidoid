@@ -96,11 +96,11 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 	}
 
 	public RapidoidWorker(String name, final Protocol protocol, final RapidoidHelper helper,
-	                      int bufSizeKB, boolean noNelay) {
+	                      int bufSizeKB, boolean noNelay, boolean syncBufs) {
 
 		super(name);
 
-		this.bufs = new BufGroup(14); // 2^14B (16 KB per buffer segment)
+		this.bufs = new BufGroup(14, syncBufs); // 2^14B (16 KB per buffer segment)
 		this.serverProtocol = protocol;
 		this.helper = helper;
 
