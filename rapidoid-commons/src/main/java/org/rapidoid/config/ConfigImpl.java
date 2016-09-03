@@ -481,7 +481,6 @@ public class ConfigImpl extends RapidoidThing implements Config {
 			ConfigLoaderUtil.loadBuiltInConfig(this, loaded);
 		}
 
-		ConfigLoaderUtil.loadDefaultConfig(this, loaded);
 		ConfigLoaderUtil.loadConfig(this, detached, loaded);
 
 		base.applyArgsTo(this);

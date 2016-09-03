@@ -45,12 +45,12 @@ public class ConfigLoadingTest extends AbstractCommonsTest {
 
 		config.setPath("my-cfg");
 
-		eq(config.toMap(), U.map("x", 1, "y", 2, "z", "foo", "k", "hey"));
+		eq(config.toMap(), U.map("z", "foo", "k", "hey"));
 
 		Env.setProfiles("prof1", "prof2");
 		config.invalidate();
 
-		eq(config.toMap(), U.map("x", 1, "y", 100, "z", "bar", "m", "moo", "k", "hey"));
+		eq(config.toMap(), U.map("z", "bar", "k", "hey"));
 	}
 
 }
