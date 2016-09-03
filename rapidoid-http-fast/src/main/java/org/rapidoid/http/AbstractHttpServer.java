@@ -20,8 +20,6 @@ package org.rapidoid.http;
  * #L%
  */
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -30,17 +28,18 @@ import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.commons.Dates;
 import org.rapidoid.data.BufRange;
 import org.rapidoid.data.BufRanges;
+import org.rapidoid.data.JSON;
+import org.rapidoid.http.impl.HttpIO;
 import org.rapidoid.http.impl.HttpParser;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.Server;
 import org.rapidoid.net.TCP;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.RapidoidHelper;
-import org.rapidoid.u.U;
-import org.rapidoid.util.StreamUtils;
+import org.rapidoid.util.Msc;
 import org.rapidoid.wrap.BoolWrap;
 
-import java.io.IOException;
+import java.io.ByteArrayOutputStream;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.1")
@@ -59,7 +58,6 @@ public abstract class AbstractHttpServer extends RapidoidThing implements Protoc
 	protected final byte[] CONTENT_TYPE_TXT = "Content-Type: ".getBytes();
 
 	protected final HttpParser HTTP_PARSER = createParser();
-	protected final ObjectMapper MAPPER = createMapper();
 
 	public AbstractHttpServer() {
 		this("Rapidoid", "Not found!", "Error!");
@@ -89,12 +87,6 @@ public abstract class AbstractHttpServer extends RapidoidThing implements Protoc
 		return new HttpParser();
 	}
 
-	protected ObjectMapper createMapper() {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.registerModule(new AfterburnerModule());
-		return mapper;
-	}
-
 	@Override
 	public void process(Channel ctx) {
 		if (ctx.isInitial()) {
@@ -120,6 +112,7 @@ public abstract class AbstractHttpServer extends RapidoidThing implements Protoc
 		HTTP_PARSER.parse(buf, isGet, isKeepAlive, body, verb, uri, path, query, protocol, headers, helper);
 
 		boolean keepAlive = isKeepAlive.value;
+
 		HttpStatus status = handle(ctx, buf, verb, uri, path, query, protocol, headers, isGet.value, keepAlive, body);
 
 		switch (status) {
@@ -176,49 +169,19 @@ public abstract class AbstractHttpServer extends RapidoidThing implements Protoc
 		ctx.write(CR_LF);
 	}
 
-	protected void writeContentLengthHeader(Channel ctx, int contentLength) {
-		ctx.write(CONTENT_LENGTH_TXT);
-		writeNum(ctx, contentLength);
-		ctx.write(CR_LF);
-	}
-
 	protected void writeBody(Channel ctx, byte[] body, MediaType contentType) {
 		writeContentTypeHeader(ctx, contentType);
-		writeContentLengthHeader(ctx, body.length);
+		HttpIO.writeContentLengthHeader(ctx, body.length);
 
 		ctx.write(CR_LF);
 
 		ctx.write(body);
 	}
 
-	protected void writeNum(Channel ctx, int value) {
-		try {
-			StreamUtils.putNumAsText(ctx.output().asOutputStream(), value);
-		} catch (IOException e) {
-			throw U.rte(e);
-		}
-	}
-
 	protected void writeJsonBody(Channel ctx, Object value) {
-		Buf output = ctx.output();
-
-		ctx.write(MediaType.JSON.getBytes());
-		ctx.write(CONTENT_LENGTH_TXT);
-
-		int posConLen = output.size() - 10;
-		ctx.write(CR_LF);
-		ctx.write(CR_LF);
-
-		int posBefore = output.size();
-
-		try {
-			MAPPER.writeValue(output.asOutputStream(), value);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-
-		int posAfter = output.size();
-		output.putNumAsText(posConLen, posAfter - posBefore, false);
+		ByteArrayOutputStream os = Msc.locals().jsonRenderingStream();
+		JSON.stringify(value, os);
+		HttpIO.writeContentLengthAndBody(ctx, os);
 	}
 
 	protected HttpStatus ok(Channel ctx, boolean isKeepAlive, byte[] body, MediaType contentType) {

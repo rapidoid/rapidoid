@@ -7,6 +7,7 @@ import org.rapidoid.data.BufRange;
 import org.rapidoid.data.BufRanges;
 import org.rapidoid.wrap.IntWrap;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
@@ -58,6 +59,8 @@ public interface Buf {
 	void append(byte[] bytes);
 
 	void append(byte[] bytes, int offset, int length);
+
+	void append(ByteArrayOutputStream src);
 
 	String data();
 

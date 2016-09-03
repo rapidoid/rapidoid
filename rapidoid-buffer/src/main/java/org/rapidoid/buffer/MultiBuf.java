@@ -15,6 +15,7 @@ import org.rapidoid.util.D;
 import org.rapidoid.util.Msc;
 import org.rapidoid.wrap.IntWrap;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
@@ -1404,6 +1405,15 @@ public class MultiBuf extends OutputStream implements Buf, Constants {
 	@Override
 	public Buf unwrap() {
 		return this;
+	}
+
+	@Override
+	public void append(ByteArrayOutputStream src) {
+		try {
+			src.writeTo(asOutputStream());
+		} catch (IOException e) {
+			throw U.rte(e);
+		}
 	}
 
 }

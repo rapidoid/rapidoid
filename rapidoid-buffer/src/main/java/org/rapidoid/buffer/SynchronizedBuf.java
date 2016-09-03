@@ -7,6 +7,7 @@ import org.rapidoid.data.BufRange;
 import org.rapidoid.data.BufRanges;
 import org.rapidoid.wrap.IntWrap;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
@@ -353,4 +354,8 @@ public class SynchronizedBuf extends OutputStream implements Buf {
 		return buf;
 	}
 
+	@Override
+	public synchronized void append(ByteArrayOutputStream src) {
+		buf.append(src);
+	}
 }

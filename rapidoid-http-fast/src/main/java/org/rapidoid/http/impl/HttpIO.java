@@ -18,10 +18,13 @@ import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Msc;
+import org.rapidoid.util.StreamUtils;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /*
  * #%L
@@ -45,7 +48,7 @@ import java.io.ByteArrayOutputStream;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class HttpIO extends RapidoidThing {
+public class HttpIO extends RapidoidThing implements Constants {
 
 	public static final byte[] HTTP_200_OK = "HTTP/1.1 200 OK\r\n".getBytes();
 
@@ -77,7 +80,7 @@ public class HttpIO extends RapidoidThing {
 
 	static {
 		for (int len = 0; len < CONTENT_LENGTHS.length; len++) {
-			CONTENT_LENGTHS[len] = (new String(CONTENT_LENGTH_IS) + len + new String(Constants.CR_LF)).getBytes();
+			CONTENT_LENGTHS[len] = (new String(CONTENT_LENGTH_IS) + len + new String(CR_LF)).getBytes();
 		}
 
 		HttpResponseCodes.init();
@@ -120,7 +123,7 @@ public class HttpIO extends RapidoidThing {
 		if (MANDATORY_HEADER_DATE) {
 			ctx.write(DATE_IS);
 			ctx.write(Dates.getDateTimeBytes());
-			ctx.write(Constants.CR_LF);
+			ctx.write(CR_LF);
 		}
 
 		if (MANDATORY_HEADER_CONTENT_TYPE) {
@@ -132,7 +135,7 @@ public class HttpIO extends RapidoidThing {
 		ctx.write(name);
 		ctx.write(HEADER_SEP);
 		ctx.write(value);
-		ctx.write(Constants.CR_LF);
+		ctx.write(CR_LF);
 	}
 
 	public static void writeResponse(Channel ctx, boolean isKeepAlive, int code, MediaType contentTypeHeader, byte[] content) {
@@ -231,19 +234,26 @@ public class HttpIO extends RapidoidThing {
 	}
 
 	public static void writeContentLengthAndBody(Channel ctx, byte[] content) {
-		int len = content.length;
+		writeContentLengthHeader(ctx, content.length);
+		ctx.write(CR_LF);
+		ctx.write(content);
+	}
 
+	public static void writeContentLengthAndBody(Channel ctx, ByteArrayOutputStream baos) {
+		writeContentLengthHeader(ctx, baos.size());
+		ctx.write(CR_LF);
+		ctx.output().append(baos);
+	}
+
+	public static void writeContentLengthHeader(Channel ctx, int len) {
 		if (len < CONTENT_LENGTHS_SIZE) {
 			ctx.write(CONTENT_LENGTHS[len]);
 		} else {
 			ctx.write(CONTENT_LENGTH_IS);
 			Buf out = ctx.output();
 			out.putNumAsText(out.size(), len, true);
-			ctx.write(Constants.CR_LF);
+			ctx.write(CR_LF);
 		}
-
-		ctx.write(Constants.CR_LF);
-		ctx.write(content);
 	}
 
 	public static void writeAsJson(Channel ctx, int code, boolean isKeepAlive, Object value) {
@@ -264,25 +274,27 @@ public class HttpIO extends RapidoidThing {
 		Buf output = ctx.output();
 
 		synchronized (output) {
-			Buf out = output.unwrap();
-
-			ctx.write(CONTENT_LENGTH_UNKNOWN);
-
-			int posConLen = out.size() - 1;
-			ctx.write(Constants.CR_LF);
-
-			// finishing the headers
-			ctx.write(Constants.CR_LF);
-
-			int posBefore = out.size();
-
-			JSON.stringify(value, out.asOutputStream());
-
-			int posAfter = out.size();
-			int contentLength = posAfter - posBefore;
-
-			out.putNumAsText(posConLen, contentLength, false);
+			writeJsonBody(output.unwrap(), value);
 		}
+	}
+
+	public static void writeJsonBody(Buf out, Object value) {
+		out.append(CONTENT_LENGTH_UNKNOWN);
+
+		int posConLen = out.size() - 1;
+		out.append(CR_LF);
+
+		// finishing the headers
+		out.append(CR_LF);
+
+		int posBefore = out.size();
+
+		JSON.stringify(value, out.asOutputStream());
+
+		int posAfter = out.size();
+		int contentLength = posAfter - posBefore;
+
+		out.putNumAsText(posConLen, contentLength, false);
 	}
 
 	public static void writeContentLengthUnknown(Channel channel) {
@@ -292,6 +304,14 @@ public class HttpIO extends RapidoidThing {
 	public static void done(Channel ctx, boolean isKeepAlive) {
 		ctx.done();
 		ctx.closeIf(!isKeepAlive);
+	}
+
+	public static void writeNum(Channel ctx, int value) {
+		try {
+			StreamUtils.putNumAsText(ctx.output().asOutputStream(), value);
+		} catch (IOException e) {
+			throw U.rte(e);
+		}
 	}
 
 }
