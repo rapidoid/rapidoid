@@ -287,6 +287,7 @@ org.rapidoid.html.tag.TdTag
 org.rapidoid.html.tag.TextareaTag
 org.rapidoid.html.tag.ThTag
 org.rapidoid.html.TagWidget
+org.rapidoid.http.AbstractHttpServer
 org.rapidoid.http.Current
 org.rapidoid.http.customize.BeanParameterFactory
 org.rapidoid.http.customize.BeanValidator

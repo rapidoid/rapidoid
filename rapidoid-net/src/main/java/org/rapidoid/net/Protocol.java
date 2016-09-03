@@ -29,10 +29,6 @@ import org.rapidoid.util.Constants;
 @Since("2.0.0")
 public interface Protocol extends Constants {
 
-	long ALL = -1;
-
-	long OTHERS = -2;
-
-	void process(final Channel ctx);
+	void process(Channel ctx);
 
 }
