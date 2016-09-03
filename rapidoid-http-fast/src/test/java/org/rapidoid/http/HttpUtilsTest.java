@@ -29,15 +29,37 @@ import org.rapidoid.test.TestCommons;
 @Since("5.1.0")
 public class HttpUtilsTest extends TestCommons {
 
+	String[] invalidResNames = {
+		null, "",
+		"\\r", "\\n", "/h\\r", "/\\n", "/\\t",
+		"/\\x0", "д", "\\x200",
+		"?", "/?", "/f?2",
+		"*", "/f*fg",
+		"..", "/g..html", "", "/xy\\z", "../aa", "..\\ff",
+		"/a\\b", "/a\\b/c", "/a/xx/\\b/c", "/\\", "/afbbb.asd/ff\\b/c",
+		"/..", "/../", "/../ad", "/xx/../ad", "/../11/g.ad"
+	};
+
 	@Test
 	public void testView() {
 		eq(HttpUtils.resName("/"), "index");
 		eq(HttpUtils.resName("/abc"), "abc");
 		eq(HttpUtils.resName("/x/y/z"), "x/y/z");
 
+		eq(HttpUtils.resName("/foo.html"), "foo");
+		eq(HttpUtils.resName("/aa/bb.html"), "aa/bb");
+		eq(HttpUtils.resName("/aa/bb-c_d11.txt"), "aa/bb-c_d11.txt");
+
 		eq(HttpUtils.resNameFromRoutePath("/books/{x}"), "books/x");
 		eq(HttpUtils.resNameFromRoutePath("/books/{id:\\d+}"), "books/id");
 		eq(HttpUtils.resNameFromRoutePath("/books/{a:.*}-{b}/view"), "books/a-b/view");
+	}
+
+	@Test
+	public void testInvalidResources() {
+		for (String resName : invalidResNames) {
+			eq(HttpUtils.resName(resName), null);
+		}
 	}
 
 }

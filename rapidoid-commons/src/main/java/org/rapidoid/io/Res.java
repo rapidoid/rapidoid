@@ -42,7 +42,7 @@ import java.util.regex.Pattern;
 @Since("4.1.0")
 public class Res extends RapidoidThing {
 
-	public static volatile Pattern REGEX_INVALID_FILENAME = Pattern.compile("(?:[*?'\"<>|:\\x00-\\x1F]|\\.\\.)");
+	public static volatile Pattern REGEX_INVALID_FILENAME = Pattern.compile("(?:[*?'\"<>|\\x00-\\x1F]|\\.\\.)");
 
 	private static final ConcurrentMap<ResKey, Res> FILES = Coll.concurrentMap();
 
@@ -81,7 +81,7 @@ public class Res extends RapidoidThing {
 		validateFilename(name);
 	}
 
-	public static void validateFilename(String filename) {
+	private static void validateFilename(String filename) {
 		U.must(!Res.REGEX_INVALID_FILENAME.matcher(filename).find(), "Invalid resource name: %s", filename);
 	}
 

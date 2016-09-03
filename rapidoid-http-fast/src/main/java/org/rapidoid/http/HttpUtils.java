@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Future;
+import java.util.regex.Pattern;
 
 /*
  * #%L
@@ -60,6 +61,8 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 	private static final String PAGE_RELOAD = "<h2>&nbsp;Reloading...</h2><script>location.reload();</script>";
 
 	private static final byte[] EMPTY_RESPONSE = {};
+
+	public static volatile Pattern REGEX_VALID_HTTP_RESOURCE = Pattern.compile("(?:/[A-Za-z0-9_\\-\\.]+)*/?");
 
 	public static final String _USER = "_user";
 	public static final String _EXPIRES = "_expires";
@@ -134,9 +137,13 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 	}
 
 	public static String resName(String path) {
-		Res.validateFilename(path);
-		String res = Str.triml(path, "/");
-		return res.isEmpty() ? "index" : Str.trimr(res, ".html");
+		if (U.notEmpty(path) && REGEX_VALID_HTTP_RESOURCE.matcher(path).matches() && !path.contains("..")) {
+			String res = Str.triml(path, "/");
+			return res.isEmpty() ? "index" : Str.trimr(res, ".html");
+
+		} else {
+			return null;
+		}
 	}
 
 	public static boolean hasExtension(String name) {
@@ -160,6 +167,8 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 
 	public static Res staticPage(Req req, String... possibleLocations) {
 		String resName = resName(req);
+
+		if (resName == null) return null;
 
 		if (hasExtension(resName)) {
 			return Res.from(resName, possibleLocations);
@@ -382,4 +391,5 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 			token.remove(_EXPIRES);
 		}
 	}
+
 }

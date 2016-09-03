@@ -53,19 +53,21 @@ public class StaticResourcesHandler extends AbstractHttpHandler {
 
 		try {
 			String[] staticFilesLocations = customization.staticFilesPath();
-
 			if (!U.isEmpty(staticFilesLocations)) {
+
 				Res res = HttpUtils.staticPage(req, staticFilesLocations);
+				if (res != null) {
 
-				StaticFilesSecurity staticFilesSecurity = customization.staticFilesSecurity();
+					StaticFilesSecurity staticFilesSecurity = customization.staticFilesSecurity();
 
-				if (staticFilesSecurity.canServe(req, res)) {
-					byte[] bytes = res.getBytesOrNull();
+					if (staticFilesSecurity.canServe(req, res)) {
+						byte[] bytes = res.getBytesOrNull();
 
-					if (bytes != null) {
-						MediaType contentType = U.or(MediaType.getByFileName(res.getName()), MediaType.BINARY);
-						HttpIO.write200(ctx, isKeepAlive, contentType, bytes);
-						return HttpStatus.DONE;
+						if (bytes != null) {
+							MediaType contentType = U.or(MediaType.getByFileName(res.getName()), MediaType.BINARY);
+							HttpIO.write200(ctx, isKeepAlive, contentType, bytes);
+							return HttpStatus.DONE;
+						}
 					}
 				}
 			}
