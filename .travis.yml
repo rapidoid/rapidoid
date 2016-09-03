@@ -6,7 +6,8 @@ jdk:
   - oraclejdk8
 
 before_install:
-  - echo "MAVEN_OPTS='-Xmx2g -XX:MaxPermSize=512m'" > ~/.mavenrc
+  - export MAVEN_OPTS="-Xmx2g $MAVEN_OPTS"
+  - echo "MAVEN_OPTS='-Xmx2g'" > ~/.mavenrc
 
 env:
   global:
