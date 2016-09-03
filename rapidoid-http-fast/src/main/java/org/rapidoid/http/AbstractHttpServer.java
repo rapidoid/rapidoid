@@ -179,9 +179,16 @@ public abstract class AbstractHttpServer extends RapidoidThing implements Protoc
 	}
 
 	protected void writeJsonBody(Channel ctx, Object value) {
+		writeContentTypeHeader(ctx, MediaType.JSON);
 		ByteArrayOutputStream os = Msc.locals().jsonRenderingStream();
 		JSON.stringify(value, os);
 		HttpIO.writeContentLengthAndBody(ctx, os);
+	}
+
+	protected HttpStatus serializeToJson(Channel ctx, boolean isKeepAlive, Object value) {
+		startResponse(ctx, isKeepAlive);
+		writeJsonBody(ctx, value);
+		return HttpStatus.DONE;
 	}
 
 	protected HttpStatus ok(Channel ctx, boolean isKeepAlive, byte[] body, MediaType contentType) {
