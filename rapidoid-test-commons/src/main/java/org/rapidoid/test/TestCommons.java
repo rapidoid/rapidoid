@@ -528,19 +528,31 @@ public abstract class TestCommons {
 		return a == null ? b == null : a.equals(b);
 	}
 
-	protected void check(String desc, String actual, String expected) {
+	protected boolean httpResultsMatch(String actual, String expected) {
+		return isEq(platformNeutral(actual), platformNeutral(expected));
+	}
+
+	private String platformNeutral(String httpResponse) {
 		if (OS.contains("win")) {
+
 			// remove carriage returns to make tests platform independent
-			actual = actual.replaceAll("(\\r)", "");
-			expected = expected.replaceAll("(\\r)", "");
-			// remove the content length line to make tests pass on any platform 
-			actual = actual.replaceAll("Content-Length:([0-9\\n ]+)", "");
-			expected = expected.replaceAll("Content-Length:([0-9\\n ]+)", "");
+			httpResponse = httpResponse.replaceAll("(\\r)", "");
+
+			// remove the content length line to make tests pass on any platform
+			httpResponse = httpResponse.replaceAll("Content-Length:([0-9\\n ]+)", "");
 		}
+
+		return httpResponse;
+	}
+
+	protected void check(String desc, String actual, String expected) {
+		actual = platformNeutral(actual);
+		expected = platformNeutral(expected);
 
 		if (!isEq(actual, expected)) {
 			System.out.println("FAILURE: " + desc);
 		}
+
 		eq(actual, expected);
 	}
 
