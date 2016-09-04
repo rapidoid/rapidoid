@@ -34,7 +34,7 @@ public class HttpStaticFilesTest extends IntegrationTestCommons {
 	public void serveStaticFiles() {
 		On.custom().staticFilesPath("static1", "non-existing-location", "static2");
 
-		On.get("/c").staticJson("override".getBytes());
+		On.get("/c").managed(false).contentType(MediaType.JSON).serve("override");
 
 		onlyGet("/"); // home page
 		onlyGet("/index"); // home page

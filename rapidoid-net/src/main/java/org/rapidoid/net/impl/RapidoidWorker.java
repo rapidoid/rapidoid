@@ -101,6 +101,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		super(name);
 
 		this.bufs = new BufGroup(14, syncBufs); // 2^14B (16 KB per buffer segment)
+
 		this.serverProtocol = protocol;
 		this.helper = helper;
 

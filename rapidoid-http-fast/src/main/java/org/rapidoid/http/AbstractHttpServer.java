@@ -59,14 +59,17 @@ public abstract class AbstractHttpServer extends RapidoidThing implements Protoc
 
 	protected final HttpParser HTTP_PARSER = createParser();
 
+	private final boolean syncBufs;
+
 	public AbstractHttpServer() {
-		this("Rapidoid", "Not found!", "Error!");
+		this("Rapidoid", "Not found!", "Error!", true);
 	}
 
-	public AbstractHttpServer(String serverName, String notFoundMsg, String errorMsg) {
-		SERVER_HDR = hdr("Server: " + serverName);
-		HTTP_404 = fullResp(404, notFoundMsg.getBytes());
-		HTTP_500 = fullResp(500, errorMsg.getBytes());
+	public AbstractHttpServer(String serverName, String notFoundMsg, String errorMsg, boolean syncBufs) {
+		this.SERVER_HDR = hdr("Server: " + serverName);
+		this.HTTP_404 = fullResp(404, notFoundMsg.getBytes());
+		this.HTTP_500 = fullResp(500, errorMsg.getBytes());
+		this.syncBufs = syncBufs;
 	}
 
 	private static byte[] hdr(String name) {
@@ -230,6 +233,7 @@ public abstract class AbstractHttpServer extends RapidoidThing implements Protoc
 			.protocol(this)
 			.address(address)
 			.port(port)
+			.syncBufs(syncBufs)
 			.build()
 			.start();
 	}

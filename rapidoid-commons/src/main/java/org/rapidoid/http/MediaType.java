@@ -1049,6 +1049,7 @@ public class MediaType extends RapidoidThing {
 	public static final MediaType TEXT_IULS = create("text/iuls", "uls");
 	public static final MediaType TEXT_MATHML = create("text/mathml", "mml");
 	public static final MediaType TEXT_N3 = create("text/n3", "n3");
+	public static final MediaType TEXT_PLAIN = create("text/plain");
 	public static final MediaType TEXT_PLAIN_UTF8 = createUTF8("text/plain", "asc", "txt", "text", "conf", "def",
 		"pot", "brf", "LIST", "LOG", "IN");
 	public static final MediaType TEXT_PRS_LINES_TAG = create("text/prs.lines.tag", "dsc");

@@ -42,7 +42,7 @@ public class DynamicClientTest extends IntegrationTestCommons {
 	public void testDynamic() {
 		On.get("/test-abc").html("abc-ok");
 
-		On.get("/nums").staticJson("[1, 2, 3]".getBytes());
+		On.get("/nums").managed(false).contentType(MediaType.JSON).serve("[1, 2, 3]");
 
 		On.get("/size").json(new ReqHandler() {
 			@Override
