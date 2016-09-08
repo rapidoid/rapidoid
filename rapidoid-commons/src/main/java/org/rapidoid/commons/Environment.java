@@ -113,6 +113,7 @@ public class Environment extends RapidoidInitializer {
 		}
 
 		String modeProfile = mode.name().toLowerCase();
+		Log.info("Automatically activating mode-related profile", "!profile", modeProfile);
 		profiles.add(modeProfile);
 
 		Log.info("Initialized environment", "!mode", mode, "!profiles", profiles);
