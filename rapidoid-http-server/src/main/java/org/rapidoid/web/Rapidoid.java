@@ -33,6 +33,10 @@ public class Rapidoid extends RapidoidThing {
 	private Rapidoid() {
 	}
 
+	/**
+	 * Use <code>App.bootstrap(args)</code> instead.
+	 */
+	@Deprecated
 	public static synchronized AppBootstrap run(String... args) {
 		return App.bootstrap(args);
 	}
