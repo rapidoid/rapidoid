@@ -100,6 +100,17 @@ public class App extends RapidoidThing {
 		return new AppBootstrap();
 	}
 
+	public static AppBootstrap run(String[] args, String... extraArgs) {
+		return run(Arr.concat(args, extraArgs));
+	}
+
+	public static AppBootstrap run(String... args) {
+		args(args);
+		// no implicit classpath scanning here
+
+		return new AppBootstrap();
+	}
+
 	public static void profiles(String... profiles) {
 		Env.setProfiles(profiles);
 		Conf.reset();
