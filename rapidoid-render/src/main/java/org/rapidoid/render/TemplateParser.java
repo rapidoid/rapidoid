@@ -38,7 +38,11 @@ public class TemplateParser extends RapidoidThing {
 
 	static final String EXPR = "(\\$|@)\\{([^\\}]+?)\\}";
 	static final String STAT = NL + SP + "\\{\\{([\\^!#\\?/>][^\\}]+?)\\}\\}" + SP + NL;
-	static final String TAG = "</?\\s*(\\w+(-\\w+)*)(\\s+\\w+=\"[^\"]+?\")*?\\s*/?>";
+
+	static final String W = "[a-zA-Z0-9_]";
+	static final String ID = "(" + W + "+(?:-" + W + "+)*)";
+	static final String TAG_NAME = ID + "\\:" + ID;
+	static final String TAG = "<" + TAG_NAME + "(\\s+" + W + "+=\"[^\"]*?\")*?(?:\\s?/)?>|</" + TAG_NAME + ">";
 
 	static final Pattern TOKENIZER = Pattern.compile("(?s)(.*?)(?:" + U.join("|", EXPR, STAT) + ")");
 
