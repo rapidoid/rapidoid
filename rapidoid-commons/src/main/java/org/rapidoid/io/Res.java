@@ -354,7 +354,7 @@ public class Res extends RapidoidThing {
 
 		if (dir.exists()) {
 			if (dir.isDirectory()) {
-				Log.info("Setting application root", "!root", root, "!content", dir.listFiles());
+				Log.info("Setting application root", "!root", root, "!content", U.list(dir.listFiles()));
 			} else {
 				Log.error("The configured application root must be a folder!", "!root", root);
 			}

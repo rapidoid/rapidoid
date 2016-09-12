@@ -366,9 +366,14 @@ public class Log extends RapidoidThing {
 
 	private static Callable<Logger> createLoggerFactory() {
 		try {
+
 			Class.forName("org.slf4j.LoggerFactory");
+			Class.forName("org.slf4j.impl.StaticLoggerBinder");
+
 			return createSlf4jLoggerFactory();
+
 		} catch (ClassNotFoundException e) {
+
 			return createNullLoggerFactory();
 		}
 	}
