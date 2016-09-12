@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Env;
 import org.rapidoid.commons.RapidoidInfo;
+import org.rapidoid.config.Conf;
 import org.rapidoid.http.IntegrationTestCommons;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.setup.App;
@@ -39,6 +40,8 @@ public class StatusHandlerTest extends IntegrationTestCommons {
 	public void testDefault() throws Exception {
 		Env.reset();
 
+		Conf.ROOT.set("id", "foo-bar");
+
 		verify("in-test", status().toString());
 	}
 
@@ -47,6 +50,7 @@ public class StatusHandlerTest extends IntegrationTestCommons {
 		Env.reset();
 
 		App.args("profiles=mysql", "production");
+		Conf.ROOT.set("id", "rpd123");
 		ClasspathUtil.appJar("/a/b.jar");
 
 		verify("app-setup", status().toString());

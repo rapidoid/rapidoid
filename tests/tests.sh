@@ -58,7 +58,7 @@ mkdir output
 ./simple-test-bg.sh admin-service-welcome admin.services=welcome
 
 ./simple-fetch.sh ping 8888 /_ping app.services=ping
-./simple-fetch.sh status 8888 /_status app.services=status
+./simple-fetch.sh status 8888 /_status app.services=status id=rapidoid.xyz-123
 
 # ./proxy.sh $1
 

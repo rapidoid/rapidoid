@@ -1,1 +1,1 @@
-{root=null, jar=null, jarExists=false, notes=, mode=TEST, profiles=[default, test]}
+{id=foo-bar, root=null, jar=null, jarExists=false, notes=, mode=TEST, profiles=[default, test]}

@@ -74,7 +74,9 @@ public class Msc extends RapidoidThing implements Constants {
 
 	private static final boolean uniformOutput = "true".equalsIgnoreCase(System.getenv("UNIFORM_OUTPUT"));
 
-	private static long measureStart;
+	private static volatile String uid;
+
+	private static volatile long measureStart;
 
 	public static final ScheduledThreadPoolExecutor EXECUTOR = new ScheduledThreadPoolExecutor(8,
 		new RapidoidThreadFactory("utils", true));
@@ -959,7 +961,11 @@ public class Msc extends RapidoidThing implements Constants {
 	}
 
 	public static int processId() {
-		return U.num(ManagementFactory.getRuntimeMXBean().getName().split("@")[0]);
+		return U.num(processName().split("@")[0]);
+	}
+
+	public static String processName() {
+		return ManagementFactory.getRuntimeMXBean().getName();
 	}
 
 	public static String javaVersion() {
@@ -1001,6 +1007,13 @@ public class Msc extends RapidoidThing implements Constants {
 		Conf.reset();
 		JDBC.reset();
 		Env.reset();
+
+		resetState();
+	}
+
+	private static void resetState() {
+		uid = null;
+		measureStart = 0;
 	}
 
 	public static boolean isAscii(String s) {
@@ -1052,4 +1065,8 @@ public class Msc extends RapidoidThing implements Constants {
 		return uniformOutput ? "<?>" : value;
 	}
 
+	public static synchronized String id() {
+		if (uid == null) uid = Conf.ROOT.entry("id").or(processName());
+		return uid;
+	}
 }

@@ -9,8 +9,6 @@ import org.rapidoid.log.Log;
 import org.rapidoid.log.LogbackUtil;
 import org.rapidoid.util.Msc;
 
-import java.lang.management.ManagementFactory;
-
 /*
  * #%L
  * rapidoid-commons
@@ -46,7 +44,7 @@ public class RapidoidInitializer extends RapidoidThing {
 			initialized = true;
 
 			String ver = RapidoidInfo.version();
-			String proc = ManagementFactory.getRuntimeMXBean().getName();
+			String proc = Msc.processName();
 			String dir = System.getProperty("user.dir");
 			String maxMem = (Runtime.getRuntime().maxMemory() / 1024 / 1024) + " MB";
 

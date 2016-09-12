@@ -41,6 +41,7 @@ public class StatusHandler extends RapidoidThing implements Callable<Object> {
 	@Override
 	public Map<String, ?> call() throws Exception {
 		return U.map(
+			"id", Msc.id(),
 			"root", Res.root(),
 			"jar", ClasspathUtil.appJar(),
 			"jarExists", U.notEmpty(ClasspathUtil.appJar()) && new File(ClasspathUtil.appJar()).exists(),
