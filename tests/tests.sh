@@ -60,7 +60,7 @@ mkdir output
 ./simple-fetch.sh ping 8888 /_ping app.services=ping
 ./simple-fetch.sh status 8888 /_status app.services=status id=rapidoid.xyz-123
 
-# ./proxy.sh $1
+./proxy.sh
 
 printf "\n - DONE\n\n"
 

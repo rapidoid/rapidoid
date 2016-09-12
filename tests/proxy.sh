@@ -4,40 +4,41 @@ IFS=$'\n\t'
 
 ./cleanup.sh
 
-printf "\n - Testing PROXY\n\n"
+printf "\n - Testing PROXY (tag=$TAG)\n\n"
 
-docker run -d \
+docker run \
     --net=host \
     -e "UNIFORM_OUTPUT=true" \
-    --name proxy \
     rapidoid/rapidoid:$TAG \
-    '/app1->https://localhost:8080' \
-    '/app2->https://localhost:9090' \
-    '/->https://https://localhost:8080,http://upstream2:9090' \
+    '/app->http://localhost:8080,http://localhost:9090' \
     on.port=80 \
+    > output/proxy.txt 2>&1 &
+
+sleep 3
 
 docker run -d \
     --net=host \
     -e "UNIFORM_OUTPUT=true" \
-    --name app1 \
     rapidoid/rapidoid:$TAG \
+    id=app1 \
     on.port=8080 \
-    secret=secret1 \
-    users.admin.password=my-passwd
+    app.services=status
 
 docker run -d \
     --net=host \
     -e "UNIFORM_OUTPUT=true" \
-    --name app2 \
     rapidoid/rapidoid:$TAG \
+    id=app2 \
     on.port=9090 \
-    secret=secret1 \
-    users.admin.password=my-passwd
+    app.services=status
 
-sleep 5
+./wait-for.sh 8080
+./wait-for.sh 9090
 
-curl -i  --raw 'http://localhost:80/'
-curl -i  --raw 'http://localhost:80/'
-curl -i  --raw 'http://localhost:80/'
+./http-get.sh app-proxy-req1 80 /app/_status
+./http-get.sh app-proxy-req2 80 /app/_status
+./http-get.sh app-proxy-req3 80 /app/_status
+./http-get.sh app-proxy-req4 80 /app/_status
+./http-get.sh app-proxy-req5 80 /app/_status
 
 ./cleanup.sh
