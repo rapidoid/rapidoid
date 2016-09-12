@@ -11,6 +11,7 @@ docker run \
     -e "UNIFORM_OUTPUT=true" \
     rapidoid/rapidoid:$TAG \
     '/app->http://localhost:8080,http://localhost:9090' \
+    '/->http://localhost:9090,http://localhost:8080' \
     on.port=80 \
     > output/proxy.txt 2>&1 &
 

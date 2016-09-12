@@ -63,7 +63,7 @@ public class ProxyMapping extends RapidoidThing {
 	public String getTargetUrl(Req req) {
 		ProxyUpstream upstream = loadBalancer.pickUpstream(req, upstreams);
 
-		String trimmed = Str.triml(req.uri(), prefix());
+		String trimmed = prefix.equals("/") ? req.uri() : Str.triml(req.uri(), prefix);
 
 		return upstream.url() + trimmed;
 	}

@@ -35,6 +35,8 @@ import org.rapidoid.jpa.JPA;
 import org.rapidoid.jpa.JPAUtil;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
+import org.rapidoid.reverseproxy.ProxyMapping;
+import org.rapidoid.reverseproxy.Reverse;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.setup.*;
 import org.rapidoid.sql.JDBC;
@@ -90,14 +92,6 @@ public abstract class IntegrationTestCommons extends TestCommons {
 		System.out.println("--- SERVER STARTED ---");
 
 		verifyNoRoutes();
-
-		notFound("/");
-		notFound("/a");
-		notFound("/b?dgfg");
-		notFound("/c?x=123");
-		notFound("/else");
-		notFound("/echo");
-		notFound("/upload");
 	}
 
 	@After
@@ -362,6 +356,10 @@ public abstract class IntegrationTestCommons extends TestCommons {
 
 	protected void tx(Runnable action) {
 		JPA.transaction(action);
+	}
+
+	protected ProxyMapping proxy(String match, String upstreams) {
+		return Reverse.proxy().map(match).to(upstreams);
 	}
 
 }
