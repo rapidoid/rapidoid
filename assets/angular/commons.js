@@ -2,23 +2,7 @@
 
     Rapidoid.initializer(function($scope) {
 
-        $scope.toggleMore = function(item) {
-            item.more = !item.more;
-        }
-
-        $scope.upvote = function(item) {
-            item.vote = item.vote != 1 ? 1 : 0;
-        }
-
-        $scope.downvote = function(item) {
-            item.vote = item.vote != -1 ? -1 : 0;
-        }
-
-        $scope.unvote = function(item) {
-            item.vote = 0;
-        }
-
-        $scope.toggleFavorite = function(item) {
+        $scope.toggleLocalFavorite = function(item) {
             var favs = JSON.parse(localStorage['favorites'] || '{}');
             item.fav = !item.fav;
             if (item.fav) {

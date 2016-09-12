@@ -1,4 +1,8 @@
-/* Rapidoid Extras */
+/*!
+ * Rapidoid Extras
+ * Author: Nikolche Mihajlovski
+ * Licence: MIT
+ */
 window.Rapidoid = window.Rapidoid || {};
 
 (function() {
