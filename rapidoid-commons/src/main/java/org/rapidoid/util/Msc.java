@@ -11,9 +11,11 @@ import org.rapidoid.annotation.Run;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.Coll;
+import org.rapidoid.commons.Arr;
 import org.rapidoid.commons.Env;
 import org.rapidoid.commons.Str;
 import org.rapidoid.config.Conf;
+import org.rapidoid.config.ConfigOptions;
 import org.rapidoid.crypto.Crypto;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
@@ -69,6 +71,8 @@ import java.util.concurrent.*;
 public class Msc extends RapidoidThing implements Constants {
 
 	public static final String OS_NAME = System.getProperty("os.name");
+
+	private static final boolean uniformOutput = "true".equalsIgnoreCase(System.getenv("UNIFORM_OUTPUT"));
 
 	private static long measureStart;
 
@@ -798,6 +802,10 @@ public class Msc extends RapidoidThing implements Constants {
 		return Cls.exists("ch.qos.logback.classic.Logger");
 	}
 
+	public static boolean hasSlf4jImpl() {
+		return Cls.exists("org.slf4j.impl.StaticLoggerBinder");
+	}
+
 	public static boolean isValidationError(Throwable error) {
 		return (error instanceof InvalidData) || error.getClass().getName().startsWith("javax.validation.");
 	}
@@ -1004,6 +1012,44 @@ public class Msc extends RapidoidThing implements Constants {
 
 	public static RapidoidThreadLocals locals() {
 		return RapidoidThreadLocals.get();
+	}
+
+	public static boolean bootService(String setup, String service) {
+		String prefix = setup + ".services=";
+
+		for (String arg : Env.args()) {
+			if (arg.startsWith(prefix)) {
+				String[] services = Str.triml(arg, prefix).split("\\,");
+
+				for (String srvc : services) {
+					U.must(ConfigOptions.SERVICE_NAMES.contains(srvc), "Unknown service: '%s'!", srvc);
+				}
+
+				return Arr.contains(services, service);
+			}
+		}
+
+		return false;
+	}
+
+	public static boolean insideDocker() {
+		return U.eq(System.getenv("RAPIDOID_JAR"), "/opt/rapidoid.jar")
+			&& U.eq(System.getenv("RAPIDOID_TMP"), "/tmp/rapidoid")
+			&& U.notEmpty(System.getenv("RAPIDOID_VERSION"))
+			&& hasAppFolder();
+	}
+
+	private static boolean hasAppFolder() {
+		File app = new File("/app");
+		return app.exists() && app.isDirectory();
+	}
+
+	public static boolean uniformOutput() {
+		return uniformOutput;
+	}
+
+	public static Object maybeMasked(Object value) {
+		return uniformOutput ? "<?>" : value;
 	}
 
 }

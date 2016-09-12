@@ -31,8 +31,38 @@ import org.rapidoid.setup.Setup;
 public class RapidoidGoodies extends RapidoidThing implements IGoodies {
 
 	@Override
-	public void adminCenter(Setup setup) {
-		Goodies.adminCenter(setup);
+	public void overview(Setup setup) {
+		Goodies.overview(setup);
+	}
+
+	@Override
+	public void application(Setup setup) {
+		Goodies.application(setup);
+	}
+
+	@Override
+	public void lifecycle(Setup setup) {
+		Goodies.lifecycle(setup);
+	}
+
+	@Override
+	public void jmx(Setup setup) {
+		Goodies.jmx(setup);
+	}
+
+	@Override
+	public void metrics(Setup setup) {
+		Goodies.metrics(setup);
+	}
+
+	@Override
+	public void deploy(Setup setup) {
+		Goodies.deploy(setup);
+	}
+
+	@Override
+	public void ping(Setup setup) {
+		Goodies.ping(setup);
 	}
 
 	@Override
@@ -40,4 +70,23 @@ public class RapidoidGoodies extends RapidoidThing implements IGoodies {
 		Goodies.auth(setup);
 	}
 
+	@Override
+	public void oauth(Setup setup) {
+		Goodies.oauth(setup);
+	}
+
+	@Override
+	public void adminCenter(Setup setup) {
+		Goodies.adminCenter(setup);
+	}
+
+	@Override
+	public void entities(Setup setup) {
+		Goodies.entities(setup);
+	}
+
+	@Override
+	public void welcome(Setup setup) {
+		Goodies.welcome(setup);
+	}
 }

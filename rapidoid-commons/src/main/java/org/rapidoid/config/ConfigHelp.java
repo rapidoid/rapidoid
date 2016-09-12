@@ -1,8 +1,11 @@
 package org.rapidoid.config;
 
 import org.rapidoid.RapidoidThing;
+import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.commons.Str;
 import org.rapidoid.u.U;
+
+import java.util.List;
 
 /*
  * #%L
@@ -31,26 +34,41 @@ import org.rapidoid.u.U;
 public class ConfigHelp extends RapidoidThing {
 
 	public static void processHelp(Object[] args) {
-		if (args != null && args.length == 1 && args[0].equals("--help")) {
-			show("Usage:");
-			show("  java -cp <yourapp>.jar com.example.Main [option1 option2 ...]");
-
-			show("\nExample:");
-			show("  java -cp <yourapp>.jar com.example.Main on.port=9090 on.address=127.0.0.1 production secret=my-secret");
-
-			show("\nAvailable options:");
-
-			for (ConfigOption opt : ConfigOptions.ALL) {
-				String desc = U.frmt("%s (default: %s)", opt.getDesc(), opt.getDefaultValue());
-				opt(opt.getName(), desc);
+		for (Object arg : args) {
+			if (arg.equals("--help")) {
+				showUsage();
 			}
+		}
+	}
 
-			System.exit(0);
+	private static void showUsage() {
+		show("Rapidoid v" + RapidoidInfo.version() + RapidoidInfo.notes());
+		show("");
+		show("Usage:");
+		show("  java -cp <yourapp>.jar com.example.Main [option1 option2 ...]");
+
+		show("\nExample:");
+		show("  java -cp <yourapp>.jar com.example.Main on.port=9090 on.address=127.0.0.1 app.services=ping,jmx admin.services=ping,jmx production secret=my-secret");
+
+		show("\nMain configuration options:");
+		showOpts(ConfigOptions.ALL);
+
+		show("\nService activation options:");
+		showOpts(ConfigOptions.SERVICES);
+
+		show("\nFor a complete list of options see: http://www.rapidoid.org/the-default-configuration.html");
+		System.exit(0);
+	}
+
+	private static void showOpts(List<ConfigOption> opts) {
+		for (ConfigOption opt : opts) {
+			String desc = U.frmt("%s (default: %s)", opt.getDesc(), opt.getDefaultValue());
+			opt(opt.getName(), desc);
 		}
 	}
 
 	private static void opt(String opt, String desc) {
-		show("  " + opt + Str.mul(" ", 21 - opt.length()) + " - " + desc);
+		show("  " + opt + Str.mul(" ", 25 - opt.length()) + " - " + desc);
 	}
 
 	private static void show(String msg) {

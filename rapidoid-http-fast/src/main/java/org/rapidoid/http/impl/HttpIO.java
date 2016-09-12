@@ -78,6 +78,8 @@ public class HttpIO extends RapidoidThing implements Constants {
 	private static final boolean MANDATORY_HEADER_SERVER;
 	private static final boolean MANDATORY_HEADER_CONTENT_TYPE;
 
+	private static final byte[] UNIFORM_DATE = "Sat, 10 Sep 2016 01:02:03 GMT".getBytes();
+
 	static {
 		for (int len = 0; len < CONTENT_LENGTHS.length; len++) {
 			CONTENT_LENGTHS[len] = (new String(CONTENT_LENGTH_IS) + len + new String(CR_LF)).getBytes();
@@ -122,7 +124,13 @@ public class HttpIO extends RapidoidThing implements Constants {
 
 		if (MANDATORY_HEADER_DATE) {
 			ctx.write(DATE_IS);
-			ctx.write(Dates.getDateTimeBytes());
+
+			if (!Msc.uniformOutput()) {
+				ctx.write(Dates.getDateTimeBytes());
+			} else {
+				ctx.write(UNIFORM_DATE);
+			}
+
 			ctx.write(CR_LF);
 		}
 

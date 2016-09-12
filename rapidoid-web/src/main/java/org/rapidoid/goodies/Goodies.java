@@ -3,21 +3,21 @@ package org.rapidoid.goodies;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Env;
-import org.rapidoid.config.Conf;
-import org.rapidoid.config.Config;
-import org.rapidoid.crypto.Crypto;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.http.HttpUtils;
+import org.rapidoid.http.HttpVerb;
+import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.insight.Metrics;
 import org.rapidoid.jpa.JPA;
-import org.rapidoid.log.Log;
 import org.rapidoid.security.Role;
+import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
-import org.rapidoid.util.AnsiColor;
+import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
 import java.lang.management.ManagementFactory;
+import java.lang.reflect.Method;
 
 /*
  * #%L
@@ -42,8 +42,6 @@ import java.lang.management.ManagementFactory;
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class Goodies extends RapidoidThing {
-
-	private static volatile String generatedAdminPassword;
 
 	public static MultiDetailsHandler memoryPool() {
 		return new MultiDetailsHandler("Memory pool", ManagementFactory.getMemoryPoolMXBeans(), "name", "type", "memoryManagerNames", "usage", "peakUsage", "collectionUsage");
@@ -143,34 +141,56 @@ public class Goodies extends RapidoidThing {
 	}
 
 	public static void bootstrapAppGoodies(Setup setup) {
-		if (!setup.goodies()) {
-			Log.warn("Goodies are disabled for setup: " + setup.name());
-			return;
-		}
-
 		Msc.logSection("Registering App goodies:");
 
 		auth(setup);
 	}
 
 	public static void adminCenter(Setup setup) {
-		if (!setup.goodies()) {
-			Log.warn("Goodies are disabled for setup: " + setup.name());
-			return;
-		}
-
 		Msc.logSection("Registering Admin goodies:");
 
 		Metrics.bootstrap();
 
+		overview(setup);
+		entities(setup);
+		application(setup);
+		lifecycle(setup);
+		jmx(setup);
+		metrics(setup);
+		deploy(setup);
+		auth(setup);
+	}
+
+	public static void ping(Setup setup) {
+		setup.get("/_ping").plain("OK");
+	}
+
+	public static void lifecycle(Setup setup) {
+		setup.page("/_/terminate").mvc(Goodies.terminate());
+	}
+
+	public static void overview(Setup setup) {
 		setup.page("/_").mvc(Goodies.overview());
+	}
 
-		jpaGoodies(setup);
-
+	public static void application(Setup setup) {
 		setup.page("/_/routes").mvc(Goodies.routes());
 		setup.page("/_/beans").mvc(Goodies.beans());
 		setup.page("/_/config").mvc(Goodies.config());
+		setup.get("/_/classpath").mvc(Goodies.classpath());
+	}
 
+	public static void deploy(Setup setup) {
+		setup.page("/_/deploy").mvc(Goodies.deploy());
+		setup.post("/_/jar").json(Goodies.jarUpload());
+	}
+
+	public static void metrics(Setup setup) {
+		setup.page("/_/metrics").mvc(Goodies.graphs());
+		setup.get("/_/graphs/{id:.*}").json(Goodies.graphData());
+	}
+
+	public static void jmx(Setup setup) {
 		setup.page("/_/jmx/memory").mvc(Goodies.memory());
 		setup.page("/_/jmx/mempool").mvc(Goodies.memoryPool());
 		setup.page("/_/jmx/classes").mvc(Goodies.classes());
@@ -179,40 +199,9 @@ public class Goodies extends RapidoidThing {
 		setup.page("/_/jmx/compilation").mvc(Goodies.compilation());
 		setup.page("/_/jmx/runtime").mvc(Goodies.runtime());
 		setup.page("/_/jmx/gc").mvc(Goodies.gc());
-
-		setup.page("/_/metrics").mvc(Goodies.graphs());
-		setup.get("/_/graphs/{id:.*}").json(Goodies.graphData());
-
-		setup.get("/_/classpath").mvc(Goodies.classpath());
-		setup.page("/_/deploy").mvc(Goodies.deploy());
-		setup.post("/_/jar").json(Goodies.jarUpload());
-		setup.page("/_/terminate").mvc(Goodies.terminate());
-
-		setup.get("/_ping").plain("OK");
-
-		auth(setup);
-
-		if (Env.dev()) {
-			Config admin = Conf.USERS.sub("admin");
-
-			if (!admin.has("password") && !admin.has("hash")) {
-				String pass = generatedAdminPassword();
-				admin.set("password", pass);
-
-				Msc.logSection("ADMIN CREDENTIALS: username = " + AnsiColor.bold("admin") + ", password = " + AnsiColor.bold(pass));
-			}
-		}
 	}
 
-	public static synchronized String generatedAdminPassword() {
-		if (generatedAdminPassword == null) {
-			generatedAdminPassword = Crypto.randomStr(16);
-		}
-
-		return generatedAdminPassword;
-	}
-
-	private static void jpaGoodies(Setup setup) {
+	public static void entities(Setup setup) {
 		setup.page("/_/entities").mvc(Goodies.entities());
 
 		if (Msc.hasJPA()) {
@@ -222,6 +211,25 @@ public class Goodies extends RapidoidThing {
 				X.scaffold(setup, Msc.uri(contextPath, uri), type);
 			}
 		}
+	}
+
+	public static void oauth(Setup setup) {
+		Class<?> oauthClass = Cls.getClassIfExists("org.rapidoid.oauth.OAuth");
+		U.must(oauthClass != null, "Cannot find the OAuth components, is module 'rapidoid-oauth' missing?");
+
+		Method bootstrap = Cls.getMethod(oauthClass, "bootstrap", Setup.class);
+
+		Cls.invokeStatic(bootstrap, setup);
+	}
+
+	public static void welcome(Setup setup) {
+		if (!setup.routes().hasRouteOrResource(HttpVerb.GET, "/")) {
+			On.get("/").view("_welcome").mvc(welcome());
+		}
+	}
+
+	public static ReqRespHandler welcome() {
+		return new WelcomeHandler();
 	}
 
 }

@@ -4,6 +4,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,4 +55,12 @@ public class RapidoidInfo extends RapidoidThing {
 		return VERSION;
 	}
 
+	public static String notes() {
+		String notes = "";
+
+		if (Msc.insideDocker()) notes += " [Dockerized]";
+		if (Msc.uniformOutput()) notes += " [Uniform output]";
+
+		return notes;
+	}
 }

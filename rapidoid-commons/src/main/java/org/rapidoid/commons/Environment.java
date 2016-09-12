@@ -113,7 +113,7 @@ public class Environment extends RapidoidInitializer {
 		}
 
 		String modeProfile = mode.name().toLowerCase();
-		Log.info("Automatically activating mode-related profile", "!profile", modeProfile);
+		Log.info("Automatically activating mode-specific profile", "!profile", modeProfile);
 		profiles.add(modeProfile);
 
 		Log.info("Initialized environment", "!mode", mode, "!profiles", profiles);
@@ -122,7 +122,10 @@ public class Environment extends RapidoidInitializer {
 	private static EnvMode inferMode() {
 		if (Msc.isInsideTest()) {
 			return EnvMode.TEST;
+
 		} else {
+			if (Msc.insideDocker()) return EnvMode.PRODUCTION;
+
 			return ClasspathUtil.getClasspathFolders().isEmpty() ? EnvMode.PRODUCTION : EnvMode.DEV;
 		}
 	}

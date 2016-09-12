@@ -1,6 +1,6 @@
 package org.rapidoid.setup;
 
-import org.rapidoid.RapidoidThing;
+import org.rapidoid.AuthBootstrap;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
@@ -25,7 +25,6 @@ import org.rapidoid.ioc.IoC;
 import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.lambda.NParamLambda;
-import org.rapidoid.log.Log;
 import org.rapidoid.net.Server;
 import org.rapidoid.security.Role;
 import org.rapidoid.u.U;
@@ -112,7 +111,6 @@ public class Setup extends RapidoidInitializer implements Constants {
 	private volatile Server server;
 	private volatile boolean activated;
 	private volatile boolean reloaded;
-	private volatile boolean goodies = true;
 
 	private final Once bootstrapedComponents = new Once();
 
@@ -394,7 +392,6 @@ public class Setup extends RapidoidInitializer implements Constants {
 		processor = null;
 		activated = false;
 		ioCContext.reset();
-		goodies = true;
 		server = null;
 
 		defaults = new RouteOptions();
@@ -459,6 +456,13 @@ public class Setup extends RapidoidInitializer implements Constants {
 
 	static void initDefaults() {
 		ADMIN.defaults().roles(Role.ADMINISTRATOR);
+
+		ADMIN.routes().onInit(new Runnable() {
+			@Override
+			public void run() {
+				AuthBootstrap.bootstrapAdminCredentials();
+			}
+		});
 	}
 
 	public static List<Setup> instances() {
@@ -479,15 +483,6 @@ public class Setup extends RapidoidInitializer implements Constants {
 
 	private RouteOptions opts() {
 		return new RouteOptions();
-	}
-
-	public boolean goodies() {
-		return goodies;
-	}
-
-	public Setup goodies(boolean goodies) {
-		this.goodies = goodies;
-		return this;
 	}
 
 	public String name() {

@@ -40,6 +40,7 @@ org.rapidoid.annotation.Transaction
 org.rapidoid.annotation.TransactionMode
 org.rapidoid.annotation.Valid
 org.rapidoid.annotation.Wired
+org.rapidoid.AuthBootstrap
 org.rapidoid.beany.AnnotatedPropertyFilter
 org.rapidoid.beany.BeanProp
 org.rapidoid.beany.BeanProperties
@@ -197,6 +198,7 @@ org.rapidoid.goodies.OverviewHandler
 org.rapidoid.goodies.RapidoidGoodies
 org.rapidoid.goodies.RoutesHandler
 org.rapidoid.goodies.TerminateHandler
+org.rapidoid.goodies.WelcomeHandler
 org.rapidoid.goodies.X
 org.rapidoid.gui.base.AbstractCommand
 org.rapidoid.gui.base.AbstractInput
@@ -602,6 +604,7 @@ org.rapidoid.setup.App
 org.rapidoid.setup.AppBootstrap
 org.rapidoid.setup.AppRestartListener
 org.rapidoid.setup.AppRestartProcessor
+org.rapidoid.setup.AppVerification
 org.rapidoid.setup.CustomizableSetupAwarePersisterProvider
 org.rapidoid.setup.IGoodies
 org.rapidoid.setup.My
@@ -611,6 +614,8 @@ org.rapidoid.setup.OnError
 org.rapidoid.setup.OnRoute
 org.rapidoid.setup.PojoHandlersSetup
 org.rapidoid.setup.ReloadUtil
+org.rapidoid.setup.ServiceActivator
+org.rapidoid.setup.ServiceBootstrap
 org.rapidoid.setup.Setup
 org.rapidoid.setup.WatchForChanges
 org.rapidoid.sql.C3P0ConnectionPool

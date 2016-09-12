@@ -93,6 +93,9 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 
 	private final Set<Route> routes = Coll.synchronizedSet();
 
+	private volatile boolean initialized;
+	private volatile Runnable onInit;
+
 	public HttpRoutesImpl(Customization customization) {
 		this.customization = customization;
 		staticResourcesHandler = new StaticResourcesHandler(customization);
@@ -423,6 +426,8 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 
 		U.must(path.startsWith("/"), "The URI must start with '/', but found: '%s'", path);
 
+		initialize();
+
 		if (add) {
 			U.notNull(handler, "HTTP handler");
 		}
@@ -480,6 +485,9 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 		staticResourcesHandler = new StaticResourcesHandler(customization);
 
 		routes.clear();
+
+		initialized = false;
+		onInit = null;
 	}
 
 	@Override
@@ -551,6 +559,25 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 
 	public HttpHandler staticResourcesHandler() {
 		return staticResourcesHandler;
+	}
+
+	@Override
+	public Runnable onInit() {
+		return onInit;
+	}
+
+	@Override
+	public void onInit(Runnable onInit) {
+		this.onInit = onInit;
+	}
+
+	private synchronized void initialize() {
+		if (initialized) return;
+
+		initialized = true;
+		Runnable initializer = onInit;
+
+		if (initializer != null) initializer.run();
 	}
 
 }

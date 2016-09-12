@@ -55,4 +55,8 @@ public interface HttpRoutes {
 
 	boolean hasRouteOrResource(HttpVerb verb, String uri);
 
+	Runnable onInit();
+
+	void onInit(Runnable onInit);
+
 }

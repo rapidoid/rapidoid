@@ -86,4 +86,9 @@ public class MscTest extends TestCommons {
 		eq(Msc.path("/ab/", "cd"), abcd);
 	}
 
+	@Test
+	public void testInsideDocker() throws Exception {
+		isFalse(Msc.insideDocker());
+	}
+
 }

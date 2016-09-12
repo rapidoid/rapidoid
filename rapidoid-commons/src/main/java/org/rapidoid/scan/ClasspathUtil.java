@@ -137,7 +137,8 @@ public class ClasspathUtil extends RapidoidInitializer {
 		List<String> classList = U.list(classes);
 
 		long timeMs = U.time() - startingAt;
-		Log.info("Finished classpath scan", "time", timeMs + "ms", "searched", searched.get(), "!found", Msc.classNames(classList));
+
+		Log.info("Finished classpath scan", "time", Msc.maybeMasked(timeMs) + "ms", "searched", searched.get(), "!found", Msc.classNames(classList));
 
 		return classList;
 	}

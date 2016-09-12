@@ -27,8 +27,28 @@ import org.rapidoid.annotation.Since;
 @Since("5.1.0")
 public interface IGoodies {
 
-	void adminCenter(Setup setup);
+	void overview(Setup setup);
+
+	void application(Setup setup);
+
+	void lifecycle(Setup setup);
+
+	void jmx(Setup setup);
+
+	void metrics(Setup setup);
+
+	void deploy(Setup setup);
+
+	void ping(Setup setup);
 
 	void auth(Setup setup);
+
+	void oauth(Setup setup);
+
+	void adminCenter(Setup setup);
+
+	void entities(Setup setup);
+
+	void welcome(Setup setup);
 
 }

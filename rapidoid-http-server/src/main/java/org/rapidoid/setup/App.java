@@ -75,11 +75,12 @@ public class App extends RapidoidThing {
 	});
 
 	public static void args(String[] args, String... extraArgs) {
-		args(Arr.concat(args, extraArgs));
+		args(Arr.concat(extraArgs, args));
 	}
 
 	public static void args(String... args) {
 		ConfigHelp.processHelp(args);
+
 		Env.setArgs(args);
 
 		for (String arg : args) {
@@ -87,28 +88,36 @@ public class App extends RapidoidThing {
 				processProxyArg(arg);
 			}
 		}
+
+		AppVerification.selfVerify(args);
 	}
 
 	public static AppBootstrap bootstrap(String[] args, String... extraArgs) {
-		return bootstrap(Arr.concat(args, extraArgs));
+		return bootstrap(Arr.concat(extraArgs, args));
 	}
 
 	public static AppBootstrap bootstrap(String... args) {
 		args(args);
 		scan();
 
-		return new AppBootstrap();
+		return boot();
 	}
 
 	public static AppBootstrap run(String[] args, String... extraArgs) {
-		return run(Arr.concat(args, extraArgs));
+		return run(Arr.concat(extraArgs, args));
 	}
 
 	public static AppBootstrap run(String... args) {
 		args(args);
 		// no implicit classpath scanning here
 
-		return new AppBootstrap();
+		return boot();
+	}
+
+	private static AppBootstrap boot() {
+		AppBootstrap bootstrap = new AppBootstrap();
+		bootstrap.services();
+		return bootstrap;
 	}
 
 	public static void profiles(String... profiles) {

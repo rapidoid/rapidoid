@@ -1,0 +1,38 @@
+Rapidoid v5.2.3-SNAPSHOT [Dockerized] [Uniform output]
+
+Usage:
+  java -cp <yourapp>.jar com.example.Main [option1 option2 ...]
+
+Example:
+  java -cp <yourapp>.jar com.example.Main on.port=9090 on.address=127.0.0.1 app.services=ping,jmx admin.services=ping,jmx production secret=my-secret
+
+Main configuration options:
+  config                    - configuration filename prefix (default: config)
+  dev                       - run in DEV mode (default: auto-detected)
+  production                - run in PRODUCTION mode (default: auto-detected)
+  test                      - run in TEST mode (default: auto-detected)
+  secret=<SECRET>           - configure app-specific secret for encryption (default: random)
+  profiles=<P1,P2...>       - comma-separated list of application profiles (e.g. mysql,prod) (default: the 'default' profile)
+  on.port=<P>               - the default App server will listen at port P (default: 8888)
+  on.address=<ADDR>         - the default App server will listen at address ADDR (default: 0.0.0.0)
+  admin.port=<P>            - the Admin server will listen at port P (default: same as on.port)
+  admin.address=<ADDR>      - the Admin server will listen at address ADDR (default: on.address)
+  cpus=<C>                  - optimize for C number of CPUs (default: the actual number of the CPUs)
+  app.services=<S1,S2...>   - comma-separated list of services to bootstrap on the App server (default: none)
+  admin.services=<S1,S2...> - comma-separated list of services to bootstrap on the Admin server (default: none)
+
+Service activation options:
+  center                    - Admin Center (default: disabled)
+  ping                      - Ping service (default: disabled)
+  overview                  - Overview service (default: disabled)
+  application               - Application services (default: disabled)
+  lifecycle                 - Lifecycle services (default: disabled)
+  jmx                       - JMX services (default: disabled)
+  metrics                   - Metrics services (default: disabled)
+  deploy                    - Application deployment services (default: disabled)
+  auth                      - Authentication services (default: disabled)
+  oauth                     - OAuth services (default: disabled)
+  entities                  - JPA Entities services (default: disabled)
+  welcome                   - Welcome page (default: disabled)
+
+For a complete list of options see: http://www.rapidoid.org/the-default-configuration.html

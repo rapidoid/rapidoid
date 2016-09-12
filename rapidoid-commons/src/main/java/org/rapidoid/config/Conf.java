@@ -8,6 +8,7 @@ import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.util.Map;
 
@@ -67,6 +68,12 @@ public class Conf extends RapidoidThing {
 		}
 
 		if (config == ROOT) {
+
+			if (Msc.insideDocker()) {
+				if (!APP.has("jar")) APP.set("jar", "/app/app.jar");
+				if (!ROOT.has("root")) ROOT.set("root", "/app");
+			}
+
 			String appJar = APP.entry("jar").str().getOrNull();
 			if (U.notEmpty(appJar)) {
 				ClasspathUtil.appJar(appJar);
