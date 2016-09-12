@@ -44,4 +44,11 @@ public class Reverse extends RapidoidThing {
 		return new ReverseProxy();
 	}
 
+	public static synchronized void reset() {
+		if (DEFAULT_PROXY != null) {
+			DEFAULT_PROXY.reset();
+			DEFAULT_PROXY = null;
+		}
+	}
+
 }

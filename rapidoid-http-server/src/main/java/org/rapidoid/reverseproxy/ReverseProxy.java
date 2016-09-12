@@ -138,4 +138,8 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 		return mappings;
 	}
 
+	public void reset() {
+		mappings.clear();
+	}
+
 }

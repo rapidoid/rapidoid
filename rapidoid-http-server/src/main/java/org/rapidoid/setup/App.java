@@ -235,6 +235,7 @@ public class App extends RapidoidThing {
 		AppBootstrap.reset();
 		beansCache.clear();
 		invoked.clear();
+		Reverse.reset();
 	}
 
 	public static void notifyChanges() {
