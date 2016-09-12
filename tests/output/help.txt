@@ -24,6 +24,7 @@ Main configuration options:
 Service activation options:
   center                    - Admin Center (default: disabled)
   ping                      - Ping service (default: disabled)
+  status                    - Status service (default: disabled)
   overview                  - Overview service (default: disabled)
   application               - Application services (default: disabled)
   lifecycle                 - Lifecycle services (default: disabled)

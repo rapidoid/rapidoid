@@ -2,7 +2,7 @@ package org.rapidoid.setup;
 
 /*
  * #%L
- * rapidoid-http-server
+ * rapidoid-integration-tests
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -20,37 +20,19 @@ package org.rapidoid.setup;
  * #L%
  */
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.IntegrationTestCommons;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public interface IGoodies {
+@Since("5.2.3")
+public class ServiceActivatorTest extends IntegrationTestCommons {
 
-	void overview(Setup setup);
-
-	void application(Setup setup);
-
-	void lifecycle(Setup setup);
-
-	void jmx(Setup setup);
-
-	void metrics(Setup setup);
-
-	void deploy(Setup setup);
-
-	void ping(Setup setup);
-
-	void auth(Setup setup);
-
-	void oauth(Setup setup);
-
-	void adminCenter(Setup setup);
-
-	void entities(Setup setup);
-
-	void welcome(Setup setup);
-
-	void status(Setup setup);
+	@Test
+	public void testCoverage() {
+		// this will fail when a service activation is not covered
+		ServiceActivator.activateServices();
+	}
 
 }

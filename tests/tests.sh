@@ -33,6 +33,9 @@ mkdir output
 ./simple-test-bg.sh app-service-deploy app.services=deploy
 ./simple-test-bg.sh admin-service-deploy admin.services=deploy
 
+./simple-test-bg.sh app-service-status app.services=status
+./simple-test-bg.sh admin-service-status admin.services=status
+
 ./simple-test-bg.sh app-service-ping app.services=ping
 ./simple-test-bg.sh admin-service-ping admin.services=ping
 
@@ -55,6 +58,7 @@ mkdir output
 ./simple-test-bg.sh admin-service-welcome admin.services=welcome
 
 ./simple-fetch.sh ping 8888 /_ping app.services=ping
+./simple-fetch.sh status 8888 /_status app.services=status
 
 # ./proxy.sh $1
 

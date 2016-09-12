@@ -74,6 +74,7 @@ public class ConfigOptions extends RapidoidThing {
 
 		opts.add(srvOpt("center", "Admin Center"));
 		opts.add(srvOpt("ping", "Ping service"));
+		opts.add(srvOpt("status", "Status service"));
 		opts.add(srvOpt("overview", "Overview service"));
 		opts.add(srvOpt("application", "Application services"));
 		opts.add(srvOpt("lifecycle", "Lifecycle services"));

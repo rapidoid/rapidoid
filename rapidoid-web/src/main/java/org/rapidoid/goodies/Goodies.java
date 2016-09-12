@@ -127,6 +127,10 @@ public class Goodies extends RapidoidThing {
 		return new TerminateHandler();
 	}
 
+	public static StatusHandler status() {
+		return new StatusHandler();
+	}
+
 	public static void bootstrap(Setup setup) {
 		if (setup.isAdmin()) {
 			adminCenter(setup);
@@ -159,6 +163,7 @@ public class Goodies extends RapidoidThing {
 		metrics(setup);
 		deploy(setup);
 		auth(setup);
+		status(setup);
 	}
 
 	public static void ping(Setup setup) {
@@ -230,6 +235,10 @@ public class Goodies extends RapidoidThing {
 
 	public static ReqRespHandler welcome() {
 		return new WelcomeHandler();
+	}
+
+	public static void status(Setup setup) {
+		setup.get("/_status").json(Goodies.status());
 	}
 
 }

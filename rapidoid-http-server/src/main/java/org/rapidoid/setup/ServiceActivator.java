@@ -66,6 +66,7 @@ public class ServiceActivator extends RapidoidThing {
 		if (boot(setupName, "entities")) goodies().entities(setup);
 		if (boot(setupName, "center")) goodies().adminCenter(setup);
 		if (boot(setupName, "welcome")) goodies().welcome(setup);
+		if (boot(setupName, "status")) goodies().status(setup);
 	}
 
 	private static boolean boot(String setupName, String service) {

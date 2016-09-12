@@ -118,6 +118,13 @@ public class AppBootstrap extends RapidoidThing {
 		}
 	};
 
+	private static final ServiceBootstrap status = new ServiceBootstrap() {
+		@Override
+		protected void bootstrap() {
+			getGoodies().status(Admin.setup());
+		}
+	};
+
 	private static final ServiceBootstrap adminCenter = new ServiceBootstrap() {
 		@Override
 		protected void bootstrap() {
@@ -165,6 +172,11 @@ public class AppBootstrap extends RapidoidThing {
 		return this;
 	}
 
+	public AppBootstrap status() {
+		status.run();
+		return this;
+	}
+
 	public AppBootstrap ping() {
 		ping.run();
 		return this;
@@ -209,6 +221,7 @@ public class AppBootstrap extends RapidoidThing {
 		jmx.reset();
 		metrics.reset();
 		deploy.reset();
+		status.reset();
 		ping.reset();
 		auth.reset();
 		oauth.reset();

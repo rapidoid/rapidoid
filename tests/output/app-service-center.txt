@@ -36,3 +36,4 @@ INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setu
 INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = app | verbs = POST | path = /_/jar | roles = [] | tx = NONE | mvc = false
 INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = app | verbs = POST | path = /_login | roles = [] | tx = NONE | mvc = false
 INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = app | verbs = GET | path = /_logout | roles = [logged_in] | tx = NONE | mvc = false
+INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = app | verbs = GET | path = /_status | roles = [] | tx = NONE | mvc = false
