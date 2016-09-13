@@ -42,4 +42,8 @@ docker run -d \
 ./http-get.sh app-proxy-req4 80 /app/_status
 ./http-get.sh app-proxy-req5 80 /app/_status
 
+./http-get.sh proxy-req1 80 /_status
+./http-get.sh proxy-req2 80 /_status
+./http-get.sh proxy-req3 80 /_status
+
 ./cleanup.sh
