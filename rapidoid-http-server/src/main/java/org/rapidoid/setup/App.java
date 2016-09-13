@@ -289,11 +289,11 @@ public class App extends RapidoidThing {
 	}
 
 	private static void processProxyArg(String arg) {
-		String[] parts = arg.split("->");
+		String[] parts = arg.split("\\s*->\\s*");
 
 		U.must(parts.length == 2, "Expected /uri->target proxy mapping!");
 
-		Reverse.proxy().map(parts[0]).to(parts[1].split("\\,"));
+		Reverse.proxy().map(parts[0]).to(parts[1].split("\\s*\\,\\s*"));
 	}
 
 	static void filterAndInvokeMainClasses(Object[] beans) {
