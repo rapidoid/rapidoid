@@ -25,25 +25,25 @@ admin-zone:
   menu:
     Overview: /_
     Application:
-      Routes: /_/routes
-      Beans: /_/beans
-      Configuration: /_/config
+      Routes: /_routes
+      Beans: /_beans
+      Configuration: /_config
       Deploy: /_deployment
-      Terminate / Restart: /_/terminate
+      Terminate / Restart: /_terminate
     Data:
-      Entities: /_/entities
+      Entities: /_entities
     Details:
-      Metrics: /_/metrics
-      Classpath: /_/classpath
+      Metrics: /_metrics
+      Classpath: /_classpath
     JMX:
-      Memory pool: /_/jmx/mempool
-      JVM Threads: /_/jmx/threads
-      Operating system: /_/jmx/os
-      Garbage collection: /_/jmx/gc
-      Memory: /_/jmx/memory
-      Runtime: /_/jmx/runtime
-      Classes: /_/jmx/classes
-      Compilation: /_/jmx/compilation
+      Memory pool: /_jmx/mempool
+      JVM Threads: /_jmx/threads
+      Operating system: /_jmx/os
+      Garbage collection: /_jmx/gc
+      Memory: /_jmx/memory
+      Runtime: /_jmx/runtime
+      Classes: /_jmx/classes
+      Compilation: /_jmx/compilation
 
 users:
   admin:

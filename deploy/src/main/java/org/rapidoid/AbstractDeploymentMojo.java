@@ -120,7 +120,7 @@ public abstract class AbstractDeploymentMojo extends AbstractMojo {
 		Upload jar = new Upload("app.jar", IO.loadBytes(uberJar));
 
 		for (String server : servers) {
-			uploadTo(jar, Str.trimr(server, "/") + "/_/jar");
+			uploadTo(jar, Str.trimr(server, "/") + "/_jar");
 		}
 	}
 

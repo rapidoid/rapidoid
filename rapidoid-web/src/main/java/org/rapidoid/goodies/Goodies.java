@@ -175,7 +175,7 @@ public class Goodies extends RapidoidThing {
 	}
 
 	public static void lifecycle(Setup setup) {
-		setup.page("/_/terminate").mvc(Goodies.terminate());
+		setup.page("/_terminate").mvc(Goodies.terminate());
 	}
 
 	public static void overview(Setup setup) {
@@ -183,10 +183,10 @@ public class Goodies extends RapidoidThing {
 	}
 
 	public static void application(Setup setup) {
-		setup.page("/_/routes").mvc(Goodies.routes());
-		setup.page("/_/beans").mvc(Goodies.beans());
-		setup.page("/_/config").mvc(Goodies.config());
-		setup.get("/_/classpath").mvc(Goodies.classpath());
+		setup.page("/_routes").mvc(Goodies.routes());
+		setup.page("/_beans").mvc(Goodies.beans());
+		setup.page("/_config").mvc(Goodies.config());
+		setup.get("/_classpath").mvc(Goodies.classpath());
 	}
 
 	public static void deployment(Setup setup) {
@@ -196,23 +196,23 @@ public class Goodies extends RapidoidThing {
 	}
 
 	public static void metrics(Setup setup) {
-		setup.page("/_/metrics").mvc(Goodies.graphs());
-		setup.get("/_/graphs/{id:.*}").json(Goodies.graphData());
+		setup.page("/_metrics").mvc(Goodies.graphs());
+		setup.get("/_graphs/{id:.*}").json(Goodies.graphData());
 	}
 
 	public static void jmx(Setup setup) {
-		setup.page("/_/jmx/memory").mvc(Goodies.memory());
-		setup.page("/_/jmx/mempool").mvc(Goodies.memoryPool());
-		setup.page("/_/jmx/classes").mvc(Goodies.classes());
-		setup.page("/_/jmx/os").mvc(Goodies.os());
-		setup.page("/_/jmx/threads").mvc(Goodies.threads());
-		setup.page("/_/jmx/compilation").mvc(Goodies.compilation());
-		setup.page("/_/jmx/runtime").mvc(Goodies.runtime());
-		setup.page("/_/jmx/gc").mvc(Goodies.gc());
+		setup.page("/_jmx/memory").mvc(Goodies.memory());
+		setup.page("/_jmx/mempool").mvc(Goodies.memoryPool());
+		setup.page("/_jmx/classes").mvc(Goodies.classes());
+		setup.page("/_jmx/os").mvc(Goodies.os());
+		setup.page("/_jmx/threads").mvc(Goodies.threads());
+		setup.page("/_jmx/compilation").mvc(Goodies.compilation());
+		setup.page("/_jmx/runtime").mvc(Goodies.runtime());
+		setup.page("/_jmx/gc").mvc(Goodies.gc());
 	}
 
 	public static void entities(Setup setup) {
-		setup.page("/_/entities").mvc(Goodies.entities());
+		setup.page("/_entities").mvc(Goodies.entities());
 
 		if (Msc.hasJPA()) {
 			for (Class<?> type : JPA.getEntityJavaTypes()) {

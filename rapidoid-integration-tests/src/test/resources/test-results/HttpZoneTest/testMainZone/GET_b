@@ -3,6 +3,6 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: application/json
-Content-Length: 647
+Content-Length: 635
 
-{"brand":"<i class=\"fa fa-dashboard\"></i> Admin","cdn":"auto","contextPath":"","fluid":false,"home":"/_","menu":{"Overview":"/_","Application":{"Routes":"/_/routes","Beans":"/_/beans","Configuration":"/_/config","Deploy":"/_/deploy","Terminate / Restart":"/_/terminate"},"Data":{"Entities":"/_/entities"},"Details":{"Metrics":"/_/metrics","Classpath":"/_/classpath"},"JMX":{"Memory pool":"/_/jmx/mempool","JVM Threads":"/_/jmx/threads","Operating system":"/_/jmx/os","Garbage collection":"/_/jmx/gc","Memory":"/_/jmx/memory","Runtime":"/_/jmx/runtime","Classes":"/_/jmx/classes","Compilation":"/_/jmx/compilation"}},"navbar":true,"search":false}
+{"brand":"<i class=\"fa fa-dashboard\"></i> Admin","cdn":"auto","contextPath":"","fluid":false,"home":"/_","menu":{"Overview":"/_","Application":{"Routes":"/_routes","Beans":"/_beans","Configuration":"/_config","Deploy":"/_deployment","Terminate / Restart":"/_terminate"},"Data":{"Entities":"/_entities"},"Details":{"Metrics":"/_metrics","Classpath":"/_classpath"},"JMX":{"Memory pool":"/_jmx/mempool","JVM Threads":"/_jmx/threads","Operating system":"/_jmx/os","Garbage collection":"/_jmx/gc","Memory":"/_jmx/memory","Runtime":"/_jmx/runtime","Classes":"/_jmx/classes","Compilation":"/_jmx/compilation"}},"navbar":true,"search":false}

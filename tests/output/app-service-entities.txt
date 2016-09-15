@@ -11,4 +11,4 @@ INFO | main | org.rapidoid.io.Res | Setting application root | root = /app | con
 INFO | main | org.rapidoid.config.ConfigImpl | Loaded configuration | files = [default-config.yml, default-config-default.yml]
 INFO | main | org.rapidoid.setup.App | Inferring application root | main = null | package = org.rapidoid.setup
 INFO | server | org.rapidoid.net.impl.RapidoidServerLoop | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
-INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = app | verbs = GET,POST | path = /_/entities | roles = [] | tx = NONE | mvc = true
+INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = app | verbs = GET,POST | path = /_entities | roles = [] | tx = NONE | mvc = true
