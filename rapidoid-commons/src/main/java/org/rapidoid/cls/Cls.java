@@ -723,6 +723,7 @@ public class Cls extends RapidoidThing {
 	}
 
 	public static boolean isRapidoidClass(String className) {
+		className = className.split("\\$")[0]; // without inner classes
 		return RAPIDOID_CLASSES.contains(className);
 	}
 
