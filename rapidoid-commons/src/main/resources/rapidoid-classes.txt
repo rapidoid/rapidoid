@@ -1,6 +1,4 @@
 org.rapidoid.AbstractDeploymentMojo
-org.rapidoid.BuildUberJarMojo
-org.rapidoid.UberJarMojo
 org.rapidoid.activity.AbstractLoopThread
 org.rapidoid.activity.AbstractThreadActivity
 org.rapidoid.activity.Activity
@@ -66,6 +64,7 @@ org.rapidoid.buffer.MultiBuf
 org.rapidoid.buffer.SynchronizedBuf
 org.rapidoid.bufstruct.BufMap
 org.rapidoid.bufstruct.BufMapImpl
+org.rapidoid.BuildUberJarMojo
 org.rapidoid.bytes.ByteArrayBytes
 org.rapidoid.bytes.ByteBufferBytes
 org.rapidoid.bytes.Bytes
@@ -637,6 +636,7 @@ org.rapidoid.test.RapidoidTest
 org.rapidoid.test.TestCommons
 org.rapidoid.timeseries.TimeSeries
 org.rapidoid.timeseries.TSValue
+org.rapidoid.UberJarMojo
 org.rapidoid.util.AbstractMapImpl
 org.rapidoid.util.AnsiColor
 org.rapidoid.util.AppInfo
