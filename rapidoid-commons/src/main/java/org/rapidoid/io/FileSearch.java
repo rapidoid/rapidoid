@@ -34,9 +34,13 @@ import java.util.regex.Pattern;
 @Since("5.2.4")
 public class FileSearch extends RapidoidThing {
 
-	private volatile String name;
+	private volatile String[] name;
+
+	private volatile String[] ignore;
 
 	private volatile String regex;
+
+	private volatile String ignoreRegex;
 
 	private volatile String location;
 
@@ -46,8 +50,13 @@ public class FileSearch extends RapidoidThing {
 
 	private volatile boolean recursive;
 
-	public FileSearch name(String name) {
+	public FileSearch name(String... name) {
 		this.name = name;
+		return this;
+	}
+
+	public FileSearch ignore(String... ignore) {
+		this.ignore = ignore;
 		return this;
 	}
 
@@ -58,6 +67,11 @@ public class FileSearch extends RapidoidThing {
 
 	public FileSearch regex(String regex) {
 		this.regex = regex;
+		return this;
+	}
+
+	public FileSearch ignoreRegex(String ignoreRegex) {
+		this.ignoreRegex = ignoreRegex;
 		return this;
 	}
 
@@ -108,19 +122,23 @@ public class FileSearch extends RapidoidThing {
 
 		U.must(U.notEmpty(location), "Location must be specified!");
 
-		U.must(U.isEmpty(name) || U.isEmpty(name), "You should either specify a name or a regex, not both of them!");
+		U.must(U.isEmpty(name) || U.isEmpty(regex), "You can specify either 'name' or 'regex', not both of them!");
+		U.must(U.isEmpty(ignore) || U.isEmpty(ignoreRegex), "You can specify either 'ignore' or 'ignoreRegex', not both of them!");
 
-		Pattern pattern = null;
+		String matching = U.notEmpty(name) ? Str.wildcardsToRegex(name) : regex;
+		String ignoring = U.notEmpty(ignore) ? Str.wildcardsToRegex(ignore) : ignoreRegex;
 
-		if (U.notEmpty(name)) pattern = Pattern.compile(Str.wildcardsToRegex(name));
-		if (U.notEmpty(regex)) pattern = Pattern.compile(regex);
+		Pattern mtch = U.notEmpty(matching) ? Pattern.compile(matching) : null;
+		Pattern ignr = U.notEmpty(ignoring) ? Pattern.compile(ignoring) : null;
 
-		search(new File(location), found, pattern, files || filesAndFolders, folders || filesAndFolders, recursive);
+		search(new File(location), found, mtch, ignr, files || filesAndFolders, folders || filesAndFolders, recursive);
 
 		return found;
 	}
 
-	static void search(File dir, List<File> found, Pattern regex, boolean includeFiles, boolean includeDirectories, boolean recursive) {
+	static void search(File dir, List<File> found, Pattern matching, Pattern ignoring,
+	                   boolean includeFiles, boolean includeDirectories, boolean recursive) {
+
 		File[] files = dir.listFiles();
 
 		if (files != null) {
@@ -130,13 +148,15 @@ public class FileSearch extends RapidoidThing {
 
 					String filename = f.getAbsolutePath();
 
-					if (regex == null || regex.matcher(filename).matches()) {
-						found.add(f);
+					if (matching == null || matching.matcher(filename).matches()) {
+						if (ignoring == null || !ignoring.matcher(filename).matches()) {
+							found.add(f);
+						}
 					}
 				}
 
 				if (recursive && f.isDirectory()) {
-					search(f, found, regex, includeFiles, includeDirectories, recursive);
+					search(f, found, matching, ignoring, includeFiles, includeDirectories, recursive);
 				}
 			}
 		}
