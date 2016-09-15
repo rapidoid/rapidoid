@@ -96,15 +96,7 @@ public abstract class AbstractDeploymentMojo extends AbstractMojo {
 		boolean deleted = new File(assemblyFile).delete();
 		if (!deleted) getLog().warn("Couldn't delete the temporary assembly descriptor file!");
 
-		List<String> found = U.list();
-		IO.findAll(new File(project.getBuild().getDirectory()), found, true, false);
-
-		List<String> appJars = U.list();
-		for (String f : found) {
-			if (f.endsWith("-uber-deployment.jar")) {
-				appJars.add(f);
-			}
-		}
+		List<String> appJars = IO.find("*-uber-deployment.jar").in(project.getBuild().getDirectory()).getNames();
 
 		failIf(appJars.size() != 1, "Cannot find the deployment JAR (found %s candidates)! " + ABORT, appJars.size());
 
