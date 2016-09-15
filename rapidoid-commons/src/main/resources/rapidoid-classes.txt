@@ -187,13 +187,14 @@ org.rapidoid.fluent.utils.StreamUtils
 org.rapidoid.goodies.BeansHandler
 org.rapidoid.goodies.ClasspathHandler
 org.rapidoid.goodies.ConfigHandler
-org.rapidoid.goodies.DeployHandler
+org.rapidoid.goodies.DeploymentHandler
 org.rapidoid.goodies.DetailsHandler
 org.rapidoid.goodies.EntitiesHandler
 org.rapidoid.goodies.Goodies
 org.rapidoid.goodies.GraphDataHandler
 org.rapidoid.goodies.GraphsHandler
-org.rapidoid.goodies.JarUploadHandler
+org.rapidoid.goodies.JarDeploymentHandler
+org.rapidoid.goodies.JarStagingHandler
 org.rapidoid.goodies.LoginHandler
 org.rapidoid.goodies.LogoutHandler
 org.rapidoid.goodies.MultiDetailsHandler
@@ -398,6 +399,7 @@ org.rapidoid.http.impl.RouteImpl
 org.rapidoid.http.impl.RouteOptions
 org.rapidoid.http.impl.TokenStatus
 org.rapidoid.http.MediaType
+org.rapidoid.http.NiceResponse
 org.rapidoid.http.NotFound
 org.rapidoid.http.processor.AbstractHttpProcessor
 org.rapidoid.http.processor.HttpProcessor

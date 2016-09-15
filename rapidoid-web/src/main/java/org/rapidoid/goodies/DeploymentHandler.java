@@ -10,6 +10,7 @@ import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 /*
@@ -34,7 +35,7 @@ import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class DeployHandler extends GUI implements Callable<Object> {
+public class DeploymentHandler extends GUI implements Callable<Object> {
 
 	@Override
 	public Object call() throws Exception {
@@ -42,17 +43,23 @@ public class DeployHandler extends GUI implements Callable<Object> {
 
 		if (ClasspathUtil.hasAppJar()) {
 
-			info.add(h2("Upload an application JAR to re-deploy:"));
-			info.add(hardcoded("<form action=\"/_/jar\" class=\"dropzone\" id=\"jar-upload\"></form>"));
+			String appJar = ClasspathUtil.appJar();
+			String stagedAppJar = appJar + ".staged";
+
+			info.add(h2("Deployment status:"));
+			info.add(grid(jarsInfo()));
+
+			info.add(h2("Upload an application JAR to re-deployment:"));
+			info.add(hardcoded("<form action=\"/_stage\" class=\"dropzone\" id=\"jar-upload\"></form>"));
 
 			String token = U.or(ReqInfo.get().cookies().get("_token"), "");
 
 			info.add(h2("HTTP API for Deployment:"));
-			info.add(h6(verb(HttpVerb.POST), b(" http://your-app-domain/_/jar?_token=<token>")));
+			info.add(h6(verb(HttpVerb.POST), b(" http://your-app-domain/_stage?_token=<token>")));
 			info.add(h6(b("POST DATA: file=<your-jar>")));
 
 			info.add(h2("Building and deploying with Maven:"));
-			String cmd = "mvn clean package && cp target/*.jar target/_app_.jar && curl -F 'file=@target/_app_.jar' 'http://localhost:8888/_/jar?_token=" + token + "'";
+			String cmd = "mvn clean package && cp target/*.jar target/_app_.jar && curl -F 'file=@target/_app_.jar' 'http://localhost:8888/_stage?_token=" + token + "'";
 
 			info.add(h6(copy(b(cmd))));
 
@@ -74,6 +81,11 @@ public class DeployHandler extends GUI implements Callable<Object> {
 		}
 
 		return multi(info);
+	}
+
+	private List<Map<String, ?>> jarsInfo() {
+		List<Map<String, ?>> info = U.list();
+		return info;
 	}
 
 }

@@ -115,12 +115,16 @@ public class Goodies extends RapidoidThing {
 		return new ClasspathHandler();
 	}
 
-	public static DeployHandler deploy() {
-		return new DeployHandler();
+	public static DeploymentHandler deployment() {
+		return new DeploymentHandler();
 	}
 
-	public static JarUploadHandler jarUpload() {
-		return new JarUploadHandler();
+	public static JarStagingHandler jarStaging() {
+		return new JarStagingHandler();
+	}
+
+	public static JarDeploymentHandler jarDeployment() {
+		return new JarDeploymentHandler();
 	}
 
 	public static TerminateHandler terminate() {
@@ -161,7 +165,7 @@ public class Goodies extends RapidoidThing {
 		lifecycle(setup);
 		jmx(setup);
 		metrics(setup);
-		deploy(setup);
+		deployment(setup);
 		auth(setup);
 		status(setup);
 	}
@@ -185,9 +189,10 @@ public class Goodies extends RapidoidThing {
 		setup.get("/_/classpath").mvc(Goodies.classpath());
 	}
 
-	public static void deploy(Setup setup) {
-		setup.page("/_/deploy").mvc(Goodies.deploy());
-		setup.post("/_/jar").json(Goodies.jarUpload());
+	public static void deployment(Setup setup) {
+		setup.page("/_deployment").mvc(Goodies.deployment());
+		setup.post("/_stage").json(Goodies.jarStaging());
+		setup.post("/_deploy").json(Goodies.jarDeployment());
 	}
 
 	public static void metrics(Setup setup) {

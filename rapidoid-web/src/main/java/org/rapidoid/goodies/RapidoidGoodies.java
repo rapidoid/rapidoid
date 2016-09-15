@@ -57,7 +57,7 @@ public class RapidoidGoodies extends RapidoidThing implements IGoodies {
 
 	@Override
 	public void deploy(Setup setup) {
-		Goodies.deploy(setup);
+		Goodies.deployment(setup);
 	}
 
 	@Override

@@ -28,7 +28,7 @@ admin-zone:
       Routes: /_/routes
       Beans: /_/beans
       Configuration: /_/config
-      Deploy: /_/deploy
+      Deploy: /_deployment
       Terminate / Restart: /_/terminate
     Data:
       Entities: /_/entities

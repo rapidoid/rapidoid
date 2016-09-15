@@ -3,13 +3,14 @@ package org.rapidoid.goodies;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.GUI;
+import org.rapidoid.http.NiceResponse;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
-import org.rapidoid.io.IO;
-import org.rapidoid.io.Upload;
 import org.rapidoid.log.Log;
 import org.rapidoid.scan.ClasspathUtil;
-import org.rapidoid.util.AnsiColor;
+import org.rapidoid.u.U;
+
+import java.io.File;
 
 /*
  * #%L
@@ -33,25 +34,28 @@ import org.rapidoid.util.AnsiColor;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class JarUploadHandler extends GUI implements ReqHandler {
+public class JarDeploymentHandler extends GUI implements ReqHandler {
+
+	private static final String SUCCESS = "Successfully deployed the jar, restarting...";
+
+	private static final String NOT_POSSIBLE = "Not possible!";
 
 	@Override
 	public Object execute(Req req) throws Exception {
 		String appJar = ClasspathUtil.appJar();
+		String stagedAppJar = appJar + ".staged";
 
-		if (appJar != null) {
-			Upload jar = req.file("file");
-			IO.save(appJar, jar.content());
-			Log.info("Saved new JAR", "size", jar.content().length, "destination", appJar);
+		if (U.notEmpty(appJar)) {
 
-			if (req.header("User-Agent", "").toLowerCase().startsWith("curl/")) {
-				return req.response().plain(AnsiColor.green("Successfully uploaded the JAR.\n"));
-			} else {
-				return "OK";
-			}
+			new File(appJar).delete();
+			new File(stagedAppJar).renameTo(new File(appJar));
+
+			Log.info("Successfully deployed the staged jar", "staged", stagedAppJar, "deployed", appJar);
+
+			return NiceResponse.ok(req, SUCCESS);
 
 		} else {
-			return "Not possible!";
+			return NiceResponse.err(req, NOT_POSSIBLE);
 		}
 	}
 
