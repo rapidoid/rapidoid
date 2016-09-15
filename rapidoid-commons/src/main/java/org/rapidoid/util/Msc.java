@@ -1069,4 +1069,9 @@ public class Msc extends RapidoidThing implements Constants {
 		if (uid == null) uid = Conf.ROOT.entry("id").or(processName());
 		return uid;
 	}
+
+	public static String rootPath() {
+		return Conf.ROOT.entry("root").str().getOrNull();
+	}
+
 }
