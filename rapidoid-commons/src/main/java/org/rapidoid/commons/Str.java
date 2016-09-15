@@ -229,7 +229,7 @@ public class Str extends RapidoidThing {
 		return DatatypeConverter.parseBase64Binary(base64);
 	}
 
-	public static String wildcardsToRegex(String pattern) {
+	public static String wildcardToRegex(String pattern) {
 
 		if (pattern.isEmpty()) return "";
 		if (pattern.equals("*")) return "(.*)";
@@ -243,6 +243,23 @@ public class Str extends RapidoidThing {
 		}
 
 		return sb.toString();
+	}
+
+	public static String wildcardsToRegex(String... patterns) {
+
+		if (U.isEmpty(patterns)) return "";
+		if (patterns.length == 1) return wildcardToRegex(patterns[0]);
+
+		StringBuilder sb = new StringBuilder();
+
+		for (Iterator<String> it = U.iterator(patterns); it.hasNext(); ) {
+			String pattern = it.next();
+			sb.append(wildcardToRegex(pattern));
+
+			if (it.hasNext()) sb.append("|");
+		}
+
+		return "(?:" + sb + ")";
 	}
 
 }

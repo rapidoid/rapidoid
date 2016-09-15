@@ -107,6 +107,10 @@ public class StrTest extends AbstractCommonsTest {
 		eq(Str.wildcardsToRegex("*.jar"), "(.*)\\Q.jar\\E");
 		eq(Str.wildcardsToRegex("foo.*"), "\\Qfoo.\\E(.*)");
 		eq(Str.wildcardsToRegex("*.bar.*"), "(.*)\\Q.bar.\\E(.*)");
+
+		eq(Str.wildcardsToRegex("abc", "x.txt"), "(?:\\Qabc\\E|\\Qx.txt\\E)");
+
+		eq(Str.wildcardsToRegex("a", "b", "c"), "(?:\\Qa\\E|\\Qb\\E|\\Qc\\E)");
 	}
 
 }
