@@ -20,6 +20,7 @@ package org.rapidoid.util;
  * #L%
  */
 
+import org.apache.maven.plugin.AbstractMojo;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.junit.Test;
 import org.rapidoid.RapidoidThing;
@@ -49,6 +50,7 @@ public class RapidoidThingsTest {
 					|| HibernatePersistenceProvider.class.isAssignableFrom(clazz)
 					|| OutputStream.class.isAssignableFrom(clazz)
 					|| Map.class.isAssignableFrom(clazz)
+					|| AbstractMojo.class.isAssignableFrom(clazz)
 					|| Thread.class.isAssignableFrom(clazz), "" + cls);
 			}
 		}

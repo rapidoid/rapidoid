@@ -77,6 +77,8 @@
 		<mustache.java.version>0.9.1</mustache.java.version>
 		<jmustache.version>1.12</jmustache.version>
 
+		<plugin.api.version>3.0</plugin.api.version>
+
 		<junit.version>4.12</junit.version>
 		<mockito.version>1.8.5</mockito.version>
 
@@ -104,6 +106,7 @@
 		<module>rapidoid-watch</module>
 		<module>rapidoid-fluent</module>
 		<module>rapidoid-integration-tests</module>
+		<module>deploy</module>
 	</modules>
 
 	<build>

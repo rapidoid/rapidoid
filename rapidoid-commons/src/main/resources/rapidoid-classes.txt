@@ -1,3 +1,6 @@
+deploy.src.main.org.rapidoid.AbstractDeploymentMojo
+deploy.src.main.org.rapidoid.BuildUberJarMojo
+deploy.src.main.org.rapidoid.UberJarMojo
 org.rapidoid.activity.AbstractLoopThread
 org.rapidoid.activity.AbstractThreadActivity
 org.rapidoid.activity.Activity
