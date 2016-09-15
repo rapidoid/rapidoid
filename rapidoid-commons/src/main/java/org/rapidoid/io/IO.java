@@ -290,22 +290,6 @@ public class IO extends RapidoidThing {
 		}
 	}
 
-	public static void findAll(File dir, List<String> found, boolean includeFiles, boolean includeDirectories) {
-		File[] files = dir.listFiles();
-
-		if (files != null) {
-			for (File f : files) {
-				if ((includeFiles && f.isFile()) || (includeDirectories && f.isDirectory())) {
-					found.add(f.getAbsolutePath());
-				}
-
-				if (f.isDirectory()) {
-					findAll(f, found, includeFiles, includeDirectories);
-				}
-			}
-		}
-	}
-
 	public static void write(OutputStream out, byte[] content) {
 		try {
 			out.write(content);
@@ -317,5 +301,14 @@ public class IO extends RapidoidThing {
 	public static void write(OutputStream out, String content) {
 		write(out, content.getBytes());
 	}
+
+	public static FileSearch find(String name) {
+		return find().name(name);
+	}
+
+	public static FileSearch find() {
+		return new FileSearch();
+	}
+
 
 }

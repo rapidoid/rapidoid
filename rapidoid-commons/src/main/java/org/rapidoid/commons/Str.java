@@ -229,4 +229,20 @@ public class Str extends RapidoidThing {
 		return DatatypeConverter.parseBase64Binary(base64);
 	}
 
+	public static String wildcardsToRegex(String pattern) {
+
+		if (pattern.isEmpty()) return "";
+		if (pattern.equals("*")) return "(.*)";
+
+		String[] nameParts = pattern.split("\\*", Integer.MAX_VALUE);
+		StringBuilder sb = new StringBuilder();
+
+		for (String part : nameParts) {
+			String s = part.isEmpty() ? "(.*)" : Pattern.quote(part);
+			sb.append(s);
+		}
+
+		return sb.toString();
+	}
+
 }

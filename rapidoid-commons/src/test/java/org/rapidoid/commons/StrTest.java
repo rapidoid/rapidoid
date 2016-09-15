@@ -97,4 +97,16 @@ public class StrTest extends AbstractCommonsTest {
 		eq(Str.camelToSnake("myDate2"), "my_date_2");
 	}
 
+	@Test
+	public void testWildcardsToRegex() {
+		eq(Str.wildcardsToRegex(""), "");
+		eq(Str.wildcardsToRegex("*"), "(.*)");
+		eq(Str.wildcardsToRegex("-"), "\\Q-\\E");
+		eq(Str.wildcardsToRegex("abc"), "\\Qabc\\E");
+		eq(Str.wildcardsToRegex("x.txt"), "\\Qx.txt\\E");
+		eq(Str.wildcardsToRegex("*.jar"), "(.*)\\Q.jar\\E");
+		eq(Str.wildcardsToRegex("foo.*"), "\\Qfoo.\\E(.*)");
+		eq(Str.wildcardsToRegex("*.bar.*"), "(.*)\\Q.bar.\\E(.*)");
+	}
+
 }
