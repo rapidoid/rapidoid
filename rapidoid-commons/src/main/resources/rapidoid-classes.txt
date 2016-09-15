@@ -1,4 +1,3 @@
-org.rapidoid.AbstractDeploymentMojo
 org.rapidoid.activity.AbstractLoopThread
 org.rapidoid.activity.AbstractThreadActivity
 org.rapidoid.activity.Activity
@@ -64,7 +63,6 @@ org.rapidoid.buffer.MultiBuf
 org.rapidoid.buffer.SynchronizedBuf
 org.rapidoid.bufstruct.BufMap
 org.rapidoid.bufstruct.BufMapImpl
-org.rapidoid.BuildUberJarMojo
 org.rapidoid.bytes.ByteArrayBytes
 org.rapidoid.bytes.ByteBufferBytes
 org.rapidoid.bytes.Bytes
@@ -543,6 +541,9 @@ org.rapidoid.oauth.OAuthLoginHandler
 org.rapidoid.oauth.OAuthProvider
 org.rapidoid.oauth.OAuthStateCheck
 org.rapidoid.oauth.OAuthTokenHandler
+org.rapidoid.plugin.deploy.AbstractDeploymentMojo
+org.rapidoid.plugin.deploy.BuildUberJarMojo
+org.rapidoid.plugin.deploy.UberJarMojo
 org.rapidoid.pool.ArrayPool
 org.rapidoid.pool.Pool
 org.rapidoid.pool.Pools
@@ -636,7 +637,6 @@ org.rapidoid.test.RapidoidTest
 org.rapidoid.test.TestCommons
 org.rapidoid.timeseries.TimeSeries
 org.rapidoid.timeseries.TSValue
-org.rapidoid.UberJarMojo
 org.rapidoid.util.AbstractMapImpl
 org.rapidoid.util.AnsiColor
 org.rapidoid.util.AppInfo
