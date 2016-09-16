@@ -1,4 +1,4 @@
-INFO | main | org.rapidoid.config.RapidoidInitializer | Starting Rapidoid [Dockerized] [Uniform output]... | version = 5.2.3-SNAPSHOT
+INFO | main | org.rapidoid.config.RapidoidInitializer | Starting Rapidoid [Dockerized] [Uniform output]... | version = <?>
 INFO | main | org.rapidoid.config.RapidoidInitializer | System info | os = Linux | java = 1.8.0_91 | process = <?> | max memory = <?> | dir = /opt
 INFO | main | org.rapidoid.scan.ClasspathUtil | Scanning classpath | annotated = [@Controller, @Service, @Run, @Named, @Singleton] | packages = [null]
 INFO | main | org.rapidoid.scan.ClasspathUtil | Finished classpath scan | time = <?>ms | searched = 0 | found = []
@@ -9,6 +9,5 @@ INFO | main | org.rapidoid.commons.Environment | Initialized environment | mode 
 INFO | main | org.rapidoid.scan.ClasspathUtil | Setting application JAR | appJar = /app/app.jar | exists = false
 INFO | main | org.rapidoid.io.Res | Setting application root | root = /app | content = []
 INFO | main | org.rapidoid.config.ConfigImpl | Loaded configuration | files = [default-config.yml, default-config-default.yml]
-INFO | main | org.rapidoid.setup.App | Inferring application root | main = null | package = org.rapidoid.setup
 INFO | server | org.rapidoid.net.impl.RapidoidServerLoop | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
 INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET | path = /_status | roles = [administrator] | tx = NONE | mvc = false

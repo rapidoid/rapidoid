@@ -1,4 +1,4 @@
-INFO | main | org.rapidoid.config.RapidoidInitializer | Starting Rapidoid [Dockerized] [Uniform output]... | version = 5.2.3-SNAPSHOT
+INFO | main | org.rapidoid.config.RapidoidInitializer | Starting Rapidoid [Dockerized] [Uniform output]... | version = <?>
 INFO | main | org.rapidoid.config.RapidoidInitializer | System info | os = Linux | java = 1.8.0_91 | process = <?> | max memory = <?> | dir = /opt
 INFO | main | org.rapidoid.commons.Environment | No profiles were specified, activating 'default' profile
 INFO | main | org.rapidoid.commons.Environment | No production/dev/test mode was configured, inferring mode | mode = PRODUCTION
