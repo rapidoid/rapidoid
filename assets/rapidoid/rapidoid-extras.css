@@ -18,6 +18,13 @@
 	border-radius: 3px;
 }
 
+/***** Text box */
+.text-box {
+	padding: 1px 3px;
+	border: #aaa solid 1px !important;
+	border-radius: 5px;
+}
+
 /***** Default Gmap dimensions */
 div.gmap-default {
 	width: 100%;
