@@ -68,6 +68,13 @@ org.rapidoid.bytes.ByteBufferBytes
 org.rapidoid.bytes.Bytes
 org.rapidoid.bytes.BytesUtil
 org.rapidoid.bytes.StringBytes
+org.rapidoid.cache.Cache
+org.rapidoid.cache.Cached
+org.rapidoid.cache.CachedCalc
+org.rapidoid.cache.CachedImpl
+org.rapidoid.cache.CacheDSL
+org.rapidoid.cache.CacheFactory
+org.rapidoid.cache.ConcurrentCached
 org.rapidoid.cls.AbstractTypeSpecificFactory
 org.rapidoid.cls.AbstractTypeSpecificVisitor
 org.rapidoid.cls.Cls
