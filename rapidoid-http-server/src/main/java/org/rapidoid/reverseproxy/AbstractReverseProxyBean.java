@@ -4,6 +4,9 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HttpClient;
+import org.rapidoid.util.LazyInit;
+
+import java.util.concurrent.Callable;
 
 /*
  * #%L
@@ -35,19 +38,12 @@ public abstract class AbstractReverseProxyBean<T> extends RapidoidThing {
 
 	private volatile int maxConnPerRoute = 100;
 
-	private volatile HttpClient client;
-
-	protected HttpClient getOrCreateClient() {
-		if (client == null) {
-			synchronized (this) {
-				if (client == null) {
-					client = createClient();
-				}
-			}
+	private final LazyInit<HttpClient> client = new LazyInit<HttpClient>(new Callable<HttpClient>() {
+		@Override
+		public HttpClient call() throws Exception {
+			return createClient();
 		}
-
-		return client;
-	}
+	});
 
 	protected abstract HttpClient createClient();
 
@@ -84,12 +80,16 @@ public abstract class AbstractReverseProxyBean<T> extends RapidoidThing {
 	}
 
 	public HttpClient client() {
-		return client;
+		return client.getValue();
 	}
 
 	public T client(HttpClient client) {
-		this.client = client;
+		this.client.setValue(client);
 		return me();
+	}
+
+	protected HttpClient getOrCreateClient() {
+		return client.get();
 	}
 
 }
