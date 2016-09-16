@@ -7,7 +7,6 @@ import org.rapidoid.commons.Str;
 import org.rapidoid.config.BasicConfig;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
-import org.rapidoid.crypto.Crypto;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.gui.reqinfo.ReqInfo;
@@ -16,18 +15,16 @@ import org.rapidoid.http.customize.JsonResponseRenderer;
 import org.rapidoid.http.impl.PathPattern;
 import org.rapidoid.io.Res;
 import org.rapidoid.lambda.Mapper;
-import org.rapidoid.serialize.Serialize;
 import org.rapidoid.u.U;
 import org.rapidoid.util.ErrCodeAndMsg;
 import org.rapidoid.util.Msc;
+import org.rapidoid.util.Tokens;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.Serializable;
-import java.nio.BufferOverflowException;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -74,7 +71,6 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 		}
 	};
 
-	@SuppressWarnings("unchecked")
 	public static Map<String, Serializable> initAndDeserializeToken(Req req) {
 		String token = req.cookie(TOKEN, null);
 
@@ -82,41 +78,12 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 			token = req.data(TOKEN, null);
 		}
 
-		if (!U.isEmpty(token)) {
-			byte[] decoded = Str.fromBase64(token.replace('$', '+').replace('_', '/'));
-			byte[] tokenDecrypted = Crypto.decrypt(decoded);
-			return (Map<String, Serializable>) Serialize.deserialize(tokenDecrypted);
-		} else {
-			return null;
-		}
+		return Tokens.deserialize(token);
 	}
 
 	public static void saveTokenBeforeRenderingHeaders(Req req, Map<String, Serializable> tokenData) {
-		String token = token(tokenData);
+		String token = Tokens.serialize(tokenData);
 		setResponseTokenCookie(req.response(), token);
-	}
-
-	public static String token(Map<String, Serializable> token) {
-		if (U.notEmpty(token)) {
-			byte[] tokenBytes = serializeToken(token);
-			byte[] tokenEncrypted = Crypto.encrypt(tokenBytes);
-			return Str.toBase64(tokenEncrypted).replace('+', '$').replace('/', '_');
-
-		} else {
-			return "";
-		}
-	}
-
-	private static byte[] serializeToken(Map<String, Serializable> token) {
-		byte[] dest = new byte[2500];
-
-		try {
-			int size = Serialize.serialize(dest, token);
-			dest = Arrays.copyOf(dest, size);
-		} catch (BufferOverflowException e) {
-			throw U.rte("The token is too big!");
-		}
-		return dest;
 	}
 
 	public static boolean isGetReq(Req req) {

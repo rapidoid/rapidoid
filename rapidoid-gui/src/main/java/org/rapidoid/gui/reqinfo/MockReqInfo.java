@@ -6,6 +6,7 @@ import org.rapidoid.http.HttpVerb;
 import org.rapidoid.io.Upload;
 import org.rapidoid.u.U;
 
+import java.io.Serializable;
 import java.util.*;
 
 /*
@@ -57,6 +58,8 @@ public class MockReqInfo extends AbstractReqInfo {
 	private Map<String, String> cookies = U.map();
 
 	private Map<String, Object> attributes = U.map();
+
+	private Map<String, Serializable> token = U.map();
 
 	private String username;
 
@@ -183,6 +186,16 @@ public class MockReqInfo extends AbstractReqInfo {
 
 	public MockReqInfo setAttributes(Map<String, Object> attributes) {
 		this.attributes = attributes;
+		return this;
+	}
+
+	@Override
+	public Map<String, Serializable> token() {
+		return token;
+	}
+
+	public MockReqInfo setToken(Map<String, Serializable> token) {
+		this.token = token;
 		return this;
 	}
 

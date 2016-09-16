@@ -3,11 +3,11 @@ package org.rapidoid.goodies;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.Resp;
 import org.rapidoid.security.AuthResponse;
+import org.rapidoid.util.Tokens;
 
 /*
  * #%L
@@ -42,7 +42,7 @@ public class LoginHandler extends RapidoidThing implements ReqRespHandler {
 
 		auth.success = resp.login(username, password);
 
-		auth.token = auth.success ? HttpUtils.token(req.token()) : "";
+		auth.token = auth.success ? Tokens.serialize(req.token()) : "";
 
 		return auth;
 	}

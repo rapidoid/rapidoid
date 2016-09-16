@@ -6,6 +6,7 @@ import org.rapidoid.http.HttpVerb;
 import org.rapidoid.io.Upload;
 import org.rapidoid.u.U;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -97,6 +98,11 @@ public class NoReqInfo extends AbstractReqInfo {
 
 	@Override
 	public Map<String, Object> attrs() {
+		return U.map();
+	}
+
+	@Override
+	public Map<String, Serializable> token() {
 		return U.map();
 	}
 

@@ -8,6 +8,7 @@ import org.rapidoid.http.HttpVerb;
 import org.rapidoid.http.Req;
 import org.rapidoid.io.Upload;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -89,6 +90,11 @@ public class RapidoidReqInfo extends AbstractReqInfo {
 	@Override
 	public Map<String, Object> attrs() {
 		return req().attrs();
+	}
+
+	@Override
+	public Map<String, Serializable> token() {
+		return req().token();
 	}
 
 	@Override

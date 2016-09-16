@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HttpVerb;
 import org.rapidoid.io.Upload;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -58,6 +59,8 @@ public interface IReqInfo {
 	Map<String, String> cookies();
 
 	Map<String, Object> attrs();
+
+	Map<String, Serializable> token();
 
 	String username();
 
