@@ -20,16 +20,13 @@ package org.rapidoid.fluent.dox;
  * #L%
  */
 
-import org.rapidoid.fluent.Mergers;
 import org.rapidoid.fluent.To;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -54,7 +51,7 @@ public class DoMap<T> {
 	}
 
 	public <K, V> Map<K, V> to(Function<T, K> keyMapper, Function<T, V> valueMapper) {
-		return stream.collect(Collectors.toMap(keyMapper, valueMapper, Mergers.thrower(), LinkedHashMap::new));
+		return stream.collect(To.linkedMap(keyMapper, valueMapper));
 	}
 
 }

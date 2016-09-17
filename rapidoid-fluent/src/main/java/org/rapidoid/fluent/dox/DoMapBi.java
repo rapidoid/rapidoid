@@ -43,7 +43,7 @@ public class DoMapBi<K, V> {
 	public <K2, V2> Map<K2, V2> to(BiFunction<K, V, ? extends K2> keyTransformation,
 	                               BiFunction<K, V, ? extends V2> valueTransformation) {
 		return items.entrySet().stream()
-			.collect(To.map(e -> Lambdas.apply(e, keyTransformation), e -> Lambdas.apply(e, valueTransformation)));
+			.collect(To.linkedMap(e -> Lambdas.apply(e, keyTransformation), e -> Lambdas.apply(e, valueTransformation)));
 	}
 
 	public <R> List<R> toList(BiFunction<K, V, R> transformation) {
