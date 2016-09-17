@@ -1,4 +1,4 @@
-Rapidoid v5.2.4-SNAPSHOT [Dockerized] [Uniform output]
+Rapidoid v<?> [Dockerized] [Uniform output]
 
 Usage:
   java -cp <yourapp>.jar com.example.Main [option1 option2 ...]

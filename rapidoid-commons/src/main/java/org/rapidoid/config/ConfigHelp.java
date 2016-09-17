@@ -42,7 +42,7 @@ public class ConfigHelp extends RapidoidThing {
 	}
 
 	private static void showUsage() {
-		show("Rapidoid v" + RapidoidInfo.version() + RapidoidInfo.notes());
+		show(RapidoidInfo.nameAndInfo());
 		show("");
 		show("Usage:");
 		show("  java -cp <yourapp>.jar com.example.Main [option1 option2 ...]");

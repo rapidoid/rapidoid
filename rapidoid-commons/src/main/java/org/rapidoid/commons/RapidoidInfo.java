@@ -8,6 +8,7 @@ import org.rapidoid.util.Msc;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Properties;
 
 /*
@@ -55,12 +56,19 @@ public class RapidoidInfo extends RapidoidThing {
 		return VERSION;
 	}
 
-	public static String notes() {
-		String notes = "";
+	public static List<String> notes() {
+		List<String> notes = U.list();
 
-		if (Msc.insideDocker()) notes += " [Dockerized]";
-		if (Msc.uniformOutput()) notes += " [Uniform output]";
+		if (Msc.insideDocker()) notes.add("Dockerized");
+		if (Msc.uniformOutput()) notes.add("Uniform output");
 
 		return notes;
 	}
+
+	public static String nameAndInfo() {
+		String ver = "v" + Msc.maybeMasked(version());
+		String notes = Str.render(notes(), " [%s]", "");
+		return "Rapidoid " + ver + notes;
+	}
+
 }
