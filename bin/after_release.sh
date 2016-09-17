@@ -7,7 +7,15 @@ CHANGES=`git status --porcelain`
 
 printf "Bumping version from $OLD_VER to $NEW_VER...\n\n"
 
-sed -i "s/$OLD_VER/$NEW_VER/g" examples/getting-started/pom.xml ../docker-rapidoid/Dockerfile
+REPL="s/$OLD_VER/$NEW_VER/g"
+
+for TARGET in examples/getting-started/pom.xml ../docker-rapidoid/Dockerfile
+ do
+    echo "Processing $TARGET"
+    sed -i "$REPL" "$TARGET"
+ done
+
+echo
 
 if [[ "$CHANGES" ]]; then
   echo "Dirty git index, cannot commit"
