@@ -29,6 +29,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
@@ -109,7 +110,7 @@ public class AES {
 		m.init(hmacKeySpec);
 		byte[] expectedHmac = m.doFinal(encrypted);
 
-		if (Arrays.equals(hmac, expectedHmac)) {
+		if (MessageDigest.isEqual(hmac, expectedHmac)) {
 			byte[] decrKey = hkdf(secret, aesSalt, AES_KEY_LENGTH);
 			SecretKeySpec dekrKeySpec = new SecretKeySpec(decrKey, "AES");
 
