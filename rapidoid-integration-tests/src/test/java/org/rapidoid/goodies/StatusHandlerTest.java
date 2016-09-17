@@ -61,6 +61,10 @@ public class StatusHandlerTest extends IntegrationTestCommons {
 
 		eq(status.remove("version"), RapidoidInfo.version());
 
+		String uptime = (String) status.remove("uptime");
+		notNull(uptime);
+		isTrue(uptime.matches("\\d+s"));
+
 		return status;
 	}
 
