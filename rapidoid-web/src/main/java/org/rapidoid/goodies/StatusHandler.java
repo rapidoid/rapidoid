@@ -48,7 +48,8 @@ public class StatusHandler extends RapidoidThing implements Callable<Object> {
 			"version", Msc.maybeMasked(RapidoidInfo.version()),
 			"notes", RapidoidInfo.notes(),
 			"mode", Env.mode(),
-			"profiles", Env.profiles()
+			"profiles", Env.profiles(),
+			"uptime", Msc.maybeMasked((RapidoidInfo.uptime() / 1000) + "s")
 		);
 	}
 

@@ -8,9 +8,10 @@ import org.rapidoid.collection.Coll;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Future;
 import org.rapidoid.log.Log;
+import org.rapidoid.util.LazyInit;
 
-import java.io.IOException;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 /*
  * #%L
@@ -36,8 +37,6 @@ import java.util.Map;
 @Since("5.1.0")
 public class HttpClient extends RapidoidThing {
 
-	private volatile CloseableHttpAsyncClient client;
-
 	private volatile String host = null;
 
 	private volatile String userAgent = null;
@@ -60,18 +59,20 @@ public class HttpClient extends RapidoidThing {
 
 	private final Map<String, String> cookies = Coll.synchronizedMap();
 
-	public Future<HttpResp> executeRequest(HttpReq req, Callback<HttpResp> callback) {
+	private final LazyInit<CloseableHttpAsyncClient> client = new LazyInit<CloseableHttpAsyncClient>(
+		new Callable<CloseableHttpAsyncClient>() {
 
-		if (client == null) {
-			synchronized (this) {
-				if (client == null) {
-					client = HttpClientUtil.client(this);
-					client.start();
-				}
+			@Override
+			public CloseableHttpAsyncClient call() throws Exception {
+				CloseableHttpAsyncClient client = HttpClientUtil.client(HttpClient.this);
+				client.start();
+				return client;
 			}
-		}
 
-		return HttpClientUtil.request(req, client, callback, false);
+		});
+
+	public Future<HttpResp> executeRequest(HttpReq req, Callback<HttpResp> callback) {
+		return HttpClientUtil.request(req, client.get(), callback, false);
 	}
 
 	public HttpClient userAgent(String userAgent) {
@@ -215,15 +216,10 @@ public class HttpClient extends RapidoidThing {
 	}
 
 	public synchronized void close() {
-		if (client != null) {
-
-			try {
-				client.close();
-			} catch (IOException e) {
-				Log.error("Error while closing the HTTP client!", e);
-			}
-
-			client = null;
+		try {
+			client.resetAndClose();
+		} catch (Exception e) {
+			Log.error("Error while closing the HTTP client!", e);
 		}
 	}
 

@@ -37,18 +37,17 @@ public class RapidoidInitializer extends RapidoidThing {
 		initialize();
 	}
 
-	private static volatile boolean initialized;
+	private static volatile long startedOn;
 
 	public static synchronized void initialize() {
-		if (!initialized) {
-			initialized = true;
+		if (startedOn == 0) {
+			startedOn = System.currentTimeMillis();
 
-			String ver = RapidoidInfo.version();
 			String proc = Msc.processName();
 			String dir = System.getProperty("user.dir");
 			String maxMem = (Runtime.getRuntime().maxMemory() / 1024 / 1024) + " MB";
 
-			Log.info("!Starting Rapidoid" + RapidoidInfo.notes() + "...", "!version", ver);
+			Log.info("!Starting " + RapidoidInfo.nameAndInfo());
 
 			Log.info("!System info", "os", Msc.OS_NAME, "java", Msc.javaVersion(),
 				"process", Msc.maybeMasked(proc), "max memory", Msc.maybeMasked(maxMem), "dir", dir);
@@ -59,6 +58,10 @@ public class RapidoidInitializer extends RapidoidThing {
 
 			Cls.getClassIfExists("org.rapidoid.insight.Metrics");
 		}
+	}
+
+	public static long startedOn() {
+		return startedOn;
 	}
 
 }
