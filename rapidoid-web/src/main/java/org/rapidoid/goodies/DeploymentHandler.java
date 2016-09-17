@@ -4,11 +4,16 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.Btn;
 import org.rapidoid.gui.GUI;
+import org.rapidoid.gui.reqinfo.IReqInfo;
 import org.rapidoid.gui.reqinfo.ReqInfo;
+import org.rapidoid.html.Tag;
 import org.rapidoid.http.HttpVerb;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Tokens;
 
+import java.io.File;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -43,23 +48,25 @@ public class DeploymentHandler extends GUI implements Callable<Object> {
 
 		if (ClasspathUtil.hasAppJar()) {
 
+			IReqInfo req = ReqInfo.get();
+
 			String appJar = ClasspathUtil.appJar();
 			String stagedAppJar = appJar + ".staged";
 
-			info.add(h2("Deployment status:"));
-			info.add(grid(jarsInfo()));
+			info.add(h3("Deployment status:"));
+			info.add(grid(jarsInfo(appJar, stagedAppJar)));
 
-			info.add(h2("Upload an application JAR to re-deployment:"));
+			info.add(h3("Upload an application JAR to stage it and then deploy it:"));
 			info.add(hardcoded("<form action=\"/_stage\" class=\"dropzone\" id=\"jar-upload\"></form>"));
 
-			String token = U.or(ReqInfo.get().cookies().get("_token"), "");
+			String token = Tokens.serialize(U.<String, Serializable>map("username", req.username()));
 
-			info.add(h2("HTTP API for Deployment:"));
-			info.add(h6(verb(HttpVerb.POST), b(" http://your-app-domain/_stage?_token=<token>")));
-			info.add(h6(b("POST DATA: file=<your-jar>")));
+			info.add(h3("HTTP API for Deployment:"));
 
-			info.add(h2("Building and deploying with Maven:"));
-			String cmd = "mvn clean package && cp target/*.jar target/_app_.jar && curl -F 'file=@target/_app_.jar' 'http://localhost:8888/_stage?_token=" + token + "'";
+			info.add(grid(apisInfo()));
+
+			info.add(h3("Packaging and deploying with Maven:"));
+			String cmd = "mvn clean org.rapidoid:deploy:uber-jar";
 
 			info.add(h6(copy(b(cmd))));
 
@@ -83,9 +90,39 @@ public class DeploymentHandler extends GUI implements Callable<Object> {
 		return multi(info);
 	}
 
-	private List<Map<String, ?>> jarsInfo() {
-		List<Map<String, ?>> info = U.list();
-		return info;
+	@SuppressWarnings("unchecked")
+	private List<Map<String, ?>> jarsInfo(String appJar, String stagedAppJar) {
+		return U.list(
+			jarInfo(appJar, "Currently deployed application JAR"),
+			jarInfo(stagedAppJar, "Application JAR to be deployed")
+		);
+	}
+
+	private Map<String, ?> jarInfo(String filename, String desc) {
+		File file = new File(filename);
+
+		String size = file.exists() ? (file.length() / 1024) + " KB" : "";
+
+		return U.map("file", filename, "description", desc, "exists", display(file.exists()), "size", size);
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<Map<String, ?>> apisInfo() {
+		return U.list(
+			apiInfo("Staging of the application JAR",
+				verb(HttpVerb.POST), "/_stage",
+				U.map("_token", "Deployment token", "file", "<your-jar>"),
+				"curl -F 'file=@app.jar' 'http://example.com/_stage?_token=4F920B"),
+
+			apiInfo("Deployment of the staged JAR",
+				verb(HttpVerb.POST), "/_deploy",
+				U.map("_token", "Deployment token"),
+				"curl -X POST 'http://example.com/_deploy?_token=4F920B")
+		);
+	}
+
+	private Map<String, ?> apiInfo(String desc, Tag verb, String uri, Map<String, String> params, String example) {
+		return U.map("description", desc, "verb", verb, "uri", span(uri).class_("text-box"), "parameters", grid(params).headless(true), "example", example);
 	}
 
 }
