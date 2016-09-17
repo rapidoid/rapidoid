@@ -3,6 +3,7 @@ package org.rapidoid.commons;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
@@ -69,6 +70,10 @@ public class RapidoidInfo extends RapidoidThing {
 		String ver = "v" + Msc.maybeMasked(version());
 		String notes = Str.render(notes(), " [%s]", "");
 		return "Rapidoid " + ver + notes;
+	}
+
+	public static long uptime() {
+		return U.time() - RapidoidInitializer.startedOn();
 	}
 
 }

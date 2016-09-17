@@ -3,6 +3,6 @@ Connection: keep-alive
 Server: Rapidoid
 Date: Sat, 10 Sep 2016 01:02:03 GMT
 Content-Type: application/json
-Content-Length: 190
+Content-Length: 205
 
-{"id":"rapidoid.xyz-123","root":"/app","jar":"/app/app.jar","jarExists":false,"version":"<?>","notes":["Dockerized","Uniform output"],"mode":"PRODUCTION","profiles":["default","production"]}
+{"id":"rapidoid.xyz-123","root":"/app","jar":"/app/app.jar","jarExists":false,"version":"<?>","notes":["Dockerized","Uniform output"],"mode":"PRODUCTION","profiles":["default","production"],"uptime":"<?>"}

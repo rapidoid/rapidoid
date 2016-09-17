@@ -37,11 +37,11 @@ public class RapidoidInitializer extends RapidoidThing {
 		initialize();
 	}
 
-	private static volatile boolean initialized;
+	private static volatile long startedOn;
 
 	public static synchronized void initialize() {
-		if (!initialized) {
-			initialized = true;
+		if (startedOn == 0) {
+			startedOn = System.currentTimeMillis();
 
 			String proc = Msc.processName();
 			String dir = System.getProperty("user.dir");
@@ -58,6 +58,10 @@ public class RapidoidInitializer extends RapidoidThing {
 
 			Cls.getClassIfExists("org.rapidoid.insight.Metrics");
 		}
+	}
+
+	public static long startedOn() {
+		return startedOn;
 	}
 
 }
