@@ -10,7 +10,7 @@
 
 	<groupId>org.rapidoid</groupId>
 	<artifactId>rapidoid</artifactId>
-	<version>5.2.4-SNAPSHOT</version>
+	<version>5.2.5-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Rapidoid</name>

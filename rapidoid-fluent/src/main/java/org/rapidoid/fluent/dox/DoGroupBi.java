@@ -43,7 +43,7 @@ public class DoGroupBi<K, V> {
 
 	public <R> Map<R, Map<K, V>> by(BiFunction<K, V, R> transformation) {
 		Function<Entry<K, V>, R> classifier = e -> transformation.apply(e.getKey(), e.getValue());
-		Collector<Entry<K, V>, ?, Map<K, V>> downstream = To.map(e -> e.getKey(), e -> e.getValue());
+		Collector<Entry<K, V>, ?, Map<K, V>> downstream = To.linkedMap(e -> e.getKey(), e -> e.getValue());
 		return items.entrySet().stream().collect(Collectors.groupingBy(classifier, downstream));
 	}
 

@@ -443,6 +443,7 @@ org.rapidoid.ioc.IoCContextWrapper
 org.rapidoid.ioc.IoCState
 org.rapidoid.ioc.OptionalJPAUtil
 org.rapidoid.io.FileSearch
+org.rapidoid.io.FileSearchResult
 org.rapidoid.io.IO
 org.rapidoid.io.Res
 org.rapidoid.io.ResKey

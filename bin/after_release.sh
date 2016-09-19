@@ -35,7 +35,9 @@ if [[ "$RGH_DIRTY" ]]; then
   git status
 else
   echo "Clean git index, will apply changes and commit..."
-  sed -i "$REPL" "$TARGET"
-  git add *
+  sed -i "$REPL" "$TARGET" *.html
+  git add *.html
+  git add *.css
+  git add *.js
   git commit -m "Bumped version from $OLD_VER to $NEW_VER."
 fi

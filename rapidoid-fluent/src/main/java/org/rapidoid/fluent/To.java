@@ -1,5 +1,6 @@
 package org.rapidoid.fluent;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -65,7 +66,23 @@ public class To {
 	}
 
 	public static <T, K, V> Collector<Entry<K, V>, ?, Map<K, V>> map() {
-		return To.map(Entry::getKey, Entry::getValue);
+		return map(Entry::getKey, Entry::getValue);
+	}
+
+	public static <T, K, U> Collector<T, ?, Map<K, U>> linkedMap(Function<? super T, ? extends K> keyMapper,
+	                                                             Function<? super T, ? extends U> valueMapper,
+	                                                             BinaryOperator<U> mergeFunction) {
+
+		return Collectors.toMap(keyMapper, valueMapper, mergeFunction, LinkedHashMap::new);
+	}
+
+	public static <T, K, U> Collector<T, ?, Map<K, U>> linkedMap(Function<? super T, ? extends K> keyMapper,
+	                                                             Function<? super T, ? extends U> valueMapper) {
+		return linkedMap(keyMapper, valueMapper, Mergers.thrower());
+	}
+
+	public static <T, K, V> Collector<Entry<K, V>, ?, Map<K, V>> linkedMap() {
+		return linkedMap(Entry::getKey, Entry::getValue);
 	}
 
 }

@@ -64,7 +64,7 @@ public class MergersTest extends TestCommons {
 		AtomicInteger n = new AtomicInteger();
 
 		Map<String, Integer> lengths = words.stream()
-			.collect(To.map(x -> x, x -> n.incrementAndGet(), Mergers.keeper()));
+			.collect(To.linkedMap(x -> x, x -> n.incrementAndGet(), Mergers.keeper()));
 
 		eq(lengths, New.map("a", 1, "bb", 2, "ccc", 3));
 	}

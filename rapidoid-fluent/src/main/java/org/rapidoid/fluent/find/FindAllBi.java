@@ -39,7 +39,7 @@ public class FindAllBi<K, V> {
 	}
 
 	public Map<K, V> where(BiPredicate<K, V> predicate) {
-		return items.entrySet().stream().filter(Lambdas.entryTest(predicate)).collect(To.map());
+		return items.entrySet().stream().filter(Lambdas.entryTest(predicate)).collect(To.linkedMap());
 	}
 
 }
