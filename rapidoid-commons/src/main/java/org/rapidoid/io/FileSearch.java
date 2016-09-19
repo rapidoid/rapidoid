@@ -103,16 +103,28 @@ public class FileSearch extends RapidoidThing {
 	public List<String> getRelativeNames() {
 		List<String> names = U.list();
 
-		for (String filename : getNames()) {
-			U.must(filename.startsWith(location));
-
-			String relative = Str.triml(filename, location);
-			relative = Str.triml(relative, File.separator);
-
-			names.add(relative);
+		for (FileSearchResult result : getResults()) {
+			names.add(result.relativeName());
 		}
 
 		return names;
+	}
+
+	public List<FileSearchResult> getResults() {
+		List<FileSearchResult> results = U.list();
+
+		for (File file : get()) {
+
+			String filename = file.getAbsolutePath();
+			U.must(filename.startsWith(location));
+
+			String relativeName = Str.triml(filename, location);
+			relativeName = Str.triml(relativeName, File.separator);
+
+			results.add(new FileSearchResult(file, filename, relativeName));
+		}
+
+		return results;
 	}
 
 	public List<File> get() {
