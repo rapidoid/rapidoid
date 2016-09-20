@@ -56,11 +56,10 @@ public class ConfigOptions extends RapidoidThing {
 		opts.add(opt("admin.port=<P>", "the Admin server will listen at port P", "same as on.port"));
 		opts.add(opt("admin.address=<ADDR>", "the Admin server will listen at address ADDR", "on.address"));
 
-		opts.add(opt("cpus=<C>", "optimize for C number of CPUs", "the actual number of the CPUs"));
-
 		opts.add(opt("app.services=<S1,S2...>", "comma-separated list of services to bootstrap on the App server", "none"));
 		opts.add(opt("admin.services=<S1,S2...>", "comma-separated list of services to bootstrap on the Admin server", "none"));
 
+//		opts.add(opt("cpus=<C>", "optimize for C number of CPUs", "the actual number of the CPUs"));
 //		opts.add(opt("workers=<W>", "start W number of I/O workers", "the configured number of CPUs - cpus options"));
 //		opts.add(opt("nodelay", "set the TCP_NODELAY flag to disable Nagle's algorithm", false));
 //		opts.add(opt("blockingAccept", "accept connection in BLOCKING mode", false));
