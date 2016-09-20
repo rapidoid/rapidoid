@@ -3,7 +3,6 @@ package org.rapidoid.config;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Env;
-import org.rapidoid.io.Res;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.scan.ClasspathUtil;
@@ -69,10 +68,6 @@ public class Conf extends RapidoidThing {
 
 		if (config == ROOT) {
 
-			if (Msc.dockerized()) {
-				if (!ROOT.has("root")) ROOT.set("root", "/app");
-			}
-
 			String root = Msc.rootPath();
 
 			if (Msc.dockerized()) {
@@ -85,10 +80,6 @@ public class Conf extends RapidoidThing {
 
 			if (U.notEmpty(appJar)) {
 				ClasspathUtil.appJar(appJar);
-			}
-
-			if (U.notEmpty(root)) {
-				Res.root(root);
 			}
 
 			boolean fancy = ROOT.entry("fancy").bool().or(false);

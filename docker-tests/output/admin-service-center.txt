@@ -6,8 +6,8 @@ INFO | main | org.rapidoid.commons.Environment | No profiles were specified, act
 INFO | main | org.rapidoid.commons.Environment | No production/dev/test mode was configured, inferring mode | mode = PRODUCTION
 INFO | main | org.rapidoid.commons.Environment | Automatically activating mode-specific profile | profile = production
 INFO | main | org.rapidoid.commons.Environment | Initialized environment | mode = PRODUCTION | profiles = [default, production]
-INFO | main | org.rapidoid.scan.ClasspathUtil | Setting application JAR | appJar = /app/app.jar | exists = false
 INFO | main | org.rapidoid.io.Res | Setting application root | root = /app | content = []
+INFO | main | org.rapidoid.scan.ClasspathUtil | Setting application JAR | appJar = /app/app.jar | exists = false
 INFO | main | org.rapidoid.config.ConfigImpl | Loaded configuration | files = [default-config.yml, default-config-default.yml]
 INFO | main | org.rapidoid.util.Msc | --------------------------
 INFO | main | org.rapidoid.util.Msc | Registering Admin goodies:

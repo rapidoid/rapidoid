@@ -8,8 +8,10 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.commons.Env;
+import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 import org.rapidoid.value.Value;
 import org.rapidoid.value.Values;
 
@@ -333,17 +335,32 @@ public class ConfigImpl extends RapidoidThing implements Config {
 
 					if (parts.length > 1) {
 						String value = parts[1];
-
-						if (name.equals("config")) {
-							setFilenameBase(value);
-						}
-
-						base.putArg(name, value);
+						base.setInitial(name, value);
 					} else {
-						base.putArg(name, true);
+						base.setInitial(name, true);
 					}
 				}
 			}
+		}
+
+		processInitialConfigEntries();
+	}
+
+	private void processInitialConfigEntries() {
+		String config = (String) base.initial.get("config");
+
+		if (config != null) {
+			base.setInitial("config", config);
+			setFilenameBase(config);
+		}
+
+		String root = (String) base.initial.get("root");
+
+		if (U.isEmpty(root) && Msc.dockerized()) root = "/app";
+
+		if (root != null) {
+			base.setInitial("root", root);
+			Res.root(root);
 		}
 	}
 
@@ -475,7 +492,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 		List<String> loaded = U.list();
 
 		args(Env.args());
-		base.applyArgsTo(this);
+		base.applyInitialConfig(this);
 
 		if (useBuiltInDefaults()) {
 			ConfigLoaderUtil.loadBuiltInConfig(this, loaded);
@@ -483,7 +500,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 
 		ConfigLoaderUtil.loadConfig(this, detached, loaded);
 
-		base.applyArgsTo(this);
+		base.applyInitialConfig(this);
 		Conf.applyConfig(this);
 
 		if (!loaded.isEmpty()) {

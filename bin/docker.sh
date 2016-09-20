@@ -16,8 +16,6 @@ ls -l .
 docker build -t rapidoid/rapidoid:snapshot .
 docker rmi $(docker images -f "dangling=true" -q)
 
-docker images -a
-
 rm -f entrypoint.sh
 
 echo rapidoid/rapidoid:snapshot was built successfully

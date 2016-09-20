@@ -6,8 +6,8 @@ INFO | main | org.rapidoid.commons.Environment | No profiles were specified, act
 INFO | main | org.rapidoid.commons.Environment | No production/dev/test mode was configured, inferring mode | mode = PRODUCTION
 INFO | main | org.rapidoid.commons.Environment | Automatically activating mode-specific profile | profile = production
 INFO | main | org.rapidoid.commons.Environment | Initialized environment | mode = PRODUCTION | profiles = [default, production]
-INFO | main | org.rapidoid.scan.ClasspathUtil | Setting application JAR | appJar = /app/app.jar | exists = false
 INFO | main | org.rapidoid.io.Res | Setting application root | root = /app | content = []
+INFO | main | org.rapidoid.scan.ClasspathUtil | Setting application JAR | appJar = /app/app.jar | exists = false
 INFO | main | org.rapidoid.config.ConfigImpl | Loaded configuration | files = [default-config.yml, default-config-default.yml]
 INFO | server | org.rapidoid.net.impl.RapidoidServerLoop | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
 INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = app | verbs = GET,POST | path = /_/terminate | roles = [] | tx = NONE | mvc = true
