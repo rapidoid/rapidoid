@@ -124,7 +124,7 @@ public class Environment extends RapidoidInitializer {
 			return EnvMode.TEST;
 
 		} else {
-			if (Msc.insideDocker()) return EnvMode.PRODUCTION;
+			if (Msc.dockerized()) return EnvMode.PRODUCTION;
 
 			return ClasspathUtil.getClasspathFolders().isEmpty() ? EnvMode.PRODUCTION : EnvMode.DEV;
 		}

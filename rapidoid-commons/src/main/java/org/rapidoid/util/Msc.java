@@ -1045,7 +1045,7 @@ public class Msc extends RapidoidThing implements Constants {
 		return false;
 	}
 
-	public static boolean insideDocker() {
+	public static boolean dockerized() {
 		return U.eq(System.getenv("RAPIDOID_JAR"), "/opt/rapidoid.jar")
 			&& U.eq(System.getenv("RAPIDOID_TMP"), "/tmp/rapidoid")
 			&& U.notEmpty(System.getenv("RAPIDOID_VERSION"))

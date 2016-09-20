@@ -69,13 +69,13 @@ public class Conf extends RapidoidThing {
 
 		if (config == ROOT) {
 
-			if (Msc.insideDocker()) {
+			if (Msc.dockerized()) {
 				if (!ROOT.has("root")) ROOT.set("root", "/app");
 			}
 
 			String root = Msc.rootPath();
 
-			if (Msc.insideDocker()) {
+			if (Msc.dockerized()) {
 				U.must(U.notEmpty(root), "The root must be configured in a Dockerized environment!");
 
 				if (!APP.has("jar")) APP.set("jar", Msc.path(root, "app.jar"));

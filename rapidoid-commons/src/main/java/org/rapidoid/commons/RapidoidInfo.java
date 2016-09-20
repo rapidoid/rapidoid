@@ -60,7 +60,7 @@ public class RapidoidInfo extends RapidoidThing {
 	public static List<String> notes() {
 		List<String> notes = U.list();
 
-		if (Msc.insideDocker()) notes.add("Dockerized");
+		if (Msc.dockerized()) notes.add("Dockerized");
 		if (Msc.uniformOutput()) notes.add("Uniform output");
 
 		return notes;

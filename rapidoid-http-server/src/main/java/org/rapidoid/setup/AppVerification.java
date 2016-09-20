@@ -39,7 +39,7 @@ public class AppVerification extends RapidoidThing {
 	}
 
 	private static void dockerSelfVerify() {
-		U.must(Msc.insideDocker(), "Docker environment couldn't be detected!");
+		U.must(Msc.dockerized(), "Docker environment couldn't be detected!");
 		U.must("/app".equals(Msc.rootPath()), "The default root path for Docker environment must be '/app'!");
 
 		Log.info("Docker environment was verified!");
