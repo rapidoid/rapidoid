@@ -26,13 +26,19 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.test.AbstractCommonsTest;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.3.0")
-public class VersionTest extends AbstractCommonsTest {
+@Since("5.2.5")
+public class RapidoidInfoTest extends AbstractCommonsTest {
 
 	@Test
 	public void testVersion() {
 		notNull(RapidoidInfo.version());
 		isTrue(RapidoidInfo.version().startsWith("5."));
+	}
+
+	@Test
+	public void testBuiltOn() {
+		notNull(RapidoidInfo.builtOn());
+		isTrue(RapidoidInfo.builtOn().matches("201\\d-\\d{2}-\\d{2}\\s\\d{2}:\\d{2}"));
 	}
 
 }

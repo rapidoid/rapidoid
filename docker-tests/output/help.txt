@@ -1,4 +1,4 @@
-Rapidoid v<?> [Dockerized] [Uniform output]
+Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
 
 Usage:
   docker run -it --rm -p <PORT>:8888 [-v <your-app-root>:/app] rapidoid/rapidoid[:tag] [option1 option2 ...]
