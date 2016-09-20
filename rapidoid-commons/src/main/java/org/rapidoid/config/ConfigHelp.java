@@ -4,6 +4,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.commons.Str;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.util.List;
 
@@ -45,10 +46,21 @@ public class ConfigHelp extends RapidoidThing {
 		show(RapidoidInfo.nameAndInfo());
 		show("");
 		show("Usage:");
-		show("  java -cp <yourapp>.jar com.example.Main [option1 option2 ...]");
+
+		if (Msc.dockerized()) {
+			show("  docker run -it --rm -p <PORT>:8888 [-v <your-app-root>:/app] rapidoid/rapidoid[:tag] [option1 option2 ...]");
+			show("  docker run -d -p <PORT>:8888 [-v <your-app-root>:/app] [-u nobody] rapidoid/rapidoid[:tag] [option1 option2 ...]");
+		} else {
+			show("  java -cp <yourapp>.jar com.example.Main [option1 option2 ...]");
+		}
 
 		show("\nExample:");
-		show("  java -cp <yourapp>.jar com.example.Main on.port=9090 on.address=127.0.0.1 app.services=ping,jmx admin.services=ping,jmx production secret=my-secret");
+
+		if (Msc.dockerized()) {
+			show("  docker run -it --rm -p 80:8888 -v $(pwd):/app -u nobody rapidoid/rapidoid app.services=welcome,ping admin.services=center users.admin.password=my-pass");
+		} else {
+			show("  java -cp <yourapp>.jar com.example.Main on.port=9090 on.address=127.0.0.1 app.services=ping,jmx admin.services=center production users.admin.password=my-pass");
+		}
 
 		show("\nMain configuration options:");
 		showOpts(ConfigOptions.ALL);
