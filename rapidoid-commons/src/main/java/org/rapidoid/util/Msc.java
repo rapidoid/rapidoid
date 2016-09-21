@@ -1074,4 +1074,8 @@ public class Msc extends RapidoidThing implements Constants {
 		return Conf.ROOT.entry("root").str().getOrNull();
 	}
 
+	public static boolean hasConsole() {
+		return System.console() != null;
+	}
+
 }

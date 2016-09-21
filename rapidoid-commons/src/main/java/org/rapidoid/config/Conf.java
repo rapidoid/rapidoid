@@ -82,7 +82,7 @@ public class Conf extends RapidoidThing {
 				ClasspathUtil.appJar(appJar);
 			}
 
-			boolean fancy = ROOT.entry("fancy").bool().or(false);
+			boolean fancy = ROOT.entry("fancy").bool().or(Msc.hasConsole());
 			if (fancy) {
 				Log.setStyled(true);
 			}

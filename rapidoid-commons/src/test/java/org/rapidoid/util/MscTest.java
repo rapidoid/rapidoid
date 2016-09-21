@@ -87,7 +87,7 @@ public class MscTest extends TestCommons {
 	}
 
 	@Test
-	public void testInsideDocker() throws Exception {
+	public void testInsideDocker() {
 		isFalse(Msc.dockerized());
 	}
 
