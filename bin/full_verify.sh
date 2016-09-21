@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
 
-mvn clean install
-bin/verify.sh
+mvn clean install && bin/verify.sh
