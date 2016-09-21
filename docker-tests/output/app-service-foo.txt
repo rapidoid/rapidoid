@@ -21,4 +21,4 @@ Exception in thread "main" java.lang.IllegalArgumentException: Unknown service: 
 	at org.rapidoid.setup.AppBootstrap.services(AppBootstrap.java:136)
 	at org.rapidoid.setup.App.boot(App.java:119)
 	at org.rapidoid.setup.App.bootstrap(App.java:103)
-	at org.rapidoid.standalone.Main.main(Main.java:33)
+	at org.rapidoid.standalone.Main.main(Main.java:35)

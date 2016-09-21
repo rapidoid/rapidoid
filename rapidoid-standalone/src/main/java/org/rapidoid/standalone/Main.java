@@ -24,6 +24,8 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.setup.App;
+import org.rapidoid.setup.On;
+import org.rapidoid.setup.Setup;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -31,6 +33,10 @@ public class Main extends RapidoidThing {
 
 	public static void main(String[] args) {
 		App.bootstrap(args);
+
+		if (!Setup.isAnyRunning()) {
+			On.setup().activate();
+		}
 	}
 
 }

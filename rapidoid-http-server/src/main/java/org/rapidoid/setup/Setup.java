@@ -170,7 +170,8 @@ public class Setup extends RapidoidInitializer implements Constants {
 		return http;
 	}
 
-	public synchronized Server listen() {
+	private synchronized Server listen() {
+
 		if (!listening && !reloaded) {
 
 			App.inferCallers();
@@ -235,7 +236,7 @@ public class Setup extends RapidoidInitializer implements Constants {
 		return this == ON;
 	}
 
-	private synchronized void activate() {
+	public synchronized void activate() {
 		if (activated) {
 			return;
 		}
@@ -511,6 +512,14 @@ public class Setup extends RapidoidInitializer implements Constants {
 		for (Setup setup : instances()) {
 			setup.shutdown();
 		}
+	}
+
+	public static synchronized boolean isAnyRunning() {
+		for (Setup setup : instances()) {
+			if (setup.isRunning()) return true;
+		}
+
+		return false;
 	}
 
 	public int port() {

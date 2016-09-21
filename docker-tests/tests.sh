@@ -8,9 +8,11 @@ echo "TARGET TAG: $TAG"
 rm -rf ./output/
 mkdir output
 
-./simple-test.sh verify docker-self-verify
 ./simple-test.sh help --help
-./simple-test.sh run
+
+./simple-test-bg.sh verify docker-self-verify
+./simple-test-bg.sh run
+
 ./simple-test.sh cmd echo OK
 ./simple-test.sh pwd pwd
 ./simple-test.sh user whoami

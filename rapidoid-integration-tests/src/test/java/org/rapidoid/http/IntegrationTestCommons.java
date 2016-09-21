@@ -84,7 +84,7 @@ public abstract class IntegrationTestCommons extends TestCommons {
 		App.resetGlobalState();
 		OnChanges.ignore();
 
-		On.setup().listen();
+		On.setup().activate();
 		On.setup().reload();
 
 		JDBC.execute(RapidoidIntegrationTest.HSQL_TRUNCATE);
