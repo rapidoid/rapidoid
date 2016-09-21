@@ -25,6 +25,7 @@ import org.rapidoid.ioc.IoC;
 import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.lambda.NParamLambda;
+import org.rapidoid.log.Log;
 import org.rapidoid.net.Server;
 import org.rapidoid.security.Role;
 import org.rapidoid.u.U;
@@ -193,11 +194,18 @@ public class Setup extends RapidoidInitializer implements Constants {
 			}
 
 			if (server == null) {
+				int onPort;
+
 				if (isAppOrAdminOnSameServer()) {
-					server = proc.listen(ON.address(), ON.port());
+					onPort = ON.port();
+					server = proc.listen(ON.address(), onPort);
 				} else {
-					server = proc.listen(address(), port());
+					onPort = port();
+					server = proc.listen(address(), onPort);
 				}
+
+				Log.info("!Server has started", "setup", name(), "!home", "http://localhost:" + onPort);
+				Log.info("!Static resources will be served from the following locations", "setup", name(), "!locations", custom().staticFilesPath());
 			}
 		}
 

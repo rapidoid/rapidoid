@@ -3,7 +3,6 @@ package org.rapidoid.net.impl;
 import org.rapidoid.activity.RapidoidThread;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Env;
 import org.rapidoid.commons.Rnd;
 import org.rapidoid.config.ConfigUtil;
 import org.rapidoid.log.Log;
@@ -128,10 +127,6 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 			ServerSocket socket = serverSocketChannel.socket();
 
 			Log.info("!Starting server", "!address", address, "!port", port, "I/O workers", workers, "sync", syncBufs, "accept", blockingInfo);
-
-			if (Env.dev()) {
-				Log.info("!Home page: http://localhost:" + port);
-			}
 
 			InetSocketAddress addr = new InetSocketAddress(address, port);
 

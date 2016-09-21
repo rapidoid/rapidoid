@@ -11,3 +11,5 @@ INFO | main | org.rapidoid.setup.AppVerification | Docker environment was verifi
 INFO | main | org.rapidoid.scan.ClasspathUtil | Scanning classpath | annotated = [@Controller, @Service, @Run, @Named, @Singleton] | packages = [null]
 INFO | main | org.rapidoid.scan.ClasspathUtil | Finished classpath scan | time = <?>ms | searched = 0 | found = []
 INFO | server | org.rapidoid.net.impl.RapidoidServerLoop | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
+INFO | main | org.rapidoid.setup.Setup | Server has started | setup = app | home = http://localhost:8888
+INFO | main | org.rapidoid.setup.Setup | Static resources will be served from the following locations | setup = app | locations = [static, public, default/static, default/public]
