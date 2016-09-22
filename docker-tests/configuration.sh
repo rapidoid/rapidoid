@@ -7,7 +7,7 @@ IFS=$'\n\t'
 printf "\n - Testing CONFIGURATION (tag=$TAG)\n\n"
 
 docker run \
-    -p 4444:8888 \
+    --net host \
     -v $(pwd)/app1:/app \
     -u nobody \
     -e "UNIFORM_OUTPUT=true" \
