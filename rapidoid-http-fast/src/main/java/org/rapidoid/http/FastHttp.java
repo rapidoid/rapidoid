@@ -71,16 +71,24 @@ public class FastHttp extends AbstractHttpProcessor {
 	}
 
 	@Override
-	public void onRequest(Channel channel, boolean isGet, boolean isKeepAlive, BufRange xbody, BufRange xverb, BufRange xuri,
-	                      BufRange xpath, BufRange xquery, BufRange xprotocol, BufRanges hdrs) {
+	public void onRequest(Channel channel, RapidoidHelper data) {
 
-		RapidoidHelper helper = channel.helper();
 		Buf buf = channel.input();
 
-		HttpIO.removeTrailingSlash(buf, xpath);
-		HttpIO.removeTrailingSlash(buf, xuri);
+		boolean isGet = data.isGet.value;
+		boolean isKeepAlive = data.isKeepAlive.value;
 
-		String err = validateRequest(buf, xverb, xuri);
+		BufRange body = data.body;
+		BufRange verb = data.verb;
+		BufRange uri = data.uri;
+		BufRange path = data.path;
+		BufRange query = data.query;
+		BufRanges headers = data.headers;
+
+		HttpIO.removeTrailingSlash(buf, path);
+		HttpIO.removeTrailingSlash(buf, uri);
+
+		String err = validateRequest(buf, verb, uri);
 		if (err != null) {
 			channel.write(HttpIO.HTTP_400_BAD_REQUEST);
 			channel.close();
@@ -94,7 +102,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		HandlerMatch match = null;
 
 		for (HttpRoutesImpl r : routeGroups) {
-			match = r.findHandler(buf, isGet, xverb, xpath);
+			match = r.findHandler(buf, isGet, verb, path);
 			if (match != null) {
 				matchingRoutes = r;
 				matchingRoute = match.getRoute();
@@ -119,8 +127,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		ReqImpl req = null;
 
 		if (!noReq) {
-			req = createReq(channel, isGet, isKeepAlive, xbody, xverb, xuri, xpath, xquery, hdrs,
-				helper, buf, matchingRoutes, matchingRoute, match, handler);
+			req = createReq(channel, isGet, isKeepAlive, data, buf, matchingRoutes, matchingRoute, match, handler);
 		}
 
 		try {
@@ -147,20 +154,23 @@ public class FastHttp extends AbstractHttpProcessor {
 	}
 
 	@SuppressWarnings("unchecked")
-	public ReqImpl createReq(Channel channel, boolean isGet, boolean isKeepAlive, BufRange xbody, BufRange xverb, BufRange xuri, BufRange xpath, BufRange xquery, BufRanges hdrs, RapidoidHelper helper, Buf buf, HttpRoutesImpl matchingRoutes, Route matchingRoute, HandlerMatch match, HttpHandler handler) {
-		ReqImpl req;
-		KeyValueRanges paramsKV = helper.pairs1.reset();
-		KeyValueRanges headersKV = helper.pairs2.reset();
-		KeyValueRanges cookiesKV = helper.pairs5.reset();
+	public ReqImpl createReq(Channel channel, boolean isGet, boolean isKeepAlive,
+	                         RapidoidHelper helper, Buf buf, HttpRoutesImpl matchingRoutes,
+	                         Route matchingRoute, HandlerMatch match, HttpHandler handler) {
 
-		HTTP_PARSER.parseParams(buf, paramsKV, xquery);
+		ReqImpl req;
+		KeyValueRanges paramsKV = helper.params.reset();
+		KeyValueRanges headersKV = helper.headersKV.reset();
+		KeyValueRanges cookiesKV = helper.cookies.reset();
+
+		HTTP_PARSER.parseParams(buf, paramsKV, helper.query);
 		Map<String, String> params = U.cast(paramsKV.toMap(buf, true, true, false));
 
 		if (match != null && match.getParams() != null) {
 			params.putAll(match.getParams());
 		}
 
-		HTTP_PARSER.parseHeadersIntoKV(buf, hdrs, headersKV, cookiesKV, helper);
+		HTTP_PARSER.parseHeadersIntoKV(buf, helper.headers, headersKV, cookiesKV, helper);
 		Map<String, String> headers = U.cast(headersKV.toMap(buf, false, false, true));
 		Map<String, String> cookies = U.cast(cookiesKV.toMap(buf, false, false, false));
 
@@ -169,16 +179,16 @@ public class FastHttp extends AbstractHttpProcessor {
 		Map<String, List<Upload>> files;
 		boolean pendingBodyParsing = false;
 
-		if (!isGet && !xbody.isEmpty()) {
+		if (!isGet && !helper.body.isEmpty()) {
 			KeyValueRanges postedKV = helper.pairs3.reset();
 
-			body = xbody.bytes(buf);
+			body = helper.body.bytes(buf);
 
 			// parse posted body as data
 			posted = U.map();
 			files = U.map();
 
-			pendingBodyParsing = !HTTP_PARSER.parsePosted(buf, headersKV, xbody, postedKV, files, helper, posted);
+			pendingBodyParsing = !HTTP_PARSER.parsePosted(buf, headersKV, helper.body, postedKV, files, helper, posted);
 
 			posted = Collections.synchronizedMap(posted);
 			files = Collections.synchronizedMap(files);
@@ -189,10 +199,10 @@ public class FastHttp extends AbstractHttpProcessor {
 			body = null;
 		}
 
-		String verb = xverb.str(buf);
-		String uri = xuri.str(buf);
-		String path = Msc.urlDecode(xpath.str(buf));
-		String query = Msc.urlDecodeOrKeepOriginal(xquery.str(buf));
+		String verb = helper.verb.str(buf);
+		String uri = helper.uri.str(buf);
+		String path = Msc.urlDecode(helper.path.str(buf));
+		String query = Msc.urlDecodeOrKeepOriginal(helper.query.str(buf));
 		String zone = null;
 
 		MediaType contentType = MediaType.HTML_UTF_8;
