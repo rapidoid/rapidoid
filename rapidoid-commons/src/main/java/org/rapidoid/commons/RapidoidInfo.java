@@ -39,6 +39,7 @@ public class RapidoidInfo extends RapidoidThing {
 	private static final Properties PROPS = new Properties();
 
 	private static final String VERSION;
+	private static final String BUILT_ON;
 
 	static {
 		try {
@@ -51,25 +52,31 @@ public class RapidoidInfo extends RapidoidThing {
 		}
 
 		VERSION = PROPS.getProperty("version");
+		BUILT_ON = PROPS.getProperty("built-on");
 	}
 
 	public static String version() {
 		return VERSION;
 	}
 
+	public static String builtOn() {
+		return BUILT_ON;
+	}
+
 	public static List<String> notes() {
 		List<String> notes = U.list();
 
-		if (Msc.insideDocker()) notes.add("Dockerized");
+		if (Msc.dockerized()) notes.add("Dockerized");
 		if (Msc.uniformOutput()) notes.add("Uniform output");
 
 		return notes;
 	}
 
 	public static String nameAndInfo() {
-		String ver = "v" + Msc.maybeMasked(version());
+		String info = U.frmt("v%s, built on %s", Msc.maybeMasked(version()), Msc.maybeMasked(builtOn()));
 		String notes = Str.render(notes(), " [%s]", "");
-		return "Rapidoid " + ver + notes;
+
+		return "Rapidoid " + info + notes;
 	}
 
 	public static long uptime() {

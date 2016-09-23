@@ -53,8 +53,6 @@ public class HttpParserTest extends TestCommons {
 
 	private static final String CONTENT_LENGTH = "CoNtEnT-LenGth";
 
-	private static final RapidoidHelper HELPER = new RapidoidHelper();
-
 	private static String req(String s, String nl) {
 		return s.replaceAll("\\|", nl);
 	}
@@ -66,100 +64,99 @@ public class HttpParserTest extends TestCommons {
 
 	@Test
 	public void shouldParseRequest1() {
-		ReqData req = parse(REQ1);
+		RapidoidHelper req = parse(REQ1);
 
 		BufGroup bufs = new BufGroup(2);
 		Buf reqbuf = bufs.from(REQ1, "r2");
 
-		eq(REQ1, req.rVerb, "GET");
-		eq(REQ1, req.rPath, "/foo/bar");
+		eq(REQ1, req.verb, "GET");
+		eq(REQ1, req.path, "/foo/bar");
 		eqs(REQ1, req.params, "a", "5", "b", "", "n", "%20");
 		eq(req.params.toMap(reqbuf, true, true, false), U.map("a", "5", "b", "", "n", " "));
-		eq(REQ1, req.rProtocol, "HTTP/1.1");
+		eq(REQ1, req.protocol, "HTTP/1.1");
 		eqs(REQ1, req.headersKV, "Host", "www.test.com", "Set-Cookie", "aaa=2");
 
-		isNone(req.rBody);
+		isNone(req.body);
 	}
 
 	@Test
 	public void shouldParseRequest2() {
-		ReqData req = parse(REQ2);
+		RapidoidHelper req = parse(REQ2);
 
-		eq(REQ2, req.rVerb, "POST");
-		eq(REQ2, req.rPath, "/something/else/here");
+		eq(REQ2, req.verb, "POST");
+		eq(REQ2, req.path, "/something/else/here");
 		eqs(REQ2, req.params, "x", "abc%20de");
-		eq(REQ2, req.rProtocol, "HTTP/STRANGE");
+		eq(REQ2, req.protocol, "HTTP/STRANGE");
 		eqs(REQ2, req.headersKV, "Host", "a.b.c.org", "", "ign", "ored", "", "My-Header", "same", "My-Header", "again",
 			CONTENT_LENGTH, "5");
-		eq(REQ2, req.rQuery, "x=abc%20de");
-		eq(REQ2, req.rBody, "BODYa");
+		eq(REQ2, req.query, "x=abc%20de");
+		eq(REQ2, req.body, "BODYa");
 	}
 
 	@Test
 	public void shouldParseRequest3() {
-		ReqData req = parse(REQ3);
+		RapidoidHelper req = parse(REQ3);
 
-		eq(REQ3, req.rVerb, "PUT");
-		eq(REQ3, req.rPath, "/books");
+		eq(REQ3, req.verb, "PUT");
+		eq(REQ3, req.path, "/books");
 		eqs(REQ3, req.params);
-		eq(REQ3, req.rProtocol, "HTTP/1.0");
+		eq(REQ3, req.protocol, "HTTP/1.0");
 		eqs(REQ3, req.headersKV, "CoNNectioN", "keep-alive", "AAAAA", "c = 2", CONTENT_LENGTH, "6");
-		eq(REQ3, req.rBody, "BODYab");
+		eq(REQ3, req.body, "BODYab");
 	}
 
 	@Test
 	public void shouldParseRequest4() {
-		ReqData req = parse(REQ4);
+		RapidoidHelper req = parse(REQ4);
 
-		eq(REQ4, req.rVerb, "DELETE");
-		eq(REQ4, req.rPath, "/");
+		eq(REQ4, req.verb, "DELETE");
+		eq(REQ4, req.path, "/");
 		eqs(REQ4, req.params, "a", "", "bb", "c", "d", "");
-		eq(REQ4, req.rProtocol, "MY-PROTOCOL");
+		eq(REQ4, req.protocol, "MY-PROTOCOL");
 		eqs(REQ4, req.headersKV, CONTENT_LENGTH, "7");
-		eq(REQ4, req.rBody, "BODYabc");
+		eq(REQ4, req.body, "BODYabc");
 	}
 
 	@Test
 	public void shouldParseRequest5() {
-		ReqData req = parse(REQ5);
+		RapidoidHelper req = parse(REQ5);
 
-		eq(REQ5, req.rVerb, "ABCD");
-		eq(REQ5, req.rPath, "///");
+		eq(REQ5, req.verb, "ABCD");
+		eq(REQ5, req.path, "///");
 		eqs(REQ5, req.params, "??", "");
 		eq(req.params.toMap(REQ5), U.map("??", ""));
-		eq(REQ5, req.rProtocol, "HTTP/1.1");
+		eq(REQ5, req.protocol, "HTTP/1.1");
 		eqs(REQ5, req.headersKV, CONTENT_LENGTH, "8");
-		eq(REQ5, req.rBody, "BODYabcd");
+		eq(REQ5, req.body, "BODYabcd");
 	}
 
 	@Test
 	public void shouldParseRequest6() {
-		ReqData req = parse(REQ6);
+		RapidoidHelper req = parse(REQ6);
 
-		eq(REQ6, req.rVerb, "GET");
-		eq(REQ6, req.rPath, "/");
+		eq(REQ6, req.verb, "GET");
+		eq(REQ6, req.path, "/");
 		eqs(REQ6, req.params, "x", "");
-		eq(REQ6, req.rProtocol, "A");
+		eq(REQ6, req.protocol, "A");
 		eqs(REQ6, req.headersKV);
-		isNone(req.rBody);
+		isNone(req.body);
 	}
 
-	private ReqData parse(String reqs) {
-		ReqData req = new ReqData();
+	private RapidoidHelper parse(String reqs) {
+		RapidoidHelper req = new RapidoidHelper();
 
 		Buf reqbuf = new BufGroup(10).from(reqs, "test");
 
 		Channel conn = mock(Channel.class);
 		returns(conn.input(), reqbuf);
-		returns(conn.helper(), HELPER);
+		returns(conn.helper(), req);
 
 		HttpParser parser = new HttpParser();
-		parser.parse(reqbuf, req.isGet, req.isKeepAlive, req.rBody, req.rVerb, req.rUri, req.rPath, req.rQuery,
-			req.rProtocol, req.headers, HELPER);
+		parser.parse(reqbuf, req);
 
-		parser.parseParams(reqbuf, req.params, req.rQuery);
+		parser.parseParams(reqbuf, req.params, req.query);
 
-		parser.parseHeadersIntoKV(reqbuf, req.headers, req.headersKV, req.cookies, HELPER);
+		parser.parseHeadersIntoKV(reqbuf, req.headers, req.headersKV, req.cookies, req);
 
 		return req;
 	}

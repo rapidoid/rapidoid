@@ -22,11 +22,10 @@ package org.rapidoid.setup;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.data.BufRange;
-import org.rapidoid.data.BufRanges;
 import org.rapidoid.http.processor.AbstractHttpProcessor;
 import org.rapidoid.http.processor.HttpProcessor;
 import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.net.impl.RapidoidHelper;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -37,12 +36,11 @@ public class AppRestartProcessor extends AbstractHttpProcessor {
 	}
 
 	@Override
-	public void onRequest(Channel channel, boolean isGet, boolean isKeepAlive, BufRange body,
-	                      BufRange verb, BufRange uri, BufRange path, BufRange query, BufRange protocol, BufRanges headers) {
+	public void onRequest(Channel channel, RapidoidHelper data) {
 
 		App.restartIfDirty();
 
-		next.onRequest(channel, isGet, isKeepAlive, body, verb, uri, path, query, protocol, headers);
+		next.onRequest(channel, data);
 	}
 
 }

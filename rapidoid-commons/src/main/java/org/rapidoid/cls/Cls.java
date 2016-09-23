@@ -476,13 +476,11 @@ public class Cls extends RapidoidThing {
 
 			case BOOLEAN:
 			case BOOLEAN_OBJ:
-				if ("y".equalsIgnoreCase(value) || "t".equalsIgnoreCase(value) || "yes".equalsIgnoreCase(value)
-					|| "true".equalsIgnoreCase(value)) {
+				if ("y".equalsIgnoreCase(value) || "yes".equalsIgnoreCase(value) || "true".equalsIgnoreCase(value)) {
 					return (T) Boolean.TRUE;
 				}
 
-				if ("n".equalsIgnoreCase(value) || "f".equalsIgnoreCase(value) || "no".equalsIgnoreCase(value)
-					|| "false".equalsIgnoreCase(value)) {
+				if ("n".equalsIgnoreCase(value) || "no".equalsIgnoreCase(value) || "false".equalsIgnoreCase(value)) {
 					return (T) Boolean.FALSE;
 				}
 

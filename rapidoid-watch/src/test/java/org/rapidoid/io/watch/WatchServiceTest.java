@@ -32,8 +32,6 @@ import org.rapidoid.util.Msc;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
@@ -55,9 +53,7 @@ public class WatchServiceTest extends TestCommons {
 
 	@Test
 	public void testDirRefresh() throws IOException {
-		Path tmpDir = Files.createTempDirectory("watch-service-test");
-		String tmpPath = tmpDir.toAbsolutePath().toString();
-		tmpDir.toFile().deleteOnExit();
+		String tmpPath = createTempDir("watch-service-test");
 
 		Dir dir = Dir.from(tmpPath);
 		Dir dir2 = Dir.from(tmpPath);

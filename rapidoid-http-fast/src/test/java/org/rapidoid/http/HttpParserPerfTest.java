@@ -24,12 +24,10 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufGroup;
-import org.rapidoid.data.BufRange;
 import org.rapidoid.data.BufRanges;
 import org.rapidoid.http.impl.HttpParser;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.util.Msc;
-import org.rapidoid.wrap.BoolWrap;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -50,20 +48,7 @@ public class HttpParserPerfTest {
 		final Buf[] reqs = {r(REQ1), r(REQ2), r(REQ3), r(REQ4)};
 		final RapidoidHelper helper = new RapidoidHelper(null);
 
-		BufRange[] ranges = helper.ranges1.ranges;
-		final BufRanges headers = helper.ranges2;
-
-		final BoolWrap isGet = helper.booleans[0];
-		final BoolWrap isKeepAlive = helper.booleans[1];
-
-		final BufRange verb = ranges[ranges.length - 1];
-		final BufRange uri = ranges[ranges.length - 2];
-		final BufRange path = ranges[ranges.length - 3];
-		final BufRange query = ranges[ranges.length - 4];
-		final BufRange protocol = ranges[ranges.length - 5];
-		final BufRange body = ranges[ranges.length - 6];
-
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 100; i++) {
 			Msc.benchmark("parse", 3000000, new Runnable() {
 				int n;
 
@@ -71,7 +56,7 @@ public class HttpParserPerfTest {
 				public void run() {
 					Buf buf = reqs[n % 4];
 					buf.position(0);
-					parser.parse(buf, isGet, isKeepAlive, body, verb, uri, path, query, protocol, headers, helper);
+					parser.parse(buf, helper);
 					n++;
 				}
 			});

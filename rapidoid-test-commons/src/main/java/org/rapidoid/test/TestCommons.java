@@ -30,6 +30,8 @@ import org.mockito.stubbing.OngoingStubbing;
 import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
@@ -499,6 +501,19 @@ public abstract class TestCommons {
 
 		file.deleteOnExit();
 		return file;
+	}
+
+	protected String createTempDir(String name) {
+		Path tmpDir = null;
+		try {
+			tmpDir = Files.createTempDirectory(name);
+		} catch (IOException e) {
+			throw new RuntimeException("Couldn't create temporary directory!", e);
+		}
+
+		String tmpPath = tmpDir.toAbsolutePath().toString();
+		tmpDir.toFile().deleteOnExit();
+		return tmpPath;
 	}
 
 	protected String getTestName() {

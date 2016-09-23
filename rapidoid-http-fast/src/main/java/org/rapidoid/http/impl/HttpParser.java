@@ -17,7 +17,6 @@ import org.rapidoid.log.Log;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
-import org.rapidoid.wrap.BoolWrap;
 import org.rapidoid.wrap.IntWrap;
 
 import java.util.List;
@@ -91,13 +90,15 @@ public class HttpParser extends RapidoidThing implements Constants {
 
 	private static final byte[] GET = "GET".getBytes();
 
-	public void parse(Buf buf, BoolWrap isGet, BoolWrap isKeepAlive, BufRange body, BufRange verb, BufRange uri, BufRange path,
-	                  BufRange query, BufRange protocol, BufRanges headers, RapidoidHelper helper) {
+	public void parse(Buf buf, RapidoidHelper helper) {
 
 		Bytes bytes = buf.bytes();
 
-		buf.scanUntil(SPACE, verb);
-		buf.scanUntil(SPACE, uri);
+		BufRange protocol = helper.protocol;
+		BufRanges headers = helper.headers;
+
+		buf.scanUntil(SPACE, helper.verb);
+		buf.scanUntil(SPACE, helper.uri);
 		buf.scanLn(protocol);
 
 		boolean keepAliveByDefault = protocol.isEmpty() || bytes.get(protocol.last()) != '0'; // e.g. HTTP/1.1
@@ -106,19 +107,19 @@ public class HttpParser extends RapidoidThing implements Constants {
 		if (keepAliveByDefault) {
 			buf.scanLnLn(headers.reset(), result, (byte) 's', (byte) 'e'); // clo[se]
 			int possibleCloseHeaderPos = result.value;
-			isKeepAlive.value = possibleCloseHeaderPos < 0 || isConnectionHeader(bytes, headers, helper, possibleCloseHeaderPos);
+			helper.isKeepAlive.value = possibleCloseHeaderPos < 0 || isConnectionHeader(bytes, headers, helper, possibleCloseHeaderPos);
 
 		} else {
 			buf.scanLnLn(headers.reset(), result, (byte) 'v', (byte) 'e'); // keep-ali[ve]
 			int possibleKeepAliveHeaderPos = result.value;
-			isKeepAlive.value = possibleKeepAliveHeaderPos >= 0 && isConnectionHeader(bytes, headers, helper, possibleKeepAliveHeaderPos);
+			helper.isKeepAlive.value = possibleKeepAliveHeaderPos >= 0 && isConnectionHeader(bytes, headers, helper, possibleKeepAliveHeaderPos);
 		}
 
-		BytesUtil.split(bytes, uri, ASTERISK, path, query, false);
+		BytesUtil.split(bytes, helper.uri, ASTERISK, helper.path, helper.query, false);
 
-		isGet.value = BytesUtil.matches(bytes, verb, GET, true);
-		if (!isGet.value) {
-			parseBody(buf, body, headers, helper);
+		helper.isGet.value = BytesUtil.matches(bytes, helper.verb, GET, true);
+		if (!helper.isGet.value) {
+			parseBody(buf, helper);
 		}
 	}
 
@@ -145,7 +146,10 @@ public class HttpParser extends RapidoidThing implements Constants {
 		return BytesUtil.matches(bytes, connVal, KEEP_ALIVE, false);
 	}
 
-	private void parseBody(Buf buf, BufRange body, BufRanges headers, RapidoidHelper helper) {
+	private void parseBody(Buf buf, RapidoidHelper helper) {
+		BufRanges headers = helper.headers;
+		BufRange body = helper.body;
+
 		BufRange clen = headers.getByPrefix(buf.bytes(), CONTENT_LENGTH, false);
 
 		if (clen != null) {
@@ -327,7 +331,7 @@ public class HttpParser extends RapidoidThing implements Constants {
 	private void parseMultiPart(Buf src, BufRange body, KeyValueRanges data, Map<String, List<Upload>> files,
 	                            BufRange multipartBoundary, RapidoidHelper helper, int from, int to) {
 
-		KeyValueRanges headers = helper.pairs.reset();
+		KeyValueRanges headers = helper.headersKV.reset();
 		BufRange partBody = helper.ranges4.ranges[0];
 		BufRange contType = helper.ranges4.ranges[1];
 		BufRange contEnc = helper.ranges4.ranges[2];

@@ -33,7 +33,7 @@ public class OAuthDemo extends RapidoidThing {
 	public static void main(String[] args) {
 		Setup setup = On.setup();
 		OAuth.register(setup);
-		setup.listen();
+		setup.activate();
 	}
 
 }

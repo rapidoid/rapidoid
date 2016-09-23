@@ -10,6 +10,7 @@ import org.rapidoid.commons.Arr;
 import org.rapidoid.commons.Env;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 import org.rapidoid.value.Value;
 import org.rapidoid.value.Values;
 
@@ -121,53 +122,41 @@ public class ConfigImpl extends RapidoidThing implements Config {
 			value = asMap().get(key);
 		}
 
-		return value != null ? value : global(key);
-	}
-
-	private String global(String key) {
-		String fullKey = fullKey(key, ".");
-
-		String value = System.getProperty(fullKey);
-
+		// if it's in the config, it's already overriden by the Env. If not, check manually:
 		if (value == null) {
-			value = System.getenv(fullKey);
-		}
-
-		if (value == null) {
-			value = System.getenv(fullKey(key, "_").toUpperCase());
-		}
-
-		if (value == null) {
-			value = System.getenv(fullKey(key, "_").toLowerCase());
+			value = globalOrArgConfigByRelativeKey(key);
 		}
 
 		return value;
 	}
 
+	private Object globalOrArgConfigByRelativeKey(String relKey) {
+		String key = fullKey(relKey, ".");
+		return globalOrArgConfig(key);
+	}
+
 	private String fullKey(String key, String separator) {
-		return U.join(separator, baseKeys) + separator + key;
+		return U.join(separator, Arr.concat(U.array(baseKeys), key));
 	}
 
 	@Override
 	public boolean has(String key) {
 		makeSureIsInitialized();
 
-		synchronized (base.properties) {
-			return asMap().containsKey(key);
-		}
+		return get(key) != null;
 	}
 
 	@Override
 	public boolean is(String key) {
 		makeSureIsInitialized();
 
-		Object value;
+		Object value = get(key);
 
-		synchronized (base.properties) {
-			value = asMap().get(key);
+		try {
+			return Boolean.TRUE.equals(Cls.convert(value, Boolean.class));
+		} catch (Exception e) {
+			return false;
 		}
-
-		return Boolean.TRUE.equals(Cls.convert(value, Boolean.class));
 	}
 
 	@Override
@@ -242,15 +231,6 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	}
 
 	@Override
-	public void set(String key, Object value) {
-		makeSureIsInitialized();
-
-		synchronized (base.properties) {
-			asMap().put(key, value);
-		}
-	}
-
-	@Override
 	public void remove(String key) {
 		makeSureIsInitialized();
 
@@ -274,7 +254,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 		makeSureIsInitialized();
 
 		synchronized (base.properties) {
-			return asMap().isEmpty();
+			return asMap().isEmpty() && !Env.properties().hasPrefix(U.join("_", baseKeys) + "_");
 		}
 	}
 
@@ -282,7 +262,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	public void update(Map<String, ?> entries) {
 		makeSureIsInitialized();
 
-		update(entries, false);
+		update(entries, true);
 	}
 
 	@Override
@@ -291,9 +271,8 @@ public class ConfigImpl extends RapidoidThing implements Config {
 		makeSureIsInitialized();
 
 		synchronized (base.properties) {
-			Map<String, Object> conf = asMap();
-
 			for (Map.Entry<String, ?> e : entries.entrySet()) {
+
 				String name = e.getKey();
 				Object value = e.getValue();
 
@@ -301,15 +280,37 @@ public class ConfigImpl extends RapidoidThing implements Config {
 					sub(name).update((Map<String, ?>) value, overridenByEnv);
 
 				} else {
-					if (overridenByEnv) {
-						value = U.or(global(name), value);
-					}
-
-					conf.put(name, value);
+					set(name, value, overridenByEnv);
 				}
 			}
 		}
 	}
+
+	@Override
+	public void set(String key, Object value) {
+		set(key, value, true);
+	}
+
+	@Override
+	public void set(String key, Object value, boolean overridenByEnv) {
+		makeSureIsInitialized();
+
+		String[] keys = key.split("\\.");
+		if (keys.length > 1) {
+			Config cfg = sub(Arr.sub(keys, 0, -1));
+			cfg.set(U.last(keys), value, overridenByEnv);
+			return;
+		}
+
+		if (overridenByEnv) {
+			value = U.or(globalOrArgConfigByRelativeKey(key), value);
+		}
+
+		synchronized (base.properties) {
+			asMap().put(key, value);
+		}
+	}
+
 
 	@Override
 	public String toString() {
@@ -323,39 +324,15 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	@Override
 	public void args(List<String> args) {
 		mustBeRoot();
-		makeSureIsInitialized();
+		base.initial.putAll(Msc.parseArgs(args));
+	}
 
-		if (U.notEmpty(args)) {
-			for (String arg : args) {
-				if (!arg.contains("->")) {
-					String[] parts = arg.split("=", 2);
-					String name = parts[0];
-
-					if (parts.length > 1) {
-						String value = parts[1];
-
-						if (name.equals("config")) {
-							setFilenameBase(value);
-						}
-
-						base.putArg(name, value);
-					} else {
-						base.putArg(name, true);
-					}
-				}
-			}
-		}
+	private Object globalOrArgConfig(String key) {
+		return U.or(base.initial.get(key), Env.properties().get(key));
 	}
 
 	private void mustBeRoot() {
 		U.must(isRoot, "Must be Config's root!");
-	}
-
-	@Override
-	public void setNested(String key, Object value) {
-		String[] keys = key.split("\\.");
-		Config cfg = keys.length > 1 ? sub(Arr.sub(keys, 0, -1)) : this;
-		cfg.set(U.last(keys), value);
 	}
 
 	@Override
@@ -475,7 +452,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 		List<String> loaded = U.list();
 
 		args(Env.args());
-		base.applyArgsTo(this);
+		overrideByEnv();
 
 		if (useBuiltInDefaults()) {
 			ConfigLoaderUtil.loadBuiltInConfig(this, loaded);
@@ -483,7 +460,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 
 		ConfigLoaderUtil.loadConfig(this, detached, loaded);
 
-		base.applyArgsTo(this);
+		overrideByEnv();
 		Conf.applyConfig(this);
 
 		if (!loaded.isEmpty()) {
@@ -493,16 +470,18 @@ public class ConfigImpl extends RapidoidThing implements Config {
 		}
 	}
 
+	private void overrideByEnv() {
+		base.applyInitialConfig(this);
+	}
+
 	@Override
 	public boolean useBuiltInDefaults() {
 		return base.useBuiltInDefaults();
 	}
 
 	@Override
-	public void updateNested(Map<String, Object> properties) {
-		for (Map.Entry<String, Object> prop : properties.entrySet()) {
-			setNested(prop.getKey(), prop.getValue());
-		}
+	public boolean isInitialized() {
+		return base.initialized;
 	}
 
 }

@@ -4,6 +4,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
+import org.rapidoid.commons.Env;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -49,8 +50,6 @@ public class Res extends RapidoidThing {
 	public static final ScheduledThreadPoolExecutor EXECUTOR = new ScheduledThreadPoolExecutor(1);
 
 	private static final String[] DEFAULT_LOCATIONS = {""};
-
-	private static volatile String ROOT = "";
 
 	private final String name;
 
@@ -112,11 +111,12 @@ public class Res extends RapidoidThing {
 		U.must(!U.isEmpty(filename), "Resource filename must be specified!");
 		U.must(!file.isAbsolute(), "Expected relative filename!");
 
-		if (U.notEmpty(ROOT)) {
+		String root = Env.root();
+		if (U.notEmpty(Env.root())) {
 			String[] loc = new String[possibleLocations.length * 2];
 
 			for (int i = 0; i < possibleLocations.length; i++) {
-				loc[2 * i] = Msc.path(ROOT, possibleLocations[i]);
+				loc[2 * i] = Msc.path(root, possibleLocations[i]);
 				loc[2 * i + 1] = possibleLocations[i];
 			}
 
@@ -338,31 +338,10 @@ public class Res extends RapidoidThing {
 			res.invalidate();
 		}
 		FILES.clear();
-		Res.ROOT = null;
 	}
 
 	public void invalidate() {
 		lastUpdatedOn = 0;
-	}
-
-	public static String root() {
-		return ROOT;
-	}
-
-	public static void root(String root) {
-		File dir = new File(root);
-
-		if (dir.exists()) {
-			if (dir.isDirectory()) {
-				Log.info("Setting application root", "!root", root, "!content", U.list(dir.listFiles()));
-			} else {
-				Log.error("The configured application root must be a folder!", "!root", root);
-			}
-		} else {
-			Log.error("The configured application root folder doesn't exist!", "!root", root);
-		}
-
-		Res.ROOT = root;
 	}
 
 	public boolean isHidden() {

@@ -23,10 +23,9 @@ package org.rapidoid.http.processor;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
-import org.rapidoid.data.BufRange;
-import org.rapidoid.data.BufRanges;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.net.impl.RapidoidHelper;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -37,13 +36,12 @@ public class LoggingHttpProcessor extends AbstractHttpProcessor {
 	}
 
 	@Override
-	public void onRequest(Channel channel, boolean isGet, boolean isKeepAlive, BufRange body,
-	                      BufRange verb, BufRange uri, BufRange path, BufRange query, BufRange protocol, BufRanges headers) {
+	public void onRequest(Channel channel, RapidoidHelper data) {
 
 		Buf buf = channel.input();
-		Log.debug("HTTP request", "verb", buf.get(verb), "uri", buf.get(uri), "protocol", buf.get(protocol));
+		Log.debug("HTTP request", "verb", buf.get(data.verb), "uri", buf.get(data.uri), "protocol", buf.get(data.protocol));
 
-		next.onRequest(channel, isGet, isKeepAlive, body, verb, uri, path, query, protocol, headers);
+		next.onRequest(channel, data);
 	}
 
 }

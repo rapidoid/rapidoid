@@ -1,0 +1,15 @@
+INFO | main | org.rapidoid.config.RapidoidInitializer | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
+INFO | main | org.rapidoid.config.RapidoidInitializer | System info | os = Linux | java = 1.8.0_91 | process = <?> | max memory = <?> | dir = /opt
+INFO | main | org.rapidoid.commons.Env | Setting application root | root = /app | content = []
+INFO | main | org.rapidoid.scan.ClasspathUtil | Scanning classpath | annotated = [@Controller, @Service, @Run, @Named, @Singleton] | packages = [null]
+INFO | main | org.rapidoid.scan.ClasspathUtil | Finished classpath scan | time = <?>ms | searched = 0 | found = []
+INFO | main | org.rapidoid.commons.Environment | No profiles were specified, activating 'default' profile
+INFO | main | org.rapidoid.commons.Environment | No production/dev/test mode was configured, inferring mode | mode = PRODUCTION
+INFO | main | org.rapidoid.commons.Environment | Automatically activating mode-specific profile | profile = production
+INFO | main | org.rapidoid.commons.Environment | Initialized environment | mode = PRODUCTION | profiles = [default, production]
+INFO | main | org.rapidoid.scan.ClasspathUtil | Setting application JAR | appJar = /app/app.jar | exists = false
+INFO | main | org.rapidoid.config.ConfigImpl | Loaded configuration | files = [default-config.yml, default-config-default.yml]
+INFO | server | org.rapidoid.net.impl.RapidoidServerLoop | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
+INFO | main | org.rapidoid.setup.Setup | Server has started | setup = admin | home = http://localhost:8888
+INFO | main | org.rapidoid.setup.Setup | Static resources will be served from the following locations | setup = admin | locations = [static, public, default/static, default/public]
+INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET,POST | path = /_/entities | roles = [administrator] | tx = NONE | mvc = true

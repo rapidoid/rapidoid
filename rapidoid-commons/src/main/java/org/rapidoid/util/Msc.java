@@ -45,6 +45,8 @@ import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /*
  * #%L
@@ -69,6 +71,8 @@ import java.util.concurrent.*;
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class Msc extends RapidoidThing implements Constants {
+
+	private static final String SPECIAL_ARG_REGEX = "\\s*(.*?)\\s*(->|<-|:=|<=|=>|==)\\s*(.*?)\\s*";
 
 	public static final String OS_NAME = System.getProperty("os.name");
 
@@ -993,6 +997,7 @@ public class Msc extends RapidoidThing implements Constants {
 
 	public static Thread thread(Runnable runnable) {
 		Thread thread = new Thread(runnable);
+		thread.setName("Msc-thread-" + runnable.getClass());
 		thread.start();
 		return thread;
 	}
@@ -1045,7 +1050,7 @@ public class Msc extends RapidoidThing implements Constants {
 		return false;
 	}
 
-	public static boolean insideDocker() {
+	public static boolean dockerized() {
 		return U.eq(System.getenv("RAPIDOID_JAR"), "/opt/rapidoid.jar")
 			&& U.eq(System.getenv("RAPIDOID_TMP"), "/tmp/rapidoid")
 			&& U.notEmpty(System.getenv("RAPIDOID_VERSION"))
@@ -1070,8 +1075,57 @@ public class Msc extends RapidoidThing implements Constants {
 		return uid;
 	}
 
-	public static String rootPath() {
-		return Conf.ROOT.entry("root").str().getOrNull();
+	public static boolean hasConsole() {
+		return System.console() != null;
+	}
+
+	public static Map<String, Object> parseArgs(List<String> args) {
+		Map<String, Object> arguments = U.map();
+
+		for (String arg : U.safe(args)) {
+			if (!isSpecialArg(arg)) {
+
+				String[] parts = arg.split("=", 2);
+				String name = parts[0];
+
+				if (parts.length > 1) {
+					String value = parts[1];
+					arguments.put(name, value);
+				} else {
+					arguments.put(name, true);
+				}
+
+			} else {
+				processSpecialArg(arguments, arg);
+			}
+		}
+
+		return arguments;
+	}
+
+	public static boolean isSpecialArg(String arg) {
+		return arg.matches(SPECIAL_ARG_REGEX);
+	}
+
+	private static void processSpecialArg(Map<String, Object> arguments, String arg) {
+		Matcher m = Pattern.compile(SPECIAL_ARG_REGEX).matcher(arg);
+		U.must(m.matches(), "Invalid argument");
+
+		String left = m.group(1);
+		String sep = m.group(2);
+		String right = m.group(3);
+
+		switch (sep) {
+
+			case "->":
+				left = "proxy." + left;
+				break;
+
+			default:
+				throw U.rte("Argument operator not supported: " + sep);
+		}
+
+		arguments.put(left, right);
 	}
 
 }

@@ -47,10 +47,13 @@
 	</scm>
 
 	<properties>
-		<java.version>1.6</java.version>
+		<java.version>1.7</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<test.jvm.argLine>-server -verbose:gc</test.jvm.argLine>
+
+		<timestamp>${maven.build.timestamp}</timestamp>
+		<maven.build.timestamp.format>yyyy-MM-dd HH:mm z</maven.build.timestamp.format>
 
 		<jackson.version>2.6.6</jackson.version>
 		<javassist.version>3.20.0-GA</javassist.version>

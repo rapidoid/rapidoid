@@ -11,10 +11,6 @@
 	<packaging>jar</packaging>
 	<description>Rapidoid Watch</description>
 
-	<properties>
-		<java.version>1.7</java.version>
-	</properties>
-
 	<dependencies>
 
 		<dependency>

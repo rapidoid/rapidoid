@@ -27,7 +27,6 @@ import org.rapidoid.buffer.Buf;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.commons.Dates;
 import org.rapidoid.data.BufRange;
-import org.rapidoid.data.BufRanges;
 import org.rapidoid.data.JSON;
 import org.rapidoid.http.impl.HttpIO;
 import org.rapidoid.http.impl.HttpParser;
@@ -37,7 +36,6 @@ import org.rapidoid.net.TCP;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.util.Msc;
-import org.rapidoid.wrap.BoolWrap;
 
 import java.io.ByteArrayOutputStream;
 
@@ -97,26 +95,13 @@ public abstract class AbstractHttpServer extends RapidoidThing implements Protoc
 		}
 
 		Buf buf = ctx.input();
-		RapidoidHelper helper = ctx.helper();
+		RapidoidHelper data = ctx.helper();
 
-		BufRange[] ranges = helper.ranges1.ranges;
-		BufRanges headers = helper.ranges2;
+		HTTP_PARSER.parse(buf, data);
 
-		BoolWrap isGet = helper.booleans[0];
-		BoolWrap isKeepAlive = helper.booleans[1];
+		boolean keepAlive = data.isKeepAlive.value;
 
-		BufRange verb = ranges[ranges.length - 1];
-		BufRange uri = ranges[ranges.length - 2];
-		BufRange path = ranges[ranges.length - 3];
-		BufRange query = ranges[ranges.length - 4];
-		BufRange protocol = ranges[ranges.length - 5];
-		BufRange body = ranges[ranges.length - 6];
-
-		HTTP_PARSER.parse(buf, isGet, isKeepAlive, body, verb, uri, path, query, protocol, headers, helper);
-
-		boolean keepAlive = isKeepAlive.value;
-
-		HttpStatus status = handle(ctx, buf, verb, uri, path, query, protocol, headers, isGet.value, keepAlive, body);
+		HttpStatus status = handle(ctx, buf, data);
 
 		switch (status) {
 			case DONE:
@@ -139,8 +124,7 @@ public abstract class AbstractHttpServer extends RapidoidThing implements Protoc
 		}
 	}
 
-	protected abstract HttpStatus handle(Channel ctx, Buf buf, BufRange verb, BufRange uri, BufRange path, BufRange query,
-	                                     BufRange protocol, BufRanges headers, boolean isGet, boolean isKeepAlive, BufRange body);
+	protected abstract HttpStatus handle(Channel ctx, Buf buf, RapidoidHelper data);
 
 	protected void startResponse(Channel ctx, boolean isKeepAlive) {
 		ctx.write(STATUS_200);

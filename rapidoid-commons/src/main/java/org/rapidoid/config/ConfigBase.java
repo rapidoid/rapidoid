@@ -38,7 +38,7 @@ public class ConfigBase extends RapidoidInitializer {
 
 	final Map<String, Object> properties = Coll.synchronizedMap();
 
-	final Map<String, Object> args = Coll.synchronizedMap();
+	final Map<String, Object> initial = Coll.synchronizedMap();
 
 	volatile boolean initializing;
 
@@ -56,7 +56,7 @@ public class ConfigBase extends RapidoidInitializer {
 
 	synchronized void reset() {
 		this.properties.clear();
-		this.args.clear();
+		this.initial.clear();
 
 		this.filenameBase = this.defaultFilenameBase;
 		this.path = "";
@@ -108,12 +108,12 @@ public class ConfigBase extends RapidoidInitializer {
 		return useBuiltInDefaults;
 	}
 
-	void putArg(String name, Object value) {
-		args.put(name, value);
+	void setInitial(String name, Object value) {
+		initial.put(name, value);
 	}
 
-	void applyArgsTo(Config config) {
-		config.updateNested(args);
+	void applyInitialConfig(Config config) {
+		config.update(initial);
 	}
 
 }

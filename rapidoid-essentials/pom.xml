@@ -11,6 +11,10 @@
 	<packaging>jar</packaging>
 	<description>Rapidoid Essentials</description>
 
+	<properties>
+		<java.version>1.6</java.version>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.slf4j</groupId>

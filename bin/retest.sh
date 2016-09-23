@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-cd tests
+cd docker-tests
 
 ./tests.sh snapshot

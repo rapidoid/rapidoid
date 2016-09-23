@@ -49,7 +49,7 @@ public class Log extends RapidoidThing {
 
 	private static volatile Callable<Logger> loggerFactory;
 
-	private static volatile boolean styled = false;
+	private static volatile boolean styled = System.console() != null;
 
 	private Log() {
 	}

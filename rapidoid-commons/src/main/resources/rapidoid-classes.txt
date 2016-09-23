@@ -102,6 +102,7 @@ org.rapidoid.commons.English
 org.rapidoid.commons.Env
 org.rapidoid.commons.Environment
 org.rapidoid.commons.EnvMode
+org.rapidoid.commons.EnvProperties
 org.rapidoid.commons.Err
 org.rapidoid.commons.JS
 org.rapidoid.commons.RapidoidInfo

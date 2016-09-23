@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-mvn clean install
-bin/verify.sh
+docker-tests/cleanup.sh
+mvn clean install && bin/verify.sh

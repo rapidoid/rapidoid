@@ -46,6 +46,9 @@ public class ReverseProxyMapDSL extends RapidoidThing {
 	}
 
 	public ProxyMapping to(List<String> upstreams) {
+
+		upstreams = refine(upstreams);
+
 		Log.info("!Reverse proxy mapping", "!uriPrefix", uriPrefix, "!upstreams", upstreams);
 
 		List<ProxyUpstream> proxyUpstreams = U.list();
@@ -58,6 +61,20 @@ public class ReverseProxyMapDSL extends RapidoidThing {
 		proxy.mappings().add(mapping);
 
 		return mapping;
+	}
+
+	private static List<String> refine(List<String> upstreams) {
+		List<String> refinedUpstreams = U.list();
+
+		for (String upstream : upstreams) {
+			if (!upstream.startsWith("http://") && !upstream.startsWith("https://")) {
+				upstream = "http://" + upstream;
+			}
+
+			refinedUpstreams.add(upstream);
+		}
+
+		return refinedUpstreams;
 	}
 
 }

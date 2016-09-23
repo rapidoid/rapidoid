@@ -31,6 +31,7 @@ import org.rapidoid.data.JSON;
 import org.rapidoid.io.Res;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.ioc.IoCContext;
+import org.rapidoid.job.Jobs;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.NParamLambda;
 import org.rapidoid.log.Log;
@@ -83,12 +84,6 @@ public class App extends RapidoidThing {
 
 		Env.setArgs(args);
 
-		for (String arg : args) {
-			if (arg.contains("->")) {
-				processProxyArg(arg);
-			}
-		}
-
 		AppVerification.selfVerify(args);
 	}
 
@@ -115,6 +110,16 @@ public class App extends RapidoidThing {
 	}
 
 	private static AppBootstrap boot() {
+		Jobs.initialize();
+
+		if (!Conf.PROXY.isEmpty()) {
+			for (Map.Entry<String, Object> e : Conf.PROXY.toMap().entrySet()) {
+				String uri = e.getKey();
+				String upstream = (String) e.getValue();
+				Reverse.proxy().map(uri).to(upstream.split("\\s*\\,\\s*"));
+			}
+		}
+
 		AppBootstrap bootstrap = new AppBootstrap();
 		bootstrap.services();
 		return bootstrap;
@@ -288,14 +293,6 @@ public class App extends RapidoidThing {
 		return IoC.defaultContext();
 	}
 
-	private static void processProxyArg(String arg) {
-		String[] parts = arg.split("\\s*->\\s*");
-
-		U.must(parts.length == 2, "Expected /uri->target proxy mapping!");
-
-		Reverse.proxy().map(parts[0]).to(parts[1].split("\\s*\\,\\s*"));
-	}
-
 	static void filterAndInvokeMainClasses(Object[] beans) {
 		Msc.filterAndInvokeMainClasses(beans, invoked);
 	}
@@ -303,4 +300,5 @@ public class App extends RapidoidThing {
 	public static boolean isRestarted() {
 		return restarted;
 	}
+
 }

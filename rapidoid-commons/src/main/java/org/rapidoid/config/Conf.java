@@ -3,7 +3,6 @@ package org.rapidoid.config;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Env;
-import org.rapidoid.io.Res;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.scan.ClasspathUtil;
@@ -58,6 +57,7 @@ public class Conf extends RapidoidThing {
 	public static final Config ON = section("on");
 	public static final Config ADMIN = section("admin");
 	public static final Config TOKEN = section("token");
+	public static final Config PROXY = section("proxy");
 
 	static void applyConfig(Config config) {
 
@@ -69,13 +69,9 @@ public class Conf extends RapidoidThing {
 
 		if (config == ROOT) {
 
-			if (Msc.insideDocker()) {
-				if (!ROOT.has("root")) ROOT.set("root", "/app");
-			}
+			String root = Env.root();
 
-			String root = Msc.rootPath();
-
-			if (Msc.insideDocker()) {
+			if (Msc.dockerized()) {
 				U.must(U.notEmpty(root), "The root must be configured in a Dockerized environment!");
 
 				if (!APP.has("jar")) APP.set("jar", Msc.path(root, "app.jar"));
@@ -87,11 +83,7 @@ public class Conf extends RapidoidThing {
 				ClasspathUtil.appJar(appJar);
 			}
 
-			if (U.notEmpty(root)) {
-				Res.root(root);
-			}
-
-			boolean fancy = ROOT.entry("fancy").bool().or(false);
+			boolean fancy = ROOT.entry("fancy").bool().or(Msc.hasConsole());
 			if (fancy) {
 				Log.setStyled(true);
 			}
@@ -112,6 +104,14 @@ public class Conf extends RapidoidThing {
 
 	private static Config createSection(String name) {
 		return ROOT.sub(name);
+	}
+
+	public static boolean isInitialized() {
+		return ROOT.isInitialized();
+	}
+
+	public static void setFilenameBase(String filenameBase) {
+		ROOT.setFilenameBase(filenameBase);
 	}
 
 }
