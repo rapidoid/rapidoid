@@ -45,6 +45,8 @@ import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /*
  * #%L
@@ -69,6 +71,8 @@ import java.util.concurrent.*;
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class Msc extends RapidoidThing implements Constants {
+
+	private static final String SPECIAL_ARG_REGEX = "\\s*(.*?)\\s*(->|<-|:=|<=|=>|==)\\s*(.*?)\\s*";
 
 	public static final String OS_NAME = System.getProperty("os.name");
 
@@ -1080,6 +1084,7 @@ public class Msc extends RapidoidThing implements Constants {
 
 		for (String arg : U.safe(args)) {
 			if (!isSpecialArg(arg)) {
+
 				String[] parts = arg.split("=", 2);
 				String name = parts[0];
 
@@ -1089,6 +1094,9 @@ public class Msc extends RapidoidThing implements Constants {
 				} else {
 					arguments.put(name, true);
 				}
+
+			} else {
+				processSpecialArg(arguments, arg);
 			}
 		}
 
@@ -1096,9 +1104,28 @@ public class Msc extends RapidoidThing implements Constants {
 	}
 
 	public static boolean isSpecialArg(String arg) {
-		return arg.contains("->") || arg.contains("<-")
-			|| arg.contains("<=") || arg.contains("=>")
-			|| arg.contains(":=");
+		return arg.matches(SPECIAL_ARG_REGEX);
+	}
+
+	private static void processSpecialArg(Map<String, Object> arguments, String arg) {
+		Matcher m = Pattern.compile(SPECIAL_ARG_REGEX).matcher(arg);
+		U.must(m.matches(), "Invalid argument");
+
+		String left = m.group(1);
+		String sep = m.group(2);
+		String right = m.group(3);
+
+		switch (sep) {
+
+			case "->":
+				left = "proxy." + left;
+				break;
+
+			default:
+				throw U.rte("Argument operator not supported: " + sep);
+		}
+
+		arguments.put(left, right);
 	}
 
 }

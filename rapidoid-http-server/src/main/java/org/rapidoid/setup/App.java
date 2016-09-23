@@ -83,17 +83,8 @@ public class App extends RapidoidThing {
 		ConfigHelp.processHelp(args);
 
 		Env.setArgs(args);
-		processSpecialArgs(args);
 
 		AppVerification.selfVerify(args);
-	}
-
-	private static void processSpecialArgs(String[] args) {
-		for (String arg : args) {
-			if (arg.contains("->")) {
-				processProxyArg(arg);
-			}
-		}
 	}
 
 	public static AppBootstrap bootstrap(String[] args, String... extraArgs) {
@@ -120,6 +111,14 @@ public class App extends RapidoidThing {
 
 	private static AppBootstrap boot() {
 		Jobs.initialize();
+
+		if (!Conf.PROXY.isEmpty()) {
+			for (Map.Entry<String, Object> e : Conf.PROXY.toMap().entrySet()) {
+				String uri = e.getKey();
+				String upstream = (String) e.getValue();
+				Reverse.proxy().map(uri).to(upstream.split("\\s*\\,\\s*"));
+			}
+		}
 
 		AppBootstrap bootstrap = new AppBootstrap();
 		bootstrap.services();
@@ -294,14 +293,6 @@ public class App extends RapidoidThing {
 		return IoC.defaultContext();
 	}
 
-	private static void processProxyArg(String arg) {
-		String[] parts = arg.split("\\s*->\\s*");
-
-		U.must(parts.length == 2, "Expected /uri->target proxy mapping!");
-
-		Reverse.proxy().map(parts[0]).to(parts[1].split("\\s*\\,\\s*"));
-	}
-
 	static void filterAndInvokeMainClasses(Object[] beans) {
 		Msc.filterAndInvokeMainClasses(beans, invoked);
 	}
@@ -309,4 +300,5 @@ public class App extends RapidoidThing {
 	public static boolean isRestarted() {
 		return restarted;
 	}
+
 }
