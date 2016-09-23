@@ -12,5 +12,6 @@ INFO | main | org.rapidoid.config.ConfigImpl | Loaded configuration | files = [d
 INFO | server | org.rapidoid.net.impl.RapidoidServerLoop | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
 INFO | main | org.rapidoid.setup.Setup | Server has started | setup = app | home = http://localhost:8888
 INFO | main | org.rapidoid.setup.Setup | Static resources will be served from the following locations | setup = app | locations = [static, public, default/static, default/public]
-INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = app | verbs = GET,POST | path = /_/deploy | roles = [] | tx = NONE | mvc = true
-INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = app | verbs = POST | path = /_/jar | roles = [] | tx = NONE | mvc = false
+INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = app | verbs = GET,POST | path = /_deployment | roles = [] | tx = NONE | mvc = true
+INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = app | verbs = POST | path = /_stage | roles = [] | tx = NONE | mvc = false
+INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = app | verbs = POST | path = /_deploy | roles = [] | tx = NONE | mvc = false

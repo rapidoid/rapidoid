@@ -12,11 +12,11 @@ INFO | main | org.rapidoid.config.ConfigImpl | Loaded configuration | files = [d
 INFO | server | org.rapidoid.net.impl.RapidoidServerLoop | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
 INFO | main | org.rapidoid.setup.Setup | Server has started | setup = admin | home = http://localhost:8888
 INFO | main | org.rapidoid.setup.Setup | Static resources will be served from the following locations | setup = admin | locations = [static, public, default/static, default/public]
-INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET,POST | path = /_/jmx/memory | roles = [administrator] | tx = NONE | mvc = true
-INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET,POST | path = /_/jmx/mempool | roles = [administrator] | tx = NONE | mvc = true
-INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET,POST | path = /_/jmx/classes | roles = [administrator] | tx = NONE | mvc = true
-INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET,POST | path = /_/jmx/os | roles = [administrator] | tx = NONE | mvc = true
-INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET,POST | path = /_/jmx/threads | roles = [administrator] | tx = NONE | mvc = true
-INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET,POST | path = /_/jmx/compilation | roles = [administrator] | tx = NONE | mvc = true
-INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET,POST | path = /_/jmx/runtime | roles = [administrator] | tx = NONE | mvc = true
-INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET,POST | path = /_/jmx/gc | roles = [administrator] | tx = NONE | mvc = true
+INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET,POST | path = /_jmx/memory | roles = [administrator] | tx = NONE | mvc = true
+INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET,POST | path = /_jmx/mempool | roles = [administrator] | tx = NONE | mvc = true
+INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET,POST | path = /_jmx/classes | roles = [administrator] | tx = NONE | mvc = true
+INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET,POST | path = /_jmx/os | roles = [administrator] | tx = NONE | mvc = true
+INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET,POST | path = /_jmx/threads | roles = [administrator] | tx = NONE | mvc = true
+INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET,POST | path = /_jmx/compilation | roles = [administrator] | tx = NONE | mvc = true
+INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET,POST | path = /_jmx/runtime | roles = [administrator] | tx = NONE | mvc = true
+INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET,POST | path = /_jmx/gc | roles = [administrator] | tx = NONE | mvc = true
