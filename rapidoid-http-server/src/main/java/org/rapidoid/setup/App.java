@@ -28,6 +28,10 @@ import org.rapidoid.commons.Env;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.ConfigHelp;
 import org.rapidoid.data.JSON;
+import org.rapidoid.http.HttpVerb;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.ReqRespHandler;
+import org.rapidoid.http.Resp;
 import org.rapidoid.io.Res;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.ioc.IoCContext;
@@ -39,6 +43,7 @@ import org.rapidoid.render.Templates;
 import org.rapidoid.reverseproxy.Reverse;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.scan.Scan;
+import org.rapidoid.sql.JDBC;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
@@ -112,6 +117,15 @@ public class App extends RapidoidThing {
 	private static AppBootstrap boot() {
 		Jobs.initialize();
 
+		bootstrapProxy();
+		bootstrapSqlRoutes();
+
+		AppBootstrap bootstrap = new AppBootstrap();
+		bootstrap.services();
+		return bootstrap;
+	}
+
+	private static void bootstrapProxy() {
 		if (!Conf.PROXY.isEmpty()) {
 			for (Map.Entry<String, Object> e : Conf.PROXY.toMap().entrySet()) {
 				String uri = e.getKey();
@@ -119,10 +133,44 @@ public class App extends RapidoidThing {
 				Reverse.proxy().map(uri).to(upstream.split("\\s*\\,\\s*"));
 			}
 		}
+	}
 
-		AppBootstrap bootstrap = new AppBootstrap();
-		bootstrap.services();
-		return bootstrap;
+	private static void bootstrapSqlRoutes() {
+		if (!Conf.SQL.isEmpty()) {
+			for (Map.Entry<String, Object> e : Conf.SQL.toMap().entrySet()) {
+
+				String[] verbUri = e.getKey().trim().split("\\s+");
+
+				final HttpVerb verb;
+				String uri;
+
+				if (verbUri.length == 1) {
+					verb = HttpVerb.GET;
+					uri = verbUri[0];
+
+				} else if (verbUri.length == 2) {
+					verb = HttpVerb.from(verbUri[0]);
+					uri = verbUri[1];
+
+				} else {
+					throw U.rte("Invalid route!");
+				}
+
+				final String sql = (String) e.getValue();
+
+				On.route(verb.name(), uri).json(new ReqRespHandler() {
+					@Override
+					public Object execute(Req req, Resp resp) throws Exception {
+						if (verb == HttpVerb.GET) {
+							return JDBC.query(sql);
+						} else {
+							JDBC.execute(sql);
+							return U.map("success", true); // FIXME improve
+						}
+					}
+				});
+			}
+		}
 	}
 
 	public static void profiles(String... profiles) {
