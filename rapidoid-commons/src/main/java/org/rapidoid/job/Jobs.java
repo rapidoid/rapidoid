@@ -12,6 +12,7 @@ import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.WithContext;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Once;
 
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicLong;
@@ -44,17 +45,11 @@ public class Jobs extends RapidoidInitializer {
 
 	private static final AtomicLong errorCounter = new AtomicLong();
 
-	static {
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			public void run() {
-				shutdownNow();
-			}
-		});
-	}
-
 	private static ScheduledExecutorService SCHEDULER;
 
 	private static ExecutorService EXECUTOR;
+
+	private static final Once init = new Once();
 
 	private Jobs() {
 	}
@@ -63,6 +58,8 @@ public class Jobs extends RapidoidInitializer {
 		if (SCHEDULER == null) {
 			int threads = JOBS.sub("scheduler").entry("threads").or(64);
 			SCHEDULER = Executors.newScheduledThreadPool(threads, new RapidoidThreadFactory("scheduler", true));
+
+			if (init.go()) init();
 		}
 
 		return SCHEDULER;
@@ -72,9 +69,19 @@ public class Jobs extends RapidoidInitializer {
 		if (EXECUTOR == null) {
 			int threads = JOBS.sub("executor").entry("threads").or(64);
 			EXECUTOR = Executors.newFixedThreadPool(threads, new RapidoidThreadFactory("executor", true));
+
+			if (init.go()) init();
 		}
 
 		return EXECUTOR;
+	}
+
+	private static void init() {
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			public void run() {
+				shutdownNow();
+			}
+		});
 	}
 
 	public static ScheduledFuture<?> schedule(Runnable job, long delay, TimeUnit unit) {

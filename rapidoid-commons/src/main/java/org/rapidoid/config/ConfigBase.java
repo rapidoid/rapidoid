@@ -113,7 +113,7 @@ public class ConfigBase extends RapidoidInitializer {
 	}
 
 	void applyInitialConfig(Config config) {
-		config.updateNested(initial);
+		config.update(initial);
 	}
 
 }

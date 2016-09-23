@@ -68,7 +68,7 @@ public class Conf extends RapidoidThing {
 
 		if (config == ROOT) {
 
-			String root = Msc.rootPath();
+			String root = Env.root();
 
 			if (Msc.dockerized()) {
 				U.must(U.notEmpty(root), "The root must be configured in a Dockerized environment!");
@@ -103,6 +103,14 @@ public class Conf extends RapidoidThing {
 
 	private static Config createSection(String name) {
 		return ROOT.sub(name);
+	}
+
+	public static boolean isInitialized() {
+		return ROOT.isInitialized();
+	}
+
+	public static void setFilenameBase(String filenameBase) {
+		ROOT.setFilenameBase(filenameBase);
 	}
 
 }

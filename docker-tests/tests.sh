@@ -63,6 +63,7 @@ mkdir output
 ./simple-fetch.sh status 8888 /_status app.services=status id=rapidoid.xyz-123
 
 ./configuration.sh
+./env-config.sh
 ./proxy.sh
 
 printf "\n - DONE\n\n"

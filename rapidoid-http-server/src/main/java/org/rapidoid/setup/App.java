@@ -31,6 +31,7 @@ import org.rapidoid.data.JSON;
 import org.rapidoid.io.Res;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.ioc.IoCContext;
+import org.rapidoid.job.Jobs;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.NParamLambda;
 import org.rapidoid.log.Log;
@@ -82,14 +83,17 @@ public class App extends RapidoidThing {
 		ConfigHelp.processHelp(args);
 
 		Env.setArgs(args);
+		processSpecialArgs(args);
 
+		AppVerification.selfVerify(args);
+	}
+
+	private static void processSpecialArgs(String[] args) {
 		for (String arg : args) {
 			if (arg.contains("->")) {
 				processProxyArg(arg);
 			}
 		}
-
-		AppVerification.selfVerify(args);
 	}
 
 	public static AppBootstrap bootstrap(String[] args, String... extraArgs) {
@@ -115,6 +119,8 @@ public class App extends RapidoidThing {
 	}
 
 	private static AppBootstrap boot() {
+		Jobs.initialize();
+
 		AppBootstrap bootstrap = new AppBootstrap();
 		bootstrap.services();
 		return bootstrap;

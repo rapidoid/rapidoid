@@ -40,10 +40,10 @@ public class ConfigLoaderUtil extends RapidoidThing {
 			String configFilenamePattern = nameBase + ConfigUtil.YML_OR_YAML;
 			String configProfilePattern = nameBase + "-%s" + ConfigUtil.YML_OR_YAML;
 
-			ConfigUtil.load(Msc.path(config.getPath(), configFilenamePattern), config, false, loaded);
+			ConfigUtil.load(Msc.path(config.getPath(), configFilenamePattern), config, loaded);
 
 			for (String profile : Env.profiles()) {
-				ConfigUtil.load(Msc.path(config.getPath(), U.frmt(configProfilePattern, profile)), config, false, loaded);
+				ConfigUtil.load(Msc.path(config.getPath(), U.frmt(configProfilePattern, profile)), config, loaded);
 			}
 
 			for (List<String> keys : detached) {
@@ -57,11 +57,11 @@ public class ConfigLoaderUtil extends RapidoidThing {
 
 		if (U.notEmpty(nameBase)) {
 
-			ConfigUtil.load("default-config.yml", config, true, loaded);
+			ConfigUtil.load("default-config.yml", config, loaded);
 
 			for (String profile : Env.profiles()) {
 				String filename = U.frmt("default-config-%s.yml", profile);
-				ConfigUtil.load(filename, config, true, loaded);
+				ConfigUtil.load(filename, config, loaded);
 			}
 		}
 	}
@@ -75,14 +75,14 @@ public class ConfigLoaderUtil extends RapidoidThing {
 			String filename = name + ".yml";
 			filename = Msc.path(config.getPath(), filename);
 
-			ConfigUtil.load(filename, config, true, loaded);
+			ConfigUtil.load(filename, config, loaded);
 
 			for (String profile : Env.profiles()) {
 
 				filename = U.frmt(name + "-%s.yml", profile);
 				filename = Msc.path(config.getPath(), filename);
 
-				ConfigUtil.load(filename, config, true, loaded);
+				ConfigUtil.load(filename, config, loaded);
 			}
 		}
 	}

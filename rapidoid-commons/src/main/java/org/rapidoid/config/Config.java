@@ -48,6 +48,8 @@ public interface Config extends BasicConfig {
 
 	void set(String key, Object value);
 
+	void set(String key, Object value, boolean overridenByEnv);
+
 	void remove(String key);
 
 	void assign(Map<String, Object> entries);
@@ -58,8 +60,6 @@ public interface Config extends BasicConfig {
 
 	@SuppressWarnings("unchecked")
 	void update(Map<String, ?> entries, boolean overridenByEnv);
-
-	void setNested(String key, Object value);
 
 	Config root();
 
@@ -91,6 +91,6 @@ public interface Config extends BasicConfig {
 
 	boolean useBuiltInDefaults();
 
-	void updateNested(Map<String, Object> properties);
+	boolean isInitialized();
 
 }

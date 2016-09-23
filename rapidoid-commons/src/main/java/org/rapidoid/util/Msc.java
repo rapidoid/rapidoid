@@ -993,6 +993,7 @@ public class Msc extends RapidoidThing implements Constants {
 
 	public static Thread thread(Runnable runnable) {
 		Thread thread = new Thread(runnable);
+		thread.setName("Msc-thread-" + runnable.getClass());
 		thread.start();
 		return thread;
 	}
@@ -1070,12 +1071,34 @@ public class Msc extends RapidoidThing implements Constants {
 		return uid;
 	}
 
-	public static String rootPath() {
-		return Conf.ROOT.entry("root").str().getOrNull();
-	}
-
 	public static boolean hasConsole() {
 		return System.console() != null;
+	}
+
+	public static Map<String, Object> parseArgs(List<String> args) {
+		Map<String, Object> arguments = U.map();
+
+		for (String arg : U.safe(args)) {
+			if (!isSpecialArg(arg)) {
+				String[] parts = arg.split("=", 2);
+				String name = parts[0];
+
+				if (parts.length > 1) {
+					String value = parts[1];
+					arguments.put(name, value);
+				} else {
+					arguments.put(name, true);
+				}
+			}
+		}
+
+		return arguments;
+	}
+
+	public static boolean isSpecialArg(String arg) {
+		return arg.contains("->") || arg.contains("<-")
+			|| arg.contains("<=") || arg.contains("=>")
+			|| arg.contains(":=");
 	}
 
 }

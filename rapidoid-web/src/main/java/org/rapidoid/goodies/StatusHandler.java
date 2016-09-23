@@ -5,7 +5,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Env;
 import org.rapidoid.commons.RapidoidInfo;
-import org.rapidoid.io.Res;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -42,7 +41,7 @@ public class StatusHandler extends RapidoidThing implements Callable<Object> {
 	public Map<String, ?> call() throws Exception {
 		return U.map(
 			"id", Msc.id(),
-			"root", Res.root(),
+			"root", Env.root(),
 			"jar", ClasspathUtil.appJar(),
 			"jarExists", U.notEmpty(ClasspathUtil.appJar()) && new File(ClasspathUtil.appJar()).exists(),
 			"version", Msc.maybeMasked(RapidoidInfo.version()),

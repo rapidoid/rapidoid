@@ -67,16 +67,11 @@ public class Setup extends RapidoidInitializer implements Constants {
 	private static final List<Setup> instances = Coll.synchronizedList(ON, ADMIN);
 
 	static {
-		Jobs.execute(new Runnable() {
-			@Override
-			public void run() {
-				JSON.warmup();
-			}
-		});
-
 		if (Ctxs.getPersisterProvider() == null) {
 			Ctxs.setPersisterProvider(new CustomizableSetupAwarePersisterProvider());
 		}
+
+		JSON.warmUp();
 
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {

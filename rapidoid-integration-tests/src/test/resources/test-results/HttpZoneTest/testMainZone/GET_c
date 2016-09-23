@@ -3,6 +3,6 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: application/json
-Content-Length: 95
+Content-Length: 85
 
-{"cdn":"auto","contextPath":"","fluid":false,"home":"/","menu":{},"navbar":true,"search":false}
+{"cdn":"auto","contextPath":"","fluid":false,"home":"/","navbar":true,"search":false}

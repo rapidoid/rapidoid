@@ -109,4 +109,40 @@ public class ConfigurationTest extends AbstractCommonsTest {
 		eq(Conf.USERS.sub("nick").toMap(), U.map("roles", "moderator", "password", pswd));
 	}
 
+	@Test
+	public void testEnvironmentProperties() {
+		Env.setArgs("config=myconfig");
+
+		String osName = System.getProperty("os.name", "?");
+
+		Config os = Conf.section("os");
+
+		isFalse(os.isEmpty());
+
+		eq(os.get("name"), osName);
+		eq(os.entry("name").getOrNull(), osName);
+		eq(os.entry("name").or(""), osName);
+
+		isTrue(os.has("name"));
+		isFalse(os.is("name"));
+
+		checkDefaults();
+	}
+
+	@Test
+	public void testArgOverride() {
+		Env.setArgs("foo=bar123");
+
+		Conf.ROOT.set("foo", "b");
+		eq(Conf.ROOT.get("foo"), "bar123");
+	}
+
+	@Test
+	public void testNestedSet() {
+		Conf.ROOT.set("foo.bar", "b");
+		Conf.ROOT.set("foo.baz", "z");
+
+		eq(Conf.section("foo").toMap(), U.map("bar", "b", "baz", "z"));
+	}
+
 }

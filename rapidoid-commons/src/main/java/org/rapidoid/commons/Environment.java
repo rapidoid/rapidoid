@@ -11,6 +11,7 @@ import org.rapidoid.util.Msc;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /*
@@ -46,6 +47,8 @@ public class Environment extends RapidoidInitializer {
 	private volatile List<String> args;
 
 	private volatile List<String> argsView;
+
+	private final EnvProperties properties = new EnvProperties();
 
 	public Environment() {
 		reset();
@@ -194,6 +197,15 @@ public class Environment extends RapidoidInitializer {
 
 	public boolean isInitialized() {
 		return mode != null;
+	}
+
+	public EnvProperties properties() {
+		return properties;
+	}
+
+	public Map<String, Object> argsAsMap() {
+		U.notNull(args, "environment args");
+		return Msc.parseArgs(args);
 	}
 
 }

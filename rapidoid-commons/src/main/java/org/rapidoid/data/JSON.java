@@ -13,6 +13,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Env;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.io.OutputStream;
 import java.util.Map;
@@ -195,9 +196,14 @@ public class JSON extends RapidoidThing {
 		return parse(json, Map.class);
 	}
 
-	public static void warmup() {
-		JSON.stringify(123);
-		JSON.parse("{}", Map.class);
+	public static void warmUp() {
+		Msc.thread(new Runnable() {
+			@Override
+			public void run() {
+				JSON.stringify(123);
+				JSON.parse("{}", Map.class);
+			}
+		});
 	}
 
 	public static byte[] parseBytes(String json) {

@@ -24,6 +24,8 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Arr;
+import org.rapidoid.commons.Env;
+import org.rapidoid.config.Conf;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -35,12 +37,21 @@ public class AppVerification extends RapidoidThing {
 	static void selfVerify(String[] args) {
 		if (Arr.contains(args, "docker-self-verify")) {
 			dockerSelfVerify();
+			verifyNotInitialized();
 		}
+
+		if (!Msc.isInsideTest()) {
+			verifyNotInitialized();
+		}
+	}
+
+	private static void verifyNotInitialized() {
+		U.must(!Conf.isInitialized(), "The configuration shouldn't be initialized yet!");
 	}
 
 	private static void dockerSelfVerify() {
 		U.must(Msc.dockerized(), "Docker environment couldn't be detected!");
-		U.must("/app".equals(Msc.rootPath()), "The default root path for Docker environment must be '/app'!");
+		U.must("/app".equals(Env.root()), "The default root path for Docker environment must be '/app'!");
 
 		Log.info("Docker environment was verified!");
 	}
