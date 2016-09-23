@@ -23,11 +23,11 @@ package org.rapidoid.setup;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.IntegrationTestCommons;
+import org.rapidoid.http.IsolatedIntegrationTest;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.3")
-public class ServiceActivatorTest extends IntegrationTestCommons {
+public class ServiceActivatorTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testCoverage() {

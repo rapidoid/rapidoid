@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HTTP;
-import org.rapidoid.http.IntegrationTestCommons;
+import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;
 
@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
-public class JPACustomizationTest extends IntegrationTestCommons {
+public class JPACustomizationTest extends IsolatedIntegrationTest {
 
 	final int total = 3;
 

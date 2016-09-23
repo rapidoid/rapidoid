@@ -27,7 +27,7 @@ import org.rapidoid.setup.On;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.3")
-public class ReverseProxyTest extends IntegrationTestCommons {
+public class ReverseProxyTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testRoutingPerPath() {

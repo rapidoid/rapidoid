@@ -20,25 +20,17 @@ package org.rapidoid.jdbc;
  * #L%
  */
 
-import org.junit.Before;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Env;
 import org.rapidoid.config.Conf;
-import org.rapidoid.http.IntegrationTestCommons;
+import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.setup.App;
 import org.rapidoid.sql.JDBC;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.5")
-public class SqlRoutesTest extends IntegrationTestCommons {
-
-	@Before
-	public void reset() {
-		Env.reset();
-		Conf.reset();
-	}
+public class SqlRoutesTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testSqlRoutes() {

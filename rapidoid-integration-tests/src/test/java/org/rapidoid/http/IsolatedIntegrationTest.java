@@ -1,4 +1,4 @@
-package org.rapidoid.web;
+package org.rapidoid.http;
 
 /*
  * #%L
@@ -20,43 +20,20 @@ package org.rapidoid.web;
  * #L%
  */
 
-import org.junit.Test;
+import org.junit.Before;
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Required;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.GUI;
-import org.rapidoid.http.IsolatedIntegrationTest;
-import org.rapidoid.setup.On;
-import org.rapidoid.u.U;
+import org.rapidoid.commons.Env;
+import org.rapidoid.config.Conf;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class BeanFormRenderingTest extends IsolatedIntegrationTest {
+@Since("5.2.5")
+public abstract class IsolatedIntegrationTest extends IntegrationTestCommons {
 
-	@Test
-	public void testBeanFormBindingAndRendering() {
-		On.page("/").html(() -> GUI.edit(new Dude("unknown", 100)));
-
-		getAndPost("/");
-		getAndPost("/?name=foo&age=12345"); // URL params are ignored
-
-		postData("/?bad-age", U.map("name", "Mozart", "age", "123f"));
-		postData("/?name=hey&age=77", U.map("name", "Bach"));
+	@Before
+	public void resetEnvCfg() {
+		Env.reset();
+		Conf.reset();
 	}
-}
 
-class Dude {
-	@Required
-	String name;
-
-	int age;
-
-	Integer x;
-
-	String desc;
-
-	public Dude(String name, int age) {
-		this.name = name;
-		this.age = age;
-	}
 }

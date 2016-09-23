@@ -27,12 +27,15 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.JSON;
-import org.rapidoid.setup.*;
+import org.rapidoid.setup.Admin;
+import org.rapidoid.setup.App;
+import org.rapidoid.setup.My;
+import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class CustomizationTest extends IntegrationTestCommons {
+public class CustomizationTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testSerializationConfig() {

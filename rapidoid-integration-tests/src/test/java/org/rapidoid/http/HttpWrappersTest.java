@@ -29,7 +29,7 @@ import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
-public class HttpWrappersTest extends IntegrationTestCommons {
+public class HttpWrappersTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testWrappers() {

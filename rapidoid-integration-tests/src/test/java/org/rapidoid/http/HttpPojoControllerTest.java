@@ -35,7 +35,7 @@ import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.10")
-public class HttpPojoControllerTest extends IntegrationTestCommons {
+public class HttpPojoControllerTest extends IsolatedIntegrationTest {
 
 	@SuppressWarnings("unchecked")
 	@Test

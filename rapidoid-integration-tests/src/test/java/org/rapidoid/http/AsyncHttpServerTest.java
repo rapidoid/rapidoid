@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class AsyncHttpServerTest extends IntegrationTestCommons {
+public class AsyncHttpServerTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testAsyncHttpServer() {

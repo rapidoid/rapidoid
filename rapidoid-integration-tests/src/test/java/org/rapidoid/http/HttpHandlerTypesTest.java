@@ -27,7 +27,7 @@ import org.rapidoid.setup.On;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class HttpHandlerTypesTest extends IntegrationTestCommons {
+public class HttpHandlerTypesTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testHandlerTypes() {

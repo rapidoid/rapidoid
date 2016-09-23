@@ -24,13 +24,13 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Run;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.IntegrationTestCommons;
+import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class HttpMainEntryTest extends IntegrationTestCommons {
+public class HttpMainEntryTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testSequentialControllerRegistration() {

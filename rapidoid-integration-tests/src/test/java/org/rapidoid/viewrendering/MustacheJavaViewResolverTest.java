@@ -24,7 +24,7 @@ import com.github.mustachejava.reflect.ReflectionObjectHandler;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.IntegrationTestCommons;
+import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.integrate.Integrate;
 import org.rapidoid.integrate.MustacheJavaViewResolver;
 import org.rapidoid.setup.My;
@@ -33,7 +33,7 @@ import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
-public class MustacheJavaViewResolverTest extends IntegrationTestCommons {
+public class MustacheJavaViewResolverTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testRendering() {
