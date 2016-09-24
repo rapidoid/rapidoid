@@ -1,6 +1,6 @@
 jdbc:
   driver: com.mysql.jdbc.Driver
-  url: jdbc:mysql://mysql:3306/rapidoid
+  url: jdbc:mysql://mysql:3306
   username: root
   password: root
 
@@ -10,4 +10,4 @@ hibernate:
     driver_class: com.mysql.jdbc.Driver
     username: root
     password: root
-    url: jdbc:mysql://mysql:3306/rapidoid
+    url: jdbc:mysql://mysql:3306
