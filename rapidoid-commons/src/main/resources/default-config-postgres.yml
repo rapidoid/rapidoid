@@ -1,0 +1,13 @@
+jdbc:
+  driver: org.postgresql.Driver
+  url: jdbc:postgresql://postgres:5432/
+  username: postgres
+  password: postgres
+
+hibernate:
+  dialect: org.hibernate.dialect.PostgreSQL9Dialect
+  connection:
+    driver_class: org.postgresql.Driver
+    username: postgres
+    password: postgres
+    url: jdbc:postgresql://postgres:5432/

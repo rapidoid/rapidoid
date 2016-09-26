@@ -25,6 +25,7 @@ mkdir output
 ./proxy.sh
 
 ./mysql.sh
+./postgres.sh
 
 ./simple-test-bg.sh app-service-overview app.services=overview
 ./simple-test-bg.sh admin-service-overview admin.services=overview
