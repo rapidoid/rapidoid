@@ -138,7 +138,9 @@ public class HttpClientUtil extends RapidoidThing {
 			req.addHeader(e.getKey(), e.getValue());
 		}
 
-		req.addHeader("Cookie", joinCookiesAsHeader(cookies));
+		if (U.notEmpty(cookies)) {
+			req.addHeader("Cookie", joinCookiesAsHeader(cookies));
+		}
 
 		if (config.verb() == HttpVerb.POST || config.verb() == HttpVerb.PUT || config.verb() == HttpVerb.PATCH) {
 			HttpEntityEnclosingRequestBase entityEnclosingReq = (HttpEntityEnclosingRequestBase) req;
