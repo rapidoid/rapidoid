@@ -71,14 +71,6 @@ public abstract class HttpTestCommons extends TestCommons {
 		System.out.println("--- SERVER STARTED ---");
 
 		verifyNoRoutes();
-
-		notFound("/");
-		notFound("/a");
-		notFound("/b?dgfg");
-		notFound("/c?x=123");
-		notFound("/else");
-		notFound("/echo");
-		notFound("/upload");
 	}
 
 	@After
