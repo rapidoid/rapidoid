@@ -7,9 +7,9 @@
 		<version>5.2.5-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>rapidoid-standalone</artifactId>
+	<artifactId>rapidoid-platform</artifactId>
 	<packaging>jar</packaging>
-	<description>Rapidoid Standalone</description>
+	<description>Rapidoid Platform</description>
 
 	<properties>
 		<java.version>1.8</java.version>

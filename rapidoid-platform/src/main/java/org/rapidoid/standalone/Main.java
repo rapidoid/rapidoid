@@ -2,7 +2,7 @@ package org.rapidoid.standalone;
 
 /*
  * #%L
- * rapidoid-standalone
+ * rapidoid-platform
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%

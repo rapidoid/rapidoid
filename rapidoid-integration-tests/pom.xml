@@ -23,7 +23,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-standalone</artifactId>
+			<artifactId>rapidoid-platform</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
