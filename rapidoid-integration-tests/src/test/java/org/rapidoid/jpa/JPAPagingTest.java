@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.fluent.Do;
-import org.rapidoid.http.IntegrationTestCommons;
+import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.u.U;
 
 import java.util.List;
@@ -31,7 +31,7 @@ import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class JPAPagingTest extends IntegrationTestCommons {
+public class JPAPagingTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testPaging() {

@@ -1,0 +1,17 @@
+INFO | main | org.rapidoid.config.RapidoidInitializer | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
+INFO | main | org.rapidoid.config.RapidoidInitializer | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
+INFO | main | org.rapidoid.commons.Env | Setting application root | root = /app | content = []
+INFO | main | org.rapidoid.scan.ClasspathUtil | Scanning classpath | annotated = [@Controller, @Service, @Run, @Named, @Singleton] | packages = [null]
+INFO | main | org.rapidoid.scan.ClasspathUtil | Finished classpath scan | time = <?>ms | searched = 0 | found = []
+INFO | main | org.rapidoid.commons.Environment | Configuring active profiles | profiles = [mysql]
+INFO | main | org.rapidoid.commons.Environment | No production/dev/test mode was configured, inferring mode | mode = PRODUCTION
+INFO | main | org.rapidoid.commons.Environment | Automatically activating mode-specific profile | profile = production
+INFO | main | org.rapidoid.commons.Environment | Initialized environment | mode = PRODUCTION | profiles = [mysql, production]
+INFO | main | org.rapidoid.scan.ClasspathUtil | Setting application JAR | appJar = /app/app.jar | exists = false
+INFO | main | org.rapidoid.config.ConfigImpl | Loaded configuration | files = [default-config.yml, default-config-mysql.yml]
+INFO | server | org.rapidoid.net.impl.RapidoidServerLoop | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
+INFO | main | org.rapidoid.setup.Setup | Server has started | setup = app | home = http://localhost:8888
+INFO | main | org.rapidoid.setup.Setup | Static resources will be served from the following locations | setup = app | locations = [static, public, default/static, default/public]
+INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = app | verbs = GET | path = /users | roles = [] | tx = NONE | mvc = false
+INFO | executor2 | org.rapidoid.sql.JdbcClient | Initialized JDBC API | url = jdbc:mysql://mysql:3306 | driver = com.mysql.jdbc.Driver | username = root | password = *****
+Sat Sep 24 22:54:50 UTC 2016 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.

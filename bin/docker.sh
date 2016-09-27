@@ -8,7 +8,7 @@ rm -f docker/rapidoid.jar
 cp ../docker-rapidoid/entrypoint.sh docker
 
 bin/quick-install.sh
-cp rapidoid-standalone/target/rapidoid-standalone-*-SNAPSHOT.jar docker/rapidoid.jar
+cp rapidoid-platform/target/rapidoid-platform-*-SNAPSHOT.jar docker/rapidoid.jar
 
 cd docker
 ls -l .

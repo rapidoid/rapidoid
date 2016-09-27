@@ -1,8 +1,8 @@
-package org.rapidoid.standalone;
+package org.rapidoid.http;
 
 /*
  * #%L
- * rapidoid-standalone
+ * rapidoid-integration-tests
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -20,23 +20,20 @@ package org.rapidoid.standalone;
  * #L%
  */
 
-import org.rapidoid.RapidoidThing;
+import org.junit.Before;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.App;
-import org.rapidoid.setup.On;
-import org.rapidoid.setup.Setup;
+import org.rapidoid.commons.Env;
+import org.rapidoid.config.Conf;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class Main extends RapidoidThing {
+@Since("5.2.5")
+public abstract class IsolatedIntegrationTest extends IntegrationTestCommons {
 
-	public static void main(String[] args) {
-		App.bootstrap(args);
-
-		if (!Setup.isAnyRunning()) {
-			On.setup().activate();
-		}
+	@Before
+	public void resetEnvCfg() {
+		Env.reset();
+		Conf.reset();
 	}
 
 }

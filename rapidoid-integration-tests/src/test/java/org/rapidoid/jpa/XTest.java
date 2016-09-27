@@ -3,9 +3,9 @@ package org.rapidoid.jpa;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.IntegrationTestCommons;
-import org.rapidoid.u.U;
 import org.rapidoid.goodies.X;
+import org.rapidoid.http.IsolatedIntegrationTest;
+import org.rapidoid.u.U;
 
 /*
  * #%L
@@ -29,7 +29,7 @@ import org.rapidoid.goodies.X;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class XTest extends IntegrationTestCommons {
+public class XTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testXQueries() {

@@ -25,7 +25,7 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
-import org.rapidoid.http.IntegrationTestCommons;
+import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.sql.C3P0ConnectionPool;
 import org.rapidoid.sql.JDBC;
 import org.rapidoid.u.U;
@@ -35,7 +35,7 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class JDBCPoolC3P0Test extends IntegrationTestCommons {
+public class JDBCPoolC3P0Test extends IsolatedIntegrationTest {
 
 	@Test(timeout = 30000)
 	public void testJDBCPoolC3P0() {

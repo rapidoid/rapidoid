@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.fluent.Flow;
-import org.rapidoid.http.IntegrationTestCommons;
+import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -31,7 +31,7 @@ import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.7")
-public class InvalidUrlDecodedParamsTest extends IntegrationTestCommons {
+public class InvalidUrlDecodedParamsTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testWithInvalidEncoding() {

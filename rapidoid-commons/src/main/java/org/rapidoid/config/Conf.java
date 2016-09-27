@@ -58,6 +58,7 @@ public class Conf extends RapidoidThing {
 	public static final Config ADMIN = section("admin");
 	public static final Config TOKEN = section("token");
 	public static final Config PROXY = section("proxy");
+	public static final Config SQL = section("sql");
 
 	static void applyConfig(Config config) {
 

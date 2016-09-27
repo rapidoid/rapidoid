@@ -1,0 +1,8 @@
+HTTP/1.1 200 OK
+Connection: keep-alive
+Server: Rapidoid
+Date: XXXXX GMT
+Content-Type: application/json
+Content-Length: 69
+
+[{"ID":1,"NAME":"one"},{"ID":2,"NAME":"two"},{"ID":3,"NAME":"three"}]

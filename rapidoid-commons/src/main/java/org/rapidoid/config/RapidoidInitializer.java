@@ -49,7 +49,7 @@ public class RapidoidInitializer extends RapidoidThing {
 
 			Log.info("!Starting " + RapidoidInfo.nameAndInfo());
 
-			Log.info("!System info", "os", Msc.OS_NAME, "java", Msc.javaVersion(),
+			Log.info("!System info", "os", Msc.OS_NAME, "java", Msc.maybeMasked(Msc.javaVersion()),
 				"process", Msc.maybeMasked(proc), "max memory", Msc.maybeMasked(maxMem), "dir", dir);
 
 			if (Msc.hasLogback()) {

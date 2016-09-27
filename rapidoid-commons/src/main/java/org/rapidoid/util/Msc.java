@@ -1121,6 +1121,10 @@ public class Msc extends RapidoidThing implements Constants {
 				left = "proxy." + left;
 				break;
 
+			case "<=":
+				left = "sql." + left;
+				break;
+
 			default:
 				throw U.rte("Argument operator not supported: " + sep);
 		}

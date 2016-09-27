@@ -29,7 +29,7 @@ import java.util.TreeMap;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
-public class HttpZoneTest extends IntegrationTestCommons {
+public class HttpZoneTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testMainZone() {

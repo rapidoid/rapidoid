@@ -27,7 +27,7 @@ import org.rapidoid.setup.Admin;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class HttpAdminServerTest extends IntegrationTestCommons {
+public class HttpAdminServerTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testAdminServer() {

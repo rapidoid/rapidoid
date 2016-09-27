@@ -173,7 +173,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 		}
 
 		if (!cookieContainsPath(extras)) {
-			value += "path=" + HttpUtils.cookiePath();
+			value += "; path=" + HttpUtils.cookiePath();
 		}
 
 		cookies().put(name, value);

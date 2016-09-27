@@ -5,6 +5,9 @@ IFS=$'\n\t'
 export TAG=$1
 echo "TARGET TAG: $TAG"
 
+echo "Will need sudo!"
+sudo echo "Thanks!"
+
 rm -rf ./output/
 mkdir output
 
@@ -16,6 +19,13 @@ mkdir output
 ./simple-test.sh cmd echo OK
 ./simple-test.sh pwd pwd
 ./simple-test.sh user whoami
+
+./configuration.sh
+./env-config.sh
+./proxy.sh
+
+./mysql.sh
+./postgres.sh
 
 ./simple-test-bg.sh app-service-overview app.services=overview
 ./simple-test-bg.sh admin-service-overview admin.services=overview
@@ -61,10 +71,6 @@ mkdir output
 
 ./simple-fetch.sh ping 8888 /_ping app.services=ping
 ./simple-fetch.sh status 8888 /_status app.services=status id=rapidoid.xyz-123
-
-./configuration.sh
-./env-config.sh
-./proxy.sh
 
 printf "\n - DONE\n\n"
 

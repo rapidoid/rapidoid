@@ -3,7 +3,7 @@ package org.rapidoid.jpa;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.IntegrationTestCommons;
+import org.rapidoid.http.IsolatedIntegrationTest;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class JPATransactionTest extends IntegrationTestCommons {
+public class JPATransactionTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testBasicCRUD() {

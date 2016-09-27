@@ -26,7 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Env;
 import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.config.Conf;
-import org.rapidoid.http.IntegrationTestCommons;
+import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.setup.App;
 
@@ -34,7 +34,7 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.3")
-public class StatusHandlerTest extends IntegrationTestCommons {
+public class StatusHandlerTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testDefault() throws Exception {

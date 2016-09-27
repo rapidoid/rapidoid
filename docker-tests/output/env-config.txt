@@ -1,5 +1,5 @@
 INFO | main | org.rapidoid.config.RapidoidInitializer | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
-INFO | main | org.rapidoid.config.RapidoidInitializer | System info | os = Linux | java = 1.8.0_91 | process = <?> | max memory = <?> | dir = /opt
+INFO | main | org.rapidoid.config.RapidoidInitializer | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
 INFO | main | org.rapidoid.commons.Env | Setting application root | root = /app/the-root | content = [/app/the-root/my-config.yaml]
 INFO | main | org.rapidoid.config.ConfigBase | Changing configuration filename base | from = config | to = my-config
 INFO | main | org.rapidoid.scan.ClasspathUtil | Scanning classpath | annotated = [@Controller, @Service, @Run, @Named, @Singleton] | packages = [null]

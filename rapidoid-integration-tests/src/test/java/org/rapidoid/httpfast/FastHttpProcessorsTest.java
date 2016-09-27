@@ -23,7 +23,7 @@ package org.rapidoid.httpfast;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.IntegrationTestCommons;
+import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.http.processor.HttpProcessor;
 import org.rapidoid.http.processor.LoggingHttpProcessor;
 import org.rapidoid.http.processor.NotFoundHttpProcessor;
@@ -31,7 +31,7 @@ import org.rapidoid.net.Server;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class FastHttpProcessorsTest extends IntegrationTestCommons {
+public class FastHttpProcessorsTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testChainOfHttpProcessors() {

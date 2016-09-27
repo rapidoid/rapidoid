@@ -74,6 +74,7 @@
 		<mysql-connector.version>5.1.38</mysql-connector.version>
 		<h2.version>1.4.187</h2.version>
 		<hsqldb.version>2.3.3</hsqldb.version>
+		<postgresql-version>9.4.1211</postgresql-version>
 
 		<spring.version>4.2.5.RELEASE</spring.version>
 		<oltu.version>1.0.1</oltu.version>
@@ -104,7 +105,7 @@
 		<module>rapidoid-oauth</module>
 		<module>rapidoid-integrate</module>
 		<module>rapidoid-web</module>
-		<module>rapidoid-standalone</module>
+		<module>rapidoid-platform</module>
 		<module>rapidoid-quick</module>
 		<module>rapidoid-watch</module>
 		<module>rapidoid-fluent</module>

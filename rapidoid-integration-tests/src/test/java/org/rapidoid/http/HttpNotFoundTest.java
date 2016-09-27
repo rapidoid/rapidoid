@@ -27,7 +27,7 @@ import org.rapidoid.setup.On;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
-public class HttpNotFoundTest extends IntegrationTestCommons {
+public class HttpNotFoundTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testThrowingNotFound() {

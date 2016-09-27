@@ -3,7 +3,7 @@ package org.rapidoid.jpa;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.IntegrationTestCommons;
+import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
@@ -29,7 +29,7 @@ import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class HttpTransactionTest extends IntegrationTestCommons {
+public class HttpTransactionTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testWebTx() {
