@@ -1,7 +1,7 @@
 Rapidoid - Simple. Powerful. Secure. Fast!
 ========
 
-# Documentation (examples)
+# Documentation, examples, community support
 
 Please visit the official site:
 
