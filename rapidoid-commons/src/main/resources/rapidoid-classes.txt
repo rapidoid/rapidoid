@@ -644,6 +644,7 @@ org.rapidoid.util.D
 org.rapidoid.util.Deleted
 org.rapidoid.util.ErrCodeAndMsg
 org.rapidoid.util.Expectation
+org.rapidoid.util.GlobalCfg
 org.rapidoid.util.LazyInit
 org.rapidoid.util.Lorem
 org.rapidoid.util.MapEntry

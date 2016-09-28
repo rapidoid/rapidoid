@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.u.U;
+import org.rapidoid.util.GlobalCfg;
 import org.rapidoid.util.Msc;
 
 import java.io.IOException;
@@ -67,7 +68,7 @@ public class RapidoidInfo extends RapidoidThing {
 		List<String> notes = U.list();
 
 		if (Msc.dockerized()) notes.add("Dockerized");
-		if (Msc.uniformOutput()) notes.add("Uniform output");
+		if (GlobalCfg.uniformOutput()) notes.add("Uniform output");
 
 		return notes;
 	}
