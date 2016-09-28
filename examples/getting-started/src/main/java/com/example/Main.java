@@ -3,6 +3,7 @@ package com.example;
 import org.rapidoid.annotation.Run;
 import org.rapidoid.annotation.Valid;
 import org.rapidoid.jpa.JPA;
+import org.rapidoid.log.Log;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;
@@ -12,6 +13,8 @@ import org.rapidoid.u.U;
 public class Main {
 
 	public static void main(String[] args) {
+		Log.info("Starting application");
+
 		App.bootstrap(args).jpa().auth(); // bootstrap controllers, JPA and Auth
 
 		On.get("/books").json(() -> JPA.of(Book.class).all()); // get all books

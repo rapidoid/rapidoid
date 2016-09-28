@@ -66,6 +66,7 @@ public class App extends RapidoidThing {
 	private static volatile String appPkgName;
 	private static volatile boolean dirty;
 	private static volatile boolean restarted;
+	private static volatile boolean managed;
 
 	private static final Set<Class<?>> invoked = Coll.synchronizedSet();
 
@@ -185,8 +186,8 @@ public class App extends RapidoidThing {
 	public static synchronized String[] path() {
 		inferCallers();
 
-		if (U.isEmpty(App.path)) {
-			App.path = U.array(appPkgName);
+		if (App.path == null) {
+			App.path = appPkgName != null ? U.array(appPkgName) : new String[0];
 		}
 
 		return path;
@@ -194,9 +195,8 @@ public class App extends RapidoidThing {
 
 	static void inferCallers() {
 		if (!restarted && appPkgName == null && mainClassName == null) {
-			String pkg = Msc.getCallingPackage();
 
-			appPkgName = pkg;
+			appPkgName = Msc.getCallingPackage();
 
 			if (mainClassName == null) {
 				Class<?> mainClass = Msc.getCallingMainClass();
@@ -204,8 +204,8 @@ public class App extends RapidoidThing {
 				mainClassName = mainClass != null ? mainClass.getName() : null;
 			}
 
-			if (mainClassName != null || pkg != null) {
-				Log.info("Inferring application root", "!main", mainClassName, "!package", pkg);
+			if (mainClassName != null || appPkgName != null) {
+				Log.info("Inferring application root", "!main", mainClassName, "!package", appPkgName);
 			}
 		}
 	}
@@ -281,6 +281,7 @@ public class App extends RapidoidThing {
 		mainClassName = null;
 		appPkgName = null;
 		restarted = false;
+		managed = false;
 		dirty = false;
 		path = null;
 		loader = App.class.getClassLoader();
@@ -314,16 +315,27 @@ public class App extends RapidoidThing {
 			packages = path();
 		}
 
-		return beansCache.get(U.list(packages));
+		List<String> pkgs = U.notEmpty(packages) ? U.list(packages) : U.<String>list();
+
+		return beansCache.get(pkgs);
 	}
 
 	public static boolean scan(String... packages) {
+
+		String appPath = Conf.APP.entry("path").str().getOrNull();
+		if (U.notEmpty(appPath)) {
+			App.path(appPath);
+		}
+
 		List<Class<?>> beans = App.findBeans(packages);
 		beans(beans.toArray());
 		return !beans.isEmpty();
 	}
 
 	public static void beans(Object... beans) {
+
+		App.managed(true);
+
 		for (Object bean : beans) {
 			U.notNull(bean, "bean");
 
@@ -349,4 +361,11 @@ public class App extends RapidoidThing {
 		return restarted;
 	}
 
+	public static boolean managed() {
+		return managed;
+	}
+
+	public static void managed(boolean managed) {
+		App.managed = managed;
+	}
 }

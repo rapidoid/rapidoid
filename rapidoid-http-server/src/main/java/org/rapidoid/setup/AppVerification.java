@@ -46,7 +46,9 @@ public class AppVerification extends RapidoidThing {
 	}
 
 	private static void verifyNotInitialized() {
-		U.must(!Conf.isInitialized(), "The configuration shouldn't be initialized yet!");
+		if (!App.managed()) {
+			U.must(!Conf.isInitialized(), "The configuration shouldn't be initialized yet!");
+		}
 	}
 
 	private static void dockerSelfVerify() {

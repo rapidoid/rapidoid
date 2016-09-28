@@ -113,7 +113,7 @@ public class ClasspathUtil extends RapidoidInitializer {
 		String[] pkgs = params.in();
 
 		if (U.isEmpty(pkgs)) {
-			pkgs = new String[]{rootPackage};
+			pkgs = rootPackage != null ? new String[]{rootPackage} : new String[]{""};
 		}
 
 		long startingAt = U.time();
@@ -186,7 +186,7 @@ public class ClasspathUtil extends RapidoidInitializer {
 					Log.warn("Invalid classpath entry: " + cpe);
 				}
 			} else {
-				if (!cpe.contains("*") && !cpe.contains("?")) {
+				if (!cpe.contains("*") && !cpe.contains("?") && U.neq(cpe, appJar)) {
 					Log.warn("Classpath entry doesn't exist: " + cpe);
 				}
 			}
@@ -367,7 +367,6 @@ public class ClasspathUtil extends RapidoidInitializer {
 			}
 
 			ClassLoader cl = ClassLoader.getSystemClassLoader();
-
 			URL[] urls = ((URLClassLoader) cl).getURLs();
 
 			for (URL url : urls) {
@@ -375,14 +374,23 @@ public class ClasspathUtil extends RapidoidInitializer {
 				CLASSPATH.add(new File(path).getAbsolutePath());
 			}
 
-			for (String cp : CLASSPATH) {
-				if (cp.endsWith("/app.jar") || cp.endsWith("\\app.jar")) {
-					appJar = cp;
-				}
+			if (U.isEmpty(appJar)) {
+				inferAppJarFromClasspath();
 			}
 		}
 
 		return CLASSPATH;
+	}
+
+	private static boolean inferAppJarFromClasspath() {
+		for (String cp : CLASSPATH) {
+			if (cp.endsWith("/app.jar") || cp.endsWith("\\app.jar")) {
+				appJar = cp;
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public static synchronized Set<String> getClasspathFolders() {
