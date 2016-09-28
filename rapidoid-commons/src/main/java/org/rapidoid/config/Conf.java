@@ -5,6 +5,7 @@ import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Env;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
+import org.rapidoid.log.LogLevel;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -59,6 +60,7 @@ public class Conf extends RapidoidThing {
 	public static final Config TOKEN = section("token");
 	public static final Config PROXY = section("proxy");
 	public static final Config SQL = section("sql");
+	public static final Config LOG = section("log");
 
 	static void applyConfig(Config config) {
 
@@ -69,7 +71,6 @@ public class Conf extends RapidoidThing {
 		}
 
 		if (config == ROOT) {
-
 			String root = Env.root();
 
 			if (Msc.dockerized()) {
@@ -79,15 +80,17 @@ public class Conf extends RapidoidThing {
 			}
 
 			String appJar = APP.entry("jar").str().getOrNull();
-
 			if (U.notEmpty(appJar)) {
 				ClasspathUtil.appJar(appJar);
 			}
 
-			boolean fancy = ROOT.entry("fancy").bool().or(Msc.hasConsole());
+			boolean fancy = LOG.entry("fancy").bool().or(Msc.hasConsole());
 			if (fancy) {
 				Log.setStyled(true);
 			}
+
+			String logLevel = LOG.entry("level").or("info");
+			Log.setLogLevel(LogLevel.valueOf(logLevel.toUpperCase()));
 		}
 	}
 
