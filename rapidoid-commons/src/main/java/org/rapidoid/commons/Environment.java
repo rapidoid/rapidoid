@@ -85,7 +85,7 @@ public class Environment extends RapidoidInitializer {
 
 		if (U.isEmpty(profiles)) {
 			profiles = Coll.synchronizedSet();
-			profiles.addAll(retrieveProfiles(args));
+			profiles.addAll(retrieveProfiles());
 			profilesView = Collections.unmodifiableSet(profiles);
 		}
 
@@ -133,12 +133,11 @@ public class Environment extends RapidoidInitializer {
 		}
 	}
 
-	private static List<String> retrieveProfiles(List<String> args) {
+	private static List<String> retrieveProfiles() {
+		String profilesLst = (String) Env.properties().get("profiles");
 
-		String profilesArg = findProfilesArg(args);
-
-		if (U.notEmpty(profilesArg)) {
-			List<String> profiles = U.list(profilesArg.split("\\s*\\,\\s*"));
+		if (U.notEmpty(profilesLst)) {
+			List<String> profiles = U.list(profilesLst.split("\\s*\\,\\s*"));
 			Log.info("Configuring active profiles", "!profiles", profiles);
 			return profiles;
 
@@ -146,16 +145,6 @@ public class Environment extends RapidoidInitializer {
 			Log.info("No profiles were specified, activating 'default' profile");
 			return U.list("default");
 		}
-	}
-
-	private static String findProfilesArg(List<String> args) {
-		String prefix = "profiles=";
-
-		for (String arg : args) {
-			if (arg.toLowerCase().startsWith(prefix)) return Str.triml(arg, prefix);
-		}
-
-		return null;
 	}
 
 	public void setArgs(String... args) {
