@@ -60,6 +60,7 @@ public class PojoHandlersSetup extends RapidoidThing {
 	}
 
 	public void register() {
+		App.managed(true);
 		process(true);
 	}
 

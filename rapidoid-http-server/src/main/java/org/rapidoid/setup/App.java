@@ -37,7 +37,6 @@ import org.rapidoid.ioc.IoC;
 import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.lambda.Mapper;
-import org.rapidoid.lambda.NParamLambda;
 import org.rapidoid.log.Log;
 import org.rapidoid.render.Templates;
 import org.rapidoid.reverseproxy.Reverse;
@@ -99,7 +98,8 @@ public class App extends RapidoidThing {
 
 	public static AppBootstrap bootstrap(String... args) {
 		args(args);
-		scan();
+
+		if (!managed) scan();
 
 		return boot();
 	}
@@ -333,20 +333,7 @@ public class App extends RapidoidThing {
 	}
 
 	public static void beans(Object... beans) {
-
-		App.managed(true);
-
-		for (Object bean : beans) {
-			U.notNull(bean, "bean");
-
-			if (bean instanceof NParamLambda) {
-				throw U.rte("Expected a bean, but found lambda: " + bean);
-			}
-		}
-
-		filterAndInvokeMainClasses(beans);
-
-		PojoHandlersSetup.from(Setup.ON, beans).register();
+		Setup.ON.beans(beans);
 	}
 
 	public static IoCContext context() {
@@ -354,6 +341,7 @@ public class App extends RapidoidThing {
 	}
 
 	static void filterAndInvokeMainClasses(Object[] beans) {
+		managed(true);
 		Msc.filterAndInvokeMainClasses(beans, invoked);
 	}
 
