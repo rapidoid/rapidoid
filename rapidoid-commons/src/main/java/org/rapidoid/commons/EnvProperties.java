@@ -60,6 +60,10 @@ public class EnvProperties extends RapidoidThing {
 		return props.get(normalize(key));
 	}
 
+	public boolean has(String key, Object value) {
+		return String.valueOf(get(key)).equalsIgnoreCase(String.valueOf(value));
+	}
+
 	private String normalize(String key) {
 		return key.toUpperCase().replace('.', '_');
 	}

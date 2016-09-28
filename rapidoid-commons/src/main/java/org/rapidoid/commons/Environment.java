@@ -89,9 +89,9 @@ public class Environment extends RapidoidInitializer {
 			profilesView = Collections.unmodifiableSet(profiles);
 		}
 
-		boolean production = args.contains("production") || profiles.contains("production");
-		boolean test = args.contains("test") || profiles.contains("test");
-		boolean dev = args.contains("dev") || profiles.contains("dev");
+		boolean production = Env.hasInitial("mode", "production") || profiles.contains("production");
+		boolean test = Env.hasInitial("mode", "test") || profiles.contains("test");
+		boolean dev = Env.hasInitial("mode", "dev") || profiles.contains("dev");
 
 		if (!production && !test && !dev) {
 			mode = inferMode();
@@ -134,7 +134,7 @@ public class Environment extends RapidoidInitializer {
 	}
 
 	private static List<String> retrieveProfiles() {
-		String profilesLst = (String) Env.properties().get("profiles");
+		String profilesLst = Env.initial("profiles");
 
 		if (U.notEmpty(profilesLst)) {
 			List<String> profiles = U.list(profilesLst.split("\\s*\\,\\s*"));
