@@ -1,0 +1,8 @@
+HTTP/1.1 200 OK
+Connection: keep-alive
+Server: Rapidoid
+Date: Sat, 10 Sep 2016 01:02:03 GMT
+Content-Type: application/json
+Content-Length: 17
+
+"This is public!"
