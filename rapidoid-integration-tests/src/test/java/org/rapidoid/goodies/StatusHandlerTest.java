@@ -49,7 +49,7 @@ public class StatusHandlerTest extends IsolatedIntegrationTest {
 	public void testAppSetup() throws Exception {
 		Env.reset();
 
-		App.args("profiles=mysql", "production");
+		App.args("profiles=mysql", "mode=production");
 		Conf.ROOT.set("id", "rpd123");
 		ClasspathUtil.appJar("/a/b.jar");
 
