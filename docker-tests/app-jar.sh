@@ -6,12 +6,11 @@ IFS=$'\n\t'
 
 printf "\n - Testing APP-JAR (tag=$TAG)\n\n"
 
-DB_ID=$(docker run -d -e MYSQL_ROOT_PASSWORD=db-pass mysql)
+DB_ID=$(docker run -d -e MYSQL_ROOT_PASSWORD=db-pass -e MYSQL_DATABASE=rapidoid mysql)
 
 sudo docker run \
-    -e UNIFORM_OUTPUT=true \
-    -e USERS_ADMIN_PASSWORD=aa \
-    -e JDBC.PASSWORD=db-pass \
+    -e uniform_output=true \
+    -e HIBERNATE_CONNECTION_PASSWORD=db-pass \
     -e profiles=mysql \
     -p 8888:8888 \
     -u nobody \
@@ -24,13 +23,13 @@ sudo docker run \
     '/users <= SELECT user FROM mysql.user' \
     > output/app-jar.txt 2>&1 &
 
+sleep 60 # give MySQL some time to initialize
+
 ./wait-for.sh 8888
 
 ./http-get.sh app-jar-index 8888 /
 ./http-get.sh app-jar-manage 8888 /manage
 
-#sleep 3 # give MySQL some time to initialize
-
-#./http-get.sh app-jar 8888 /users
+./http-get.sh app-jar-books 8888 /books
 
 ./cleanup.sh

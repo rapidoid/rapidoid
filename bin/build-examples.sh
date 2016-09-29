@@ -6,6 +6,6 @@ echo Building the getting-started example
 
 cd examples/getting-started
 
-mvn clean install
+mvn clean install -Pfull
 
-cp target/*.jar ../../docker-tests/app3/app.jar
+cp target/app-full.jar ../../docker-tests/app3/app.jar
