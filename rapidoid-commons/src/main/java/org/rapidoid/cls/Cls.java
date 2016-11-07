@@ -9,7 +9,10 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.collection.AutoExpandingMap;
 import org.rapidoid.collection.Coll;
-import org.rapidoid.commons.*;
+import org.rapidoid.commons.Arr;
+import org.rapidoid.commons.Dates;
+import org.rapidoid.commons.Err;
+import org.rapidoid.commons.Str;
 import org.rapidoid.io.IO;
 import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
@@ -873,8 +876,22 @@ public class Cls extends RapidoidThing {
 	}
 
 	public static <T> Class<T> get(String className) {
+
+		if (className.equals("byte")) return U.cast(byte.class);
+		if (className.equals("short")) return U.cast(short.class);
+		if (className.equals("int")) return U.cast(int.class);
+		if (className.equals("long")) return U.cast(long.class);
+		if (className.equals("float")) return U.cast(float.class);
+		if (className.equals("double")) return U.cast(double.class);
+		if (className.equals("boolean")) return U.cast(boolean.class);
+
+		if (className.endsWith("[]")) {
+			String cls = Str.trimr(className, "[]");
+			return U.cast(Array.newInstance(get(cls), 0).getClass());
+		}
+
 		try {
-			return (Class<T>) Class.forName(className);
+			return U.cast(Class.forName(className));
 		} catch (ClassNotFoundException e) {
 			throw U.rte(e);
 		}
@@ -1054,6 +1071,40 @@ public class Cls extends RapidoidThing {
 		}
 	}
 
+	public static List<Method> getDeclaredMethods(Class<?> clazz) {
+		ClassPool cp = new ClassPool();
+		cp.insertClassPath(new ClassClassPath(clazz));
+
+		CtClass cc;
+		try {
+			cc = cp.get(clazz.getName());
+		} catch (NotFoundException e) {
+			throw U.rte("Cannot find the target class!", e);
+		}
+
+		List<Method> methods = U.list();
+
+		for (CtMethod m : cc.getDeclaredMethods()) {
+			try {
+				methods.add(getMethod(clazz, m.getName(), ctTypes(m.getParameterTypes())));
+			} catch (Exception e) {
+				throw U.rte(e);
+			}
+		}
+
+		return methods;
+	}
+
+	private static Class<?>[] ctTypes(CtClass[] types) {
+		Class<?>[] classes = new Class[types.length];
+
+		for (int i = 0; i < classes.length; i++) {
+			classes[i] = get(types[i].getName());
+		}
+
+		return classes;
+	}
+
 	public static String[] getMethodParameterNames(Method method) {
 		Class<?>[] paramTypes = method.getParameterTypes();
 		String[] names = new String[paramTypes.length];
@@ -1096,42 +1147,44 @@ public class Cls extends RapidoidThing {
 			}
 
 			MethodInfo methodInfo = cm.getMethodInfo();
-
 			CodeAttribute codeAttribute = methodInfo.getCodeAttribute();
-			LocalVariableAttribute attr = (LocalVariableAttribute) codeAttribute
-				.getAttribute(LocalVariableAttribute.tag);
 
-			int offset = Modifier.isStatic(cm.getModifiers()) ? 0 : 1;
+			if (codeAttribute != null) {
+				LocalVariableAttribute attr = (LocalVariableAttribute) codeAttribute
+					.getAttribute(LocalVariableAttribute.tag);
 
-			for (int i = 0; i < names.length; i++) {
-				names[i] = null;
-			}
+				int offset = Modifier.isStatic(cm.getModifiers()) ? 0 : 1;
 
-			for (int i = 0; i < attr.tableLength(); i++) {
-				int index = i - offset;
-
-				if (useIndexMapping) {
-					index = attr.index(index);
-				}
-
-				String var = attr.variableName(i);
-
-				if (index >= 0 && index < names.length && !"this".equals(var)) {
-					names[index] = var;
-				}
-			}
-
-			if (!validNames(names)) {
 				for (int i = 0; i < names.length; i++) {
 					names[i] = null;
 				}
 
 				for (int i = 0; i < attr.tableLength(); i++) {
 					int index = i - offset;
+
+					if (useIndexMapping) {
+						index = attr.index(index);
+					}
+
 					String var = attr.variableName(i);
 
 					if (index >= 0 && index < names.length && !"this".equals(var)) {
 						names[index] = var;
+					}
+				}
+
+				if (!validNames(names)) {
+					for (int i = 0; i < names.length; i++) {
+						names[i] = null;
+					}
+
+					for (int i = 0; i < attr.tableLength(); i++) {
+						int index = i - offset;
+						String var = attr.variableName(i);
+
+						if (index >= 0 && index < names.length && !"this".equals(var)) {
+							names[index] = var;
+						}
 					}
 				}
 			}
