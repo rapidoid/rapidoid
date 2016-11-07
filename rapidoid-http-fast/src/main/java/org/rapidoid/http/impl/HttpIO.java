@@ -20,6 +20,7 @@ import org.rapidoid.log.LogLevel;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
+import org.rapidoid.util.GlobalCfg;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.StreamUtils;
 
@@ -125,7 +126,7 @@ public class HttpIO extends RapidoidThing implements Constants {
 		if (MANDATORY_HEADER_DATE) {
 			ctx.write(DATE_IS);
 
-			if (!Msc.uniformOutput()) {
+			if (!GlobalCfg.uniformOutput()) {
 				ctx.write(Dates.getDateTimeBytes());
 			} else {
 				ctx.write(UNIFORM_DATE);

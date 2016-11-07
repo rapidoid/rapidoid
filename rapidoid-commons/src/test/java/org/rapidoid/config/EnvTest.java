@@ -51,13 +51,13 @@ public class EnvTest extends TestCommons {
 
 	@Test
 	public void testArgs() {
-		Env.setArgs("production", "foo=bar", "111");
-		eq(Env.args(), U.list("production", "foo=bar", "111"));
+		Env.setArgs("mode=production", "foo=bar", "111");
+		eq(Env.args(), U.list("mode=production", "foo=bar", "111"));
 	}
 
 	@Test
 	public void testProductionMode() {
-		Env.setArgs("production", "foo=bar");
+		Env.setArgs("mode=production", "foo=bar");
 
 		eq(Env.profiles(), U.set("default", "production"));
 		assertProductionMode();
@@ -65,7 +65,7 @@ public class EnvTest extends TestCommons {
 
 	@Test
 	public void testDevMode() {
-		Env.setArgs("dev", "foo=bar");
+		Env.setArgs("mode=dev", "foo=bar");
 
 		eq(Env.profiles(), U.set("default", "dev"));
 		assertDevMode();
@@ -73,7 +73,7 @@ public class EnvTest extends TestCommons {
 
 	@Test
 	public void testTestMode() {
-		Env.setArgs("test", "foo=bar");
+		Env.setArgs("mode=test", "foo=bar");
 
 		eq(Env.profiles(), U.set("default", "test"));
 		assertTestMode();

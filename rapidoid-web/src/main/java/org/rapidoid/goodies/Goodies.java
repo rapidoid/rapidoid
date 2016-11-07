@@ -149,13 +149,13 @@ public class Goodies extends RapidoidThing {
 	}
 
 	public static void bootstrapAppGoodies(Setup setup) {
-		Msc.logSection("Registering App goodies:");
+		Msc.logSection("Registering App services:");
 
 		auth(setup);
 	}
 
 	public static void adminCenter(Setup setup) {
-		Msc.logSection("Registering Admin goodies:");
+		Msc.logSection("Registering Admin Center:");
 
 		Metrics.bootstrap();
 

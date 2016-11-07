@@ -1,0 +1,5 @@
+hibernate:
+  hbm2ddl:
+    auto: create
+  connection:
+    url: 'jdbc:mysql://mysql:3306/rapidoid'

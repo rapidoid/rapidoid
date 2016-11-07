@@ -1,0 +1,170 @@
+22:46:57.397 [main] INFO  o.r.config.RapidoidInitializer - Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
+22:46:57.400 [main] INFO  o.r.config.RapidoidInitializer - System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
+22:46:57.411 [main] INFO  org.rapidoid.commons.Env - Setting application root | root = /app | content = [/app/app.jar, /app/config.yml]
+22:46:57.604 [main] INFO  org.rapidoid.commons.Environment - Configuring active profiles | profiles = [mysql]
+22:46:57.606 [main] INFO  org.rapidoid.commons.Environment - No production/dev/test mode was configured, inferring mode | mode = PRODUCTION
+22:46:57.606 [main] INFO  org.rapidoid.commons.Environment - Automatically activating mode-specific profile | profile = production
+22:46:57.606 [main] INFO  org.rapidoid.commons.Environment - Initialized environment | mode = PRODUCTION | profiles = [mysql, production]
+22:46:57.611 [main] INFO  org.rapidoid.scan.ClasspathUtil - Setting application JAR | appJar = /app/app.jar | exists = true
+22:46:57.613 [main] INFO  org.rapidoid.config.ConfigImpl - Loaded configuration | files = [default-config.yml, default-config-mysql.yml, /app/config.yml]
+22:46:57.613 [main] INFO  org.rapidoid.scan.ClasspathUtil - Scanning classpath | annotated = [@Controller, @Service, @Run, @Named, @Singleton] | packages = [com.example]
+22:46:57.696 [main] INFO  org.rapidoid.scan.ClasspathUtil - Finished classpath scan | time = <?>ms | searched = 3 | found = [Main, MyCtrl]
+22:46:57.747 [main] INFO  org.rapidoid.util.Msc - -----------------------------------------
+22:46:57.747 [main] INFO  org.rapidoid.util.Msc - Invoking @Run component: com.example.Main
+22:46:57.747 [main] INFO  org.rapidoid.util.Msc - -----------------------------------------
+22:46:57.747 [main] INFO  com.example.Main - Starting application
+22:46:57.749 [main] INFO  org.rapidoid.setup.App - Inferring application root | main = com.example.Main | package = com.example
+22:46:57.771 [server] INFO  o.r.net.impl.RapidoidServerLoop - Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
+22:46:58.011 [main] INFO  org.rapidoid.setup.Setup - Server has started | setup = app | home = http://localhost:8888
+22:46:58.012 [main] INFO  org.rapidoid.setup.Setup - Static resources will be served from the following locations | setup = app | locations = [static, public, default/static, default/public]
+22:46:58.026 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = app | verbs = GET | path = /users | roles = [] | tx = NONE | mvc = false
+22:46:58.164 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = app | verbs = GET | path = / | roles = [] | tx = NONE | mvc = true
+22:46:58.165 [main] INFO  org.rapidoid.util.Msc - -------------------------
+22:46:58.165 [main] INFO  org.rapidoid.util.Msc - Registering Admin Center:
+22:46:58.165 [main] INFO  org.rapidoid.util.Msc - -------------------------
+22:46:58.165 [main] INFO  org.rapidoid.insight.Metrics - Bootstraping metrics
+22:46:58.172 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = admin | verbs = GET,POST | path = /_ | roles = [administrator] | tx = NONE | mvc = true
+22:46:58.173 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = admin | verbs = GET,POST | path = /_/entities | roles = [administrator] | tx = NONE | mvc = true
+22:46:58.175 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = admin | verbs = GET,POST | path = /_/routes | roles = [administrator] | tx = NONE | mvc = true
+22:46:58.175 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = admin | verbs = GET,POST | path = /_/beans | roles = [administrator] | tx = NONE | mvc = true
+22:46:58.176 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = admin | verbs = GET,POST | path = /_/config | roles = [administrator] | tx = NONE | mvc = true
+22:46:58.177 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = admin | verbs = GET | path = /_/classpath | roles = [administrator] | tx = NONE | mvc = true
+22:46:58.177 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = admin | verbs = GET,POST | path = /_/terminate | roles = [administrator] | tx = NONE | mvc = true
+22:46:58.178 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = admin | verbs = GET,POST | path = /_/jmx/memory | roles = [administrator] | tx = NONE | mvc = true
+22:46:58.179 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = admin | verbs = GET,POST | path = /_/jmx/mempool | roles = [administrator] | tx = NONE | mvc = true
+22:46:58.180 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = admin | verbs = GET,POST | path = /_/jmx/classes | roles = [administrator] | tx = NONE | mvc = true
+22:46:58.180 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = admin | verbs = GET,POST | path = /_/jmx/os | roles = [administrator] | tx = NONE | mvc = true
+22:46:58.180 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = admin | verbs = GET,POST | path = /_/jmx/threads | roles = [administrator] | tx = NONE | mvc = true
+22:46:58.181 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = admin | verbs = GET,POST | path = /_/jmx/compilation | roles = [administrator] | tx = NONE | mvc = true
+22:46:58.181 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = admin | verbs = GET,POST | path = /_/jmx/runtime | roles = [administrator] | tx = NONE | mvc = true
+22:46:58.182 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = admin | verbs = GET,POST | path = /_/jmx/gc | roles = [administrator] | tx = NONE | mvc = true
+22:46:58.183 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = admin | verbs = GET,POST | path = /_/metrics | roles = [administrator] | tx = NONE | mvc = true
+22:46:58.211 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = admin | verbs = GET | path = /_/graphs/{id:.*} | roles = [administrator] | tx = NONE | mvc = false
+22:46:58.214 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = admin | verbs = GET,POST | path = /_/deploy | roles = [administrator] | tx = NONE | mvc = true
+22:46:58.215 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = admin | verbs = POST | path = /_/jar | roles = [administrator] | tx = NONE | mvc = false
+22:46:58.216 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = admin | verbs = POST | path = /_login | roles = [] | tx = NONE | mvc = false
+22:46:58.216 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = admin | verbs = GET | path = /_logout | roles = [logged_in] | tx = NONE | mvc = false
+22:46:58.217 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = admin | verbs = GET | path = /_status | roles = [administrator] | tx = NONE | mvc = false
+22:46:58.245 [main] INFO  org.rapidoid.util.Msc - --------------------------------
+22:46:58.245 [main] INFO  org.rapidoid.util.Msc - Bootstrapping JPA (Hibernate)...
+22:46:58.245 [main] INFO  org.rapidoid.util.Msc - --------------------------------
+22:46:58.246 [main] INFO  org.rapidoid.scan.ClasspathUtil - Scanning classpath | annotated = [@Entity] | packages = [com.example]
+22:46:58.278 [main] INFO  org.rapidoid.scan.ClasspathUtil - Finished classpath scan | time = <?>ms | searched = 3 | found = [Book]
+22:46:58.278 [main] INFO  org.rapidoid.jpa.EMFUtil - Found 1 JPA Entities
+22:46:58.279 [main] INFO  org.rapidoid.util.Msc - ---------------------
+22:46:58.279 [main] INFO  org.rapidoid.util.Msc - Hibernate properties:
+22:46:58.279 [main] INFO  org.rapidoid.util.Msc - ---------------------
+22:46:58.279 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.c3p0.idleConnectionTestPeriod = 300
+22:46:58.279 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.connection.driver_class = com.mysql.jdbc.Driver
+22:46:58.279 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.c3p0.acquireIncrement = 5
+22:46:58.279 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.dialect = org.hibernate.dialect.MySQL5Dialect
+22:46:58.279 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.c3p0.initialPoolSize = 5
+22:46:58.279 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.connection.username = root
+22:46:58.279 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.c3p0.maxPoolSize = 100
+22:46:58.280 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.hbm2ddl.auto = create
+22:46:58.280 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.c3p0.minPoolSize = 5
+22:46:58.280 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.c3p0.debug = false
+22:46:58.280 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.connection.url = jdbc:mysql://mysql:3306/rapidoid
+22:46:58.280 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.connection.password = *****
+22:46:58.280 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.c3p0.maxStatementsPerConnection = 10
+22:46:58.280 [main] INFO  org.rapidoid.util.Msc - -------------------
+22:46:58.280 [main] INFO  org.rapidoid.util.Msc - Starting Hibernate:
+22:46:58.280 [main] INFO  org.rapidoid.util.Msc - -------------------
+22:46:58.293 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [
+	name: null
+	...]
+22:46:58.338 [main] INFO  org.hibernate.Version - HHH000412: Hibernate Core {4.3.11.Final}
+22:46:58.339 [main] INFO  org.hibernate.cfg.Environment - HHH000206: hibernate.properties not found
+22:46:58.340 [main] INFO  org.hibernate.cfg.Environment - HHH000021: Bytecode provider name : javassist
+22:46:58.416 [main] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {4.0.5.Final}
+22:46:58.434 [main] WARN  o.h.e.j.c.i.ConnectionProviderInitiator - HHH000022: c3p0 properties were encountered, but the c3p0 provider class was not found on the classpath; these properties are going to be ignored.
+22:46:58.436 [main] WARN  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000402: Using Hibernate built-in connection pool (not for production use!)
+22:46:58.441 [main] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://mysql:3306/rapidoid]
+22:46:58.441 [main] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000046: Connection properties: {user=root, password=****}
+22:46:58.442 [main] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000006: Autocommit mode: false
+22:46:58.442 [main] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000115: Hibernate connection pool size: 20 (min=1)
+22:46:58.556 [main] WARN  org.rapidoid.jpa.JPAUtil - Couldn't connect, will retry again in 3 seconds...
+22:47:01.557 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [
+	name: null
+	...]
+22:47:01.574 [main] WARN  o.h.e.j.c.i.ConnectionProviderInitiator - HHH000022: c3p0 properties were encountered, but the c3p0 provider class was not found on the classpath; these properties are going to be ignored.
+22:47:01.575 [main] WARN  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000402: Using Hibernate built-in connection pool (not for production use!)
+22:47:01.576 [main] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://mysql:3306/rapidoid]
+22:47:01.579 [main] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000046: Connection properties: {user=root, password=****}
+22:47:01.580 [main] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000006: Autocommit mode: false
+22:47:01.580 [main] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000115: Hibernate connection pool size: 20 (min=1)
+22:47:01.586 [main] WARN  org.rapidoid.jpa.JPAUtil - Couldn't connect, will retry again in 3 seconds...
+22:47:04.586 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [
+	name: null
+	...]
+22:47:04.604 [main] WARN  o.h.e.j.c.i.ConnectionProviderInitiator - HHH000022: c3p0 properties were encountered, but the c3p0 provider class was not found on the classpath; these properties are going to be ignored.
+22:47:04.604 [main] WARN  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000402: Using Hibernate built-in connection pool (not for production use!)
+22:47:04.605 [main] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://mysql:3306/rapidoid]
+22:47:04.606 [main] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000046: Connection properties: {user=root, password=****}
+22:47:04.606 [main] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000006: Autocommit mode: false
+22:47:04.606 [main] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000115: Hibernate connection pool size: 20 (min=1)
+22:47:04.612 [main] WARN  org.rapidoid.jpa.JPAUtil - Couldn't connect, will retry again in 3 seconds...
+22:47:07.613 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [
+	name: null
+	...]
+22:47:07.625 [main] WARN  o.h.e.j.c.i.ConnectionProviderInitiator - HHH000022: c3p0 properties were encountered, but the c3p0 provider class was not found on the classpath; these properties are going to be ignored.
+22:47:07.626 [main] WARN  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000402: Using Hibernate built-in connection pool (not for production use!)
+22:47:07.626 [main] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://mysql:3306/rapidoid]
+22:47:07.627 [main] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000046: Connection properties: {user=root, password=****}
+22:47:07.627 [main] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000006: Autocommit mode: false
+22:47:07.628 [main] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000115: Hibernate connection pool size: 20 (min=1)
+22:47:07.633 [main] WARN  org.rapidoid.jpa.JPAUtil - Couldn't connect, will retry again in 3 seconds...
+22:47:10.634 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [
+	name: null
+	...]
+22:47:10.650 [main] WARN  o.h.e.j.c.i.ConnectionProviderInitiator - HHH000022: c3p0 properties were encountered, but the c3p0 provider class was not found on the classpath; these properties are going to be ignored.
+22:47:10.650 [main] WARN  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000402: Using Hibernate built-in connection pool (not for production use!)
+22:47:10.650 [main] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://mysql:3306/rapidoid]
+22:47:10.651 [main] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000046: Connection properties: {user=root, password=****}
+22:47:10.651 [main] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000006: Autocommit mode: false
+22:47:10.651 [main] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000115: Hibernate connection pool size: 20 (min=1)
+22:47:10.653 [main] WARN  org.rapidoid.jpa.JPAUtil - Couldn't connect, will retry again in 3 seconds...
+22:47:13.653 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [
+	name: null
+	...]
+22:47:13.669 [main] WARN  o.h.e.j.c.i.ConnectionProviderInitiator - HHH000022: c3p0 properties were encountered, but the c3p0 provider class was not found on the classpath; these properties are going to be ignored.
+22:47:13.670 [main] WARN  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000402: Using Hibernate built-in connection pool (not for production use!)
+22:47:13.670 [main] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://mysql:3306/rapidoid]
+22:47:13.671 [main] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000046: Connection properties: {user=root, password=****}
+22:47:13.672 [main] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000006: Autocommit mode: false
+22:47:13.672 [main] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000115: Hibernate connection pool size: 20 (min=1)
+22:47:13.679 [main] WARN  org.rapidoid.jpa.JPAUtil - Couldn't connect, will retry again in 3 seconds...
+22:47:16.680 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [
+	name: null
+	...]
+22:47:16.687 [main] WARN  o.h.e.j.c.i.ConnectionProviderInitiator - HHH000022: c3p0 properties were encountered, but the c3p0 provider class was not found on the classpath; these properties are going to be ignored.
+22:47:16.688 [main] WARN  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000402: Using Hibernate built-in connection pool (not for production use!)
+22:47:16.688 [main] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://mysql:3306/rapidoid]
+22:47:16.689 [main] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000046: Connection properties: {user=root, password=****}
+22:47:16.689 [main] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000006: Autocommit mode: false
+22:47:16.689 [main] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000115: Hibernate connection pool size: 20 (min=1)
+Wed Sep 28 22:47:16 UTC 2016 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.
+22:47:16.834 [main] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+22:47:16.903 [main] INFO  o.h.h.i.a.ASTQueryTranslatorFactory - HHH000397: Using ASTQueryTranslatorFactory
+22:47:17.002 [Finalizer] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000030: Cleaning up connection pool [jdbc:mysql://mysql:3306/rapidoid]
+22:47:17.003 [Finalizer] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000030: Cleaning up connection pool [jdbc:mysql://mysql:3306/rapidoid]
+22:47:17.004 [Finalizer] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000030: Cleaning up connection pool [jdbc:mysql://mysql:3306/rapidoid]
+22:47:17.004 [Finalizer] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000030: Cleaning up connection pool [jdbc:mysql://mysql:3306/rapidoid]
+22:47:17.005 [Finalizer] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000030: Cleaning up connection pool [jdbc:mysql://mysql:3306/rapidoid]
+22:47:17.005 [Finalizer] INFO  o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000030: Cleaning up connection pool [jdbc:mysql://mysql:3306/rapidoid]
+22:47:17.020 [main] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 5.2.4.Final
+22:47:17.262 [main] INFO  o.h.tool.hbm2ddl.SchemaExport - HHH000227: Running hbm2ddl schema export
+22:47:17.317 [main] INFO  o.h.tool.hbm2ddl.SchemaExport - HHH000230: Schema export complete
+22:47:17.344 [main] INFO  org.rapidoid.util.Msc - -------------------------
+22:47:17.344 [main] INFO  org.rapidoid.util.Msc - JPA (Hibernate) is ready.
+22:47:17.344 [main] INFO  org.rapidoid.util.Msc - -------------------------
+22:47:17.345 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = app | verbs = POST | path = /_login | roles = [] | tx = NONE | mvc = false
+22:47:17.345 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = app | verbs = GET | path = /_logout | roles = [logged_in] | tx = NONE | mvc = false
+22:47:17.359 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = app | verbs = GET | path = /books | roles = [] | tx = NONE | mvc = false
+22:47:17.365 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = app | verbs = POST | path = /books | roles = [] | tx = NONE | mvc = false
+22:47:17.368 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = app | verbs = PUT | path = /books/{id} | roles = [] | tx = NONE | mvc = false
+22:47:17.370 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = app | verbs = DELETE | path = /books/{id} | roles = [] | tx = NONE | mvc = false
+22:47:17.382 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = app | verbs = GET | path = /manage | roles = [manager] | tx = NONE | mvc = false
+22:47:17.383 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = app | verbs = GET | path = / | roles = [] | tx = NONE | mvc = false
+22:47:17.383 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - Registering handler | setup = app | verbs = GET | path = /users | roles = [] | tx = NONE | mvc = false
+22:47:55.934 [executor24] WARN  org.rapidoid.http.impl.HttpIO - Access denied for request: GET /manage | client = 172.17.0.1

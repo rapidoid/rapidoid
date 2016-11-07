@@ -66,7 +66,7 @@ public class Log extends RapidoidThing {
 
 	public static synchronized void setLogLevel(LogLevel logLevel) {
 		if (LOG_LEVEL != logLevel) {
-			info("Setting log level", "from", LOG_LEVEL, "to", logLevel);
+			info("Changing log level", "from", LOG_LEVEL, "to", logLevel);
 		}
 		LOG_LEVEL = logLevel;
 	}

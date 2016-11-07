@@ -76,8 +76,6 @@ public class Msc extends RapidoidThing implements Constants {
 
 	public static final String OS_NAME = System.getProperty("os.name");
 
-	private static final boolean uniformOutput = "true".equalsIgnoreCase(System.getenv("UNIFORM_OUTPUT"));
-
 	private static volatile String uid;
 
 	private static volatile long measureStart;
@@ -792,6 +790,10 @@ public class Msc extends RapidoidThing implements Constants {
 		return Cls.exists("javax.persistence.Entity");
 	}
 
+	public static boolean hasHibernate() {
+		return Cls.exists("org.hibernate.cfg.Configuration");
+	}
+
 	public static boolean hasRapidoidJPA() {
 		return Cls.exists("org.rapidoid.jpa.JPA");
 	}
@@ -1062,12 +1064,8 @@ public class Msc extends RapidoidThing implements Constants {
 		return app.exists() && app.isDirectory();
 	}
 
-	public static boolean uniformOutput() {
-		return uniformOutput;
-	}
-
 	public static Object maybeMasked(Object value) {
-		return uniformOutput ? "<?>" : value;
+		return GlobalCfg.uniformOutput() ? "<?>" : value;
 	}
 
 	public static synchronized String id() {

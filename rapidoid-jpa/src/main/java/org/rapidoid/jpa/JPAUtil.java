@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.metamodel.EntityType;
+import java.net.ConnectException;
 import java.util.List;
 import java.util.Properties;
 
@@ -70,29 +71,58 @@ public class JPAUtil extends RapidoidThing {
 	}
 
 	public static void bootstrap(String[] path, Class<?>... providedEntities) {
-		if (Cls.exists("org.hibernate.cfg.Configuration") && (emf() == null)) {
-			Msc.logSection("Bootstrapping JPA (Hibernate)...");
+		if (Msc.hasHibernate()) {
 
-			List<String> entityTypes = EMFUtil.createEMF(path, providedEntities);
-
-			if (entityTypes.isEmpty()) {
-				Log.info("Didn't find JPA entities, canceling JPA/Hibernate setup!");
-				return;
+			if (emf() == null) {
+				bootstrapJPA(path, providedEntities);
+			} else {
+				Log.warn("A custom EMF was already assigned, won't bootstrap JPA!");
 			}
 
-//			Msc.logSection("Hibernate properties:");
-			Properties props = EMFUtil.hibernateProperties();
-//			Msc.logProperties(props);
+		} else {
+			Log.warn("Couldn't find Hibernate, cannot bootstrap JPA!");
+		}
+	}
 
-			Msc.logSection("Starting Hibernate:");
+	private static void bootstrapJPA(String[] path, Class<?>[] providedEntities) {
+		Msc.logSection("Bootstrapping JPA (Hibernate)...");
 
-			CustomHibernatePersistenceProvider provider = new CustomHibernatePersistenceProvider();
-			provider.names().addAll(entityTypes);
+		List<String> entityTypes = EMFUtil.createEMF(path, providedEntities);
 
-			EntityManagerFactory emf = provider.createEntityManagerFactory("rapidoid", props);
-			emf(emf);
+		if (entityTypes.isEmpty()) {
+			Log.info("Didn't find JPA entities, canceling JPA/Hibernate setup!");
+			return;
+		}
 
-			Msc.logSection("JPA (Hibernate) is ready.");
+		Properties props = EMFUtil.hibernateProperties();
+		Msc.logSection("Hibernate properties:");
+		Msc.logProperties(props);
+
+		Msc.logSection("Starting Hibernate:");
+
+		CustomHibernatePersistenceProvider provider = new CustomHibernatePersistenceProvider();
+		provider.names().addAll(entityTypes);
+
+		EntityManagerFactory emf = createEMF(props, provider);
+
+		emf(emf);
+
+		Msc.logSection("JPA (Hibernate) is ready.");
+	}
+
+	private static EntityManagerFactory createEMF(Properties props, CustomHibernatePersistenceProvider provider) {
+		while (true) {
+			try {
+				return provider.createEntityManagerFactory("rapidoid", props);
+
+			} catch (Exception e) {
+				if (Msc.rootCause(e) instanceof ConnectException) {
+					Log.warn("Couldn't connect, will retry again in 3 seconds...");
+					U.sleep(3000); // FIXME improve back-off
+				} else {
+					throw U.rte("Failed to create EMF!", e);
+				}
+			}
 		}
 	}
 
