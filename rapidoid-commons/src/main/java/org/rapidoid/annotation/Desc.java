@@ -26,7 +26,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
-@Since("5.2.6")
+@Since("5.3.0")
 public @interface Desc {
 
 	String value();
