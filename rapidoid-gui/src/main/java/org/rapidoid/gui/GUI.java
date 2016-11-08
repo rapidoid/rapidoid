@@ -39,6 +39,7 @@ import org.rapidoid.html.tag.*;
 import org.rapidoid.http.HttpVerb;
 import org.rapidoid.lambda.Calc;
 import org.rapidoid.lambda.ToMap;
+import org.rapidoid.log.Log;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
@@ -557,7 +558,9 @@ public abstract class GUI extends HTML implements Role {
 	public static Object display(Object item) {
 		try {
 			return _display(item);
+
 		} catch (Exception e) {
+			Log.error("Error while rendering GUI element!", e);
 			return N_A;
 		}
 	}

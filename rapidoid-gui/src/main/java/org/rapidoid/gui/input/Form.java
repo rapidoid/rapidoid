@@ -168,7 +168,7 @@ public class Form extends AbstractWidget<Form> {
 	}
 
 	protected Tag noFormFields() {
-		return GUI.h4("Insufficient permissions!");
+		return div("No details are available!");
 	}
 
 	protected Field getField(int index) {

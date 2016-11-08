@@ -36,4 +36,12 @@ public interface TextareaTag extends SpecificTag<TextareaTag> {
 
 	TextareaTag placeholder(String placeholder);
 
+	String rows();
+
+	TextareaTag rows(String rows);
+
+	String cols();
+
+	TextareaTag cols(String cols);
+
 }
