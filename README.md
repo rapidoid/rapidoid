@@ -14,8 +14,10 @@ Rapidoid is released under the liberal Apache Public License v2, so it is free t
 # Roadmap
 
 * Better documentation
-* Maven plugin for easy deployment
-* Built-in cache
+* Maven plugin for easy deployment (coming soon in 5.3)
+* Built-in object cache (coming soon in 5.3)
+* Off-heap cache storage
+* RPC layer (high-level, POJO-based)
 * SSL support
 
 # Contributing
@@ -26,4 +28,3 @@ Rapidoid is released under the liberal Apache Public License v2, so it is free t
 4. Push the branch (`git push origin branch_name`).
 5. Open a Pull Request.
 6. Thank you for your contribution! Wait for a response...
-
