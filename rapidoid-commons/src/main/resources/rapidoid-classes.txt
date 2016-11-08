@@ -13,6 +13,7 @@ org.rapidoid.annotation.Contributors
 org.rapidoid.annotation.Controller
 org.rapidoid.annotation.Cookie
 org.rapidoid.annotation.DELETE
+org.rapidoid.annotation.Desc
 org.rapidoid.annotation.DontReload
 org.rapidoid.annotation.GET
 org.rapidoid.annotation.HEAD
@@ -250,6 +251,7 @@ org.rapidoid.gui.menu.PageMenu
 org.rapidoid.gui.menu.PageMenuItem
 org.rapidoid.gui.menu.PageSubMenu
 org.rapidoid.gui.menu.PageSubMenuItem
+org.rapidoid.gui.MultiWidget
 org.rapidoid.gui.Pager
 org.rapidoid.gui.Panel
 org.rapidoid.gui.reqinfo.AbstractReqInfo
@@ -266,7 +268,6 @@ org.rapidoid.html.BasicUtils
 org.rapidoid.html.Cmd
 org.rapidoid.html.CustomTag
 org.rapidoid.html.customtag.ColspanTag
-org.rapidoid.html.ElementGroup
 org.rapidoid.html.FieldType
 org.rapidoid.html.FormLayout
 org.rapidoid.html.HTML
