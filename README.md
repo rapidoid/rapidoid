@@ -1,6 +1,8 @@
 Rapidoid - Simple. Powerful. Secure. Fast!
 ========
 
+Rapidoid is an extremely fast HTTP server and modern Java web framework / application container, with a strong focus on high productivity and high performance.
+
 # Documentation, examples, community support
 
 Please visit the official site:
