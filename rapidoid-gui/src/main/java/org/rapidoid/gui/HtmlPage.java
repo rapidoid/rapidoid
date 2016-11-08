@@ -66,7 +66,8 @@ public class HtmlPage extends ScreenBean {
 		}
 
 		String html;
-		if (ReqInfo.get().isGetReq()) {
+		IReqInfo req = ReqInfo.get();
+		if (req.isGetReq() && req.params().get("__event__") == null) {
 			html = PAGE_TEMPLATE.render(model);
 		} else {
 			html = PAGE_AJAX_TEMPLATE.render(model);
