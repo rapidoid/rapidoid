@@ -1,13 +1,13 @@
-package org.rapidoid.html;
+package org.rapidoid.gui;
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.html.impl.TagRenderer;
 
 /*
  * #%L
- * rapidoid-html
+ * rapidoid-gui
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -27,17 +27,17 @@ import org.rapidoid.html.impl.TagRenderer;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class ElementGroup extends RapidoidThing {
+public class MultiWidget extends AbstractWidget {
 
 	private final Object[] elements;
 
-	public ElementGroup(Object[] elements) {
+	public MultiWidget(Object[] elements) {
 		this.elements = elements;
 	}
 
 	@Override
-	public String toString() {
-		return TagRenderer.get().toHTML(elements, null);
+	protected Object render() {
+		return GUI.hardcoded(TagRenderer.get().toHTML(elements, null));
 	}
 
 }

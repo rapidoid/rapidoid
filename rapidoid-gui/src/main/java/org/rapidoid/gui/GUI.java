@@ -27,9 +27,6 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.AnyObj;
 import org.rapidoid.commons.English;
 import org.rapidoid.commons.Str;
-import org.rapidoid.html.ElementGroup;
-import org.rapidoid.timeseries.TimeSeries;
-import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.gui.input.*;
 import org.rapidoid.gui.reqinfo.IReqInfo;
 import org.rapidoid.gui.reqinfo.ReqInfo;
@@ -47,6 +44,7 @@ import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
 import org.rapidoid.render.Templates;
 import org.rapidoid.security.Role;
+import org.rapidoid.timeseries.TimeSeries;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 import org.rapidoid.var.Var;
@@ -614,7 +612,8 @@ public abstract class GUI extends HTML implements Role {
 	private static boolean isBean(Object obj) {
 		return Cls.isBean(obj)
 			&& !(obj instanceof Tag)
-			&& !(obj instanceof AbstractWidget);
+			&& !(obj instanceof TagWidget)
+			&& !(obj instanceof MultiWidget);
 	}
 
 	private static Object display(Iterator<?> it) {
@@ -870,8 +869,11 @@ public abstract class GUI extends HTML implements Role {
 	public static boolean isGUI(Object result) {
 		return (result instanceof Tag)
 			|| (result instanceof HtmlPage)
-			|| (result instanceof TagWidget)
-			|| (result instanceof ElementGroup);
+			|| (result instanceof TagWidget);
+	}
+
+	public static MultiWidget multi(Object... elements) {
+		return new MultiWidget(elements);
 	}
 
 }

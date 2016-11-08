@@ -52,10 +52,6 @@ public class HTML extends Tags {
 		return new ConstantTag(content);
 	}
 
-	public static Object multi(Object... elements) {
-		return new ElementGroup(elements);
-	}
-
 	public static ATag a_void(Object... contents) {
 		return a(contents).href("javascript:void(0);");
 	}
