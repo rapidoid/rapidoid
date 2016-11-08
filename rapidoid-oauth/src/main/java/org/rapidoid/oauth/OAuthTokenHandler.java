@@ -125,7 +125,7 @@ public class OAuthTokenHandler extends RapidoidThing implements ReqHandler {
 			String username = email;
 			Set<String> roles = customization.rolesProvider().getRolesForUser(req, username);
 
-			UserInfo user = new UserInfo(username, roles);
+			UserInfo user = new UserInfo(username, roles, null);
 			user.name = name;
 			user.email = email;
 			user.oauthProvider = provider.getName();

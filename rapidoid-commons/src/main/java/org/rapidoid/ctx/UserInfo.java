@@ -36,13 +36,15 @@ public class UserInfo extends RapidoidThing implements Serializable {
 
 	private static final long serialVersionUID = 7062732348562440194L;
 
-	public static final UserInfo ANONYMOUS = new UserInfo(null, U.<String>set());
+	public static final UserInfo ANONYMOUS = new UserInfo(null, U.<String>set(), null);
 
 	public final String username;
 
 	public final Set<String> roles;
 
 	public final Map<String, Boolean> is;
+
+	public final Set<String> scope;
 
 	public volatile String email;
 
@@ -52,10 +54,11 @@ public class UserInfo extends RapidoidThing implements Serializable {
 
 	public volatile String oauthProvider;
 
-	public UserInfo(String username, Set<String> roles) {
+	public UserInfo(String username, Set<String> roles, Set<String> scope) {
 		this.username = username;
 		this.roles = Collections.unmodifiableSet(U.safe(roles));
 		this.is = rolesMap(roles);
+		this.scope = Collections.unmodifiableSet(U.safe(scope));
 	}
 
 	private static Map<String, Boolean> rolesMap(Set<String> roles) {

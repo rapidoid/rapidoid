@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.nio.BufferOverflowException;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Set;
 
 /*
  * #%L
@@ -36,6 +37,10 @@ import java.util.Map;
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
 public class Tokens extends RapidoidThing {
+
+	public static final String _USER = "_user";
+	public static final String _SCOPE = "_scope";
+	public static final String _EXPIRES = "_expires";
 
 	public static String serialize(Map<String, Serializable> token) {
 		if (U.notEmpty(token)) {
@@ -71,6 +76,41 @@ public class Tokens extends RapidoidThing {
 		} else {
 			return null;
 		}
+	}
+
+	public static TokenAuthData getAuth(Map<String, Serializable> token) {
+		TokenAuthData data = new TokenAuthData();
+
+		data.user = (String) token.get(_USER);
+		data.scope = scope((String) token.get(_SCOPE));
+		data.expires = (Long) token.get(_EXPIRES);
+
+		if (data.expires == null || data.expires > U.time()) {
+			return data;
+		} else {
+			return null; // expired
+		}
+	}
+
+	private static Set<String> scope(String scope) {
+		if (U.isEmpty(scope)) return null;
+
+		Set<String> scopes = U.set();
+
+		for (String sc : scope.split("\\,")) {
+			String[] parts = sc.trim().split("\\:");
+			String uri = parts[parts.length - 1];
+
+			if (parts.length == 1) {
+				scopes.add(uri);
+			} else {
+				for (int i = 0; i < parts.length - 1; i++) {
+					scopes.add(parts[i] + " " + uri);
+				}
+			}
+		}
+
+		return scopes;
 	}
 
 }

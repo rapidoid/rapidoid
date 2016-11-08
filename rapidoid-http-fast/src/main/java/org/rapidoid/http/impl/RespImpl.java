@@ -18,6 +18,7 @@ import org.rapidoid.http.customize.LoginProvider;
 import org.rapidoid.http.customize.RolesProvider;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
+import org.rapidoid.util.Tokens;
 import org.rapidoid.web.Screen;
 import org.rapidoid.web.ScreenBean;
 
@@ -366,10 +367,11 @@ public class RespImpl extends RapidoidThing implements Resp {
 				long ttl = Conf.TOKEN.entry("ttl").or(0);
 				long expiresOn = ttl > 0 ? U.time() + ttl : Long.MAX_VALUE;
 
-				Ctxs.required().setUser(new UserInfo(username, roles));
+				UserInfo user = new UserInfo(username, roles, null);
+				Ctxs.required().setUser(user);
 
-				request().token().put(HttpUtils._USER, username);
-				request().token().put(HttpUtils._EXPIRES, expiresOn);
+				request().token().put(Tokens._USER, username);
+				request().token().put(Tokens._EXPIRES, expiresOn);
 			}
 
 		} catch (Throwable e) {

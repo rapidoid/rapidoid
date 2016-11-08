@@ -1,8 +1,8 @@
-package org.rapidoid.http;
+package org.rapidoid.util;
 
 /*
  * #%L
- * rapidoid-http-fast
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -23,45 +23,23 @@ package org.rapidoid.http;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Ctx;
-import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.ctx.UserInfo;
-import org.rapidoid.u.U;
 
 import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class Current extends RapidoidThing {
+@Since("5.3.0")
+public class TokenAuthData extends RapidoidThing {
 
-	public static boolean hasContext() {
-		return Ctxs.get() != null;
+	public volatile String user;
+	public volatile Set<String> scope;
+	public volatile Long expires;
+
+	@Override
+	public String toString() {
+		return "TokenAuthData{" +
+			"user='" + user + '\'' +
+			", scope='" + scope + '\'' +
+			", expires=" + expires +
+			'}';
 	}
-
-	public static UserInfo user() {
-		Ctx ctx = Ctxs.get();
-		UserInfo user = ctx != null ? ctx.user() : null;
-		return U.or(user, UserInfo.ANONYMOUS);
-	}
-
-	public static boolean isLoggedIn() {
-		return user().username != null;
-	}
-
-	public static String username() {
-		return user().username;
-	}
-
-	public static Set<String> roles() {
-		return user().roles;
-	}
-
-	public static Set<String> scope() {
-		return user().scope;
-	}
-
-	public static Req request() {
-		return Ctxs.required().exchange();
-	}
-
 }

@@ -47,7 +47,7 @@ public class JobsTest extends AbstractCommonsTest {
 			public void run() {
 				Ctxs.open("test-job");
 
-				final UserInfo user = new UserInfo(rndStr(50), U.set("role1"));
+				final UserInfo user = new UserInfo(rndStr(50), U.set("role1"), null);
 
 				Ctxs.required().setUser(user);
 				ensureProperContext(user);

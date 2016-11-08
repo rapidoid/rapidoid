@@ -15,6 +15,7 @@ import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.security.Secure;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
+import org.rapidoid.util.TokenAuthData;
 
 import java.util.Collections;
 import java.util.Set;
@@ -97,25 +98,6 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 		return HttpStatus.ASYNC;
 	}
 
-	private String getUser(Req req) {
-		if (req.hasToken()) {
-			String username = req.token(HttpUtils._USER, null);
-
-			if (username != null) {
-				long expiresOn = req.token(HttpUtils._EXPIRES);
-
-				if (expiresOn < U.time()) {
-					username = null; // expired
-				}
-			}
-
-			return username;
-
-		} else {
-			return null;
-		}
-	}
-
 	private Set<String> userRoles(Req req, String username) {
 		if (username != null) {
 			try {
@@ -152,17 +134,22 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 
 			volatile String username = null;
 			volatile Set<String> roles = null;
+			volatile Set<String> scope = null;
 
 			@Override
 			public void run() {
 				try {
-					username = getUser(req);
+
+					TokenAuthData auth = HttpUtils.getAuth(req);
+
+					if (auth != null) username = auth.user;
 
 					if (U.isEmpty(username)) {
 						HttpUtils.clearUserData(req);
 					}
 
 					roles = userRoles(req, username);
+					scope = auth != null ? auth.scope : null;
 
 					TransactionMode txMode = before(req, username, roles);
 					U.notNull(txMode, "txMode");
@@ -172,18 +159,18 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 					Runnable handleRequest = handlerWithWrappers(channel, isKeepAlive, contentType, req, extra, wrappers);
 					Runnable handleRequestMaybeInTx = txWrap(req, txMode, handleRequest);
 
-					With.tag(CTX_TAG_HANDLER).exchange(req).username(username).roles(roles).run(handleRequestMaybeInTx);
+					With.tag(CTX_TAG_HANDLER).exchange(req).username(username).roles(roles).scope(scope).run(handleRequestMaybeInTx);
 
 				} catch (Throwable e) {
 					// if there was an error in the job scheduling:
-					execErrorHandler(req, username, roles, e);
+					execErrorHandler(req, username, roles, scope, e);
 				}
 			}
 		});
 	}
 
-	private HttpStatus execErrorHandler(final Req req, String username, Set<String> roles, final Throwable error) {
-		With.tag(CTX_TAG_ERROR).exchange(req).username(username).roles(roles).run(new Runnable() {
+	private HttpStatus execErrorHandler(final Req req, String username, Set<String> roles, Set<String> scope, final Throwable error) {
+		With.tag(CTX_TAG_ERROR).exchange(req).username(username).roles(roles).scope(scope).run(new Runnable() {
 			@Override
 			public void run() {
 				handleError(req, error);

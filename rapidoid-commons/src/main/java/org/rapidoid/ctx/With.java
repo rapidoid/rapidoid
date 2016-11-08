@@ -43,6 +43,10 @@ public class With extends RapidoidThing {
 		return new WithContext().roles(roles);
 	}
 
+	public static WithContext scope(Set<String> scope) {
+		return new WithContext().scope(scope);
+	}
+
 	public static WithContext persister(Object persister) {
 		return new WithContext().persister(persister);
 	}

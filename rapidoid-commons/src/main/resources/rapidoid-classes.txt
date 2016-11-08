@@ -671,6 +671,8 @@ org.rapidoid.util.SimpleList
 org.rapidoid.util.SimpleMap
 org.rapidoid.util.SimplePersisterProvider
 org.rapidoid.util.StreamUtils
+org.rapidoid.util.TokenAuthData
+org.rapidoid.util.Tokens
 org.rapidoid.util.Usage
 org.rapidoid.u.U
 org.rapidoid.validation.InvalidData

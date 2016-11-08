@@ -38,6 +38,8 @@ public class WithContext extends RapidoidThing {
 
 	private volatile Set<String> roles;
 
+	private volatile Set<String> scope;
+
 	private volatile Object persister;
 
 	private volatile Object exchange;
@@ -69,6 +71,15 @@ public class WithContext extends RapidoidThing {
 
 	public Set<String> roles() {
 		return this.roles;
+	}
+
+	public WithContext scope(Set<String> scope) {
+		this.scope = scope;
+		return this;
+	}
+
+	public Set<String> scope() {
+		return scope;
 	}
 
 	public WithContext persister(Object persister) {

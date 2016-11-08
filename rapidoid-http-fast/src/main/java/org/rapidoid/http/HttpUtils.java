@@ -16,9 +16,7 @@ import org.rapidoid.http.impl.PathPattern;
 import org.rapidoid.io.Res;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
-import org.rapidoid.util.ErrCodeAndMsg;
-import org.rapidoid.util.Msc;
-import org.rapidoid.util.Tokens;
+import org.rapidoid.util.*;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -60,9 +58,6 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 	private static final byte[] EMPTY_RESPONSE = {};
 
 	public static volatile Pattern REGEX_VALID_HTTP_RESOURCE = Pattern.compile("(?:/[A-Za-z0-9_\\-\\.]+)*/?");
-
-	public static final String _USER = "_user";
-	public static final String _EXPIRES = "_expires";
 
 	private static final Mapper<String[], String> PATH_PARAM_EXTRACTOR = new Mapper<String[], String>() {
 		@Override
@@ -354,9 +349,17 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 
 		if (req.hasToken()) {
 			Map<String, Serializable> token = req.token();
-			token.remove(_USER);
-			token.remove(_EXPIRES);
+			token.remove(Tokens._USER);
+			token.remove(Tokens._SCOPE);
 		}
 	}
 
+	public static TokenAuthData getAuth(Req req) {
+		TokenAuthData auth = req.hasToken() ? Tokens.getAuth(req.token()) : null;
+
+		// check if the route is outside of scope
+		if (auth != null && U.notEmpty(auth.scope) && !auth.scope.contains(req.verb() + " " + req.path())) auth = null;
+
+		return auth;
+	}
 }

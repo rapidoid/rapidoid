@@ -48,6 +48,10 @@ public class NiceResponse extends RapidoidThing {
 		return details(msg, false);
 	}
 
+	public static Object deny(Req req) {
+		return err(req, "Access denied!");
+	}
+
 	public static Object details(String msg, boolean success) {
 		return U.map("msg", msg, "success", success);
 	}
