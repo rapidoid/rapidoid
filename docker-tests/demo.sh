@@ -21,4 +21,5 @@ sudo docker run -it --rm \
     admin.services=center \
     app.path=com.example \
     users.admin.password=aaa \
+    app.cdn=false \
     '/users <= SELECT user FROM mysql.user'
