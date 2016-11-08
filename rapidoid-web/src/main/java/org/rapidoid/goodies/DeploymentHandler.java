@@ -8,12 +8,14 @@ import org.rapidoid.gui.reqinfo.IReqInfo;
 import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.html.Tag;
 import org.rapidoid.http.HttpVerb;
+import org.rapidoid.io.IO;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Tokens;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -42,6 +44,8 @@ import java.util.concurrent.Callable;
 @Since("5.1.0")
 public class DeploymentHandler extends GUI implements Callable<Object> {
 
+	public static final String SCOPES = "POST:/_stage, POST:/_deploy, GET:POST:/_deployment";
+
 	@Override
 	public Object call() throws Exception {
 		List<Object> info = U.list();
@@ -50,37 +54,29 @@ public class DeploymentHandler extends GUI implements Callable<Object> {
 
 			IReqInfo req = ReqInfo.get();
 
+			Map<String, Serializable> tokenData = U.<String, Serializable>map(Tokens._USER, req.username(), Tokens._SCOPE, SCOPES);
+			String token = Tokens.serialize(tokenData);
+
 			String appJar = ClasspathUtil.appJar();
 			String stagedAppJar = appJar + ".staged";
 
 			info.add(h3("Deployment status:"));
 			info.add(grid(jarsInfo(appJar, stagedAppJar)));
 
+			info.add(h3("Your deployment token is:"));
+			info.add(copy(textarea(token).rows("2").attr("readonly", "readonly").style("width:100%; font-size: 10px;")));
+
 			info.add(h3("Upload an application JAR to stage it and then deploy it:"));
 			info.add(hardcoded("<form action=\"/_stage\" class=\"dropzone\" id=\"jar-upload\"></form>"));
-
-			String token = Tokens.serialize(U.<String, Serializable>map("username", req.username()));
-
-			info.add(h3("HTTP API for Deployment:"));
-
-			info.add(grid(apisInfo()));
 
 			info.add(h3("Packaging and deploying with Maven:"));
 			String cmd = "mvn clean org.rapidoid:deploy:uber-jar";
 
 			info.add(h6(copy(b(cmd))));
 
-			Btn shutdown = btn("Shutdown / Restart").danger()
-				.confirm("Do you really want to SHUTDOWN / RESTART the application?")
-				.onClick(new Runnable() {
-					@Override
-					public void run() {
-						TerminateHandler.shutdownSoon();
-					}
-				});
+			info.add(h3("HTTP API for Deployment:"));
 
-			info.add(br());
-			info.add(shutdown);
+			info.add(grid(apisInfo()));
 
 		} else {
 			info.add(h3(WARN, " No ", b("app.jar"), " file was configured on the classpath, so application deployment is disabled!"));
@@ -93,17 +89,52 @@ public class DeploymentHandler extends GUI implements Callable<Object> {
 	@SuppressWarnings("unchecked")
 	private List<Map<String, ?>> jarsInfo(String appJar, String stagedAppJar) {
 		return U.list(
-			jarInfo(appJar, "Currently deployed application JAR"),
-			jarInfo(stagedAppJar, "Application JAR to be deployed")
+			jarInfo(appJar, "Currently deployed application JAR", false),
+			jarInfo(stagedAppJar, "Application JAR to be deployed", true)
 		);
 	}
 
-	private Map<String, ?> jarInfo(String filename, String desc) {
+	private Map<String, ?> jarInfo(final String filename, String desc, boolean staged) {
 		File file = new File(filename);
 
-		String size = file.exists() ? (file.length() / 1024) + " KB" : "";
+		boolean exists = file.exists();
+		String size = exists ? (file.length() / 1024) + " KB" : "";
+		String since = exists ? new Date(file.lastModified()).toString() : "";
 
-		return U.map("file", filename, "description", desc, "exists", display(file.exists()), "size", size);
+		final Btn deploy = staged && exists ? btn("Deploy")
+			.class_("btn btn-primary btn-xs")
+			.confirm("Do you really want to DEPLOY and RESTART the application?")
+			.onSuccess(new Runnable() {
+				@Override
+				public void run() {
+					new JarDeploymentHandler().deploy();
+				}
+			}) : null;
+
+		String stgd = staged ? "staged" : "deployed";
+		final Btn delete = exists
+			? btn("Delete").command("delete_" + stgd)
+			.class_("btn btn-danger btn-xs")
+			.confirm("Do you really want do delete the file '" + filename + "'?")
+			: null;
+
+		if (delete != null) {
+			delete.onSuccess(new Runnable() {
+				@Override
+				public void run() {
+					IO.delete(filename);
+				}
+			});
+		}
+
+		return U.map(
+			"file", filename,
+			"description", desc,
+			"exists", exists,
+			"size", size,
+			"since", since,
+			"actions", multi(deploy, delete)
+		);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -112,12 +143,12 @@ public class DeploymentHandler extends GUI implements Callable<Object> {
 			apiInfo("Staging of the application JAR",
 				verb(HttpVerb.POST), "/_stage",
 				U.map("_token", "Deployment token", "file", "<your-jar>"),
-				"curl -F 'file=@app.jar' 'http://example.com/_stage?_token=4F920B"),
+				"curl -F 'file=@app.jar' 'http://example.com/_stage?_token=..."),
 
 			apiInfo("Deployment of the staged JAR",
 				verb(HttpVerb.POST), "/_deploy",
 				U.map("_token", "Deployment token"),
-				"curl -X POST 'http://example.com/_deploy?_token=4F920B")
+				"curl -X POST 'http://example.com/_deploy?_token=...")
 		);
 	}
 

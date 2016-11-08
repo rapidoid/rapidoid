@@ -36,27 +36,24 @@ import org.rapidoid.u.U;
 @Since("5.1.0")
 public class JarStagingHandler extends GUI implements ReqHandler {
 
-	private static final String SUCCESS = "Successfully uploaded the JAR.";
+	private static final String SUCCESS = "Successfully staged the application.";
 
 	private static final String NOT_POSSIBLE = "Not possible!";
 
 	@Override
 	public Object execute(Req req) throws Exception {
+
 		String appJar = ClasspathUtil.appJar();
 		String stagedAppJar = appJar + ".staged";
 
-		if (U.notEmpty(appJar)) {
+		if (U.isEmpty(appJar)) return NiceResponse.err(req, NOT_POSSIBLE);
 
-			Upload jar = req.file("file");
-			IO.save(stagedAppJar, jar.content());
+		Upload jar = req.file("file");
+		IO.save(stagedAppJar, jar.content());
 
-			Log.info("Staged application jar", "size", jar.content().length, "destination", appJar);
+		Log.info("Staged application jar", "size", jar.content().length, "destination", appJar);
 
-			return NiceResponse.ok(req, SUCCESS);
-
-		} else {
-			return NiceResponse.err(req, NOT_POSSIBLE);
-		}
+		return NiceResponse.ok(req, SUCCESS);
 	}
 
 }

@@ -36,27 +36,40 @@ import java.io.File;
 @Since("5.1.0")
 public class JarDeploymentHandler extends GUI implements ReqHandler {
 
-	private static final String SUCCESS = "Successfully deployed the jar, restarting...";
+	private static final String SUCCESS = "Successfully deployed the application, restarting...";
 
-	private static final String NOT_POSSIBLE = "Not possible!";
+	private static final String NOT_POSSIBLE = "Cannot deploy, the application jar path was not configured!";
+
+	private static final String STAGE_FIRST = "Cannot deploy, the application needs to be staged first!";
 
 	@Override
 	public Object execute(Req req) throws Exception {
+
+		String appJar = ClasspathUtil.appJar();
+
+		if (U.isEmpty(appJar)) return NiceResponse.err(req, NOT_POSSIBLE);
+
+		if (!new File(appJar + ".staged").exists()) return NiceResponse.err(req, STAGE_FIRST);
+
+		deploy();
+
+		return NiceResponse.ok(req, SUCCESS);
+	}
+
+	public void deploy() {
+		Log.info("Deploying JAR...");
 		String appJar = ClasspathUtil.appJar();
 		String stagedAppJar = appJar + ".staged";
 
-		if (U.notEmpty(appJar)) {
+		File jar = new File(appJar);
 
-			new File(appJar).delete();
-			new File(stagedAppJar).renameTo(new File(appJar));
+		if (jar.exists()) U.must(jar.delete(), "Couldn't delete the application JAR!");
 
-			Log.info("Successfully deployed the staged jar", "staged", stagedAppJar, "deployed", appJar);
+		U.must(new File(stagedAppJar).renameTo(jar), "Couldn't rename the staged JAR into application JAR!");
 
-			return NiceResponse.ok(req, SUCCESS);
+		Log.info("Deployed JAR, restarting...", "filename", appJar);
 
-		} else {
-			return NiceResponse.err(req, NOT_POSSIBLE);
-		}
+		TerminateHandler.shutdownSoon();
 	}
 
 }
