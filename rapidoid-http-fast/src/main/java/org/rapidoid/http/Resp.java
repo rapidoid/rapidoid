@@ -215,8 +215,7 @@ public interface Resp {
 	Resp html(Object content);
 
 	/**
-	 * Sets the <b><code>Content-Type: application/json; charset=utf-8</code> header and the content</b> of the HTTP
-	 * response. <br>
+	 * Sets the <b><code>Content-Type: application/json</code> header and the content</b> of the HTTP response. <br>
 	 * <i>Alias</i> to <code>contentType(MediaType.JSON).body(content)</code>.
 	 */
 	Resp json(Object content);
