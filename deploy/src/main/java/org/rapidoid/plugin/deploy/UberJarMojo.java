@@ -32,7 +32,7 @@ import org.rapidoid.annotation.Since;
 public class UberJarMojo extends AbstractDeploymentMojo {
 
 	public void execute() throws MojoExecutionException {
-		String uberJar = build(false); // FIXME
+		String uberJar = build(true);
 		deploy(uberJar);
 	}
 

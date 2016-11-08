@@ -29,7 +29,9 @@ import org.apache.maven.shared.invoker.*;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Str;
+import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.http.HTTP;
+import org.rapidoid.http.HttpReq;
 import org.rapidoid.http.HttpResp;
 import org.rapidoid.io.IO;
 import org.rapidoid.io.Upload;
@@ -53,7 +55,15 @@ public abstract class AbstractDeploymentMojo extends AbstractMojo {
 	@Parameter(defaultValue = "${session}", readonly = true, required = true)
 	protected MavenSession session;
 
+	@Parameter(defaultValue = "${token}", required = true)
+	protected String token;
+
+	@Parameter(defaultValue = "${servers}", required = true)
+	protected String servers;
+
 	protected String build(boolean updateSnapshots) throws MojoExecutionException {
+		RapidoidInitializer.initialize();
+
 		InvocationRequest request = new DefaultInvocationRequest();
 
 		request.setPomFile(session.getRequest().getPom());
@@ -112,27 +122,58 @@ public abstract class AbstractDeploymentMojo extends AbstractMojo {
 
 	protected void deploy(String uberJar) throws MojoExecutionException {
 
-		List<String> servers = U.list("http://localhost:8888");
+		List<String> targetServers = U.list(servers.split("\\s*\\,\\s*"));
 
-		getLog().info(U.frmt("Deploying the uber-jar to %s servers...", servers.size()));
+		// FIXME validate servers and token
+
+		getLog().info(U.frmt("Deploying the uber-jar to %s servers...", targetServers.size()));
 		getLog().info("");
 
 		Upload jar = new Upload("app.jar", IO.loadBytes(uberJar));
 
-		for (String server : servers) {
-			uploadTo(jar, Str.trimr(server, "/") + "/_stage");
+		boolean ok = true;
+		for (String server : targetServers) {
+			ok &= doStage(jar, Str.trimr(server, "/") + "/_stage");
+		}
+
+		failIf(!ok, "The staging failed on at least 1 server. Aborting the deployment!");
+
+		for (String server : targetServers) {
+			doDeploy(Str.trimr(server, "/") + "/_deploy");
 		}
 	}
 
-	private void uploadTo(Upload jar, String url) {
-		getLog().info(" - uploading the uber-jar to: " + url);
-		HttpResp resp = HTTP.post(url).file("file", U.list(jar)).execute();
-		getLog().info("RESP " + resp.code() + " " + resp.body() + " " + resp.body());
+	private boolean doStage(Upload jar, String url) {
+		getLog().info(" - uploading / staging the uber-jar to: " + url);
+		return request(HTTP.post(url).data("_token", token).file("file", U.list(jar)));
+	}
+
+	private boolean doDeploy(String url) {
+		getLog().info(" - deploying the staged application on: " + url);
+		return request(HTTP.post(url).data("_token", token));
+	}
+
+	private boolean request(HttpReq req) {
+		HttpResp resp = req.execute();
+
+		switch (resp.code()) {
+			case 200:
+				return true;
+
+			case 404:
+				getLog().error(U.frmt("Couldn't find: %s", req.url()));
+				return false;
+
+			default:
+				String msg = "Unexpected response received from: %s! Response code: %s, full response:\n\n%s\n";
+				getLog().error(U.frmt(msg, req.url(), resp.code(), resp.body()));
+				return false;
+		}
 	}
 
 	protected void failIf(boolean failureCondition, String msg, Object... args) throws MojoExecutionException {
 		if (failureCondition) {
-			throw new MojoExecutionException(msg);
+			throw new MojoExecutionException(U.frmt(msg, args));
 		}
 	}
 
