@@ -30,7 +30,7 @@ import org.rapidoid.setup.On;
 public class ReloadDemo {
 
 	public static void main(String[] args) {
-		App.bootstrap();
+		App.bootstrap(args);
 
 		On.get("/xy").json((Req req, String x, Integer y) -> x + "::" + y);
 	}

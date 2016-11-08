@@ -41,7 +41,7 @@ public class HttpBeanValidationTest extends IsolatedIntegrationTest {
 	@Test
 	public void testValidation() {
 		App.path("org.rapidoid.validation");
-		App.bootstrap().jpa();
+		App.bootstrap(new String[0]).jpa();
 
 		onlyGet("/echo?num=123");
 		onlyGet("/echo");

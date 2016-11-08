@@ -81,10 +81,8 @@ public class App extends RapidoidThing {
 	});
 
 	public static void args(String[] args, String... extraArgs) {
-		args(Arr.concat(extraArgs, args));
-	}
+		args = Arr.concat(extraArgs, args);
 
-	public static void args(String... args) {
 		ConfigHelp.processHelp(args);
 
 		Env.setArgs(args);
@@ -93,10 +91,8 @@ public class App extends RapidoidThing {
 	}
 
 	public static AppBootstrap bootstrap(String[] args, String... extraArgs) {
-		return bootstrap(Arr.concat(extraArgs, args));
-	}
+		args = Arr.concat(extraArgs, args);
 
-	public static AppBootstrap bootstrap(String... args) {
 		args(args);
 
 		if (!managed) scan();
@@ -105,10 +101,8 @@ public class App extends RapidoidThing {
 	}
 
 	public static AppBootstrap run(String[] args, String... extraArgs) {
-		return run(Arr.concat(extraArgs, args));
-	}
+		args = Arr.concat(extraArgs, args);
 
-	public static AppBootstrap run(String... args) {
 		args(args);
 		// no implicit classpath scanning here
 

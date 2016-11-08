@@ -49,7 +49,7 @@ public class HttpRecursiveMainEntryTest extends IsolatedIntegrationTest {
 @Run
 class EntryPoint1 {
 	public static void main(String[] args) {
-		App.bootstrap();
+		App.bootstrap(args);
 		On.get("/b").plain("B");
 	}
 }

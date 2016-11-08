@@ -37,7 +37,7 @@ public class SqlRoutesTest extends IsolatedIntegrationTest {
 		String all = "SELECT * FROM nums";
 		String add = "insert into nums values (3, 'three')";
 
-		App.run("/nums <= " + all, "POST /add <= " + add);
+		App.run(new String[0], "/nums <= " + all, "POST /add <= " + add);
 
 		JDBC.execute("create table nums (id int, name varchar(10))");
 
