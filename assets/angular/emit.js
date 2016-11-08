@@ -24,6 +24,16 @@ Rapidoid.initializer(function($scope) {
 
     };
 
+    function onServerError(data) {
+        $('i:last-child', btn).remove();
+
+        var title = data.status ? "Server error: " + data.status + "!" : "Cannot connect to the server!";
+        var msg = data.statusText != "error" ? data.statusText : "";
+
+        swal(title, msg, "error");
+        console.log(data);
+    }
+
     function doEmit(event, eventId, eventArgs) {
 
         var btn = $(event.currentTarget);
@@ -96,7 +106,11 @@ Rapidoid.initializer(function($scope) {
                 if (go && data.indexOf('class="field-error"') < 0) {
                     Rapidoid.goAt(go);
                 } else {
-                    Rapidoid.setHtml(data);
+
+                    $.get(loc, {__event__: true}).done(function(data) {
+                        Rapidoid.setHtml(data);
+                    }).fail(onServerError);
+
                 }
 
                 return;
@@ -134,24 +148,18 @@ Rapidoid.initializer(function($scope) {
                 }
 
                 for ( var sel in data._sel_) {
-                    if (sel == 'body') {
-                        $scope.ajaxBodyContent = data._sel_[sel];
-                        $scope.$apply();
-                    } else {
+//                    if (sel == 'body') {
+//
+//                        $scope.ajaxBodyContent = data._sel_[sel];
+//                        $scope.$apply();
+//
+//                    } else {
                         swal('Selector not supported: ' + sel);
-                    }
+//                    }
                 }
             }
 
-        }).fail(function(data) {
-            $('i:last-child', btn).remove();
-
-            var title = data.status ? "Server error: " + data.status + "!" : "Cannot connect to the server!";
-            var msg = data.statusText != "error" ? data.statusText : "";
-
-            swal(title, msg, "error");
-            console.log(data);
-        });
+        }).fail(onServerError);
     }
 
 });
