@@ -100,7 +100,8 @@ public class IO extends RapidoidThing {
 	}
 
 	public static String loadResourceAsString(String filename) {
-		return new String(loadBytes(filename));
+		byte[] bytes = loadBytes(filename);
+		return bytes != null ? new String(bytes) : null;
 	}
 
 	public static byte[] loadBytes(String filename) {
