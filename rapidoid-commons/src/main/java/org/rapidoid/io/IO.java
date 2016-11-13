@@ -131,19 +131,7 @@ public class IO extends RapidoidThing {
 		return loadBytes(fullClassName.replace('.', '/') + ".class");
 	}
 
-	public static String load(String filename) {
-		byte[] bytes = loadBytes(filename);
-		return bytes != null ? new String(bytes) : null;
-	}
-
-	public static List<String> loadLines(String filename) {
-		byte[] bytes = loadBytes(filename);
-
-		if (bytes == null) {
-			return null;
-		}
-
-		BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes)));
+	public static List<String> readLines(BufferedReader reader) {
 		List<String> lines = U.list();
 
 		try {
@@ -156,6 +144,21 @@ public class IO extends RapidoidThing {
 		}
 
 		return lines;
+	}
+
+	public static String load(String filename) {
+		byte[] bytes = loadBytes(filename);
+		return bytes != null ? new String(bytes) : null;
+	}
+
+	public static List<String> loadLines(String filename) {
+		byte[] bytes = loadBytes(filename);
+
+		if (bytes == null) {
+			return null;
+		}
+
+		return readLines(new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes))));
 	}
 
 	public static List<String> loadLines(String filename, final boolean filterEmpty, final String commentPrefix) {
