@@ -7,6 +7,7 @@ import org.rapidoid.commons.Str;
 import org.rapidoid.u.U;
 
 import java.io.*;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
@@ -83,15 +84,39 @@ public class IO extends RapidoidThing {
 	}
 
 	public static byte[] loadBytes(InputStream input) {
-		ByteArrayOutputStream output = new ByteArrayOutputStream();
 
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		byte[] buffer = new byte[16 * 1024];
 
 		try {
 			int readN;
+
 			while ((readN = input.read(buffer)) != -1) {
 				output.write(buffer, 0, readN);
 			}
+
+		} catch (IOException e) {
+			throw U.rte(e);
+		}
+
+		return output.toByteArray();
+	}
+
+	public static byte[] readWithTimeout(InputStream input) {
+
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		byte[] buffer = new byte[16 * 1024];
+
+		try {
+			int readN;
+
+			while ((readN = input.read(buffer)) != -1) {
+				output.write(buffer, 0, readN);
+			}
+
+		} catch (SocketTimeoutException e) {
+			// do nothing
+
 		} catch (IOException e) {
 			throw U.rte(e);
 		}
@@ -100,7 +125,8 @@ public class IO extends RapidoidThing {
 	}
 
 	public static String loadResourceAsString(String filename) {
-		return new String(loadBytes(filename));
+		byte[] bytes = loadBytes(filename);
+		return bytes != null ? new String(bytes) : null;
 	}
 
 	public static byte[] loadBytes(String filename) {
@@ -130,19 +156,7 @@ public class IO extends RapidoidThing {
 		return loadBytes(fullClassName.replace('.', '/') + ".class");
 	}
 
-	public static String load(String filename) {
-		byte[] bytes = loadBytes(filename);
-		return bytes != null ? new String(bytes) : null;
-	}
-
-	public static List<String> loadLines(String filename) {
-		byte[] bytes = loadBytes(filename);
-
-		if (bytes == null) {
-			return null;
-		}
-
-		BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes)));
+	public static List<String> readLines(BufferedReader reader) {
 		List<String> lines = U.list();
 
 		try {
@@ -155,6 +169,21 @@ public class IO extends RapidoidThing {
 		}
 
 		return lines;
+	}
+
+	public static String load(String filename) {
+		byte[] bytes = loadBytes(filename);
+		return bytes != null ? new String(bytes) : null;
+	}
+
+	public static List<String> loadLines(String filename) {
+		byte[] bytes = loadBytes(filename);
+
+		if (bytes == null) {
+			return null;
+		}
+
+		return readLines(new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes))));
 	}
 
 	public static List<String> loadLines(String filename, final boolean filterEmpty, final String commentPrefix) {

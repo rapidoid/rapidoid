@@ -101,19 +101,7 @@ public class HttpParser extends RapidoidThing implements Constants {
 		buf.scanUntil(SPACE, helper.uri);
 		buf.scanLn(protocol);
 
-		boolean keepAliveByDefault = protocol.isEmpty() || bytes.get(protocol.last()) != '0'; // e.g. HTTP/1.1
-		IntWrap result = helper.integers[0];
-
-		if (keepAliveByDefault) {
-			buf.scanLnLn(headers.reset(), result, (byte) 's', (byte) 'e'); // clo[se]
-			int possibleCloseHeaderPos = result.value;
-			helper.isKeepAlive.value = possibleCloseHeaderPos < 0 || isConnectionHeader(bytes, headers, helper, possibleCloseHeaderPos);
-
-		} else {
-			buf.scanLnLn(headers.reset(), result, (byte) 'v', (byte) 'e'); // keep-ali[ve]
-			int possibleKeepAliveHeaderPos = result.value;
-			helper.isKeepAlive.value = possibleKeepAliveHeaderPos >= 0 && isConnectionHeader(bytes, headers, helper, possibleKeepAliveHeaderPos);
-		}
+		helper.isKeepAlive.value = detectKeepAlive(buf, helper, bytes, protocol, headers);
 
 		BytesUtil.split(bytes, helper.uri, ASTERISK, helper.path, helper.query, false);
 
@@ -123,15 +111,34 @@ public class HttpParser extends RapidoidThing implements Constants {
 		}
 	}
 
-	private boolean isConnectionHeader(Bytes bytes, BufRanges headers, RapidoidHelper helper, int possibleConnectionHeaderPos) {
-		BufRange maybeConnHdr = headers.get(possibleConnectionHeaderPos);
+	private boolean detectKeepAlive(Buf buf, RapidoidHelper helper, Bytes bytes, BufRange protocol, BufRanges headers) {
+		IntWrap result = helper.integers[0];
+		boolean keepAliveByDefault = protocol.isEmpty() || bytes.get(protocol.last()) != '0'; // e.g. HTTP/1.1
 
-		if (BytesUtil.startsWith(bytes, maybeConnHdr, CONNECTION, true)) {
-			return true;
+		// try to detect the opposite of the default
+		if (keepAliveByDefault) {
+			buf.scanLnLn(headers.reset(), result, (byte) 's', (byte) 'e'); // clo[se]
+
+		} else {
+			buf.scanLnLn(headers.reset(), result, (byte) 'v', (byte) 'e'); // keep-ali[ve]
 		}
 
+		int possibleConnHeaderPos = result.value;
+
+		if (possibleConnHeaderPos < 0) return keepAliveByDefault; // no evidence of the opposite
+
+		BufRange possibleConnHdr = headers.get(possibleConnHeaderPos);
+		if (BytesUtil.startsWith(bytes, possibleConnHdr, CONNECTION, true)) {
+			return !keepAliveByDefault; // detected the opposite of the default
+		}
+
+		return isKeepAlive(bytes, headers, helper, keepAliveByDefault);
+	}
+
+	private boolean isKeepAlive(Bytes bytes, BufRanges headers, RapidoidHelper helper, boolean keepAliveByDefault) {
 		BufRange connHdr = headers.getByPrefix(bytes, CONNECTION, false);
-		return connHdr == null || getKeepAliveValue(bytes, connHdr, helper);
+
+		return connHdr != null ? getKeepAliveValue(bytes, connHdr, helper) : keepAliveByDefault;
 	}
 
 	private boolean getKeepAliveValue(Bytes bytes, BufRange connHdr, RapidoidHelper helper) {

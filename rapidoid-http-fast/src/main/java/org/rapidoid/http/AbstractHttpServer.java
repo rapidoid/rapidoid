@@ -77,7 +77,7 @@ public abstract class AbstractHttpServer extends RapidoidThing implements Protoc
 	protected byte[] fullResp(int code, byte[] content) {
 		String status = new String(HttpResponseCodes.get(code));
 
-		String resp = status + "\r\n" +
+		String resp = status +
 			"Content-Length: " + content.length + "\r\n" +
 			"\r\n" + new String(content);
 

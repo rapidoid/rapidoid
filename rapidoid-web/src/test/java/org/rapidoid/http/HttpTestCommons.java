@@ -26,6 +26,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.config.Conf;
+import org.rapidoid.crypto.Crypto;
 import org.rapidoid.io.IO;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.jpa.JPAUtil;
@@ -244,6 +245,27 @@ public abstract class HttpTestCommons extends TestCommons {
 
 		client.raw(false);
 		return resp;
+	}
+
+	protected void raw(byte[] req) {
+		String resp = new String(Msc.writeAndRead("localhost", 8888, req, 1000));
+		resp = resp.replaceFirst("Date: .*? GMT", "Date: XXXXX GMT");
+
+		resp = new String(req) + "--------------------------------------------------------\n" + resp + "<END>";
+
+		String hash = Crypto.md5(req);
+		String reqName = reqName(DEFAULT_PORT, "", hash);
+
+		verifyCase(DEFAULT_PORT + "-" + hash, resp, reqName);
+	}
+
+	protected void raw(String req) {
+		raw(req.getBytes());
+	}
+
+	protected void raw(List<String> requestLines) {
+		raw((U.join("\r\n", requestLines) + "\r\n").getBytes());
+		raw((U.join("\n", requestLines) + "\n").getBytes());
 	}
 
 	protected String fetch(HttpReq client, String verb, String uri, Map<String, ?> data) {
