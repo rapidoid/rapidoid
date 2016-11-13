@@ -13,6 +13,7 @@ org.rapidoid.annotation.Contributors
 org.rapidoid.annotation.Controller
 org.rapidoid.annotation.Cookie
 org.rapidoid.annotation.DELETE
+org.rapidoid.annotation.Desc
 org.rapidoid.annotation.DontReload
 org.rapidoid.annotation.GET
 org.rapidoid.annotation.HEAD
