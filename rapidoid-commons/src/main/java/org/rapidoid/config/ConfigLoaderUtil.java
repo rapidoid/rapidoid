@@ -37,8 +37,8 @@ public class ConfigLoaderUtil extends RapidoidThing {
 		String nameBase = config.getFilenameBase();
 
 		if (U.notEmpty(nameBase)) {
-			String configFilenamePattern = nameBase + ConfigUtil.YML_OR_YAML;
-			String configProfilePattern = nameBase + "-%s" + ConfigUtil.YML_OR_YAML;
+			String configFilenamePattern = nameBase + ConfigUtil.YML_OR_YAML_OR_JSON;
+			String configProfilePattern = nameBase + "-%s" + ConfigUtil.YML_OR_YAML_OR_JSON;
 
 			ConfigUtil.load(Msc.path(config.getPath(), configFilenamePattern), config, loaded);
 
@@ -97,7 +97,7 @@ public class ConfigLoaderUtil extends RapidoidThing {
 	private static String filename(Config config, List<String> keys) {
 		U.must(keys.size() < 2);
 		String configName = keys.isEmpty() ? config.getFilenameBase() : keys.get(0);
-		return Msc.path(config.getPath(), configName + ConfigUtil.YML_OR_YAML);
+		return Msc.path(config.getPath(), configName + ConfigUtil.YML_OR_YAML_OR_JSON);
 	}
 
 }

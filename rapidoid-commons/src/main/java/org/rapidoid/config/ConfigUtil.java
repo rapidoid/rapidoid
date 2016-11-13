@@ -4,7 +4,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Str;
-import org.rapidoid.data.YAML;
+import org.rapidoid.data.Parse;
 import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
@@ -36,20 +36,20 @@ import java.util.Map;
 @Since("5.1.0")
 public class ConfigUtil extends RapidoidThing {
 
-	public static final String YML_OR_YAML = ".yml_or_yaml";
+	public static final String YML_OR_YAML_OR_JSON = ".yml_or_yaml_or_json";
 
-	private static final ConfigParser YAML_PARSER = new ConfigParser() {
+	private static final ConfigParser YAML_OR_JSON_PARSER = new ConfigParser() {
 		@SuppressWarnings("unchecked")
 		@Override
 		public Map<String, Object> parse(byte[] bytes) {
-			return YAML.parse(bytes, Map.class);
+			return Parse.data(bytes, Map.class);
 		}
 	};
 
 	private static final Map<List<String>, Res> tracking = U.map();
 
 	public static synchronized void autoRefresh(final Config config, final String yamlFilename) {
-		autoRefresh(config, yamlFilename, YAML_PARSER);
+		autoRefresh(config, yamlFilename, YAML_OR_JSON_PARSER);
 	}
 
 	public static synchronized void autoRefresh(final Config config, final String filename, final ConfigParser parser) {
@@ -101,7 +101,7 @@ public class ConfigUtil extends RapidoidThing {
 
 		if (bytes != null) {
 			if (bytes.length > 0) {
-				Map<String, Object> configData = U.safe(YAML_PARSER.parse(bytes));
+				Map<String, Object> configData = U.safe(YAML_OR_JSON_PARSER.parse(bytes));
 				Log.debug("Loading configuration file", "filename", filename);
 				config.update(configData);
 			}
@@ -123,18 +123,18 @@ public class ConfigUtil extends RapidoidThing {
 	}
 
 	private static Res findConfigResource(String filename) {
-		if (filename.endsWith(YML_OR_YAML)) {
+		if (filename.endsWith(YML_OR_YAML_OR_JSON)) {
 
 			// flexible extension: YML or YAML
-			String basename = Str.trimr(filename, YML_OR_YAML);
+			String basename = Str.trimr(filename, YML_OR_YAML_OR_JSON);
 
 			Res res = Res.from(basename + ".yaml");
+			if (res.exists()) return res;
 
-			if (res.exists()) {
-				return res;
-			} else {
-				return Res.from(basename + ".yml");
-			}
+			res = Res.from(basename + ".yml");
+			if (res.exists()) return res;
+
+			return Res.from(basename + ".json");
 
 		} else {
 			return Res.from(filename);

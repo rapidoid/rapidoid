@@ -53,4 +53,20 @@ public class ConfigLoadingTest extends AbstractCommonsTest {
 		eq(config.toMap(), U.map("z", "bar", "k", "hey"));
 	}
 
+	@Test
+	public void testJsonFileConfig() {
+		Config config = new ConfigImpl("cfg");
+
+		eq(config.toMap(), U.map());
+
+		config.setPath("my-cfg");
+
+		eq(config.toMap(), U.map("z", "foo2", "k", "hey2"));
+
+		Env.setProfiles("prof1", "prof2");
+		config.invalidate();
+
+		eq(config.toMap(), U.map("z", "bar2", "k", "hey2"));
+	}
+
 }
