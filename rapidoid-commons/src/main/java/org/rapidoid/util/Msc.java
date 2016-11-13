@@ -152,20 +152,24 @@ public class Msc extends RapidoidThing implements Constants {
 		return output.toString();
 	}
 
-	public static <T> T connect(String address, int port, F2<T, BufferedReader, DataOutputStream> protocol) {
+	public static <T> T connect(String address, int port, F3<T, InputStream, BufferedReader, DataOutputStream> protocol) {
 		T resp;
 		Socket socket = null;
 
 		try {
 			socket = new Socket(address, port);
-			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-			resp = protocol.execute(in, out);
+			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+			InputStream inputStream = socket.getInputStream();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+			resp = protocol.execute(inputStream, reader, out);
 
 			socket.close();
+
 		} catch (Exception e) {
 			throw U.rte(e);
+
 		} finally {
 			if (socket != null) {
 				try {
@@ -177,6 +181,18 @@ public class Msc extends RapidoidThing implements Constants {
 		}
 
 		return resp;
+	}
+
+	public static byte[] writeAndRead(String address, int port, final byte[] req, long timeout) {
+		return Msc.connect(address, port, new F3<byte[], InputStream, BufferedReader, DataOutputStream>() {
+
+			@Override
+			public byte[] execute(InputStream in, BufferedReader reader, DataOutputStream out) throws Exception {
+				out.write(req);
+				return IO.loadBytes(in);
+			}
+
+		});
 	}
 
 	public static short bytesToShort(String s) {

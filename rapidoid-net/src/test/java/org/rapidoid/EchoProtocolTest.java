@@ -23,7 +23,7 @@ package org.rapidoid;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.lambda.F2;
+import org.rapidoid.lambda.F3;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.util.Msc;
@@ -31,6 +31,7 @@ import org.rapidoid.util.Msc;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
 
 @Authors("Nikolche Mihajlovski")
@@ -50,9 +51,9 @@ public class EchoProtocolTest extends NetTestCommons {
 		}, new Runnable() {
 			@Override
 			public void run() {
-				Msc.connect("localhost", 8888, new F2<Void, BufferedReader, DataOutputStream>() {
+				Msc.connect("localhost", 8888, new F3<Void, InputStream, BufferedReader, DataOutputStream>() {
 					@Override
-					public Void execute(BufferedReader in, DataOutputStream out) throws IOException {
+					public Void execute(InputStream inputStream, BufferedReader in, DataOutputStream out) throws IOException {
 						out.writeBytes("hello\n");
 						eq(in.readLine(), "HELLO");
 
@@ -90,9 +91,9 @@ public class EchoProtocolTest extends NetTestCommons {
 		}, new Runnable() {
 			@Override
 			public void run() {
-				Msc.connect("localhost", 8888, new F2<Void, BufferedReader, DataOutputStream>() {
+				Msc.connect("localhost", 8888, new F3<Void, InputStream, BufferedReader, DataOutputStream>() {
 					@Override
-					public Void execute(BufferedReader in, DataOutputStream out) throws IOException {
+					public Void execute(InputStream inputStream, BufferedReader in, DataOutputStream out) throws IOException {
 						out.writeBytes("a\n");
 						eq(in.readLine(), "A");
 
