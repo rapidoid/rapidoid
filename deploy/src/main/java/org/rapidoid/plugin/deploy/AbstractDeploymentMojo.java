@@ -29,7 +29,8 @@ import org.apache.maven.shared.invoker.*;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Str;
-import org.rapidoid.config.RapidoidInitializer;
+import org.rapidoid.config.Config;
+import org.rapidoid.config.ConfigImpl;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HttpReq;
 import org.rapidoid.http.HttpResp;
@@ -41,6 +42,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 @Authors("Nikolche Mihajlovski")
@@ -55,14 +57,14 @@ public abstract class AbstractDeploymentMojo extends AbstractMojo {
 	@Parameter(defaultValue = "${session}", readonly = true, required = true)
 	protected MavenSession session;
 
-	@Parameter(defaultValue = "${token}", required = true)
+	@Parameter(defaultValue = "${token}", required = false)
 	protected String token;
 
-	@Parameter(defaultValue = "${servers}", required = true)
+	@Parameter(defaultValue = "${servers}", required = false)
 	protected String servers;
 
 	protected String build(boolean updateSnapshots) throws MojoExecutionException {
-		RapidoidInitializer.initialize();
+		initConfig();
 
 		InvocationRequest request = new DefaultInvocationRequest();
 
@@ -141,6 +143,16 @@ public abstract class AbstractDeploymentMojo extends AbstractMojo {
 		for (String server : targetServers) {
 			doDeploy(Str.trimr(server, "/") + "/_deploy");
 		}
+	}
+
+	private void initConfig() {
+		Config config = new ConfigImpl("deploy");
+		config.setPath(project.getBasedir().toString());
+
+		Map<String, Object> cfg = config.toMap();
+
+		if (U.isEmpty(token)) token = U.str(cfg.get("token"));
+		if (U.isEmpty(servers)) servers = U.str(cfg.get("servers"));
 	}
 
 	private boolean doStage(Upload jar, String url) {
