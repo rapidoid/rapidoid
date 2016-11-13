@@ -251,6 +251,8 @@ public abstract class HttpTestCommons extends TestCommons {
 		String resp = new String(Msc.writeAndRead("localhost", 8888, req, 1000));
 		resp = resp.replaceFirst("Date: .*? GMT", "Date: XXXXX GMT");
 
+		resp = new String(req) + "--------------------------------------------------------\n" + resp + "<END>";
+
 		String hash = Crypto.md5(req);
 		String reqName = reqName(DEFAULT_PORT, "", hash);
 
@@ -259,6 +261,11 @@ public abstract class HttpTestCommons extends TestCommons {
 
 	protected void raw(String req) {
 		raw(req.getBytes());
+	}
+
+	protected void raw(List<String> requestLines) {
+		raw((U.join("\r\n", requestLines) + "\r\n").getBytes());
+		raw((U.join("\n", requestLines) + "\n").getBytes());
 	}
 
 	protected String fetch(HttpReq client, String verb, String uri, Map<String, ?> data) {
