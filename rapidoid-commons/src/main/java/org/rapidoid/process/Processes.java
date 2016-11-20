@@ -1,11 +1,5 @@
 package org.rapidoid.process;
 
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import java.io.File;
-
 /*
  * #%L
  * rapidoid-commons
@@ -26,23 +20,18 @@ import java.io.File;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.group.GroupOf;
+
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class Proc extends RapidoidThing {
+public class Processes extends GroupOf<ProcessHandle> {
 
-	public static ProcessHandle run(String... command) {
-		return new ProcessDSL().run(command);
+	public static final Processes DEFAULT = new Processes("default");
+
+	public Processes(String name) {
+		super(ProcessHandle.class, name);
 	}
 
-	public static ProcessDSL in(File dir) {
-		return new ProcessDSL().in(dir);
-	}
-
-	public static ProcessDSL in(String dir) {
-		return in(new File(dir));
-	}
-
-	public static ProcessDSL group(Processes group) {
-		return new ProcessDSL().group(group);
-	}
 }

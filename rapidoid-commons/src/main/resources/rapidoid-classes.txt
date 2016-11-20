@@ -211,6 +211,8 @@ org.rapidoid.goodies.StatusHandler
 org.rapidoid.goodies.TerminateHandler
 org.rapidoid.goodies.WelcomeHandler
 org.rapidoid.goodies.X
+org.rapidoid.group.GroupOf
+org.rapidoid.group.GroupStats
 org.rapidoid.gui.base.AbstractCommand
 org.rapidoid.gui.base.AbstractInput
 org.rapidoid.gui.base.AbstractOption
@@ -562,6 +564,7 @@ org.rapidoid.pool.SynchronizedPool
 org.rapidoid.pool.ThreadSafeArrayPool
 org.rapidoid.process.Proc
 org.rapidoid.process.ProcessDSL
+org.rapidoid.process.Processes
 org.rapidoid.process.ProcessHandle
 org.rapidoid.RapidoidThing
 org.rapidoid.reload.ClassReloader

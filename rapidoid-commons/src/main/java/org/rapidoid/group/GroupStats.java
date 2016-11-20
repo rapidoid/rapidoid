@@ -1,10 +1,4 @@
-package org.rapidoid.process;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import java.io.File;
+package org.rapidoid.group;
 
 /*
  * #%L
@@ -26,23 +20,23 @@ import java.io.File;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import java.util.concurrent.atomic.AtomicLong;
+
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class Proc extends RapidoidThing {
+public class GroupStats extends RapidoidThing {
 
-	public static ProcessHandle run(String... command) {
-		return new ProcessDSL().run(command);
+	public final AtomicLong added = new AtomicLong();
+
+	@Override
+	public String toString() {
+		return "{" +
+			"added=" + added +
+			'}';
 	}
 
-	public static ProcessDSL in(File dir) {
-		return new ProcessDSL().in(dir);
-	}
-
-	public static ProcessDSL in(String dir) {
-		return in(new File(dir));
-	}
-
-	public static ProcessDSL group(Processes group) {
-		return new ProcessDSL().group(group);
-	}
 }

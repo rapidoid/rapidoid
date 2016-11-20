@@ -253,7 +253,12 @@ public class ProcessHandle extends RapidoidThing {
 			throw U.rte("Cannot start process: " + U.join(" ", params.command()));
 		}
 
-		return new ProcessHandle(process);
+		ProcessHandle handle = new ProcessHandle(process);
+
+		Processes group = U.or(params.group(), Processes.DEFAULT);
+		group.add(handle);
+
+		return handle;
 	}
 
 	public ProcessHandle waitFor() {

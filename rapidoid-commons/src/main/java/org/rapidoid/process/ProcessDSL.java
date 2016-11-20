@@ -34,6 +34,8 @@ public class ProcessDSL extends RapidoidThing {
 
 	private volatile String[] command;
 
+	private volatile Processes group;
+
 	public File in() {
 		return in;
 	}
@@ -45,6 +47,15 @@ public class ProcessDSL extends RapidoidThing {
 
 	public String[] command() {
 		return command;
+	}
+
+	public ProcessDSL group(Processes group) {
+		this.group = group;
+		return this;
+	}
+
+	public Processes group() {
+		return group;
 	}
 
 	public ProcessHandle run(String... command) {
