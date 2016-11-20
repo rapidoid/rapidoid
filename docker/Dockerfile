@@ -1,7 +1,7 @@
 FROM java:8-jre
 MAINTAINER Nikolche Mihajlovski
 
-ENV RAPIDOID_VERSION 5.2.2
+ENV RAPIDOID_VERSION 5.x.y-SNAPSHOT
 ENV RAPIDOID_JAR /opt/rapidoid.jar
 ENV RAPIDOID_TMP /tmp/rapidoid
 
