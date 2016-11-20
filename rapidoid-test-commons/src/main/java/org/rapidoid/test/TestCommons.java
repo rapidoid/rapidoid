@@ -42,7 +42,7 @@ import java.util.concurrent.CountDownLatch;
  */
 public abstract class TestCommons {
 
-	protected static final boolean ADJUST_RESULTS = false;
+	protected static final boolean ADJUST_TESTS = "true".equalsIgnoreCase(System.getProperty("adjustTests"));
 
 	protected static final Random RND = new Random();
 
@@ -64,7 +64,8 @@ public abstract class TestCommons {
 	@Before
 	public final void initTest() {
 		System.out.println("--------------------------------------------------------------------------------");
-		System.out.println(" @" + ManagementFactory.getRuntimeMXBean().getName() + " TEST " + getClass().getCanonicalName());
+		String info = ADJUST_TESTS ? " [ADJUST]" : "";
+		System.out.println(" @" + ManagementFactory.getRuntimeMXBean().getName() + " TEST " + getClass().getCanonicalName() + info);
 		System.out.println("--------------------------------------------------------------------------------");
 
 		hasError = false;
@@ -72,7 +73,7 @@ public abstract class TestCommons {
 		String s = File.separator;
 		String resultsDir = "src" + s + "test" + s + "resources" + s + TEST_RESULTS_FOLDER + s + getTestName();
 
-		if (!initialized && ADJUST_RESULTS) {
+		if (!initialized && ADJUST_TESTS) {
 			File testDir = new File(resultsDir);
 
 			if (testDir.isDirectory()) {
@@ -595,7 +596,7 @@ public abstract class TestCommons {
 		String resname = TEST_RESULTS_FOLDER + s + getTestName() + s + getTestMethodName() + s + testCaseName;
 		String filename = "src" + s + "test" + s + "resources" + s + resname;
 
-		if (ADJUST_RESULTS) {
+		if (ADJUST_TESTS) {
 			synchronized (this) {
 				File testDir = new File(filename).getParentFile();
 
