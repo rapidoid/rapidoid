@@ -115,6 +115,10 @@ public class Goodies extends RapidoidThing {
 		return new ClasspathHandler();
 	}
 
+	public static ProcessesHandler processes() {
+		return new ProcessesHandler();
+	}
+
 	public static DeploymentHandler deployment() {
 		return new DeploymentHandler();
 	}

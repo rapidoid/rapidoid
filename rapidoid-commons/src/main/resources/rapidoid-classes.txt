@@ -206,6 +206,7 @@ org.rapidoid.goodies.LoginHandler
 org.rapidoid.goodies.LogoutHandler
 org.rapidoid.goodies.MultiDetailsHandler
 org.rapidoid.goodies.OverviewHandler
+org.rapidoid.goodies.ProcessesHandler
 org.rapidoid.goodies.RapidoidGoodies
 org.rapidoid.goodies.RoutesHandler
 org.rapidoid.goodies.StatusHandler
