@@ -4,6 +4,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.activity.RapidoidThread;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Arr;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.log.Log;
@@ -48,13 +49,15 @@ public class ProcessHandle extends RapidoidThing {
 
 	private final BlockingQueue<String> error = new ArrayBlockingQueue<String>(100);
 
+	private final ProcessParams params;
 	private final Process process;
 
 	private volatile boolean inputDone;
 	private volatile boolean outputDone;
 	private volatile boolean errorDone;
 
-	public ProcessHandle(final Process process) {
+	public ProcessHandle(ProcessParams params, final Process process) {
+		this.params = params;
 		this.process = process;
 
 		Thread inputProcessor = new RapidoidThread() {
@@ -163,6 +166,10 @@ public class ProcessHandle extends RapidoidThing {
 		return process;
 	}
 
+	public ProcessParams params() {
+		return params;
+	}
+
 	public boolean isAlive() {
 		return process.isAlive();
 	}
@@ -238,7 +245,7 @@ public class ProcessHandle extends RapidoidThing {
 		return sb.toString();
 	}
 
-	public static ProcessHandle startProcess(ProcessDSL params) {
+	public static ProcessHandle startProcess(ProcessParams params) {
 
 		ProcessBuilder builder = new ProcessBuilder().command(params.command());
 
@@ -253,10 +260,8 @@ public class ProcessHandle extends RapidoidThing {
 			throw U.rte("Cannot start process: " + U.join(" ", params.command()));
 		}
 
-		ProcessHandle handle = new ProcessHandle(process);
-
-		Processes group = U.or(params.group(), Processes.DEFAULT);
-		group.add(handle);
+		ProcessHandle handle = new ProcessHandle(params, process);
+		params.group().add(handle);
 
 		return handle;
 	}
@@ -289,6 +294,14 @@ public class ProcessHandle extends RapidoidThing {
 	public ProcessHandle destroyForcibly() {
 		process.destroyForcibly();
 		return this;
+	}
+
+	public String cmd() {
+		return params.command()[0];
+	}
+
+	public String[] args() {
+		return Arr.sub(params.command(), 1, params().command().length);
 	}
 
 }

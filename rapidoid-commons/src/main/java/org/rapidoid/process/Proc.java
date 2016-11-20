@@ -31,18 +31,18 @@ import java.io.File;
 public class Proc extends RapidoidThing {
 
 	public static ProcessHandle run(String... command) {
-		return new ProcessDSL().run(command);
+		return new ProcessParams().run(command);
 	}
 
-	public static ProcessDSL in(File dir) {
-		return new ProcessDSL().in(dir);
+	public static ProcessParams in(File dir) {
+		return new ProcessParams().in(dir);
 	}
 
-	public static ProcessDSL in(String dir) {
+	public static ProcessParams in(String dir) {
 		return in(new File(dir));
 	}
 
-	public static ProcessDSL group(Processes group) {
-		return new ProcessDSL().group(group);
+	public static ProcessParams group(Processes group) {
+		return new ProcessParams().group(group);
 	}
 }

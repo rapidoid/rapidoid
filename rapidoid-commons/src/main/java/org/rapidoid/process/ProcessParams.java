@@ -28,19 +28,19 @@ import java.io.File;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class ProcessDSL extends RapidoidThing {
+public class ProcessParams extends RapidoidThing {
 
 	private volatile File in;
 
 	private volatile String[] command;
 
-	private volatile Processes group;
+	private volatile Processes group = Processes.DEFAULT;
 
 	public File in() {
 		return in;
 	}
 
-	public ProcessDSL in(File in) {
+	public ProcessParams in(File in) {
 		this.in = in;
 		return this;
 	}
@@ -49,7 +49,7 @@ public class ProcessDSL extends RapidoidThing {
 		return command;
 	}
 
-	public ProcessDSL group(Processes group) {
+	public ProcessParams group(Processes group) {
 		this.group = group;
 		return this;
 	}

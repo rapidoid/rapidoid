@@ -564,9 +564,9 @@ org.rapidoid.pool.SynchronizedArrayPool
 org.rapidoid.pool.SynchronizedPool
 org.rapidoid.pool.ThreadSafeArrayPool
 org.rapidoid.process.Proc
-org.rapidoid.process.ProcessDSL
 org.rapidoid.process.Processes
 org.rapidoid.process.ProcessHandle
+org.rapidoid.process.ProcessParams
 org.rapidoid.RapidoidThing
 org.rapidoid.reload.ClassReloader
 org.rapidoid.reload.OptionalJPAUtil
