@@ -206,6 +206,10 @@ public class Beany extends RapidoidThing {
 	public static Prop property(Class<?> clazz, String property, boolean mandatory) {
 		Prop prop = BEAN_PROPERTIES.get(clazz).get(property);
 
+		if (prop == null && JSProp.is(property)) {
+			prop = new JSProp(property);
+		}
+
 		if (mandatory && prop == null) {
 			throw U.rte("Cannot find the property '%s' in the class '%s'", property, clazz);
 		}

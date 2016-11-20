@@ -64,7 +64,14 @@ public class BeanProperties extends RapidoidThing implements Iterable<Prop> {
 
 				for (String propName : include) {
 					Prop prop = map.get(propName);
-					U.must(prop != null, "Cannot find property '%s'!", propName);
+
+					if (prop == null) {
+						if (JSProp.is(propName)) {
+							prop = new JSProp(propName);
+						} else {
+							throw U.rte("Cannot find property '%s'!", propName);
+						}
+					}
 
 					if (!veto(prop) && Lmbd.eval(selector, prop) && Lmbd.eval(selector, prop)) {
 						selected.add(prop);

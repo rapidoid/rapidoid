@@ -46,6 +46,7 @@ org.rapidoid.beany.AnnotatedPropertyFilter
 org.rapidoid.beany.BeanProp
 org.rapidoid.beany.BeanProperties
 org.rapidoid.beany.Beany
+org.rapidoid.beany.JSProp
 org.rapidoid.beany.MapProp
 org.rapidoid.beany.Metadata
 org.rapidoid.beany.Prop
