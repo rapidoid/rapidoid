@@ -15,6 +15,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.TimeUnit;
 
 /*
  * #%L
@@ -252,6 +254,36 @@ public class ProcessHandle extends RapidoidThing {
 		}
 
 		return new ProcessHandle(process);
+	}
+
+	public ProcessHandle waitFor() {
+		try {
+			process.waitFor();
+		} catch (InterruptedException e) {
+			throw new CancellationException();
+		}
+
+		return this;
+	}
+
+	public ProcessHandle waitFor(long timeout, TimeUnit unit) {
+		try {
+			process.waitFor(timeout, unit);
+		} catch (InterruptedException e) {
+			throw new CancellationException();
+		}
+
+		return this;
+	}
+
+	public ProcessHandle destroy() {
+		process.destroy();
+		return this;
+	}
+
+	public ProcessHandle destroyForcibly() {
+		process.destroyForcibly();
+		return this;
 	}
 
 }
