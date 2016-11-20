@@ -35,12 +35,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class Coll extends RapidoidThing {
+
 	@SuppressWarnings("unchecked")
+	@SafeVarargs
 	public static <T> Set<T> synchronizedSet(T... values) {
 		return Collections.synchronizedSet(U.set(values));
 	}
 
 	@SuppressWarnings("unchecked")
+	@SafeVarargs
 	public static <T> List<T> synchronizedList(T... values) {
 		return Collections.synchronizedList(U.list(values));
 	}
