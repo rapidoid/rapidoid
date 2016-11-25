@@ -217,7 +217,7 @@ public class App extends RapidoidThing {
 
 		restarted = true;
 
-		Set<AppRestartListener> listeners = U.set(OnChanges.getRestartListeners());
+		Set<AppRestartListener> listeners = U.set(On.changes().getRestartListeners());
 
 		for (AppRestartListener listener : listeners) {
 			try {

@@ -128,4 +128,8 @@ public class On extends RapidoidThing {
 	public static RouteOptions defaults() {
 		return SETUP.defaults();
 	}
+
+	public static OnChanges changes() {
+		return OnChanges.INSTANCE;
+	}
 }

@@ -34,15 +34,17 @@ import java.util.Set;
 @Since("5.1.0")
 public class OnChanges extends RapidoidThing {
 
-	static volatile boolean initialized;
-	static volatile boolean ignore;
+	static final OnChanges INSTANCE = new OnChanges();
 
-	private static final Set<AppRestartListener> restartListeners = Coll.synchronizedSet();
+	volatile boolean initialized;
+	volatile boolean ignore;
+
+	private final Set<AppRestartListener> restartListeners = Coll.synchronizedSet();
 
 	private OnChanges() {
 	}
 
-	public static synchronized void restart() {
+	public synchronized void restart() {
 		if (!initialized) {
 			initialized = true;
 			ignore = false;
@@ -59,29 +61,29 @@ public class OnChanges extends RapidoidThing {
 		}
 	}
 
-	public static synchronized void byDefaultRestart() {
+	public synchronized void byDefaultRestart() {
 		if (!ignore) {
 			restart();
 		}
 	}
 
-	public static synchronized void ignore() {
+	public synchronized void ignore() {
 		ignore = true;
 	}
 
-	public static boolean isIgnored() {
+	public boolean isIgnored() {
 		return ignore;
 	}
 
-	public static boolean isInitialized() {
+	public boolean isInitialized() {
 		return initialized;
 	}
 
-	public static Set<AppRestartListener> getRestartListeners() {
+	public Set<AppRestartListener> getRestartListeners() {
 		return restartListeners;
 	}
 
-	public static void addRestartListener(AppRestartListener restartListener) {
+	public void addRestartListener(AppRestartListener restartListener) {
 		if (!App.isRestarted()) {
 			restartListeners.add(restartListener);
 		}

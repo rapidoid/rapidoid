@@ -34,7 +34,6 @@ import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.setup.Admin;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
-import org.rapidoid.setup.OnChanges;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -64,7 +63,7 @@ public abstract class HttpTestCommons extends TestCommons {
 		IoC.reset();
 
 		App.resetGlobalState();
-		OnChanges.ignore();
+		On.changes().ignore();
 
 		On.setup().activate();
 		On.setup().reload();

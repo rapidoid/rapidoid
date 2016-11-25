@@ -176,9 +176,9 @@ public class Setup extends RapidoidInitializer implements Constants {
 
 			HttpProcessor proc = processor != null ? processor : http();
 
-			if (Env.dev() && !OnChanges.isIgnored() && Msc.hasRapidoidWatch()) {
+			if (Env.dev() && !On.changes().isIgnored() && Msc.hasRapidoidWatch()) {
 				proc = new AppRestartProcessor(this, proc);
-				OnChanges.byDefaultRestart();
+				On.changes().byDefaultRestart();
 			}
 
 			if (delegateAdminToApp()) {

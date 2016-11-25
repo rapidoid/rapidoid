@@ -82,7 +82,7 @@ public abstract class IntegrationTestCommons extends TestCommons {
 		IoC.reset();
 
 		App.resetGlobalState();
-		OnChanges.ignore();
+		On.changes().ignore();
 
 		On.setup().activate();
 		On.setup().reload();
