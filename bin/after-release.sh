@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
 
 OLD_VER=$1
 NEW_VER=$2
@@ -9,7 +11,7 @@ printf "Bumping version from $OLD_VER to $NEW_VER...\n\n"
 
 REPL="s/$OLD_VER/$NEW_VER/g"
 
-for TARGET in examples/getting-started/pom.xml ../docker-rapidoid/Dockerfile
+for TARGET in $(find examples -name pom.xml) ../docker-rapidoid/Dockerfile
  do
     echo "Processing $TARGET"
     sed -i "$REPL" "$TARGET"
