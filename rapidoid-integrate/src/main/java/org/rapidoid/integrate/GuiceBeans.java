@@ -23,6 +23,7 @@ package org.rapidoid.integrate;
 import com.google.inject.Binding;
 import com.google.inject.Injector;
 import com.google.inject.Key;
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Metadata;
@@ -36,7 +37,7 @@ import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class GuiceBeans implements Beans {
+public class GuiceBeans extends RapidoidThing implements Beans {
 
 	private final Injector injector;
 

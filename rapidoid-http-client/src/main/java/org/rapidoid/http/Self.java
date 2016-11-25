@@ -1,5 +1,6 @@
 package org.rapidoid.http;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
@@ -27,7 +28,7 @@ import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class Self {
+public class Self extends RapidoidThing {
 
 	public static String localUrl(String urlPath) {
 		U.must(urlPath.startsWith("/"), "Invalid URL path, it must start with '/'!");
