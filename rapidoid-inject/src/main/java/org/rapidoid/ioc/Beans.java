@@ -28,7 +28,7 @@ import java.util.Collection;
 import java.util.Set;
 
 /**
- * A collection of beans, usually inside a dependency injection context.
+ * A collection of beans, usually managed in external dependency injection context.
  */
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
