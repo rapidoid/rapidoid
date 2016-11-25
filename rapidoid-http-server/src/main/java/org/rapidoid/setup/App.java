@@ -350,4 +350,9 @@ public class App extends RapidoidThing {
 	public static void managed(boolean managed) {
 		App.managed = managed;
 	}
+
+	public static void shutdown() {
+		Setup.shutdownAll();
+	}
+
 }
