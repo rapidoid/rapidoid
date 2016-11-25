@@ -1,5 +1,8 @@
 package org.rapidoid.integrate;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Module;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -34,6 +37,14 @@ public class Integrate extends RapidoidThing {
 
 	public static JMustacheViewResolver jMustacheViewResolver() {
 		return new JMustacheViewResolver();
+	}
+
+	public static GuiceBeans guice(Module... guiceModules) {
+		return guice(Guice.createInjector(guiceModules));
+	}
+
+	public static GuiceBeans guice(Injector guiceInjector) {
+		return new GuiceBeans(guiceInjector);
 	}
 
 }

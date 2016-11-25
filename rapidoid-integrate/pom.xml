@@ -55,6 +55,12 @@
 			<version>${spring.version}</version>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+			<version>${guice.version}</version>
+			<optional>true</optional>
+		</dependency>
 
 		<dependency>
 			<groupId>org.rapidoid</groupId>

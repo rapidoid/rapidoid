@@ -77,6 +77,7 @@
 		<postgresql-version>9.4.1211</postgresql-version>
 
 		<spring.version>4.2.5.RELEASE</spring.version>
+		<guice.version>4.1.0</guice.version>
 		<oltu.version>1.0.1</oltu.version>
 		<mustache.java.version>0.9.1</mustache.java.version>
 		<jmustache.version>1.12</jmustache.version>
