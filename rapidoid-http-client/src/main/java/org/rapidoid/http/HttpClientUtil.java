@@ -261,7 +261,8 @@ public class HttpClientUtil extends RapidoidThing {
 	                                Callback<HttpResp> callback, boolean close) {
 
 		HttpRequestBase req = createRequest(config);
-		Log.debug("Starting HTTP request", "request", req.getRequestLine());
+
+		if (Log.isDebugEnabled()) Log.debug("Starting HTTP request", "request", req.getRequestLine());
 
 		Promise<HttpResp> promise = Promises.create();
 		FutureCallback<HttpResponse> cb = callback(client, callback, promise, close);

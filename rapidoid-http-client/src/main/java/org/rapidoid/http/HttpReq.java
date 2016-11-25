@@ -10,6 +10,7 @@ import org.rapidoid.data.JSON;
 import org.rapidoid.io.Upload;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Expectation;
+import org.rapidoid.util.Msc;
 
 import java.util.List;
 import java.util.Map;
@@ -271,6 +272,26 @@ public class HttpReq extends RapidoidThing {
 
 	public HttpReq trace(String url) {
 		return verb(HttpVerb.TRACE).url(url);
+	}
+
+	public void benchmark(int rounds, int threads, int requests) {
+
+		final HttpClient client = HTTP.client().reuseConnections(true).keepAlive(true)
+			.maxConnTotal(threads).maxConnPerRoute(threads).keepCookies(false);
+
+		final HttpReq req = this;
+
+		for (int i = 0; i < rounds; i++) {
+			Msc.benchmarkMT(threads, "req", requests, new Runnable() {
+				@Override
+				public void run() {
+					HttpResp resp = client.executeRequest(req, null).get();
+					U.notNull(resp, "HTTP response");
+				}
+			});
+		}
+
+		client.close();
 	}
 
 }
