@@ -8,6 +8,7 @@ import org.rapidoid.u.U;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.Map;
 
 /*
@@ -91,9 +92,21 @@ public class Metadata extends RapidoidThing {
 		return (T) propAnnotations(clazz, property).get(annotationClass);
 	}
 
-	public static boolean isAnnotated(Class<?> clazz, Class<?> annotation) {
+	public static boolean isAnnotated(Class<?> clazz, Class<? extends Annotation> annotation) {
 		clazz = Cls.unproxy(clazz);
 		return classAnnotations(clazz).containsKey(annotation);
+	}
+
+	public static boolean isAnnotatedAny(Class<?> clazz, Collection<Class<? extends Annotation>> annotations) {
+		clazz = Cls.unproxy(clazz);
+
+		for (Class<? extends Annotation> ann : annotations) {
+			if (clazz.isAnnotationPresent(ann)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	@SuppressWarnings("unchecked")
