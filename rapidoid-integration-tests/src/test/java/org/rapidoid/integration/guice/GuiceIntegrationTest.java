@@ -21,12 +21,16 @@ package org.rapidoid.integration.guice;
  */
 
 import org.junit.Test;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.http.IntegrationTestCommons;
 import org.rapidoid.http.Self;
 import org.rapidoid.integrate.Integrate;
 import org.rapidoid.ioc.Beans;
 import org.rapidoid.setup.App;
 
+@Authors("Nikolche Mihajlovski")
+@Since("5.3.0")
 public class GuiceIntegrationTest extends IntegrationTestCommons {
 
 	@Test

@@ -20,13 +20,17 @@ package org.rapidoid.integration.guice;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Controller;
 import org.rapidoid.annotation.GET;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
 
 import javax.inject.Inject;
 
 @Controller
+@Authors("Nikolche Mihajlovski")
+@Since("5.3.0")
 public class MathCtrl {
 
 	private final MathService math;
