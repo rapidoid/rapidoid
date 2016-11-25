@@ -21,7 +21,8 @@ package org.rapidoid.setup;
  */
 
 import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.*;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.commons.Env;
@@ -33,6 +34,7 @@ import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.Resp;
 import org.rapidoid.io.Res;
+import org.rapidoid.ioc.Beans;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.job.Jobs;
@@ -46,8 +48,6 @@ import org.rapidoid.sql.JDBC;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
-import javax.inject.Named;
-import javax.inject.Singleton;
 import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Map;
@@ -56,8 +56,6 @@ import java.util.Set;
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class App extends RapidoidThing {
-
-	private static final Class<?>[] ANNOTATIONS = {Controller.class, Service.class, Run.class, Named.class, Singleton.class};
 
 	private static volatile String[] path;
 
@@ -76,7 +74,7 @@ public class App extends RapidoidThing {
 		@Override
 		public List<Class<?>> map(List<String> packages) throws Exception {
 			String[] pkgs = U.arrayOf(String.class, packages);
-			return Scan.annotated((Class<? extends Annotation>[]) ANNOTATIONS).in(pkgs).loadAll();
+			return Scan.annotated((Class<? extends Annotation>[]) Setup.ANNOTATIONS).in(pkgs).loadAll();
 		}
 	});
 
@@ -349,6 +347,10 @@ public class App extends RapidoidThing {
 
 	public static void managed(boolean managed) {
 		App.managed = managed;
+	}
+
+	public static void register(Beans beans) {
+		Setup.ON.register(beans);
 	}
 
 	public static void shutdown() {
