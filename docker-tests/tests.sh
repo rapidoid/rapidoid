@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -uo pipefail
 IFS=$'\n\t'
 
 export TAG=$1
 echo "TARGET TAG: $TAG"
 
 echo "Will need sudo!"
-sudo echo "Thanks!"
+sudo service nginx stop
 
 rm -rf ./output/
 mkdir output
