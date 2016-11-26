@@ -1,10 +1,11 @@
-package org.rapidoid.sql;
+package org.rapidoid.sql.pool;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
+import org.rapidoid.sql.JdbcClient;
 import org.rapidoid.u.U;
 
 import java.beans.PropertyVetoException;

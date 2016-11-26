@@ -26,15 +26,6 @@ public class Movie {
 
 	private String title;
 
-	public Long getId() {
-		return id;
-	}
-
-	public Movie setId(long id) {
-		this.id = id;
-		return this;
-	}
-
 	public String getTitle() {
 		return title;
 	}
@@ -43,4 +34,5 @@ public class Movie {
 		this.title = title;
 		return this;
 	}
+
 }

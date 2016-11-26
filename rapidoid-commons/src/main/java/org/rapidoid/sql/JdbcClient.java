@@ -4,6 +4,9 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
+import org.rapidoid.sql.pool.C3P0ConnectionPool;
+import org.rapidoid.sql.pool.ConnectionPool;
+import org.rapidoid.sql.pool.NoConnectionPool;
 import org.rapidoid.u.U;
 
 import java.sql.*;
