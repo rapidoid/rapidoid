@@ -98,6 +98,7 @@ org.rapidoid.collection.ChangeTrackingSet
 org.rapidoid.collection.Coll
 org.rapidoid.commons.AnyObj
 org.rapidoid.commons.Arr
+org.rapidoid.commons.CommonsModule
 org.rapidoid.commons.Dates
 org.rapidoid.commons.Deep
 org.rapidoid.commons.English

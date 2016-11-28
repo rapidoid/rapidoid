@@ -24,6 +24,8 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
 
+import java.util.Iterator;
+import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
 import java.util.Set;
 
@@ -31,9 +33,37 @@ import java.util.Set;
 @Since("5.3.0")
 public class RapidoidModules extends RapidoidThing {
 
-	public static Set<RapidoidModule> all() {
-		ServiceLoader<RapidoidModule> serviceLoader = ServiceLoader.load(RapidoidModule.class);
-		return U.set(serviceLoader);
+	public static Set<RapidoidModule> getAll() {
+		return all(false);
+	}
+
+	public static Set<RapidoidModule> getAllAvailable() {
+		return all(true);
+	}
+
+	public static Set<RapidoidModule> all(boolean availableOnly) {
+		Set<RapidoidModule> modules = U.set();
+
+		Iterator<RapidoidModule> it = ServiceLoader.load(RapidoidModule.class).iterator();
+
+		while (it.hasNext()) {
+			RapidoidModule mod;
+
+			if (availableOnly) {
+				try {
+					mod = it.next();
+				} catch (ServiceConfigurationError e) {
+					mod = null;
+					// ignore it
+				}
+			} else {
+				mod = it.next();
+			}
+
+			modules.add(mod);
+		}
+
+		return modules;
 	}
 
 }

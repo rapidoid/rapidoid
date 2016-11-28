@@ -1,4 +1,4 @@
-package org.rapidoid.test;
+package org.rapidoid.commons;
 
 /*
  * #%L
@@ -20,22 +20,33 @@ package org.rapidoid.test;
  * #L%
  */
 
-import org.junit.Before;
-import org.rapidoid.config.Conf;
-import org.rapidoid.data.JSON;
+import org.rapidoid.RapidoidModule;
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.util.Msc;
 
-public abstract class AbstractCommonsTest extends TestCommons {
+@Authors("Nikolche Mihajlovski")
+@Since("5.3.0")
+public class CommonsModule extends RapidoidThing implements RapidoidModule {
 
-	@Before
-	public final void resetContext() {
-		Msc.reset();
-
-		Conf.ROOT.setPath(getTestName());
+	@Override
+	public String name() {
+		return "Commons";
 	}
 
-	protected void verify(String name, Object actual) {
-		super.verifyCase(name, JSON.prettify(actual), name);
+	@Override
+	public void beforeTest(Object test, boolean isIntegrationTest) {
+		cleanUp();
+	}
+
+	@Override
+	public void afterTest(Object test, boolean isIntegrationTest) {
+		cleanUp();
+	}
+
+	private void cleanUp() {
+		Msc.reset();
 	}
 
 }

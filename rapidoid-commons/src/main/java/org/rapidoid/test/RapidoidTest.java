@@ -46,7 +46,7 @@ public abstract class RapidoidTest extends RapidoidThing {
 
 		hasError = false;
 
-		for (RapidoidModule mod : RapidoidModules.all()) {
+		for (RapidoidModule mod : RapidoidModules.getAllAvailable()) {
 			mod.beforeTest(this, isIntegrationTest());
 		}
 	}
@@ -54,7 +54,7 @@ public abstract class RapidoidTest extends RapidoidThing {
 	@After
 	public final void afterRapidoidTest() {
 
-		for (RapidoidModule mod : RapidoidModules.all()) {
+		for (RapidoidModule mod : RapidoidModules.getAllAvailable()) {
 			mod.afterTest(this, isIntegrationTest());
 		}
 

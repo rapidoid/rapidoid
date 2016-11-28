@@ -12,13 +12,13 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Arr;
-import org.rapidoid.env.Env;
 import org.rapidoid.commons.Str;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.ConfigOptions;
 import org.rapidoid.crypto.Crypto;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.env.Env;
 import org.rapidoid.event.Events;
 import org.rapidoid.insight.Insights;
 import org.rapidoid.io.IO;
@@ -1033,6 +1033,9 @@ public class Msc extends RapidoidThing implements Constants {
 		AppInfo.reset();
 		Conf.reset();
 		Env.reset();
+
+		Ctxs.reset();
+		U.must(Ctxs.get() == null);
 
 		resetState();
 	}
