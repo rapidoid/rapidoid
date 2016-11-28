@@ -4,7 +4,7 @@ import org.rapidoid.AuthBootstrap;
 import org.rapidoid.annotation.*;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.AnyObj;
-import org.rapidoid.commons.Env;
+import org.rapidoid.env.Env;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
 import org.rapidoid.config.RapidoidInitializer;

@@ -24,7 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Env;
+import org.rapidoid.env.Env;
 import org.rapidoid.io.IO;
 import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.util.Msc;

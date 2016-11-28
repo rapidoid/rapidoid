@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.bytes.BytesUtil;
-import org.rapidoid.commons.Env;
+import org.rapidoid.env.Env;
 import org.rapidoid.data.BufRanges;
 import org.rapidoid.http.impl.HttpParser;
 import org.rapidoid.net.Protocol;

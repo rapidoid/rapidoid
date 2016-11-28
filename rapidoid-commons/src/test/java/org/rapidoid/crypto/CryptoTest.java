@@ -23,7 +23,7 @@ package org.rapidoid.crypto;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Env;
+import org.rapidoid.env.Env;
 import org.rapidoid.commons.Str;
 import org.rapidoid.test.AbstractCommonsTest;
 

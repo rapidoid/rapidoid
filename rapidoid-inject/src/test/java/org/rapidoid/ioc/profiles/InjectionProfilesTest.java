@@ -23,7 +23,7 @@ package org.rapidoid.ioc.profiles;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Env;
+import org.rapidoid.env.Env;
 import org.rapidoid.ioc.AbstractInjectTest;
 import org.rapidoid.ioc.IoC;
 

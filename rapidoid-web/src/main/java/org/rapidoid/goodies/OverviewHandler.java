@@ -2,7 +2,7 @@ package org.rapidoid.goodies;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Env;
+import org.rapidoid.env.Env;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.setup.App;

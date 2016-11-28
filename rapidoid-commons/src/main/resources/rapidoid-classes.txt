@@ -101,10 +101,6 @@ org.rapidoid.commons.Arr
 org.rapidoid.commons.Dates
 org.rapidoid.commons.Deep
 org.rapidoid.commons.English
-org.rapidoid.commons.Env
-org.rapidoid.commons.Environment
-org.rapidoid.commons.EnvMode
-org.rapidoid.commons.EnvProperties
 org.rapidoid.commons.Err
 org.rapidoid.commons.JS
 org.rapidoid.commons.RapidoidInfo
@@ -158,6 +154,10 @@ org.rapidoid.data.MultiData
 org.rapidoid.data.Parse
 org.rapidoid.data.XML
 org.rapidoid.data.YAML
+org.rapidoid.env.Env
+org.rapidoid.env.Environment
+org.rapidoid.env.EnvMode
+org.rapidoid.env.EnvProperties
 org.rapidoid.event.Event
 org.rapidoid.event.EventListener
 org.rapidoid.event.Events

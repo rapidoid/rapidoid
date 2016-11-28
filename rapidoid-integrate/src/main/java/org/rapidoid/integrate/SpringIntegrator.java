@@ -3,7 +3,7 @@ package org.rapidoid.integrate;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Env;
+import org.rapidoid.env.Env;
 import org.rapidoid.ioc.BeanProvider;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.jpa.JPA;

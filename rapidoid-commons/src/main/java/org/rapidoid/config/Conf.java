@@ -2,7 +2,7 @@ package org.rapidoid.config;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.collection.Coll;
-import org.rapidoid.commons.Env;
+import org.rapidoid.env.Env;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;

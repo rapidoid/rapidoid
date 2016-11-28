@@ -1,4 +1,4 @@
-package org.rapidoid.commons;
+package org.rapidoid.env;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;

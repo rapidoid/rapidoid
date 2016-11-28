@@ -1,8 +1,9 @@
-package org.rapidoid.commons;
+package org.rapidoid.env;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
+import org.rapidoid.commons.Err;
 import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.log.Log;
 import org.rapidoid.scan.ClasspathUtil;

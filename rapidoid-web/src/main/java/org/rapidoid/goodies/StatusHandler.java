@@ -3,7 +3,7 @@ package org.rapidoid.goodies;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Env;
+import org.rapidoid.env.Env;
 import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
