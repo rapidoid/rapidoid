@@ -20,17 +20,12 @@ package org.rapidoid.sql.test;
  * #L%
  */
 
-import org.junit.Before;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.RapidoidIntegrationTest;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class SQLTestCommons extends TestCommons {
-
-	@Before
-	public final void resetSql() {
-	}
+public class SQLTestCommons extends RapidoidIntegrationTest {
 
 }

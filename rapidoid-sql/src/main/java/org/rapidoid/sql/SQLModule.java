@@ -30,9 +30,16 @@ import org.rapidoid.log.Log;
 @Since("5.3.0")
 public class SQLModule extends RapidoidThing implements RapidoidModule {
 
-	private static final String HSQL_DRIVER = "org.hsqldb.jdbc.JDBCDriver";
+	private static final String HSQLDB_DRIVER = "org.hsqldb.jdbc.JDBCDriver";
 
-	private static final String HSQL_TRUNCATE = "TRUNCATE SCHEMA PUBLIC RESTART IDENTITY AND COMMIT NO CHECK";
+	@SuppressWarnings("unused")
+	private static final String HSQLDB_TRUNCATE = "TRUNCATE SCHEMA PUBLIC RESTART IDENTITY AND COMMIT NO CHECK";
+
+	private static final String HSQLDB_DROP_ALL = "DROP SCHEMA public CASCADE";
+
+	private static final String H2_DRIVER = "org.h2.Driver";
+
+	private static final String H2_DROP_ALL = "DROP ALL OBJECTS DELETE FILES";
 
 	@Override
 	public String name() {
@@ -46,13 +53,21 @@ public class SQLModule extends RapidoidThing implements RapidoidModule {
 
 	@Override
 	public void afterTest(Object test) {
-
-		if (HSQL_DRIVER.equals(JDBC.defaultApi().driver())) {
-			Log.info("Dropping all objects in the H2 database");
-			JDBC.execute(HSQL_TRUNCATE);
-		}
+		cleanInMemDatabases();
 
 		JDBC.reset();
+	}
+
+	private void cleanInMemDatabases() {
+		if (HSQLDB_DRIVER.equals(JDBC.defaultApi().driver())) {
+			Log.info("Dropping all objects in the HSQLDB database");
+			JDBC.execute(HSQLDB_DROP_ALL);
+		}
+
+		if (H2_DRIVER.equals(JDBC.defaultApi().driver())) {
+			Log.info("Dropping all objects in the H2 database");
+			JDBC.execute(H2_DROP_ALL);
+		}
 	}
 
 }

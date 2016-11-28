@@ -42,7 +42,6 @@ public class ORMTest extends SQLTestCommons {
 
 	@Test
 	public void testORM() {
-
 		ORM.bootstrap(Booky.class, Person.class);
 
 		Booky book = new Booky();
