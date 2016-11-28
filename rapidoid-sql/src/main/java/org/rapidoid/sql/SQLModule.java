@@ -32,7 +32,6 @@ public class SQLModule extends RapidoidThing implements RapidoidModule {
 
 	private static final String HSQLDB_DRIVER = "org.hsqldb.jdbc.JDBCDriver";
 
-	@SuppressWarnings("unused")
 	private static final String HSQLDB_TRUNCATE = "TRUNCATE SCHEMA PUBLIC RESTART IDENTITY AND COMMIT NO CHECK";
 
 	private static final String HSQLDB_DROP_ALL = "DROP SCHEMA public CASCADE";
@@ -59,12 +58,15 @@ public class SQLModule extends RapidoidThing implements RapidoidModule {
 	}
 
 	private void cleanInMemDatabases() {
-		if (HSQLDB_DRIVER.equals(JDBC.defaultApi().driver())) {
+		JdbcClient jdbc = JDBC.defaultApi();
+
+		if (HSQLDB_DRIVER.equals(jdbc.driver())) {
 			Log.info("Dropping all objects in the HSQLDB database");
+			JDBC.execute(HSQLDB_TRUNCATE);
 			JDBC.execute(HSQLDB_DROP_ALL);
 		}
 
-		if (H2_DRIVER.equals(JDBC.defaultApi().driver())) {
+		if (H2_DRIVER.equals(jdbc.driver())) {
 			Log.info("Dropping all objects in the H2 database");
 			JDBC.execute(H2_DROP_ALL);
 		}

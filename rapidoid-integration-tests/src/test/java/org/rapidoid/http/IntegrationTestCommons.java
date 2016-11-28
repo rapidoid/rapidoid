@@ -22,6 +22,7 @@ package org.rapidoid.http;
 
 import org.junit.After;
 import org.junit.Before;
+import org.rapidoid.RapidoidModules;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.IntegrationTest;
 import org.rapidoid.annotation.Since;
@@ -43,9 +44,9 @@ import org.rapidoid.setup.Admin;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;
+import org.rapidoid.test.RapidoidTest;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -68,21 +69,20 @@ public abstract class IntegrationTestCommons extends TestCommons {
 
 	@Before
 	public void openContext() {
-		Msc.reset();
-
 		TimeZone.setDefault(TimeZone.getTimeZone("CET"));
 
 		ClasspathUtil.setRootPackage("some.nonexisting.app");
 
-		TimeZone.setDefault(TimeZone.getTimeZone("CET"));
-
-		System.out.println("--- STARTING SERVER ---");
+		RapidoidModules.getAll(); // all modules must be present
+		RapidoidTest.before(this);
 
 		My.reset();
 		JPAUtil.reset();
 		Conf.ROOT.setPath(getTestName());
 		Log.setLogLevel(LogLevel.INFO);
 		IoC.reset();
+
+		System.out.println("--- STARTING SERVER ---");
 
 		App.resetGlobalState();
 		On.changes().ignore();
@@ -108,6 +108,8 @@ public abstract class IntegrationTestCommons extends TestCommons {
 		}
 
 		System.out.println("--- SERVER STOPPED ---");
+
+		RapidoidTest.after(this);
 	}
 
 	protected String localhost(String uri) {
