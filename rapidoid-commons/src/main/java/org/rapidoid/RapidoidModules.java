@@ -22,6 +22,7 @@ package org.rapidoid;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.u.U;
 
 import java.util.Iterator;
@@ -62,6 +63,16 @@ public class RapidoidModules extends RapidoidThing {
 
 			if (mod != null) {
 				modules.add(mod);
+			}
+		}
+
+		for (String clsName : Cls.getRapidoidClasses()) {
+			if (clsName.endsWith("Module")) {
+				Class<?> cls = Cls.getClassIfExists(clsName);
+
+				if (cls != null && RapidoidModule.class.isAssignableFrom(cls) && !cls.isInterface()) {
+					modules.add((RapidoidModule) Cls.newInstance(cls));
+				}
 			}
 		}
 
