@@ -27,7 +27,9 @@ import org.rapidoid.RapidoidModule;
 import org.rapidoid.RapidoidModules;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.IntegrationTest;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.beany.Metadata;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.Msc;
 
@@ -46,25 +48,33 @@ public abstract class RapidoidTest extends RapidoidThing {
 
 		hasError = false;
 
-		for (RapidoidModule mod : RapidoidModules.getAllAvailable()) {
-			mod.beforeTest(this, isIntegrationTest());
-		}
+		before(this);
 	}
 
 	@After
 	public final void afterRapidoidTest() {
 
-		for (RapidoidModule mod : RapidoidModules.getAllAvailable()) {
-			mod.afterTest(this, isIntegrationTest());
-		}
+		after(this);
 
 		if (hasError) {
 			Assert.fail("Assertion error(s) occured, probably were caught or were thrown on non-main thread!");
 		}
 	}
 
-	protected boolean isIntegrationTest() {
-		return false;
+	public static void before(Object test) {
+		for (RapidoidModule mod : RapidoidModules.getAllAvailable()) {
+			mod.beforeTest(test, isIntegrationTest(test));
+		}
+	}
+
+	public static void after(Object test) {
+		for (RapidoidModule mod : RapidoidModules.getAllAvailable()) {
+			mod.afterTest(test, isIntegrationTest(test));
+		}
+	}
+
+	public static boolean isIntegrationTest(Object test) {
+		return Metadata.getAnnotationRecursive(test.getClass(), IntegrationTest.class) != null;
 	}
 
 	protected void registerError(AssertionError e) {

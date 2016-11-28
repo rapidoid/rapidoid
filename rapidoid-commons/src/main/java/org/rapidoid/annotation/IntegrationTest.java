@@ -1,4 +1,10 @@
-package org.rapidoid.test;
+package org.rapidoid.annotation;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /*
  * #%L
@@ -20,27 +26,9 @@ package org.rapidoid.test;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.IntegrationTest;
-import org.rapidoid.annotation.Since;
-
+@Target({TYPE})
+@Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.6")
-@IntegrationTest
-public abstract class RapidoidIntegrationTest extends RapidoidTest {
-
-	//		isTrue(Env.test());
-//		isTrue(Env.profiles().contains("test"));
-//		Log.setLogLevel(LogLevel.DEBUG);
-//
-//		IoC.autowire(this);
-//
-//		ScanPackages scan = Metadata.getAnnotationRecursive(getClass(), ScanPackages.class);
-//
-//		if (scan != null) {
-//			String[] pkgs = scan.value();
-//			U.must(U.notEmpty(pkgs), "@ScanPackages requires a list of packages to scan!");
-//			App.scan(pkgs);
-//		}
-
+@Since("5.3.0")
+public @interface IntegrationTest {
 }
