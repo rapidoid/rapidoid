@@ -25,14 +25,13 @@ import org.junit.Test;
 import org.rapidoid.sql.JDBC;
 import org.rapidoid.sql.JdbcClient;
 import org.rapidoid.sql.pool.C3P0ConnectionPool;
-import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
 import java.util.List;
 import java.util.Map;
 
-public class JDBCTest extends TestCommons {
+public class JDBCTest extends SQLTestCommons {
 
 	@Test
 	public void testWithMySQL() {
