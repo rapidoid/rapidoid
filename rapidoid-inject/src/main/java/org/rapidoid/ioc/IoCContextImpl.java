@@ -329,7 +329,13 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 		Log.debug("Autowiring", "target", target, "session", session, "bindings", locals);
 
 		boolean autowired = false;
-		for (Field field : meta(target.getClass()).injectableFields) {
+		ClassMetadata meta = meta(target.getClass());
+
+		if (U.notEmpty(meta.dependencyTypes)) {
+			manage(meta.dependencyTypes.toArray());
+		}
+
+		for (Field field : meta.injectableFields) {
 
 			boolean optional = isInjectOptional(field);
 			Object value = provideIoCInstanceOf(target, field.getType(), field.getName(), properties, optional);

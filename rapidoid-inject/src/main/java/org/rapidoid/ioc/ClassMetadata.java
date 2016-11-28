@@ -2,8 +2,10 @@ package org.rapidoid.ioc;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Manage;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Wired;
+import org.rapidoid.beany.Metadata;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -12,6 +14,7 @@ import javax.annotation.Resource;
 import javax.inject.Inject;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.Collections;
 import java.util.List;
 
 /*
@@ -42,12 +45,32 @@ public class ClassMetadata extends RapidoidThing {
 
 	final List<Field> injectableFields;
 
+	final List<Class<?>> dependencyTypes;
+
 	public ClassMetadata(Class<?> clazz) {
 		this.clazz = clazz;
+		this.injectableFields = Collections.synchronizedList(getInjectableFields(clazz));
+		this.dependencyTypes = Collections.synchronizedList(getDependencyTypes(clazz));
+	}
 
-		this.injectableFields = Cls.getFieldsAnnotated(clazz, Wired.class);
-		this.injectableFields.addAll(Cls.getFieldsAnnotated(clazz, Resource.class));
-		this.injectableFields.addAll(Cls.getFieldsAnnotated(clazz, Inject.class));
+	private List<Class<?>> getDependencyTypes(Class<?> clazz) {
+		List<Class<?>> dependencies = U.list();
+
+		Manage depAnn = Metadata.getAnnotationRecursive(clazz, Manage.class);
+
+		if (depAnn != null) {
+			Collections.addAll(dependencies, depAnn.value());
+		}
+
+		return dependencies;
+	}
+
+	public static List<Field> getInjectableFields(Class<?> clazz) {
+		List<Field> fields = U.list();
+
+		fields.addAll(Cls.getFieldsAnnotated(clazz, Wired.class));
+		fields.addAll(Cls.getFieldsAnnotated(clazz, Resource.class));
+		fields.addAll(Cls.getFieldsAnnotated(clazz, Inject.class));
 
 		if (Msc.hasJPA()) {
 			Class<Annotation> javaxPersistenceContext = Cls.get("javax.persistence.PersistenceContext");
@@ -57,8 +80,10 @@ public class ClassMetadata extends RapidoidThing {
 				U.must(emField.getType().getName().equals("javax.persistence.EntityManager"), "Expected EntityManager type!");
 			}
 
-			this.injectableFields.addAll(emFields);
+			fields.addAll(emFields);
 		}
+
+		return fields;
 	}
 
 }
