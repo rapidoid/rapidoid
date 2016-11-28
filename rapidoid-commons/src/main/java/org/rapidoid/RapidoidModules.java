@@ -60,7 +60,9 @@ public class RapidoidModules extends RapidoidThing {
 				mod = it.next();
 			}
 
-			modules.add(mod);
+			if (mod != null) {
+				modules.add(mod);
+			}
 		}
 
 		return modules;
