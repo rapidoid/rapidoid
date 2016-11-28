@@ -332,6 +332,19 @@ public class Cls extends RapidoidThing {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <T> T invoke(Constructor<?> constructor, Object... args) {
+		boolean accessible = constructor.isAccessible();
+		try {
+			constructor.setAccessible(true);
+			return (T) constructor.newInstance(args);
+		} catch (Exception e) {
+			throw U.rte("Cannot invoke method '%s' with args: %s", e, constructor.getName(), Arrays.toString(args));
+		} finally {
+			constructor.setAccessible(accessible);
+		}
+	}
+
 	public static Class<?>[] getImplementedInterfaces(Class<?> clazz) {
 		try {
 			List<Class<?>> interfaces = new LinkedList<Class<?>>();

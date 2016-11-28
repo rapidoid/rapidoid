@@ -16,6 +16,7 @@ import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
 import javax.annotation.PostConstruct;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Iterator;
@@ -181,8 +182,17 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 		return value != null ? Cls.convert(value, type) : null;
 	}
 
+	@SuppressWarnings("unchecked")
 	private <T> T provideIoCInstanceOf(Object target, Class<T> type, String name,
 	                                   Map<String, Object> properties, boolean optional) {
+
+		if (target != null) {
+			processMetadata(meta(target.getClass()));
+		}
+
+		if (type != null) {
+			processMetadata(meta(type));
+		}
 
 		T instance = (T) provideSpecialInstance(type, name);
 
@@ -227,11 +237,39 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 		// instantiation if it's real class
 		if (!type.isInterface() && !type.isEnum() && !type.isAnnotation()) {
 			if (Msc.matchingProfile(type)) {
-				return register(Cls.newInstance(type, properties), properties);
+				T instance = instantiate(type, properties);
+				return register(instance, properties);
 			}
 		}
 
 		return null;
+	}
+
+	private <T> T instantiate(Class<T> type, Map<String, Object> properties) {
+
+		ClassMetadata meta = meta(type);
+
+		if (U.notEmpty(meta.injectableConstructors)) {
+			U.must(meta.injectableConstructors.size() == 1, "Found more than 1 @Inject-annotated constructor for: %s", type);
+
+			Constructor<?> constr = U.single(meta.injectableConstructors);
+			Class<?>[] paramTypes = constr.getParameterTypes();
+			Object[] args = new Object[paramTypes.length];
+
+			for (int i = 0; i < args.length; i++) {
+				Class<?> paramType = paramTypes[i];
+				String paramName = null; // FIXME inject by name
+				args[i] = provideIoCInstanceOf(null, paramType, paramName, properties, false);
+			}
+
+			return Cls.invoke(constr, args);
+
+		} else if (meta.defaultConstructor != null) {
+			return Cls.invoke(meta.defaultConstructor);
+
+		} else {
+			throw U.illegal("Cannot find a default nor @Inject-annotated constructor for: %s", type);
+		}
 	}
 
 	private <T> T provideInstanceByType(Class<T> type, Map<String, Object> properties) {

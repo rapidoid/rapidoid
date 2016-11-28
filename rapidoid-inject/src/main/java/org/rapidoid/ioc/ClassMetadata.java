@@ -11,6 +11,7 @@ import org.rapidoid.util.Msc;
 import javax.annotation.Resource;
 import javax.inject.Inject;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.List;
@@ -47,11 +48,17 @@ public class ClassMetadata extends RapidoidThing {
 
 	public final Set<Field> injectableFields;
 
+	public final Set<Constructor<?>> injectableConstructors;
+
+	public final Constructor<?> defaultConstructor;
+
 	public final Set<Class<?>> typesToManage;
 
 	public ClassMetadata(Class<?> clazz) {
 		this.clazz = clazz;
 		this.injectableFields = Collections.synchronizedSet(getInjectableFields(clazz));
+		this.injectableConstructors = Collections.synchronizedSet(getInjectableConstructors(clazz));
+		this.defaultConstructor = getDefaultConstructor(clazz);
 		this.typesToManage = Collections.synchronizedSet(getTypesToManage(clazz));
 	}
 
@@ -86,6 +93,26 @@ public class ClassMetadata extends RapidoidThing {
 		}
 
 		return fields;
+	}
+
+	public static Set<Constructor<?>> getInjectableConstructors(Class<?> clazz) {
+		Set<Constructor<?>> constructors = U.set();
+
+		for (Constructor<?> constr : clazz.getDeclaredConstructors()) {
+			if (Metadata.hasAny(constr.getAnnotations(), ClassMetadata.INJECTION_ANNOTATIONS)) {
+				constructors.add(constr);
+			}
+		}
+
+		return constructors;
+	}
+
+	public static Constructor<?> getDefaultConstructor(Class<?> clazz) {
+		try {
+			return clazz.getDeclaredConstructor();
+		} catch (NoSuchMethodException e) {
+			return null;
+		}
 	}
 
 }
