@@ -27,7 +27,7 @@ import org.rapidoid.setup.On;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class HttpPageResourcesTest extends IntegrationTestCommons {
+public class HttpPageResourcesTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testPageResources() {

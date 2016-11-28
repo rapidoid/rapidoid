@@ -30,7 +30,7 @@ import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
-public class HttpTemplatesPathTest extends IntegrationTestCommons {
+public class HttpTemplatesPathTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testTemplatesPath1() {

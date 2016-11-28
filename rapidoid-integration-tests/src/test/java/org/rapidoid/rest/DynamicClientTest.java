@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.4.0")
-public class DynamicClientTest extends IntegrationTestCommons {
+public class DynamicClientTest extends IsolatedIntegrationTest {
 
 	private final MyClient client = REST.client(MyClient.class);
 

@@ -2,7 +2,6 @@ package org.rapidoid.gui;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.env.Env;
 import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.commons.Str;
 import org.rapidoid.config.Conf;
@@ -14,6 +13,7 @@ import org.rapidoid.http.HttpVerb;
 import org.rapidoid.render.Template;
 import org.rapidoid.render.Templates;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 import org.rapidoid.util.StreamUtils;
 import org.rapidoid.web.ScreenBean;
 
@@ -98,7 +98,7 @@ public class HtmlPage extends ScreenBean {
 		model.put("appUrl", ReqInfoUtils.appUrl());
 		model.put("adminUrl", ReqInfoUtils.adminUrl());
 
-		model.put("dev", Env.dev());
+		model.put("dev", Msc.isDev());
 		model.put("admin", "admin".equalsIgnoreCase(req.zone()));
 
 		model.put("host", req.host());

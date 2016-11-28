@@ -23,8 +23,10 @@ package org.rapidoid.http;
 import org.junit.Before;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.env.Env;
 import org.rapidoid.config.Conf;
+import org.rapidoid.env.Env;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.5")
@@ -32,8 +34,16 @@ public abstract class IsolatedIntegrationTest extends IntegrationTestCommons {
 
 	@Before
 	public void resetEnvCfg() {
+		U.must(Msc.isInsideTest());
+		U.must(Env.test());
+
 		Env.reset();
+
 		Conf.reset();
+		Conf.ROOT.setPath(getTestName());
+
+		U.must(Msc.isInsideTest());
+		U.must(Env.test());
 	}
 
 }

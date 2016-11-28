@@ -1152,4 +1152,12 @@ public class Msc extends RapidoidThing implements Constants {
 		arguments.put(left, right);
 	}
 
+	public static boolean isDev() {
+		if (Env.isInitialized()) {
+			return Env.dev();
+		}
+
+		return !Msc.isInsideTest() && Env.dev();
+	}
+
 }

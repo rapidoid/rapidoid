@@ -36,7 +36,6 @@ import org.rapidoid.ioc.IoC;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.jpa.JPAUtil;
 import org.rapidoid.log.Log;
-import org.rapidoid.log.LogLevel;
 import org.rapidoid.reverseproxy.ProxyMapping;
 import org.rapidoid.reverseproxy.Reverse;
 import org.rapidoid.scan.ClasspathUtil;
@@ -76,13 +75,14 @@ public abstract class IntegrationTestCommons extends TestCommons {
 		RapidoidModules.getAll(); // all modules must be present
 		RapidoidTest.before(this);
 
-		My.reset();
 		JPAUtil.reset();
-		Conf.ROOT.setPath(getTestName());
-		Log.setLogLevel(LogLevel.INFO);
 		IoC.reset();
 
+		Conf.ROOT.setPath(getTestName());
+
 		System.out.println("--- STARTING SERVER ---");
+
+		My.reset();
 
 		App.resetGlobalState();
 		On.changes().ignore();

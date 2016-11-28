@@ -30,7 +30,7 @@ import org.rapidoid.web.Screen;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.11")
-public class HttpRenderTest extends IntegrationTestCommons {
+public class HttpRenderTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testRender() {
