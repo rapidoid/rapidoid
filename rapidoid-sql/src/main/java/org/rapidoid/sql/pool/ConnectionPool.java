@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-sql
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
