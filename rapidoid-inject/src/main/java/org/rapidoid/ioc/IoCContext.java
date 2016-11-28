@@ -41,7 +41,7 @@ public interface IoCContext {
 
 	<T> T singleton(Class<T> type);
 
-	<T> T autowire(T target);
+	boolean autowire(Object target);
 
 	<T> T autowire(T target, Mapper<String, Object> session, Mapper<String, Object> bindings);
 

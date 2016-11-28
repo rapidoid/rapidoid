@@ -44,7 +44,7 @@ public class IoC extends RapidoidThing {
 		return DEFAULT_CONTEXT.singleton(type);
 	}
 
-	public static <T> T autowire(T target) {
+	public static boolean autowire(Object target) {
 		return DEFAULT_CONTEXT.autowire(target);
 	}
 

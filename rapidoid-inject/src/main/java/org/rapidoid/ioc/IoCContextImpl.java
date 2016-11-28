@@ -146,10 +146,9 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 	}
 
 	@Override
-	public synchronized <T> T autowire(T target) {
+	public synchronized boolean autowire(Object target) {
 		Log.debug("Autowire", "target", target);
-		autowire(target, null, null, null);
-		return target;
+		return autowire(target, null, null, null);
 	}
 
 	@Override
@@ -324,11 +323,12 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 		return (T) instance;
 	}
 
-	private void autowire(Object target, Map<String, Object> properties, Mapper<String, Object> session,
-	                      Mapper<String, Object> locals) {
+	private boolean autowire(Object target, Map<String, Object> properties, Mapper<String, Object> session,
+	                         Mapper<String, Object> locals) {
 
 		Log.debug("Autowiring", "target", target, "session", session, "bindings", locals);
 
+		boolean autowired = false;
 		for (Field field : meta(target.getClass()).injectableFields) {
 
 			boolean optional = isInjectOptional(field);
@@ -338,8 +338,11 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 
 			if (!optional || value != null) {
 				Cls.setFieldValue(target, field.getName(), value);
+				autowired = true;
 			}
 		}
+
+		return autowired;
 	}
 
 	private boolean isInjectOptional(Field field) {

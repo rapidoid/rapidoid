@@ -86,7 +86,7 @@ public class IoCContextWrapper extends RapidoidThing implements IoCContext {
 	}
 
 	@Override
-	public synchronized <T> T autowire(T target) {
+	public synchronized boolean autowire(Object target) {
 		IoCState backup = context.backup();
 
 		try {

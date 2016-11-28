@@ -18,6 +18,7 @@ org.rapidoid.annotation.DontReload
 org.rapidoid.annotation.GET
 org.rapidoid.annotation.HEAD
 org.rapidoid.annotation.Header
+org.rapidoid.annotation.IntegrationTest
 org.rapidoid.annotation.OfType
 org.rapidoid.annotation.OPTIONS
 org.rapidoid.annotation.Order
@@ -450,6 +451,7 @@ org.rapidoid.ioc.IoCContext
 org.rapidoid.ioc.IoCContextChanges
 org.rapidoid.ioc.IoCContextImpl
 org.rapidoid.ioc.IoCContextWrapper
+org.rapidoid.ioc.IoCModule
 org.rapidoid.ioc.IoCState
 org.rapidoid.ioc.OptionalJPAUtil
 org.rapidoid.io.FileSearch
