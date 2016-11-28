@@ -126,6 +126,14 @@ public class Metadata extends RapidoidThing {
 		return get(annotations, annotationClass) != null;
 	}
 
+	@SuppressWarnings("unchecked")
+	public static boolean hasAny(Annotation[] annotations, Iterable<Class<? extends Annotation>> annotationType) {
+		for (Class<? extends Annotation> annType : annotationType) {
+			if (has(annotations, annType)) return true;
+		}
+		return false;
+	}
+
 	public static <T extends Annotation> T getAnnotationRecursive(Class<?> clazz, Class<T> annotationClass) {
 		clazz = Cls.unproxy(clazz);
 

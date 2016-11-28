@@ -390,7 +390,7 @@ public class Cls extends RapidoidThing {
 		throw U.rte("Cannot find appropriate constructor for %s with args %s!", clazz, values);
 	}
 
-	private static Object[] getAssignableArgs(Class<?>[] types, Collection<?> properties) {
+	public static Object[] getAssignableArgs(Class<?>[] types, Collection<?> properties) {
 		Object[] args = new Object[types.length];
 
 		for (int i = 0; i < types.length; i++) {

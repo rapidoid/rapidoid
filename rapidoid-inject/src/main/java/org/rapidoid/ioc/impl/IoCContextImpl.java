@@ -216,6 +216,12 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 		return Cls.isAppBean(instance) ? register(instance, properties) : null;
 	}
 
+	private void processMetadata(ClassMetadata meta) {
+		if (U.notEmpty(meta.typesToManage)) {
+			manage(meta.typesToManage.toArray());
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	private <T> T provideNewInstanceOf(Class<T> type, Map<String, Object> properties) {
 		// instantiation if it's real class
@@ -330,9 +336,7 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 		boolean autowired = false;
 		ClassMetadata meta = meta(target.getClass());
 
-		if (U.notEmpty(meta.typesToManage)) {
-			manage(meta.typesToManage.toArray());
-		}
+		processMetadata(meta);
 
 		for (Field field : meta.injectableFields) {
 
