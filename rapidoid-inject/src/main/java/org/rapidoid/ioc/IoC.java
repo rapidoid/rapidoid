@@ -3,6 +3,8 @@ package org.rapidoid.ioc;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.ioc.impl.IoCContextImpl;
+import org.rapidoid.ioc.impl.IoCContextWrapper;
 
 import java.util.Map;
 

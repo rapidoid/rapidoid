@@ -21,7 +21,7 @@ package org.rapidoid.ioc.db;
  */
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Wired;
+import org.rapidoid.ioc.Wired;
 import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")

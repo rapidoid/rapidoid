@@ -2,6 +2,7 @@ package org.rapidoid.ioc;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.ioc.impl.IoCContextChanges;
 import org.rapidoid.lambda.Mapper;
 
 import java.util.List;

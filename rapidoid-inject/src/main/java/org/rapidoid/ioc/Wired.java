@@ -1,4 +1,7 @@
-package org.rapidoid.annotation;
+package org.rapidoid.ioc;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -8,7 +11,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-inject
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%

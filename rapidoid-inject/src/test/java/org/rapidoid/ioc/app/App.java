@@ -21,9 +21,9 @@ package org.rapidoid.ioc.app;
  */
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Autocreate;
+import org.rapidoid.ioc.Autocreate;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.annotation.Wired;
+import org.rapidoid.ioc.Wired;
 import org.rapidoid.ioc.Logger;
 
 import javax.annotation.PostConstruct;

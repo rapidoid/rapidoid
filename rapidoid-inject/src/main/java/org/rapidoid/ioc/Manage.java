@@ -1,10 +1,14 @@
 package org.rapidoid.ioc;
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
-import java.util.List;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /*
  * #%L
@@ -26,25 +30,13 @@ import java.util.List;
  * #L%
  */
 
+@Target({TYPE})
+@Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class IoCContextChanges extends RapidoidThing {
+@Since("5.3.0")
+@Documented
+public @interface Manage {
 
-	private final List<Object> loadedInstances;
-
-	private final List<Object> removedInstances;
-
-	public IoCContextChanges(List<Object> loadedInstances, List<Object> removedInstances) {
-		this.loadedInstances = loadedInstances;
-		this.removedInstances = removedInstances;
-	}
-
-	public List<Object> getLoadedInstances() {
-		return loadedInstances;
-	}
-
-	public List<Object> getRemovedInstances() {
-		return removedInstances;
-	}
+	Class<?>[] value();
 
 }

@@ -1,8 +1,10 @@
-package org.rapidoid.ioc;
+package org.rapidoid.ioc.impl;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.ioc.BeanProvider;
+import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.lambda.Mapper;
 
 import java.util.List;
@@ -34,7 +36,7 @@ public class IoCContextWrapper extends RapidoidThing implements IoCContext {
 
 	private final IoCContextImpl context;
 
-	IoCContextWrapper(IoCContextImpl context) {
+	public IoCContextWrapper(IoCContextImpl context) {
 		this.context = context;
 		context.wrapper(this);
 	}

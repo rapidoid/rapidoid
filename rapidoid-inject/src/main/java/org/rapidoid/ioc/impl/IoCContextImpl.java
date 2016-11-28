@@ -1,15 +1,14 @@
-package org.rapidoid.ioc;
+package org.rapidoid.ioc.impl;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Autocreate;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.annotation.Wired;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Deep;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
+import org.rapidoid.ioc.*;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
@@ -48,7 +47,7 @@ import java.util.Set;
 @Since("5.1.0")
 public class IoCContextImpl extends RapidoidThing implements IoCContext {
 
-	IoCContextImpl() {
+	public IoCContextImpl() {
 	}
 
 	private volatile String name;
@@ -331,8 +330,8 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 		boolean autowired = false;
 		ClassMetadata meta = meta(target.getClass());
 
-		if (U.notEmpty(meta.dependencyTypes)) {
-			manage(meta.dependencyTypes.toArray());
+		if (U.notEmpty(meta.typesToManage)) {
+			manage(meta.typesToManage.toArray());
 		}
 
 		for (Field field : meta.injectableFields) {

@@ -2,9 +2,7 @@ package org.rapidoid.ioc;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Manage;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.annotation.Wired;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.u.U;
@@ -41,28 +39,28 @@ import java.util.List;
 @Since("5.1.0")
 public class ClassMetadata extends RapidoidThing {
 
-	final Class<?> clazz;
+	public final Class<?> clazz;
 
-	final List<Field> injectableFields;
+	public final List<Field> injectableFields;
 
-	final List<Class<?>> dependencyTypes;
+	public final List<Class<?>> typesToManage;
 
 	public ClassMetadata(Class<?> clazz) {
 		this.clazz = clazz;
 		this.injectableFields = Collections.synchronizedList(getInjectableFields(clazz));
-		this.dependencyTypes = Collections.synchronizedList(getDependencyTypes(clazz));
+		this.typesToManage = Collections.synchronizedList(getTypesToManage(clazz));
 	}
 
-	private List<Class<?>> getDependencyTypes(Class<?> clazz) {
-		List<Class<?>> dependencies = U.list();
+	public static List<Class<?>> getTypesToManage(Class<?> clazz) {
+		List<Class<?>> types = U.list();
 
 		Manage depAnn = Metadata.getAnnotationRecursive(clazz, Manage.class);
 
 		if (depAnn != null) {
-			Collections.addAll(dependencies, depAnn.value());
+			Collections.addAll(types, depAnn.value());
 		}
 
-		return dependencies;
+		return types;
 	}
 
 	public static List<Field> getInjectableFields(Class<?> clazz) {

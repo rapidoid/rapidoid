@@ -1,5 +1,14 @@
 package org.rapidoid.ioc;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 /*
  * #%L
  * rapidoid-inject
@@ -20,22 +29,9 @@ package org.rapidoid.ioc;
  * #L%
  */
 
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.jpa.SharedContextAwareEntityManagerProxy;
-import org.rapidoid.jpa.SharedEntityManagerFactoryProxy;
-
+@Target({TYPE})
+@Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class OptionalJPAUtil extends RapidoidThing {
-
-	public static Object getSharedEntityManagerFactoryProxy() {
-		return SharedEntityManagerFactoryProxy.INSTANCE;
-	}
-
-	public static Object getSharedContextAwareEntityManagerProxy() {
-		return SharedContextAwareEntityManagerProxy.INSTANCE;
-	}
-
+@Since("2.0.0")
+public @interface Autocreate {
 }

@@ -22,9 +22,9 @@ package org.rapidoid.ioc.basic;
 
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Manage;
+import org.rapidoid.ioc.Manage;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.annotation.Wired;
+import org.rapidoid.ioc.Wired;
 import org.rapidoid.test.RapidoidTest;
 
 import javax.inject.Inject;

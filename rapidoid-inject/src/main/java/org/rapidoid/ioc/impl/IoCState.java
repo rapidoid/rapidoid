@@ -1,4 +1,4 @@
-package org.rapidoid.ioc;
+package org.rapidoid.ioc.impl;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;

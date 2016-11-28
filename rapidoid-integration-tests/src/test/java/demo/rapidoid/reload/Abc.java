@@ -22,7 +22,7 @@ package demo.rapidoid.reload;
 
 import org.rapidoid.annotation.Controller;
 import org.rapidoid.annotation.GET;
-import org.rapidoid.annotation.Wired;
+import org.rapidoid.ioc.Wired;
 
 @Controller
 public class Abc {

@@ -21,7 +21,6 @@ package org.rapidoid.ioc;
  */
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Wired;
 import org.rapidoid.annotation.Since;
 
 import java.util.concurrent.Callable;

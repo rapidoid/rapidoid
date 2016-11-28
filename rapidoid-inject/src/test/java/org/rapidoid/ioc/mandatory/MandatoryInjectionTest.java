@@ -22,7 +22,7 @@ package org.rapidoid.ioc.mandatory;
 
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Wired;
+import org.rapidoid.ioc.Wired;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ioc.AbstractInjectTest;
 import org.rapidoid.ioc.IoC;

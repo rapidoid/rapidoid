@@ -1,15 +1,8 @@
-package org.rapidoid.annotation;
-
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+package org.rapidoid.ioc.impl;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-inject
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -27,13 +20,36 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * #L%
  */
 
-@Target({TYPE})
-@Retention(RUNTIME)
+import org.rapidoid.RapidoidModule;
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.ioc.IoC;
+
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-@Documented
-public @interface Manage {
+public class IoCModule extends RapidoidThing implements RapidoidModule {
 
-	Class<?>[] value();
+	@Override
+	public String name() {
+		return "IoC";
+	}
+
+	@Override
+	public void beforeTest(Object test, boolean isIntegrationTest) {
+		cleanUp();
+
+		// unsuccessful autowire might have some side-effects
+		if (!IoC.autowire(test)) cleanUp();
+	}
+
+	@Override
+	public void afterTest(Object test, boolean isIntegrationTest) {
+		cleanUp();
+	}
+
+	private void cleanUp() {
+		IoC.reset();
+	}
 
 }

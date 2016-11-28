@@ -1,4 +1,4 @@
-package org.rapidoid.ioc;
+package org.rapidoid.ioc.impl;
 
 /*
  * #%L
@@ -20,35 +20,22 @@ package org.rapidoid.ioc;
  * #L%
  */
 
-import org.rapidoid.RapidoidModule;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.jpa.SharedContextAwareEntityManagerProxy;
+import org.rapidoid.jpa.SharedEntityManagerFactoryProxy;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.3.0")
-public class IoCModule extends RapidoidThing implements RapidoidModule {
+@Since("5.1.0")
+public class OptionalJPAUtil extends RapidoidThing {
 
-	@Override
-	public String name() {
-		return "IoC";
+	public static Object getSharedEntityManagerFactoryProxy() {
+		return SharedEntityManagerFactoryProxy.INSTANCE;
 	}
 
-	@Override
-	public void beforeTest(Object test, boolean isIntegrationTest) {
-		cleanUp();
-
-		// unsuccessful autowire might have some side-effects
-		if (!IoC.autowire(test)) cleanUp();
-	}
-
-	@Override
-	public void afterTest(Object test, boolean isIntegrationTest) {
-		cleanUp();
-	}
-
-	private void cleanUp() {
-		IoC.reset();
+	public static Object getSharedContextAwareEntityManagerProxy() {
+		return SharedContextAwareEntityManagerProxy.INSTANCE;
 	}
 
 }

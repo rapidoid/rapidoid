@@ -1,14 +1,14 @@
-package org.rapidoid.annotation;
+package org.rapidoid.ioc.impl;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.util.List;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-inject
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -26,9 +26,25 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * #L%
  */
 
-@Target({TYPE})
-@Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public @interface Autocreate {
+@Since("5.1.0")
+public class IoCContextChanges extends RapidoidThing {
+
+	private final List<Object> loadedInstances;
+
+	private final List<Object> removedInstances;
+
+	public IoCContextChanges(List<Object> loadedInstances, List<Object> removedInstances) {
+		this.loadedInstances = loadedInstances;
+		this.removedInstances = removedInstances;
+	}
+
+	public List<Object> getLoadedInstances() {
+		return loadedInstances;
+	}
+
+	public List<Object> getRemovedInstances() {
+		return removedInstances;
+	}
+
 }

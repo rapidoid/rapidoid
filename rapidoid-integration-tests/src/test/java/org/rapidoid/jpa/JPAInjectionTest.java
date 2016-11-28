@@ -6,7 +6,8 @@ import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.http.Req;
 import org.rapidoid.ioc.IoCContext;
-import org.rapidoid.ioc.IoCContextWrapper;
+import org.rapidoid.ioc.impl.IoCContextWrapper;
+import org.rapidoid.ioc.Wired;
 import org.rapidoid.setup.App;
 import org.rapidoid.u.U;
 
