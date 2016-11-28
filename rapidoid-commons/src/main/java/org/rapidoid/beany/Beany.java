@@ -90,8 +90,8 @@ public class Beany extends RapidoidThing {
 
 				String name = method.getName();
 
-				if (!name.startsWith("_") && !Modifier.isPrivate(modif) && !Modifier.isProtected(modif)
-					&& !Modifier.isStatic(modif)) {
+				if (!name.startsWith("_") && !name.contains("$")
+					&& !Modifier.isPrivate(modif) && !Modifier.isProtected(modif) && !Modifier.isStatic(modif)) {
 
 					if ((name.matches(GETTER) && params.length == 0) || (name.matches(SETTER) && params.length == 1)) {
 
@@ -163,7 +163,7 @@ public class Beany extends RapidoidThing {
 
 					String fieldName = field.getName();
 
-					if (!fieldName.startsWith("_")) {
+					if (!fieldName.startsWith("_") && !fieldName.contains("$")) {
 						BeanProp prop = properties.get(fieldName);
 
 						if (prop == null) {
