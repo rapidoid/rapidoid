@@ -38,16 +38,8 @@ import java.util.Map;
 @Since("5.3.0")
 public class ORM extends RapidoidThing {
 
-	private static final JdbcClient jdbc = JDBC.defaultApi();
-
-	private static final SQL sql = new SQL(jdbc);
-
-	public static SQL sql() {
-		return sql;
-	}
-
-	public static JdbcClient jdbc() {
-		return jdbc;
+	private static JdbcClient jdbc() {
+		return JDBC.defaultApi();
 	}
 
 	public static void bootstrap(Class<?>... entityClasses) {
@@ -58,7 +50,7 @@ public class ORM extends RapidoidThing {
 
 	private static void defineTable(Class<?> entityClass) {
 
-		String table = sql.tableOf(entityClass);
+		String table = SQL.tableOf(entityClass);
 		Map<String, String> columns = U.map();
 
 		for (Prop prop : Beany.propertiesOf(entityClass)) {
@@ -69,7 +61,7 @@ public class ORM extends RapidoidThing {
 			}
 		}
 
-		sql.createTable(table, columns);
+		SQL.createTable(table, columns);
 	}
 
 	private static String columnTypeOf(Class<?> rawType) {

@@ -3,6 +3,7 @@ package org.rapidoid.orm;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
+import org.rapidoid.sql.SQL;
 
 /*
  * #%L
@@ -29,11 +30,12 @@ import org.rapidoid.beany.Beany;
 public abstract class DbEntity<ID> {
 
 	public void save() {
-		ORM.sql().insert(getClass()).values(Beany.read(this));
+		SQL.insert(getClass()).values(Beany.read(this));
 	}
 
 	public void load(int id) {
-		Object data = ORM.sql().get(getClass(), id);
+		Object data = SQL.get(getClass(), id);
 		Beany.update(this, Beany.read(data));
 	}
+
 }

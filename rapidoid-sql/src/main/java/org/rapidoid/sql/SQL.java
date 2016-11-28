@@ -34,112 +34,107 @@ import java.util.Map;
 @Since("5.3.0")
 public class SQL extends RapidoidThing {
 
-	private final JdbcClient client;
-
-	public SQL(JdbcClient client) {
-		this.client = client;
-	}
-
-	public JdbcClient client() {
-		return client;
-	}
-
 	/**
 	 * Equivalent to SELECT [columns] ...
 	 */
-	public SQLSelectDSL select(String... columns) {
-		return new SQLSelectDSL(client, columns);
+	public static SQLSelectDSL select(String... columns) {
+		return new SQLSelectDSL(jdbc(), columns);
 	}
 
 	/**
 	 * Equivalent to SELECT * FROM [table] ...
 	 */
-	public SQLSelectFromDSL from(String table) {
+	public static SQLSelectFromDSL from(String table) {
 		return select("*").from(table);
 	}
 
 	/**
 	 * Equivalent to SELECT * FROM [table] ...
 	 */
-	public Map<String, Object> get(String table, Object id) {
+	public static Map<String, Object> get(String table, Object id) {
 		return select("*").from(table).where("id = ?", id).getOnly();
 	}
 
 	/**
 	 * Equivalent to SELECT * FROM [table] ...
 	 */
-	public <T> T get(Class<T> resultType, Object id) {
+	public static <T> T get(Class<T> resultType, Object id) {
 		List<T> list = select("*").from(tableOf(resultType)).where("id = ?", id).as(resultType);
 		return U.single(list);
 	}
 
-	public String tableOf(Class<?> resultType) {
+	public static String tableOf(Class<?> resultType) {
 		return resultType.getSimpleName().toLowerCase();
 	}
 
 	/**
 	 * Equivalent to INSERT INTO [table] ...
 	 */
-	public SQLInsertDSL insert(String table) {
-		return new SQLInsertDSL(client, table);
+	public static SQLInsertDSL insert(String table) {
+		return new SQLInsertDSL(jdbc(), table);
 	}
 
 	/**
 	 * Equivalent to INSERT INTO [table] ...
 	 */
-	public SQLInsertDSL insert(Class<?> entityType) {
+	public static SQLInsertDSL insert(Class<?> entityType) {
 		return insert(tableOf(entityType));
 	}
 
 	/**
 	 * Equivalent to UPDATE [table] ...
 	 */
-	public SQLUpdateDSL update(String table) {
-		return new SQLUpdateDSL(client, table);
+	public static SQLUpdateDSL update(String table) {
+		return new SQLUpdateDSL(jdbc(), table);
 	}
 
 	/**
 	 * Equivalent to DELETE FROM [table] ...
 	 */
-	public SQLDeleteDSL delete(String table) {
-		return new SQLDeleteDSL(client, table);
+	public static SQLDeleteDSL delete(String table) {
+		return new SQLDeleteDSL(jdbc(), table);
 	}
 
 	/**
 	 * Equivalent to DROP TABLE [table]
 	 */
-	public void dropTable(String table) {
+	public static void dropTable(String table) {
 		execute("DROP TABLE " + table + "");
 	}
 
 	/**
 	 * Equivalent to DROP TABLE [table] IF EXISTS
 	 */
-	public void dropTableIfExists(String table) {
+	public static void dropTableIfExists(String table) {
 		execute("DROP TABLE " + table + " IF EXISTS");
 	}
 
 	/**
 	 * Equivalent to CREATE TABLE [table]
 	 */
-	public void createTable(String table, Map<String, String> columns) {
+	public static void createTable(String table, Map<String, String> columns) {
 		String cols = Str.render(columns, "%s %s", ", ");
 		execute(U.frmt("CREATE TABLE %s (%s)", table, cols));
 	}
 
-	public void execute(String sql, Object... args) {
-		client.execute(sql, args);
+	public static void execute(String sql, Object... args) {
+		jdbc().execute(sql, args);
 	}
 
-	public void tryToExecute(String sql, Object... args) {
-		client.tryToExecute(sql, args);
+	public static void tryToExecute(String sql, Object... args) {
+		jdbc().tryToExecute(sql, args);
 	}
 
-	public <T> List<T> query(Class<T> resultType, String sql, Object... args) {
-		return client.query(resultType, sql, args);
+	public static <T> List<T> query(Class<T> resultType, String sql, Object... args) {
+		return jdbc().query(resultType, sql, args);
 	}
 
-	public List<Map<String, Object>> query(String sql, Object... args) {
-		return client.query(sql, args);
+	public static List<Map<String, Object>> query(String sql, Object... args) {
+		return jdbc().query(sql, args);
 	}
+
+	private static JdbcClient jdbc() {
+		return JDBC.defaultApi();
+	}
+
 }

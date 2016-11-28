@@ -1,4 +1,4 @@
-package org.rapidoid.sql.test;
+package org.rapidoid.SQL.test;
 
 /*
  * #%L
@@ -23,8 +23,9 @@ package org.rapidoid.sql.test;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.sql.JDBC;
 import org.rapidoid.sql.SQL;
+import org.rapidoid.sql.test.Movie;
+import org.rapidoid.sql.test.SQLTestCommons;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
@@ -37,32 +38,32 @@ public class SQLAPITest extends SQLTestCommons {
 
 	@Test
 	public void testSQLAPI() {
-		SQL sql = new SQL(JDBC.newApi().hsql("test"));
+		//SQL sql = new SQL(JDBC.newApi().hsql("test"));
 
-		sql.dropTableIfExists("movie");
-		sql.execute("CREATE TABLE movie (id int, title varchar(99))");
+		SQL.dropTableIfExists("movie");
+		SQL.execute("CREATE TABLE movie (id int, title varchar(99))");
 
-		sql.insert("movie").values(10, "Rambo");
-		sql.insert("movie").values(20, "Hackers");
+		SQL.insert("movie").values(10, "Rambo");
+		SQL.insert("movie").values(20, "Hackers");
 
 		for (int i = 0; i < 1000; i++) {
-			sql.insert("movie").values(100 + i, "movie" + i);
+			SQL.insert("movie").values(100 + i, "movie" + i);
 		}
 
-		sql.update("movie")
+		SQL.update("movie")
 			.set("id", "123")
 			.set("title", "Rambo 2")
 			.where("title", "Rambo 2")
 			.and("title", "Rambo 2")
 			.execute();
 
-		List<Map<String, Object>> rows = sql.select("id", "title").from("movie").where("id < ?", 25).asList();
+		List<Map<String, Object>> rows = SQL.select("id", "title").from("movie").where("id < ?", 25).asList();
 
 		eq(rows.size(), 2);
 		eq(Msc.lowercase(rows.get(0)), U.map("id", 10, "title", "rambo"));
 		eq(Msc.lowercase(rows.get(1)), U.map("id", 20, "title", "hackers"));
 
-		List<Movie> movies = sql.from("movie")
+		List<Movie> movies = SQL.from("movie")
 			.where("id < ?", 25)
 			.and("? > id or id = ?", 50, 1000)
 			.and("id = id")
@@ -70,7 +71,7 @@ public class SQLAPITest extends SQLTestCommons {
 
 		eq(movies.size(), 2);
 
-		Movie m1 = sql.get(Movie.class, 10);
+		Movie m1 = SQL.get(Movie.class, 10);
 		eq(m1.id, 10);
 		eq(m1.getTitle(), "Rambo");
 
@@ -82,7 +83,7 @@ public class SQLAPITest extends SQLTestCommons {
 		eq(movie2.id, 20);
 		eq(movie2.getTitle(), "Hackers");
 
-		sql.delete("movie")
+		SQL.delete("movie")
 			.where("id < ?", 25)
 			.where("? > id or id = ?", 50, 1000)
 			.execute();
