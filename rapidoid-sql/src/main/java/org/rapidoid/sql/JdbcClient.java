@@ -163,6 +163,8 @@ public class JdbcClient extends RapidoidThing {
 	public void execute(String sql, Object... args) {
 		ensureIsInitialized();
 
+		Log.info("SQL", "sql", sql, "args", args);
+
 		Connection conn = provideConnection();
 		PreparedStatement stmt = null;
 

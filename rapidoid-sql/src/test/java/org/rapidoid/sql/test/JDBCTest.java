@@ -1,4 +1,4 @@
-package org.rapidoid.sql;
+package org.rapidoid.sql.test;
 
 /*
  * #%L
@@ -22,6 +22,8 @@ package org.rapidoid.sql;
 
 import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
 import org.junit.Test;
+import org.rapidoid.sql.JDBC;
+import org.rapidoid.sql.JdbcClient;
 import org.rapidoid.sql.pool.C3P0ConnectionPool;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;

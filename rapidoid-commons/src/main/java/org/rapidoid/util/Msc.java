@@ -26,7 +26,6 @@ import org.rapidoid.io.Res;
 import org.rapidoid.lambda.*;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
-import org.rapidoid.sql.JDBC;
 import org.rapidoid.u.U;
 import org.rapidoid.validation.InvalidData;
 import org.rapidoid.wrap.BoolWrap;
@@ -1033,7 +1032,6 @@ public class Msc extends RapidoidThing implements Constants {
 		Res.reset();
 		AppInfo.reset();
 		Conf.reset();
-		JDBC.reset();
 		Env.reset();
 
 		resetState();
