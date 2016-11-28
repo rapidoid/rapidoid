@@ -38,9 +38,10 @@ import org.rapidoid.log.LogLevel;
 import org.rapidoid.reverseproxy.ProxyMapping;
 import org.rapidoid.reverseproxy.Reverse;
 import org.rapidoid.scan.ClasspathUtil;
-import org.rapidoid.setup.*;
-import org.rapidoid.sql.JDBC;
-import org.rapidoid.test.RapidoidIntegrationTest;
+import org.rapidoid.setup.Admin;
+import org.rapidoid.setup.App;
+import org.rapidoid.setup.My;
+import org.rapidoid.setup.On;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -86,8 +87,6 @@ public abstract class IntegrationTestCommons extends TestCommons {
 
 		On.setup().activate();
 		On.setup().reload();
-
-		JDBC.execute(RapidoidIntegrationTest.HSQL_TRUNCATE);
 
 		System.out.println("--- SERVER STARTED ---");
 

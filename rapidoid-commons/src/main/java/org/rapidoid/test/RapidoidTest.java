@@ -23,28 +23,41 @@ package org.rapidoid.test;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.rapidoid.RapidoidModule;
+import org.rapidoid.RapidoidModules;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.log.Log;
 import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.6")
 public abstract class RapidoidTest extends RapidoidThing {
 
-	private boolean hasError;
+	private volatile boolean hasError;
 
 	@Before
-	public void init() {
-		System.out.println("--------------------------------------------------------------------------------");
-		System.out.println(" @" + Msc.processId() + " TEST " + getClass().getCanonicalName());
-		System.out.println("--------------------------------------------------------------------------------");
+	public final void beforeRapidoidTest() {
+
+		Log.info("--------------------------------------------------------------------------------");
+		Log.info("@" + Msc.processId() + " TEST " + getClass().getCanonicalName());
+		Log.info("--------------------------------------------------------------------------------");
 
 		hasError = false;
+
+		for (RapidoidModule mod : RapidoidModules.all()) {
+			mod.beforeTest(this);
+		}
 	}
 
 	@After
-	public void checkForErrors() {
+	public final void afterRapidoidTest() {
+
+		for (RapidoidModule mod : RapidoidModules.all()) {
+			mod.afterTest(this);
+		}
+
 		if (hasError) {
 			Assert.fail("Assertion error(s) occured, probably were caught or were thrown on non-main thread!");
 		}
