@@ -47,7 +47,7 @@ public abstract class RapidoidTest extends RapidoidThing {
 		hasError = false;
 
 		for (RapidoidModule mod : RapidoidModules.all()) {
-			mod.beforeTest(this);
+			mod.beforeTest(this, isIntegrationTest());
 		}
 	}
 
@@ -55,12 +55,16 @@ public abstract class RapidoidTest extends RapidoidThing {
 	public final void afterRapidoidTest() {
 
 		for (RapidoidModule mod : RapidoidModules.all()) {
-			mod.afterTest(this);
+			mod.afterTest(this, isIntegrationTest());
 		}
 
 		if (hasError) {
 			Assert.fail("Assertion error(s) occured, probably were caught or were thrown on non-main thread!");
 		}
+	}
+
+	protected boolean isIntegrationTest() {
+		return false;
 	}
 
 	protected void registerError(AssertionError e) {

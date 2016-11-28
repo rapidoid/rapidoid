@@ -47,12 +47,12 @@ public class SQLModule extends RapidoidThing implements RapidoidModule {
 	}
 
 	@Override
-	public void beforeTest(Object test) {
+	public void beforeTest(Object test, boolean isIntegrationTest) {
 		JDBC.reset();
 	}
 
 	@Override
-	public void afterTest(Object test) {
+	public void afterTest(Object test, boolean isIntegrationTest) {
 		cleanInMemDatabases();
 
 		JDBC.reset();

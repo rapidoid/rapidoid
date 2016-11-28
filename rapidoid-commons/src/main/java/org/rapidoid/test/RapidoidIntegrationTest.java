@@ -27,6 +27,11 @@ import org.rapidoid.annotation.Since;
 @Since("5.1.6")
 public abstract class RapidoidIntegrationTest extends RapidoidTest {
 
+	@Override
+	protected boolean isIntegrationTest() {
+		return true;
+	}
+
 	//		isTrue(Env.test());
 //		isTrue(Env.profiles().contains("test"));
 //		Log.setLogLevel(LogLevel.DEBUG);

@@ -29,8 +29,8 @@ public interface RapidoidModule {
 
 	String name();
 
-	void beforeTest(Object test);
+	void beforeTest(Object test, boolean isIntegrationTest);
 
-	void afterTest(Object test);
+	void afterTest(Object test, boolean isIntegrationTest);
 
 }
