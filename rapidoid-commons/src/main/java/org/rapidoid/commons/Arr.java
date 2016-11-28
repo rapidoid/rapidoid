@@ -139,6 +139,15 @@ public class Arr extends RapidoidThing {
 		return indexOf(arr, value) >= 0;
 	}
 
+	/* containsAny */
+
+	public static <T> boolean containsAny(T[] arr, Iterable<? extends T> values) {
+		for (T value : values) {
+			if (contains(arr, value)) return true;
+		}
+		return false;
+	}
+
 	/* sub */
 
 	public static <T> T[] sub(T[] arr, int from, int to) {
