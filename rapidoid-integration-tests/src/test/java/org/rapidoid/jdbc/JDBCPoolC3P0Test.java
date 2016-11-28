@@ -26,8 +26,9 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.http.IsolatedIntegrationTest;
-import org.rapidoid.sql.pool.C3P0ConnectionPool;
 import org.rapidoid.sql.JDBC;
+import org.rapidoid.sql.JdbcClient;
+import org.rapidoid.sql.pool.C3P0ConnectionPool;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
@@ -65,14 +66,17 @@ public class JDBCPoolC3P0Test extends IsolatedIntegrationTest {
 	}
 
 	@Test(timeout = 30000)
-	public void testJDBCWithTextconfig() {
-		JDBC.reset();
+	public void testJDBCWithTextConfig() {
 
+		Conf.JDBC.set("driver", "org.h2.Driver");
 		Conf.JDBC.set("url", "jdbc:h2:mem:mydb");
 		Conf.JDBC.set("username", "sa");
 		Conf.C3P0.set("maxPoolSize", "123");
 
 		JDBC.defaultApi().pooled();
+
+		JdbcClient jdbc = JDBC.defaultApi();
+		eq(jdbc.driver(), "org.h2.Driver");
 
 		C3P0ConnectionPool pool = (C3P0ConnectionPool) JDBC.defaultApi().pool();
 		ComboPooledDataSource c3p0 = pool.pool();
