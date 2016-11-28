@@ -20,6 +20,8 @@ package org.rapidoid.sql.dsl;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.sql.JdbcClient;
 
