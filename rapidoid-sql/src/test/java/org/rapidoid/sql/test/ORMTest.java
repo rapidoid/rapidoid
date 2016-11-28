@@ -20,17 +20,42 @@ package org.rapidoid.sql.test;
  * #L%
  */
 
-import org.junit.Before;
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.data.JSON;
+import org.rapidoid.orm.DbEntity;
+import org.rapidoid.orm.DbId;
+import org.rapidoid.orm.ORM;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class SQLTestCommons extends TestCommons {
+public class ORMTest extends SQLTestCommons {
 
-	@Before
-	public final void resetSql() {
+	static class Booky extends DbEntity {
+		@DbId
+		public long id;
+
+		public String title;
+	}
+
+	@Test
+	public void testORM() {
+
+		ORM.bootstrap(Booky.class, Person.class);
+
+		Booky book = new Booky();
+		book.title = "asd";
+		book.id = 123;
+
+		book.save();
+
+		Booky b2 = new Booky();
+		b2.load(123);
+
+		U.print(JSON.stringify(b2));
 	}
 
 }
+

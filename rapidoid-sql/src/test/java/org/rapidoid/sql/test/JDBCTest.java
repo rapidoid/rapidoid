@@ -22,6 +22,8 @@ package org.rapidoid.sql.test;
 
 import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
 import org.junit.Test;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.sql.JDBC;
 import org.rapidoid.sql.JdbcClient;
 import org.rapidoid.sql.pool.C3P0ConnectionPool;
@@ -31,6 +33,8 @@ import org.rapidoid.util.Msc;
 import java.util.List;
 import java.util.Map;
 
+@Authors("Nikolche Mihajlovski")
+@Since("5.x")
 public class JDBCTest extends SQLTestCommons {
 
 	@Test

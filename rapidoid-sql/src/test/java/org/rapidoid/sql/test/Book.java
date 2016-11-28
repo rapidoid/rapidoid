@@ -20,17 +20,17 @@ package org.rapidoid.sql.test;
  * #L%
  */
 
-import org.junit.Before;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.orm.DbEntity;
+import org.rapidoid.orm.DbId;
+import org.rapidoid.orm.Ref;
 
-@Authors("Nikolche Mihajlovski")
-@Since("5.3.0")
-public class SQLTestCommons extends TestCommons {
+public class Book extends DbEntity {
 
-	@Before
-	public final void resetSql() {
-	}
+	@DbId
+	public long id;
+
+	public String title;
+
+	public Ref<Person> author; // author_id
 
 }

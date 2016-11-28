@@ -20,17 +20,26 @@ package org.rapidoid.sql.test;
  * #L%
  */
 
-import org.junit.Before;
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.orm.ORM;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class SQLTestCommons extends TestCommons {
+public class ORMRelTest extends SQLTestCommons {
 
-	@Before
-	public final void resetSql() {
+	@Test
+	public void testORMRelations() {
+
+		ORM.bootstrap(Book.class, Person.class);
+
+		Book book = new Book();
+		Person person = new Person();
+
+//		Person author = book.author.get(); // Person[id=?]
+//		List<Book> books = person.books.get(); // Book[author_id=?]
 	}
 
 }
+
