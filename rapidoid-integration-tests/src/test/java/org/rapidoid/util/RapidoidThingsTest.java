@@ -27,6 +27,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.orm.DbEntity;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 
@@ -51,6 +52,7 @@ public class RapidoidThingsTest {
 					|| OutputStream.class.isAssignableFrom(clazz)
 					|| Map.class.isAssignableFrom(clazz)
 					|| AbstractMojo.class.isAssignableFrom(clazz)
+					|| DbEntity.class.isAssignableFrom(clazz)
 					|| Thread.class.isAssignableFrom(clazz), "" + cls);
 			}
 		}
