@@ -8,6 +8,7 @@ import org.rapidoid.u.U;
 
 import javax.xml.bind.DatatypeConverter;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -131,6 +132,23 @@ public class Str extends RapidoidThing {
 
 			sb.append(U.frmt(itemFormat, item));
 			i++;
+		}
+
+		return sb.toString();
+	}
+
+	public static String render(Map<?, ?> items, String itemFormat, String sep) {
+		StringBuilder sb = new StringBuilder();
+
+		boolean first = true;
+		for (Map.Entry<?, ?> e : items.entrySet()) {
+			if (!first) {
+				sb.append(sep);
+			}
+
+			sb.append(U.frmt(itemFormat, e.getKey(), e.getValue()));
+
+			first = false;
 		}
 
 		return sb.toString();
