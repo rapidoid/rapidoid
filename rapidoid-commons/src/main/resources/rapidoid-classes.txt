@@ -693,6 +693,7 @@ org.rapidoid.util.ByType
 org.rapidoid.util.Constants
 org.rapidoid.util.D
 org.rapidoid.util.Deleted
+org.rapidoid.util.Dict
 org.rapidoid.util.ErrCodeAndMsg
 org.rapidoid.util.Expectation
 org.rapidoid.util.GlobalCfg
