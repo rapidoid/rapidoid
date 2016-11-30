@@ -20,7 +20,7 @@ import org.rapidoid.jpa.JPA;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
-import org.rapidoid.sql.JDBC;
+import org.rapidoid.jdbc.JDBC;
 import org.rapidoid.u.U;
 
 import javax.persistence.metamodel.EntityType;

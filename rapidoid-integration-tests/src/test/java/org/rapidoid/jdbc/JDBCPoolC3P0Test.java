@@ -26,9 +26,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.http.IsolatedIntegrationTest;
-import org.rapidoid.sql.JDBC;
-import org.rapidoid.sql.JdbcClient;
-import org.rapidoid.sql.pool.C3P0ConnectionPool;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 

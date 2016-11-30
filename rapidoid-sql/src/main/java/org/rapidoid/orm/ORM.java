@@ -7,8 +7,8 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
-import org.rapidoid.sql.JDBC;
-import org.rapidoid.sql.JdbcClient;
+import org.rapidoid.jdbc.JDBC;
+import org.rapidoid.jdbc.JdbcClient;
 import org.rapidoid.sql.SQL;
 import org.rapidoid.u.U;
 

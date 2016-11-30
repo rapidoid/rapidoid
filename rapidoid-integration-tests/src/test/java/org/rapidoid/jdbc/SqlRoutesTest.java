@@ -26,7 +26,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.setup.App;
-import org.rapidoid.sql.JDBC;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.5")

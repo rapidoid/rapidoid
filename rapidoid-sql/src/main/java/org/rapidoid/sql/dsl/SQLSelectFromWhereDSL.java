@@ -22,7 +22,7 @@ package org.rapidoid.sql.dsl;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.sql.JdbcClient;
+import org.rapidoid.jdbc.JdbcClient;
 import org.rapidoid.u.U;
 
 import java.util.List;

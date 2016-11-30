@@ -24,6 +24,8 @@ import org.rapidoid.RapidoidModule;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.jdbc.JDBC;
+import org.rapidoid.jdbc.JdbcClient;
 import org.rapidoid.log.Log;
 
 @Authors("Nikolche Mihajlovski")

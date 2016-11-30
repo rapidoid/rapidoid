@@ -1,4 +1,4 @@
-package org.rapidoid.sql;
+package org.rapidoid.jdbc;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;

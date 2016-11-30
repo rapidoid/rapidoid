@@ -4,6 +4,8 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Str;
+import org.rapidoid.jdbc.JDBC;
+import org.rapidoid.jdbc.JdbcClient;
 import org.rapidoid.sql.dsl.*;
 import org.rapidoid.u.U;
 

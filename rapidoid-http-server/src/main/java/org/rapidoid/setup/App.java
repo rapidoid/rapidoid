@@ -44,7 +44,7 @@ import org.rapidoid.render.Templates;
 import org.rapidoid.reverseproxy.Reverse;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.scan.Scan;
-import org.rapidoid.sql.JDBC;
+import org.rapidoid.jdbc.JDBC;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
