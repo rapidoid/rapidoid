@@ -23,15 +23,19 @@ package org.rapidoid.standalone;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.io.IO;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class Main extends RapidoidThing {
 
 	public static void main(String[] args) {
+		U.print(IO.load("rapidoid.txt"));
+
 		App.bootstrap(args);
 
 		if (!Setup.isAnyRunning()) {
