@@ -3,6 +3,7 @@ package org.rapidoid.scan;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;
@@ -34,6 +35,10 @@ public class Scan extends RapidoidThing {
 
 	public static ScanParams in(String... packages) {
 		return new ScanParams().in(packages);
+	}
+
+	public static ScanParams in(List<String> packages) {
+		return in(U.arrayOf(String.class, packages));
 	}
 
 	public static ScanParams matching(String matching) {

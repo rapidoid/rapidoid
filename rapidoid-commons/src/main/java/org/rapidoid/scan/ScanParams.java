@@ -48,6 +48,10 @@ public class ScanParams extends RapidoidThing {
 		return this;
 	}
 
+	public synchronized ScanParams in(Iterable<String> packages) {
+		return in(U.arrayOf(String.class, packages));
+	}
+
 	public synchronized String[] in() {
 		return this.packages;
 	}

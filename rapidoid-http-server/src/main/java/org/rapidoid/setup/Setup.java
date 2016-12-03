@@ -1,15 +1,16 @@
 package org.rapidoid.setup;
 
 import org.rapidoid.AuthBootstrap;
-import org.rapidoid.annotation.*;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.AnyObj;
-import org.rapidoid.env.Env;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
 import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.data.JSON;
+import org.rapidoid.env.Env;
 import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.HttpRoutes;
 import org.rapidoid.http.ReqHandler;
@@ -35,9 +36,7 @@ import org.rapidoid.util.Constants;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.Once;
 
-import javax.inject.Named;
-import javax.inject.Singleton;
-import java.lang.annotation.Annotation;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -65,9 +64,6 @@ import java.util.Map;
 @Since("5.1.0")
 public class Setup extends RapidoidInitializer implements Constants {
 
-	public static final Class<? extends Annotation>[] ANNOTATIONS = new Class[]{
-		Controller.class, Service.class, Run.class, Named.class, Singleton.class
-	};
 
 	static final Setup ON = new Setup("app", "main", "0.0.0.0", 8888, IoC.defaultContext(), Conf.ROOT, Conf.ON);
 	static final Setup ADMIN = new Setup("admin", "admin", "0.0.0.0", 8888, IoC.defaultContext(), Conf.ROOT, Conf.ADMIN);
@@ -480,7 +476,7 @@ public class Setup extends RapidoidInitializer implements Constants {
 	}
 
 	public static List<Setup> instances() {
-		return instances;
+		return Collections.unmodifiableList(instances);
 	}
 
 	public Config config() {
@@ -579,7 +575,7 @@ public class Setup extends RapidoidInitializer implements Constants {
 	}
 
 	public void register(Beans beans) {
-		beans(beans.getAnnotated(U.set(ANNOTATIONS)));
+		beans(beans.getAnnotated(U.set(IoC.ANNOTATIONS)));
 	}
 
 }

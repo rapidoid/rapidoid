@@ -1,11 +1,13 @@
 package org.rapidoid.ioc;
 
 import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.*;
 import org.rapidoid.ioc.impl.IoCContextImpl;
 import org.rapidoid.ioc.impl.IoCContextWrapper;
 
+import javax.inject.Named;
+import javax.inject.Singleton;
+import java.lang.annotation.Annotation;
 import java.util.Map;
 
 /*
@@ -31,6 +33,11 @@ import java.util.Map;
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class IoC extends RapidoidThing {
+
+	@SuppressWarnings("unchecked")
+	public static final Class<? extends Annotation>[] ANNOTATIONS = new Class[]{
+		Controller.class, Service.class, Run.class, Named.class, Singleton.class
+	};
 
 	private static final IoCContext DEFAULT_CONTEXT = createContext();
 

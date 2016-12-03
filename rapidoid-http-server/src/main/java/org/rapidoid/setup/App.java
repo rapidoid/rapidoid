@@ -25,10 +25,10 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Arr;
-import org.rapidoid.env.Env;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.ConfigHelp;
 import org.rapidoid.data.JSON;
+import org.rapidoid.env.Env;
 import org.rapidoid.http.HttpVerb;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqRespHandler;
@@ -37,18 +37,17 @@ import org.rapidoid.io.Res;
 import org.rapidoid.ioc.Beans;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.ioc.IoCContext;
+import org.rapidoid.jdbc.JDBC;
 import org.rapidoid.job.Jobs;
-import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.render.Templates;
 import org.rapidoid.reverseproxy.Reverse;
+import org.rapidoid.scan.ClasspathScanner;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.scan.Scan;
-import org.rapidoid.jdbc.JDBC;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
-import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -68,15 +67,6 @@ public class App extends RapidoidThing {
 	private static final Set<Class<?>> invoked = Coll.synchronizedSet();
 
 	static volatile ClassLoader loader = App.class.getClassLoader();
-
-	private static Map<List<String>, List<Class<?>>> beansCache = Coll.autoExpandingMap(new Mapper<List<String>, List<Class<?>>>() {
-		@SuppressWarnings("unchecked")
-		@Override
-		public List<Class<?>> map(List<String> packages) throws Exception {
-			String[] pkgs = U.arrayOf(String.class, packages);
-			return Scan.annotated((Class<? extends Annotation>[]) Setup.ANNOTATIONS).in(pkgs).loadAll();
-		}
-	});
 
 	public static void args(String[] args, String... extraArgs) {
 		args = Arr.concat(extraArgs, args);
@@ -234,7 +224,7 @@ public class App extends RapidoidThing {
 		JSON.reset();
 
 		AppBootstrap.reset();
-		beansCache.clear();
+		ClasspathScanner.reset();
 		invoked.clear();
 
 		for (Setup setup : Setup.instances()) {
@@ -279,7 +269,6 @@ public class App extends RapidoidThing {
 		loader = App.class.getClassLoader();
 		Setup.initDefaults();
 		AppBootstrap.reset();
-		beansCache.clear();
 		invoked.clear();
 		Reverse.reset();
 	}
@@ -307,9 +296,7 @@ public class App extends RapidoidThing {
 			packages = path();
 		}
 
-		List<String> pkgs = U.notEmpty(packages) ? U.list(packages) : U.<String>list();
-
-		return beansCache.get(pkgs);
+		return Scan.annotated(IoC.ANNOTATIONS).in(packages).loadAll();
 	}
 
 	public static boolean scan(String... packages) {

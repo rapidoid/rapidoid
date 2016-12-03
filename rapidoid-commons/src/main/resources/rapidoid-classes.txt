@@ -615,6 +615,7 @@ org.rapidoid.reverseproxy.Reverse
 org.rapidoid.reverseproxy.ReverseProxy
 org.rapidoid.reverseproxy.ReverseProxyMapDSL
 org.rapidoid.reverseproxy.RoundRobinLoadBalancer
+org.rapidoid.scan.ClasspathScanner
 org.rapidoid.scan.ClasspathUtil
 org.rapidoid.scan.Scan
 org.rapidoid.scan.ScanParams
