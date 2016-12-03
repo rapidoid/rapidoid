@@ -1160,4 +1160,9 @@ public class Msc extends RapidoidThing implements Constants {
 		return !Msc.isInsideTest() && Env.dev();
 	}
 
+	public static String fileSizeReadable(String filename) {
+		long sizeKB = Math.round(new File(filename).length() / 1024.0);
+		return sizeKB + " KB";
+	}
+
 }

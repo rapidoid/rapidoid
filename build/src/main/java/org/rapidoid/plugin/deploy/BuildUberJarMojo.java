@@ -2,7 +2,7 @@ package org.rapidoid.plugin.deploy;
 
 /*
  * #%L
- * Rapidoid Deploy Plugin
+ * Rapidoid Build Plugin
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -20,20 +20,28 @@ package org.rapidoid.plugin.deploy;
  * #L%
  */
 
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.MavenProject;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-@Mojo(name = "uber-jar", aggregator = true, defaultPhase = LifecyclePhase.DEPLOY)
-public class UberJarMojo extends AbstractDeploymentMojo {
+@Mojo(name = "uber-jar", aggregator = true, defaultPhase = LifecyclePhase.PACKAGE)
+public class BuildUberJarMojo extends AbstractRapidoidMojo {
+
+	@Parameter(defaultValue = "${project}", readonly = true, required = true)
+	protected MavenProject project;
+
+	@Parameter(defaultValue = "${session}", readonly = true, required = true)
+	protected MavenSession session;
 
 	public void execute() throws MojoExecutionException {
-		String uberJar = build(true);
-		deploy(uberJar);
+		buildUberJar(project, session);
 	}
 
 }

@@ -569,9 +569,7 @@ org.rapidoid.oauth.OAuthLoginHandler
 org.rapidoid.oauth.OAuthProvider
 org.rapidoid.oauth.OAuthStateCheck
 org.rapidoid.oauth.OAuthTokenHandler
-org.rapidoid.plugin.deploy.AbstractDeploymentMojo
-org.rapidoid.plugin.deploy.BuildUberJarMojo
-org.rapidoid.plugin.deploy.UberJarMojo
+org.rapidoid.plugin.deploy.DeployUberJarMojo
 org.rapidoid.pool.ArrayPool
 org.rapidoid.pool.Pool
 org.rapidoid.pool.Pools

@@ -112,6 +112,7 @@
 		<module>rapidoid-watch</module>
 		<module>rapidoid-fluent</module>
 		<module>rapidoid-integration-tests</module>
+		<module>build</module>
 		<module>deploy</module>
 	</modules>
 
