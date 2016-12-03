@@ -1,0 +1,8 @@
+# the token for the deployment API
+token: YOUR-DEPLOYMENT-TOKEN-HERE
+
+# list of servers
+servers: 'localhost:8888'
+
+# the main class to execute when the deployed application is started
+main: 'com.example.Main'
