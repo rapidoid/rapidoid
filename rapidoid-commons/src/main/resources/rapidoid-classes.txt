@@ -28,6 +28,7 @@ org.rapidoid.annotation.POST
 org.rapidoid.annotation.Profiles
 org.rapidoid.annotation.Programmatic
 org.rapidoid.annotation.PUT
+org.rapidoid.annotation.RapidoidModuleDesc
 org.rapidoid.annotation.Required
 org.rapidoid.annotation.Run
 org.rapidoid.annotation.Scaffold
@@ -383,6 +384,7 @@ org.rapidoid.http.HttpContentType
 org.rapidoid.http.HttpException
 org.rapidoid.http.HttpHeaders
 org.rapidoid.http.HttpMetadata
+org.rapidoid.http.HttpModule
 org.rapidoid.http.HttpReq
 org.rapidoid.http.HttpResp
 org.rapidoid.http.HttpResponseCodes
@@ -569,6 +571,8 @@ org.rapidoid.oauth.OAuthLoginHandler
 org.rapidoid.oauth.OAuthProvider
 org.rapidoid.oauth.OAuthStateCheck
 org.rapidoid.oauth.OAuthTokenHandler
+org.rapidoid.plugin.deploy.AbstractRapidoidMojo
+org.rapidoid.plugin.deploy.BuildUberJarMojo
 org.rapidoid.plugin.deploy.DeployUberJarMojo
 org.rapidoid.pool.ArrayPool
 org.rapidoid.pool.Pool
