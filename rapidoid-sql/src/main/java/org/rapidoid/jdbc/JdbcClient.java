@@ -157,7 +157,7 @@ public class JdbcClient extends RapidoidThing {
 		}
 	}
 
-	public void execute(String sql, Object... args) {
+	public int execute(String sql, Object... args) {
 		ensureIsInitialized();
 
 		Log.info("SQL", "sql", sql, "args", args);
@@ -167,7 +167,13 @@ public class JdbcClient extends RapidoidThing {
 
 		try {
 			stmt = JDBC.prepare(conn, sql, args);
-			stmt.execute();
+
+			if (sql.trim().toUpperCase().startsWith("UPDATE ")) {
+				return stmt.executeUpdate();
+
+			} else {
+				return stmt.execute() ? 1 : 0;
+			}
 
 		} catch (SQLException e) {
 			throw U.rte(e);
