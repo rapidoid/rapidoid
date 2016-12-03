@@ -1,4 +1,11 @@
-package org.rapidoid.commons;
+package org.rapidoid.annotation;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /*
  * #%L
@@ -20,30 +27,15 @@ package org.rapidoid.commons;
  * #L%
  */
 
-import org.rapidoid.RapidoidModule;
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.RapidoidModuleDesc;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.util.Msc;
-
+@Target({TYPE})
+@Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-@RapidoidModuleDesc(name = "Commons", order = 100)
-public class CommonsModule extends RapidoidThing implements RapidoidModule {
+@Documented
+public @interface RapidoidModuleDesc {
 
-	@Override
-	public void beforeTest(Object test, boolean isIntegrationTest) {
-		cleanUp();
-	}
+	String name();
 
-	@Override
-	public void afterTest(Object test, boolean isIntegrationTest) {
-		cleanUp();
-	}
-
-	private void cleanUp() {
-		Msc.reset();
-	}
+	int order();
 
 }

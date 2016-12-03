@@ -23,13 +23,11 @@ package org.rapidoid.jdbc;
 import org.rapidoid.RapidoidModule;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.jdbc.JDBC;
-import org.rapidoid.jdbc.JdbcClient;
+import org.rapidoid.annotation.RapidoidModuleDesc;
 import org.rapidoid.log.Log;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.3.0")
+@RapidoidModuleDesc(name = "SQL", order = 500)
 public class SQLModule extends RapidoidThing implements RapidoidModule {
 
 	private static final String HSQLDB_DRIVER = "org.hsqldb.jdbc.JDBCDriver";
@@ -41,11 +39,6 @@ public class SQLModule extends RapidoidThing implements RapidoidModule {
 	private static final String H2_DRIVER = "org.h2.Driver";
 
 	private static final String H2_DROP_ALL = "DROP ALL OBJECTS DELETE FILES";
-
-	@Override
-	public String name() {
-		return "SQL";
-	}
 
 	@Override
 	public void beforeTest(Object test, boolean isIntegrationTest) {

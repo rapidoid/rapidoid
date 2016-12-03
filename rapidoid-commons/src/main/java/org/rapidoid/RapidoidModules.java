@@ -21,30 +21,63 @@ package org.rapidoid;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.RapidoidModuleDesc;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.u.U;
 
-import java.util.Iterator;
-import java.util.ServiceConfigurationError;
-import java.util.ServiceLoader;
-import java.util.Set;
+import java.util.*;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
 public class RapidoidModules extends RapidoidThing {
 
-	public static Set<RapidoidModule> getAll() {
+	private static final Comparator<RapidoidModule> MODULE_COMPARATOR = new Comparator<RapidoidModule>() {
+		@Override
+		public int compare(RapidoidModule mod1, RapidoidModule mod2) {
+
+			RapidoidModuleDesc desc1 = mod1.getClass().getAnnotation(RapidoidModuleDesc.class);
+			RapidoidModuleDesc desc2 = mod2.getClass().getAnnotation(RapidoidModuleDesc.class);
+
+			return desc1.order() - desc2.order();
+		}
+	};
+
+	public static List<RapidoidModule> getAll() {
 		return all(false);
 	}
 
-	public static Set<RapidoidModule> getAllAvailable() {
+	public static List<RapidoidModule> getAllAvailable() {
 		return all(true);
 	}
 
-	public static Set<RapidoidModule> all(boolean availableOnly) {
-		Set<RapidoidModule> modules = U.set();
+	public static List<RapidoidModule> all(boolean availableOnly) {
+		List<RapidoidModule> modules = U.list();
 
+		addServiceLoaderModules(availableOnly, modules);
+
+		addBuiltInModules(modules);
+
+		validate(modules);
+
+		Collections.sort(modules, MODULE_COMPARATOR);
+
+		return modules;
+	}
+
+	private static void addBuiltInModules(List<RapidoidModule> modules) {
+		for (String clsName : Cls.getRapidoidClasses()) {
+			if (clsName.endsWith("Module")) {
+				Class<?> cls = Cls.getClassIfExists(clsName);
+
+				if (cls != null && RapidoidModule.class.isAssignableFrom(cls) && !cls.isInterface()) {
+					modules.add((RapidoidModule) Cls.newInstance(cls));
+				}
+			}
+		}
+	}
+
+	private static void addServiceLoaderModules(boolean availableOnly, List<RapidoidModule> modules) {
 		Iterator<RapidoidModule> it = ServiceLoader.load(RapidoidModule.class).iterator();
 
 		while (it.hasNext()) {
@@ -65,18 +98,13 @@ public class RapidoidModules extends RapidoidThing {
 				modules.add(mod);
 			}
 		}
+	}
 
-		for (String clsName : Cls.getRapidoidClasses()) {
-			if (clsName.endsWith("Module")) {
-				Class<?> cls = Cls.getClassIfExists(clsName);
-
-				if (cls != null && RapidoidModule.class.isAssignableFrom(cls) && !cls.isInterface()) {
-					modules.add((RapidoidModule) Cls.newInstance(cls));
-				}
-			}
+	private static void validate(List<RapidoidModule> modules) {
+		for (RapidoidModule module : modules) {
+			RapidoidModuleDesc desc = module.getClass().getAnnotation(RapidoidModuleDesc.class);
+			U.must(desc != null, "The module must be annotated with %s!", RapidoidModuleDesc.class);
 		}
-
-		return modules;
 	}
 
 }

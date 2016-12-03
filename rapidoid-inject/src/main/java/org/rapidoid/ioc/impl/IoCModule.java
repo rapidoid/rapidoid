@@ -23,24 +23,23 @@ package org.rapidoid.ioc.impl;
 import org.rapidoid.RapidoidModule;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.RapidoidModuleDesc;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ioc.IoC;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
+@RapidoidModuleDesc(name = "IoC", order = 300)
 public class IoCModule extends RapidoidThing implements RapidoidModule {
-
-	@Override
-	public String name() {
-		return "IoC";
-	}
 
 	@Override
 	public void beforeTest(Object test, boolean isIntegrationTest) {
 		cleanUp();
 
 		// unsuccessful autowire might have some side-effects
-		if (!IoC.autowire(test)) cleanUp();
+		if (!IoC.autowire(test)) {
+			cleanUp();
+		}
 	}
 
 	@Override
