@@ -41,6 +41,7 @@ public class RapidoidThingsTest {
 	public void classesShouldExtendRapidoidThing() {
 		for (String cls : Cls.getRapidoidClasses()) {
 			Class<?> clazz = Cls.get(cls);
+
 			if (!clazz.isInterface() && !clazz.isEnum() && !clazz.isAnnotation()) {
 				U.must(RapidoidThing.class.isAssignableFrom(clazz)
 					|| clazz == TestCommons.class
@@ -53,6 +54,8 @@ public class RapidoidThingsTest {
 					|| AbstractMojo.class.isAssignableFrom(clazz)
 					|| Thread.class.isAssignableFrom(clazz), "" + cls);
 			}
+
+
 		}
 	}
 

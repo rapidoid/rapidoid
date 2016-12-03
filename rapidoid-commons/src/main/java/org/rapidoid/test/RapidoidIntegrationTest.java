@@ -29,18 +29,4 @@ import org.rapidoid.annotation.Since;
 @IntegrationTest
 public abstract class RapidoidIntegrationTest extends RapidoidTest {
 
-	//		isTrue(Env.test());
-//		isTrue(Env.profiles().contains("test"));
-//		Log.setLogLevel(LogLevel.DEBUG);
-//
-//		IoC.autowire(this);
-//
-//		ScanPackages scan = Metadata.getAnnotationRecursive(getClass(), ScanPackages.class);
-//
-//		if (scan != null) {
-//			String[] pkgs = scan.value();
-//			U.must(U.notEmpty(pkgs), "@ScanPackages requires a list of packages to scan!");
-//			App.scan(pkgs);
-//		}
-
 }

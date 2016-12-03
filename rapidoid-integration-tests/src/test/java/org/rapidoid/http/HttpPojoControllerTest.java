@@ -75,7 +75,7 @@ public class HttpPojoControllerTest extends IsolatedIntegrationTest {
 	public void testPojoHandlersWithIoC() {
 		notFound("/b");
 
-		List<String> ctrls = Scan.annotated(MyTestController.class).in("pkg1", "pkg2").getAll();
+		List<String> ctrls = Scan.annotated(MyTestController.class).in(U.list("pkg1", "pkg2")).getAll();
 		isTrue(ctrls.isEmpty());
 
 		List<String> ctrls2 = Scan.annotated(MyTestController.class, Generated.class).in(App.path()).getAll();

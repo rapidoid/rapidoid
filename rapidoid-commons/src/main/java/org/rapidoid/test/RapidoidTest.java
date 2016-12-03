@@ -28,8 +28,10 @@ import org.rapidoid.RapidoidModules;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.IntegrationTest;
+import org.rapidoid.annotation.RapidoidModuleDesc;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Metadata;
+import org.rapidoid.env.Env;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.Msc;
 
@@ -48,12 +50,14 @@ public abstract class RapidoidTest extends RapidoidThing {
 
 		hasError = false;
 
+		isTrue(Msc.isInsideTest());
+		isTrue(Env.test());
+
 		before(this);
 	}
 
 	@After
 	public final void afterRapidoidTest() {
-
 		after(this);
 
 		if (hasError) {
@@ -63,8 +67,12 @@ public abstract class RapidoidTest extends RapidoidThing {
 
 	public static void before(Object test) {
 		for (RapidoidModule mod : RapidoidModules.getAllAvailable()) {
+			RapidoidModuleDesc ann = mod.getClass().getAnnotation(RapidoidModuleDesc.class);
+			Log.debug("Initializing module before the test", "module", ann.name(), "order", ann.order());
 			mod.beforeTest(test, isIntegrationTest(test));
 		}
+
+		Log.debug("All modules are initialized");
 	}
 
 	public static void after(Object test) {
