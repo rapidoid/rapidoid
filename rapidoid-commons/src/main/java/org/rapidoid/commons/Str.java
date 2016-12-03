@@ -141,14 +141,22 @@ public class Str extends RapidoidThing {
 		StringBuilder sb = new StringBuilder();
 
 		boolean first = true;
+		int index = 0;
 		for (Map.Entry<?, ?> e : items.entrySet()) {
+
 			if (!first) {
 				sb.append(sep);
 			}
 
-			sb.append(U.frmt(itemFormat, e.getKey(), e.getValue()));
+			String s = itemFormat
+				.replaceAll(Pattern.quote("${key}"), String.valueOf(e.getKey()))
+				.replaceAll(Pattern.quote("${value}"), String.valueOf(e.getValue()))
+				.replaceAll(Pattern.quote("${index}"), String.valueOf(index));
+
+			sb.append(s);
 
 			first = false;
+			index++;
 		}
 
 		return sb.toString();
