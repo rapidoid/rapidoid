@@ -2,6 +2,7 @@ package org.rapidoid.ioc;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.ScanPackages;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.cls.Cls;
@@ -54,12 +55,15 @@ public class ClassMetadata extends RapidoidThing {
 
 	public final Set<Class<?>> typesToManage;
 
+	public final Set<String> packagesToScan;
+
 	public ClassMetadata(Class<?> clazz) {
 		this.clazz = clazz;
 		this.injectableFields = Collections.synchronizedSet(getInjectableFields(clazz));
 		this.injectableConstructors = Collections.synchronizedSet(getInjectableConstructors(clazz));
 		this.defaultConstructor = getDefaultConstructor(clazz);
 		this.typesToManage = Collections.synchronizedSet(getTypesToManage(clazz));
+		this.packagesToScan = Collections.synchronizedSet(getPackagesToScan(clazz));
 	}
 
 	public static Set<Class<?>> getTypesToManage(Class<?> clazz) {
@@ -72,6 +76,19 @@ public class ClassMetadata extends RapidoidThing {
 		}
 
 		return types;
+	}
+
+	private Set<String> getPackagesToScan(Class<?> clazz) {
+		ScanPackages scan = Metadata.getAnnotationRecursive(clazz, ScanPackages.class);
+
+		if (scan != null) {
+			String[] pkgs = scan.value();
+			U.must(U.notEmpty(pkgs), "@ScanPackages requires a list of packages to scan!");
+			return U.set(pkgs);
+
+		} else {
+			return U.set();
+		}
 	}
 
 	public static Set<Field> getInjectableFields(Class<?> clazz) {

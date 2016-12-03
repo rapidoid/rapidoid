@@ -7,6 +7,7 @@ import org.rapidoid.lambda.Mapper;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /*
  * #%L
@@ -61,4 +62,9 @@ public interface IoCContext {
 	Map<String, Object> info();
 
 	void beanProvider(BeanProvider beanProvider);
+
+	Set<Object> getManagedInstances();
+
+	Set<Class<?>> getManagedClasses();
+
 }

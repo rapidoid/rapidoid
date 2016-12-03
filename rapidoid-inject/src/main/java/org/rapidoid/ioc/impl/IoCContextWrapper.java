@@ -9,6 +9,7 @@ import org.rapidoid.lambda.Mapper;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /*
  * #%L
@@ -201,6 +202,32 @@ public class IoCContextWrapper extends RapidoidThing implements IoCContext {
 
 		try {
 			context.beanProvider(beanProvider);
+		} catch (RuntimeException e) {
+			context.rollback(backup);
+			throw e;
+		}
+	}
+
+	@Override
+	public synchronized Set<Object> getManagedInstances() {
+		IoCState backup = context.backup();
+
+		try {
+			return context.getManagedInstances();
+
+		} catch (RuntimeException e) {
+			context.rollback(backup);
+			throw e;
+		}
+	}
+
+	@Override
+	public synchronized Set<Class<?>> getManagedClasses() {
+		IoCState backup = context.backup();
+
+		try {
+			return context.getManagedClasses();
+
 		} catch (RuntimeException e) {
 			context.rollback(backup);
 			throw e;

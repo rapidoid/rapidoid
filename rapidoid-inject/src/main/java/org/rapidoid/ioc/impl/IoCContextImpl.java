@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.Coll;
+import org.rapidoid.commons.AnyObj;
 import org.rapidoid.commons.Deep;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
@@ -12,6 +13,7 @@ import org.rapidoid.ioc.*;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
+import org.rapidoid.scan.Scan;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
@@ -19,10 +21,7 @@ import javax.annotation.PostConstruct;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /*
  * #%L
@@ -97,6 +96,9 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 
 	@Override
 	public synchronized void manage(Object... classesOrInstances) {
+
+		classesOrInstances = AnyObj.flat(classesOrInstances);
+
 		List<Class<?>> autoCreate = U.list();
 
 		for (Object classOrInstance : classesOrInstances) {
@@ -226,10 +228,24 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 		return Cls.isAppBean(instance) ? register(instance, properties) : null;
 	}
 
-	private void processMetadata(ClassMetadata meta) {
+	private boolean processMetadata(ClassMetadata meta) {
+		boolean processed = false;
+
 		if (U.notEmpty(meta.typesToManage)) {
-			manage(meta.typesToManage.toArray());
+			manage(meta.typesToManage);
+			processed = true;
 		}
+
+		if (U.notEmpty(meta.packagesToScan)) {
+			List<Class<?>> classes = Scan.annotated(IoC.ANNOTATIONS).in(meta.packagesToScan).loadAll();
+
+			if (U.notEmpty(classes)) {
+				manage(classes);
+				processed = true;
+			}
+		}
+
+		return processed;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -371,10 +387,9 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 
 		Log.debug("Autowiring", "target", target, "session", session, "bindings", locals);
 
-		boolean autowired = false;
 		ClassMetadata meta = meta(target.getClass());
 
-		processMetadata(meta);
+		boolean processed = processMetadata(meta);
 
 		for (Field field : meta.injectableFields) {
 
@@ -385,11 +400,11 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 
 			if (!optional || value != null) {
 				Cls.setFieldValue(target, field.getName(), value);
-				autowired = true;
+				processed = true;
 			}
 		}
 
-		return autowired;
+		return processed;
 	}
 
 	private boolean isInjectOptional(Field field) {
@@ -418,7 +433,7 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 	}
 
 	private boolean isManaged(Object instance) {
-		return state.instances.contains(instance);
+		return state.instances.contains(instance) || state.providedInstances.contains(instance);
 	}
 
 	private void add(Object instance) {
@@ -552,6 +567,18 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 	@Override
 	public void beanProvider(BeanProvider beanProvider) {
 		this.beanProvider = beanProvider;
+	}
+
+	@Override
+	public Set<Object> getManagedInstances() {
+		Set<Object> beans = U.set(state.instances);
+		beans.addAll(state.providedInstances);
+		return Collections.unmodifiableSet(beans);
+	}
+
+	@Override
+	public Set<Class<?>> getManagedClasses() {
+		return Collections.unmodifiableSet(state.providedClasses);
 	}
 
 	@Override
