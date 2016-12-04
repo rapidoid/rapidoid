@@ -39,7 +39,7 @@ Content-Length: 1991
 
 <script src="/jquery-2.2.3.min.js"></script>
 <script src="/bootstrap/js/bootstrap-3.3.6.min.js"></script>
-<script src="/angular-1.5.5.min.js"></script>
+<script src="/angular-1.5.8.min.js"></script>
 <script src="/rapidoid.min.js"></script>
 
 <script src="/application.js"></script>

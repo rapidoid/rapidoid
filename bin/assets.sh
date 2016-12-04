@@ -7,7 +7,7 @@ DISTRO_CSS=$DISTRO/rapidoid.min.css
 #curl http://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css > rapidoid-html/src/main/resources/default/static/font-awesome/css/font-awesome-4.5.0.min.css
 #curl http://code.jquery.com/jquery-2.2.3.min.js > rapidoid-html/src/main/resources/default/static/jquery-2.2.3.min.js
 #curl http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js > rapidoid-html/src/main/resources/default/static/bootstrap/js/bootstrap-3.3.6.min.js
-#curl http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js > rapidoid-html/src/main/resources/default/static/angular-1.5.5.min.js
+#curl http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js > rapidoid-html/src/main/resources/default/static/angular-1.5.8.min.js
 
 # cd assets
 # rm ui-bootstrap-tpls.min.js && wget https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.1/ui-bootstrap-tpls.min.js
