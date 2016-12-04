@@ -72,17 +72,17 @@ public class ConfigOptions extends RapidoidThing {
 		List<ConfigOption> opts = U.list();
 
 		opts.add(srvOpt("center", "Admin Center"));
-		opts.add(srvOpt("ping", "Ping service"));
-		opts.add(srvOpt("status", "Status service"));
-		opts.add(srvOpt("overview", "Overview service"));
-		opts.add(srvOpt("application", "Application services"));
-		opts.add(srvOpt("lifecycle", "Lifecycle services"));
-		opts.add(srvOpt("jmx", "JMX services"));
+		opts.add(srvOpt("ping", "Simple ping service"));
+		opts.add(srvOpt("status", "Application and system status service"));
+		opts.add(srvOpt("overview", "General overview service"));
+		opts.add(srvOpt("application", "Application management services"));
+		opts.add(srvOpt("lifecycle", "Lifecycle management services"));
+		opts.add(srvOpt("jmx", "JMX overview services"));
 		opts.add(srvOpt("metrics", "Metrics services"));
 		opts.add(srvOpt("deploy", "Application deployment services"));
 		opts.add(srvOpt("auth", "Authentication services"));
-		opts.add(srvOpt("oauth", "OAuth services"));
-		opts.add(srvOpt("entities", "JPA Entities services"));
+		opts.add(srvOpt("oauth", "OAuth client services"));
+		opts.add(srvOpt("entities", "JPA entities management services"));
 		opts.add(srvOpt("welcome", "Welcome page"));
 
 		return opts;
