@@ -61,6 +61,7 @@ public class Conf extends RapidoidThing {
 	public static final Config PROXY = section("proxy");
 	public static final Config SQL = section("sql");
 	public static final Config LOG = section("log");
+	public static final Config API = section("api");
 
 	static void applyConfig(Config config) {
 
@@ -116,6 +117,10 @@ public class Conf extends RapidoidThing {
 
 	public static void setFilenameBase(String filenameBase) {
 		ROOT.setFilenameBase(filenameBase);
+	}
+
+	public static void setPath(String path) {
+		ROOT.setPath(path);
 	}
 
 }
