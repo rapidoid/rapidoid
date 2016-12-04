@@ -14,7 +14,7 @@ cd docker
 ls -l .
 
 docker build -t rapidoid/rapidoid:snapshot .
-docker rmi $(docker images -f "dangling=true" -q)
+docker rmi $(docker images -f "dangling=true" -q) || echo "Nothing to remove"
 
 rm -f entrypoint.sh
 
