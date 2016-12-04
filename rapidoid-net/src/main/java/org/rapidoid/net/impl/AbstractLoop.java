@@ -23,6 +23,7 @@ package org.rapidoid.net.impl;
 import org.rapidoid.activity.LifecycleActivity;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Arr;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
@@ -36,6 +37,10 @@ public abstract class AbstractLoop<T> extends LifecycleActivity<T> implements Ru
 
 	public AbstractLoop(String name) {
 		super(name);
+	}
+
+	public LoopStatus status() {
+		return status;
 	}
 
 	@Override
@@ -86,7 +91,7 @@ public abstract class AbstractLoop<T> extends LifecycleActivity<T> implements Ru
 
 		while (status == LoopStatus.INIT || status == LoopStatus.BEFORE_LOOP) {
 			try {
-				Thread.sleep(100);
+				Thread.sleep(10);
 				Log.debug("Waiting for event loop to initialize...", "name", name);
 			} catch (InterruptedException e) {
 				// ignore it, stopping anyway
@@ -136,11 +141,21 @@ public abstract class AbstractLoop<T> extends LifecycleActivity<T> implements Ru
 		return (T) this;
 	}
 
+	public void waitForStatus(LoopStatus... requiredStatuses) {
+		while (!Arr.contains(requiredStatuses, status)) {
+			U.sleep(5);
+		}
+	}
+
+	public void waitForStatusOtherThan(LoopStatus... requiredStatuses) {
+		while (Arr.contains(requiredStatuses, status)) {
+			U.sleep(5);
+		}
+	}
+
 	public void waitToStart() {
 		// wait for the event loop to activate
-		while (status == LoopStatus.INIT || status == LoopStatus.BEFORE_LOOP) {
-			U.sleep(50);
-		}
+		waitForStatusOtherThan(LoopStatus.INIT, LoopStatus.BEFORE_LOOP);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -154,10 +169,7 @@ public abstract class AbstractLoop<T> extends LifecycleActivity<T> implements Ru
 	}
 
 	public void waitToStop() {
-		// wait for the event loop to stop
-		while (status != LoopStatus.STOPPED && status != LoopStatus.FAILED) {
-			U.sleep(50);
-		}
+		waitForStatus(LoopStatus.STOPPED, LoopStatus.FAILED);
 	}
 
 }

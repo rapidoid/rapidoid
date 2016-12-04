@@ -176,6 +176,12 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 	public synchronized Server start() {
 		new RapidoidThread(this, "server").start();
 
+		waitForStatusOtherThan(LoopStatus.INIT, LoopStatus.BEFORE_LOOP);
+
+		if (status == LoopStatus.FAILED) {
+			throw U.rte("Server start-up failed!");
+		}
+
 		return super.start();
 	}
 
