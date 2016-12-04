@@ -167,6 +167,7 @@ public class Goodies extends RapidoidThing {
 		entities(setup);
 		application(setup);
 		lifecycle(setup);
+		processes(setup);
 		jmx(setup);
 		metrics(setup);
 		deployment(setup);
@@ -202,6 +203,11 @@ public class Goodies extends RapidoidThing {
 	public static void metrics(Setup setup) {
 		setup.page("/_metrics").mvc(Goodies.graphs());
 		setup.get("/_graphs/{id:.*}").json(Goodies.graphData());
+	}
+
+	public static void processes(Setup setup) {
+		setup.page("/_processes").mvc(new ProcessesHandler());
+		setup.page("/_processes/{group}/{id}").mvc(new ProcessDetailsHandler());
 	}
 
 	public static void jmx(Setup setup) {

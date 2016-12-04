@@ -57,6 +57,7 @@ public class ServiceActivator extends RapidoidThing {
 		if (boot(setupName, "overview")) goodies().overview(setup);
 		if (boot(setupName, "application")) goodies().application(setup);
 		if (boot(setupName, "lifecycle")) goodies().lifecycle(setup);
+		if (boot(setupName, "processes")) goodies().processes(setup);
 		if (boot(setupName, "jmx")) goodies().jmx(setup);
 		if (boot(setupName, "metrics")) goodies().metrics(setup);
 		if (boot(setupName, "deploy")) goodies().deploy(setup);

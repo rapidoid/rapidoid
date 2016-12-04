@@ -34,6 +34,7 @@ admin-zone:
       Entities: /_entities
     Details:
       Metrics: /_metrics
+      Processes: /_processes
       Classpath: /_classpath
     JMX:
       Memory pool: /_jmx/mempool

@@ -77,6 +77,7 @@ public class ConfigOptions extends RapidoidThing {
 		opts.add(srvOpt("overview", "General overview service"));
 		opts.add(srvOpt("application", "Application management services"));
 		opts.add(srvOpt("lifecycle", "Lifecycle management services"));
+		opts.add(srvOpt("processes", "Process management services"));
 		opts.add(srvOpt("jmx", "JMX overview services"));
 		opts.add(srvOpt("metrics", "Metrics services"));
 		opts.add(srvOpt("deploy", "Application deployment services"));

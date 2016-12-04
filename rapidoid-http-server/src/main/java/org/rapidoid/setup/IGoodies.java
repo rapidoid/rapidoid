@@ -33,6 +33,8 @@ public interface IGoodies {
 
 	void lifecycle(Setup setup);
 
+	void processes(Setup setup);
+
 	void jmx(Setup setup);
 
 	void metrics(Setup setup);
