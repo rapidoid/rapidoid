@@ -172,8 +172,19 @@ public class ConfigImpl extends RapidoidThing implements Config {
 		Map<String, T> map = U.map();
 
 		for (Map.Entry<String, Object> e : toMap().entrySet()) {
+			T bean;
 			Object value = e.getValue();
-			T bean = JSON.MAPPER.convertValue(value, type);
+
+			if (value instanceof Map) {
+				bean = JSON.MAPPER.convertValue(value, type);
+
+			} else if (value instanceof String) {
+				bean = Cls.newInstance(type, value);
+
+			} else {
+				throw U.rte("Unsupported configuration type: %s", Cls.of(value));
+			}
+
 			map.put(e.getKey(), bean);
 		}
 

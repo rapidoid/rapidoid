@@ -27,6 +27,7 @@ import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.ConfigHelp;
+import org.rapidoid.config.bean.ProxyConfig;
 import org.rapidoid.data.JSON;
 import org.rapidoid.env.Env;
 import org.rapidoid.http.HttpVerb;
@@ -97,7 +98,7 @@ public class App extends RapidoidThing {
 		return boot();
 	}
 
-	private static AppBootstrap boot() {
+	public static AppBootstrap boot() {
 		Jobs.initialize();
 
 		bootstrapProxy();
@@ -110,10 +111,10 @@ public class App extends RapidoidThing {
 
 	private static void bootstrapProxy() {
 		if (!Conf.PROXY.isEmpty()) {
-			for (Map.Entry<String, Object> e : Conf.PROXY.toMap().entrySet()) {
+			for (Map.Entry<String, ProxyConfig> e : Conf.PROXY.toMap(ProxyConfig.class).entrySet()) {
 				String uri = e.getKey();
-				String upstream = (String) e.getValue();
-				Reverse.proxy().map(uri).to(upstream.split("\\s*\\,\\s*"));
+				ProxyConfig proxy = e.getValue();
+				Reverse.proxy().map(uri).to(proxy.upstream.split("\\s*\\,\\s*"));
 			}
 		}
 	}

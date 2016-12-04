@@ -1138,7 +1138,7 @@ public class Msc extends RapidoidThing implements Constants {
 		switch (sep) {
 
 			case "->":
-				left = "proxy." + left;
+				left = "proxy." + left + ".upstream"; // FIXME use :
 				break;
 
 			case "<=":
