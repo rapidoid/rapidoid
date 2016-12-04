@@ -4,7 +4,9 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.activity.RapidoidThread;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Arr;
+import org.rapidoid.group.Manageable;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.log.Log;
@@ -14,6 +16,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CancellationException;
@@ -41,13 +45,25 @@ import java.util.concurrent.TimeUnit;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class ProcessHandle extends RapidoidThing {
+public class ProcessHandle extends RapidoidThing implements Manageable {
+
+	private final static Set<ProcessHandle> ALL = Coll.synchronizedSet();
+
+	private final static ProcessCrawlerThread CRAWLER = new ProcessCrawlerThread(ALL);
+
+	private final String id = UUID.randomUUID().toString();
+
+	private volatile Processes group;
 
 	private final BlockingQueue<Object> input = new ArrayBlockingQueue<Object>(100);
 
 	private final BlockingQueue<String> output = new ArrayBlockingQueue<String>(100);
 
 	private final BlockingQueue<String> error = new ArrayBlockingQueue<String>(100);
+
+	private final StringBuffer outBuffer = new StringBuffer();
+	private final StringBuffer errBuffer = new StringBuffer();
+	private final StringBuffer outAndErrBuffer = new StringBuffer();
 
 	private final ProcessParams params;
 	private final Process process;
@@ -56,7 +72,10 @@ public class ProcessHandle extends RapidoidThing {
 	private volatile boolean outputDone;
 	private volatile boolean errorDone;
 
-	public ProcessHandle(ProcessParams params, final Process process) {
+	private volatile long startedAt;
+	private volatile long finishedAt;
+
+	private ProcessHandle(ProcessParams params, final Process process) {
 		this.params = params;
 		this.process = process;
 
@@ -79,7 +98,7 @@ public class ProcessHandle extends RapidoidThing {
 			public void run() {
 				try {
 					BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-					long total = readInto(reader, error);
+					long total = readInto(reader, error, errBuffer, outAndErrBuffer);
 				} finally {
 					errorDone = true;
 				}
@@ -94,7 +113,7 @@ public class ProcessHandle extends RapidoidThing {
 			public void run() {
 				try {
 					BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-					long total = readInto(reader, output);
+					long total = readInto(reader, output, outBuffer, outAndErrBuffer);
 
 				} finally {
 					outputDone = true;
@@ -130,7 +149,7 @@ public class ProcessHandle extends RapidoidThing {
 		}
 	}
 
-	private static long readInto(BufferedReader reader, BlockingQueue<String> dest) {
+	private static long readInto(BufferedReader reader, BlockingQueue<String> dest, StringBuffer... buffers) {
 		long total = 0;
 
 		try {
@@ -138,6 +157,11 @@ public class ProcessHandle extends RapidoidThing {
 			while ((line = reader.readLine()) != null) {
 				try {
 					dest.put(line);
+
+					for (StringBuffer buffer : buffers) {
+						buffer.append(line + "\n");
+					}
+
 					total++;
 				} catch (InterruptedException e) {
 					throw new ThreadDeath();
@@ -171,7 +195,7 @@ public class ProcessHandle extends RapidoidThing {
 	}
 
 	public boolean isAlive() {
-		return process.isAlive();
+		return exitCode() == null;
 	}
 
 	public void receive(Operation<String> outputProcessor, Operation<String> errorProcessor) {
@@ -198,51 +222,19 @@ public class ProcessHandle extends RapidoidThing {
 	}
 
 	public void print() {
-		print(true, true);
-	}
-
-	public void print(final boolean output, final boolean error) {
-		receive(new Operation<String>() {
-			@Override
-			public void execute(String s) throws Exception {
-				if (output) {
-					U.print(s);
-				}
-			}
-		}, new Operation<String>() {
-			@Override
-			public void execute(String s) throws Exception {
-				if (error) {
-					Log.error(s);
-				}
-			}
-		});
+		U.print(outAndError());
 	}
 
 	public String out() {
-		final StringBuffer sb = new StringBuffer();
-
-		receive(new Operation<String>() {
-			@Override
-			public void execute(String s) throws Exception {
-				sb.append(s).append("\n");
-			}
-		}, null);
-
-		return sb.toString();
+		return outBuffer.toString();
 	}
 
 	public String err() {
-		final StringBuffer sb = new StringBuffer();
+		return errBuffer.toString();
+	}
 
-		receive(null, new Operation<String>() {
-			@Override
-			public void execute(String s) throws Exception {
-				sb.append(s).append("\n");
-			}
-		});
-
-		return sb.toString();
+	public String outAndError() {
+		return outAndErrBuffer.toString();
 	}
 
 	public static ProcessHandle startProcess(ProcessParams params) {
@@ -253,6 +245,8 @@ public class ProcessHandle extends RapidoidThing {
 			builder.directory(params.in());
 		}
 
+		long startingAt = U.time();
+
 		Process process;
 		try {
 			process = builder.start();
@@ -261,7 +255,17 @@ public class ProcessHandle extends RapidoidThing {
 		}
 
 		ProcessHandle handle = new ProcessHandle(params, process);
-		params.group().add(handle);
+		handle.startedAt = startingAt;
+
+		handle.group = params.group();
+		handle.group.add(handle);
+
+		ALL.add(handle);
+
+		synchronized (CRAWLER) {
+			if (CRAWLER.getState() == Thread.State.NEW) CRAWLER.start();
+		}
+
 
 		return handle;
 	}
@@ -304,4 +308,42 @@ public class ProcessHandle extends RapidoidThing {
 		return Arr.sub(params.command(), 1, params().command().length);
 	}
 
+	public Integer exitCode() {
+		try {
+			return process.exitValue();
+		} catch (IllegalThreadStateException e) {
+			return null;
+		}
+	}
+
+	public long duration() {
+		if (this.startedAt <= 0) return 0;
+
+		long until = this.finishedAt;
+		if (until == 0) until = U.time();
+
+		return until - this.startedAt;
+	}
+
+	void onTerminated() {
+		ALL.remove(this);
+		finishedAt = U.time();
+	}
+
+	public long startedAt() {
+		return startedAt;
+	}
+
+	public long finishedAt() {
+		return finishedAt;
+	}
+
+	@Override
+	public String id() {
+		return id;
+	}
+
+	public Processes group() {
+		return group;
+	}
 }

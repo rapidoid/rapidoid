@@ -20,51 +20,30 @@ package org.rapidoid.process;
  * #L%
  */
 
-import org.rapidoid.RapidoidThing;
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-
-import java.io.File;
+import org.rapidoid.test.TestCommons;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class ProcessParams extends RapidoidThing {
+public class ProcTest extends TestCommons {
 
-	private volatile File in;
+	@Test
+	public void testProcessExecution() {
+		Processes processes = new Processes("test");
 
-	private volatile String[] command;
+		for (int i = 0; i < 5; i++) {
+			ProcessHandle proc = Proc.group(processes).run("java", "-version").waitFor();
 
-	private volatile Processes group = Processes.DEFAULT;
+			String out = proc.outAndError();
+			isTrue(out.contains("Java") || out.contains("JDK") || out.contains("JRE"));
 
-	public File in() {
-		return in;
-	}
+			String out2 = proc.outAndError();
+			eq(out2, out);
+		}
 
-	public ProcessParams in(File in) {
-		this.in = in;
-		return this;
-	}
-
-	public ProcessParams in(String in) {
-		return in(new File(in));
-	}
-
-	public String[] command() {
-		return command;
-	}
-
-	public ProcessParams group(Processes group) {
-		this.group = group;
-		return this;
-	}
-
-	public Processes group() {
-		return group;
-	}
-
-	public ProcessHandle run(String... command) {
-		this.command = command;
-		return ProcessHandle.startProcess(this);
+		eq(processes.size(), 5);
 	}
 
 }

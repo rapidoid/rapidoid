@@ -31,7 +31,7 @@ import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class GroupOf<E> extends RapidoidThing {
+public class GroupOf<E extends Manageable> extends RapidoidThing {
 
 	private final Class<E> itemType;
 
@@ -44,6 +44,7 @@ public class GroupOf<E> extends RapidoidThing {
 	public GroupOf(Class<E> itemType, String name) {
 		this.itemType = itemType;
 		this.name = name;
+		Groups.ALL.add(this);
 	}
 
 	public String name() {
@@ -139,6 +140,31 @@ public class GroupOf<E> extends RapidoidThing {
 			", size=" + items.size() +
 			", stats=" + stats +
 			'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		GroupOf<?> groupOf = (GroupOf<?>) o;
+
+		if (!itemType.equals(groupOf.itemType)) return false;
+		return name.equals(groupOf.name);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = itemType.hashCode();
+		result = 31 * result + name.hashCode();
+		return result;
+	}
+
+	public E find(String id) {
+		for (E item : items) {
+			if (U.eq(item.id(), id)) return item;
+		}
+		return null;
 	}
 
 }

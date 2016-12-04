@@ -20,51 +20,38 @@ package org.rapidoid.process;
  * #L%
  */
 
-import org.rapidoid.RapidoidThing;
+import org.rapidoid.activity.AbstractLoopThread;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
 
-import java.io.File;
+import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class ProcessParams extends RapidoidThing {
+public class ProcessCrawlerThread extends AbstractLoopThread {
 
-	private volatile File in;
+	private final Set<ProcessHandle> handles;
 
-	private volatile String[] command;
+	ProcessCrawlerThread(Set<ProcessHandle> handles) {
+		super("process-crawler");
+		setDaemon(true);
 
-	private volatile Processes group = Processes.DEFAULT;
-
-	public File in() {
-		return in;
+		this.handles = handles;
 	}
 
-	public ProcessParams in(File in) {
-		this.in = in;
-		return this;
+	@Override
+	protected void loop() {
+		// use a copy because the handles set is synchronized
+		for (ProcessHandle handle : U.set(handles)) {
+			visit(handle);
+		}
 	}
 
-	public ProcessParams in(String in) {
-		return in(new File(in));
-	}
-
-	public String[] command() {
-		return command;
-	}
-
-	public ProcessParams group(Processes group) {
-		this.group = group;
-		return this;
-	}
-
-	public Processes group() {
-		return group;
-	}
-
-	public ProcessHandle run(String... command) {
-		this.command = command;
-		return ProcessHandle.startProcess(this);
+	private void visit(ProcessHandle handle) {
+		if (!handle.isAlive()) {
+			handle.onTerminated();
+		}
 	}
 
 }

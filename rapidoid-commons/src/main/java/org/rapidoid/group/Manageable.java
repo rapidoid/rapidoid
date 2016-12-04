@@ -1,4 +1,4 @@
-package org.rapidoid.process;
+package org.rapidoid.group;
 
 /*
  * #%L
@@ -20,51 +20,13 @@ package org.rapidoid.process;
  * #L%
  */
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
-import java.io.File;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class ProcessParams extends RapidoidThing {
+public interface Manageable {
 
-	private volatile File in;
-
-	private volatile String[] command;
-
-	private volatile Processes group = Processes.DEFAULT;
-
-	public File in() {
-		return in;
-	}
-
-	public ProcessParams in(File in) {
-		this.in = in;
-		return this;
-	}
-
-	public ProcessParams in(String in) {
-		return in(new File(in));
-	}
-
-	public String[] command() {
-		return command;
-	}
-
-	public ProcessParams group(Processes group) {
-		this.group = group;
-		return this;
-	}
-
-	public Processes group() {
-		return group;
-	}
-
-	public ProcessHandle run(String... command) {
-		this.command = command;
-		return ProcessHandle.startProcess(this);
-	}
+	String id();
 
 }

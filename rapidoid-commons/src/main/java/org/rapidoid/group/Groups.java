@@ -1,11 +1,13 @@
-package org.rapidoid.activity;
+package org.rapidoid.group;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.log.Log;
+import org.rapidoid.collection.Coll;
 import org.rapidoid.u.U;
 
-import java.util.concurrent.CancellationException;
+import java.util.Collections;
+import java.util.Set;
 
 /*
  * #%L
@@ -28,40 +30,23 @@ import java.util.concurrent.CancellationException;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.1.0")
-public abstract class AbstractLoopThread extends RapidoidThread {
+@Since("5.3.0")
+public class Groups extends RapidoidThing {
 
-	private volatile long sleepMs = 5;
+	static final Set<GroupOf<?>> ALL = Coll.synchronizedSet();
 
-	public AbstractLoopThread() {
+	public static Set<GroupOf<?>> all() {
+		return Collections.unmodifiableSet(U.set(ALL)); // snapshot
 	}
 
-	public AbstractLoopThread(String name) {
-		super(name);
-	}
-
-	public AbstractLoopThread(long sleepMs) {
-		this.sleepMs = sleepMs;
-	}
-
-	@Override
-	public final void run() {
-		while (!Thread.interrupted()) {
-			try {
-				loop();
-			} catch (ThreadDeath e) {
-				throw e;
-			} catch (CancellationException e) {
-				Log.error("The thread was interrupted!");
-				return;
-			} catch (Throwable e) {
-				Log.error("Exception occured inside the thread loop!", e);
+	@SuppressWarnings("unchecked")
+	public static <T extends Manageable> GroupOf<T> find(Class<T> itemType, String name) {
+		for (GroupOf<?> group : all()) {
+			if (group.itemType().equals(itemType) && group.name().equals(name)) {
+				return (GroupOf<T>) group;
 			}
-
-			U.sleep(sleepMs);
 		}
+		return null;
 	}
-
-	protected abstract void loop();
 
 }

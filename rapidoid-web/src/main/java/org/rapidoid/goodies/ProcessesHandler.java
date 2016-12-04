@@ -3,6 +3,8 @@ package org.rapidoid.goodies;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.GUI;
+import org.rapidoid.gui.Grid;
+import org.rapidoid.lambda.Mapper;
 import org.rapidoid.process.ProcessHandle;
 import org.rapidoid.process.Processes;
 import org.rapidoid.u.U;
@@ -39,6 +41,11 @@ public class ProcessesHandler extends GUI implements Callable<Object> {
 		"args",
 		"$.params().in()",
 		"alive",
+		"exitCode",
+		"duration",
+		"startedAt",
+		"finishedAt",
+		"$.group().name()",
 	};
 
 	public static final Object[] COLUMN_NAMES = {
@@ -46,6 +53,11 @@ public class ProcessesHandler extends GUI implements Callable<Object> {
 		"Arguments",
 		"Location",
 		"Is alive?",
+		"Exit code",
+		"Duration (ms)",
+		"Started at",
+		"Finished at",
+		"Group",
 	};
 
 	@Override
@@ -56,7 +68,18 @@ public class ProcessesHandler extends GUI implements Callable<Object> {
 
 		List<ProcessHandle> processes = Processes.DEFAULT.items();
 
-		info.add(grid(processes).columns(COLUMNS).headers(COLUMN_NAMES).pageSize(0));
+		Grid grid = grid(processes)
+			.columns(COLUMNS)
+			.headers(COLUMN_NAMES)
+			.toUri(new Mapper<ProcessHandle, String>() {
+				@Override
+				public String map(ProcessHandle handle) throws Exception {
+					return U.frmt("/_processes/%s/%s", handle.group().name(), handle.id());
+				}
+			})
+			.pageSize(100);
+
+		info.add(grid);
 
 		return multi(info);
 	}

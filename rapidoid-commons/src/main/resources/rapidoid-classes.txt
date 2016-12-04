@@ -207,6 +207,7 @@ org.rapidoid.goodies.LoginHandler
 org.rapidoid.goodies.LogoutHandler
 org.rapidoid.goodies.MultiDetailsHandler
 org.rapidoid.goodies.OverviewHandler
+org.rapidoid.goodies.ProcessDetailsHandler
 org.rapidoid.goodies.ProcessesHandler
 org.rapidoid.goodies.RapidoidGoodies
 org.rapidoid.goodies.RoutesHandler
@@ -215,7 +216,9 @@ org.rapidoid.goodies.TerminateHandler
 org.rapidoid.goodies.WelcomeHandler
 org.rapidoid.goodies.X
 org.rapidoid.group.GroupOf
+org.rapidoid.group.Groups
 org.rapidoid.group.GroupStats
+org.rapidoid.group.Manageable
 org.rapidoid.gui.base.AbstractCommand
 org.rapidoid.gui.base.AbstractInput
 org.rapidoid.gui.base.AbstractOption
@@ -581,6 +584,7 @@ org.rapidoid.pool.SynchronizedArrayPool
 org.rapidoid.pool.SynchronizedPool
 org.rapidoid.pool.ThreadSafeArrayPool
 org.rapidoid.process.Proc
+org.rapidoid.process.ProcessCrawlerThread
 org.rapidoid.process.Processes
 org.rapidoid.process.ProcessHandle
 org.rapidoid.process.ProcessParams

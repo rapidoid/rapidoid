@@ -850,7 +850,7 @@ public class Msc extends RapidoidThing implements Constants {
 			pageTo = Math.min(pageTo, size);
 		}
 
-		List<?> range = Coll.range(items, pageFrom, pageTo);
+		List<?> range = U.list(Coll.range(items, pageFrom, pageTo));
 		isLastPage.value = range.size() < pageSize + 1;
 
 		if (!isLastPage.value && !range.isEmpty()) {
