@@ -7,6 +7,7 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Arr;
+import org.rapidoid.data.JSON;
 import org.rapidoid.env.Env;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
@@ -164,6 +165,19 @@ public class ConfigImpl extends RapidoidThing implements Config {
 		makeSureIsInitialized();
 
 		return Collections.unmodifiableMap(asMap());
+	}
+
+	@Override
+	public <T> Map<String, T> toMap(Class<T> type) {
+		Map<String, T> map = U.map();
+
+		for (Map.Entry<String, Object> e : toMap().entrySet()) {
+			Object value = e.getValue();
+			T bean = JSON.MAPPER.convertValue(value, type);
+			map.put(e.getKey(), bean);
+		}
+
+		return Collections.unmodifiableMap(map);
 	}
 
 	private Map<String, Object> asMap() {

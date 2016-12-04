@@ -44,6 +44,8 @@ public interface Config extends BasicConfig {
 	@Override
 	Map<String, Object> toMap();
 
+	<T> Map<String, T> toMap(Class<T> type);
+
 	void clear();
 
 	void set(String key, Object value);

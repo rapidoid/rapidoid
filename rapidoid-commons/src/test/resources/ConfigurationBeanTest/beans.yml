@@ -1,0 +1,16 @@
+platforms:
+
+  Ubuntu:
+    version: 16.04
+    comments:
+      - very nice!
+
+  Windows:
+    version: 95
+    comments:
+      - very old
+      - very very old
+    other-unknown-property: this should be ignored
+
+  Other:
+    version: X
