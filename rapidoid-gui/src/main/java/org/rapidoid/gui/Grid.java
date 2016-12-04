@@ -122,7 +122,7 @@ public class Grid extends AbstractWidget<Grid> {
 	}
 
 	protected Tag noDataAvailable() {
-		return GUI.h4("No data available!");
+		return GUI.NOTHING;
 	}
 
 	protected Pager noPager() {
