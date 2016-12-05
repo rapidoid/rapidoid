@@ -9,12 +9,14 @@ import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.data.JSON;
 import org.rapidoid.env.Env;
+import org.rapidoid.lambda.Operation;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 import org.rapidoid.value.Value;
 import org.rapidoid.value.Values;
 
+import java.io.File;
 import java.util.*;
 
 /*
@@ -445,7 +447,22 @@ public class ConfigImpl extends RapidoidThing implements Config {
 			invalidate(); // clear to apply changes
 		}
 
+		if (new File(path).isAbsolute()) {
+			Msc.watchForChanges(path, new Operation<String>() {
+				@Override
+				public void execute(String filename) throws Exception {
+					onFileSystemChange(filename);
+				}
+			});
+		}
+
 		return this;
+	}
+
+	private void onFileSystemChange(String filename) {
+		if (filename.endsWith(".yaml") || filename.endsWith(".yml") || filename.endsWith(".json")) {
+			invalidate();
+		}
 	}
 
 	@Override
