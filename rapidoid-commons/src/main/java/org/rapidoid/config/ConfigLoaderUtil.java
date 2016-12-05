@@ -33,7 +33,7 @@ import java.util.List;
 @Since("5.2.0")
 public class ConfigLoaderUtil extends RapidoidThing {
 
-	public static void loadConfig(Config config, List<List<String>> detached, List<String> loaded) {
+	public static void loadConfig(Config config, List<String> loaded) {
 		String nameBase = config.getFilenameBase();
 
 		if (U.notEmpty(nameBase)) {
@@ -44,10 +44,6 @@ public class ConfigLoaderUtil extends RapidoidThing {
 
 			for (String profile : Env.profiles()) {
 				ConfigUtil.load(Msc.path(config.getPath(), U.frmt(configProfilePattern, profile)), config, loaded);
-			}
-
-			for (List<String> keys : detached) {
-				autoRefresh(keys.isEmpty() ? config : config.sub(keys));
 			}
 		}
 	}
@@ -84,13 +80,6 @@ public class ConfigLoaderUtil extends RapidoidThing {
 
 				ConfigUtil.load(filename, config, loaded);
 			}
-		}
-	}
-
-	private static void autoRefresh(Config... configs) {
-		for (Config config : configs) {
-			List<String> keys = config.keys();
-			ConfigUtil.autoRefresh(config, filename(config, keys));
 		}
 	}
 

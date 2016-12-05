@@ -490,7 +490,6 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	protected synchronized void initialize() {
 		mustBeRoot();
 
-		List<List<String>> detached = ConfigUtil.untrack();
 		List<String> loaded = U.list();
 
 		args(Env.args());
@@ -500,7 +499,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 			ConfigLoaderUtil.loadBuiltInConfig(this, loaded);
 		}
 
-		ConfigLoaderUtil.loadConfig(this, detached, loaded);
+		ConfigLoaderUtil.loadConfig(this, loaded);
 
 		overrideByEnv();
 		Conf.applyConfig(this);
