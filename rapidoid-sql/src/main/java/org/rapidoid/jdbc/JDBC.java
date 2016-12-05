@@ -98,8 +98,8 @@ public class JDBC extends RapidoidThing {
 		return defaultApi().hsql(databaseName);
 	}
 
-	public static void execute(String sql, Object... args) {
-		defaultApi().execute(sql, args);
+	public static int execute(String sql, Object... args) {
+		return defaultApi().execute(sql, args);
 	}
 
 	public static void tryToExecute(String sql, Object... args) {

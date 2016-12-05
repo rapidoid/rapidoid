@@ -32,6 +32,16 @@ import java.util.Map;
 @Since("5.0.4")
 public class JS extends RapidoidThing {
 
+	public static boolean compiles(String js) {
+		try {
+			JS.compile(js);
+			return true;
+
+		} catch (ScriptException e) {
+			return false;
+		}
+	}
+
 	public static <T> T eval(String js) throws ScriptException {
 		return eval(js, null);
 	}
