@@ -27,6 +27,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
 import java.util.Map;
+import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
@@ -39,6 +40,8 @@ public class ConfigBase extends RapidoidInitializer {
 	final Map<String, Object> properties = Coll.synchronizedMap();
 
 	final Map<String, Object> initial = Coll.synchronizedMap();
+
+	final Set<ConfigChangeListener> configChangesListeners = Coll.synchronizedSet();
 
 	volatile boolean initializing;
 

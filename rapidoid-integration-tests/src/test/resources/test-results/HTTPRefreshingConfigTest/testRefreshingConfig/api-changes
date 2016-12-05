@@ -1,0 +1,48 @@
+[ {
+  "initial" : false,
+  "added" : {
+    "/" : {
+      "sql" : "select * from foo"
+    }
+  },
+  "changed" : { },
+  "removed" : [ ],
+  "keys" : [ "api" ]
+}, {
+  "initial" : false,
+  "added" : { },
+  "changed" : {
+    "/" : {
+      "sql" : "select * from bar"
+    }
+  },
+  "removed" : [ ],
+  "keys" : [ "api" ]
+}, {
+  "initial" : false,
+  "added" : {
+    "/books" : {
+      "desc" : "books",
+      "sql" : "select * from books"
+    }
+  },
+  "changed" : { },
+  "removed" : [ "/" ],
+  "keys" : [ "api" ]
+}, {
+  "initial" : false,
+  "added" : { },
+  "changed" : { },
+  "removed" : [ "/books" ],
+  "keys" : [ "api" ]
+}, {
+  "initial" : false,
+  "added" : {
+    "/hi" : {
+      "abcde" : 123
+    }
+  },
+  "changed" : { },
+  "removed" : [ ],
+  "keys" : [ "api" ]
+} ]

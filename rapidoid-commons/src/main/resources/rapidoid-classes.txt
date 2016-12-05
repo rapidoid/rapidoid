@@ -123,6 +123,8 @@ org.rapidoid.config.Conf
 org.rapidoid.config.Config
 org.rapidoid.config.ConfigAlternatives
 org.rapidoid.config.ConfigBase
+org.rapidoid.config.ConfigChangeListener
+org.rapidoid.config.ConfigChanges
 org.rapidoid.config.ConfigHelp
 org.rapidoid.config.ConfigImpl
 org.rapidoid.config.ConfigLoaderUtil

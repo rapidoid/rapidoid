@@ -22,6 +22,7 @@ package org.rapidoid.config;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.lambda.Operation;
 
 import java.util.List;
 import java.util.Map;
@@ -94,5 +95,11 @@ public interface Config extends BasicConfig {
 	boolean useBuiltInDefaults();
 
 	boolean isInitialized();
+
+	ConfigChanges getChangesSince(Config previousConfig);
+
+	void addChangeListener(Operation<ConfigChanges> configChangeListener);
+
+	void removeChangeListener(Operation<ConfigChanges> configChangeListener);
 
 }

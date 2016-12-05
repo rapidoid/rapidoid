@@ -23,12 +23,16 @@ package org.rapidoid.http;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.collection.Coll;
 import org.rapidoid.config.Conf;
+import org.rapidoid.config.ConfigChanges;
 import org.rapidoid.data.JSON;
 import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
+
+import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -41,16 +45,60 @@ public class HTTPRefreshingConfigTest extends IsolatedIntegrationTest {
 		Conf.reset();
 		Conf.setPath(cfgDir);
 
+		List<ConfigChanges> rootChanges = Coll.synchronizedList();
+		List<ConfigChanges> apiChanges = Coll.synchronizedList();
+
+		Conf.ROOT.addChangeListener(changes -> {
+			U.print("******** ", changes);
+
+			if (changes.initial) {
+				eq(changes.added, Conf.ROOT.toMap());
+			} else {
+				rootChanges.add(changes);
+			}
+		});
+
+		Conf.API.addChangeListener(changes -> {
+			U.print("*** API  ", changes);
+
+			if (changes.initial) {
+				eq(changes.added, Conf.API.toMap());
+			} else {
+				apiChanges.add(changes);
+			}
+
+			if (changes.initial) fail("There's not initial API config!");
+		});
+
+		Conf.HTTP.addChangeListener(changes -> {
+			U.print("*** HTTP  ", changes);
+
+			if (changes.initial) {
+				eq(changes.added, Conf.HTTP.toMap());
+			} else {
+				fail("There are not additional HTTP config changes!");
+			}
+		});
+
+		Conf.ROOT.sub("abcd").addChangeListener(changes -> {
+			fail("The 'abcd' config change is not expected!");
+		});
+
 		String cfgFile = Msc.path(cfgDir, "config.yml");
 
 		eq(Conf.API.toMap(), U.map());
+		eq(Conf.ROOT.getChangesSince(null).added, Conf.ROOT.toMap());
+		eq(Conf.API.getChangesSince(null).added, Conf.API.toMap());
+		eq(Conf.HTTP.getChangesSince(null).added, Conf.HTTP.toMap());
 
 		U.sleep(2000); // give the Watch service some time to start
 
-		for (int i = 0; i < 5; i++) {
-			exerciseConfigChanges(1, cfgFile);
-			exerciseConfigChanges(2, cfgFile);
+		for (int n = 1; n <= 5; n++) {
+			exerciseConfigChanges(n, cfgFile);
 		}
+
+		verify("root-changes", JSON.prettify(rootChanges));
+		verify("api-changes", JSON.prettify(apiChanges));
 	}
 
 	private void exerciseConfigChanges(int step, String cfg) {

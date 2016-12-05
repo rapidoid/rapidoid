@@ -7,7 +7,6 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Arr;
-import org.rapidoid.data.JSON;
 import org.rapidoid.env.Env;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.log.Log;
@@ -53,6 +52,11 @@ public class ConfigImpl extends RapidoidThing implements Config {
 
 	public ConfigImpl() {
 		this(null, false);
+	}
+
+	public ConfigImpl(Map<String, Object> entries) {
+		this();
+		update(entries);
 	}
 
 	public ConfigImpl(String defaultFilenameBase) {
@@ -171,26 +175,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 
 	@Override
 	public <T> Map<String, T> toMap(Class<T> type) {
-		Map<String, T> map = U.map();
-
-		for (Map.Entry<String, Object> e : toMap().entrySet()) {
-			T bean;
-			Object value = e.getValue();
-
-			if (value instanceof Map) {
-				bean = JSON.MAPPER.convertValue(value, type);
-
-			} else if (value instanceof String) {
-				bean = Cls.newInstance(type, value);
-
-			} else {
-				throw U.rte("Unsupported configuration type: %s", Cls.of(value));
-			}
-
-			map.put(e.getKey(), bean);
-		}
-
-		return Collections.unmodifiableMap(map);
+		return Coll.toBeanMap(toMap(), type);
 	}
 
 	private Map<String, Object> asMap() {
@@ -427,6 +412,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 
 	@Override
 	public Config setFilenameBase(String filenameBase) {
+		mustBeRoot();
 
 		if (base.setFilenameBase(filenameBase)) {
 			invalidate(); // clear to apply changes
@@ -442,6 +428,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 
 	@Override
 	public Config setPath(String path) {
+		mustBeRoot();
 
 		if (base.setPath(path)) {
 			invalidate(); // clear to apply changes
@@ -457,12 +444,6 @@ public class ConfigImpl extends RapidoidThing implements Config {
 		}
 
 		return this;
-	}
-
-	private void onFileSystemChange(String filename) {
-		if (filename.endsWith(".yaml") || filename.endsWith(".yml") || filename.endsWith(".json")) {
-			invalidate();
-		}
 	}
 
 	@Override
@@ -499,7 +480,11 @@ public class ConfigImpl extends RapidoidThing implements Config {
 			ConfigLoaderUtil.loadBuiltInConfig(this, loaded);
 		}
 
-		ConfigLoaderUtil.loadConfig(this, loaded);
+		boolean useConfigFiles = U.notEmpty(getFilenameBase());
+
+		if (useConfigFiles) {
+			ConfigLoaderUtil.loadConfig(this, loaded);
+		}
 
 		overrideByEnv();
 		Conf.applyConfig(this);
@@ -507,7 +492,9 @@ public class ConfigImpl extends RapidoidThing implements Config {
 		if (!loaded.isEmpty()) {
 			Log.info("Loaded configuration", "!files", loaded);
 		} else {
-			Log.warn("Didn't find any configuration files", "path", getPath());
+			if (useConfigFiles) {
+				Log.warn("Didn't find any configuration files", "path", getPath());
+			}
 		}
 	}
 
@@ -523,6 +510,83 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	@Override
 	public boolean isInitialized() {
 		return base.initialized;
+	}
+
+	@Override
+	public ConfigChanges getChangesSince(Config previousConfig) {
+
+		Map<String, Object> prevMap;
+		boolean initial = previousConfig == null;
+
+		if (!initial) {
+			prevMap = isRoot ? previousConfig.toMap() : previousConfig.sub(keys()).toMap();
+		} else {
+			prevMap = U.map();
+		}
+
+		return ConfigChanges.from(keys(), prevMap, toMap(), initial);
+	}
+
+	@Override
+	public synchronized void addChangeListener(Operation<ConfigChanges> configChangeListener) {
+		ConfigChangeListener listener = new ConfigChangeListener(keys(), configChangeListener);
+
+		base.configChangesListeners.add(listener);
+
+		// for the first time, call the listener with the current configuration as initial
+		root().notifyChangeListener(listener, null);
+	}
+
+	@Override
+	public synchronized void removeChangeListener(Operation<ConfigChanges> configChangeListener) {
+		base.configChangesListeners.remove(new ConfigChangeListener(keys(), configChangeListener));
+	}
+
+	private synchronized void onFileSystemChange(String filename) {
+		mustBeRoot();
+
+		Log.info("Detected configuration file changes", "file", filename);
+
+		if (filename.endsWith(".yaml")
+			|| filename.endsWith(".yml")
+			|| filename.endsWith(".json")) {
+
+			reloadAndProcessChanges();
+		}
+	}
+
+	private void reloadAndProcessChanges() {
+		mustBeRoot();
+
+		Set<ConfigChangeListener> listeners = U.set(base.configChangesListeners);
+
+		if (listeners.isEmpty()) return;
+
+		ConfigImpl previousConfig = new ConfigImpl(Coll.deepCopyOf(toMap()));
+
+		// reload the configuration
+		invalidate();
+		makeSureIsInitialized();
+
+		// notify listeners
+		for (ConfigChangeListener listener : listeners) {
+			notifyChangeListener(listener, previousConfig);
+		}
+	}
+
+	private void notifyChangeListener(ConfigChangeListener listener, Config previousConfig) {
+		mustBeRoot();
+
+		Config cfg = U.notEmpty(listener.keys) ? sub(listener.keys) : this;
+		ConfigChanges changes = cfg.getChangesSince(previousConfig);
+
+		if (changes.count() > 0) {
+			try {
+				listener.operation.execute(changes);
+			} catch (Exception e) {
+				Log.error("Error occurred in a configuration changes listener!", e);
+			}
+		}
 	}
 
 }
