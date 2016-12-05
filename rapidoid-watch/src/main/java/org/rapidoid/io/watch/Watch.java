@@ -4,11 +4,13 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.config.RapidoidInitializer;
+import org.rapidoid.lambda.Operation;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
 import java.util.Collection;
 import java.util.Queue;
+import java.util.Set;
 
 /*
  * #%L
@@ -34,16 +36,16 @@ import java.util.Queue;
 @Since("4.1.0")
 public class Watch extends RapidoidInitializer {
 
-	private final WatcherThread watcher;
+	private static final Set<WatcherThread> WATCHERS = Coll.synchronizedSet();
 
-	public Watch(Collection<String> folders, FilesystemChangeListener changes) {
-		this.watcher = new WatcherThread(changes, folders, true);
-		watcher.start();
-	}
-
-	public static Watch dirs(Collection<String> folders, final FilesystemChangeListener changes) {
+	public static WatcherThread dirs(Collection<String> folders, final FilesystemChangeListener changes) {
 		try {
-			return new Watch(folders, changes);
+
+			WatcherThread watcher = new WatcherThread(changes, folders, true);
+			watcher.start();
+			WATCHERS.add(watcher);
+
+			return watcher;
 
 		} catch (Throwable e) {
 			Log.error("Couldn't watch for changes!", e);
@@ -51,11 +53,11 @@ public class Watch extends RapidoidInitializer {
 		}
 	}
 
-	public static Watch dir(String folder, FilesystemChangeListener changes) {
+	public static WatcherThread dir(String folder, FilesystemChangeListener changes) {
 		return dirs(U.list(folder), changes);
 	}
 
-	public static Watch dirs(Collection<String> folders, final ClassRefresher refresher) {
+	public static WatcherThread dirs(Collection<String> folders, final ClassRefresher refresher) {
 		try {
 			Queue<String> created = Coll.queue();
 			Queue<String> modified = Coll.queue();
@@ -72,12 +74,45 @@ public class Watch extends RapidoidInitializer {
 		}
 	}
 
-	public static Watch dir(String folder, ClassRefresher changes) {
+	public static WatcherThread dir(String folder, ClassRefresher changes) {
 		return dirs(U.list(folder), changes);
 	}
 
-	public void stop() {
-		watcher.interrupt();
+	public static WatcherThread dirs(Collection<String> folders, final Operation<String> changeListener) {
+		return dirs(folders, simpleListener(changeListener));
+	}
+
+	public static WatcherThread dir(String folder, final Operation<String> changeListener) {
+		return dir(folder, simpleListener(changeListener));
+	}
+
+	public static FilesystemChangeListener simpleListener(final Operation<String> changeListener) {
+		return new FilesystemChangeListener() {
+			@Override
+			public void created(String filename) throws Exception {
+				changeListener.execute(filename);
+			}
+
+			@Override
+			public void modified(String filename) throws Exception {
+				changeListener.execute(filename);
+			}
+
+			@Override
+			public void deleted(String filename) throws Exception {
+				changeListener.execute(filename);
+			}
+		};
+	}
+
+	public static void cancelAll() {
+		synchronized (WATCHERS) {
+			for (WatcherThread watch : WATCHERS) {
+				watch.cancel();
+			}
+
+			WATCHERS.clear();
+		}
 	}
 
 }

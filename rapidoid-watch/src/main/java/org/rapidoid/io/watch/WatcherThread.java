@@ -16,7 +16,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.CancellationException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
@@ -48,19 +47,19 @@ public class WatcherThread extends AbstractLoopThread {
 
 	private static final AtomicInteger idGen = new AtomicInteger();
 
+	private final WatchService watchService;
+
 	private final Map<WatchKey, Path> keys = U.map();
 
 	private final FilesystemChangeListener onChange;
 
 	private final boolean recursive;
 
-	private final WatchService watcher;
-
 	private final List<String> folders = Coll.synchronizedList();
 
 	private final Set<String> watching = Coll.synchronizedSet();
 
-	public WatcherThread(FilesystemChangeListener change, Collection<String> targetFolders, boolean recursive) {
+	WatcherThread(FilesystemChangeListener change, Collection<String> targetFolders, boolean recursive) {
 		this.onChange = change;
 		this.recursive = recursive;
 
@@ -71,7 +70,7 @@ public class WatcherThread extends AbstractLoopThread {
 		setName("watcher" + idGen.incrementAndGet());
 
 		try {
-			watcher = FileSystems.getDefault().newWatchService();
+			watchService = FileSystems.getDefault().newWatchService();
 		} catch (IOException e) {
 			throw U.rte("Couldn't create a file system watch service!", e);
 		}
@@ -99,10 +98,10 @@ public class WatcherThread extends AbstractLoopThread {
 	}
 
 	private void init(Path dir) {
-		Log.debug("Registering directory watch", "dir", dir);
+		Log.info("Registering directory watch", "dir", dir);
 
 		try {
-			WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+			WatchKey key = dir.register(watchService, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
 			U.notNull(key, "watch key");
 
 			keys.put(key, dir);
@@ -131,9 +130,10 @@ public class WatcherThread extends AbstractLoopThread {
 
 		WatchKey key;
 		try {
-			key = watcher.take();
-		} catch (InterruptedException x) {
-			throw new CancellationException();
+			key = watchService.take();
+
+		} catch (InterruptedException | ClosedWatchServiceException x) {
+			return;
 		}
 
 		Path dir = keys.get(key);
@@ -142,33 +142,10 @@ public class WatcherThread extends AbstractLoopThread {
 		}
 
 		for (WatchEvent<?> event : key.pollEvents()) {
-			WatchEvent.Kind<?> kind = event.kind();
-
-			if (ENTRY_CREATE.equals(kind)) {
-
-				Path child = getChild(dir, event);
-
-				if (recursive && Files.isDirectory(child, NOFOLLOW_LINKS)) {
-					startWatchingTree(child);
-				}
-
-				onChange.created(fullNameOf(child));
-
-			} else if (ENTRY_MODIFY.equals(kind)) {
-				Path child = getChild(dir, event);
-
-				onChange.modified(fullNameOf(child));
-
-			} else if (ENTRY_DELETE.equals(kind)) {
-				Path child = getChild(dir, event);
-
-				onChange.deleted(fullNameOf(child));
-
-			} else if (OVERFLOW.equals(kind)) {
-				Log.warn("Received OVERFLOW event from the Watch service!");
-
-			} else {
-				throw Err.notExpected();
+			try {
+				processEvent(dir, event);
+			} catch (Exception e) {
+				Log.error("File system change processing error!", e);
 			}
 		}
 
@@ -188,6 +165,37 @@ public class WatcherThread extends AbstractLoopThread {
 		}
 	}
 
+	private void processEvent(Path dir, WatchEvent<?> event) throws Exception {
+		WatchEvent.Kind<?> kind = event.kind();
+
+		if (ENTRY_CREATE.equals(kind)) {
+
+			Path child = getChild(dir, event);
+
+			if (recursive && Files.isDirectory(child, NOFOLLOW_LINKS)) {
+				startWatchingTree(child);
+			}
+
+			onChange.created(fullNameOf(child));
+
+		} else if (ENTRY_MODIFY.equals(kind)) {
+			Path child = getChild(dir, event);
+
+			onChange.modified(fullNameOf(child));
+
+		} else if (ENTRY_DELETE.equals(kind)) {
+			Path child = getChild(dir, event);
+
+			onChange.deleted(fullNameOf(child));
+
+		} else if (OVERFLOW.equals(kind)) {
+			Log.warn("Received OVERFLOW event from the Watch service!");
+
+		} else {
+			throw Err.notExpected();
+		}
+	}
+
 	private Path getChild(Path dir, WatchEvent<?> event) {
 		WatchEvent<Path> ev = U.cast(event);
 		Path path = ev.context();
@@ -196,6 +204,23 @@ public class WatcherThread extends AbstractLoopThread {
 
 	private String fullNameOf(Path child) {
 		return child.toAbsolutePath().toString();
+	}
+
+	public void cancel() {
+		interrupt();
+
+		Set<WatchKey> keysToCancel = U.set(keys.keySet());
+		keys.clear();
+
+		for (WatchKey key : keysToCancel) {
+			key.cancel();
+		}
+
+		try {
+			watchService.close();
+		} catch (IOException e) {
+			Log.error("Error occurred while closing a WatchService!", e);
+		}
 	}
 
 }

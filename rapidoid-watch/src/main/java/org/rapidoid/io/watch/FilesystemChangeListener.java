@@ -27,10 +27,10 @@ import org.rapidoid.annotation.Since;
 @Since("4.1.0")
 public interface FilesystemChangeListener {
 
-	void created(String filename);
+	void created(String filename) throws Exception;
 
-	void modified(String filename);
+	void modified(String filename) throws Exception;
 
-	void deleted(String filename);
+	void deleted(String filename) throws Exception;
 
 }

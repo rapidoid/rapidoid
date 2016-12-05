@@ -1165,4 +1165,13 @@ public class Msc extends RapidoidThing implements Constants {
 		return sizeKB + " KB";
 	}
 
+	public static void watchForChanges(String path, Operation<String> changeListener) {
+		Class<?> watch = Cls.getClassIfExists("org.rapidoid.io.watch.Watch");
+
+		if (watch != null) {
+			Method dir = Cls.getMethod(watch, "dir", String.class, Operation.class);
+			Cls.invokeStatic(dir, path, changeListener);
+		}
+	}
+
 }

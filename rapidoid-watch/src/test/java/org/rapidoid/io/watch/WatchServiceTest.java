@@ -25,31 +25,16 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.io.IO;
 import org.rapidoid.io.Res;
-import org.rapidoid.log.Log;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class WatchServiceTest extends TestCommons {
-
-	public void justDemo() {
-		Watch watch = Watch.dir("/tmp/classes", new ClassRefresher() {
-			@Override
-			public void refresh(List<Class<?>> reloaded, List<String> deleted) {
-				Log.info("Refreshed classes", "classes", reloaded);
-			}
-		});
-
-		giveItTimeToRefresh();
-
-		watch.stop();
-	}
 
 	@Test
 	public void testDirRefresh() throws IOException {
@@ -149,7 +134,6 @@ public class WatchServiceTest extends TestCommons {
 
 		eq(dir.files(), U.set());
 		eq(dir.folders(), U.set());
-
 	}
 
 	private void giveItTimeToRefresh() {
