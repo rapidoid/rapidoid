@@ -49,16 +49,19 @@ public abstract class AbstractLoopThread extends RapidoidThread {
 		while (!Thread.interrupted()) {
 			try {
 				loop();
+				U.sleep(sleepMs);
+
 			} catch (ThreadDeath e) {
-				throw e;
-			} catch (CancellationException e) {
-				Log.error("The thread was interrupted!");
+				Log.error("Received ThreadDeath error, terminating!", e);
 				return;
+
+			} catch (CancellationException e) {
+				Log.info("The thread was interrupted.");
+				return;
+
 			} catch (Throwable e) {
 				Log.error("Exception occured inside the thread loop!", e);
 			}
-
-			U.sleep(sleepMs);
 		}
 	}
 

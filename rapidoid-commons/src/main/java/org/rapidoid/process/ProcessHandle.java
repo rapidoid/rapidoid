@@ -164,7 +164,7 @@ public class ProcessHandle extends RapidoidThing implements Manageable {
 
 					total++;
 				} catch (InterruptedException e) {
-					throw new ThreadDeath();
+					throw new CancellationException();
 				}
 			}
 		} catch (IOException e) {
