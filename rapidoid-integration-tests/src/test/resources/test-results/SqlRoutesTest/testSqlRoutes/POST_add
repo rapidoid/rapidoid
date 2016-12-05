@@ -3,6 +3,6 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: application/json
-Content-Length: 16
+Content-Length: 28
 
-{"success":true}
+{"success":true,"changes":0}

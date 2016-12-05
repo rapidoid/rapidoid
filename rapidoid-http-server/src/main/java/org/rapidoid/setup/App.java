@@ -27,6 +27,7 @@ import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.ConfigHelp;
+import org.rapidoid.config.bean.APIConfig;
 import org.rapidoid.config.bean.ProxyConfig;
 import org.rapidoid.data.JSON;
 import org.rapidoid.env.Env;
@@ -102,7 +103,7 @@ public class App extends RapidoidThing {
 		Jobs.initialize();
 
 		bootstrapProxy();
-		bootstrapSqlRoutes();
+		bootstrapAPI();
 
 		AppBootstrap bootstrap = new AppBootstrap();
 		bootstrap.services();
@@ -119,42 +120,47 @@ public class App extends RapidoidThing {
 		}
 	}
 
-	private static void bootstrapSqlRoutes() {
-		if (!Conf.SQL.isEmpty()) {
-			for (Map.Entry<String, Object> e : Conf.SQL.toMap().entrySet()) {
+	private static void bootstrapAPI() {
+		if (!Conf.API.isEmpty()) {
+			for (Map.Entry<String, APIConfig> e : Conf.API.toMap(APIConfig.class).entrySet()) {
 
-				String[] verbUri = e.getKey().trim().split("\\s+");
+				String apiKey = e.getKey().trim();
+				APIConfig api = e.getValue();
 
-				final HttpVerb verb;
-				String uri;
-
-				if (verbUri.length == 1) {
-					verb = HttpVerb.GET;
-					uri = verbUri[0];
-
-				} else if (verbUri.length == 2) {
-					verb = HttpVerb.from(verbUri[0]);
-					uri = verbUri[1];
-
-				} else {
-					throw U.rte("Invalid route!");
-				}
-
-				final String sql = (String) e.getValue();
-
-				On.route(verb.name(), uri).json(new ReqRespHandler() {
-					@Override
-					public Object execute(Req req, Resp resp) throws Exception {
-						if (verb == HttpVerb.GET) {
-							return JDBC.query(sql);
-						} else {
-							JDBC.execute(sql);
-							return U.map("success", true); // FIXME improve
-						}
-					}
-				});
+				applyAPIEntry(apiKey, api);
 			}
 		}
+	}
+
+	private static void applyAPIEntry(String apiKey, final APIConfig api) {
+		String[] verbUri = apiKey.split("\\s+");
+
+		final HttpVerb verb;
+		String uri;
+
+		if (verbUri.length == 1) {
+			verb = HttpVerb.GET;
+			uri = verbUri[0];
+
+		} else if (verbUri.length == 2) {
+			verb = HttpVerb.from(verbUri[0]);
+			uri = verbUri[1];
+
+		} else {
+			throw U.rte("Invalid route!");
+		}
+
+		On.route(verb.name(), uri).json(new ReqRespHandler() {
+			@Override
+			public Object execute(Req req, Resp resp) throws Exception {
+				if (verb == HttpVerb.GET) {
+					return JDBC.query(api.sql);
+				} else {
+					int changes = JDBC.execute(api.sql);
+					return U.map("success", true, "changes", changes); // FIXME improve
+				}
+			}
+		});
 	}
 
 	public static void profiles(String... profiles) {

@@ -1142,7 +1142,7 @@ public class Msc extends RapidoidThing implements Constants {
 				break;
 
 			case "<=":
-				left = "sql." + left;
+				left = "api." + left + ".sql";
 				break;
 
 			default:
