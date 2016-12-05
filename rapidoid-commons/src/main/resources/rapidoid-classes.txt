@@ -474,6 +474,7 @@ org.rapidoid.io.watch.FilesystemChangeQueueListener
 org.rapidoid.io.watch.Watch
 org.rapidoid.io.watch.WatcherThread
 org.rapidoid.io.watch.WatchingRefresherThread
+org.rapidoid.io.watch.WatchModule
 org.rapidoid.jdbc.C3P0ConnectionPool
 org.rapidoid.jdbc.ConnectionPool
 org.rapidoid.jdbc.JDBC

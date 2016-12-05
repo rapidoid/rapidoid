@@ -32,7 +32,6 @@ import org.rapidoid.data.JSON;
 import org.rapidoid.env.Env;
 import org.rapidoid.fluent.Do;
 import org.rapidoid.io.IO;
-import org.rapidoid.io.watch.Watch;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.jpa.JPAUtil;
 import org.rapidoid.log.Log;
@@ -118,8 +117,6 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 		}
 
 		System.out.println("--- SERVER STOPPED ---");
-
-		Watch.cancelAll();
 
 		RapidoidTest.after(this);
 	}
