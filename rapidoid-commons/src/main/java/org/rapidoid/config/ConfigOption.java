@@ -1,6 +1,8 @@
 package org.rapidoid.config;
 
 import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 /*
  * #%L
@@ -22,10 +24,8 @@ import org.rapidoid.RapidoidThing;
  * #L%
  */
 
-/**
- * @author Nikolche Mihajlovski
- * @since 5.0.2
- */
+@Authors("Nikolche Mihajlovski")
+@Since("5.0.2")
 public class ConfigOption extends RapidoidThing {
 
 	public final String name;

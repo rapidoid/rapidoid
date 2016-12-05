@@ -1,6 +1,8 @@
 package org.rapidoid.config;
 
 import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.commons.Str;
 import org.rapidoid.u.U;
@@ -28,10 +30,8 @@ import java.util.List;
  * #L%
  */
 
-/**
- * @author Nikolche Mihajlovski
- * @since 5.0.2
- */
+@Authors("Nikolche Mihajlovski")
+@Since("5.0.2")
 public class ConfigHelp extends RapidoidThing {
 
 	public static void processHelp(Object[] args) {
