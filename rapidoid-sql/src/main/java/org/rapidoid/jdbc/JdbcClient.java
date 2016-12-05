@@ -160,7 +160,7 @@ public class JdbcClient extends RapidoidThing {
 	public int execute(String sql, Object... args) {
 		ensureIsInitialized();
 
-		Log.info("SQL", "sql", sql, "args", args);
+		Log.debug("SQL", "sql", sql, "args", args);
 
 		Connection conn = provideConnection();
 		PreparedStatement stmt = null;
@@ -168,7 +168,12 @@ public class JdbcClient extends RapidoidThing {
 		try {
 			stmt = JDBC.prepare(conn, sql, args);
 
-			if (sql.trim().toUpperCase().startsWith("UPDATE ")) {
+			String q = sql.trim().toUpperCase();
+
+			if (q.startsWith("INSERT ")
+				|| q.startsWith("UPDATE ")
+				|| q.startsWith("DELETE ")) {
+
 				return stmt.executeUpdate();
 
 			} else {
