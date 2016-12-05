@@ -86,12 +86,21 @@ public class ConfigChanges extends RapidoidThing {
 		return added.size() + changed.size() + removed.size();
 	}
 
-	public <T> Map<String, T> added(Class<T> type) {
+	public <T> Map<String, T> getAddedAs(Class<T> type) {
 		return Coll.toBeanMap(added, type);
 	}
 
-	public <T> Map<String, T> changed(Class<T> type) {
+	public <T> Map<String, T> getChangedAs(Class<T> type) {
 		return Coll.toBeanMap(changed, type);
+	}
+
+	public <T> Map<String, T> getAddedOrChangedAs(Class<T> type) {
+		Map<String, Object> addedOrChanged = U.map();
+
+		addedOrChanged.putAll(added);
+		addedOrChanged.putAll(changed);
+
+		return Coll.toBeanMap(addedOrChanged, type);
 	}
 
 	@Override

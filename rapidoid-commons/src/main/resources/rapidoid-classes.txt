@@ -653,6 +653,7 @@ org.rapidoid.serialize.Serialize
 org.rapidoid.serialize.TypeSpecificDeserializer
 org.rapidoid.serialize.TypeSpecificSerializer
 org.rapidoid.setup.Admin
+org.rapidoid.setup.APIConfigListener
 org.rapidoid.setup.App
 org.rapidoid.setup.AppBootstrap
 org.rapidoid.setup.AppRestartListener
@@ -666,6 +667,7 @@ org.rapidoid.setup.OnChanges
 org.rapidoid.setup.OnError
 org.rapidoid.setup.OnRoute
 org.rapidoid.setup.PojoHandlersSetup
+org.rapidoid.setup.ProxyConfigListener
 org.rapidoid.setup.ReloadUtil
 org.rapidoid.setup.ServiceActivator
 org.rapidoid.setup.ServiceBootstrap

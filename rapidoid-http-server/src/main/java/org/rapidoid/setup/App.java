@@ -27,19 +27,12 @@ import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.ConfigHelp;
-import org.rapidoid.config.bean.APIConfig;
-import org.rapidoid.config.bean.ProxyConfig;
 import org.rapidoid.data.JSON;
 import org.rapidoid.env.Env;
-import org.rapidoid.http.HttpVerb;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.ReqRespHandler;
-import org.rapidoid.http.Resp;
 import org.rapidoid.io.Res;
 import org.rapidoid.ioc.Beans;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.ioc.IoCContext;
-import org.rapidoid.jdbc.JDBC;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.render.Templates;
@@ -51,7 +44,6 @@ import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
@@ -102,65 +94,16 @@ public class App extends RapidoidThing {
 	public static AppBootstrap boot() {
 		Jobs.initialize();
 
-		bootstrapProxy();
-		bootstrapAPI();
+		registerConfigListeners();
 
 		AppBootstrap bootstrap = new AppBootstrap();
 		bootstrap.services();
 		return bootstrap;
 	}
 
-	private static void bootstrapProxy() {
-		if (!Conf.PROXY.isEmpty()) {
-			for (Map.Entry<String, ProxyConfig> e : Conf.PROXY.toMap(ProxyConfig.class).entrySet()) {
-				String uri = e.getKey();
-				ProxyConfig proxy = e.getValue();
-				Reverse.proxy().map(uri).to(proxy.upstream.split("\\s*\\,\\s*"));
-			}
-		}
-	}
-
-	private static void bootstrapAPI() {
-		if (!Conf.API.isEmpty()) {
-			for (Map.Entry<String, APIConfig> e : Conf.API.toMap(APIConfig.class).entrySet()) {
-
-				String apiKey = e.getKey().trim();
-				APIConfig api = e.getValue();
-
-				applyAPIEntry(apiKey, api);
-			}
-		}
-	}
-
-	private static void applyAPIEntry(String apiKey, final APIConfig api) {
-		String[] verbUri = apiKey.split("\\s+");
-
-		final HttpVerb verb;
-		String uri;
-
-		if (verbUri.length == 1) {
-			verb = HttpVerb.GET;
-			uri = verbUri[0];
-
-		} else if (verbUri.length == 2) {
-			verb = HttpVerb.from(verbUri[0]);
-			uri = verbUri[1];
-
-		} else {
-			throw U.rte("Invalid route!");
-		}
-
-		On.route(verb.name(), uri).json(new ReqRespHandler() {
-			@Override
-			public Object execute(Req req, Resp resp) throws Exception {
-				if (verb == HttpVerb.GET) {
-					return JDBC.query(api.sql);
-				} else {
-					int changes = JDBC.execute(api.sql);
-					return U.map("success", true, "changes", changes); // FIXME improve
-				}
-			}
-		});
+	private static void registerConfigListeners() {
+		Conf.PROXY.addChangeListener(new ProxyConfigListener());
+		Conf.API.addChangeListener(new APIConfigListener());
 	}
 
 	public static void profiles(String... profiles) {
