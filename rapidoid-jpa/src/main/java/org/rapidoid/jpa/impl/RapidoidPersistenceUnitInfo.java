@@ -1,4 +1,4 @@
-package org.rapidoid.jpa;
+package org.rapidoid.jpa.impl;
 
 /*
  * #%L

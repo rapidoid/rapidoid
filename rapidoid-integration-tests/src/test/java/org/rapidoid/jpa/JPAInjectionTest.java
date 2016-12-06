@@ -8,6 +8,8 @@ import org.rapidoid.http.Req;
 import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.ioc.impl.IoCContextWrapper;
 import org.rapidoid.ioc.Wired;
+import org.rapidoid.jpa.impl.SharedContextAwareEntityManagerProxy;
+import org.rapidoid.jpa.impl.SharedEntityManagerFactoryProxy;
 import org.rapidoid.setup.App;
 import org.rapidoid.u.U;
 

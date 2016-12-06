@@ -1,4 +1,4 @@
-package org.rapidoid.jpa;
+package org.rapidoid.jpa.impl;
 
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.hibernate.jpa.boot.internal.PersistenceUnitInfoDescriptor;
@@ -6,6 +6,7 @@ import org.hibernate.jpa.boot.spi.EntityManagerFactoryBuilder;
 import org.hibernate.jpa.boot.spi.PersistenceUnitDescriptor;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.jpa.CustomDescriptor;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
 

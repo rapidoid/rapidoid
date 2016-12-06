@@ -23,8 +23,8 @@ package org.rapidoid.ioc.impl;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.jpa.SharedContextAwareEntityManagerProxy;
-import org.rapidoid.jpa.SharedEntityManagerFactoryProxy;
+import org.rapidoid.jpa.impl.SharedContextAwareEntityManagerProxy;
+import org.rapidoid.jpa.impl.SharedEntityManagerFactoryProxy;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

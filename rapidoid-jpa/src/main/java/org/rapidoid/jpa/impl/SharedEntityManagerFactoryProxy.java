@@ -1,8 +1,9 @@
-package org.rapidoid.jpa;
+package org.rapidoid.jpa.impl;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.jpa.JPA;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
