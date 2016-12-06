@@ -18,6 +18,7 @@ import org.rapidoid.util.Msc;
 
 import java.util.Collections;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 /*
  * #%L
@@ -169,10 +170,9 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 
 					HttpWrapper[] wrappers = httpWrappers != null ? httpWrappers : U.or(Customization.of(req).wrappers(), NO_WRAPPERS);
 
-					Runnable handleRequest = handlerWithWrappers(channel, isKeepAlive, contentType, req, extra, wrappers);
-					Runnable handleRequestMaybeInTx = txWrap(req, txMode, handleRequest);
+					Runnable handleRequest = handlerWithWrappers(channel, isKeepAlive, contentType, req, extra, wrappers, txMode);
 
-					With.tag(CTX_TAG_HANDLER).exchange(req).username(username).roles(roles).run(handleRequestMaybeInTx);
+					With.tag(CTX_TAG_HANDLER).exchange(req).username(username).roles(roles).run(handleRequest);
 
 				} catch (Throwable e) {
 					// if there was an error in the job scheduling:
@@ -194,7 +194,7 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 	}
 
 	private Runnable handlerWithWrappers(final Channel channel, final boolean isKeepAlive, final MediaType contentType,
-	                                     final Req req, final Object extra, final HttpWrapper[] wrappers) {
+	                                     final Req req, final Object extra, final HttpWrapper[] wrappers, final TransactionMode txMode) {
 
 		return new Runnable() {
 
@@ -206,10 +206,11 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 					if (!U.isEmpty(wrappers)) {
 						result = wrap(channel, isKeepAlive, req, 0, extra, wrappers);
 					} else {
-						result = handleReq(channel, isKeepAlive, req, extra);
+						result = handleReqMaybeInTx(channel, isKeepAlive, req, extra, txMode);
 					}
 
 					result = HttpUtils.postprocessResult(req, result);
+
 				} catch (Throwable e) {
 					result = e;
 				}
@@ -219,18 +220,27 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 		};
 	}
 
-	private Runnable txWrap(final Req req, final TransactionMode txMode, final Runnable handleRequest) {
+	private Object handleReqMaybeInTx(final Channel channel, final boolean isKeepAlive, final Req req, final Object extra, TransactionMode txMode) throws Exception {
+
 		if (txMode != null && txMode != TransactionMode.NONE) {
 
-			return new Runnable() {
+			final AtomicReference<Object> result = new AtomicReference();
+
+			JPA.transaction(new Runnable() {
 				@Override
 				public void run() {
-					JPA.transaction(handleRequest, txMode == TransactionMode.READ_ONLY);
+					try {
+						result.set(handleReq(channel, isKeepAlive, req, extra));
+					} catch (Exception e) {
+						throw U.rte("Error occured inside the transactional web handler!", e);
+					}
 				}
-			};
+			}, txMode == TransactionMode.READ_ONLY);
+
+			return result.get();
 
 		} else {
-			return handleRequest;
+			return handleReq(channel, isKeepAlive, req, extra);
 		}
 	}
 
