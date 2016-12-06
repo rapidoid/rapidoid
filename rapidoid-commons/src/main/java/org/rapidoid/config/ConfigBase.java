@@ -60,6 +60,7 @@ public class ConfigBase extends RapidoidInitializer {
 	synchronized void reset() {
 		this.properties.clear();
 		this.initial.clear();
+		this.configChangesListeners.clear();
 
 		this.filenameBase = this.defaultFilenameBase;
 		this.path = "";

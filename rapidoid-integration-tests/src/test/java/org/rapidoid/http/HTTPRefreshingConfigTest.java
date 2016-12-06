@@ -29,6 +29,7 @@ import org.rapidoid.config.ConfigChanges;
 import org.rapidoid.data.JSON;
 import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
+import org.rapidoid.setup.App;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
@@ -44,6 +45,8 @@ public class HTTPRefreshingConfigTest extends IsolatedIntegrationTest {
 
 		Conf.reset();
 		Conf.setPath(cfgDir);
+
+		App.registerConfigListeners();
 
 		List<ConfigChanges> rootChanges = Coll.synchronizedList();
 		List<ConfigChanges> apiChanges = Coll.synchronizedList();
@@ -93,8 +96,8 @@ public class HTTPRefreshingConfigTest extends IsolatedIntegrationTest {
 
 		U.sleep(2000); // give the Watch service some time to start
 
-		for (int n = 1; n <= 5; n++) {
-			exerciseConfigChanges(n, cfgFile);
+		for (int step = 1; step <= 5; step++) {
+			exerciseConfigChanges(step, cfgFile);
 		}
 
 		verify("root-changes", JSON.prettify(rootChanges));

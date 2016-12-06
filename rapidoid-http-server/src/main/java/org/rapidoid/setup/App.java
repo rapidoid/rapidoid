@@ -101,7 +101,7 @@ public class App extends RapidoidThing {
 		return bootstrap;
 	}
 
-	private static void registerConfigListeners() {
+	public static void registerConfigListeners() {
 		Conf.PROXY.addChangeListener(new ProxyConfigListener());
 		Conf.API.addChangeListener(new APIConfigListener());
 	}
