@@ -44,6 +44,7 @@ public class Log extends RapidoidThing {
 	public static final LogLevel LEVEL_INFO = LogLevel.INFO;
 	public static final LogLevel LEVEL_WARN = LogLevel.WARN;
 	public static final LogLevel LEVEL_ERROR = LogLevel.ERROR;
+	public static final LogLevel LEVEL_NO_LOGS = LogLevel.NO_LOGS;
 
 	protected static volatile LogLevel LOG_LEVEL = LEVEL_INFO;
 

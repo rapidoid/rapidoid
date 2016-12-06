@@ -29,7 +29,12 @@ import org.rapidoid.event.Events;
  */
 public enum LogLevel {
 
-	TRACE(Events.LOG_TRACE), DEBUG(Events.LOG_DEBUG), INFO(Events.LOG_INFO), WARN(Events.LOG_WARN), ERROR(Events.LOG_ERROR);
+	TRACE(Events.LOG_TRACE),
+	DEBUG(Events.LOG_DEBUG),
+	INFO(Events.LOG_INFO),
+	WARN(Events.LOG_WARN),
+	ERROR(Events.LOG_ERROR),
+	NO_LOGS(null);
 
 	private final Event event;
 
