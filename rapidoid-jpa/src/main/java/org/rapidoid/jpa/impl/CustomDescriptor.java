@@ -1,4 +1,4 @@
-package org.rapidoid.jpa;
+package org.rapidoid.jpa.impl;
 
 import org.hibernate.jpa.boot.spi.PersistenceUnitDescriptor;
 import org.rapidoid.RapidoidThing;

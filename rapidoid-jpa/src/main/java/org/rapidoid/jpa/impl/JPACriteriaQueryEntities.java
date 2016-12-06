@@ -1,4 +1,4 @@
-package org.rapidoid.jpa;
+package org.rapidoid.jpa.impl;
 
 /*
  * #%L
@@ -23,6 +23,9 @@ package org.rapidoid.jpa;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.datamodel.AbstractDataItems;
+import org.rapidoid.jpa.Entities;
+import org.rapidoid.jpa.JPA;
+import org.rapidoid.jpa.JPAUtil;
 
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;

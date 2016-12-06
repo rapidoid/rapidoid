@@ -8,7 +8,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.jpa.impl.CustomHibernatePersistenceProvider;
-import org.rapidoid.jpa.impl.EntityManagerWrapper;
+import org.rapidoid.jpa.impl.JPAInternals;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -59,17 +59,15 @@ public class JPAUtil extends RapidoidThing {
 
 	public static EntityManager em() {
 		Ctx ctx = Ctxs.get();
+
 		if (ctx != null) {
-			return wrapEM((EntityManager) ctx.persister());
+			return JPAInternals.wrapEM((EntityManager) ctx.persister());
+
 		} else {
 			EntityManagerFactory emf = JPAUtil.emf;
 			U.notNull(emf, "JPA.emf");
-			return wrapEM(emf.createEntityManager());
+			return JPAInternals.wrapEM(emf.createEntityManager());
 		}
-	}
-
-	private static EntityManager wrapEM(EntityManager em) {
-		return new EntityManagerWrapper(em);
 	}
 
 	public static EntityManager currentEntityManager() {
@@ -179,7 +177,7 @@ public class JPAUtil extends RapidoidThing {
 		return emf;
 	}
 
-	static <T> List<T> getPage(Query q, int start, int length) {
+	public static <T> List<T> getPage(Query q, int start, int length) {
 		q.setFirstResult(start);
 		q.setMaxResults(length);
 

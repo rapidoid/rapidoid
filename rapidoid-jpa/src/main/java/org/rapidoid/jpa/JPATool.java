@@ -3,6 +3,7 @@ package org.rapidoid.jpa;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.jpa.impl.JPACriteriaQueryEntities;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.u.U;
 
