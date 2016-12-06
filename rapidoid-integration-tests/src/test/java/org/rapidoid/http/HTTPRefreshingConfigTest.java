@@ -108,6 +108,7 @@ public class HTTPRefreshingConfigTest extends IsolatedIntegrationTest {
 		changeConfig(cfg, "cfg-" + step + ".yml");
 
 		verify("cfg-api-" + step, JSON.prettify(Conf.API.toMap()));
+		// verifyRoutes("routes-" + step);
 	}
 
 	private void changeConfig(String cfg, String loadFrom) {
