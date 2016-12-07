@@ -248,5 +248,184 @@ public class Arr extends RapidoidThing {
 		return concatenated;
 	}
 
+	/* merge */
+
+	public static Object[] merge(Object[]... arrays) {
+		int size = 0;
+		for (Object[] arr : arrays) size += arr.length;
+		Object[] concat = new Object[size];
+
+		int destPos = 0;
+		for (Object[] src : arrays) {
+			System.arraycopy(src, 0, concat, destPos, src.length);
+			destPos += src.length;
+		}
+
+		return concat;
+	}
+
+	public static boolean[] merge(boolean[]... arrays) {
+		int size = 0;
+		for (boolean[] arr : arrays) size += arr.length;
+		boolean[] concat = new boolean[size];
+
+		int destPos = 0;
+		for (boolean[] src : arrays) {
+			System.arraycopy(src, 0, concat, destPos, src.length);
+			destPos += src.length;
+		}
+
+		return concat;
+	}
+
+	public static byte[] merge(byte[]... arrays) {
+		int size = 0;
+		for (byte[] arr : arrays) size += arr.length;
+		byte[] concat = new byte[size];
+
+		int destPos = 0;
+		for (byte[] src : arrays) {
+			System.arraycopy(src, 0, concat, destPos, src.length);
+			destPos += src.length;
+		}
+
+		return concat;
+	}
+
+	public static char[] merge(char[]... arrays) {
+		int size = 0;
+		for (char[] arr : arrays) size += arr.length;
+		char[] concat = new char[size];
+
+		int destPos = 0;
+		for (char[] src : arrays) {
+			System.arraycopy(src, 0, concat, destPos, src.length);
+			destPos += src.length;
+		}
+
+		return concat;
+	}
+
+	public static int[] merge(int[]... arrays) {
+		int size = 0;
+		for (int[] arr : arrays) size += arr.length;
+		int[] concat = new int[size];
+
+		int destPos = 0;
+		for (int[] src : arrays) {
+			System.arraycopy(src, 0, concat, destPos, src.length);
+			destPos += src.length;
+		}
+
+		return concat;
+	}
+
+	public static long[] merge(long[]... arrays) {
+		int size = 0;
+		for (long[] arr : arrays) size += arr.length;
+		long[] concat = new long[size];
+
+		int destPos = 0;
+		for (long[] src : arrays) {
+			System.arraycopy(src, 0, concat, destPos, src.length);
+			destPos += src.length;
+		}
+
+		return concat;
+	}
+
+	public static float[] merge(float[]... arrays) {
+		int size = 0;
+		for (float[] arr : arrays) size += arr.length;
+		float[] concat = new float[size];
+
+		int destPos = 0;
+		for (float[] src : arrays) {
+			System.arraycopy(src, 0, concat, destPos, src.length);
+			destPos += src.length;
+		}
+
+		return concat;
+	}
+
+	public static double[] merge(double[]... arrays) {
+		int size = 0;
+		for (double[] arr : arrays) size += arr.length;
+		double[] concat = new double[size];
+
+		int destPos = 0;
+		for (double[] src : arrays) {
+			System.arraycopy(src, 0, concat, destPos, src.length);
+			destPos += src.length;
+		}
+
+		return concat;
+	}
+
+	/* split */
+
+	public static <T> void split(T[] src, T[]... parts) {
+		int srcPos = 0;
+		for (T[] dest : parts) {
+			System.arraycopy(src, srcPos, dest, 0, dest.length);
+			srcPos += dest.length;
+		}
+	}
+
+	public static void split(boolean[] src, boolean[]... parts) {
+		int srcPos = 0;
+		for (boolean[] dest : parts) {
+			System.arraycopy(src, srcPos, dest, 0, dest.length);
+			srcPos += dest.length;
+		}
+	}
+
+	public static void split(byte[] src, byte[]... parts) {
+		int srcPos = 0;
+		for (byte[] dest : parts) {
+			System.arraycopy(src, srcPos, dest, 0, dest.length);
+			srcPos += dest.length;
+		}
+	}
+
+	public static void split(char[] src, char[]... parts) {
+		int srcPos = 0;
+		for (char[] dest : parts) {
+			System.arraycopy(src, srcPos, dest, 0, dest.length);
+			srcPos += dest.length;
+		}
+	}
+
+	public static void split(int[] src, int[]... parts) {
+		int srcPos = 0;
+		for (int[] dest : parts) {
+			System.arraycopy(src, srcPos, dest, 0, dest.length);
+			srcPos += dest.length;
+		}
+	}
+
+	public static void split(long[] src, long[]... parts) {
+		int srcPos = 0;
+		for (long[] dest : parts) {
+			System.arraycopy(src, srcPos, dest, 0, dest.length);
+			srcPos += dest.length;
+		}
+	}
+
+	public static void split(float[] src, float[]... parts) {
+		int srcPos = 0;
+		for (float[] dest : parts) {
+			System.arraycopy(src, srcPos, dest, 0, dest.length);
+			srcPos += dest.length;
+		}
+	}
+
+	public static void split(double[] src, double[]... parts) {
+		int srcPos = 0;
+		for (double[] dest : parts) {
+			System.arraycopy(src, srcPos, dest, 0, dest.length);
+			srcPos += dest.length;
+		}
+	}
 
 }
