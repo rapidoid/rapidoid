@@ -23,19 +23,32 @@ package org.rapidoid.crypto;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Arr;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class AES extends RapidoidThing {
+public class CryptoKey extends RapidoidThing {
 
-	private static final AESCypherTool INSTANCE = new AESCypherTool();
+	final byte[] encryptionKey;
 
-	public static byte[] encrypt(byte[] data, byte[] secret) throws Exception {
-		return INSTANCE.encrypt(data, secret);
+	final byte[] hmacKey;
+
+	public CryptoKey(byte[] encryptionKey, byte[] hmacKey) {
+		this.encryptionKey = encryptionKey;
+		this.hmacKey = hmacKey;
 	}
 
-	public static byte[] decrypt(byte[] data, byte[] secret) throws Exception {
-		return INSTANCE.decrypt(data, secret);
+	public static CryptoKey from(char[] password) {
+
+		int totalSize = AESCypherTool.AES_KEY_LENGTH + Crypto.HMAC_KEY_LENGTH; // bits
+		byte[] keys = Crypto.pbkdf2(password, Crypto.DEFAULT_PBKDF2_SALT, 100000, totalSize);
+
+		byte[] encryptionKey = new byte[AESCypherTool.AES_KEY_LENGTH / 8]; // bits to bytes
+		byte[] hmacKey = new byte[Crypto.HMAC_KEY_LENGTH / 8]; // bits to bytes
+
+		Arr.split(keys, encryptionKey, hmacKey);
+
+		return new CryptoKey(encryptionKey, hmacKey);
 	}
 
 }

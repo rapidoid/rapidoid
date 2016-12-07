@@ -23,8 +23,8 @@ package org.rapidoid.crypto;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.env.Env;
 import org.rapidoid.commons.Str;
+import org.rapidoid.env.Env;
 import org.rapidoid.test.AbstractCommonsTest;
 
 @Authors("Nikolche Mihajlovski")
@@ -41,13 +41,13 @@ public class CryptoTest extends AbstractCommonsTest {
 	@Test
 	public void testRandomSecret() {
 		notNull(Crypto.getSecretKey());
-		neq(Str.toHex(Crypto.getSecretKey()), "3CDB902856D13CC88139DD290822DA99E85242F16E575E73ED7953208B88B045");
+		neq(Str.toHex(Crypto.getSecretKey().encryptionKey), "3CDB902856D13CC88139DD290822DA99E85242F16E575E73ED7953208B88B045");
 	}
 
 	@Test
 	public void testSpecifiedSecret() {
 		Env.setArgs("secret=mysecret");
-		String key = Str.toHex(Crypto.getSecretKey());
+		String key = Str.toHex(Crypto.getSecretKey().encryptionKey);
 		isTrue(key.equals("DCE88CB5E440BC26D371D64E55DBB67832BBB44C2887BEE9C1DF17F88BC1764B") || key.equals("3CDB902856D13CC88139DD290822DA99E85242F16E575E73ED7953208B88B045"));
 	}
 
@@ -94,7 +94,7 @@ public class CryptoTest extends AbstractCommonsTest {
 
 	@Test
 	public void testEncryptWithCustomPassword() {
-		byte[] key = Crypto.pbkdf2("pass".toCharArray());
+		CryptoKey key = CryptoKey.from("pass".toCharArray());
 
 		for (int i = 0; i < 10000; i++) {
 			String msg1 = "" + i;

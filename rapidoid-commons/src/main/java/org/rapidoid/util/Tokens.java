@@ -72,7 +72,7 @@ public class Tokens extends RapidoidThing {
 		if (!U.isEmpty(token)) {
 			byte[] decoded = Str.fromBase64(token.replace('$', '+').replace('_', '/'));
 			byte[] tokenDecrypted = Crypto.decrypt(decoded);
-			return (Map<String, Serializable>) Serialize.deserialize(tokenDecrypted);
+			return tokenDecrypted != null ? (Map<String, Serializable>) Serialize.deserialize(tokenDecrypted) : null;
 		} else {
 			return null;
 		}

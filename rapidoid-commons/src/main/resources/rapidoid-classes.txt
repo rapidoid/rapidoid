@@ -134,10 +134,9 @@ org.rapidoid.config.ConfigParser
 org.rapidoid.config.ConfigUtil
 org.rapidoid.config.ConfigValueStore
 org.rapidoid.config.RapidoidInitializer
-org.rapidoid.crypto.AES
 org.rapidoid.crypto.AESCypherTool
 org.rapidoid.crypto.Crypto
-org.rapidoid.crypto.CryptoUtil
+org.rapidoid.crypto.CryptoKey
 org.rapidoid.ctx.Classes
 org.rapidoid.ctx.Contextual
 org.rapidoid.ctx.Ctx

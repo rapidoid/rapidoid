@@ -707,7 +707,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 						tokenStatus(tokenData != null ? TokenStatus.LOADED : TokenStatus.NONE);
 
 					} catch (Exception e) {
-						Log.debug("Token deserialization error!", e);
+						Log.error("Token deserialization error!", e);
 						tokenStatus(TokenStatus.INVALID);
 					}
 
