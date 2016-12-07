@@ -34,6 +34,7 @@ import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
 import java.util.List;
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -52,21 +53,19 @@ public class HTTPRefreshingConfigTest extends IsolatedIntegrationTest {
 		List<ConfigChanges> apiChanges = Coll.synchronizedList();
 
 		Conf.ROOT.addChangeListener(changes -> {
-			U.print("******** ", changes);
-
 			if (changes.initial) {
-				eq(changes.added, Conf.ROOT.toMap());
+				eq(changes.added, withoutEmptySections(Conf.ROOT.toMap()));
 			} else {
+				U.print("******** ", changes);
 				rootChanges.add(changes);
 			}
 		});
 
 		Conf.API.addChangeListener(changes -> {
-			U.print("*** API  ", changes);
-
 			if (changes.initial) {
-				eq(changes.added, Conf.API.toMap());
+				eq(changes.added, withoutEmptySections(Conf.API.toMap()));
 			} else {
+				U.print("*** API  ", changes);
 				apiChanges.add(changes);
 			}
 
@@ -90,9 +89,9 @@ public class HTTPRefreshingConfigTest extends IsolatedIntegrationTest {
 		String cfgFile = Msc.path(cfgDir, "config.yml");
 
 		eq(Conf.API.toMap(), U.map());
-		eq(Conf.ROOT.getChangesSince(null).added, Conf.ROOT.toMap());
-		eq(Conf.API.getChangesSince(null).added, Conf.API.toMap());
-		eq(Conf.HTTP.getChangesSince(null).added, Conf.HTTP.toMap());
+		eq(Conf.ROOT.getChangesSince(null).added, withoutEmptySections(Conf.ROOT.toMap()));
+		eq(Conf.API.getChangesSince(null).added, withoutEmptySections(Conf.API.toMap()));
+		eq(Conf.HTTP.getChangesSince(null).added, withoutEmptySections(Conf.HTTP.toMap()));
 
 		U.sleep(2000); // give the Watch service some time to start
 
@@ -102,6 +101,22 @@ public class HTTPRefreshingConfigTest extends IsolatedIntegrationTest {
 
 		verify("root-changes", JSON.prettify(rootChanges));
 		verify("api-changes", JSON.prettify(apiChanges));
+	}
+
+	private Map<String, Object> withoutEmptySections(Map<String, Object> map) {
+		Map<String, Object> withoutEmptySections = U.map();
+
+		for (Map.Entry<String, Object> e : map.entrySet()) {
+			Object value = e.getValue();
+
+			boolean isEmptyMap = value instanceof Map && ((Map) value).isEmpty();
+
+			if (!isEmptyMap) {
+				withoutEmptySections.put(e.getKey(), value);
+			}
+		}
+
+		return withoutEmptySections;
 	}
 
 	private void exerciseConfigChanges(int step, String cfg) {

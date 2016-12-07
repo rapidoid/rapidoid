@@ -60,26 +60,35 @@ public class ConfigChanges extends RapidoidThing {
 			Object oldValue = e.getValue();
 			Object newValue = fresh.get(key);
 
-			if (newValue != null) {
-				if (U.neq(oldValue, newValue)) {
-					changes.changed.put(key, newValue);
+			if (!isEmptyValue(oldValue)) {
+				if (!isEmptyValue(newValue)) {
+					if (U.neq(oldValue, newValue)) {
+						changes.changed.put(key, newValue);
+					}
+				} else {
+					changes.removed.add(key);
 				}
-			} else {
-				changes.removed.add(key);
 			}
 		}
 
 		for (Map.Entry<String, Object> e : fresh.entrySet()) {
 
 			String key = e.getKey();
+			Object oldValue = old.get(key);
 			Object newValue = fresh.get(key);
 
-			if (!old.containsKey(key)) {
-				changes.added.put(key, newValue);
+			if (!isEmptyValue(newValue)) {
+				if (isEmptyValue(oldValue)) {
+					changes.added.put(key, newValue);
+				}
 			}
 		}
 
 		return changes;
+	}
+
+	private static boolean isEmptyValue(Object value) {
+		return value == null || (value instanceof Map && ((Map) value).isEmpty());
 	}
 
 	public int count() {
