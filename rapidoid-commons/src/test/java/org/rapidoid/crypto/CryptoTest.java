@@ -94,7 +94,7 @@ public class CryptoTest extends AbstractCommonsTest {
 
 	@Test
 	public void testEncryptWithCustomPassword() {
-		byte[] key = Crypto.pbkdf2("pass");
+		byte[] key = Crypto.pbkdf2("pass".toCharArray());
 
 		for (int i = 0; i < 10000; i++) {
 			String msg1 = "" + i;
@@ -111,7 +111,7 @@ public class CryptoTest extends AbstractCommonsTest {
 	public void testPasswordHash() {
 		for (int i = 0; i < 10; i++) {
 			String pass = "" + i;
-			String hash = Crypto.passwordHash(pass);
+			String hash = Crypto.passwordHash(pass.toCharArray());
 
 			isTrue(Crypto.passwordMatches(pass, hash));
 			isFalse(Crypto.passwordMatches(pass + "?", hash));

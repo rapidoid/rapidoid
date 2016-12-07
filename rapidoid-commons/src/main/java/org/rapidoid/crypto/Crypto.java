@@ -1,6 +1,5 @@
 package org.rapidoid.crypto;
 
-import org.netnix.AES;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -140,10 +139,10 @@ public class Crypto extends RapidoidThing {
 
 			byte[] rnd = new byte[128];
 			RANDOM.nextBytes(rnd);
-			secretKey = Crypto.pbkdf2(Str.toHex(rnd));
+			secretKey = pbkdf2(Str.toHex(rnd).toCharArray());
 
 		} else {
-			secretKey = Crypto.pbkdf2(secret);
+			secretKey = pbkdf2(secret.toCharArray());
 		}
 	}
 
@@ -181,27 +180,27 @@ public class Crypto extends RapidoidThing {
 		return decrypt(data, getSecretKey());
 	}
 
-	public static byte[] pbkdf2(String password, byte[] salt, int iterations, int length) {
+	public static byte[] pbkdf2(char[] password, byte[] salt, int iterations, int length) {
 		try {
-			return AES.generateKey(password, salt, iterations, length);
+			return CryptoUtil.pbkdf2(password, salt, iterations, length);
 		} catch (Exception e) {
 			throw U.rte(e);
 		}
 	}
 
-	public static byte[] pbkdf2(String password) {
+	public static byte[] pbkdf2(char[] password) {
 		return pbkdf2(password, DEFAULT_PBKDF2_SALT, 100000, 256);
 	}
 
-	public static String passwordHash(String password) {
+	public static String passwordHash(char[] password) {
 		return passwordHash(password, 100000);
 	}
 
-	public static String passwordHash(String password, int iterations) {
+	public static String passwordHash(char[] password, int iterations) {
 		return passwordHash(password, iterations, randomSalt());
 	}
 
-	public static String passwordHash(String password, int iterations, byte[] salt) {
+	public static String passwordHash(char[] password, int iterations, byte[] salt) {
 		byte[] hash = pbkdf2(password, salt, iterations, 256);
 		return Str.toBase64(hash) + "$" + Str.toBase64(salt) + "$" + iterations;
 	}
@@ -223,7 +222,7 @@ public class Crypto extends RapidoidThing {
 			return false;
 		}
 
-		byte[] realHash = pbkdf2(password, salt, iterations, 256);
+		byte[] realHash = pbkdf2(password.toCharArray(), salt, iterations, 256);
 		return Arrays.equals(expectedHash, realHash);
 	}
 
