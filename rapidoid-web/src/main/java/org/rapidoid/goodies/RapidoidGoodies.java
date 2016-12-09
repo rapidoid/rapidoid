@@ -99,4 +99,9 @@ public class RapidoidGoodies extends RapidoidThing implements IGoodies {
 	public void status(Setup setup) {
 		Goodies.status(setup);
 	}
+
+	@Override
+	public void echo(Setup setup) {
+		Goodies.echo(setup);
+	}
 }

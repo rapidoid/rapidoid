@@ -1,8 +1,16 @@
-package org.rapidoid.setup;
+package org.rapidoid.goodies;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.ReqRespHandler;
+import org.rapidoid.http.Resp;
+import org.rapidoid.u.U;
 
 /*
  * #%L
- * rapidoid-http-server
+ * rapidoid-web
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -20,41 +28,14 @@ package org.rapidoid.setup;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public interface IGoodies {
+@Since("5.3.0")
+public class EchoHandler extends RapidoidThing implements ReqRespHandler {
 
-	void overview(Setup setup);
-
-	void application(Setup setup);
-
-	void lifecycle(Setup setup);
-
-	void processes(Setup setup);
-
-	void jmx(Setup setup);
-
-	void metrics(Setup setup);
-
-	void deploy(Setup setup);
-
-	void ping(Setup setup);
-
-	void auth(Setup setup);
-
-	void oauth(Setup setup);
-
-	void adminCenter(Setup setup);
-
-	void entities(Setup setup);
-
-	void welcome(Setup setup);
-
-	void status(Setup setup);
-
-	void echo(Setup setup);
+	@Override
+	public Object execute(Req req, Resp resp) {
+		return U.map("verb", req.verb(), "uri", req.uri(), "path", req.path(), "data", req.data(),
+			"headers", req.headers(), "cookies", req.cookies(), "token", req.token());
+	}
 
 }

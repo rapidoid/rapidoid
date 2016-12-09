@@ -5,9 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.gui.GUI;
-import org.rapidoid.http.HttpUtils;
-import org.rapidoid.http.HttpVerb;
-import org.rapidoid.http.ReqRespHandler;
+import org.rapidoid.http.*;
 import org.rapidoid.insight.Metrics;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.security.Role;
@@ -254,6 +252,11 @@ public class Goodies extends RapidoidThing {
 
 	public static void status(Setup setup) {
 		setup.get("/_status").json(Goodies.status());
+	}
+
+
+	public static void echo(Setup setup) {
+		setup.get("/_echo").json(new EchoHandler());
 	}
 
 }
