@@ -23,6 +23,7 @@ package org.rapidoid.goodies.discovery;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.NiceResponse;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
 
@@ -43,7 +44,7 @@ public class DiscoveryRegistrationHandler extends RapidoidThing implements ReqHa
 		PeerDiscoveryInfo info = new PeerDiscoveryInfo(req.clientIpAddress(), req.realIpAddress());
 		state.clients.get(scope).add(info);
 
-		return "OK";
+		return NiceResponse.ok(req, "Successfully registered for discovery");
 	}
 
 }
