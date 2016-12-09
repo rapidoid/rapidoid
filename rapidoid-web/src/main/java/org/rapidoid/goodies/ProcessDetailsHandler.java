@@ -79,9 +79,12 @@ public class ProcessDetailsHandler extends GUI implements ReqRespHandler {
 	public static String getOutputLineClass(String line) {
 		String upperLine = line.toUpperCase();
 
-		if (upperLine.contains("[SEVERE]")) return "proc-out proc-out-severe";
-		if (upperLine.contains("[WARNING]") || upperLine.contains("[WARN]")) return "proc-out proc-out-warning";
-		if (upperLine.contains("[ERROR]")) return "proc-out proc-out-error";
+		if (upperLine.contains("[SEVERE]") || upperLine.contains(" SEVERE ")) return "proc-out proc-out-severe";
+
+		if (upperLine.contains("[WARNING]") || upperLine.contains("[WARN]") ||
+			upperLine.contains(" WARNING ") || upperLine.contains(" WARN ")) return "proc-out proc-out-warning";
+
+		if (upperLine.contains("[ERROR]") || upperLine.contains(" ERROR ")) return "proc-out proc-out-error";
 
 		return "proc-out proc-out-default";
 	}
