@@ -97,7 +97,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	private volatile ChangeTrackingMap<String, Serializable> session;
 
-	final AtomicBoolean sessionChanged = new AtomicBoolean();
+	private final AtomicBoolean sessionChanged = new AtomicBoolean();
 
 	private volatile RespImpl response;
 
