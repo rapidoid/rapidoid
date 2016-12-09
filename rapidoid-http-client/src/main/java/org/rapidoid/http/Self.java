@@ -32,7 +32,7 @@ public class Self extends RapidoidThing {
 
 	public static String localUrl(String urlPath) {
 		U.must(urlPath.startsWith("/"), "Invalid URL path, it must start with '/'!");
-		int port = Conf.APP.entry("port").or(8888);
+		int port = Conf.ON.entry("port").or(8888);
 		return "http://localhost:" + port + urlPath;
 	}
 
