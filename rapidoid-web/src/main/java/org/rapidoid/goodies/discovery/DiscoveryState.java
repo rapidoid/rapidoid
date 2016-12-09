@@ -20,6 +20,7 @@ package org.rapidoid.goodies.discovery;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
@@ -29,7 +30,7 @@ import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class DiscoveryState {
+public class DiscoveryState extends RapidoidThing {
 
 	final Map<String, Set<PeerDiscoveryInfo>> clients = Coll.mapOfSets();
 

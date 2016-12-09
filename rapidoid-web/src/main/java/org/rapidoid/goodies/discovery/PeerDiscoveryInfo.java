@@ -20,12 +20,13 @@ package org.rapidoid.goodies.discovery;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class PeerDiscoveryInfo {
+public class PeerDiscoveryInfo extends RapidoidThing {
 
 	public final String clientIpAddress;
 

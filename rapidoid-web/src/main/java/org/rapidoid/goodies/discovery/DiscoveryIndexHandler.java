@@ -20,6 +20,7 @@ package org.rapidoid.goodies.discovery;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Req;
@@ -27,7 +28,7 @@ import org.rapidoid.http.ReqHandler;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class DiscoveryIndexHandler implements ReqHandler {
+public class DiscoveryIndexHandler extends RapidoidThing implements ReqHandler {
 
 	private final DiscoveryState state;
 
