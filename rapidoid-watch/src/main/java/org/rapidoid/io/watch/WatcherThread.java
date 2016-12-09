@@ -98,7 +98,7 @@ public class WatcherThread extends AbstractLoopThread {
 	}
 
 	private void init(Path dir) {
-		Log.info("Registering directory watch", "dir", dir);
+		Log.debug("Registering directory watch", "dir", dir);
 
 		try {
 			WatchKey key = dir.register(watchService, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
