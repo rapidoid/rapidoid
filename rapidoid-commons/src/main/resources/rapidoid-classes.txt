@@ -214,6 +214,7 @@ org.rapidoid.goodies.EntitiesHandler
 org.rapidoid.goodies.Goodies
 org.rapidoid.goodies.GraphDataHandler
 org.rapidoid.goodies.GraphsHandler
+org.rapidoid.goodies.JMXGoodies
 org.rapidoid.goodies.LoginHandler
 org.rapidoid.goodies.LogoutHandler
 org.rapidoid.goodies.MultiDetailsHandler
