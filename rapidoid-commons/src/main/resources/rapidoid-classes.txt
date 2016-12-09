@@ -201,7 +201,9 @@ org.rapidoid.fluent.utils.StreamUtils
 org.rapidoid.goodies.BeansHandler
 org.rapidoid.goodies.ClasspathHandler
 org.rapidoid.goodies.ConfigHandler
-org.rapidoid.goodies.DeploymentHandler
+org.rapidoid.goodies.deployment.DeploymentHandler
+org.rapidoid.goodies.deployment.JarDeploymentHandler
+org.rapidoid.goodies.deployment.JarStagingHandler
 org.rapidoid.goodies.DetailsHandler
 org.rapidoid.goodies.discovery.DiscoveryIndexHandler
 org.rapidoid.goodies.discovery.DiscoveryRegistrationHandler
@@ -212,8 +214,6 @@ org.rapidoid.goodies.EntitiesHandler
 org.rapidoid.goodies.Goodies
 org.rapidoid.goodies.GraphDataHandler
 org.rapidoid.goodies.GraphsHandler
-org.rapidoid.goodies.JarDeploymentHandler
-org.rapidoid.goodies.JarStagingHandler
 org.rapidoid.goodies.LoginHandler
 org.rapidoid.goodies.LogoutHandler
 org.rapidoid.goodies.MultiDetailsHandler

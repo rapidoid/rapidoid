@@ -168,7 +168,7 @@ public class ProcessHandle extends RapidoidThing implements Manageable {
 				}
 			}
 		} catch (IOException e) {
-			Log.error("Cannot read!", e);
+			// can't read anymore (e.g. the stream was closed)
 		}
 
 		return total;

@@ -2,7 +2,6 @@ package org.rapidoid.goodies;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.group.GroupOf;
 import org.rapidoid.group.Groups;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.html.Tag;
@@ -42,13 +41,9 @@ public class ProcessDetailsHandler extends GUI implements ReqRespHandler {
 	public Object execute(Req req, Resp resp) {
 		List<Object> info = U.list();
 
-		String groupName = req.data("group");
 		String id = req.data("id");
 
-		GroupOf<ProcessHandle> group = Groups.find(ProcessHandle.class, groupName);
-		U.must(group != null, "Cannot find the process group!");
-
-		ProcessHandle handle = group.find(id);
+		ProcessHandle handle = Groups.findMember(ProcessHandle.class, id);
 		U.must(handle != null, "Cannot find the process!");
 
 		info.add(h1("Process details"));

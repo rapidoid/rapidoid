@@ -1,4 +1,4 @@
-package org.rapidoid.goodies;
+package org.rapidoid.goodies.deployment;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;

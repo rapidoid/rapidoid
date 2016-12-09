@@ -1,14 +1,16 @@
-package org.rapidoid.goodies;
+package org.rapidoid.goodies.deployment;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.Btn;
 import org.rapidoid.gui.GUI;
-import org.rapidoid.gui.reqinfo.IReqInfo;
-import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.html.Tag;
+import org.rapidoid.http.Current;
 import org.rapidoid.http.HttpVerb;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.ReqHandler;
 import org.rapidoid.io.IO;
+import org.rapidoid.process.ProcessHandle;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Tokens;
@@ -18,7 +20,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
 /*
  * #%L
@@ -42,26 +43,26 @@ import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class DeploymentHandler extends GUI implements Callable<Object> {
+public class DeploymentHandler extends GUI implements ReqHandler {
 
 	public static final String SCOPES = "POST:/_stage, POST:/_deploy, GET:POST:/_deployment";
 
+	private static final String DEPLOYMENT_HELP = "Application deployment works by uploading a JAR and executing it in a child Java process.";
+
 	@Override
-	public Object call() throws Exception {
+	public Object execute(Req req) throws Exception {
 		List<Object> info = U.list();
 
 		if (ClasspathUtil.hasAppJar()) {
 
-			IReqInfo req = ReqInfo.get();
-
-			Map<String, Serializable> tokenData = U.<String, Serializable>map(Tokens._USER, req.username(), Tokens._SCOPE, SCOPES);
+			Map<String, Serializable> tokenData = U.<String, Serializable>map(Tokens._USER, Current.username(), Tokens._SCOPE, SCOPES);
 			String token = Tokens.serialize(tokenData);
 
 			String appJar = ClasspathUtil.appJar();
 			String stagedAppJar = appJar + ".staged";
 
 			info.add(h3("Deployment status:"));
-			info.add(grid(jarsInfo(appJar, stagedAppJar)));
+			info.add(grid(jarsInfo(appJar, stagedAppJar, req)));
 
 			info.add(h3("Your deployment token is:"));
 			info.add(copy(textarea(token).rows("2").attr("readonly", "readonly").style("width:100%; font-size: 10px;")));
@@ -80,30 +81,31 @@ public class DeploymentHandler extends GUI implements Callable<Object> {
 
 		} else {
 			info.add(h3(WARN, " No ", b("app.jar"), " file was configured on the classpath, so application deployment is disabled!"));
-			info.add(h4("Application deployment works by uploading a JAR which overwrites the file 'app.jar', and restarting the application."));
+			info.add(h4(DEPLOYMENT_HELP));
 		}
 
 		return multi(info);
 	}
 
 	@SuppressWarnings("unchecked")
-	private List<Map<String, ?>> jarsInfo(String appJar, String stagedAppJar) {
+	private List<Map<String, ?>> jarsInfo(String appJar, String stagedAppJar, Req req) {
 		return U.list(
-			jarInfo(appJar, "Currently deployed application JAR", false),
-			jarInfo(stagedAppJar, "Application JAR to be deployed", true)
+			jarInfo(appJar, "Currently deployed application JAR", false, req),
+			jarInfo(stagedAppJar, "Application JAR to be deployed", true, req)
 		);
 	}
 
-	private Map<String, ?> jarInfo(final String filename, String desc, boolean staged) {
-		File file = new File(filename);
+	private Map<String, ?> jarInfo(final String filename, String desc, boolean staged, Req req) {
 
+		File file = new File(filename);
 		boolean exists = file.exists();
+
 		String size = exists ? (file.length() / 1024) + " KB" : "";
 		String since = exists ? new Date(file.lastModified()).toString() : "";
 
-		final Btn deploy = staged && exists ? btn("Deploy")
+		Btn deploy = staged && exists ? btn("Deploy")
 			.class_("btn btn-primary btn-xs")
-			.confirm("Do you really want to DEPLOY and RESTART the application?")
+			.confirm("Do you want to DEPLOY the application?")
 			.onSuccess(new Runnable() {
 				@Override
 				public void run() {
@@ -111,11 +113,11 @@ public class DeploymentHandler extends GUI implements Callable<Object> {
 				}
 			}) : null;
 
-		String stgd = staged ? "staged" : "deployed";
-		final Btn delete = exists
-			? btn("Delete").command("delete_" + stgd)
+		String cmd = staged ? "staged" : "deployed";
+		Btn delete = exists
+			? btn("Delete").command("delete_" + cmd)
 			.class_("btn btn-danger btn-xs")
-			.confirm("Do you really want do delete the file '" + filename + "'?")
+			.confirm("Do you want do delete the file '" + filename + "'?")
 			: null;
 
 		if (delete != null) {
@@ -127,13 +129,28 @@ public class DeploymentHandler extends GUI implements Callable<Object> {
 			});
 		}
 
+		Btn details = null;
+		if (!staged && exists) {
+
+			List<ProcessHandle> processes = JarDeploymentHandler.DEPLOYED_PROCESSES.items();
+			if (U.notEmpty(processes)) {
+
+				String procHandleId = processes.get(0).id();
+				String processUrl = U.frmt("%s/_processes/%s", req.contextPath(), procHandleId);
+
+				details = btn("Details")
+					.class_("btn btn-default btn-xs")
+					.go(processUrl);
+			}
+		}
+
 		return U.map(
 			"file", filename,
 			"description", desc,
 			"exists", exists,
 			"size", size,
 			"since", since,
-			"actions", multi(deploy, delete)
+			"actions", multi(deploy, details, delete)
 		);
 	}
 
@@ -155,5 +172,4 @@ public class DeploymentHandler extends GUI implements Callable<Object> {
 	private Map<String, ?> apiInfo(String desc, Tag verb, String uri, Map<String, String> params, String example) {
 		return U.map("description", desc, "verb", verb, "uri", span(uri).class_("text-box"), "parameters", grid(params).headless(true), "example", example);
 	}
-
 }

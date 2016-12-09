@@ -63,4 +63,16 @@ public class Groups extends RapidoidThing {
 		return groups;
 	}
 
+	public static <T extends Manageable> T findMember(Class<? extends T> itemType, String id) {
+
+		for (GroupOf<T> group : find(itemType)) {
+			T member = group.find(id);
+			if (member != null) {
+				return member;
+			}
+		}
+
+		return null;
+	}
+
 }

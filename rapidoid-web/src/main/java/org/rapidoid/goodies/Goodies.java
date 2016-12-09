@@ -4,6 +4,9 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.goodies.deployment.DeploymentHandler;
+import org.rapidoid.goodies.deployment.JarDeploymentHandler;
+import org.rapidoid.goodies.deployment.JarStagingHandler;
 import org.rapidoid.goodies.discovery.DiscoveryIndexHandler;
 import org.rapidoid.goodies.discovery.DiscoveryRegistrationHandler;
 import org.rapidoid.goodies.discovery.DiscoveryState;
@@ -210,7 +213,7 @@ public class Goodies extends RapidoidThing {
 
 	public static void processes(Setup setup) {
 		setup.page("/_processes").mvc(new ProcessesHandler());
-		setup.page("/_processes/{group}/{id}").mvc(new ProcessDetailsHandler());
+		setup.page("/_processes/{id}").mvc(new ProcessDetailsHandler());
 	}
 
 	public static void jmx(Setup setup) {

@@ -81,7 +81,7 @@ public class ProcessesHandler extends GUI implements Callable<Object> {
 			.toUri(new Mapper<ProcessHandle, String>() {
 				@Override
 				public String map(ProcessHandle handle) throws Exception {
-					return U.frmt("/_processes/%s/%s", handle.group().name(), handle.id());
+					return U.frmt("/_processes/%s", handle.id());
 				}
 			})
 			.pageSize(100);
