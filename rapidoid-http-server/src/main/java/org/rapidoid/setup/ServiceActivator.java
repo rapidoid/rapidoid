@@ -68,6 +68,7 @@ public class ServiceActivator extends RapidoidThing {
 		if (boot(setupName, "center")) goodies().adminCenter(setup);
 		if (boot(setupName, "welcome")) goodies().welcome(setup);
 		if (boot(setupName, "status")) goodies().status(setup);
+		if (boot(setupName, "discovery")) goodies().discovery(setup);
 		if (boot(setupName, "echo")) goodies().echo(setup);
 	}
 

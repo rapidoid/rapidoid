@@ -86,6 +86,7 @@ public class ConfigOptions extends RapidoidThing {
 		opts.add(srvOpt("entities", "JPA entities management services"));
 		opts.add(srvOpt("welcome", "Welcome page"));
 		opts.add(srvOpt("echo", "Simple echo service"));
+		opts.add(srvOpt("discovery", "Peer discovery service (transient state)"));
 
 		return opts;
 	}

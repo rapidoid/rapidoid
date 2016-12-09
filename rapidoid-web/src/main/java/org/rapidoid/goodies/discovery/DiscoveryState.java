@@ -1,8 +1,8 @@
-package org.rapidoid.setup;
+package org.rapidoid.goodies.discovery;
 
 /*
  * #%L
- * rapidoid-http-server
+ * rapidoid-web
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -22,41 +22,15 @@ package org.rapidoid.setup;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.collection.Coll;
+
+import java.util.Map;
+import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public interface IGoodies {
+@Since("5.3.0")
+public class DiscoveryState {
 
-	void overview(Setup setup);
-
-	void application(Setup setup);
-
-	void lifecycle(Setup setup);
-
-	void processes(Setup setup);
-
-	void jmx(Setup setup);
-
-	void metrics(Setup setup);
-
-	void deploy(Setup setup);
-
-	void ping(Setup setup);
-
-	void auth(Setup setup);
-
-	void oauth(Setup setup);
-
-	void adminCenter(Setup setup);
-
-	void entities(Setup setup);
-
-	void welcome(Setup setup);
-
-	void status(Setup setup);
-
-	void discovery(Setup setup);
-
-	void echo(Setup setup);
+	final Map<String, Set<PeerDiscoveryInfo>> clients = Coll.mapOfSets();
 
 }

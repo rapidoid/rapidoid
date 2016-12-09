@@ -1,8 +1,8 @@
-package org.rapidoid.setup;
+package org.rapidoid.goodies.discovery;
 
 /*
  * #%L
- * rapidoid-http-server
+ * rapidoid-web
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -22,41 +22,27 @@ package org.rapidoid.setup;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.ReqHandler;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public interface IGoodies {
+@Since("5.3.0")
+public class DiscoveryRegistrationHandler implements ReqHandler {
 
-	void overview(Setup setup);
+	private final DiscoveryState state;
 
-	void application(Setup setup);
+	public DiscoveryRegistrationHandler(DiscoveryState state) {
+		this.state = state;
+	}
 
-	void lifecycle(Setup setup);
+	@Override
+	public Object execute(Req req) throws Exception {
+		String scope = req.param("scope");
 
-	void processes(Setup setup);
+		PeerDiscoveryInfo info = new PeerDiscoveryInfo(req.clientIpAddress(), req.realIpAddress());
+		state.clients.get(scope).add(info);
 
-	void jmx(Setup setup);
-
-	void metrics(Setup setup);
-
-	void deploy(Setup setup);
-
-	void ping(Setup setup);
-
-	void auth(Setup setup);
-
-	void oauth(Setup setup);
-
-	void adminCenter(Setup setup);
-
-	void entities(Setup setup);
-
-	void welcome(Setup setup);
-
-	void status(Setup setup);
-
-	void discovery(Setup setup);
-
-	void echo(Setup setup);
+		return "OK";
+	}
 
 }
