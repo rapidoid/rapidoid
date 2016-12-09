@@ -240,6 +240,11 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	}
 
 	@Override
+	public String realIpAddress() {
+		return HttpUtils.inferRealIpAddress(this);
+	}
+
+	@Override
 	public String host() {
 		return header(HttpHeaders.HOST.name(), null);
 	}

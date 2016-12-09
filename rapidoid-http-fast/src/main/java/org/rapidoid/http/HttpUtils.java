@@ -16,7 +16,10 @@ import org.rapidoid.http.impl.PathPattern;
 import org.rapidoid.io.Res;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
-import org.rapidoid.util.*;
+import org.rapidoid.util.ErrCodeAndMsg;
+import org.rapidoid.util.Msc;
+import org.rapidoid.util.TokenAuthData;
+import org.rapidoid.util.Tokens;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -362,4 +365,10 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 
 		return auth;
 	}
+
+	public static String inferRealIpAddress(Req req) {
+		// // FIXME if CloudFlare is detected, use req.header("cf-connecting-ip")
+		return req.clientIpAddress();
+	}
+
 }

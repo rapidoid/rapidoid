@@ -82,9 +82,17 @@ public interface Req {
 	String contextPath();
 
 	/**
-	 * Gets the <b>IP address</b> of the HTTP client sending the request.
+	 * Gets the <b>IP address</b> of the HTTP client directly sending the request.<br>
+	 * This can be the address of a real user, or a HTTP proxy (if the user uses such), or a reverse proxy (if the application/server uses such).
 	 */
 	String clientIpAddress();
+
+	/**
+	 * A best-effort attempt to infer the real <b>IP address</b> of the end user/client/client proxy.<br>
+	 * If a reverse proxy is detected with high confidence (or configured), its headers will be used to get the real IP address of the user.<br>
+	 * Otherwise, the value of <code>Req#clientIpAddress()</code> is returned.
+	 */
+	String realIpAddress();
 
 	/**
 	 * Gets the <b>HTTP connection ID</b>, which is unique per HTTP server instance.
