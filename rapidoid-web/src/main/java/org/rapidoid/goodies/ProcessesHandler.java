@@ -2,11 +2,12 @@ package org.rapidoid.goodies;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.group.GroupOf;
+import org.rapidoid.group.Groups;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.gui.Grid;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.process.ProcessHandle;
-import org.rapidoid.process.Processes;
 import org.rapidoid.u.U;
 
 import java.util.List;
@@ -66,7 +67,13 @@ public class ProcessesHandler extends GUI implements Callable<Object> {
 
 		info.add(h3("Managed processes:"));
 
-		List<ProcessHandle> processes = Processes.DEFAULT.items();
+		List<GroupOf<ProcessHandle>> gr = Groups.find(ProcessHandle.class);
+
+		List<ProcessHandle> processes = U.list();
+
+		for (GroupOf<ProcessHandle> group : gr) {
+			processes.addAll(group.items());
+		}
 
 		Grid grid = grid(processes)
 			.columns(COLUMNS)

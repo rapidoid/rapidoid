@@ -7,6 +7,7 @@ import org.rapidoid.collection.Coll;
 import org.rapidoid.u.U;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /*
@@ -47,6 +48,19 @@ public class Groups extends RapidoidThing {
 			}
 		}
 		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T extends Manageable> List<GroupOf<T>> find(Class<? extends T> itemType) {
+		List<GroupOf<T>> groups = U.list();
+
+		for (GroupOf<?> group : all()) {
+			if (group.itemType().equals(itemType)) {
+				groups.add((GroupOf<T>) group);
+			}
+		}
+
+		return groups;
 	}
 
 }
