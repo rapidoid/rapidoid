@@ -5,8 +5,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.var.impl.AbstractVar;
 
-import java.io.Serializable;
-
 /*
  * #%L
  * rapidoid-gui
@@ -29,7 +27,7 @@ import java.io.Serializable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.0.2")
-public abstract class WidgetVar<T extends Serializable> extends AbstractVar<T> {
+public abstract class WidgetVar<T> extends AbstractVar<T> {
 
 	private static final long serialVersionUID = 2761159925375675659L;
 
@@ -38,7 +36,7 @@ public abstract class WidgetVar<T extends Serializable> extends AbstractVar<T> {
 	}
 
 	protected boolean getBool() {
-		Object value = ReqInfo.get().posted().get(name());
+		Object value = ReqInfo.get().data().get(name());
 		return Boolean.TRUE.equals(value) || "true".equals(value);
 	}
 

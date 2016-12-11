@@ -36,7 +36,7 @@ public class PostedDataVar<T> extends DecoratorVar<T> {
 
 	@Override
 	public T get() {
-		return (T) ReqInfo.get().posted().get(name());
+		return (T) ReqInfo.get().data().get(name());
 	}
 
 }

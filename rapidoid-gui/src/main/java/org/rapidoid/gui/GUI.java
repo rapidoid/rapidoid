@@ -30,7 +30,7 @@ import org.rapidoid.commons.Str;
 import org.rapidoid.gui.input.*;
 import org.rapidoid.gui.reqinfo.IReqInfo;
 import org.rapidoid.gui.reqinfo.ReqInfo;
-import org.rapidoid.gui.var.LocalVar;
+import org.rapidoid.gui.var.ReqDataVar;
 import org.rapidoid.html.HTML;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagWidget;
@@ -499,12 +499,26 @@ public abstract class GUI extends HTML implements Role {
 		return items;
 	}
 
-	public static <T extends Serializable> Var<T> var(String name, T defaultValue) {
-		return new LocalVar<T>(name, defaultValue);
+	public static <T extends Serializable> Var<T> var(String name, Class<T> type, T defaultValue) {
+		return new ReqDataVar<>(name, type, defaultValue);
 	}
 
-	public static <T extends Serializable> Var<T> var(String name) {
-		return var(name, null);
+	public static <T extends Serializable> Var<T> var(String name, T defaultValue) {
+		return var(name, Cls.of(defaultValue), defaultValue);
+	}
+
+	public static Var<String> var(String name) {
+		return var(name, String.class, null);
+	}
+
+	public static Var<List<String>> listVar(String name) {
+		Class<List<String>> type = U.cast(List.class);
+		return new ReqDataVar<>(name, type, U.<String>list());
+	}
+
+	public static Var<List<String>> listVar(String name, List<String> defaultValue) {
+		Class<List<String>> type = U.cast(List.class);
+		return new ReqDataVar<>(name, type, defaultValue);
 	}
 
 	public static Object highlight(String text) {

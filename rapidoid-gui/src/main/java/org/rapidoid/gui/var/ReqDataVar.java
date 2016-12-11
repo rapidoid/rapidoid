@@ -3,10 +3,12 @@ package org.rapidoid.gui.var;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.Err;
 import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.u.U;
 
-import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 
 /*
  * #%L
@@ -29,25 +31,55 @@ import java.io.Serializable;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.0.0")
-public class LocalVar<T extends Serializable> extends WidgetVar<T> {
+@Since("5.3.0")
+public class ReqDataVar<T> extends WidgetVar<T> {
 
 	private static final long serialVersionUID = 2761159925375675659L;
 
 	private final String localKey;
 
+	private final Class<T> type;
+
 	private final T defaultValue;
 
-	public LocalVar(String localKey, T defaultValue) {
+	public ReqDataVar(String localKey, Class<T> type, T defaultValue) {
 		super(localKey);
 		this.localKey = localKey;
+		this.type = type;
 		this.defaultValue = defaultValue;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public T get() {
-		return (T) Cls.convert(U.or(ReqInfo.get().posted().get(localKey), defaultValue), Cls.of(defaultValue));
+		Object value = U.or(ReqInfo.get().data().get(localKey), null);
+
+		if (type.equals(List.class)) {
+
+			if (value == null) {
+				return defaultValue;
+
+			} else if (value instanceof String) {
+				String s = (String) value;
+
+				if (U.notEmpty(s)) {
+					return (T) U.list(s);
+				} else {
+					return defaultValue;
+				}
+
+			} else if (value instanceof Collection) {
+				Collection coll = (Collection) value;
+				return (T) U.list(coll);
+
+			} else {
+				throw Err.notExpected();
+			}
+
+		} else {
+			value = U.or(value, defaultValue);
+			return Cls.convert(value, type);
+		}
 	}
 
 	@Override
