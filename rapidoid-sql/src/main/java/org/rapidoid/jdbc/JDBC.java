@@ -106,6 +106,10 @@ public class JDBC extends RapidoidThing {
 		defaultApi().tryToExecute(sql, args);
 	}
 
+	public static <T> List<T> query(Class<T> resultType, String sql, Object... args) {
+		return defaultApi().query(resultType, sql, args);
+	}
+
 	public static <T> List<Map<String, Object>> query(String sql, Object... args) {
 		return defaultApi().query(sql, args);
 	}
@@ -146,15 +150,17 @@ public class JDBC extends RapidoidThing {
 
 		for (int i = 0; i < props.length; i++) {
 			String name = meta.getColumnLabel(i + 1);
-			props[i] = Beany.property(resultType, name, true);
+			props[i] = Beany.property(resultType, name, false);
 		}
 
 		while (rs.next()) {
 			T row = Cls.newInstance(resultType);
 
 			for (int i = 0; i < columnsN; i++) {
-				Object value = rs.getObject(i + 1); // 1-indexed
-				props[i].set(row, value);
+				if (props[i] != null) {
+					Object value = rs.getObject(i + 1); // 1-indexed
+					props[i].set(row, value);
+				}
 			}
 
 			rows.add(row);
