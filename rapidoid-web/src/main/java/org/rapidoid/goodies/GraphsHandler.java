@@ -2,15 +2,17 @@ package org.rapidoid.goodies;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.timeseries.TimeSeries;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.html.Tag;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.ReqRespHandler;
+import org.rapidoid.http.Resp;
 import org.rapidoid.insight.Metrics;
+import org.rapidoid.timeseries.TimeSeries;
 import org.rapidoid.u.U;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
 /*
  * #%L
@@ -34,11 +36,12 @@ import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class GraphsHandler extends GUI implements Callable<Object> {
+public class GraphsHandler extends GUI implements ReqRespHandler {
 
 	@Override
-	public Object call() throws Exception {
-		return multi(graphs(2));
+	public Object execute(Req req, Resp resp) throws Exception {
+		int columns = req.data("columns", 2);
+		return multi(graphs(columns));
 	}
 
 	public static List<Tag> graphs(int perRow) {
@@ -64,5 +67,4 @@ public class GraphsHandler extends GUI implements Callable<Object> {
 
 		return rows;
 	}
-
 }
