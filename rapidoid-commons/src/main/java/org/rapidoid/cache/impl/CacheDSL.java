@@ -1,4 +1,4 @@
-package org.rapidoid.cache;
+package org.rapidoid.cache.impl;
 
 /*
  * #%L
@@ -23,6 +23,7 @@ package org.rapidoid.cache;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cache.Cached;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")

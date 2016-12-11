@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public interface CachedCalc<V> {
+public interface CacheAtom<V> {
 
 	/**
 	 * Returns the cached value, recalculating/reloading it if expired.
@@ -33,8 +33,18 @@ public interface CachedCalc<V> {
 	V get();
 
 	/**
-	 * Invalidates the cache.
+	 * Retrieves the cached value if it exists, or <code>null</code> otherwise.
+	 */
+	V getIfExists();
+
+	/**
+	 * Invalidates the cached value.
 	 */
 	void invalidate();
+
+	/**
+	 * Sets a new cached value.
+	 */
+	void set(V value);
 
 }

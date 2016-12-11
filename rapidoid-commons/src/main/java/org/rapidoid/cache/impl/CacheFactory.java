@@ -1,4 +1,4 @@
-package org.rapidoid.cache;
+package org.rapidoid.cache.impl;
 
 /*
  * #%L
@@ -20,21 +20,16 @@ package org.rapidoid.cache;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class NotCached<K, V> implements Cached<K, V> {
+public class CacheFactory extends RapidoidThing {
 
-	@Override
-	public V get(K key) {
-		return null;
-	}
-
-	@Override
-	public V getIfExists(K key) {
-		return null;
+	public static <K, V> ConcurrentCached<K, V> create(CacheDSL<K, V> params) {
+		return new ConcurrentCached<K, V>(params.capacity(), params.of(), params.ttl());
 	}
 
 }

@@ -3,6 +3,8 @@ package org.rapidoid.cache;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cache.impl.ConcurrentCacheAtom;
+import org.rapidoid.commons.Rnd;
 import org.rapidoid.io.IO;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.test.TestCommons;
@@ -42,6 +44,13 @@ public class SimpleCacheTest extends TestCommons {
 		}
 	};
 
+	private static Mapper<Integer, Integer> NEXT = new Mapper<Integer, Integer>() {
+		@Override
+		public Integer map(Integer x) throws Exception {
+			return x + 1;
+		}
+	};
+
 	private static Callable<String> ABC = new Callable<String>() {
 		@Override
 		public String call() throws Exception {
@@ -51,7 +60,7 @@ public class SimpleCacheTest extends TestCommons {
 
 	@Test
 	public void testCachedValue() {
-		final ConcurrentCached<String> cached = new ConcurrentCached<String>(ABC, 10);
+		final ConcurrentCacheAtom<String> cached = new ConcurrentCacheAtom<String>(ABC, 10);
 
 		Msc.benchmarkMT(100, "reads", 10000000, new Runnable() {
 			@Override
@@ -69,14 +78,25 @@ public class SimpleCacheTest extends TestCommons {
 
 	@Test
 	public void testCache() {
+		final int capacity = 1000;
 
-		Cached<String, Integer> cache = Cache.of(LENGTH).capacity(10).ttl(1000).build();
+		final Cached<Integer, Integer> cache = Cache.of(NEXT).capacity(capacity).ttl(10).build();
 
-		eq(cache.get("x").intValue(), 1);
-		eq(cache.get("x").intValue(), 1);
-		eq(cache.get("aaa").intValue(), 3);
-		eq(cache.get("bb").intValue(), 2);
-		eq(cache.get("ccc").intValue(), 3);
+		Msc.benchmarkMT(100, "ops", 10000000, new Runnable() {
+			@Override
+			public void run() {
+				int n = Rnd.rnd(capacity * 100);
+
+				if (Rnd.rnd(3) == 0) cache.invalidate(n);
+
+				Integer maybe = cache.getIfExists(n);
+				isTrue(maybe == null || maybe == n + 1);
+
+				eq(cache.get(n).intValue(), n + 1);
+
+				if (Rnd.rnd(5) == 0) cache.set(n, n + 1);
+			}
+		});
 	}
 
 }
