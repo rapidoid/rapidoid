@@ -893,4 +893,8 @@ public abstract class GUI extends HTML implements Role {
 		return new MultiWidget(elements);
 	}
 
+	public static void redirect(String uri) {
+		req().setHeader("X-Rapidoid-Redirect", uri);
+	}
+
 }

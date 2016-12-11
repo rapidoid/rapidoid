@@ -128,6 +128,11 @@ public class RapidoidReqInfo extends AbstractReqInfo {
 	}
 
 	@Override
+	public void setHeader(String name, String value) {
+		req().response().header(name, value);
+	}
+
+	@Override
 	public boolean hasRoute(HttpVerb verb, String uri) {
 		ReqImpl reqq = (ReqImpl) req();
 		return reqq.http().hasRouteOrResource(verb, uri);

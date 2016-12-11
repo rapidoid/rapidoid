@@ -136,4 +136,8 @@ public class NoReqInfo extends AbstractReqInfo {
 		return null;
 	}
 
+	@Override
+	public void setHeader(String name, String value) {
+	}
+
 }

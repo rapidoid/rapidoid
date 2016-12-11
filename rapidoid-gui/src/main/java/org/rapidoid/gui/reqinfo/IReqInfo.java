@@ -74,4 +74,5 @@ public interface IReqInfo {
 
 	String view();
 
+	void setHeader(String name, String value);
 }

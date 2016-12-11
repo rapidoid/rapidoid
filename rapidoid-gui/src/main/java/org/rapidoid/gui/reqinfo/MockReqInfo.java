@@ -244,6 +244,10 @@ public class MockReqInfo extends AbstractReqInfo {
 		return null;
 	}
 
+	@Override
+	public void setHeader(String name, String value) {
+	}
+
 	public MockReqInfo contextPath(String contextPath) {
 		this.contextPath = contextPath;
 		return this;
