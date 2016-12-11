@@ -67,6 +67,14 @@ public class CachedImpl<K, V> extends AbstractMapImpl<K, CachedCalc<V>> implemen
 		return cachedValue.get();
 	}
 
+	@Override
+	public V getIfExists(K key) {
+		SimpleList<MapEntry<K, CachedCalc<V>>> bucket = entries.bucket(key.hashCode());
+		MapEntry<K, CachedCalc<V>> entry = findEntry(key, bucket);
+
+		return entry != null ? entry.value.get() : null;
+	}
+
 	private Callable<V> loaderFor(final K key) {
 		return new Callable<V>() {
 			@Override

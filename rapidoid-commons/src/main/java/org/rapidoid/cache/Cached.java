@@ -29,4 +29,6 @@ public interface Cached<K, V> {
 
 	V get(K key);
 
+	V getIfExists(K key);
+
 }
