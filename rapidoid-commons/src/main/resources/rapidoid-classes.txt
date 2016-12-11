@@ -40,6 +40,7 @@ org.rapidoid.annotation.ToString
 org.rapidoid.annotation.TRACE
 org.rapidoid.annotation.Transaction
 org.rapidoid.annotation.TransactionMode
+org.rapidoid.annotation.Transient
 org.rapidoid.annotation.Valid
 org.rapidoid.AuthBootstrap
 org.rapidoid.beany.AnnotatedPropertyFilter
