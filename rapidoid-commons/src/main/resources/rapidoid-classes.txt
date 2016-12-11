@@ -423,6 +423,8 @@ org.rapidoid.http.impl.RapidoidReqInfo
 org.rapidoid.http.impl.ReqImpl
 org.rapidoid.http.impl.RespImpl
 org.rapidoid.http.impl.ResponseRenderer
+org.rapidoid.http.impl.RouteCacheConfig
+org.rapidoid.http.impl.RouteCacheKey
 org.rapidoid.http.impl.RouteImpl
 org.rapidoid.http.impl.RouteOptions
 org.rapidoid.http.impl.TokenStatus

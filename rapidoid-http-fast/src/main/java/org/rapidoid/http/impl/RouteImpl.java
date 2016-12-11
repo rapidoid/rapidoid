@@ -3,11 +3,16 @@ package org.rapidoid.http.impl;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cache.Cache;
+import org.rapidoid.cache.Cached;
 import org.rapidoid.http.HttpVerb;
 import org.rapidoid.http.Route;
 import org.rapidoid.http.RouteConfig;
 import org.rapidoid.http.handler.HttpHandler;
+import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
+
+import java.nio.ByteBuffer;
 
 /*
  * #%L
@@ -41,11 +46,35 @@ public class RouteImpl extends RapidoidThing implements Route {
 
 	private volatile RouteOptions options;
 
-	public RouteImpl(HttpVerb verb, String path, HttpHandler handler, RouteOptions options) {
+	private final RouteCacheConfig cacheConfig;
+
+	private final Cached<RouteCacheKey, ByteBuffer> cache;
+
+	public RouteImpl(HttpVerb verb, String path, HttpHandler handler, RouteOptions options, RouteCacheConfig cacheConfig) {
 		this.verb = verb;
 		this.path = path;
 		this.handler = handler;
 		this.options = options;
+		this.cacheConfig = cacheConfig;
+		this.cache = createCache();
+	}
+
+	public static RouteImpl matching(HttpVerb verb, String path) {
+		return new RouteImpl(verb, path, null, null, null);
+	}
+
+	protected Cached<RouteCacheKey, ByteBuffer> createCache() {
+
+		if (cacheConfig == null) return null;
+
+		return Cache.of(new Mapper<RouteCacheKey, ByteBuffer>() {
+
+			@Override
+			public ByteBuffer map(RouteCacheKey key) throws Exception {
+				return null; // FIXME
+			}
+
+		}).ttl(cacheConfig.ttl).build();
 	}
 
 	@Override
@@ -96,4 +125,8 @@ public class RouteImpl extends RapidoidThing implements Route {
 		return this;
 	}
 
+	@Override
+	public Cached<RouteCacheKey, ByteBuffer> cache() {
+		return cache;
+	}
 }

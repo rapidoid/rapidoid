@@ -1,4 +1,8 @@
-package org.rapidoid.http;
+package org.rapidoid.http.impl;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 /*
  * #%L
@@ -20,25 +24,14 @@ package org.rapidoid.http;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cache.Cached;
-import org.rapidoid.http.handler.HttpHandler;
-import org.rapidoid.http.impl.RouteCacheKey;
-
-import java.nio.ByteBuffer;
-
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public interface Route {
+@Since("5.3.0")
+public class RouteCacheConfig extends RapidoidThing {
 
-	HttpVerb verb();
+	public final long ttl;
 
-	String path();
+	public RouteCacheConfig(long ttl) {
+		this.ttl = ttl;
+	}
 
-	HttpHandler handler();
-
-	RouteConfig config();
-
-	Cached<RouteCacheKey, ByteBuffer> cache();
 }

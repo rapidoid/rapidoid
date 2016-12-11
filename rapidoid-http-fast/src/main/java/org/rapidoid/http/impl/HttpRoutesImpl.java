@@ -105,7 +105,9 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 		boolean isPattern = isPattern(path);
 		PathPattern pathPattern = isPattern ? PathPattern.from(path) : null;
 
-		RouteImpl route = new RouteImpl(verb, path, handler, handler.options());
+		RouteCacheConfig cacheConfig = new RouteCacheConfig(100); // FIXME configurable
+
+		RouteImpl route = new RouteImpl(verb, path, handler, handler.options(), cacheConfig);
 		handler.setRoute(route);
 		routes.add(route);
 
@@ -197,7 +199,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 		boolean isPattern = isPattern(path);
 		PathPattern pathPattern = isPattern ? PathPattern.from(path) : null;
 
-		routes.remove(new RouteImpl(verb, path, null, null));
+		routes.remove(RouteImpl.matching(verb, path));
 
 		switch (verb) {
 			case GET:
@@ -393,7 +395,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 			Map<String, String> params = pattern.match(path);
 
 			if (params != null) {
-				RouteImpl route = new RouteImpl(verb, path, null, null);
+				RouteImpl route = RouteImpl.matching(verb, path);
 				return new HandlerMatchWithParams(e.getValue(), params, route);
 			}
 		}

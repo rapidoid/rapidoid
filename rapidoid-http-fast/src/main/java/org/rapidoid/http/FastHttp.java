@@ -4,6 +4,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.bytes.BytesUtil;
+import org.rapidoid.cache.Cached;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.config.Config;
 import org.rapidoid.config.ConfigImpl;
@@ -23,6 +24,7 @@ import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
+import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -120,6 +122,29 @@ public class FastHttp extends AbstractHttpProcessor {
 				}
 			}
 		}
+
+		boolean saveInCache = false;
+		Cached<RouteCacheKey, ByteBuffer> cache = null;
+
+		if (matchingRoute != null) {
+			cache = matchingRoute.cache();
+
+			if (cache != null) {
+				ByteBuffer cachedResp = cache.getIfExists(new RouteCacheKey());
+
+				if (cachedResp != null) {
+					channel.write(cachedResp.duplicate());
+					channel.done();
+					channel.closeIf(!isKeepAlive);
+					return;
+
+				} else {
+					saveInCache = true;
+				}
+			}
+		}
+
+		// FIXME save the response into cache
 
 		HttpHandler handler = match != null ? match.getHandler() : null;
 		boolean noReq = (handler != null && !handler.needsParams());
