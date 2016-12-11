@@ -44,32 +44,44 @@ public class JdbcClient extends RapidoidThing {
 	private volatile ConnectionPool pool = new NoConnectionPool();
 
 	public synchronized JdbcClient username(String username) {
-		this.username = username;
-		this.initialized = false;
+		if (U.neq(this.username, username)) {
+			this.username = username;
+			this.initialized = false;
+		}
 		return this;
 	}
 
 	public synchronized JdbcClient password(String password) {
-		this.password = password;
-		this.initialized = false;
+		if (U.neq(this.password, password)) {
+			this.password = password;
+			this.initialized = false;
+		}
 		return this;
 	}
 
 	public synchronized JdbcClient driver(String driver) {
-		this.driver = driver;
-		this.initialized = false;
+		if (U.neq(this.driver, driver)) {
+			this.driver = driver;
+			this.initialized = false;
+		}
 		return this;
 	}
 
-	public synchronized JdbcClient pool(ConnectionPool connectionPool) {
-		this.pool = connectionPool;
-		this.initialized = false;
+	public synchronized JdbcClient pool(ConnectionPool pool) {
+		if (U.neq(this.pool, pool)) {
+			this.pool = pool;
+			this.initialized = false;
+		}
 		return this;
 	}
 
 	public synchronized JdbcClient url(String url) {
-		this.url = url;
-		this.initialized = false;
+		if (U.neq(this.url, url)) {
+			this.url = url;
+			this.initialized = false;
+		}
+		return this;
+	}
 		return this;
 	}
 
