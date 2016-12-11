@@ -9,10 +9,11 @@ Rapidoid.plugin(function(app) {
             this.lastId = '';
             this.dataUrl = dataUrl;
             this.cols = 1;
+            this.reachedEnd = false;
         };
 
         StreamData.prototype.nextPage = function() {
-            if (this.busy)
+            if (this.busy || this.reachedEnd)
                 return;
             this.busy = true;
 
@@ -26,6 +27,7 @@ Rapidoid.plugin(function(app) {
                 }
                 this.page++;
                 this.busy = false;
+                this.reachedEnd = items.length == 0;
             }.bind(this));
         };
 
