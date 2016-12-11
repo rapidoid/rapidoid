@@ -1174,4 +1174,18 @@ public class Msc extends RapidoidThing implements Constants {
 		}
 	}
 
+	public static byte[] uuidToBytes(UUID uuid) {
+		ByteBuffer buf = ByteBuffer.wrap(new byte[16]);
+
+		buf.putLong(uuid.getMostSignificantBits());
+		buf.putLong(uuid.getLeastSignificantBits());
+
+		return buf.array();
+	}
+
+	public static UUID bytesToUUID(byte[] bytes) {
+		ByteBuffer buf = ByteBuffer.wrap(bytes);
+		return new UUID(buf.getLong(), buf.getLong());
+	}
+
 }

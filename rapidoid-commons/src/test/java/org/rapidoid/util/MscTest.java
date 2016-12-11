@@ -26,6 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.test.TestCommons;
 
 import java.io.File;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
@@ -91,4 +92,10 @@ public class MscTest extends TestCommons {
 		isFalse(Msc.dockerized());
 	}
 
+	@Test
+	public void testUuidBytes() {
+		UUID uuid = UUID.randomUUID();
+		UUID uuid2 = Msc.bytesToUUID(Msc.uuidToBytes(uuid));
+		eq(uuid2, uuid);
+	}
 }
