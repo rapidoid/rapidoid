@@ -15,6 +15,7 @@ import org.rapidoid.commons.Err;
 import org.rapidoid.commons.Str;
 import org.rapidoid.io.IO;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
 
@@ -543,7 +544,7 @@ public class Cls extends RapidoidThing {
 				return (T) UUID.fromString(value);
 
 			default:
-				throw Err.notExpected();
+				throw U.rte("Cannot convert String to type '%s'!", toType);
 		}
 	}
 
@@ -704,8 +705,9 @@ public class Cls extends RapidoidThing {
 		return (Class<T>) (type instanceof Class ? type : Object.class);
 	}
 
-	public static Class<?> of(Object obj) {
-		return obj != null ? obj.getClass() : Object.class;
+	@SuppressWarnings("unchecked")
+	public static <T> Class<T> of(T obj) {
+		return (Class<T>) (obj != null ? obj.getClass() : Object.class);
 	}
 
 	public static String str(Object value) {
@@ -817,13 +819,9 @@ public class Cls extends RapidoidThing {
 	public static <T> T newBeanInstance(Class<T> clazz) {
 		try {
 			Constructor<T> constr = clazz.getDeclaredConstructor();
-			boolean accessible = constr.isAccessible();
 			constr.setAccessible(true);
 
-			T obj = constr.newInstance();
-
-			constr.setAccessible(accessible);
-			return obj;
+			return constr.newInstance();
 		} catch (Exception e) {
 			throw U.rte(e);
 		}
@@ -833,18 +831,13 @@ public class Cls extends RapidoidThing {
 	public static <T> T newInstance(Class<T> clazz, Object... args) {
 		for (Constructor<?> constr : clazz.getConstructors()) {
 			Class<?>[] paramTypes = constr.getParameterTypes();
-			if (areAssignable(paramTypes, args)) {
-				try {
-					boolean accessible = constr.isAccessible();
-					constr.setAccessible(true);
+			if (areAssignable(paramTypes, args)) try {
 
-					T obj = (T) constr.newInstance(args);
+				constr.setAccessible(true);
 
-					constr.setAccessible(accessible);
-					return obj;
-				} catch (Exception e) {
-					throw U.rte(e);
-				}
+				return (T) constr.newInstance(args);
+			} catch (Exception e) {
+				throw U.rte(e);
 			}
 		}
 

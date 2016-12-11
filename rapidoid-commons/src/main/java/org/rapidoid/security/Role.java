@@ -30,22 +30,22 @@ import org.rapidoid.annotation.Since;
 @Since("5.1.3")
 public interface Role {
 
-	public static final String ANYBODY = "anybody";
+	String ANYBODY = "anybody";
 
-	public static final String ADMINISTRATOR = "administrator";
+	String ADMINISTRATOR = "administrator";
 
-	public static final String MANAGER = "manager";
+	String MANAGER = "manager";
 
-	public static final String MODERATOR = "moderator";
+	String MODERATOR = "moderator";
 
-	public static final String LOGGED_IN = "logged_in";
+	String LOGGED_IN = "logged_in";
 
-	public static final String OWNER = "owner";
+	String OWNER = "owner";
 
-	public static final String AUTHOR = "author";
+	String AUTHOR = "author";
 
-	public static final String SHARED_WITH = "shared_with";
+	String SHARED_WITH = "shared_with";
 
-	public static final String RESTARTER = "restarter";
+	String RESTARTER = "restarter";
 
 }
