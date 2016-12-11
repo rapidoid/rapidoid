@@ -3,7 +3,6 @@ package org.rapidoid.config;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogbackUtil;
@@ -37,31 +36,19 @@ public class RapidoidInitializer extends RapidoidThing {
 		initialize();
 	}
 
-	private static volatile long startedOn;
+	private static synchronized void initialize() {
+		String proc = Msc.processName();
+		String dir = System.getProperty("user.dir");
+		String maxMem = (Runtime.getRuntime().maxMemory() / 1024 / 1024) + " MB";
 
-	public static synchronized void initialize() {
-		if (startedOn == 0) {
-			startedOn = System.currentTimeMillis();
+		Log.info("!Starting " + RapidoidInfo.nameAndInfo());
 
-			String proc = Msc.processName();
-			String dir = System.getProperty("user.dir");
-			String maxMem = (Runtime.getRuntime().maxMemory() / 1024 / 1024) + " MB";
+		Log.info("!System info", "os", Msc.OS_NAME, "java", Msc.maybeMasked(Msc.javaVersion()),
+			"process", Msc.maybeMasked(proc), "max memory", Msc.maybeMasked(maxMem), "dir", dir);
 
-			Log.info("!Starting " + RapidoidInfo.nameAndInfo());
-
-			Log.info("!System info", "os", Msc.OS_NAME, "java", Msc.maybeMasked(Msc.javaVersion()),
-				"process", Msc.maybeMasked(proc), "max memory", Msc.maybeMasked(maxMem), "dir", dir);
-
-			if (Msc.hasLogback()) {
-				LogbackUtil.setupLogger();
-			}
-
-			Cls.getClassIfExists("org.rapidoid.insight.Metrics");
+		if (Msc.hasLogback()) {
+			LogbackUtil.setupLogger();
 		}
-	}
-
-	public static long startedOn() {
-		return startedOn;
 	}
 
 }

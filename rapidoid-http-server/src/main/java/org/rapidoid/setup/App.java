@@ -20,7 +20,6 @@ package org.rapidoid.setup;
  * #L%
  */
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
@@ -28,13 +27,13 @@ import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.ConfigHelp;
+import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.data.JSON;
 import org.rapidoid.env.Env;
 import org.rapidoid.io.Res;
 import org.rapidoid.ioc.Beans;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.ioc.IoCContext;
-import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.render.Templates;
 import org.rapidoid.reverseproxy.Reverse;
@@ -49,7 +48,7 @@ import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class App extends RapidoidThing {
+public class App extends RapidoidInitializer {
 
 	private static volatile String[] path;
 
@@ -93,8 +92,6 @@ public class App extends RapidoidThing {
 	}
 
 	public static AppBootstrap boot() {
-		Jobs.initialize();
-
 		registerConfigListeners();
 
 		AppBootstrap bootstrap = new AppBootstrap();

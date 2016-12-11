@@ -3,7 +3,6 @@ package org.rapidoid.commons;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.u.U;
 import org.rapidoid.util.GlobalCfg;
 import org.rapidoid.util.Msc;
@@ -36,6 +35,8 @@ import java.util.Properties;
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.4")
 public class RapidoidInfo extends RapidoidThing {
+
+	private static volatile long startedOn = System.currentTimeMillis();
 
 	private static final Properties PROPS = new Properties();
 
@@ -81,7 +82,7 @@ public class RapidoidInfo extends RapidoidThing {
 	}
 
 	public static long uptime() {
-		return U.time() - RapidoidInitializer.startedOn();
+		return U.time() - startedOn;
 	}
 
 }

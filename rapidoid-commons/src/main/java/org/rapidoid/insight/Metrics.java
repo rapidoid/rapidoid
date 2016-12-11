@@ -1,10 +1,10 @@
 package org.rapidoid.insight;
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.Coll;
+import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.timeseries.TimeSeries;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
@@ -40,7 +40,7 @@ import java.util.concurrent.TimeUnit;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class Metrics extends RapidoidThing implements Runnable {
+public class Metrics extends RapidoidInitializer implements Runnable {
 
 	public static final Map<String, TimeSeries> METRICS = Coll.synchronizedMap();
 
