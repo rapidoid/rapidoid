@@ -61,7 +61,7 @@ public class CachedImpl<K, V> extends AbstractMapImpl<K, CachedCalc<V>> implemen
 		CachedCalc<V> cachedValue = new ConcurrentCached<V>(loaderFor(key), ttlInMs);
 
 		synchronized (bucket) {
-			bucket.addRotating(new MapEntry<K, CachedCalc<V>>(key, cachedValue));
+			bucket.addRotating(new MapEntry<>(key, cachedValue));
 		}
 
 		return cachedValue.get();

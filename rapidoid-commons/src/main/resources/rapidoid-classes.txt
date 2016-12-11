@@ -78,6 +78,7 @@ org.rapidoid.cache.CachedImpl
 org.rapidoid.cache.CacheDSL
 org.rapidoid.cache.CacheFactory
 org.rapidoid.cache.ConcurrentCached
+org.rapidoid.cache.NotCached
 org.rapidoid.cls.AbstractTypeSpecificFactory
 org.rapidoid.cls.AbstractTypeSpecificVisitor
 org.rapidoid.cls.Cls
