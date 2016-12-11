@@ -40,7 +40,7 @@ public class GraphsHandler extends GUI implements ReqRespHandler {
 
 	@Override
 	public Object execute(Req req, Resp resp) throws Exception {
-		int columns = req.data("columns", 2);
+		int columns = req.data("columns", 4);
 		return multi(graphs(columns));
 	}
 
