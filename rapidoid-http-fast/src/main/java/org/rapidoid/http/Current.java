@@ -48,12 +48,20 @@ public class Current extends RapidoidThing {
 		return user().username != null;
 	}
 
+	public static boolean isLoggedInAs(String username) {
+		return username != null && username.equals(username());
+	}
+
 	public static String username() {
 		return user().username;
 	}
 
 	public static Set<String> roles() {
 		return user().roles;
+	}
+
+	public static boolean hasRole(String role) {
+		return roles().contains(role);
 	}
 
 	public static Set<String> scope() {
