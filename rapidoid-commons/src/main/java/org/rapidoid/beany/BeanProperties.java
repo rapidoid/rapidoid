@@ -132,7 +132,7 @@ public class BeanProperties extends RapidoidThing implements Iterable<Prop> {
 	}
 
 	public static BeanProperties from(List<Prop> properties) {
-		Map<String, Prop> map = new LinkedHashMap<String, Prop>();
+		Map<String, Prop> map = Coll.synchronizedMap();
 
 		for (Prop prop : properties) {
 			map.put(prop.getName(), prop);
@@ -142,7 +142,7 @@ public class BeanProperties extends RapidoidThing implements Iterable<Prop> {
 	}
 
 	public static BeanProperties from(Map<String, ?> map) {
-		Map<String, Prop> properties = new LinkedHashMap<String, Prop>();
+		Map<String, Prop> properties = Coll.synchronizedMap();
 
 		for (Entry<?, ?> e : map.entrySet()) {
 			Object key = e.getKey();

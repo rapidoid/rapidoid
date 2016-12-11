@@ -11,7 +11,10 @@ import org.rapidoid.util.Msc;
 import org.rapidoid.var.Var;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -42,28 +45,28 @@ public class BeanProp extends RapidoidThing implements Prop {
 
 	private final String name;
 
-	private Field field;
+	private volatile Field field;
 
-	private Method getter;
+	private volatile Method getter;
 
-	private Method setter;
+	private volatile Method setter;
 
-	private Class<?> declaringType;
+	private volatile Class<?> declaringType;
 
-	private Class<?> type;
-	private Class<?> rawType;
+	private volatile Class<?> type;
+	private volatile Class<?> rawType;
 
-	private TypeKind typeKind;
-	private TypeKind rawTypeKind;
+	private volatile TypeKind typeKind;
+	private volatile TypeKind rawTypeKind;
 
-	private PropKind propKind = PropKind.NORMAL;
+	private volatile PropKind propKind = PropKind.NORMAL;
 
-	private Object defaultValue;
+	private volatile Object defaultValue;
 
-	private boolean readOnly = true;
+	private volatile boolean readOnly = true;
 
-	private ParameterizedType genericType;
-	private ParameterizedType rawGenericType;
+	private volatile ParameterizedType genericType;
+	private volatile ParameterizedType rawGenericType;
 
 	public BeanProp(String name) {
 		this.name = name;
@@ -370,15 +373,27 @@ public class BeanProp extends RapidoidThing implements Prop {
 
 	@Override
 	public Object getFast(Object target) {
-		try {
-			if (getter != null) {
+
+		if (getter != null) {
+			getter.setAccessible(true);
+
+			try {
 				return getter.invoke(target);
-			} else {
-				return field.get(target);
+			} catch (Exception e) {
+				throw U.rte(e);
 			}
 
-		} catch (Exception e) {
-			throw U.rte(e);
+		} else if (field != null) {
+			field.setAccessible(true);
+
+			try {
+				return field.get(target);
+			} catch (Exception e) {
+				throw U.rte(e);
+			}
+
+		} else {
+			throw U.rte("No field nor getter is available for property '%s' of type '%s'", getName(), getType());
 		}
 	}
 
