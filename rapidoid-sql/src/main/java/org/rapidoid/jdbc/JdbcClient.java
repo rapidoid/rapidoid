@@ -41,7 +41,8 @@ public class JdbcClient extends RapidoidThing {
 	private volatile String driver;
 	private volatile String url;
 
-	private volatile ConnectionPool pool = new NoConnectionPool();
+	private volatile boolean usePool = true;
+	private volatile ConnectionPool pool;
 
 	public synchronized JdbcClient username(String username) {
 		if (U.neq(this.username, username)) {
@@ -70,6 +71,7 @@ public class JdbcClient extends RapidoidThing {
 	public synchronized JdbcClient pool(ConnectionPool pool) {
 		if (U.neq(this.pool, pool)) {
 			this.pool = pool;
+			this.usePool = pool != null;
 			this.initialized = false;
 		}
 		return this;
@@ -82,6 +84,21 @@ public class JdbcClient extends RapidoidThing {
 		}
 		return this;
 	}
+
+	public synchronized JdbcClient usePool(boolean usePool) {
+		if (U.neq(this.usePool, usePool)) {
+			this.usePool = usePool;
+			this.initialized = false;
+		}
+		return this;
+	}
+
+	/**
+	 * Use <code>usePool(true)</code> instead.
+	 */
+	@Deprecated
+	public JdbcClient pooled() {
+		usePool(true);
 		return this;
 	}
 
@@ -124,6 +141,10 @@ public class JdbcClient extends RapidoidThing {
 
 			String maskedPassword = U.isEmpty(password) ? "<empty>" : "<specified>";
 			Log.info("Initialized JDBC API", "!url", url, "!driver", driver, "!username", username, "!password", maskedPassword);
+
+			if (usePool && pool == null) {
+				pool = new C3P0ConnectionPool(this);
+			}
 
 			initialized = true;
 		}
@@ -294,13 +315,6 @@ public class JdbcClient extends RapidoidThing {
 
 	public ConnectionPool pool() {
 		return pool;
-	}
-
-	public JdbcClient pooled() {
-		ensureIsInitialized();
-
-		this.pool = new C3P0ConnectionPool(this);
-		return this;
 	}
 
 }
