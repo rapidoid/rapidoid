@@ -76,4 +76,9 @@ public abstract class AbstractViewResolver<T> extends RapidoidThing implements V
 	public void setExtension(String extension) {
 		this.extension = extension;
 	}
+
+	public synchronized void reset() {
+		factoriesPerLoader.clear();
+	}
+
 }

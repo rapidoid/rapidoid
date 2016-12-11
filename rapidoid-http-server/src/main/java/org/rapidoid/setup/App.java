@@ -23,6 +23,7 @@ package org.rapidoid.setup;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.beany.Beany;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.config.Conf;
@@ -77,7 +78,7 @@ public class App extends RapidoidThing {
 
 		args(args);
 
-		if (!managed) scan();
+		scan();
 
 		return boot();
 	}
@@ -172,6 +173,7 @@ public class App extends RapidoidThing {
 		Res.reset();
 		Templates.reset();
 		JSON.reset();
+		Beany.reset();
 
 		AppBootstrap.reset();
 		ClasspathScanner.reset();
@@ -181,7 +183,9 @@ public class App extends RapidoidThing {
 			setup.reload();
 		}
 
-		Setup.initDefaults();
+		Conf.reset(); // reset the config again
+		Setup.initDefaults(); // this changes the config
+		Conf.reset(); // reset the config again
 
 		if (Msc.hasRapidoidJPA()) {
 			loader = ReloadUtil.reloader();

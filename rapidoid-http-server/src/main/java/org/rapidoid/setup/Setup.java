@@ -16,9 +16,11 @@ import org.rapidoid.http.HttpRoutes;
 import org.rapidoid.http.ReqHandler;
 import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.customize.Customization;
+import org.rapidoid.http.customize.ViewResolver;
 import org.rapidoid.http.handler.HttpHandler;
 import org.rapidoid.http.handler.optimized.DelegatingParamsAwareReqHandler;
 import org.rapidoid.http.handler.optimized.DelegatingParamsAwareReqRespHandler;
+import org.rapidoid.http.impl.AbstractViewResolver;
 import org.rapidoid.http.impl.HttpRoutesImpl;
 import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.http.processor.HttpProcessor;
@@ -461,6 +463,12 @@ public class Setup extends RapidoidInitializer implements Constants {
 		defaults = new RouteOptions();
 		defaults.zone(zone);
 		attributes().clear();
+
+		ViewResolver viewResolver = custom().viewResolver();
+		if (viewResolver instanceof AbstractViewResolver) {
+			((AbstractViewResolver) viewResolver).reset();
+		}
+
 		initDefaults();
 	}
 
