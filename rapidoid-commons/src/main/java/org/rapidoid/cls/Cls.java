@@ -81,7 +81,6 @@ public class Cls extends RapidoidThing {
 					Field field = c.getDeclaredField(fieldName);
 					field.setAccessible(true);
 					field.set(instance, value);
-					field.setAccessible(false);
 					return;
 				} catch (NoSuchFieldException e) {
 					// keep searching the filed in the super-class...
@@ -98,7 +97,6 @@ public class Cls extends RapidoidThing {
 		try {
 			field.setAccessible(true);
 			field.set(instance, value);
-			field.setAccessible(false);
 		} catch (Exception e) {
 			throw U.rte("Cannot set field value!", e);
 		}
@@ -134,7 +132,6 @@ public class Cls extends RapidoidThing {
 		try {
 			field.setAccessible(true);
 			Object value = field.get(instance);
-			field.setAccessible(false);
 
 			return value;
 		} catch (Exception e) {
@@ -304,7 +301,6 @@ public class Cls extends RapidoidThing {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T invokeStatic(Method m, Object... args) {
-		boolean accessible = m.isAccessible();
 		try {
 			m.setAccessible(true);
 			return (T) m.invoke(null, args);
@@ -314,34 +310,26 @@ public class Cls extends RapidoidThing {
 			throw U.rte("Cannot statically invoke method '%s' with args: %s", e, m.getName(), Arrays.toString(args));
 		} catch (InvocationTargetException e) {
 			throw U.rte("Cannot statically invoke method '%s' with args: %s", e, m.getName(), Arrays.toString(args));
-		} finally {
-			m.setAccessible(accessible);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public static <T> T invoke(Method m, Object target, Object... args) {
-		boolean accessible = m.isAccessible();
 		try {
 			m.setAccessible(true);
 			return (T) m.invoke(target, args);
 		} catch (Exception e) {
 			throw U.rte("Cannot invoke method '%s' with args: %s", e, m.getName(), Arrays.toString(args));
-		} finally {
-			m.setAccessible(accessible);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public static <T> T invoke(Constructor<?> constructor, Object... args) {
-		boolean accessible = constructor.isAccessible();
 		try {
 			constructor.setAccessible(true);
 			return (T) constructor.newInstance(args);
 		} catch (Exception e) {
 			throw U.rte("Cannot invoke method '%s' with args: %s", e, constructor.getName(), Arrays.toString(args));
-		} finally {
-			constructor.setAccessible(accessible);
 		}
 	}
 
