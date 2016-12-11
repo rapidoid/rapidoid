@@ -39,8 +39,7 @@ public class GenericValueRetriever extends RapidoidThing implements ValueRetriev
 
 	private final String property;
 
-	private volatile Class<?> cachedModelType;
-	private volatile Prop cachedProp;
+	private volatile CachedPropRetriever cachedPropRetriever;
 
 	public GenericValueRetriever(String property) {
 		this.property = property;
@@ -54,19 +53,19 @@ public class GenericValueRetriever extends RapidoidThing implements ValueRetriev
 
 	private Object getProp(List<Object> model) {
 		Object target = U.last(model);
-
 		Class<?> cls = target.getClass();
-		if (cls.equals(cachedModelType) && cachedProp != null) {
-			return cachedProp.getFast(target);
+
+		CachedPropRetriever cachedProp = cachedPropRetriever;
+		if (cachedProp != null && cachedProp.canRetrieve(cls)) {
+			return cachedProp.retrieve(target);
 		}
 
 		if (!(target instanceof Map)) {
 			Prop prop = Beany.property(target, property, false);
 
 			if (prop != null && prop instanceof BeanProp) {
-				cachedProp = prop;
-				cachedModelType = cls;
-				return cachedProp.getFast(target);
+				cachedPropRetriever = new CachedPropRetriever(cls, prop);
+				return prop.getFast(target);
 			}
 		}
 
