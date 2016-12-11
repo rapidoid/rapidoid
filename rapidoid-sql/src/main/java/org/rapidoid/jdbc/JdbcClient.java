@@ -34,12 +34,12 @@ import java.util.Map;
 @Since("3.0.0")
 public class JdbcClient extends RapidoidThing {
 
-	private boolean initialized;
+	private volatile boolean initialized;
 
-	private String username;
-	private String password;
-	private String driver;
-	private String url;
+	private volatile String username;
+	private volatile String password;
+	private volatile String driver;
+	private volatile String url;
 
 	private volatile ConnectionPool pool = new NoConnectionPool();
 
