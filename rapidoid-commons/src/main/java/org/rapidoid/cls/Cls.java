@@ -662,6 +662,14 @@ public class Cls extends RapidoidThing {
 					throw U.rte("Cannot convert the value '%s' to date!", value);
 				}
 
+			case UUID:
+				if (value instanceof byte[]) {
+					return (T) Msc.bytesToUUID((byte[]) value);
+				} else {
+					throw U.rte("Cannot convert the value '%s' to UUID!", value);
+				}
+
+
 			default:
 				throw Err.notExpected();
 		}
