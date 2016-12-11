@@ -24,6 +24,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Arr;
+import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
 import javax.crypto.Cipher;
@@ -78,7 +79,8 @@ public class AESCypherTool extends RapidoidThing {
 			return aes(encrypted, key.encryptionKey, aesIV, Cipher.DECRYPT_MODE);
 
 		} else {
-			throw U.rte("Cannot decrypt corrupted data!");
+			Log.debug("Cannot decrypt invalid data. Has the secret changed?");
+			return null;
 		}
 	}
 
