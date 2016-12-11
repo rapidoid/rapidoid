@@ -5,10 +5,12 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.config.RapidoidInitializer;
-import org.rapidoid.timeseries.TimeSeries;
 import org.rapidoid.job.Jobs;
+import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.log.Log;
+import org.rapidoid.timeseries.TimeSeries;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 import org.rapidoid.util.Once;
 
 import java.lang.management.ManagementFactory;
@@ -16,6 +18,7 @@ import java.lang.management.OperatingSystemMXBean;
 import java.lang.management.ThreadMXBean;
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 /*
@@ -127,6 +130,41 @@ public class Metrics extends RapidoidInitializer implements Runnable {
 
 	public static Map<String, TimeSeries> all() {
 		return METRICS;
+	}
+
+	public static TimeSeries measure(String title, final Number var) {
+		return measure(title, var, 1, TimeUnit.SECONDS);
+	}
+
+	public static TimeSeries measure(String title, final Number var, long period, TimeUnit timeUnit) {
+		return measure(title, new Callable<Number>() {
+			@Override
+			public Number call() throws Exception {
+				return var;
+			}
+		}, period, timeUnit);
+	}
+
+	public static TimeSeries measure(String title, Callable<? extends Number> var) {
+		return measure(title, var, 1, TimeUnit.SECONDS);
+	}
+
+	public static TimeSeries measure(String title, final Callable<? extends Number> var, long period, TimeUnit timeUnit) {
+
+		final TimeSeries ts = new TimeSeries();
+		ts.title(title);
+
+		Jobs.every(period, timeUnit).run(new Runnable() {
+			@Override
+			public void run() {
+				Number value = Lmbd.call(var);
+				if (value != null) ts.put(U.time(), value.doubleValue());
+			}
+		});
+
+		register("/" + Msc.textToId(title), ts);
+
+		return ts;
 	}
 
 }
