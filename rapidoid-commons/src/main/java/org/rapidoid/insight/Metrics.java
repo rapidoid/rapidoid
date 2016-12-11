@@ -86,6 +86,8 @@ public class Metrics extends RapidoidInitializer implements Runnable {
 		register("threads", NUM_THREADS);
 		register("descriptors", NUM_FILE_DESC);
 
+		JMXMetrics.bootstrap();
+
 		Metrics updateMetrics = new Metrics();
 		updateMetrics.run();
 		Jobs.scheduleAtFixedRate(updateMetrics, 1, 1, TimeUnit.SECONDS);

@@ -450,6 +450,7 @@ org.rapidoid.insight.CounterMeasure
 org.rapidoid.insight.Insightful
 org.rapidoid.insight.Insights
 org.rapidoid.insight.InsightsThread
+org.rapidoid.insight.JMXMetrics
 org.rapidoid.insight.Measure
 org.rapidoid.insight.Metrics
 org.rapidoid.insight.PercentMeasure
