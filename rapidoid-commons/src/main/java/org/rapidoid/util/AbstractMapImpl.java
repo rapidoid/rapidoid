@@ -65,7 +65,7 @@ public abstract class AbstractMapImpl<K, V> extends RapidoidThing implements Sim
 		for (int i = 0; i < bucket.size(); i++) {
 			MapEntry<K, V> entry = bucket.get(i);
 
-			if (U.eq(entry.key, key)) {
+			if (entry != null && U.eq(entry.key, key)) {
 				return entry;
 			}
 		}
