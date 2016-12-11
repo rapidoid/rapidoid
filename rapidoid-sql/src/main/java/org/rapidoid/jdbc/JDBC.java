@@ -7,10 +7,12 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.sql.*;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /*
  * #%L
@@ -137,7 +139,20 @@ public class JDBC extends RapidoidThing {
 
 	public static void bind(PreparedStatement stmt, Object... args) throws SQLException {
 		for (int i = 0; i < args.length; i++) {
-			stmt.setObject(i + 1, args[i]);
+			Object arg = args[i];
+
+			if (arg instanceof byte[]) {
+				byte[] bytes = (byte[]) arg;
+				stmt.setBytes(i + 1, bytes);
+
+			} else if (arg instanceof UUID) {
+				UUID uuid = (UUID) arg;
+				byte[] bytes = Msc.uuidToBytes(uuid);
+				stmt.setBytes(i + 1, bytes);
+
+			} else {
+				stmt.setObject(i + 1, arg);
+			}
 		}
 	}
 
