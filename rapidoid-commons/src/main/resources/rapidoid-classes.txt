@@ -282,7 +282,6 @@ org.rapidoid.gui.reqinfo.NoReqInfo
 org.rapidoid.gui.reqinfo.ReqInfo
 org.rapidoid.gui.reqinfo.ReqInfoUtils
 org.rapidoid.gui.Snippet
-org.rapidoid.gui.var.PostedDataVar
 org.rapidoid.gui.var.ReqDataVar
 org.rapidoid.gui.var.WidgetVar
 org.rapidoid.html.BasicUtils
