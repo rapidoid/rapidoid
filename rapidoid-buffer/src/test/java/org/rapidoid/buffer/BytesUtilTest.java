@@ -87,4 +87,36 @@ public class BytesUtilTest extends BufferTestCommons {
 		return BytesUtil.isValidURI(buf.bytes(), uriRange);
 	}
 
+	@Test
+	public void testBufferBytes() {
+		Buf buf = buf("abc");
+
+		eq(buf.get(0), 'a');
+		eq(buf.bytes().get(0), 'a');
+
+		eq(buf.limit(), 3);
+		eq(buf.bytes().limit(), 3);
+
+		buf.deleteBefore(1);
+
+		eq(buf.get(0), 'b');
+		eq(buf.bytes().get(0), 'b');
+
+		eq(buf.limit(), 2);
+		eq(buf.bytes().limit(), 2);
+
+		buf.deleteBefore(1);
+
+		eq(buf.get(0), 'c');
+		eq(buf.bytes().get(0), 'c');
+
+		eq(buf.limit(), 1);
+		eq(buf.bytes().limit(), 1);
+
+		buf.deleteBefore(1);
+
+		eq(buf.limit(), 0);
+		eq(buf.bytes().limit(), 0);
+	}
+
 }

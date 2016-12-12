@@ -32,6 +32,9 @@ public class ByteBufferBytes extends RapidoidThing implements Bytes {
 
 	private ByteBuffer buf;
 
+	private int offset;
+	private int limit;
+
 	public ByteBufferBytes() {
 	}
 
@@ -41,16 +44,18 @@ public class ByteBufferBytes extends RapidoidThing implements Bytes {
 
 	@Override
 	public byte get(int position) {
-		return buf.get(position);
+		return buf.get(position + offset);
 	}
 
 	@Override
 	public int limit() {
-		return buf.limit();
+		return limit;
 	}
 
-	public void setBuf(ByteBuffer buf) {
+	public void setTarget(ByteBuffer buf, int offset, int limit) {
 		this.buf = buf;
+		this.offset = offset;
+		this.limit = limit;
 	}
 
 }
