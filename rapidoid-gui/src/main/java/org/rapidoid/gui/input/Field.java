@@ -12,7 +12,6 @@ import org.rapidoid.commons.Err;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.gui.reqinfo.IReqInfo;
-import org.rapidoid.gui.var.PostedDataVar;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
@@ -74,6 +73,7 @@ public class Field extends AbstractWidget<Field> {
 	}
 
 	private static Var<Object> initVar(Item item, Property prop, FormMode mode, boolean required) {
+
 		Object target = U.or(item.value(), item);
 		String varName = propVarName(target, prop.name());
 
@@ -86,25 +86,13 @@ public class Field extends AbstractWidget<Field> {
 		}
 
 		IReqInfo req = req();
-		if (!req.isGetReq() && !GUI.REFRESH.command().equals(GUI.getCommand())) {
-			var = new PostedDataVar<Object>(var);
-			var.set(req.posted().get(varName));
+
+		Object value = req.data().get(varName);
+		if (value != null || !req.isGetReq()) {
+			var.set(value);
 		}
 
 		return var;
-	}
-
-	protected String formLayoutClass(FormLayout layout) {
-		switch (layout) {
-			case VERTICAL:
-				return "";
-			case HORIZONTAL:
-				return "form-horizontal";
-			case INLINE:
-				return "form-inline";
-			default:
-				throw Err.notExpected();
-		}
 	}
 
 	protected Tag field() {

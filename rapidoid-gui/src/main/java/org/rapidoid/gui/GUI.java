@@ -746,6 +746,11 @@ public abstract class GUI extends HTML implements Role {
 		return !req.isGetReq() ? (String) req.posted().get("_cmd") : null;
 	}
 
+	public static boolean isEvent() {
+		IReqInfo req = req();
+		return U.eq(req.params().get("__event__"), "true");
+	}
+
 	public static Tag verb(HttpVerb verb) {
 		Tag tag = span(verb);
 		switch (verb) {

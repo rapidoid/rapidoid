@@ -68,13 +68,13 @@ public abstract class AbstractCommand<W extends AbstractCommand<?>> extends Abst
 			IReqInfo req = ReqInfo.get();
 
 			if (!req.isGetReq()) {
-				String event = (String) req.posted().get("_cmd");
+				String event = GUI.getCommand();
 
 				if (U.notEmpty(event) && U.eq(event, command)) {
 					Object[] args = new Object[cmdArgs.length];
 
 					for (int i = 0; i < args.length; i++) {
-						args[i] = U.or(req.posted().get("_" + i), "");
+						args[i] = U.or(req.data().get("_" + i), "");
 					}
 
 					return Arrays.equals(args, cmdArgs);

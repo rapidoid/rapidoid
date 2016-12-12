@@ -35,8 +35,8 @@ public class MandatoryVar<T> extends DecoratorVar<T> {
 
 	@Override
 	protected void doSet(T value) {
-		U.must(!U.isEmpty(value), "Non-empty value is required!");
 		var.set(value);
+		U.must(!U.isEmpty(value), "Non-empty value is required!");
 	}
 
 }

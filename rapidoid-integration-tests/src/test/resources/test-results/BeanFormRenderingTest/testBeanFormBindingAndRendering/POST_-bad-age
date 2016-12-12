@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 770
+Content-Length: 769
 
 <form class="" role="form">
   <div class="form-group">
@@ -12,7 +12,7 @@ Content-Length: 770
   </div>
   <div class="form-group with-validation-errors" data-has-validation-errors="yes">
     <label>Age: </label>
-    <input type="text" class="form-control" name="age" value="123f" placeholder="">
+    <input type="text" class="form-control" name="age" value="100" placeholder="">
     <span class="field-error">Invalid number!</span>
   </div>
   <div class="form-group">

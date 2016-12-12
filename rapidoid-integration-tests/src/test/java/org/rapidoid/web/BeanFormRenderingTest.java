@@ -38,7 +38,7 @@ public class BeanFormRenderingTest extends IsolatedIntegrationTest {
 		On.page("/").html(() -> GUI.edit(new Dude("unknown", 100)));
 
 		getAndPost("/");
-		getAndPost("/?name=foo&age=12345"); // URL params are ignored
+		getAndPost("/?name=foo&age=12345");
 
 		postData("/?bad-age", U.map("name", "Mozart", "age", "123f"));
 		postData("/?name=hey&age=77", U.map("name", "Bach"));

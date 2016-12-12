@@ -43,6 +43,8 @@ public class ValidatingVar<T> extends DecoratorVar<T> {
 
 	@Override
 	protected void doSet(T value) {
+		var.set(value);
+
 		boolean valid;
 		try {
 			valid = Lmbd.eval(isValid, value);
@@ -53,8 +55,6 @@ public class ValidatingVar<T> extends DecoratorVar<T> {
 		}
 
 		U.must(valid, message);
-
-		var.set(value);
 	}
 
 }
