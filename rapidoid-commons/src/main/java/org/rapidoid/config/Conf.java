@@ -55,6 +55,7 @@ public class Conf extends RapidoidThing {
 	public static final Config C3P0 = section("c3p0");
 	public static final Config APP = section("app");
 	public static final Config HTTP = section("http");
+	public static final Config NET = section("net");
 	public static final Config ON = section("on");
 	public static final Config ADMIN = section("admin");
 	public static final Config TOKEN = section("token");

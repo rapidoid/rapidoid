@@ -66,7 +66,7 @@ public class HttpParserTest extends TestCommons {
 	public void shouldParseRequest1() {
 		RapidoidHelper req = parse(REQ1);
 
-		BufGroup bufs = new BufGroup(2);
+		BufGroup bufs = new BufGroup(4);
 		Buf reqbuf = bufs.from(REQ1, "r2");
 
 		eq(REQ1, req.verb, "GET");
@@ -145,7 +145,7 @@ public class HttpParserTest extends TestCommons {
 	private RapidoidHelper parse(String reqs) {
 		RapidoidHelper req = new RapidoidHelper();
 
-		Buf reqbuf = new BufGroup(10).from(reqs, "test");
+		Buf reqbuf = new BufGroup(1024).from(reqs, "test");
 
 		Channel conn = mock(Channel.class);
 		returns(conn.input(), reqbuf);

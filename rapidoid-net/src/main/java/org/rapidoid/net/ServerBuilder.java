@@ -3,6 +3,7 @@ package org.rapidoid.net;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.net.impl.RapidoidServerLoop;
 
@@ -30,23 +31,23 @@ import org.rapidoid.net.impl.RapidoidServerLoop;
 @Since("5.1.0")
 public class ServerBuilder extends RapidoidThing {
 
-	private volatile String address = "0.0.0.0";
+	private volatile String address = Conf.NET.entry("address").or("0.0.0.0");
 
-	private volatile int port = 8888;
+	private volatile int port = Conf.NET.entry("port").or(8888);
 
-	private volatile int workers = Runtime.getRuntime().availableProcessors();
+	private volatile int workers = Conf.NET.entry("workers").or(Runtime.getRuntime().availableProcessors());
+
+	private volatile int bufSizeKB = Conf.NET.entry("bufSizeKB").or(16);
+
+	private volatile boolean noDelay = Conf.NET.entry("noDelay").or(false);
+
+	private volatile boolean syncBufs = Conf.NET.entry("syncBufs").or(true);
 
 	private volatile org.rapidoid.net.Protocol protocol = null;
 
 	private volatile Class<? extends org.rapidoid.net.impl.DefaultExchange<?>> exchangeClass = null;
 
 	private volatile Class<? extends org.rapidoid.net.impl.RapidoidHelper> helperClass = RapidoidHelper.class;
-
-	private volatile int bufSizeKB = 16;
-
-	private volatile boolean noNelay = false;
-
-	private volatile boolean syncBufs = true;
 
 	public ServerBuilder address(String address) {
 		this.address = address;
@@ -110,12 +111,12 @@ public class ServerBuilder extends RapidoidThing {
 		this.bufSizeKB = bufSizeKB;
 	}
 
-	public boolean noNelay() {
-		return noNelay;
+	public boolean noDelay() {
+		return noDelay;
 	}
 
-	public void noNelay(boolean noNelay) {
-		this.noNelay = noNelay;
+	public void noDelay(boolean noDelay) {
+		this.noDelay = noDelay;
 	}
 
 	public boolean syncBufs() {
@@ -128,7 +129,7 @@ public class ServerBuilder extends RapidoidThing {
 	}
 
 	public Server build() {
-		return new RapidoidServerLoop(protocol, exchangeClass, helperClass, address, port, workers, bufSizeKB, noNelay, syncBufs);
+		return new RapidoidServerLoop(protocol, exchangeClass, helperClass, address, port, workers, bufSizeKB, noDelay, syncBufs);
 	}
 
 }

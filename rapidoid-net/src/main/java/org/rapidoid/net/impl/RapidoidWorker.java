@@ -96,11 +96,13 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 	}
 
 	public RapidoidWorker(String name, final Protocol protocol, final RapidoidHelper helper,
-	                      int bufSizeKB, boolean noNelay, boolean syncBufs) {
+	                      int bufSizeKB, boolean noDelay, boolean syncBufs) {
 
 		super(name);
 
-		this.bufs = new BufGroup(14, syncBufs); // 2^14B (16 KB per buffer segment)
+		this.bufSize = bufSizeKB * 1024;
+		this.noDelay = noDelay;
+		this.bufs = new BufGroup(bufSize, syncBufs);
 
 		this.serverProtocol = protocol;
 		this.helper = helper;
@@ -119,9 +121,6 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 				return newConnection();
 			}
 		}, 100000);
-
-		this.bufSize = bufSizeKB * 1024;
-		this.noDelay = noNelay;
 
 		if (idleConnectionsCrawler != null) {
 			idleConnectionsCrawler.register(allConnections);

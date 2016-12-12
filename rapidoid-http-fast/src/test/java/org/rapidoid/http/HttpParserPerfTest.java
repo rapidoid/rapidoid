@@ -33,7 +33,7 @@ import org.rapidoid.util.Msc;
 @Since("2.0.0")
 public class HttpParserPerfTest {
 
-	private static final BufGroup BUFS = new BufGroup(10);
+	private static final BufGroup BUFS = new BufGroup(1024);
 
 	static String REQ1 = "GET /asd/ff?a=5&bn=4 HTTP/1.1|Host:www.test.com|Set-Cookie: a=2|Connection: keep-alive|Set-Cookie: aaa=2|Set-Cookie: aaa=2|Set-Cookie: aaa=2||";
 	static String REQ2 = "POST /opa/dd/fggh HTTP|Host:a.b.org|My-Header: ghhh|Content-Length: 1|My-Header: ghhh|Connection: keep-alive|My-Header: ghhh|My-Header: ghhh|My-Header: ghhh||X";

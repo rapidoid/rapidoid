@@ -49,7 +49,7 @@ public class MaxHttpPerfTest {
 
 		String req = "GET /plaintext HTTP/1.1\r\nHost:www.test.com\r\n\r\n";
 
-		BufGroup gr = new BufGroup(14);
+		BufGroup gr = new BufGroup(16 * 1024);
 		final Buf buf = gr.newBuf();
 		buf.append(req);
 

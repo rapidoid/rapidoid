@@ -31,7 +31,7 @@ public class StatisticalBufTest extends BufferTestCommons {
 
 	@Test
 	public void shouldExpandAndShrink() {
-		BufGroup bufs = new BufGroup(2);
+		BufGroup bufs = new BufGroup(4);
 		Buf buf = bufs.newBuf("");
 		String copy = "";
 		String s;

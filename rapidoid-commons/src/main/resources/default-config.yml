@@ -96,6 +96,14 @@ oauth:
     clientId: YOUR_LINKEDIN_CLIENT_ID_HERE
     clientSecret: YOUR_LINKEDIN_CLIENT_SECRET_HERE
 
+net:
+  address: 0.0.0.0
+  port: 8888
+# workers: ${cpus}
+  bufSizeKB: 16
+  noDelay: false
+  syncBufs: true
+
 http:
   timeout: 30000
   timeoutResolution: 5000

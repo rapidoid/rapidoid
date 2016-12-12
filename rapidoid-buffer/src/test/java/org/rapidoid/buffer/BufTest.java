@@ -37,7 +37,7 @@ public class BufTest extends BufferTestCommons implements Constants {
 
 	@Test
 	public void shouldAppendData() {
-		BufGroup bufs = new BufGroup(2);
+		BufGroup bufs = new BufGroup(4);
 		Buf buf = bufs.newBuf();
 
 		eq(buf, "");
@@ -72,7 +72,7 @@ public class BufTest extends BufferTestCommons implements Constants {
 
 	@Test
 	public void shouldShrinkOnLeft() {
-		BufGroup bufs = new BufGroup(2);
+		BufGroup bufs = new BufGroup(4);
 		Buf buf = bufs.newBuf();
 
 		buf.append("abcdefgh-foo-bar-123456789-the-end");
@@ -114,7 +114,7 @@ public class BufTest extends BufferTestCommons implements Constants {
 
 	@Test
 	public void shouldShrinkOnRight() {
-		BufGroup bufs = new BufGroup(2);
+		BufGroup bufs = new BufGroup(4);
 		Buf buf = bufs.newBuf();
 
 		buf.append("abcdefgh-foo-bar-123456789-the-end");
@@ -156,7 +156,7 @@ public class BufTest extends BufferTestCommons implements Constants {
 
 	@Test
 	public void shouldParseNumbers() {
-		BufGroup bufs = new BufGroup(2);
+		BufGroup bufs = new BufGroup(4);
 		Buf buf = bufs.newBuf();
 
 		buf.append("5a1234567890fg-3450fg0x45g-3");
@@ -172,7 +172,7 @@ public class BufTest extends BufferTestCommons implements Constants {
 
 	@Test
 	public void shouldFindSubsequences() {
-		BufGroup bufs = new BufGroup(2);
+		BufGroup bufs = new BufGroup(4);
 		Buf buf = bufs.newBuf();
 
 		/************* 0123456789012345678901234567890 */
@@ -200,7 +200,7 @@ public class BufTest extends BufferTestCommons implements Constants {
 
 	@Test
 	public void testScanUntil() {
-		BufGroup bufs = new BufGroup(2);
+		BufGroup bufs = new BufGroup(4);
 		Buf buf = bufs.newBuf();
 
 		buf.append("first second  third\r\na b c\r\n");
@@ -237,7 +237,7 @@ public class BufTest extends BufferTestCommons implements Constants {
 
 	@Test
 	public void testScanWhile() {
-		BufGroup bufs = new BufGroup(2);
+		BufGroup bufs = new BufGroup(4);
 		Buf buf = bufs.newBuf();
 
 		buf.append("abc:  xy:");
@@ -308,7 +308,7 @@ public class BufTest extends BufferTestCommons implements Constants {
 	@Test
 	public void testScanLnLn() {
 		for (int factor = 1; factor <= 10; factor++) {
-			BufGroup bufs = new BufGroup(factor);
+			BufGroup bufs = new BufGroup((int) Math.pow(2, factor));
 			Buf buf = bufs.newBuf();
 
 			String s = "GET /hi H\naa: bb\nxyz\r\n\r\n";
@@ -343,7 +343,7 @@ public class BufTest extends BufferTestCommons implements Constants {
 
 	@Test
 	public void testPutNumAsText() {
-		BufGroup bufs = new BufGroup(1);
+		BufGroup bufs = new BufGroup(2);
 
 		String num = "1234567890";
 
@@ -389,7 +389,7 @@ public class BufTest extends BufferTestCommons implements Constants {
 
 	@Test
 	public void testDeleteAfter() {
-		BufGroup bufs = new BufGroup(4);
+		BufGroup bufs = new BufGroup(16);
 		Buf buf = bufs.newBuf();
 
 		int size = 0;
@@ -427,6 +427,25 @@ public class BufTest extends BufferTestCommons implements Constants {
 			eq(p, pos);
 			start = p + 1;
 		}
+	}
+
+	@Test
+	public void shouldCalcSizeFactor() {
+		eq(BufGroup.calcFactor(2), 1);
+
+		eq(BufGroup.calcFactor(3), 2);
+		eq(BufGroup.calcFactor(4), 2);
+
+		eq(BufGroup.calcFactor(5), 3);
+		eq(BufGroup.calcFactor(8), 3);
+
+		eq(BufGroup.calcFactor(9), 4);
+		eq(BufGroup.calcFactor(16), 4);
+
+		eq(BufGroup.calcFactor(1024), 10);
+		eq(BufGroup.calcFactor(65536), 16);
+		eq(BufGroup.calcFactor(65536 * 1024), 26);
+		eq(BufGroup.calcFactor(Integer.MAX_VALUE), 31);
 	}
 
 }
