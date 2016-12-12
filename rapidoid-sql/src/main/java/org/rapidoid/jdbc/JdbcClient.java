@@ -142,8 +142,8 @@ public class JdbcClient extends RapidoidThing {
 			String maskedPassword = U.isEmpty(password) ? "<empty>" : "<specified>";
 			Log.info("Initialized JDBC API", "!url", url, "!driver", driver, "!username", username, "!password", maskedPassword);
 
-			if (usePool && pool == null) {
-				pool = new C3P0ConnectionPool(this);
+			if (pool == null) {
+				pool = usePool ? new C3P0ConnectionPool(this) : new NoConnectionPool();
 			}
 
 			initialized = true;
@@ -317,4 +317,12 @@ public class JdbcClient extends RapidoidThing {
 		return pool;
 	}
 
+	public boolean usePool() {
+		return usePool;
+	}
+
+	public JdbcClient init() {
+		ensureIsInitialized();
+		return this;
+	}
 }
