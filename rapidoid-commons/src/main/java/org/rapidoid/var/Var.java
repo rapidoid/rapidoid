@@ -36,6 +36,8 @@ public interface Var<T> extends Serializable {
 
 	void set(T value);
 
+	Object getRawValue();
+
 	Set<String> errors();
 
 	void error(Exception e);

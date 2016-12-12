@@ -75,4 +75,9 @@ public abstract class DecoratorVar<T> extends RapidoidThing implements Var<T> {
 		}
 	}
 
+	@Override
+	public Object getRawValue() {
+		return var.getRawValue();
+	}
+
 }

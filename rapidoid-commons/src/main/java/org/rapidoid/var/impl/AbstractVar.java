@@ -37,6 +37,8 @@ public abstract class AbstractVar<T> extends RapidoidThing implements Var<T> {
 
 	private final String name;
 
+	private volatile Object rawValue;
+
 	private final Set<String> errors = Coll.synchronizedSet();
 
 	public AbstractVar(String name) {
@@ -60,6 +62,8 @@ public abstract class AbstractVar<T> extends RapidoidThing implements Var<T> {
 
 	@Override
 	public void set(T value) {
+		this.rawValue = value;
+
 		try {
 			doSet(value);
 			errors().clear();
@@ -77,6 +81,11 @@ public abstract class AbstractVar<T> extends RapidoidThing implements Var<T> {
 		} else {
 			errors().add(U.or(e.getMessage(), "Invalid value!"));
 		}
+	}
+
+	@Override
+	public Object getRawValue() {
+		return rawValue;
 	}
 
 }
