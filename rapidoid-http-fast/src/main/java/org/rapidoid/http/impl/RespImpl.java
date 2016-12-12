@@ -471,7 +471,9 @@ public class RespImpl extends RapidoidThing implements Resp {
 
 	public byte[] renderToBytes() {
 		if (mvc()) {
-			return ResponseRenderer.render(req, this);
+			byte[] bytes = ResponseRenderer.render(req, this);
+			HttpUtils.postProcessResponse(this); // the response might have been changed, so post-process again
+			return bytes;
 
 		} else if (result() != null) {
 			return serializeResponseContent();
