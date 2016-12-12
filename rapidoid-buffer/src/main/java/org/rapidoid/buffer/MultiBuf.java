@@ -948,8 +948,9 @@ public class MultiBuf extends OutputStream implements Buf, Constants {
 		_limit = _size();
 
 		if (bufN == 1) {
-			singleBytes.setBuf(bufs[0]);
+			singleBytes.setTarget(bufs[0], shrinkN, _limit);
 			_bytes = singleBytes;
+
 		} else {
 			_bytes = multiBytes;
 		}
