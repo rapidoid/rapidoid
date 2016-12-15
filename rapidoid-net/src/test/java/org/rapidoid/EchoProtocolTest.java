@@ -20,11 +20,15 @@ package org.rapidoid;
  * #L%
  */
 
+import org.junit.Before;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Rnd;
+import org.rapidoid.config.Conf;
 import org.rapidoid.io.IO;
 import org.rapidoid.lambda.F3;
+import org.rapidoid.net.AsyncLogic;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
@@ -36,18 +40,38 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class EchoProtocolTest extends NetTestCommons {
 
-	private static final String[] testCases = {
+	private static final int ROUNDS = 1;
+
+	private static final int MAX_MSG_COUNT = 1000;
+
+	private static final List<String> testCases = U.list(
 		"abc\nxy\nbye\n",
 		"abc\r\nxy\r\nbye\r\n",
 		"abc\nbye\n",
-		"abc\r\nbye\r\n",
-	};
+		"abc\r\nbye\r\n"
+	);
+
+	static {
+		String s1 = "", s2 = "";
+
+		for (int i = 0; i < MAX_MSG_COUNT; i++) {
+			s1 += i + "\r\n";
+			s2 += i + "\n";
+		}
+
+		testCases.add(s1 + "bye\r\n");
+		testCases.add(s2 + "bye\n");
+	}
+
+	@Before
+	public void setUp() {
+		Conf.HTTP.set("maxPipeline", MAX_MSG_COUNT);
+	}
 
 	@Test
 	public void echo() {
@@ -68,6 +92,7 @@ public class EchoProtocolTest extends NetTestCommons {
 	}
 
 	private void connectAndExercise() {
+
 		Msc.connect("localhost", 8888, new F3<Void, InputStream, BufferedReader, DataOutputStream>() {
 			@Override
 			public Void execute(InputStream inputStream, BufferedReader in, DataOutputStream out) throws IOException {
@@ -84,55 +109,60 @@ public class EchoProtocolTest extends NetTestCommons {
 			}
 		});
 
-		for (final String testCase : testCases) {
-			Msc.connect("localhost", 8888, new F3<Void, InputStream, BufferedReader, DataOutputStream>() {
-				@Override
-				public Void execute(InputStream inputStream, BufferedReader in, DataOutputStream out) throws IOException {
-					out.writeBytes(testCase);
+		for (int i = 0; i < ROUNDS; i++) {
+			for (final String testCase : testCases) {
 
-					List<String> lines = IO.readLines(in);
-					List<String> expected = U.list(testCase.toUpperCase().split("\r?\n"));
+				final List<String> expected = U.list(testCase.toUpperCase().split("\r?\n"));
 
-					eq(lines, expected);
-					return null;
-				}
-			});
+				Msc.startMeasure();
+
+				Msc.connect("localhost", 8888, new F3<Void, InputStream, BufferedReader, DataOutputStream>() {
+					@Override
+					public Void execute(InputStream inputStream, BufferedReader in, DataOutputStream out) throws IOException {
+						out.writeBytes(testCase);
+
+						List<String> lines = IO.readLines(in);
+
+						eq(lines, expected);
+						return null;
+					}
+				});
+
+				Msc.endMeasure(expected.size() + " messages");
+			}
 		}
 	}
 
 	@Test
 	public void echoAsync() {
 
-		final AtomicInteger started = new AtomicInteger();
-		final AtomicInteger finished = new AtomicInteger();
-
 		server(new Protocol() {
 
 			@Override
 			public void process(final Channel ctx) {
+
 				final String in = ctx.readln();
-				final int order = started.incrementAndGet();
+				final long handle = ctx.async();
 
 				Msc.EXECUTOR.schedule(new Runnable() {
 					@Override
 					public void run() {
 
-						while (order > finished.get() + 1) {
-							U.sleep(10);
-						}
+						ctx.resume(handle, new AsyncLogic() {
 
-						ctx.write(in.toUpperCase()).write(CR_LF).send();
+							@Override
+							public boolean resumeAsync() {
+								ctx.write(in.toUpperCase()).write(CR_LF);
+								ctx.send();
+								ctx.closeIf(in.equals("bye"));
 
-						if (in.equals("bye")) {
-							ctx.done();
-							ctx.close();
-						}
+								return true; // finished
+							}
+						});
 
-						finished.incrementAndGet();
 					}
-				}, 1, TimeUnit.SECONDS);
+				}, Rnd.rnd(100), TimeUnit.MILLISECONDS);
 
-				ctx.async();
 			}
 
 		}, new Runnable() {

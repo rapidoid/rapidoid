@@ -124,6 +124,8 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	private volatile Customization custom;
 
 	public ReqImpl(FastHttp http, Channel channel, boolean isKeepAlive, String verb, String uri, String path,
+
+	private final long handle;
 	               String query, byte[] body, Map<String, String> params, Map<String, String> headers,
 	               Map<String, String> cookies, Map<String, Object> posted, Map<String, List<Upload>> files,
 	               boolean pendingBodyParsing, MediaType defaultContentType, String zone,
@@ -147,6 +149,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		this.zone = zone;
 		this.routes = routes;
 		this.route = route;
+		this.handle = channel.handle();
 		this.custom = routes != null ? routes.custom() : http.custom();
 	}
 
@@ -515,7 +518,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 			completed = true;
 		}
 
-		finish();
+		HttpIO.done(this);
 	}
 
 	private void renderResponseOrError() {
@@ -596,10 +599,6 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 			String cookie = e.getKey() + "=" + e.getValue();
 			HttpIO.addCustomHeader(channel, HttpHeaders.SET_COOKIE.getBytes(), cookie.getBytes());
 		}
-	}
-
-	private void finish() {
-		HttpIO.done(channel, isKeepAlive);
 	}
 
 	@Override
@@ -865,6 +864,16 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	public MediaType contentType() {
 		MediaType contentType = response != null ? response.contentType() : null;
 		return U.or(contentType, defaultContentType);
+	}
+
+	@Override
+	public long handle() {
+		return handle;
+	}
+
+
+	public boolean isKeepAlive() {
+		return isKeepAlive;
 	}
 
 }

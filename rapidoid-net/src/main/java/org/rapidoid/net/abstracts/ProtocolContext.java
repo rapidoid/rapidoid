@@ -3,6 +3,7 @@ package org.rapidoid.net.abstracts;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
+import org.rapidoid.net.AsyncLogic;
 import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.RapidoidHelper;
 
@@ -60,6 +61,8 @@ public interface ProtocolContext<T> {
 
 	void setRequest(IRequest request);
 
+	long handle();
+
 	boolean onSameThread();
 
 	/* PROTOCOL */
@@ -87,9 +90,9 @@ public interface ProtocolContext<T> {
 	/* ASYNC */
 
 	// due to async() web handling option, it ain't over till the fat lady sings "done"
-	T async();
+	long async();
 
-	T done();
+	void resume(long handle, AsyncLogic asyncLogic);
 
 	/* READ */
 

@@ -187,6 +187,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 	private boolean processNext(RapidoidConnection conn, boolean initial) {
 
+		long seq = conn.readSeq.incrementAndGet();
+
 		if (initial) {
 			// conn.log("<< INIT >>");
 
@@ -229,8 +231,15 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 			conn.input().setReadOnly(false);
 
-			if (!conn.closed && !conn.isAsync()) {
-				conn.done();
+			boolean isAsync = conn.isAsync();
+
+			if (!isAsync) {
+
+				if (!conn.closed) {
+					conn.done();
+				}
+
+				conn.processedSeq(seq);
 			}
 
 			conn.input().deleteBefore(conn.input().checkpoint());
@@ -253,6 +262,12 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 			state.n = stateN;
 			state.obj = stateObj;
 
+			boolean decreased = conn.readSeq.compareAndSet(seq, seq - 1);
+
+			if (!decreased) {
+				Log.error("Error in the request order control!", "handle", seq);
+			}
+
 		} catch (ProtocolException e) {
 
 			conn.log("<< PROTOCOL ERROR >>");
@@ -260,12 +275,16 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 			conn.output().deleteAfter(osize);
 			conn.write(U.or(e.getMessage(), "Protocol error!"));
 			conn.error();
+
+			conn.processedSeq(seq);
 			conn.close(true);
 
 		} catch (Throwable e) {
 
 			conn.log("<< ERROR >>");
 			Log.error("Failed to process message!", e);
+
+			conn.processedSeq(seq);
 			conn.close(true);
 		}
 
@@ -295,6 +314,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 	private void close(SelectionKey key) {
 		try {
 			if (key != null) {
+
 				Object attachment = key.attachment();
 
 				clearKey(key);
@@ -337,18 +357,24 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 			int wrote = conn.output.writeTo(socketChannel);
 			conn.output.deleteBefore(wrote);
 
-			boolean complete = conn.output.size() == 0;
+			boolean finishedWriting, closeAfterWrite;
+			synchronized (conn) {
+				finishedWriting = conn.finishedWriting();
+				closeAfterWrite = conn.closeAfterWrite();
+			}
 
-			if (conn.closeAfterWrite() && complete) {
+			if (finishedWriting && closeAfterWrite) {
 				close(conn);
+
 			} else {
-				if (complete) {
+				if (finishedWriting) {
 					key.interestOps(SelectionKey.OP_READ);
 				} else {
 					key.interestOps(SelectionKey.OP_READ + SelectionKey.OP_WRITE);
 				}
-				conn.wrote(complete);
+				conn.wrote(finishedWriting);
 			}
+
 		} catch (IOException e) {
 			close(conn);
 		} catch (CancelledKeyException cke) {

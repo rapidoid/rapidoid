@@ -7,6 +7,9 @@ import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.data.JSON;
 import org.rapidoid.expire.Expiring;
+import org.rapidoid.job.Jobs;
+import org.rapidoid.log.Log;
+import org.rapidoid.net.AsyncLogic;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.abstracts.IRequest;
@@ -23,6 +26,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 /*
@@ -89,6 +93,10 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 	volatile long requestId;
 
+	final AtomicLong readSeq = new AtomicLong();
+
+	final AtomicLong writeSeq = new AtomicLong();
+
 	volatile IRequest request;
 
 	private volatile long expiresAt;
@@ -123,6 +131,8 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 		isClient = false;
 		protocol = null;
 		requestId = 0;
+		readSeq.set(0);
+		writeSeq.set(0);
 		expiresAt = 0;
 		state.reset();
 	}
@@ -198,22 +208,19 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 		return closeAfterWrite;
 	}
 
-	@Override
-	public Channel done() {
-		done(null);
-		return this;
-	}
-
-	public synchronized void done(Object tag) {
+	Channel done() {
 		async = false;
+
 		if (!done) {
 			done = true;
 			askToSend();
-
-//			if (tag != null) {
-//				listener().onDone(this, tag);
-//			}
 		}
+
+		return this;
+	}
+
+	void processedSeq(long processedHandle) {
+		writeSeq.compareAndSet(processedHandle - 1, processedHandle);
 	}
 
 	@Override
@@ -252,6 +259,36 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 		input.deleteBefore(completedInputPos);
 		completedInputPos = 0;
+	}
+
+	@Override
+	public void resume(final long handle, final AsyncLogic asyncLogic) {
+		long seq = writeSeq.get();
+
+		if (seq < handle - 1) {
+			// too early
+
+			Jobs.after(1, TimeUnit.MILLISECONDS).run(new Runnable() {
+				@Override
+				public void run() {
+					resume(handle, asyncLogic);
+				}
+			});
+
+		} else if (seq == handle - 1) {
+
+			// execute the logic
+			boolean finished = asyncLogic.resumeAsync();
+
+			if (finished) {
+				synchronized (this) {
+					writeSeq.compareAndSet(handle - 1, handle);
+				}
+			}
+
+		} else {
+			Log.error("Tried to resume a job that already has finished!", "handle", handle, "currentHandle", seq);
+		}
 	}
 
 	@Override
@@ -317,6 +354,11 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 	}
 
 	@Override
+	public long handle() {
+		return readSeq.get();
+	}
+
+	@Override
 	public boolean isInitial() {
 		return initial;
 	}
@@ -331,10 +373,10 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 	}
 
 	@Override
-	public synchronized Channel async() {
+	public synchronized long async() {
 		this.async = true;
 		this.done = false;
-		return this;
+		return handle();
 	}
 
 	@Override
@@ -403,6 +445,10 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 	@Override
 	public void expire() {
 		close(false);
+	}
+
+	public boolean finishedWriting() {
+		return output.size() == 0;
 	}
 
 }

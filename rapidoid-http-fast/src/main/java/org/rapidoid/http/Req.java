@@ -372,4 +372,10 @@ public interface Req {
 	 */
 	MediaType contentType();
 
+	/**
+	 * Returns the request handle, which is used when resuming the request handling in asynchronous way.<br>
+	 * See <code>Resp#resume</code>.
+	 */
+	long handle();
+
 }

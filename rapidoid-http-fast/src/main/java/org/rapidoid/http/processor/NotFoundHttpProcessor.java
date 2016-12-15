@@ -50,7 +50,7 @@ public class NotFoundHttpProcessor extends AbstractHttpProcessor {
 		String content = Templates.load("404.html").render(MODEL);
 		HttpIO.writeContentLengthAndBody(channel, content.getBytes());
 
-		HttpIO.done(channel, isKeepAlive);
+		channel.send().closeIf(!isKeepAlive);
 	}
 
 }

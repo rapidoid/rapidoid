@@ -190,20 +190,13 @@ public abstract class DefaultExchange<T> extends RapidoidThing implements Protoc
 	}
 
 	@Override
-	public T async() {
-		conn.async();
-		return me();
+	public long async() {
+		return conn.async();
 	}
 
 	@Override
 	public boolean isAsync() {
 		return conn.isAsync();
-	}
-
-	@Override
-	public T done() {
-		conn.done();
-		return me();
 	}
 
 	@SuppressWarnings("unchecked")

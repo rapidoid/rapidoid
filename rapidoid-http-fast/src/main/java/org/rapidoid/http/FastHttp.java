@@ -271,7 +271,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		byte[] bytes = HttpUtils.responseToBytes(req, INTERNAL_SERVER_ERROR, contentType, jsonRenderer);
 
 		HttpIO.writeContentLengthAndBody(channel, bytes);
-		HttpIO.done(channel, isKeepAlive);
+		HttpIO.done(req);
 	}
 
 	private boolean handleError(Channel channel, boolean isKeepAlive, Req req, Throwable e) {

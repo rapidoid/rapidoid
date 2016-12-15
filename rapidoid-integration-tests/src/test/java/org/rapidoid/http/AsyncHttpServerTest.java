@@ -28,7 +28,9 @@ import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Wait;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 @Authors("Nikolche Mihajlovski")
@@ -44,15 +46,31 @@ public class AsyncHttpServerTest extends IsolatedIntegrationTest {
 			req.async();
 			U.must(req.isAsync());
 
-			Jobs.schedule(() -> {
-				IO.write(req.response().out(), "O");
+			Resp resp = req.response();
 
-				Jobs.schedule(() -> {
-					IO.write(req.response().out(), "K");
-					req.done();
-				}, 1, TimeUnit.SECONDS);
+			CountDownLatch latch = new CountDownLatch(1);
 
-			}, 1, TimeUnit.SECONDS);
+			Jobs.after(10, TimeUnit.MILLISECONDS).run(() -> {
+
+				resp.resume(req.handle(), () -> {
+					IO.write(resp.out(), "O");
+					latch.countDown();
+					return false; // not finished yet
+				});
+
+				Jobs.after(10, TimeUnit.MILLISECONDS).run(() -> {
+
+					Wait.on(latch);
+
+					resp.resume(req.handle(), () -> {
+						IO.write(resp.out(), "K");
+						req.done();
+						return true; // finished
+					});
+
+				});
+
+			});
 
 			return req;
 		});
@@ -63,17 +81,30 @@ public class AsyncHttpServerTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testAsyncHttpServer2() {
-		On.req(req -> {
-			return Jobs.after(1, TimeUnit.SECONDS).run(() -> {
-				IO.write(req.response().out(), "A");
+		On.req(req -> Jobs.after(10, TimeUnit.MILLISECONDS).run(() -> {
 
-				Jobs.after(1, TimeUnit.SECONDS).run(() -> {
-					IO.write(req.response().out(), "SYNC");
+			Resp resp = req.response();
+
+			CountDownLatch latch = new CountDownLatch(1);
+
+			resp.resume(req.handle(), () -> {
+				IO.write(resp.out(), "A");
+				latch.countDown();
+				return false;
+			});
+
+			Jobs.after(10, TimeUnit.MILLISECONDS).run(() -> {
+
+				Wait.on(latch);
+
+				resp.resume(req.handle(), () -> {
+					IO.write(resp.out(), "SYNC");
 					req.done();
+					return true;
 				});
 
 			});
-		});
+		}));
 
 		Self.get("/").expect("ASYNC").benchmark(1, 100, 10000);
 		Self.post("/").expect("ASYNC").benchmark(1, 100, 10000);

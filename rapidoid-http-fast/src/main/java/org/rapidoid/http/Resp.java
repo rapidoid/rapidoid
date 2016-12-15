@@ -1,6 +1,7 @@
 package org.rapidoid.http;
 
 import org.rapidoid.annotation.Since;
+import org.rapidoid.net.AsyncLogic;
 import org.rapidoid.web.Screen;
 
 import java.io.File;
@@ -267,5 +268,10 @@ public interface Resp {
 	 * Provides access to the screen model for custom (MVC) page rendering.
 	 */
 	Screen screen();
+
+	/**
+	 * Resumes the asynchronous request handling.
+	 */
+	void resume(long handle, AsyncLogic asyncLogic);
 
 }

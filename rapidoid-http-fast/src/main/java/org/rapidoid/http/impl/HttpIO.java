@@ -310,9 +310,11 @@ public class HttpIO extends RapidoidThing implements Constants {
 		channel.write(HttpIO.CONTENT_LENGTH_UNKNOWN);
 	}
 
-	public static void done(Channel ctx, boolean isKeepAlive) {
-		ctx.done();
-		ctx.closeIf(!isKeepAlive);
+	public static void done(Req req) {
+		ReqImpl reqq = (ReqImpl) req;
+		Channel channel = reqq.channel();
+		channel.send();
+		channel.closeIf(!reqq.isKeepAlive());
 	}
 
 	public static void writeNum(Channel ctx, int value) {

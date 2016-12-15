@@ -16,6 +16,7 @@ import org.rapidoid.http.Resp;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.LoginProvider;
 import org.rapidoid.http.customize.RolesProvider;
+import org.rapidoid.net.AsyncLogic;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.Tokens;
@@ -399,6 +400,11 @@ public class RespImpl extends RapidoidThing implements Resp {
 		}
 
 		return screen;
+	}
+
+	@Override
+	public void resume(long handle, AsyncLogic asyncLogic) {
+		req.channel().resume(handle, asyncLogic);
 	}
 
 	private Screen createScreen() {

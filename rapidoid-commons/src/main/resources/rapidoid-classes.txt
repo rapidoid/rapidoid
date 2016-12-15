@@ -562,6 +562,7 @@ org.rapidoid.model.Property
 org.rapidoid.net.abstracts.Channel
 org.rapidoid.net.abstracts.IRequest
 org.rapidoid.net.abstracts.ProtocolContext
+org.rapidoid.net.AsyncLogic
 org.rapidoid.net.impl.AbstractEventLoop
 org.rapidoid.net.impl.AbstractLoop
 org.rapidoid.net.impl.ConnState
