@@ -8,6 +8,8 @@ import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
+import java.util.concurrent.CancellationException;
+
 /*
  * #%L
  * rapidoid-commons
@@ -58,6 +60,10 @@ public class ContextPreservingJobWrapper extends RapidoidThing implements Runnab
 					Log.debug("Opening new context");
 				}
 
+			} catch (CancellationException e) {
+				Log.warn("Job context initialization was canceled!");
+				return;
+
 			} catch (Throwable e) {
 				Jobs.errorCounter().incrementAndGet();
 				Log.error("Job context initialization failed!", e);
@@ -67,10 +73,15 @@ public class ContextPreservingJobWrapper extends RapidoidThing implements Runnab
 			try {
 				job.run();
 
+			} catch (CancellationException e) {
+				Log.warn("Job execution was canceled!");
+				return;
+
 			} catch (Throwable e) {
 				Jobs.errorCounter().incrementAndGet();
 				Log.error("Job execution failed!", e);
 				throw U.rte("Job execution failed!", e);
+
 			} finally {
 				Ctxs.close();
 			}
