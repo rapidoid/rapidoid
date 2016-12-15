@@ -723,6 +723,7 @@ org.rapidoid.util.StreamUtils
 org.rapidoid.util.TokenAuthData
 org.rapidoid.util.Tokens
 org.rapidoid.util.Usage
+org.rapidoid.util.Wait
 org.rapidoid.u.U
 org.rapidoid.validation.InvalidData
 org.rapidoid.validation.Validators

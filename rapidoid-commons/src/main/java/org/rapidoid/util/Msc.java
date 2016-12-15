@@ -235,16 +235,6 @@ public class Msc extends RapidoidThing implements Constants {
 		}
 	}
 
-	public static void waitFor(Object obj) {
-		try {
-			synchronized (obj) {
-				obj.wait();
-			}
-		} catch (InterruptedException e) {
-			// do nothing
-		}
-	}
-
 	public static void joinThread(Thread thread) {
 		try {
 			thread.join();
@@ -638,22 +628,6 @@ public class Msc extends RapidoidThing implements Constants {
 		arr[len] = item;
 
 		return arr;
-	}
-
-	public static void wait(CountDownLatch latch) {
-		try {
-			latch.await();
-		} catch (InterruptedException e) {
-			throw new CancellationException();
-		}
-	}
-
-	public static void wait(CountDownLatch latch, long timeout, TimeUnit unit) {
-		try {
-			latch.await(timeout, unit);
-		} catch (InterruptedException e) {
-			throw new CancellationException();
-		}
 	}
 
 	public static boolean exists(Callable<?> accessChain) {

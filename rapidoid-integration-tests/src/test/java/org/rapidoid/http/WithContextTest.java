@@ -27,7 +27,7 @@ import org.rapidoid.commons.Err;
 import org.rapidoid.ctx.Contextual;
 import org.rapidoid.ctx.With;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
+import org.rapidoid.util.Wait;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -62,7 +62,7 @@ public class WithContextTest extends IsolatedIntegrationTest {
 
 		eq(ctxInfo(), "null:[]:false");
 
-		Msc.wait(latch, 10, TimeUnit.SECONDS);
+		Wait.on(latch, 10, TimeUnit.SECONDS);
 		eq(latch.getCount(), 0);
 
 		eq(ctxInfo(), "null:[]:false");

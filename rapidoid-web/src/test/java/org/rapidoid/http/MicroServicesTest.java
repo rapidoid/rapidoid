@@ -28,6 +28,7 @@ import org.rapidoid.concurrent.Callback;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
+import org.rapidoid.util.Wait;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -82,7 +83,8 @@ public class MicroServicesTest extends HttpTestCommons {
 			}
 		}
 
-		Msc.wait(latch);
+		Wait.on(latch);
+
 		Msc.endMeasure(count, "calls");
 
 		loop.interrupt();
