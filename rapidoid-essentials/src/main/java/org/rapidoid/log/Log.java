@@ -646,7 +646,7 @@ public class Log extends RapidoidThing {
 
 	public static void error(String msg, Throwable err) {
 		if (isErrorEnabled()) {
-			error(msg, "message", err.getMessage());
+			error(msg, "type", err.getClass().getName(), "message", err.getMessage());
 			err.printStackTrace();
 		}
 	}
