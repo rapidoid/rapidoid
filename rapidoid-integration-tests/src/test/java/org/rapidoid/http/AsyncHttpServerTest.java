@@ -57,8 +57,8 @@ public class AsyncHttpServerTest extends IsolatedIntegrationTest {
 			return req;
 		});
 
-		eq(HTTP.get("http://localhost:8888/").fetch(), "OK");
-		eq(HTTP.post("http://localhost:8888/").fetch(), "OK");
+		Self.get("/").expect("OK").benchmark(1, 100, 10000);
+		Self.post("/").expect("OK").benchmark(1, 100, 10000);
 	}
 
 	@Test
@@ -75,8 +75,8 @@ public class AsyncHttpServerTest extends IsolatedIntegrationTest {
 			});
 		});
 
-		eq(HTTP.get("http://localhost:8888/").fetch(), "ASYNC");
-		eq(HTTP.post("http://localhost:8888/").fetch(), "ASYNC");
+		Self.get("/").expect("ASYNC").benchmark(1, 100, 10000);
+		Self.post("/").expect("ASYNC").benchmark(1, 100, 10000);
 	}
 
 }

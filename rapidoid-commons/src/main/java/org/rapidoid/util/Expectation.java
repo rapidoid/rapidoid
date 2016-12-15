@@ -3,6 +3,8 @@ package org.rapidoid.util;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.data.JSON;
 import org.rapidoid.u.U;
 
 import java.util.Map;
@@ -43,9 +45,24 @@ public class Expectation extends RapidoidThing {
 		return this;
 	}
 
-	private Map<String, ?> asMap() {
-		U.must(target instanceof Map<?, ?>, "Expected a Map type, but found: %s", target);
+	public Expectation value(String expectedValue) {
+		String val = as(String.class);
+		U.must(U.eq(val, expectedValue), "Expected value [%s], but found [%s]!", expectedValue, val);
+		return this;
+	}
+
+	private <T> T as(Class<T> type) {
+		U.must(Cls.instanceOf(target, type), "Expected a type '%s', but found: %s", type, target);
 		return U.cast(target);
+	}
+
+	@SuppressWarnings("unchecked")
+	private Map<String, ?> asMap() {
+		if (target instanceof String) {
+			return JSON.parse((String) target);
+		}
+
+		return as(Map.class);
 	}
 
 	@SuppressWarnings("unchecked")

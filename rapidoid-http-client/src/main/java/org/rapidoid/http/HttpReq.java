@@ -227,7 +227,12 @@ public class HttpReq extends RapidoidThing {
 	}
 
 	public Expectation expect() {
-		return new Expectation(parse());
+		return new Expectation(fetch());
+	}
+
+	public HttpReq expect(String expectedValue) {
+		expect().value(expectedValue);
+		return this;
 	}
 
 	public <T> T toBean(Class<T> beanClass) {
