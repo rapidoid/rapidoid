@@ -3,6 +3,6 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: application/json
-Content-Length: 70
+Content-Length: 84
 
-{"error":"out of memory!","code":500,"status":"Internal Server Error"}
+{"error":"INTENTIONAL - Out of memory!","code":500,"status":"Internal Server Error"}

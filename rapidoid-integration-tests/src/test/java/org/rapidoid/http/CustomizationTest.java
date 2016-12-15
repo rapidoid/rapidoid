@@ -123,11 +123,11 @@ public class CustomizationTest extends IsolatedIntegrationTest {
 		});
 
 		On.get("/err3").json(req -> {
-			throw new SecurityException("denied!");
+			throw new SecurityException("INTENTIONAL - Access denied!");
 		});
 
 		On.get("/err4").json(req -> {
-			throw new OutOfMemoryError("out of memory!");
+			throw new OutOfMemoryError("INTENTIONAL - Out of memory!");
 		});
 
 		onlyGet("/err1");
