@@ -66,7 +66,11 @@ public interface Buf {
 
 	int writeTo(WritableByteChannel channel) throws IOException;
 
+	int writeTo(WritableByteChannel channel, int srcOffset, int length) throws IOException;
+
 	int writeTo(ByteBuffer buffer);
+
+	int writeTo(ByteBuffer buffer, int srcOffset, int length);
 
 	void deleteBefore(int position);
 

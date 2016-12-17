@@ -56,6 +56,8 @@ public class MultiBuf extends OutputStream implements Buf, Constants {
 
 	private static final int TO_BUFFER = 3;
 
+	private static final int NOT_RELEVANT = Integer.MIN_VALUE;
+
 	private final Pool<ByteBuffer> bufPool;
 
 	private final int factor;
@@ -419,9 +421,14 @@ public class MultiBuf extends OutputStream implements Buf, Constants {
 
 	@Override
 	public int writeTo(WritableByteChannel channel) throws IOException {
+		return writeTo(channel, 0, _size());
+	}
+
+	@Override
+	public int writeTo(WritableByteChannel channel, int srcOffset, int length) throws IOException {
 		assert invariant(true);
 
-		int wrote = writeTo(TO_CHANNEL, 0, _size(), null, channel, null, 0);
+		int wrote = writeTo(TO_CHANNEL, srcOffset, length, null, channel, null, NOT_RELEVANT);
 		assert U.must(wrote <= _size(), "Incorrect write to channel!");
 
 		assert invariant(true);
@@ -430,11 +437,16 @@ public class MultiBuf extends OutputStream implements Buf, Constants {
 
 	@Override
 	public int writeTo(ByteBuffer buffer) {
+		return writeTo(buffer, 0, _size());
+	}
+
+	@Override
+	public int writeTo(ByteBuffer buffer, int srcOffset, int length) {
 		assert invariant(true);
 
 		try {
-			int wrote = writeTo(TO_BUFFER, 0, _size(), null, null, buffer, 0);
-			assert wrote == _size();
+			int wrote = writeTo(TO_BUFFER, srcOffset, length, null, null, buffer, NOT_RELEVANT);
+			assert wrote == length;
 			assert invariant(true);
 			return wrote;
 		} catch (IOException e) {
@@ -445,6 +457,7 @@ public class MultiBuf extends OutputStream implements Buf, Constants {
 
 	private int writeTo(int mode, int offset, int length, byte[] bytes, WritableByteChannel channel, ByteBuffer buffer,
 	                    int destOffset) throws IOException {
+
 		if (_size() == 0) {
 			assert length == 0;
 			return 0;

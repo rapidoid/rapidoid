@@ -105,8 +105,18 @@ public class SynchronizedBuf extends OutputStream implements Buf {
 	}
 
 	@Override
+	public int writeTo(WritableByteChannel channel, int srcOffset, int length) throws IOException {
+		return buf.writeTo(channel, srcOffset, length);
+	}
+
+	@Override
 	public synchronized int writeTo(ByteBuffer buffer) {
 		return buf.writeTo(buffer);
+	}
+
+	@Override
+	public int writeTo(ByteBuffer buffer, int srcOffset, int length) {
+		return buf.writeTo(buffer, srcOffset, length);
 	}
 
 	@Override
