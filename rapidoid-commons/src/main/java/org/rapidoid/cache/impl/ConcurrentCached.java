@@ -95,15 +95,19 @@ public class ConcurrentCached<K, V> extends AbstractMapImpl<K, ConcurrentCacheAt
 		} else {
 			ConcurrentCacheAtom<V> atom = new ConcurrentCacheAtom<>(loaderFor(key), ttlInMs);
 
-			synchronized (bucket) {
-				MapEntry<K, ConcurrentCacheAtom<V>> oldEntry = bucket.addRotating(new MapEntry<>(key, atom));
-
-				if (oldEntry != null) {
-					oldEntry.value.invalidate();
-				}
-			}
+			putAtom(key, bucket, atom);
 
 			return atom.get();
+		}
+	}
+
+	public void putAtom(K key, SimpleList<MapEntry<K, ConcurrentCacheAtom<V>>> bucket, ConcurrentCacheAtom<V> atom) {
+		synchronized (bucket) {
+			MapEntry<K, ConcurrentCacheAtom<V>> oldEntry = bucket.addRotating(new MapEntry<>(key, atom));
+
+			if (oldEntry != null) {
+				oldEntry.value.invalidate();
+			}
 		}
 	}
 
@@ -141,9 +145,15 @@ public class ConcurrentCached<K, V> extends AbstractMapImpl<K, ConcurrentCacheAt
 	 */
 	@Override
 	public void set(K key, V value) {
-		MapEntry<K, ConcurrentCacheAtom<V>> entry = findEntry(key);
+		SimpleList<MapEntry<K, ConcurrentCacheAtom<V>>> bucket = entries.bucket(key.hashCode());
+		MapEntry<K, ConcurrentCacheAtom<V>> entry = findEntry(key, bucket);
+
 		if (entry != null) {
 			entry.value.set(value);
+		} else {
+			ConcurrentCacheAtom<V> atom = new ConcurrentCacheAtom<>(loaderFor(key), ttlInMs);
+			atom.set(value);
+			putAtom(key, bucket, atom);
 		}
 	}
 
