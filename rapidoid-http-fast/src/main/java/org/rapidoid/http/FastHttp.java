@@ -9,7 +9,6 @@ import org.rapidoid.collection.Coll;
 import org.rapidoid.config.Config;
 import org.rapidoid.config.ConfigImpl;
 import org.rapidoid.data.BufRange;
-import org.rapidoid.data.BufRanges;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.JsonResponseRenderer;
@@ -24,7 +23,6 @@ import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
-import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -80,12 +78,9 @@ public class FastHttp extends AbstractHttpProcessor {
 		boolean isGet = data.isGet.value;
 		boolean isKeepAlive = data.isKeepAlive.value;
 
-		BufRange body = data.body;
 		BufRange verb = data.verb;
 		BufRange uri = data.uri;
 		BufRange path = data.path;
-		BufRange query = data.query;
-		BufRanges headers = data.headers;
 
 		HttpIO.removeTrailingSlash(buf, path);
 		HttpIO.removeTrailingSlash(buf, uri);
@@ -123,29 +118,6 @@ public class FastHttp extends AbstractHttpProcessor {
 			}
 		}
 
-		boolean saveInCache = false;
-		Cached<RouteCacheKey, ByteBuffer> cache = null;
-
-		if (matchingRoute != null) {
-			cache = matchingRoute.cache();
-
-			if (cache != null) {
-				ByteBuffer cachedResp = cache.getIfExists(new RouteCacheKey());
-
-				if (cachedResp != null) {
-					channel.write(cachedResp.duplicate());
-					channel.done();
-					channel.closeIf(!isKeepAlive);
-					return;
-
-				} else {
-					saveInCache = true;
-				}
-			}
-		}
-
-		// FIXME save the response into cache
-
 		HttpHandler handler = match != null ? match.getHandler() : null;
 		boolean noReq = (handler != null && !handler.needsParams());
 
@@ -153,6 +125,8 @@ public class FastHttp extends AbstractHttpProcessor {
 
 		if (!noReq) {
 			req = createReq(channel, isGet, isKeepAlive, data, buf, matchingRoutes, matchingRoute, match, handler);
+
+			if (serveFromCache(req)) return;
 		}
 
 		try {
@@ -176,6 +150,34 @@ public class FastHttp extends AbstractHttpProcessor {
 		if (status != HttpStatus.ASYNC) {
 			channel.closeIf(!isKeepAlive);
 		}
+	}
+
+	private boolean serveFromCache(ReqImpl req) {
+		HTTPCacheKey cacheKey = req.cacheKey();
+
+		if (cacheKey != null) {
+			Cached<HTTPCacheKey, CachedResp> cache = req.route().cache();
+
+			if (cache != null) {
+				CachedResp resp = cache.getIfExists(cacheKey);
+
+				if (resp != null) {
+					serveCached(req, resp);
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	private void serveCached(ReqImpl req, CachedResp resp) {
+		Channel channel = req.channel();
+
+		HttpIO.startResponse(channel, resp.statusCode, req.isKeepAlive(), resp.contentType);
+		HttpIO.writeContentLengthAndBody(HttpUtils.noReq(), channel, resp.body.duplicate());
+
+		channel.send().closeIf(!req.isKeepAlive());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -270,7 +272,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		JsonResponseRenderer jsonRenderer = Customization.of(req).jsonResponseRenderer();
 		byte[] bytes = HttpUtils.responseToBytes(req, INTERNAL_SERVER_ERROR, contentType, jsonRenderer);
 
-		HttpIO.writeContentLengthAndBody(channel, bytes);
+		HttpIO.writeContentLengthAndBody(HttpUtils.maybe(req), channel, bytes);
 		HttpIO.done(req);
 	}
 

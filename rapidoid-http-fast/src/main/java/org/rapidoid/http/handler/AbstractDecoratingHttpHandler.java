@@ -7,6 +7,7 @@ import org.rapidoid.ctx.With;
 import org.rapidoid.http.*;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.impl.HttpIO;
+import org.rapidoid.http.impl.MaybeReq;
 import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.lambda.Mapper;
@@ -73,19 +74,20 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 
 	private HttpStatus handleNonDecorating(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
 		Object result;
+		MaybeReq maybeReq = HttpUtils.maybe(req);
 
 		try {
 			result = handleReq(ctx, isKeepAlive, req, extra);
 
 		} catch (Exception e) {
-			HttpIO.writeResponse(ctx, isKeepAlive, 500, contentType, "Internal server error!".getBytes());
+			HttpIO.writeResponse(maybeReq, ctx, isKeepAlive, 500, contentType, "Internal server error!".getBytes());
 			return HttpStatus.ERROR;
 		}
 
 		if (contentType == MediaType.JSON) {
-			HttpIO.writeAsJson(ctx, 200, isKeepAlive, result);
+			HttpIO.writeAsJson(maybeReq, ctx, 200, isKeepAlive, result);
 		} else {
-			HttpIO.write200(ctx, isKeepAlive, contentType, Msc.toBytes(result));
+			HttpIO.write200(maybeReq, ctx, isKeepAlive, contentType, Msc.toBytes(result));
 		}
 
 		return HttpStatus.DONE;

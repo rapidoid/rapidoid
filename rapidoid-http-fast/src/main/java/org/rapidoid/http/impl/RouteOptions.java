@@ -53,6 +53,8 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 
 	private volatile HttpWrapper[] wrappers;
 
+	private volatile long cacheTTL;
+
 	@Override
 	public String toString() {
 		String prefix = mvc ? "MVC" : "";
@@ -153,6 +155,17 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 		return this;
 	}
 
+	@Override
+	public long cacheTTL() {
+		return cacheTTL;
+	}
+
+	@Override
+	public RouteOptions cacheTTL(long cacheTTL) {
+		this.cacheTTL = cacheTTL;
+		return this;
+	}
+
 	public RouteOptions copy() {
 		RouteOptions copy = new RouteOptions();
 
@@ -164,6 +177,7 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 		copy.wrappers(wrappers());
 		copy.zone(zone());
 		copy.managed(managed());
+		copy.cacheTTL(cacheTTL());
 
 		return copy;
 	}
@@ -177,13 +191,13 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 
 		if (mvc != that.mvc) return false;
 		if (managed != that.managed) return false;
+		if (cacheTTL != that.cacheTTL) return false;
 		if (contentType != null ? !contentType.equals(that.contentType) : that.contentType != null) return false;
 		if (view != null ? !view.equals(that.view) : that.view != null) return false;
 		if (zone != null ? !zone.equals(that.zone) : that.zone != null) return false;
 		if (transactionMode != that.transactionMode) return false;
 		if (roles != null ? !roles.equals(that.roles) : that.roles != null) return false;
 		return Arrays.equals(wrappers, that.wrappers);
-
 	}
 
 	@Override
@@ -196,6 +210,7 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 		result = 31 * result + (transactionMode != null ? transactionMode.hashCode() : 0);
 		result = 31 * result + (roles != null ? roles.hashCode() : 0);
 		result = 31 * result + Arrays.hashCode(wrappers);
+		result = 31 * result + (int) (cacheTTL ^ (cacheTTL >>> 32));
 		return result;
 	}
 }

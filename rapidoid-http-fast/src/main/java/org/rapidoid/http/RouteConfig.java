@@ -63,4 +63,7 @@ public interface RouteConfig {
 
 	RouteOptions managed(boolean managed);
 
+	long cacheTTL();
+
+	RouteOptions cacheTTL(long cacheTTL);
 }

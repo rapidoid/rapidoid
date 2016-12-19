@@ -1,4 +1,4 @@
-package org.rapidoid.http.handler;
+package org.rapidoid.http.impl;
 
 /*
  * #%L
@@ -22,34 +22,12 @@ package org.rapidoid.http.handler;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.HttpStatus;
-import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.impl.HttpIO;
-import org.rapidoid.http.impl.RouteOptions;
-import org.rapidoid.net.abstracts.Channel;
-import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.3.0")
-public class StaticHttpHandler extends AbstractHttpHandler {
+@Since("5.3.0")
+public interface MaybeReq {
 
-	private final byte[] response;
-
-	public StaticHttpHandler(RouteOptions options, byte[] response) {
-		super(options);
-		this.response = response;
-	}
-
-	@Override
-	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
-		HttpIO.write200(HttpUtils.maybe(req), ctx, isKeepAlive, contentType, response);
-		return HttpStatus.DONE;
-	}
-
-	@Override
-	public String toString() {
-		return contentTypeInfo(U.frmt("() -> (static response of %s bytes)", response.length));
-	}
+	Req getReqOrNull();
 
 }

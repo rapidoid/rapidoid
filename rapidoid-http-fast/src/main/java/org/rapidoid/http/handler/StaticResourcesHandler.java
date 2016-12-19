@@ -65,7 +65,7 @@ public class StaticResourcesHandler extends AbstractHttpHandler {
 
 						if (bytes != null) {
 							MediaType contentType = U.or(MediaType.getByFileName(res.getName()), MediaType.BINARY);
-							HttpIO.write200(ctx, isKeepAlive, contentType, bytes);
+							HttpIO.write200(HttpUtils.maybe(req), ctx, isKeepAlive, contentType, bytes);
 							return HttpStatus.DONE;
 						}
 					}

@@ -402,4 +402,13 @@ public class OnRoute extends RapidoidThing {
 		return this;
 	}
 
+	public OnRoute cacheTTL(long cacheTTL) {
+		options.cacheTTL(cacheTTL);
+		return this;
+	}
+
+	public RouteOptions options() {
+		return options;
+	}
+
 }

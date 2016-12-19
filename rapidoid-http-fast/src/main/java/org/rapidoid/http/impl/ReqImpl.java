@@ -4,10 +4,10 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
+import org.rapidoid.cache.Cached;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.ChangeTrackingMap;
 import org.rapidoid.collection.Coll;
-import org.rapidoid.http.MediaType;
 import org.rapidoid.commons.Str;
 import org.rapidoid.http.*;
 import org.rapidoid.http.customize.BeanParameterFactory;
@@ -25,6 +25,7 @@ import org.rapidoid.util.Msc;
 
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -51,7 +52,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.2")
-public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetadata, IRequest {
+public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetadata, IRequest, MaybeReq {
 
 	private final FastHttp http;
 
@@ -103,9 +104,9 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	private volatile boolean rendering;
 
-	private volatile int posConLen;
+	private volatile int posContentLengthValue;
 
-	private volatile int posBefore;
+	private volatile int posBeforeBody = Integer.MAX_VALUE;
 
 	private volatile boolean async;
 
@@ -123,9 +124,11 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	private volatile Customization custom;
 
-	public ReqImpl(FastHttp http, Channel channel, boolean isKeepAlive, String verb, String uri, String path,
+	private final HTTPCacheKey cacheKey;
 
 	private final long handle;
+
+	public ReqImpl(FastHttp http, Channel channel, boolean isKeepAlive, String verb, String uri, String path,
 	               String query, byte[] body, Map<String, String> params, Map<String, String> headers,
 	               Map<String, String> cookies, Map<String, Object> posted, Map<String, List<Upload>> files,
 	               boolean pendingBodyParsing, MediaType defaultContentType, String zone,
@@ -151,6 +154,11 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		this.route = route;
 		this.handle = channel.handle();
 		this.custom = routes != null ? routes.custom() : http.custom();
+		this.cacheKey = createCacheKey();
+	}
+
+	private HTTPCacheKey createCacheKey() {
+		return isCachingAllowedAndSupported() ? new HTTPCacheKey(host(), uri()) : null;
 	}
 
 	@Override
@@ -465,27 +473,37 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		}
 
 		if (unknownContentLength) {
-			Buf out = channel.output();
+
+			// Content-Length header
 			HttpIO.writeContentLengthUnknown(channel);
-
-			posConLen = out.size() - 1;
+			posContentLengthValue = channel.output().size() - 1;
 			channel.write(CR_LF);
 
-			// finishing the headers
-			channel.write(CR_LF);
+			closeHeaders();
 
-			posBefore = out.size();
+			onHeadersCompleted();
 		}
+	}
+
+	private void closeHeaders() {
+		// finishing the headers
+		channel.write(CR_LF);
+
+		onHeadersCompleted();
+	}
+
+	public void onHeadersCompleted() {
+		posBeforeBody = channel.output().size();
 	}
 
 	private void writeResponseLength() {
 		Buf out = channel.output();
 
 		int posAfter = out.size();
-		int contentLength = posAfter - posBefore;
+		int contentLength = posAfter - posBeforeBody;
 
 		if (!stopped && out.size() > 0) {
-			out.putNumAsText(posConLen, contentLength, false);
+			out.putNumAsText(posContentLengthValue, contentLength, false);
 		}
 
 		completed = true;
@@ -537,8 +555,13 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		HttpUtils.postProcessResponse(response);
 
 		if (response.raw() != null) {
+			int posBeforeResponse = channel.output().size();
+
 			byte[] bytes = Msc.toBytes(response.raw());
 			channel.write(bytes);
+
+			if (willSaveToCache()) posBeforeBody = posBeforeResponse + HttpUtils.findBodyStart(bytes);
+
 			completed = true;
 
 		} else {
@@ -552,7 +575,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	}
 
 	private void writeContentLengthAndBody(byte[] bytes) {
-		HttpIO.writeContentLengthAndBody(channel, bytes);
+		HttpIO.writeContentLengthAndBody(this, channel, bytes);
 		completed = true;
 	}
 
@@ -693,6 +716,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	@Override
 	public boolean hasToken() {
+		// FIXME don't deserialize token, just check if it exists
 		token(); // try to find and deserialize the token
 		return tokenStatus != TokenStatus.NONE;
 	}
@@ -804,8 +828,8 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	@Override
 	public void revert() {
 		rendering = false;
-		posConLen = 0;
-		posBefore = 0;
+		posContentLengthValue = 0;
+		posBeforeBody = 0;
 		async = false;
 		done = false;
 		completed = false;
@@ -871,9 +895,56 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		return handle;
 	}
 
-
 	public boolean isKeepAlive() {
 		return isKeepAlive;
+	}
+
+	public void saveToCache() {
+		if (!willSaveToCache()) return;
+
+		U.must(response != null, "Can't save to cache without response object!");
+
+		U.must(posBeforeBody != Integer.MAX_VALUE);
+
+		Buf out = channel.output();
+
+		int posAfterBody = out.size();
+		int bodyLength = posAfterBody - posBeforeBody;
+
+		// FIXME validate '\r\n\r\n' before the start position of the response body
+
+		ByteBuffer body = ByteBuffer.allocateDirect(bodyLength);
+		out.writeTo(body, posBeforeBody, bodyLength);
+		body.flip();
+
+		CachedResp cached = new CachedResp(response.code(), response.contentType(), body);
+
+		Cached<HTTPCacheKey, CachedResp> cache = route.cache();
+		U.notNull(cache, "route.cache");
+
+		cache.set(cacheKey, cached);
+	}
+
+	@Override
+	public Req getReqOrNull() {
+		return this;
+	}
+
+	private boolean willSaveToCache() {
+		return cacheKey != null;
+	}
+
+	public HTTPCacheKey cacheKey() {
+		return cacheKey;
+	}
+
+	private boolean isCachingAllowedAndSupported() {
+		return route != null
+			&& HttpUtils.isGetReq(this)
+			&& route.cache() != null
+			&& cookies.isEmpty()
+			&& U.notEmpty(host())
+			&& !hasToken();
 	}
 
 }

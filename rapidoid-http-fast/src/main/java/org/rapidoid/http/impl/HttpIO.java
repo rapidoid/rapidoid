@@ -26,6 +26,7 @@ import org.rapidoid.util.StreamUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 /*
  * #%L
@@ -147,13 +148,13 @@ public class HttpIO extends RapidoidThing implements Constants {
 		ctx.write(CR_LF);
 	}
 
-	public static void writeResponse(Channel ctx, boolean isKeepAlive, int code, MediaType contentTypeHeader, byte[] content) {
+	public static void writeResponse(MaybeReq req, Channel ctx, boolean isKeepAlive, int code, MediaType contentTypeHeader, byte[] content) {
 		startResponse(ctx, code, isKeepAlive, contentTypeHeader);
-		writeContentLengthAndBody(ctx, content);
+		writeContentLengthAndBody(req, ctx, content);
 	}
 
-	public static void write200(Channel ctx, boolean isKeepAlive, MediaType contentTypeHeader, byte[] content) {
-		writeResponse(ctx, isKeepAlive, 200, contentTypeHeader, content);
+	public static void write200(MaybeReq req, Channel ctx, boolean isKeepAlive, MediaType contentTypeHeader, byte[] content) {
+		writeResponse(req, ctx, isKeepAlive, 200, contentTypeHeader, content);
 	}
 
 	public static void error(final Req req, final Throwable error, LogLevel logLevel) {
@@ -242,16 +243,22 @@ public class HttpIO extends RapidoidThing implements Constants {
 		return HttpStatus.ASYNC;
 	}
 
-	public static void writeContentLengthAndBody(Channel ctx, byte[] content) {
-		writeContentLengthHeader(ctx, content.length);
-		ctx.write(CR_LF);
-		ctx.write(content);
+	public static void writeContentLengthAndBody(MaybeReq req, Channel ctx, byte[] body) {
+		writeContentLengthHeader(ctx, body.length);
+		closeHeaders(req, ctx.output());
+		ctx.write(body);
 	}
 
-	public static void writeContentLengthAndBody(Channel ctx, ByteArrayOutputStream baos) {
-		writeContentLengthHeader(ctx, baos.size());
-		ctx.write(CR_LF);
-		ctx.output().append(baos);
+	public static void writeContentLengthAndBody(MaybeReq req, Channel ctx, ByteArrayOutputStream body) {
+		writeContentLengthHeader(ctx, body.size());
+		closeHeaders(req, ctx.output());
+		ctx.output().append(body);
+	}
+
+	public static void writeContentLengthAndBody(MaybeReq req, Channel ctx, ByteBuffer body) {
+		writeContentLengthHeader(ctx, body.remaining());
+		closeHeaders(req, ctx.output());
+		ctx.write(body);
 	}
 
 	public static void writeContentLengthHeader(Channel ctx, int len) {
@@ -265,7 +272,7 @@ public class HttpIO extends RapidoidThing implements Constants {
 		}
 	}
 
-	public static void writeAsJson(Channel ctx, int code, boolean isKeepAlive, Object value) {
+	public static void writeAsJson(MaybeReq req, Channel ctx, int code, boolean isKeepAlive, Object value) {
 		startResponse(ctx, code, isKeepAlive, MediaType.JSON);
 
 		ByteArrayOutputStream os = Msc.locals().jsonRenderingStream();
@@ -273,28 +280,27 @@ public class HttpIO extends RapidoidThing implements Constants {
 		JSON.stringify(value, os);
 		byte[] arr = os.toByteArray();
 
-		writeContentLengthAndBody(ctx, arr);
+		writeContentLengthAndBody(req, ctx, arr);
 	}
 
 	@SuppressWarnings("unused")
-	private static void writeOnBufferAsJson(Channel ctx, int code, boolean isKeepAlive, Object value) {
+	private static void writeOnBufferAsJson(MaybeReq req, Channel ctx, int code, boolean isKeepAlive, Object value) {
 		startResponse(ctx, code, isKeepAlive, MediaType.JSON);
 
 		Buf output = ctx.output();
 
 		synchronized (output) {
-			writeJsonBody(output.unwrap(), value);
+			writeJsonBody(req, output.unwrap(), value);
 		}
 	}
 
-	public static void writeJsonBody(Buf out, Object value) {
+	public static void writeJsonBody(MaybeReq req, Buf out, Object value) {
+		// Content-Length header
 		out.append(CONTENT_LENGTH_UNKNOWN);
-
 		int posConLen = out.size() - 1;
 		out.append(CR_LF);
 
-		// finishing the headers
-		out.append(CR_LF);
+		closeHeaders(req, out);
 
 		int posBefore = out.size();
 
@@ -306,12 +312,26 @@ public class HttpIO extends RapidoidThing implements Constants {
 		out.putNumAsText(posConLen, contentLength, false);
 	}
 
+	public static void closeHeaders(MaybeReq req, Buf out) {
+		// finishing the headers
+		out.append(CR_LF);
+
+		ReqImpl reqq = (ReqImpl) req.getReqOrNull();
+
+		if (reqq != null) {
+			U.must(reqq.channel().output() == out);
+			reqq.onHeadersCompleted();
+		}
+	}
+
 	public static void writeContentLengthUnknown(Channel channel) {
 		channel.write(HttpIO.CONTENT_LENGTH_UNKNOWN);
 	}
 
 	public static void done(Req req) {
 		ReqImpl reqq = (ReqImpl) req;
+		reqq.saveToCache();
+
 		Channel channel = reqq.channel();
 		channel.send();
 		channel.closeIf(!reqq.isKeepAlive());

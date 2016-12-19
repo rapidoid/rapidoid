@@ -1,1 +1,1 @@
-Route POST /dec [zone main] roles [] : json(AbcCtrl#dec(Integer x))
+Route POST /dec [zone main] roles [] (TTL=0) : json(AbcCtrl#dec(Integer x))

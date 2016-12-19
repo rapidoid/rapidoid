@@ -3,15 +3,19 @@ package org.rapidoid.http;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.bytes.Bytes;
+import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.commons.Str;
 import org.rapidoid.config.BasicConfig;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
+import org.rapidoid.data.BufRanges;
 import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.JsonResponseRenderer;
+import org.rapidoid.http.impl.MaybeReq;
 import org.rapidoid.http.impl.PathPattern;
 import org.rapidoid.io.Res;
 import org.rapidoid.lambda.Mapper;
@@ -59,6 +63,13 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 	private static final String PAGE_RELOAD = "<h2>&nbsp;Reloading...</h2><script>location.reload();</script>";
 
 	private static final byte[] EMPTY_RESPONSE = {};
+
+	private static final MaybeReq NO_REQ = new MaybeReq() {
+		@Override
+		public Req getReqOrNull() {
+			return null;
+		}
+	};
 
 	public static volatile Pattern REGEX_VALID_HTTP_RESOURCE = Pattern.compile("(?:/[A-Za-z0-9_\\-\\.]+)*/?");
 
@@ -371,4 +382,21 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 		return req.clientIpAddress();
 	}
 
+	public static MaybeReq noReq() {
+		return NO_REQ;
+	}
+
+	public static MaybeReq maybe(Req req) {
+		return req != null ? (MaybeReq) req : noReq();
+	}
+
+	public static int findBodyStart(byte[] response) {
+		Bytes bytes = BytesUtil.from(response);
+		BufRanges lines = new BufRanges(100);
+
+		int pos = BytesUtil.parseLines(bytes, lines, 0, bytes.limit());
+		U.must(pos > 0, "Invalid HTTP response!");
+
+		return pos;
+	}
 }

@@ -24,9 +24,8 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cache.Cached;
 import org.rapidoid.http.handler.HttpHandler;
-import org.rapidoid.http.impl.RouteCacheKey;
-
-import java.nio.ByteBuffer;
+import org.rapidoid.http.impl.CachedResp;
+import org.rapidoid.http.impl.HTTPCacheKey;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -40,5 +39,5 @@ public interface Route {
 
 	RouteConfig config();
 
-	Cached<RouteCacheKey, ByteBuffer> cache();
+	Cached<HTTPCacheKey, CachedResp> cache();
 }

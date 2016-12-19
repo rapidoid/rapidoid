@@ -9,10 +9,7 @@ import org.rapidoid.http.HttpVerb;
 import org.rapidoid.http.Route;
 import org.rapidoid.http.RouteConfig;
 import org.rapidoid.http.handler.HttpHandler;
-import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
-
-import java.nio.ByteBuffer;
 
 /*
  * #%L
@@ -46,35 +43,26 @@ public class RouteImpl extends RapidoidThing implements Route {
 
 	private volatile RouteOptions options;
 
-	private final RouteCacheConfig cacheConfig;
+	private final Cached<HTTPCacheKey, CachedResp> cache;
 
-	private final Cached<RouteCacheKey, ByteBuffer> cache;
-
-	public RouteImpl(HttpVerb verb, String path, HttpHandler handler, RouteOptions options, RouteCacheConfig cacheConfig) {
+	public RouteImpl(HttpVerb verb, String path, HttpHandler handler, RouteOptions options) {
 		this.verb = verb;
 		this.path = path;
 		this.handler = handler;
 		this.options = options;
-		this.cacheConfig = cacheConfig;
 		this.cache = createCache();
 	}
 
 	public static RouteImpl matching(HttpVerb verb, String path) {
-		return new RouteImpl(verb, path, null, null, null);
+		return new RouteImpl(verb, path, null, null);
 	}
 
-	protected Cached<RouteCacheKey, ByteBuffer> createCache() {
+	protected Cached<HTTPCacheKey, CachedResp> createCache() {
+		if (options == null || options.cacheTTL() <= 0) return null;
 
-		if (cacheConfig == null) return null;
-
-		return Cache.of(new Mapper<RouteCacheKey, ByteBuffer>() {
-
-			@Override
-			public ByteBuffer map(RouteCacheKey key) throws Exception {
-				return null; // FIXME
-			}
-
-		}).ttl(cacheConfig.ttl).build();
+		return Cache.of(HTTPCacheKey.class, CachedResp.class)
+			.ttl(options.cacheTTL())
+			.build();
 	}
 
 	@Override
@@ -110,7 +98,9 @@ public class RouteImpl extends RapidoidThing implements Route {
 
 	@Override
 	public String toString() {
-		return U.frmt("Route %s %s [zone %s] roles %s : %s", verb, path, config().zone(), config().roles(), handler);
+		RouteConfig cfg = config();
+		return U.frmt("Route %s %s [zone %s] roles %s (TTL=%s) : %s",
+			verb, path, cfg.zone(), cfg.roles(), cfg.cacheTTL(), handler);
 	}
 
 	@Override
@@ -126,7 +116,7 @@ public class RouteImpl extends RapidoidThing implements Route {
 	}
 
 	@Override
-	public Cached<RouteCacheKey, ByteBuffer> cache() {
+	public Cached<HTTPCacheKey, CachedResp> cache() {
 		return cache;
 	}
 }

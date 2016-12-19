@@ -23,11 +23,23 @@ package org.rapidoid.http.impl;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.MediaType;
+
+import java.nio.ByteBuffer;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class RouteCacheKey extends RapidoidThing {
+public class CachedResp extends RapidoidThing {
 
-	// FIXME define cache keys
+	public final int statusCode;
 
+	public final MediaType contentType;
+
+	public final ByteBuffer body;
+
+	public CachedResp(int statusCode, MediaType contentType, ByteBuffer body) {
+		this.statusCode = statusCode;
+		this.contentType = contentType;
+		this.body = body;
+	}
 }

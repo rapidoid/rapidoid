@@ -105,9 +105,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 		boolean isPattern = isPattern(path);
 		PathPattern pathPattern = isPattern ? PathPattern.from(path) : null;
 
-		RouteCacheConfig cacheConfig = new RouteCacheConfig(100); // FIXME configurable
-
-		RouteImpl route = new RouteImpl(verb, path, handler, handler.options(), cacheConfig);
+		RouteImpl route = new RouteImpl(verb, path, handler, handler.options());
 		handler.setRoute(route);
 		routes.add(route);
 

@@ -409,12 +409,15 @@ org.rapidoid.http.HttpUtils
 org.rapidoid.http.HttpVerb
 org.rapidoid.http.HttpWrapper
 org.rapidoid.http.impl.AbstractViewResolver
+org.rapidoid.http.impl.CachedResp
 org.rapidoid.http.impl.GUIUtil
 org.rapidoid.http.impl.HandlerMatch
 org.rapidoid.http.impl.HandlerMatchWithParams
+org.rapidoid.http.impl.HTTPCacheKey
 org.rapidoid.http.impl.HttpIO
 org.rapidoid.http.impl.HttpParser
 org.rapidoid.http.impl.HttpRoutesImpl
+org.rapidoid.http.impl.MaybeReq
 org.rapidoid.http.impl.MVCModel
 org.rapidoid.http.impl.MVCModelImpl
 org.rapidoid.http.impl.PathPattern
@@ -423,7 +426,6 @@ org.rapidoid.http.impl.ReqImpl
 org.rapidoid.http.impl.RespImpl
 org.rapidoid.http.impl.ResponseRenderer
 org.rapidoid.http.impl.RouteCacheConfig
-org.rapidoid.http.impl.RouteCacheKey
 org.rapidoid.http.impl.RouteImpl
 org.rapidoid.http.impl.RouteOptions
 org.rapidoid.http.impl.TokenStatus

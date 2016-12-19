@@ -22,6 +22,7 @@ package org.rapidoid.http.processor;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.MediaType;
 import org.rapidoid.http.impl.HttpIO;
 import org.rapidoid.net.abstracts.Channel;
@@ -48,7 +49,7 @@ public class NotFoundHttpProcessor extends AbstractHttpProcessor {
 		HttpIO.startResponse(channel, 404, isKeepAlive, MediaType.HTML_UTF_8);
 
 		String content = Templates.load("404.html").render(MODEL);
-		HttpIO.writeContentLengthAndBody(channel, content.getBytes());
+		HttpIO.writeContentLengthAndBody(HttpUtils.noReq(), channel, content.getBytes());
 
 		channel.send().closeIf(!isKeepAlive);
 	}
