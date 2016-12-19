@@ -85,11 +85,11 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 	}
 
 	public static boolean isGetReq(Req req) {
-		return req.verb().equalsIgnoreCase(GET);
+		return req.verb().equals(GET);
 	}
 
 	public static boolean isPostReq(Req req) {
-		return req.verb().equalsIgnoreCase(POST);
+		return req.verb().equals(POST);
 	}
 
 	public static String resName(Req req) {
