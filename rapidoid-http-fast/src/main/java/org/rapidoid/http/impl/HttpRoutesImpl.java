@@ -395,8 +395,10 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 			Map<String, String> params = pattern.match(path);
 
 			if (params != null) {
-				RouteImpl route = RouteImpl.matching(verb, path);
-				return new HandlerMatchWithParams(e.getValue(), params, route);
+				HttpHandler handler = e.getValue();
+				Route route = handler.getRoute();
+
+				return new HandlerMatchWithParams(handler, params, route);
 			}
 		}
 
