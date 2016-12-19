@@ -112,6 +112,10 @@ public class ConcurrentCached<K, V> extends AbstractMapImpl<K, ConcurrentCacheAt
 	}
 
 	private Callable<V> loaderFor(final K key) {
+		if (loader == null) {
+			return null;
+		}
+
 		return new Callable<V>() {
 			@Override
 			public V call() throws Exception {

@@ -37,6 +37,10 @@ public class Cache extends RapidoidThing {
 		return new CacheDSL<K, V>().of(of);
 	}
 
+	public static <K, V> CacheDSL<K, V> of(Class<K> keyClass, Class<V> valueClass) {
+		return new CacheDSL<>();
+	}
+
 	public static <T> CacheAtom<T> atom(Callable<T> loader, long ttlInMs) {
 		return new ConcurrentCacheAtom<>(loader, ttlInMs);
 	}

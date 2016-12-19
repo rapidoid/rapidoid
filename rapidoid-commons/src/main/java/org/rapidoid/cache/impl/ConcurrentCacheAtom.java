@@ -100,7 +100,7 @@ public class ConcurrentCacheAtom<V> extends RapidoidThing implements CacheAtom<V
 
 				if (loadIfExpired) {
 					try {
-						newValue = loader.call();
+						newValue = loader != null ? loader.call() : null;
 
 					} catch (Throwable e) {
 						error = e;
