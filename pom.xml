@@ -55,7 +55,7 @@
 		<timestamp>${maven.build.timestamp}</timestamp>
 		<maven.build.timestamp.format>yyyy-MM-dd HH:mm z</maven.build.timestamp.format>
 
-		<jackson.version>2.6.6</jackson.version>
+		<jackson.version>2.8.5</jackson.version>
 		<javassist.version>3.20.0-GA</javassist.version>
 
 		<slf4j.version>1.7.21</slf4j.version>

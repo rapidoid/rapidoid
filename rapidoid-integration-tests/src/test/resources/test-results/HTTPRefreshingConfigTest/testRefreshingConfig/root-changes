@@ -27,7 +27,7 @@
   "added" : {
     "x" : 1,
     "y" : {
-      "z" : ""
+      "z" : null
     }
   },
   "changed" : {
