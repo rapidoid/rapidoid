@@ -293,9 +293,10 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 
 	private void acceptChannel(ServerSocketChannel serverChannel) {
 		try {
-			SocketChannel channel = serverSocketChannel.accept();
+			SocketChannel channel = serverChannel.accept();
 			currentWorker.accept(channel);
 			currentWorker = currentWorker.next;
+
 		} catch (IOException e) {
 			Log.error("Acceptor error!", e);
 		}

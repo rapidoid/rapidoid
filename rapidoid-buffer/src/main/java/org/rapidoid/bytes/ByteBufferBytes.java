@@ -39,7 +39,7 @@ public class ByteBufferBytes extends RapidoidThing implements Bytes {
 	}
 
 	public ByteBufferBytes(ByteBuffer buf) {
-		this.buf = buf;
+		setTarget(buf, buf.position(), buf.limit());
 	}
 
 	@Override

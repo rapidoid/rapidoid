@@ -36,12 +36,7 @@ public class HttpFullRawResponseTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testBytesRawResponse() {
-		On.get("/bytes").html(new ReqHandler() {
-			@Override
-			public Object execute(Req req) throws Exception {
-				return req.response().raw(BYTES_RESPONSE.getBytes());
-			}
-		});
+		On.get("/bytes").html(req -> req.response().raw(BYTES_RESPONSE.getBytes()));
 
 		onlyGet("/bytes");
 	}

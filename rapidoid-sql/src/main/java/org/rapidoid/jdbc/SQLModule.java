@@ -32,13 +32,13 @@ public class SQLModule extends RapidoidThing implements RapidoidModule {
 
 	private static final String HSQLDB_DRIVER = "org.hsqldb.jdbc.JDBCDriver";
 
-	private static final String HSQLDB_TRUNCATE = "TRUNCATE SCHEMA PUBLIC RESTART IDENTITY AND COMMIT NO CHECK";
+	public static final String HSQLDB_TRUNCATE = "TRUNCATE SCHEMA PUBLIC RESTART IDENTITY AND COMMIT NO CHECK";
 
-	private static final String HSQLDB_DROP_ALL = "DROP SCHEMA public CASCADE";
+	public static final String HSQLDB_DROP_ALL = "DROP SCHEMA public CASCADE";
 
 	private static final String H2_DRIVER = "org.h2.Driver";
 
-	private static final String H2_DROP_ALL = "DROP ALL OBJECTS DELETE FILES";
+	public static final String H2_DROP_ALL = "DROP ALL OBJECTS DELETE FILES";
 
 	@Override
 	public void beforeTest(Object test, boolean isIntegrationTest) {
