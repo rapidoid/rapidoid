@@ -595,7 +595,7 @@ public class MultiBuf extends OutputStream implements Buf, Constants {
 	}
 
 	private void dumpBuffers() {
-		System.out.println(">> BUFFER " + name + " HAS " + bufN + " PARTS:");
+		U.print(">> BUFFER " + name + " HAS " + bufN + " PARTS:");
 
 		for (int i = 0; i < bufN - 1; i++) {
 			ByteBuffer buf = bufs[i];

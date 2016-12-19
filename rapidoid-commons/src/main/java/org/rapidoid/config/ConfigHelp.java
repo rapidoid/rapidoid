@@ -84,7 +84,7 @@ public class ConfigHelp extends RapidoidThing {
 	}
 
 	private static void show(String msg) {
-		System.out.println(msg);
+		U.print(msg);
 	}
 
 }
