@@ -41,12 +41,12 @@ public class SQLModule extends RapidoidThing implements RapidoidModule {
 	public static final String H2_DROP_ALL = "DROP ALL OBJECTS DELETE FILES";
 
 	@Override
-	public void beforeTest(Object test, boolean isIntegrationTest) {
+	public void beforeTest(Object test) {
 		JDBC.reset();
 	}
 
 	@Override
-	public void afterTest(Object test, boolean isIntegrationTest) {
+	public void afterTest(Object test) {
 		cleanInMemDatabases();
 
 		JDBC.reset();

@@ -33,7 +33,7 @@ import org.rapidoid.ioc.IoC;
 public class IoCModule extends RapidoidThing implements RapidoidModule {
 
 	@Override
-	public void beforeTest(Object test, boolean isIntegrationTest) {
+	public void beforeTest(Object test) {
 		cleanUp();
 
 		// unsuccessful autowire might have some side-effects
@@ -43,7 +43,7 @@ public class IoCModule extends RapidoidThing implements RapidoidModule {
 	}
 
 	@Override
-	public void afterTest(Object test, boolean isIntegrationTest) {
+	public void afterTest(Object test) {
 		cleanUp();
 	}
 

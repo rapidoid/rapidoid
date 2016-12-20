@@ -39,7 +39,7 @@ import org.rapidoid.u.U;
 public class HttpModule extends RapidoidThing implements RapidoidModule {
 
 	@Override
-	public void beforeTest(Object test, boolean isIntegrationTest) {
+	public void beforeTest(Object test) {
 		cleanUp();
 
 		App.beans(IoC.defaultContext().getManagedInstances());
@@ -47,7 +47,7 @@ public class HttpModule extends RapidoidThing implements RapidoidModule {
 	}
 
 	@Override
-	public void afterTest(Object test, boolean isIntegrationTest) {
+	public void afterTest(Object test) {
 		cleanUp();
 	}
 

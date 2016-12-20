@@ -20,13 +20,62 @@ package org.rapidoid.test;
  * #L%
  */
 
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.rapidoid.RapidoidModule;
+import org.rapidoid.RapidoidModules;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.IntegrationTest;
+import org.rapidoid.annotation.RapidoidModuleDesc;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.env.Env;
+import org.rapidoid.log.Log;
+import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.6")
 @IntegrationTest
 public abstract class RapidoidIntegrationTest extends RapidoidTest {
+
+	@Before
+	public final void beforeRapidoidTest() {
+
+		Log.info("--------------------------------------------------------------------------------");
+		Log.info("@" + Msc.processId() + " TEST " + getClass().getCanonicalName());
+		Log.info("--------------------------------------------------------------------------------");
+
+		clearErrors();
+
+		isTrue(Msc.isInsideTest());
+		isTrue(Env.test());
+
+		before(this);
+	}
+
+	@After
+	public final void afterRapidoidTest() {
+		after(this);
+
+		if (hasError()) {
+			Assert.fail("Assertion error(s) occured, probably were caught or were thrown on non-main thread!");
+		}
+	}
+
+	public static void before(Object test) {
+		for (RapidoidModule mod : RapidoidModules.getAllAvailable()) {
+			RapidoidModuleDesc ann = mod.getClass().getAnnotation(RapidoidModuleDesc.class);
+			Log.debug("Initializing module before the test", "module", ann.name(), "order", ann.order());
+			mod.beforeTest(test);
+		}
+
+		Log.debug("All modules are initialized");
+	}
+
+	public static void after(Object test) {
+		for (RapidoidModule mod : RapidoidModules.getAllAvailable()) {
+			mod.afterTest(test);
+		}
+	}
 
 }

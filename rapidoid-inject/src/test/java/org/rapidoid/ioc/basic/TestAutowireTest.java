@@ -24,13 +24,13 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ioc.Wired;
-import org.rapidoid.test.RapidoidTest;
+import org.rapidoid.test.RapidoidIntegrationTest;
 
 import javax.inject.Inject;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class TestAutowireTest extends RapidoidTest {
+public class TestAutowireTest extends RapidoidIntegrationTest {
 
 	static class B {
 		@Inject

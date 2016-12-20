@@ -20,20 +20,11 @@ package org.rapidoid.test;
  * #L%
  */
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
-import org.rapidoid.RapidoidModule;
-import org.rapidoid.RapidoidModules;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.IntegrationTest;
-import org.rapidoid.annotation.RapidoidModuleDesc;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.beany.Metadata;
-import org.rapidoid.env.Env;
 import org.rapidoid.log.Log;
-import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.6")
@@ -41,53 +32,17 @@ public abstract class RapidoidTest extends RapidoidThing {
 
 	private volatile boolean hasError;
 
-	@Before
-	public final void beforeRapidoidTest() {
-
-		Log.info("--------------------------------------------------------------------------------");
-		Log.info("@" + Msc.processId() + " TEST " + getClass().getCanonicalName());
-		Log.info("--------------------------------------------------------------------------------");
-
+	protected void clearErrors() {
 		hasError = false;
-
-		isTrue(Msc.isInsideTest());
-		isTrue(Env.test());
-
-		before(this);
-	}
-
-	@After
-	public final void afterRapidoidTest() {
-		after(this);
-
-		if (hasError) {
-			Assert.fail("Assertion error(s) occured, probably were caught or were thrown on non-main thread!");
-		}
-	}
-
-	public static void before(Object test) {
-		for (RapidoidModule mod : RapidoidModules.getAllAvailable()) {
-			RapidoidModuleDesc ann = mod.getClass().getAnnotation(RapidoidModuleDesc.class);
-			Log.debug("Initializing module before the test", "module", ann.name(), "order", ann.order());
-			mod.beforeTest(test, isIntegrationTest(test));
-		}
-
-		Log.debug("All modules are initialized");
-	}
-
-	public static void after(Object test) {
-		for (RapidoidModule mod : RapidoidModules.getAllAvailable()) {
-			mod.afterTest(test, isIntegrationTest(test));
-		}
-	}
-
-	public static boolean isIntegrationTest(Object test) {
-		return Metadata.getAnnotationRecursive(test.getClass(), IntegrationTest.class) != null;
 	}
 
 	protected void registerError(AssertionError e) {
 		hasError = true;
-		e.printStackTrace();
+		Log.error("Error occurred while executing test!", e);
+	}
+
+	protected boolean hasError() {
+		return hasError;
 	}
 
 	protected void fail(String msg) {
@@ -182,10 +137,6 @@ public abstract class RapidoidTest extends RapidoidThing {
 
 	protected void eq(double expected, double actual) {
 		eq(actual, expected, 0);
-	}
-
-	protected void eqApprox(double expected, double actual) {
-		eq(actual, expected, 0.00000001);
 	}
 
 	protected void eq(double expected, double actual, double delta) {

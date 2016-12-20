@@ -42,7 +42,7 @@ import org.rapidoid.setup.Admin;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;
-import org.rapidoid.test.RapidoidTest;
+import org.rapidoid.test.RapidoidIntegrationTest;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -72,7 +72,7 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 		ClasspathUtil.setRootPackage("some.nonexisting.app");
 
 		RapidoidModules.getAll(); // all modules must be present
-		RapidoidTest.before(this);
+		RapidoidIntegrationTest.before(this);
 
 		JPAUtil.reset();
 
@@ -118,7 +118,7 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 
 		System.out.println("--- SERVER STOPPED ---");
 
-		RapidoidTest.after(this);
+		RapidoidIntegrationTest.after(this);
 	}
 
 	protected String localhost(String uri) {

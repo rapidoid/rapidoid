@@ -33,12 +33,12 @@ import org.rapidoid.util.Msc;
 public class CommonsModule extends RapidoidThing implements RapidoidModule {
 
 	@Override
-	public void beforeTest(Object test, boolean isIntegrationTest) {
+	public void beforeTest(Object test) {
 		cleanUp();
 	}
 
 	@Override
-	public void afterTest(Object test, boolean isIntegrationTest) {
+	public void afterTest(Object test) {
 		cleanUp();
 	}
 

@@ -27,8 +27,8 @@ import org.rapidoid.annotation.Since;
 @Since("5.3.0")
 public interface RapidoidModule {
 
-	void beforeTest(Object test, boolean isIntegrationTest);
+	void beforeTest(Object test);
 
-	void afterTest(Object test, boolean isIntegrationTest);
+	void afterTest(Object test);
 
 }
