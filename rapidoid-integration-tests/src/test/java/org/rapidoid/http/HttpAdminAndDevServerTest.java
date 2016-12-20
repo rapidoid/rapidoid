@@ -40,7 +40,7 @@ public class HttpAdminAndDevServerTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testAdminServerConfig() {
-		int port = 20000;
+		int port = 8881;
 		Conf.section("admin").set("port", port);
 
 		sameSetup();
