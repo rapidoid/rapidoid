@@ -403,8 +403,8 @@ public class RespImpl extends RapidoidThing implements Resp {
 	}
 
 	@Override
-	public void resume(long handle, AsyncLogic asyncLogic) {
-		req.channel().resume(handle, asyncLogic);
+	public void resume(AsyncLogic asyncLogic) {
+		req.channel().resume(req.handle(), asyncLogic);
 	}
 
 	private Screen createScreen() {
@@ -451,9 +451,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 		U.must(body() == null, "The response body has already been set, so cannot write the response through OutputStream, too!");
 		U.must(raw() == null, "The raw response has already been set, so cannot write the response through OutputStream, too!");
 
-		req.startRendering(code(), true);
-
-		return req.channel().output().asOutputStream();
+		return req.startOutputStream(code());
 	}
 
 	@Override

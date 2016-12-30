@@ -8,6 +8,7 @@ import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.RapidoidHelper;
 
 import java.io.File;
+import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 
@@ -105,6 +106,8 @@ public interface ProtocolContext<T> {
 	Buf input();
 
 	Buf output();
+
+	OutputStream outputStream();
 
 	RapidoidHelper helper();
 

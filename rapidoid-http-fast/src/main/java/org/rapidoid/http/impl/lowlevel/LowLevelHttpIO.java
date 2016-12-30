@@ -1,9 +1,10 @@
-package org.rapidoid.http.impl;
+package org.rapidoid.http.impl.lowlevel;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Dates;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
@@ -14,19 +15,20 @@ import org.rapidoid.data.BufRange;
 import org.rapidoid.data.JSON;
 import org.rapidoid.http.*;
 import org.rapidoid.http.customize.Customization;
+import org.rapidoid.http.impl.MaybeReq;
+import org.rapidoid.http.impl.ReqImpl;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
+import org.rapidoid.net.AsyncLogic;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Constants;
-import org.rapidoid.util.GlobalCfg;
-import org.rapidoid.util.Msc;
-import org.rapidoid.util.StreamUtils;
+import org.rapidoid.util.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.Map;
 
 /*
  * #%L
@@ -49,12 +51,12 @@ import java.nio.ByteBuffer;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class HttpIO extends RapidoidThing implements Constants {
+@Since("5.3.0")
+class LowLevelHttpIO extends RapidoidThing implements Constants {
 
-	public static final byte[] HTTP_200_OK = "HTTP/1.1 200 OK\r\n".getBytes();
+	private static final byte[] HTTP_200_OK = "HTTP/1.1 200 OK\r\n".getBytes();
 
-	public static final byte[] HTTP_400_BAD_REQUEST = "HTTP/1.1 400 Bad Request\r\nContent-Length: 12\r\n\r\nBad Request!"
+	private static final byte[] HTTP_400_BAD_REQUEST = "HTTP/1.1 400 Bad Request\r\nContent-Length: 12\r\n\r\nBad Request!"
 		.getBytes();
 
 	private static final byte[] HEADER_SEP = ": ".getBytes();
@@ -67,7 +69,7 @@ public class HttpIO extends RapidoidThing implements Constants {
 
 	private static final byte[] CONTENT_LENGTH_IS = "Content-Length: ".getBytes();
 
-	static final byte[] CONTENT_LENGTH_UNKNOWN = "Content-Length: 0000000000".getBytes();
+	private static final byte[] CONTENT_LENGTH_UNKNOWN = "Content-Length: 0000000000".getBytes();
 
 	private static final int CONTENT_LENGTHS_SIZE = 5000;
 
@@ -100,21 +102,21 @@ public class HttpIO extends RapidoidThing implements Constants {
 		MANDATORY_HEADER_CONTENT_TYPE = mandatoryHeaders.entry("contentType").or(true);
 	}
 
-	private HttpIO() {
+	LowLevelHttpIO() {
 	}
 
-	public static void removeTrailingSlash(Buf buf, BufRange range) {
+	void removeTrailingSlash(Buf buf, BufRange range) {
 		if (range.length > 1 && buf.get(range.last()) == '/') {
 			range.length--;
 		}
 	}
 
-	public static void startResponse(Channel ctx, int code, boolean isKeepAlive, MediaType contentType) {
+	void startResponse(Channel ctx, int code, boolean isKeepAlive, MediaType contentType) {
 		ctx.write(code == 200 ? HTTP_200_OK : HttpResponseCodes.get(code));
 		addDefaultHeaders(ctx, isKeepAlive, contentType);
 	}
 
-	public static void addDefaultHeaders(Channel ctx, boolean isKeepAlive, MediaType contentType) {
+	private void addDefaultHeaders(Channel ctx, boolean isKeepAlive, MediaType contentType) {
 
 		if (!isKeepAlive || MANDATORY_HEADER_CONNECTION) {
 			ctx.write(isKeepAlive ? CONN_KEEP_ALIVE : CONN_CLOSE);
@@ -141,23 +143,23 @@ public class HttpIO extends RapidoidThing implements Constants {
 		}
 	}
 
-	public static void addCustomHeader(Channel ctx, byte[] name, byte[] value) {
+	void addCustomHeader(Channel ctx, byte[] name, byte[] value) {
 		ctx.write(name);
 		ctx.write(HEADER_SEP);
 		ctx.write(value);
 		ctx.write(CR_LF);
 	}
 
-	public static void writeResponse(MaybeReq req, Channel ctx, boolean isKeepAlive, int code, MediaType contentTypeHeader, byte[] content) {
+	void writeResponse(final MaybeReq req, final Channel ctx, final boolean isKeepAlive, final int code, final MediaType contentTypeHeader, final byte[] content) {
 		startResponse(ctx, code, isKeepAlive, contentTypeHeader);
 		writeContentLengthAndBody(req, ctx, content);
 	}
 
-	public static void write200(MaybeReq req, Channel ctx, boolean isKeepAlive, MediaType contentTypeHeader, byte[] content) {
+	void write200(MaybeReq req, Channel ctx, boolean isKeepAlive, MediaType contentTypeHeader, byte[] content) {
 		writeResponse(req, ctx, isKeepAlive, 200, contentTypeHeader, content);
 	}
 
-	public static void error(final Req req, final Throwable error, LogLevel logLevel) {
+	void error(final Req req, final Throwable error, LogLevel logLevel) {
 		try {
 			logError(req, error, logLevel);
 
@@ -173,7 +175,7 @@ public class HttpIO extends RapidoidThing implements Constants {
 		}
 	}
 
-	private static void logError(Req req, Throwable error, LogLevel logLevel) {
+	private void logError(Req req, Throwable error, LogLevel logLevel) {
 
 		if (error instanceof NotFound) return;
 
@@ -218,7 +220,7 @@ public class HttpIO extends RapidoidThing implements Constants {
 		}
 	}
 
-	public static HttpStatus errorAndDone(final Req req, final Throwable error, final LogLevel logLevel) {
+	HttpStatus errorAndDone(final Req req, final Throwable error, final LogLevel logLevel) {
 
 		req.revert();
 		req.async();
@@ -243,36 +245,31 @@ public class HttpIO extends RapidoidThing implements Constants {
 		return HttpStatus.ASYNC;
 	}
 
-	public static void writeContentLengthAndBody(MaybeReq req, Channel ctx, byte[] body) {
+	void writeContentLengthAndBody(final MaybeReq req, final Channel ctx, final byte[] body) {
 		writeContentLengthHeader(ctx, body.length);
 		closeHeaders(req, ctx.output());
 		ctx.write(body);
 	}
 
-	public static void writeContentLengthAndBody(MaybeReq req, Channel ctx, ByteArrayOutputStream body) {
+	void writeContentLengthAndBody(final MaybeReq req, final Channel ctx, final ByteArrayOutputStream body) {
 		writeContentLengthHeader(ctx, body.size());
 		closeHeaders(req, ctx.output());
 		ctx.output().append(body);
 	}
 
-	public static void writeContentLengthAndBody(MaybeReq req, Channel ctx, ByteBuffer body) {
-		writeContentLengthHeader(ctx, body.remaining());
-		closeHeaders(req, ctx.output());
-		ctx.write(body);
-	}
+	void writeContentLengthHeader(Channel ctx, long contentLength) {
+		if (contentLength < CONTENT_LENGTHS_SIZE) {
+			ctx.write(CONTENT_LENGTHS[(int) contentLength]);
 
-	public static void writeContentLengthHeader(Channel ctx, int len) {
-		if (len < CONTENT_LENGTHS_SIZE) {
-			ctx.write(CONTENT_LENGTHS[len]);
 		} else {
 			ctx.write(CONTENT_LENGTH_IS);
 			Buf out = ctx.output();
-			out.putNumAsText(out.size(), len, true);
+			out.putNumAsText(out.size(), contentLength, true);
 			ctx.write(CR_LF);
 		}
 	}
 
-	public static void writeAsJson(MaybeReq req, Channel ctx, int code, boolean isKeepAlive, Object value) {
+	void writeAsJson(final MaybeReq req, final Channel ctx, final int code, final boolean isKeepAlive, final Object value) {
 		startResponse(ctx, code, isKeepAlive, MediaType.JSON);
 
 		ByteArrayOutputStream os = Msc.locals().jsonRenderingStream();
@@ -284,7 +281,7 @@ public class HttpIO extends RapidoidThing implements Constants {
 	}
 
 	@SuppressWarnings("unused")
-	private static void writeOnBufferAsJson(MaybeReq req, Channel ctx, int code, boolean isKeepAlive, Object value) {
+	private void writeOnBufferAsJson(MaybeReq req, Channel ctx, int code, boolean isKeepAlive, Object value) {
 		startResponse(ctx, code, isKeepAlive, MediaType.JSON);
 
 		Buf output = ctx.output();
@@ -294,7 +291,7 @@ public class HttpIO extends RapidoidThing implements Constants {
 		}
 	}
 
-	public static void writeJsonBody(MaybeReq req, Buf out, Object value) {
+	private void writeJsonBody(MaybeReq req, Buf out, Object value) {
 		// Content-Length header
 		out.append(CONTENT_LENGTH_UNKNOWN);
 		int posConLen = out.size() - 1;
@@ -312,7 +309,7 @@ public class HttpIO extends RapidoidThing implements Constants {
 		out.putNumAsText(posConLen, contentLength, false);
 	}
 
-	public static void closeHeaders(MaybeReq req, Buf out) {
+	private void closeHeaders(MaybeReq req, Buf out) {
 		// finishing the headers
 		out.append(CR_LF);
 
@@ -324,25 +321,125 @@ public class HttpIO extends RapidoidThing implements Constants {
 		}
 	}
 
-	public static void writeContentLengthUnknown(Channel channel) {
-		channel.write(HttpIO.CONTENT_LENGTH_UNKNOWN);
+	void writeContentLengthUnknown(Channel channel) {
+		channel.write(CONTENT_LENGTH_UNKNOWN);
 	}
 
-	public static void done(Req req) {
+	void done(Req req) {
 		ReqImpl reqq = (ReqImpl) req;
-		reqq.saveToCache();
+		reqq.doneProcessing();
 
 		Channel channel = reqq.channel();
 		channel.send();
+
 		channel.closeIf(!reqq.isKeepAlive());
 	}
 
-	public static void writeNum(Channel ctx, int value) {
+	void writeNum(Channel ctx, int value) {
 		try {
 			StreamUtils.putNumAsText(ctx.output().asOutputStream(), value);
 		} catch (IOException e) {
 			throw U.rte(e);
 		}
+	}
+
+	void resume(MaybeReq maybeReq, Channel channel, AsyncLogic logic) {
+		Req req = maybeReq.getReqOrNull();
+
+		if (req != null) {
+			channel.resume(req.handle(), logic);
+		} else {
+			logic.resumeAsync();
+		}
+	}
+
+	void writeBadRequest(Channel channel) {
+		channel.write(HTTP_400_BAD_REQUEST);
+		channel.close();
+	}
+
+	void respond(final MaybeReq maybeReq, final Channel channel, long handle,
+	             final int code, final boolean isKeepAlive, final MediaType contentType, final Object body,
+	             final Map<String, String> headers, final Map<String, String> cookies) {
+
+		final ReqImpl req = (ReqImpl) maybeReq.getReqOrNull();
+
+		if (handle < 0) {
+			if (req != null) {
+				handle = req.handle();
+			} else {
+				handle = channel.handle();
+			}
+		}
+
+		channel.resume(handle, new AsyncLogic() {
+			@Override
+			public boolean resumeAsync() {
+
+				startResponse(channel, code, isKeepAlive, contentType);
+
+				if (U.notEmpty(headers)) {
+					for (Map.Entry<String, String> e : headers.entrySet()) {
+						addCustomHeader(channel, e.getKey().getBytes(), e.getValue().getBytes());
+					}
+				}
+
+				if (U.notEmpty(cookies)) {
+					for (Map.Entry<String, String> e : cookies.entrySet()) {
+						String cookie = e.getKey() + "=" + e.getValue();
+						addCustomHeader(channel, HttpHeaders.SET_COOKIE.getBytes(), cookie.getBytes());
+					}
+				}
+
+				Buf output = channel.output();
+
+				synchronized (channel) {
+					if (body == null) {
+
+						// unknown Content-Length header
+						writeContentLengthUnknown(channel);
+						int posContentLengthValue = output.size() - 1;
+						channel.write(CR_LF);
+
+						// finishing the headers
+						closeHeaders(maybeReq, output);
+
+						long posBeforeBody = output.size();
+
+						if (req != null) {
+							req.responded(posContentLengthValue, posBeforeBody, false);
+						}
+
+					} else {
+
+						if (body instanceof byte[]) {
+							byte[] bytes = (byte[]) body;
+
+							writeContentLengthHeader(channel, bytes.length);
+							closeHeaders(maybeReq, output);
+							channel.write(bytes);
+
+						} else if (body instanceof ByteBuffer) {
+							ByteBuffer buf = (ByteBuffer) body;
+
+							writeContentLengthHeader(channel, buf.remaining());
+							closeHeaders(maybeReq, output);
+							channel.write(buf);
+
+						} else {
+							throw U.rte("Invalid response body type: %s", Cls.of(body));
+						}
+
+						if (req != null) {
+							req.completed(true);
+							done(req);
+						}
+					}
+				}
+
+				return true;
+			}
+		});
 	}
 
 }

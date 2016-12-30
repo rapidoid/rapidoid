@@ -11,6 +11,7 @@ import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.data.JSON;
 import org.rapidoid.env.Env;
+import org.rapidoid.env.RapidoidEnv;
 import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.HttpRoutes;
 import org.rapidoid.http.ReqHandler;
@@ -246,6 +247,8 @@ public class Setup extends RapidoidInitializer implements Constants {
 	}
 
 	public synchronized void activate() {
+		RapidoidEnv.touch();
+
 		if (activated) {
 			return;
 		}
@@ -335,6 +338,7 @@ public class Setup extends RapidoidInitializer implements Constants {
 	}
 
 	public Setup beans(Object... beans) {
+		RapidoidEnv.touch();
 		beans = AnyObj.flat(beans);
 
 		for (Object bean : beans) {

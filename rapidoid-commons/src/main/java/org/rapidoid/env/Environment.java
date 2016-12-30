@@ -120,6 +120,8 @@ public class Environment extends RapidoidInitializer {
 		Log.info("Automatically activating mode-specific profile", "!profile", modeProfile);
 		profiles.add(modeProfile);
 
+		RapidoidEnv.touch();
+
 		Log.info("Initialized environment", "!mode", mode, "!profiles", profiles);
 	}
 
@@ -190,10 +192,12 @@ public class Environment extends RapidoidInitializer {
 	}
 
 	public EnvProperties properties() {
+		RapidoidEnv.touch();
 		return properties;
 	}
 
 	public Map<String, Object> argsAsMap() {
+		RapidoidEnv.touch();
 		U.notNull(args, "environment args");
 		return Msc.parseArgs(args);
 	}

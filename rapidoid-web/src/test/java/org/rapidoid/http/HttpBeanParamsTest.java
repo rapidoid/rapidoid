@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.setup.App;
+import org.rapidoid.test.ExpectErrors;
 import org.rapidoid.u.U;
 
 import java.util.List;
@@ -39,6 +40,7 @@ public class HttpBeanParamsTest extends HttpTestCommons {
 	}
 
 	@Test
+	@ExpectErrors
 	public void testBeanParams() {
 		App.beans(new Object() {
 

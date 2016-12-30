@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.env.Env;
+import org.rapidoid.env.RapidoidEnv;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
@@ -64,6 +65,7 @@ public class Conf extends RapidoidThing {
 	public static final Config API = section("api");
 
 	static void applyConfig(Config config) {
+		RapidoidEnv.touch();
 
 		if (Env.isInitialized()) {
 			if (!Env.production()) {

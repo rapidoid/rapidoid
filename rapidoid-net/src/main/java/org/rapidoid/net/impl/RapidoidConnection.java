@@ -20,6 +20,7 @@ import org.rapidoid.util.Resetable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
@@ -105,6 +106,7 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 		this.worker = worker;
 		this.input = bufs.newBuf("input#" + connId());
 		this.output = bufs.newBuf("output#" + connId());
+
 		reset();
 	}
 
@@ -132,7 +134,7 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 		protocol = null;
 		requestId = 0;
 		readSeq.set(0);
-		writeSeq.set(0);
+		writeSeq.set(-1);
 		expiresAt = 0;
 		state.reset();
 	}
@@ -220,7 +222,15 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 	}
 
 	void processedSeq(long processedHandle) {
-		writeSeq.compareAndSet(processedHandle - 1, processedHandle);
+		boolean increased = writeSeq.compareAndSet(processedHandle - 1, processedHandle);
+
+		if (!increased) {
+			// the current response might be already marked as processed (e.g. in non-async handlers)
+			long writeSeqN = writeSeq.get();
+			if (writeSeqN != processedHandle) {
+				throw U.rte("Error in the response order control! Expected handle: %s, real: %s", processedHandle - 1, writeSeqN);
+			}
+		}
 	}
 
 	@Override
@@ -234,9 +244,11 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 	}
 
 	private synchronized void askToSend() {
-		if (!waitingToWrite && output.size() > 0) {
-			waitingToWrite = true;
-			worker.wantToWrite(this);
+		synchronized (output) {
+			if (!waitingToWrite && output.size() > 0) {
+				waitingToWrite = true;
+				worker.wantToWrite(this);
+			}
 		}
 	}
 
@@ -252,7 +264,7 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 		}
 	}
 
-	public synchronized void wrote(boolean complete) {
+	synchronized void wrote(boolean complete) {
 		if (complete) {
 			waitingToWrite = false;
 		}
@@ -277,17 +289,33 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 		} else if (seq == handle - 1) {
 
-			// execute the logic
-			boolean finished = asyncLogic.resumeAsync();
+			synchronized (this) {
 
-			if (finished) {
-				synchronized (this) {
-					writeSeq.compareAndSet(handle - 1, handle);
+				U.must(seq == writeSeq.get());
+
+				// execute the logic
+				boolean finished = false;
+
+				synchronized (output) {
+					output.setReadOnly(false);
+
+					try {
+						finished = asyncLogic.resumeAsync();
+					} catch (Throwable e) {
+						Log.error("Error while resuming an asynchronous operation!", e);
+					}
+
+					output.setReadOnly(true);
+				}
+
+				if (finished) {
+					processedSeq(handle);
 				}
 			}
 
 		} else {
 			Log.error("Tried to resume a job that already has finished!", "handle", handle, "currentHandle", seq);
+			throw U.rte("Tried to resume a job that already has finished!");
 		}
 	}
 
@@ -299,6 +327,11 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 	@Override
 	public Buf output() {
 		return output;
+	}
+
+	@Override
+	public OutputStream outputStream() {
+		return output.asOutputStream();
 	}
 
 	@Override

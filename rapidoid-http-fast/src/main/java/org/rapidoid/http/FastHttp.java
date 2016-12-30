@@ -14,6 +14,7 @@ import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.JsonResponseRenderer;
 import org.rapidoid.http.handler.HttpHandler;
 import org.rapidoid.http.impl.*;
+import org.rapidoid.http.impl.lowlevel.HttpIO;
 import org.rapidoid.http.processor.AbstractHttpProcessor;
 import org.rapidoid.io.Upload;
 import org.rapidoid.log.Log;
@@ -82,13 +83,12 @@ public class FastHttp extends AbstractHttpProcessor {
 		BufRange uri = data.uri;
 		BufRange path = data.path;
 
-		HttpIO.removeTrailingSlash(buf, path);
-		HttpIO.removeTrailingSlash(buf, uri);
+		HttpIO.INSTANCE.removeTrailingSlash(buf, path);
+		HttpIO.INSTANCE.removeTrailingSlash(buf, uri);
 
 		String err = validateRequest(buf, verb, uri);
 		if (err != null) {
-			channel.write(HttpIO.HTTP_400_BAD_REQUEST);
-			channel.close();
+			HttpIO.INSTANCE.writeBadRequest(channel);
 			return;
 		}
 
@@ -174,8 +174,8 @@ public class FastHttp extends AbstractHttpProcessor {
 	private void serveCached(ReqImpl req, CachedResp resp) {
 		Channel channel = req.channel();
 
-		HttpIO.startResponse(channel, resp.statusCode, req.isKeepAlive(), resp.contentType);
-		HttpIO.writeContentLengthAndBody(HttpUtils.noReq(), channel, resp.body.duplicate());
+		HttpIO.INSTANCE.respond(HttpUtils.req(req), channel, -1, resp.statusCode,
+			req.isKeepAlive(), resp.contentType, resp.body.duplicate(), null, null);
 
 		channel.send().closeIf(!req.isKeepAlive());
 	}
@@ -264,23 +264,20 @@ public class FastHttp extends AbstractHttpProcessor {
 		}
 	}
 
-	protected void internalServerError(Channel channel, boolean isKeepAlive, Req req) {
+	private void internalServerError(final Channel channel, final boolean isKeepAlive, final Req req) {
 		MediaType contentType = req != null ? req.contentType() : MediaType.HTML_UTF_8;
 
-		HttpIO.startResponse(channel, 500, isKeepAlive, contentType);
-
 		JsonResponseRenderer jsonRenderer = Customization.of(req).jsonResponseRenderer();
-		byte[] bytes = HttpUtils.responseToBytes(req, INTERNAL_SERVER_ERROR, contentType, jsonRenderer);
+		byte[] body = HttpUtils.responseToBytes(req, INTERNAL_SERVER_ERROR, contentType, jsonRenderer);
 
-		HttpIO.writeContentLengthAndBody(HttpUtils.maybe(req), channel, bytes);
-		HttpIO.done(req);
+		HttpIO.INSTANCE.respond(HttpUtils.maybe(req), channel, -1, 500, isKeepAlive, contentType, body, null, null);
 	}
 
 	private boolean handleError(Channel channel, boolean isKeepAlive, Req req, Throwable e) {
 		if (req != null) {
 			if (!((ReqImpl) req).isStopped()) {
 				try {
-					HttpIO.errorAndDone(req, e, LogLevel.ERROR);
+					HttpIO.INSTANCE.errorAndDone(req, e, LogLevel.ERROR);
 				} catch (Exception e1) {
 					Log.error("HTTP error handler error!", e1);
 					internalServerError(channel, isKeepAlive, req);
@@ -290,7 +287,7 @@ public class FastHttp extends AbstractHttpProcessor {
 
 		} else {
 			Log.error("Low-level HTTP handler error!", e);
-			internalServerError(channel, isKeepAlive, req);
+			internalServerError(channel, isKeepAlive, null);
 		}
 
 		return false;

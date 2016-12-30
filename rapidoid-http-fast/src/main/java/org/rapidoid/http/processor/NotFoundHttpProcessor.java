@@ -24,7 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.MediaType;
-import org.rapidoid.http.impl.HttpIO;
+import org.rapidoid.http.impl.lowlevel.HttpIO;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.render.Templates;
@@ -46,10 +46,9 @@ public class NotFoundHttpProcessor extends AbstractHttpProcessor {
 	public void onRequest(Channel channel, RapidoidHelper data) {
 		boolean isKeepAlive = data.isKeepAlive.value;
 
-		HttpIO.startResponse(channel, 404, isKeepAlive, MediaType.HTML_UTF_8);
-
 		String content = Templates.load("404.html").render(MODEL);
-		HttpIO.writeContentLengthAndBody(HttpUtils.noReq(), channel, content.getBytes());
+
+		HttpIO.INSTANCE.respond(HttpUtils.noReq(), channel, -1, 404, isKeepAlive, MediaType.HTML_UTF_8, content.getBytes(), null, null);
 
 		channel.send().closeIf(!isKeepAlive);
 	}

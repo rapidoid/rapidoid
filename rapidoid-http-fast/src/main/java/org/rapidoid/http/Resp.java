@@ -272,6 +272,6 @@ public interface Resp {
 	/**
 	 * Resumes the asynchronous request handling.
 	 */
-	void resume(long handle, AsyncLogic asyncLogic);
+	void resume(AsyncLogic asyncLogic);
 
 }

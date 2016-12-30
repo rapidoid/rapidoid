@@ -20,15 +20,15 @@ package org.rapidoid.test;
  * #L%
  */
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.*;
 import org.mockito.Mockito;
 import org.mockito.stubbing.OngoingStubbing;
 
 import java.io.*;
+import java.lang.annotation.Annotation;
 import java.lang.management.ManagementFactory;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -88,6 +88,25 @@ public abstract class TestCommons {
 	public void checkForErrors() {
 		if (hasError) {
 			Assert.fail("Assertion error(s) occured, probably were caught or were thrown on non-main thread!");
+
+		} else if (getTestAnnotation(ExpectErrors.class) == null && hasErrorsLogged()) {
+			Assert.fail("Unexpected errors were logged!");
+		}
+	}
+
+	private boolean hasErrorsLogged() {
+		Boolean hasErr = callIfExists("org.rapidoid.log.LogStats", "hasErrors");
+		return hasErr != null ? hasErr : false;
+	}
+
+	private <T> T callIfExists(String className, String methodName) {
+		try {
+			Class<?> logCls = Class.forName(className);
+			Method hasErrors = logCls.getMethod(methodName);
+			return (T) hasErrors.invoke(null);
+
+		} catch (ClassNotFoundException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+			return null;
 		}
 	}
 
@@ -534,10 +553,36 @@ public abstract class TestCommons {
 		}
 
 		if (method == null) {
+			for (StackTraceElement el : trace) {
+				System.out.println(el);
+			}
 			throw new RuntimeException("Cannot calculate the test name!");
 		}
 
 		return method;
+	}
+
+	protected Method getTestMethod() {
+		String testMethodName = getTestMethodName();
+
+		for (Method method : getClass().getDeclaredMethods()) {
+			if (method.isAnnotationPresent(Test.class) && method.getName().equals(testMethodName)) {
+				return method;
+			}
+		}
+
+		throw new RuntimeException("Cannot detect the test method!");
+	}
+
+	protected <T extends Annotation> T getTestAnnotation(Class<T> ann) {
+		Method testMethod = callIfExists("org.rapidoid.env.RapidoidEnv", "getTestMethod");
+		T annotation = testMethod != null ? testMethod.getAnnotation(ann) : null;
+
+		if (annotation == null) {
+			annotation = getClass().getAnnotation(ann);
+		}
+
+		return annotation;
 	}
 
 	protected boolean isEq(Object a, Object b) {

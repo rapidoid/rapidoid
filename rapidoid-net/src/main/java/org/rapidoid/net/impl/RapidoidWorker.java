@@ -187,13 +187,17 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 	private boolean processNext(RapidoidConnection conn, boolean initial) {
 
-		long seq = conn.readSeq.incrementAndGet();
+		long seq;
 
 		if (initial) {
 			// conn.log("<< INIT >>");
 
+			seq = 0;
 			conn.requestId = -1;
 		} else {
+
+			seq = conn.readSeq.incrementAndGet();
+
 			// conn.log("<< PROCESS >>");
 			U.must(conn.input().hasRemaining());
 
@@ -257,21 +261,17 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 			conn.input().limit(limit);
 			conn.input().setReadOnly(false);
 
-			conn.output().deleteAfter(osize);
-
 			state.n = stateN;
 			state.obj = stateObj;
 
 			boolean decreased = conn.readSeq.compareAndSet(seq, seq - 1);
-
-			if (!decreased) {
-				Log.error("Error in the request order control!", "handle", seq);
-			}
+			U.must(decreased, "Error in the request order control! Handle: %s", seq);
 
 		} catch (ProtocolException e) {
 
 			conn.log("<< PROTOCOL ERROR >>");
 			Log.warn("Protocol error", "error", e);
+
 			conn.output().deleteAfter(osize);
 			conn.write(U.or(e.getMessage(), "Protocol error!"));
 			conn.error();
@@ -354,31 +354,45 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		touch(conn);
 
 		try {
-			int wrote = conn.output.writeTo(socketChannel);
-			conn.output.deleteBefore(wrote);
-
-			boolean finishedWriting, closeAfterWrite;
 			synchronized (conn) {
-				finishedWriting = conn.finishedWriting();
-				closeAfterWrite = conn.closeAfterWrite();
-			}
-
-			if (finishedWriting && closeAfterWrite) {
-				close(conn);
-
-			} else {
-				if (finishedWriting) {
-					key.interestOps(SelectionKey.OP_READ);
-				} else {
-					key.interestOps(SelectionKey.OP_READ + SelectionKey.OP_WRITE);
+				synchronized (conn.output) {
+					writeOp(key, conn, socketChannel);
 				}
-				conn.wrote(finishedWriting);
 			}
 
 		} catch (IOException e) {
 			close(conn);
+
 		} catch (CancelledKeyException cke) {
 			Log.debug("Tried to write on canceled selector key!");
+		}
+	}
+
+	private void writeOp(SelectionKey key, RapidoidConnection conn, SocketChannel socketChannel) throws IOException {
+
+		synchronized (conn.output) {
+			conn.output.setReadOnly(false);
+			int wrote = conn.output.writeTo(socketChannel);
+			conn.output.deleteBefore(wrote);
+			conn.output.setReadOnly(true);
+		}
+
+		boolean finishedWriting, closeAfterWrite;
+		synchronized (conn) {
+			finishedWriting = conn.finishedWriting();
+			closeAfterWrite = conn.closeAfterWrite();
+		}
+
+		if (finishedWriting && closeAfterWrite) {
+			close(conn);
+
+		} else {
+			if (finishedWriting) {
+				key.interestOps(SelectionKey.OP_READ);
+			} else {
+				key.interestOps(SelectionKey.OP_READ + SelectionKey.OP_WRITE);
+			}
+			conn.wrote(finishedWriting);
 		}
 	}
 

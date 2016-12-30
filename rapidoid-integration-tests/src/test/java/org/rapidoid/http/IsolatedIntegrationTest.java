@@ -34,6 +34,7 @@ import org.rapidoid.fluent.Do;
 import org.rapidoid.io.IO;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.jpa.JPAUtil;
+import org.rapidoid.lambda.F3;
 import org.rapidoid.log.Log;
 import org.rapidoid.reverseproxy.ProxyMapping;
 import org.rapidoid.reverseproxy.Reverse;
@@ -47,7 +48,10 @@ import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.List;
@@ -313,10 +317,14 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 		req.raw(true);
 
 		String resp = new String(req.execute().raw());
-		resp = resp.replaceFirst("Date: .*? GMT", "Date: XXXXX GMT");
+		resp = maskHttpResponse(resp);
 
 		req.raw(false);
 		return resp;
+	}
+
+	protected String maskHttpResponse(String resp) {
+		return resp.replaceAll("(?<=\n)Date: .*? GMT(?=\r?\n)", "Date: XXXXX GMT");
 	}
 
 	protected String fetch(HttpClient client, String verb, String uri, Map<String, ?> data) {
@@ -374,4 +382,7 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 		return Reverse.proxy().map(match).to(upstreams);
 	}
 
+	protected <T> T connect(F3<T, InputStream, BufferedReader, DataOutputStream> protocol) {
+		return Msc.connect("localhost", 8888, 1000, protocol);
+	}
 }

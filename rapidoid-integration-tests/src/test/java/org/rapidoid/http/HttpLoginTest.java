@@ -29,6 +29,7 @@ import org.rapidoid.ctx.Contextual;
 import org.rapidoid.security.Role;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class HttpLoginTest extends IsolatedIntegrationTest {
 			return U.list(Contextual.username(), Contextual.roles());
 		});
 
-		multiThreaded(50, 200, this::randomUserLogin);
+		multiThreaded(150, Msc.normalOrHeavy(1500, 15000), this::randomUserLogin);
 	}
 
 	private void randomUserLogin() {

@@ -4,7 +4,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.http.*;
-import org.rapidoid.http.impl.HttpIO;
+import org.rapidoid.http.impl.lowlevel.HttpIO;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.u.U;
 
@@ -76,9 +76,9 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 					} else {
 
 						if (error instanceof ConnectException) {
-							HttpIO.errorAndDone(req, U.rte("Couldn't connect to the upstream!", error), LogLevel.DEBUG);
+							HttpIO.INSTANCE.errorAndDone(req, U.rte("Couldn't connect to the upstream!", error), LogLevel.DEBUG);
 						} else {
-							HttpIO.errorAndDone(req, error, LogLevel.ERROR);
+							HttpIO.INSTANCE.errorAndDone(req, error, LogLevel.ERROR);
 						}
 					}
 				}

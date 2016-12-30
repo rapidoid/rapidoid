@@ -14,6 +14,7 @@ import org.rapidoid.http.customize.BeanParameterFactory;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.JsonRequestBodyParser;
 import org.rapidoid.http.customize.SessionManager;
+import org.rapidoid.http.impl.lowlevel.HttpIO;
 import org.rapidoid.io.Upload;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
@@ -27,7 +28,6 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.*;
-import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /*
@@ -54,6 +54,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Since("5.0.2")
 public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetadata, IRequest, MaybeReq {
 
+	public static final long UNDEFINED = Long.MAX_VALUE;
 	private final FastHttp http;
 
 	private final Channel channel;
@@ -104,9 +105,9 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	private volatile boolean rendering;
 
-	private volatile int posContentLengthValue;
+	private volatile long posContentLengthValue;
 
-	private volatile int posBeforeBody = Integer.MAX_VALUE;
+	private volatile long posBeforeBody = UNDEFINED;
 
 	private volatile boolean async;
 
@@ -436,17 +437,17 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		return response;
 	}
 
-	public void startRendering(int code, boolean unknownContentLength) {
+	public void doRendering(int code, byte[] responseBody) {
 		if (!isRendering()) {
 			synchronized (this) {
 				if (!isRendering()) {
-					startResponse(code, unknownContentLength);
+					respond(code, responseBody);
 				}
 			}
 		}
 	}
 
-	private void startResponse(int code, boolean unknownContentLength) {
+	private void respond(int code, byte[] responseBody) {
 		MediaType contentType = MediaType.HTML_UTF_8;
 
 		if (tokenChanged.get()) {
@@ -461,35 +462,25 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 			contentType = U.or(response.contentType(), MediaType.HTML_UTF_8);
 		}
 
-		renderResponseHeaders(code, contentType, unknownContentLength);
+		renderResponse(code, contentType, responseBody);
 	}
 
-	private void renderResponseHeaders(int code, MediaType contentType, boolean unknownContentLength) {
+	private void renderResponse(int code, MediaType contentType, byte[] responseBody) {
 		rendering = true;
-		HttpIO.startResponse(channel, code, isKeepAlive, contentType);
+		completed = responseBody != null;
 
-		if (response != null) {
-			renderCustomHeaders();
-		}
-
-		if (unknownContentLength) {
-
-			// Content-Length header
-			HttpIO.writeContentLengthUnknown(channel);
-			posContentLengthValue = channel.output().size() - 1;
-			channel.write(CR_LF);
-
-			closeHeaders();
-
-			onHeadersCompleted();
-		}
+		HttpIO.INSTANCE.respond(
+			HttpUtils.maybe(this), channel, handle,
+			code, isKeepAlive, contentType, responseBody,
+			response != null ? response.headers() : null,
+			response != null ? response.cookies() : null
+		);
 	}
 
-	private void closeHeaders() {
-		// finishing the headers
-		channel.write(CR_LF);
-
-		onHeadersCompleted();
+	public void responded(long posContentLengthValue, long posBeforeBody, boolean completed) {
+		this.posContentLengthValue = posContentLengthValue;
+		this.posBeforeBody = posBeforeBody;
+		this.completed = completed;
 	}
 
 	public void onHeadersCompleted() {
@@ -499,11 +490,13 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	private void writeResponseLength() {
 		Buf out = channel.output();
 
-		int posAfter = out.size();
-		int contentLength = posAfter - posBeforeBody;
+		long posAfter = out.size();
+		long contentLength = posAfter - posBeforeBody;
 
 		if (!stopped && out.size() > 0) {
-			out.putNumAsText(posContentLengthValue, contentLength, false);
+			out.setReadOnly(false);
+			out.putNumAsText((int) posContentLengthValue, contentLength, false);
+			out.setReadOnly(true);
 		}
 
 		completed = true;
@@ -511,6 +504,11 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	public boolean isRendering() {
 		return rendering;
+	}
+
+	public ReqImpl completed(boolean completed) {
+		this.completed = completed;
+		return this;
 	}
 
 	@Override
@@ -527,8 +525,10 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 			return;
 		}
 
+		boolean willBeDone = true;
 		if (!rendering) {
 			renderResponseOrError();
+			willBeDone = false;
 		}
 
 		if (!completed) {
@@ -536,15 +536,16 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 			completed = true;
 		}
 
-		HttpIO.done(this);
+		if (willBeDone) {
+			HttpIO.INSTANCE.done(ReqImpl.this);
+		}
 	}
 
 	private void renderResponseOrError() {
 		String err = validateResponse();
 
 		if (err != null) {
-			startRendering(500, false);
-			writeContentLengthAndBody(err.getBytes());
+			doRendering(500, err.getBytes());
 
 		} else {
 			renderResponse();
@@ -563,20 +564,15 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 			if (willSaveToCache()) posBeforeBody = posBeforeResponse + HttpUtils.findBodyStart(bytes);
 
 			completed = true;
+			HttpIO.INSTANCE.done(this);
 
 		} else {
 			// first serialize the response to bytes (with error handling)
 			byte[] bytes = responseToBytes();
 
-			// then start rendering
-			startRendering(response.code(), false);
-			writeContentLengthAndBody(bytes);
+			// then rendering
+			doRendering(response.code(), bytes);
 		}
-	}
-
-	private void writeContentLengthAndBody(byte[] bytes) {
-		HttpIO.writeContentLengthAndBody(this, channel, bytes);
-		completed = true;
 	}
 
 	private byte[] responseToBytes() {
@@ -584,7 +580,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 			return response.renderToBytes();
 
 		} catch (Throwable e) {
-			HttpIO.error(this, e, LogLevel.ERROR);
+			HttpIO.INSTANCE.error(this, e, LogLevel.ERROR);
 
 			try {
 				return response.renderToBytes();
@@ -611,17 +607,6 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		}
 
 		return null;
-	}
-
-	private void renderCustomHeaders() {
-		for (Entry<String, String> e : response.headers().entrySet()) {
-			HttpIO.addCustomHeader(channel, e.getKey().getBytes(), e.getValue().getBytes());
-		}
-
-		for (Entry<String, String> e : response.cookies().entrySet()) {
-			String cookie = e.getKey() + "=" + e.getValue();
-			HttpIO.addCustomHeader(channel, HttpHeaders.SET_COOKIE.getBytes(), cookie.getBytes());
-		}
 	}
 
 	@Override
@@ -879,9 +864,14 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		if (response != null) {
 			return response.out(); // performs extra checks
 		} else {
-			startRendering(200, true);
-			return channel().output().asOutputStream();
+			return startOutputStream(200);
 		}
+	}
+
+	public OutputStream startOutputStream(int respCode) {
+		doRendering(respCode, null);
+		channel().output().setReadOnly(false);
+		return channel().outputStream();
 	}
 
 	@Override
@@ -899,25 +889,28 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		return isKeepAlive;
 	}
 
-	public void saveToCache() {
-		if (!willSaveToCache()) return;
+	public void doneProcessing() {
+		done = true;
 
-		U.must(response != null, "Can't save to cache without response object!");
+		if (willSaveToCache()) saveToCache();
+	}
 
-		U.must(posBeforeBody != Integer.MAX_VALUE);
+	private void saveToCache() {
+		U.must(posBeforeBody != UNDEFINED);
 
 		Buf out = channel.output();
-
 		int posAfterBody = out.size();
-		int bodyLength = posAfterBody - posBeforeBody;
+		int bodyLength = (int) (posAfterBody - posBeforeBody);
 
 		// FIXME validate '\r\n\r\n' before the start position of the response body
 
 		ByteBuffer body = ByteBuffer.allocateDirect(bodyLength);
-		out.writeTo(body, posBeforeBody, bodyLength);
+		out.writeTo(body, (int) posBeforeBody, bodyLength);
 		body.flip();
 
-		CachedResp cached = new CachedResp(response.code(), response.contentType(), body);
+		int code = response != null ? response.code() : 200;
+		MediaType contentType = response != null ? response.contentType() : U.or(defaultContentType, MediaType.HTML_UTF_8);
+		CachedResp cached = new CachedResp(code, contentType, body);
 
 		Cached<HTTPCacheKey, CachedResp> cache = route.cache();
 		U.notNull(cache, "route.cache");

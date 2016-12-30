@@ -23,6 +23,7 @@ package org.rapidoid.config;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
+import org.rapidoid.env.RapidoidEnv;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
@@ -70,6 +71,7 @@ public class ConfigBase extends RapidoidInitializer {
 	}
 
 	synchronized void invalidate() {
+		RapidoidEnv.touch();
 		this.properties.clear();
 
 		this.initialized = false;
@@ -81,6 +83,7 @@ public class ConfigBase extends RapidoidInitializer {
 	}
 
 	synchronized boolean setFilenameBase(String filenameBase) {
+		RapidoidEnv.touch();
 
 		if (U.neq(this.filenameBase, filenameBase)) {
 			Log.info("Changing configuration filename base", "!from", this.filenameBase, "!to", filenameBase);
@@ -93,6 +96,7 @@ public class ConfigBase extends RapidoidInitializer {
 	}
 
 	boolean setPath(String path) {
+		RapidoidEnv.touch();
 
 		if (U.neq(this.path, path)) {
 			Log.info("Changing configuration path", "!from", this.path, "!to", path);

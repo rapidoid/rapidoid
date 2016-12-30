@@ -6,7 +6,7 @@ import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.ctx.With;
 import org.rapidoid.http.*;
 import org.rapidoid.http.customize.Customization;
-import org.rapidoid.http.impl.HttpIO;
+import org.rapidoid.http.impl.lowlevel.HttpIO;
 import org.rapidoid.http.impl.MaybeReq;
 import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.jpa.JPA;
@@ -80,14 +80,14 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 			result = handleReq(ctx, isKeepAlive, req, extra);
 
 		} catch (Exception e) {
-			HttpIO.writeResponse(maybeReq, ctx, isKeepAlive, 500, contentType, "Internal server error!".getBytes());
+			HttpIO.INSTANCE.writeResponse(maybeReq, ctx, isKeepAlive, 500, contentType, "Internal server error!".getBytes());
 			return HttpStatus.ERROR;
 		}
 
 		if (contentType == MediaType.JSON) {
-			HttpIO.writeAsJson(maybeReq, ctx, 200, isKeepAlive, result);
+			HttpIO.INSTANCE.writeAsJson(maybeReq, ctx, 200, isKeepAlive, result);
 		} else {
-			HttpIO.write200(maybeReq, ctx, isKeepAlive, contentType, Msc.toBytes(result));
+			HttpIO.INSTANCE.write200(maybeReq, ctx, isKeepAlive, contentType, Msc.toBytes(result));
 		}
 
 		return HttpStatus.DONE;
@@ -287,7 +287,7 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 		req.revert();
 		req.async();
 
-		HttpIO.error(req, e, LogLevel.ERROR);
+		HttpIO.INSTANCE.error(req, e, LogLevel.ERROR);
 		// the Req object will do the rendering
 		req.done();
 

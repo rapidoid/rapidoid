@@ -44,6 +44,7 @@ public class Env extends RapidoidThing {
 	public static void reset() {
 		env.reset();
 		root = null;
+		RapidoidEnv.reset();
 	}
 
 	public static boolean production() {
@@ -131,7 +132,14 @@ public class Env extends RapidoidThing {
 
 			if (dir.exists()) {
 				if (dir.isDirectory()) {
-					Log.info("Setting application root", "!root", root, "!content", U.list(dir.listFiles()));
+					File[] files = dir.listFiles();
+
+					if (files != null) {
+						Log.info("Setting application root", "!root", root, "!content", U.list(files));
+					} else {
+						Log.error("Couldn't access the application root!", "!root", root);
+					}
+
 				} else {
 					Log.error("The configured application root must be a folder!", "!root", root);
 				}

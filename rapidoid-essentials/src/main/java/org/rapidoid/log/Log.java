@@ -65,6 +65,11 @@ public class Log extends RapidoidThing {
 		}
 	}
 
+	public static synchronized void reset() {
+		setLogLevel(LogLevel.INFO);
+		LogStats.reset();
+	}
+
 	public static synchronized void setLogLevel(LogLevel logLevel) {
 		if (LOG_LEVEL != logLevel) {
 			info("Changing log level", "from", LOG_LEVEL, "to", logLevel);
@@ -86,6 +91,10 @@ public class Log extends RapidoidThing {
 
 	public static void debugging() {
 		setLogLevel(LEVEL_DEBUG);
+	}
+
+	public static boolean hasErrors() {
+		return LogStats.hasErrors();
 	}
 
 	private static String getCallingClass() {
@@ -224,6 +233,8 @@ public class Log extends RapidoidThing {
 	private static void log(LogLevel level, String msg, String key1, Object value1, String key2, Object value2,
 	                        String key3, Object value3, String key4, Object value4, String key5, Object value5,
 	                        String key6, Object value6, String key7, Object value7, int paramsN) {
+
+		if (U.compare(level, LEVEL_ERROR) >= 0) LogStats.hasErrors(true);
 
 		boolean visible = isEnabled(level);
 

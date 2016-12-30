@@ -26,9 +26,11 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.http.customize.ErrorHandler;
 import org.rapidoid.http.customize.defaults.Defaults;
 import org.rapidoid.setup.On;
+import org.rapidoid.test.ExpectErrors;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.11")
+@ExpectErrors
 public class HttpErrorHandlerTest extends HttpTestCommons {
 
 	@Test

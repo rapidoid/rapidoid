@@ -8,6 +8,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.env.Env;
+import org.rapidoid.env.RapidoidEnv;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
@@ -344,6 +345,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	}
 
 	private void mustBeRoot() {
+		RapidoidEnv.touch();
 		U.must(isRoot, "Must be Config's root!");
 	}
 
@@ -509,6 +511,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 
 	@Override
 	public boolean isInitialized() {
+		RapidoidEnv.touch();
 		return base.initialized;
 	}
 

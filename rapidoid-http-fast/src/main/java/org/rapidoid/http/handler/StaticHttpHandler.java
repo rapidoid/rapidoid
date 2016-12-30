@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HttpStatus;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.impl.HttpIO;
+import org.rapidoid.http.impl.lowlevel.HttpIO;
 import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
@@ -43,7 +43,7 @@ public class StaticHttpHandler extends AbstractHttpHandler {
 
 	@Override
 	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
-		HttpIO.write200(HttpUtils.maybe(req), ctx, isKeepAlive, contentType, response);
+		HttpIO.INSTANCE.write200(HttpUtils.maybe(req), ctx, isKeepAlive, contentType, response);
 		return HttpStatus.DONE;
 	}
 

@@ -390,6 +390,11 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 		return req != null ? (MaybeReq) req : noReq();
 	}
 
+	public static MaybeReq req(Req req) {
+		U.notNull(req, "HTTP request");
+		return (MaybeReq) req;
+	}
+
 	public static int findBodyStart(byte[] response) {
 		Bytes bytes = BytesUtil.from(response);
 		BufRanges lines = new BufRanges(100);

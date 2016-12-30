@@ -166,6 +166,7 @@ org.rapidoid.env.Env
 org.rapidoid.env.Environment
 org.rapidoid.env.EnvMode
 org.rapidoid.env.EnvProperties
+org.rapidoid.env.RapidoidEnv
 org.rapidoid.event.Event
 org.rapidoid.event.EventListener
 org.rapidoid.event.Events
@@ -414,9 +415,10 @@ org.rapidoid.http.impl.GUIUtil
 org.rapidoid.http.impl.HandlerMatch
 org.rapidoid.http.impl.HandlerMatchWithParams
 org.rapidoid.http.impl.HTTPCacheKey
-org.rapidoid.http.impl.HttpIO
 org.rapidoid.http.impl.HttpParser
 org.rapidoid.http.impl.HttpRoutesImpl
+org.rapidoid.http.impl.lowlevel.HttpIO
+org.rapidoid.http.impl.lowlevel.LowLevelHttpIO
 org.rapidoid.http.impl.MaybeReq
 org.rapidoid.http.impl.MVCModel
 org.rapidoid.http.impl.MVCModelImpl
@@ -544,6 +546,7 @@ org.rapidoid.log.Log
 org.rapidoid.log.LogbackUtil
 org.rapidoid.log.LogHP
 org.rapidoid.log.LogLevel
+org.rapidoid.log.LogStats
 org.rapidoid.model.IModel
 org.rapidoid.model.impl.AbstractItem
 org.rapidoid.model.impl.AbstractModel
@@ -692,6 +695,7 @@ org.rapidoid.setup.ServiceBootstrap
 org.rapidoid.setup.Setup
 org.rapidoid.setup.WatchForChanges
 org.rapidoid.standalone.Main
+org.rapidoid.test.ExpectErrors
 org.rapidoid.test.RapidoidIntegrationTest
 org.rapidoid.test.RapidoidTest
 org.rapidoid.test.TestCommons

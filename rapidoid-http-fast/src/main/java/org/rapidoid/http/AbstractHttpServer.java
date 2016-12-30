@@ -28,7 +28,7 @@ import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.commons.Dates;
 import org.rapidoid.data.BufRange;
 import org.rapidoid.data.JSON;
-import org.rapidoid.http.impl.HttpIO;
+import org.rapidoid.http.impl.lowlevel.HttpIO;
 import org.rapidoid.http.impl.HttpParser;
 import org.rapidoid.http.impl.MaybeReq;
 import org.rapidoid.net.Protocol;
@@ -159,7 +159,7 @@ public abstract class AbstractHttpServer extends RapidoidThing implements Protoc
 
 	protected void writeBody(Channel ctx, byte[] body, MediaType contentType) {
 		writeContentTypeHeader(ctx, contentType);
-		HttpIO.writeContentLengthHeader(ctx, body.length);
+		HttpIO.INSTANCE.writeContentLengthHeader(ctx, body.length);
 
 		ctx.write(CR_LF);
 
@@ -170,7 +170,7 @@ public abstract class AbstractHttpServer extends RapidoidThing implements Protoc
 		writeContentTypeHeader(ctx, MediaType.JSON);
 		ByteArrayOutputStream os = Msc.locals().jsonRenderingStream();
 		JSON.stringify(value, os);
-		HttpIO.writeContentLengthAndBody(req, ctx, os);
+		HttpIO.INSTANCE.writeContentLengthAndBody(req, ctx, os);
 	}
 
 	protected HttpStatus serializeToJson(MaybeReq req, Channel ctx, boolean isKeepAlive, Object value) {

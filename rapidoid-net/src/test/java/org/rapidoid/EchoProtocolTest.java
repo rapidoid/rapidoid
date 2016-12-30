@@ -20,12 +20,10 @@ package org.rapidoid;
  * #L%
  */
 
-import org.junit.Before;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Rnd;
-import org.rapidoid.config.Conf;
 import org.rapidoid.io.IO;
 import org.rapidoid.lambda.F3;
 import org.rapidoid.net.AsyncLogic;
@@ -45,7 +43,7 @@ import java.util.concurrent.TimeUnit;
 @Since("2.0.0")
 public class EchoProtocolTest extends NetTestCommons {
 
-	private static final int ROUNDS = 1;
+	private static final int ROUNDS = Msc.normalOrHeavy(10, 100);
 
 	private static final int MAX_MSG_COUNT = 1000;
 
@@ -68,19 +66,20 @@ public class EchoProtocolTest extends NetTestCommons {
 		testCases.add(s2 + "bye\n");
 	}
 
-	@Before
-	public void setUp() {
-		Conf.HTTP.set("maxPipeline", MAX_MSG_COUNT);
-	}
-
 	@Test
 	public void echo() {
 		server(new Protocol() {
 
 			@Override
 			public void process(Channel ctx) {
+				if (ctx.isInitial()) return;
+
 				String in = ctx.readln();
-				ctx.write(in.toUpperCase()).write(CR_LF).closeIf(in.equals("bye"));
+				synchronized (ctx.output()) {
+					ctx.output().setReadOnly(false);
+					ctx.write(in.toUpperCase()).write(CR_LF).closeIf(in.equals("bye"));
+					ctx.output().setReadOnly(true);
+				}
 			}
 
 		}, new Runnable() {
@@ -135,11 +134,15 @@ public class EchoProtocolTest extends NetTestCommons {
 
 	@Test
 	public void echoAsync() {
-
 		server(new Protocol() {
 
 			@Override
 			public void process(final Channel ctx) {
+
+				if (ctx.isInitial()) {
+					ctx.output().setReadOnly(true);
+					return;
+				}
 
 				final String in = ctx.readln();
 				final long handle = ctx.async();
@@ -152,10 +155,11 @@ public class EchoProtocolTest extends NetTestCommons {
 
 							@Override
 							public boolean resumeAsync() {
-								ctx.write(in.toUpperCase()).write(CR_LF);
+								ctx.write(in.toUpperCase());
+								ctx.write(CR_LF);
 								ctx.send();
-								ctx.closeIf(in.equals("bye"));
 
+								ctx.closeIf(in.equals("bye"));
 								return true; // finished
 							}
 						});

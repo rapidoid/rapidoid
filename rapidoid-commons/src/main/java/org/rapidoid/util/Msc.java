@@ -25,7 +25,6 @@ import org.rapidoid.io.IO;
 import org.rapidoid.io.Res;
 import org.rapidoid.lambda.*;
 import org.rapidoid.log.Log;
-import org.rapidoid.log.LogLevel;
 import org.rapidoid.u.U;
 import org.rapidoid.validation.InvalidData;
 import org.rapidoid.wrap.BoolWrap;
@@ -33,17 +32,16 @@ import org.rapidoid.wrap.BoolWrap;
 import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.management.ManagementFactory;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Proxy;
+import java.lang.reflect.*;
 import java.net.Socket;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -1001,7 +999,7 @@ public class Msc extends RapidoidThing implements Constants {
 	public static void reset() {
 		Env.reset();
 		Events.reset();
-		Log.setLogLevel(LogLevel.INFO);
+		Log.reset();
 		Crypto.reset();
 		Res.reset();
 		AppInfo.reset();
@@ -1160,6 +1158,35 @@ public class Msc extends RapidoidThing implements Constants {
 	public static UUID bytesToUUID(byte[] bytes) {
 		ByteBuffer buf = ByteBuffer.wrap(bytes);
 		return new UUID(buf.getLong(), buf.getLong());
+	}
+
+	public static <T> T normalOrHeavy(T normal, T heavy) {
+		return System.getenv("HEAVY") != null || System.getProperty("HEAVY") != null ? heavy : normal;
+	}
+
+	public static Method getTestMethodIfExists() {
+		Method method = null;
+
+		for (StackTraceElement trc : Thread.currentThread().getStackTrace()) {
+			try {
+				Class<?> logCls = Class.forName(trc.getClassName());
+
+				for (Method m : logCls.getMethods()) {
+					if (m.getName().equals(trc.getMethodName())) {
+						for (Annotation ann : m.getDeclaredAnnotations()) {
+							if (ann.annotationType().getSimpleName().equals("Test")) {
+								method = m;
+							}
+						}
+					}
+				}
+
+			} catch (Exception e) {
+				// do nothing
+			}
+		}
+
+		return method;
 	}
 
 }

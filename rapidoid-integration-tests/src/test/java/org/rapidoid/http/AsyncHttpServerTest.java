@@ -28,9 +28,7 @@ import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Wait;
 
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 @Authors("Nikolche Mihajlovski")
@@ -46,28 +44,13 @@ public class AsyncHttpServerTest extends IsolatedIntegrationTest {
 			req.async();
 			U.must(req.isAsync());
 
-			Resp resp = req.response();
-
-			CountDownLatch latch = new CountDownLatch(1);
-
 			Jobs.after(10, TimeUnit.MILLISECONDS).run(() -> {
 
-				resp.resume(req.handle(), () -> {
-					IO.write(resp.out(), "O");
-					latch.countDown();
-					return false; // not finished yet
-				});
+				IO.write(req.out(), "O");
 
 				Jobs.after(10, TimeUnit.MILLISECONDS).run(() -> {
-
-					Wait.on(latch);
-
-					resp.resume(req.handle(), () -> {
-						IO.write(resp.out(), "K");
-						req.done();
-						return true; // finished
-					});
-
+					IO.write(req.out(), "K");
+					req.done();
 				});
 
 			});
@@ -83,26 +66,11 @@ public class AsyncHttpServerTest extends IsolatedIntegrationTest {
 	public void testAsyncHttpServer2() {
 		On.req(req -> Jobs.after(10, TimeUnit.MILLISECONDS).run(() -> {
 
-			Resp resp = req.response();
-
-			CountDownLatch latch = new CountDownLatch(1);
-
-			resp.resume(req.handle(), () -> {
-				IO.write(resp.out(), "A");
-				latch.countDown();
-				return false;
-			});
+			IO.write(req.out(), "A");
 
 			Jobs.after(10, TimeUnit.MILLISECONDS).run(() -> {
-
-				Wait.on(latch);
-
-				resp.resume(req.handle(), () -> {
-					IO.write(resp.out(), "SYNC");
-					req.done();
-					return true;
-				});
-
+				IO.write(req.out(), "SYNC");
+				req.done();
 			});
 		}));
 
