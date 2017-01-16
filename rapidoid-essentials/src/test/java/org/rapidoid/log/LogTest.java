@@ -38,6 +38,7 @@ public class LogTest extends TestCommons {
 		isTrue(Log.isInfoEnabled());
 		isTrue(Log.isWarnEnabled());
 		isTrue(Log.isErrorEnabled());
+		isTrue(Log.isFatalEnabled());
 
 		Log.setLogLevel(LogLevel.INFO);
 
@@ -46,6 +47,7 @@ public class LogTest extends TestCommons {
 		isTrue(Log.isInfoEnabled());
 		isTrue(Log.isWarnEnabled());
 		isTrue(Log.isErrorEnabled());
+		isTrue(Log.isFatalEnabled());
 
 		Log.setLogLevel(LogLevel.ERROR);
 
@@ -54,6 +56,16 @@ public class LogTest extends TestCommons {
 		isFalse(Log.isInfoEnabled());
 		isFalse(Log.isWarnEnabled());
 		isTrue(Log.isErrorEnabled());
+		isTrue(Log.isFatalEnabled());
+
+		Log.setLogLevel(LogLevel.NO_LOGS);
+
+		isFalse(Log.isTraceEnabled());
+		isFalse(Log.isDebugEnabled());
+		isFalse(Log.isInfoEnabled());
+		isFalse(Log.isWarnEnabled());
+		isFalse(Log.isErrorEnabled());
+		isFalse(Log.isFatalEnabled());
 	}
 
 }

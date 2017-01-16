@@ -542,6 +542,8 @@ org.rapidoid.lambda.SixParamLambda
 org.rapidoid.lambda.ThreeParamLambda
 org.rapidoid.lambda.ToMap
 org.rapidoid.lambda.TwoParamLambda
+org.rapidoid.log.commons.RapidoidLog
+org.rapidoid.log.commons.RapidoidLogFactory
 org.rapidoid.log.Log
 org.rapidoid.log.LogbackUtil
 org.rapidoid.log.LogHP

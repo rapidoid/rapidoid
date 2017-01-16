@@ -47,6 +47,12 @@
 		<!-- OPTIONAL -->
 
 		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>${commons-logging.version}</version>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
 			<groupId>com.mchange</groupId>
 			<artifactId>c3p0</artifactId>
 			<version>${c3p0.version}</version>

@@ -34,6 +34,7 @@ public enum LogLevel {
 	INFO(Events.LOG_INFO),
 	WARN(Events.LOG_WARN),
 	ERROR(Events.LOG_ERROR),
+	FATAL(Events.LOG_FATAL),
 	NO_LOGS(null);
 
 	private final Event event;

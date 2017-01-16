@@ -23,7 +23,10 @@ import org.rapidoid.log.LogLevel;
 import org.rapidoid.net.AsyncLogic;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
-import org.rapidoid.util.*;
+import org.rapidoid.util.Constants;
+import org.rapidoid.util.GlobalCfg;
+import org.rapidoid.util.Msc;
+import org.rapidoid.util.StreamUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -192,32 +195,7 @@ class LowLevelHttpIO extends RapidoidThing implements Constants {
 			return;
 		}
 
-		String msg = "Error occurred when handling request!";
-
-		switch (logLevel) {
-
-			// FIXME add proper support e.g. Log.msg(logLevel...)
-
-			case TRACE:
-				Log.trace(msg, "error", error);
-				break;
-
-			case DEBUG:
-				Log.debug(msg, "error", error);
-				break;
-
-			case INFO:
-				Log.info(msg, "error", error);
-				break;
-
-			case WARN:
-				Log.warn(msg, "error", error);
-				break;
-
-			case ERROR:
-				Log.error(msg, "error", error);
-				break;
-		}
+		Log.log(logLevel, "Error occurred when handling request!", "error", error);
 	}
 
 	HttpStatus errorAndDone(final Req req, final Throwable error, final LogLevel logLevel) {

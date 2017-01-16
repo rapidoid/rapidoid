@@ -44,6 +44,7 @@ public class Log extends RapidoidThing {
 	public static final LogLevel LEVEL_INFO = LogLevel.INFO;
 	public static final LogLevel LEVEL_WARN = LogLevel.WARN;
 	public static final LogLevel LEVEL_ERROR = LogLevel.ERROR;
+	public static final LogLevel LEVEL_FATAL = LogLevel.FATAL;
 	public static final LogLevel LEVEL_NO_LOGS = LogLevel.NO_LOGS;
 
 	protected static volatile LogLevel LOG_LEVEL = LEVEL_INFO;
@@ -428,8 +429,58 @@ public class Log extends RapidoidThing {
 		return isEnabled(LEVEL_ERROR);
 	}
 
+	public static boolean isFatalEnabled() {
+		return isEnabled(LEVEL_FATAL);
+	}
+
 	public static boolean isEnabled(LogLevel level) {
 		return level.ordinal() >= LOG_LEVEL.ordinal();
+	}
+
+	/* LOG */
+
+	public static void log(LogLevel level, String msg) {
+		log(level, msg, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 0);
+	}
+
+	public static void log(LogLevel level, String msg, String key, Object value) {
+		log(level, msg, key, value, null, null, null, null, null, null, null, null, null, null, null, null, 1);
+	}
+
+	public static void log(LogLevel level, String msg, String key1, Object value1, String key2, Object value2) {
+		log(level, msg, key1, value1, key2, value2, null, null, null, null, null, null, null, null, null, null, 2);
+	}
+
+	public static void log(LogLevel level, String msg, String key1, Object value1, String key2, Object value2, String key3,
+	                       Object value3) {
+		log(level, msg, key1, value1, key2, value2, key3, value3, null, null, null, null, null, null, null, null, 3);
+	}
+
+	public static void log(LogLevel level, String msg, String key1, Object value1, String key2, Object value2, String key3,
+	                       Object value3, String key4, Object value4) {
+		log(level, msg, key1, value1, key2, value2, key3, value3, key4, value4, null, null, null, null, null, null, 4);
+	}
+
+	public static void log(LogLevel level, String msg, String key1, Object value1, String key2, Object value2, String key3,
+	                       Object value3, String key4, Object value4, String key5, Object value5) {
+		log(level, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, null, null, null, null, 5);
+	}
+
+	public static void log(LogLevel level, String msg, String key1, Object value1, String key2, Object value2, String key3,
+	                       Object value3, String key4, Object value4, String key5, Object value5, String key6, Object value6) {
+		log(level, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, key6, value6, null, null, 6);
+	}
+
+	public static void log(LogLevel level, String msg, String key1, Object value1, String key2, Object value2, String key3, Object value3,
+	                       String key4, Object value4, String key5, Object value5, String key6, Object value6, String key7, Object value7) {
+		log(level, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, key6, value6, key7, value7, 7);
+	}
+
+	public static void log(LogLevel level, String msg, Throwable err) {
+		if (isEnabled(level)) {
+			log(level, msg, "message", err.getMessage());
+			err.printStackTrace();
+		}
 	}
 
 	/* TRACE */
@@ -658,6 +709,52 @@ public class Log extends RapidoidThing {
 	public static void error(String msg, Throwable err) {
 		if (isErrorEnabled()) {
 			error(msg, "type", err.getClass().getName(), "message", err.getMessage());
+			err.printStackTrace();
+		}
+	}
+
+	/* FATAL */
+
+	public static void fatal(String msg) {
+		log(LEVEL_FATAL, msg, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 0);
+	}
+
+	public static void fatal(String msg, String key, Object value) {
+		log(LEVEL_FATAL, msg, key, value, null, null, null, null, null, null, null, null, null, null, null, null, 1);
+	}
+
+	public static void fatal(String msg, String key1, Object value1, String key2, Object value2) {
+		log(LEVEL_FATAL, msg, key1, value1, key2, value2, null, null, null, null, null, null, null, null, null, null, 2);
+	}
+
+	public static void fatal(String msg, String key1, Object value1, String key2, Object value2, String key3,
+	                         Object value3) {
+		log(LEVEL_FATAL, msg, key1, value1, key2, value2, key3, value3, null, null, null, null, null, null, null, null, 3);
+	}
+
+	public static void fatal(String msg, String key1, Object value1, String key2, Object value2, String key3,
+	                         Object value3, String key4, Object value4) {
+		log(LEVEL_FATAL, msg, key1, value1, key2, value2, key3, value3, key4, value4, null, null, null, null, null, null, 4);
+	}
+
+	public static void fatal(String msg, String key1, Object value1, String key2, Object value2, String key3,
+	                         Object value3, String key4, Object value4, String key5, Object value5) {
+		log(LEVEL_FATAL, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, null, null, null, null, 5);
+	}
+
+	public static void fatal(String msg, String key1, Object value1, String key2, Object value2, String key3,
+	                         Object value3, String key4, Object value4, String key5, Object value5, String key6, Object value6) {
+		log(LEVEL_FATAL, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, key6, value6, null, null, 6);
+	}
+
+	public static void fatal(String msg, String key1, Object value1, String key2, Object value2, String key3, Object value3,
+	                         String key4, Object value4, String key5, Object value5, String key6, Object value6, String key7, Object value7) {
+		log(LEVEL_FATAL, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, key6, value6, key7, value7, 7);
+	}
+
+	public static void fatal(String msg, Throwable err) {
+		if (isFatalEnabled()) {
+			fatal(msg, "message", err.getMessage());
 			err.printStackTrace();
 		}
 	}
