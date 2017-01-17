@@ -100,7 +100,7 @@ net:
   address: 0.0.0.0
   port: 8888
 # workers: ${cpus}
-  bufSizeKB: 16
+  bufSizeKB: 256
   noDelay: false
   syncBufs: true
 
