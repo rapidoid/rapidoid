@@ -160,7 +160,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	}
 
 	private HTTPCacheKey createCacheKey() {
-		return isCachingAllowedAndSupported() ? new HTTPCacheKey(host(), uri()) : null;
+		return isCacheable() ? new HTTPCacheKey(host(), uri()) : null;
 	}
 
 	@Override
@@ -703,8 +703,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	@Override
 	public boolean hasToken() {
 		// FIXME don't deserialize token, just check if it exists
-		token(); // try to find and deserialize the token
-		return tokenStatus != TokenStatus.NONE;
+		return U.notEmpty(token()); // try to find and deserialize the token
 	}
 
 	@Override
@@ -905,18 +904,35 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 		// FIXME validate '\r\n\r\n' before the start position of the response body
 
-		ByteBuffer body = ByteBuffer.allocateDirect(bodyLength);
-		out.writeTo(body, (int) posBeforeBody, bodyLength);
-		body.flip();
-
-		int code = response != null ? response.code() : 200;
-		MediaType contentType = response != null ? response.contentType() : U.or(defaultContentType, MediaType.HTML_UTF_8);
-		CachedResp cached = new CachedResp(code, contentType, body);
-
 		Cache<HTTPCacheKey, CachedResp> cache = route.cache();
 		U.notNull(cache, "route.cache");
 
+		SimpleHttpResp proxyResp = new SimpleHttpResp();
+		proxyResp.cookies = U.map(response.cookies());
+
+		Map<String, String> headers = response != null ? response.headers() : Collections.<String, String>emptyMap();
+		HttpUtils.proxyResponseHeaders(headers, proxyResp);
+
+		proxyResp.code = response != null ? response.code() : 200;
+
+		if (proxyResp.contentType == null) {
+			proxyResp.contentType = response != null ? response.contentType() : U.or(defaultContentType, MediaType.HTML_UTF_8);
+		}
+
+		// don't cache the response if it contains cookies or token data
+		if (U.notEmpty(proxyResp.cookies) || hasToken()) return;
+
+		ByteBuffer body = writeBodyToBuf(out, bodyLength);
+		CachedResp cached = new CachedResp(proxyResp.code, proxyResp.contentType, proxyResp.headers, body);
+
 		cache.set(cacheKey, cached);
+	}
+
+	private ByteBuffer writeBodyToBuf(Buf out, int bodyLength) {
+		ByteBuffer body = ByteBuffer.allocateDirect(bodyLength);
+		out.writeTo(body, (int) posBeforeBody, bodyLength);
+		body.flip();
+		return body;
 	}
 
 	@Override
@@ -932,7 +948,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		return cacheKey;
 	}
 
-	private boolean isCachingAllowedAndSupported() {
+	private boolean isCacheable() {
 		return route != null
 			&& HttpUtils.isGetReq(this)
 			&& route.cache() != null

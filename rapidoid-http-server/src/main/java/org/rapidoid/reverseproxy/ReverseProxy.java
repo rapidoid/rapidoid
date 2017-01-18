@@ -71,7 +71,8 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 						resp.body(result.bodyBytes());
 
 						// process the response headers
-						SimpleHttpResp proxyResp = HttpUtils.proxyResponseHeaders(result.headers());
+						SimpleHttpResp proxyResp = new SimpleHttpResp();
+						HttpUtils.proxyResponseHeaders(result.headers(), proxyResp);
 
 						if (proxyResp.contentType != null) resp.contentType(proxyResp.contentType);
 						if (proxyResp.headers != null) resp.headers().putAll(proxyResp.headers);

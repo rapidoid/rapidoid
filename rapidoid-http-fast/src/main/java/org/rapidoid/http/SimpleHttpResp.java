@@ -20,6 +20,7 @@ package org.rapidoid.http;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
@@ -27,7 +28,7 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class SimpleHttpResp {
+public class SimpleHttpResp extends RapidoidThing {
 
 	public volatile int code;
 

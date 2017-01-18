@@ -413,10 +413,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 			|| name.equalsIgnoreCase("Server");
 	}
 
-	public static SimpleHttpResp proxyResponseHeaders(Map<String, String> respHeaders) {
-
-		SimpleHttpResp resp = new SimpleHttpResp();
-
+	public static void proxyResponseHeaders(Map<String, String> respHeaders, SimpleHttpResp resp) {
 		for (Map.Entry<String, String> hdr : respHeaders.entrySet()) {
 
 			String name = hdr.getKey();
@@ -442,8 +439,6 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 				resp.headers.put(name, value);
 			}
 		}
-
-		return resp;
 	}
 
 }

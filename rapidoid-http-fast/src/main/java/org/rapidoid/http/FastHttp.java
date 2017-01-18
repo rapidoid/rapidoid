@@ -153,6 +153,8 @@ public class FastHttp extends AbstractHttpProcessor {
 	}
 
 	private boolean serveFromCache(ReqImpl req) {
+
+		// if the HTTP request is not cacheable, the cache key will be null
 		HTTPCacheKey cacheKey = req.cacheKey();
 
 		if (cacheKey != null) {
