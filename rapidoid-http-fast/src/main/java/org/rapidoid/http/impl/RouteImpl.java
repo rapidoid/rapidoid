@@ -3,8 +3,8 @@ package org.rapidoid.http.impl;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cache.Caching;
 import org.rapidoid.cache.Cache;
-import org.rapidoid.cache.Cached;
 import org.rapidoid.http.HttpVerb;
 import org.rapidoid.http.Route;
 import org.rapidoid.http.RouteConfig;
@@ -43,7 +43,7 @@ public class RouteImpl extends RapidoidThing implements Route {
 
 	private volatile RouteOptions options;
 
-	private final Cached<HTTPCacheKey, CachedResp> cache;
+	private final Cache<HTTPCacheKey, CachedResp> cache;
 
 	public RouteImpl(HttpVerb verb, String path, HttpHandler handler, RouteOptions options) {
 		this.verb = verb;
@@ -57,10 +57,10 @@ public class RouteImpl extends RapidoidThing implements Route {
 		return new RouteImpl(verb, path, null, null);
 	}
 
-	protected Cached<HTTPCacheKey, CachedResp> createCache() {
+	protected Cache<HTTPCacheKey, CachedResp> createCache() {
 		if (options == null || options.cacheTTL() <= 0) return null;
 
-		return Cache.of(HTTPCacheKey.class, CachedResp.class)
+		return Caching.of(HTTPCacheKey.class, CachedResp.class)
 			.ttl(options.cacheTTL())
 			.build();
 	}
@@ -116,7 +116,7 @@ public class RouteImpl extends RapidoidThing implements Route {
 	}
 
 	@Override
-	public Cached<HTTPCacheKey, CachedResp> cache() {
+	public Cache<HTTPCacheKey, CachedResp> cache() {
 		return cache;
 	}
 }

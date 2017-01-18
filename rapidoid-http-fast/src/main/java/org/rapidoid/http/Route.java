@@ -22,7 +22,7 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.cache.Cached;
+import org.rapidoid.cache.Cache;
 import org.rapidoid.http.handler.HttpHandler;
 import org.rapidoid.http.impl.CachedResp;
 import org.rapidoid.http.impl.HTTPCacheKey;
@@ -39,5 +39,5 @@ public interface Route {
 
 	RouteConfig config();
 
-	Cached<HTTPCacheKey, CachedResp> cache();
+	Cache<HTTPCacheKey, CachedResp> cache();
 }

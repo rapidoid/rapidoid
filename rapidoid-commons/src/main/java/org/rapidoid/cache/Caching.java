@@ -1,4 +1,4 @@
-package org.rapidoid.cache.impl;
+package org.rapidoid.cache;
 
 /*
  * #%L
@@ -23,47 +23,26 @@ package org.rapidoid.cache.impl;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.cache.Cache;
+import org.rapidoid.cache.impl.CacheDSL;
+import org.rapidoid.cache.impl.ConcurrentCacheAtom;
+import org.rapidoid.lambda.Mapper;
+
+import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class CacheDSL<K, V> extends RapidoidThing {
+public class Caching extends RapidoidThing {
 
-	private volatile org.rapidoid.lambda.Mapper<K, V> of = null;
-
-	private volatile int capacity = 1024;
-
-	private volatile long ttl = 0;
-
-	public CacheDSL<K, V> of(org.rapidoid.lambda.Mapper<K, V> of) {
-		this.of = of;
-		return this;
+	public static <K, V> CacheDSL<K, V> of(Mapper<K, V> of) {
+		return new CacheDSL<K, V>().of(of);
 	}
 
-	public org.rapidoid.lambda.Mapper<K, V> of() {
-		return this.of;
+	public static <K, V> CacheDSL<K, V> of(Class<K> keyClass, Class<V> valueClass) {
+		return new CacheDSL<>();
 	}
 
-	public CacheDSL<K, V> capacity(int capacity) {
-		this.capacity = capacity;
-		return this;
-	}
-
-	public int capacity() {
-		return this.capacity;
-	}
-
-	public CacheDSL<K, V> ttl(long ttl) {
-		this.ttl = ttl;
-		return this;
-	}
-
-	public long ttl() {
-		return this.ttl;
-	}
-
-	public Cache<K, V> build() {
-		return CacheFactory.create(this);
+	public static <T> CacheAtom<T> atom(Callable<T> loader, long ttlInMs) {
+		return new ConcurrentCacheAtom<>(loader, ttlInMs);
 	}
 
 }

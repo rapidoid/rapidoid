@@ -35,7 +35,7 @@ import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class SimpleCacheTest extends TestCommons {
+public class SimpleCachingTest extends TestCommons {
 
 	private static Mapper<String, Integer> LENGTH = new Mapper<String, Integer>() {
 		@Override
@@ -80,7 +80,7 @@ public class SimpleCacheTest extends TestCommons {
 	public void testCache() {
 		final int capacity = 1000;
 
-		final Cached<Integer, Integer> cache = Cache.of(NEXT).capacity(capacity).ttl(10).build();
+		final Cache<Integer, Integer> cache = Caching.of(NEXT).capacity(capacity).ttl(10).build();
 
 		Msc.benchmarkMT(100, "ops", 10000000, new Runnable() {
 			@Override

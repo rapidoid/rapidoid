@@ -1,5 +1,15 @@
 package org.rapidoid.cache;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,31 +30,13 @@ package org.rapidoid.cache;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
+@Target({METHOD})
+@Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public interface Cached<K, V> {
+@Documented
+public @interface Cached {
 
-	/**
-	 * Returns the cached value for the given key, recalculating/reloading it if expired.
-	 */
-	V get(K key);
-
-	/**
-	 * Retrieves the cached value for the given key if it exists, or <code>null</code> otherwise.
-	 */
-	V getIfExists(K key);
-
-	/**
-	 * Invalidates the cached value for the given key.
-	 */
-	void invalidate(K key);
-
-	/**
-	 * Sets a new cached value for the given key.
-	 */
-	void set(K key, V value);
+	long ttl();
 
 }

@@ -4,7 +4,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.bytes.BytesUtil;
-import org.rapidoid.cache.Cached;
+import org.rapidoid.cache.Cache;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.config.Config;
 import org.rapidoid.config.ConfigImpl;
@@ -156,7 +156,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		HTTPCacheKey cacheKey = req.cacheKey();
 
 		if (cacheKey != null) {
-			Cached<HTTPCacheKey, CachedResp> cache = req.route().cache();
+			Cache<HTTPCacheKey, CachedResp> cache = req.route().cache();
 
 			if (cache != null) {
 				CachedResp resp = cache.getIfExists(cacheKey);

@@ -2,7 +2,7 @@ package org.rapidoid.cache.impl;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.cache.Cached;
+import org.rapidoid.cache.Cache;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class ConcurrentCached<K, V> extends AbstractMapImpl<K, ConcurrentCacheAtom<V>> implements Cached<K, V> {
+public class ConcurrentCache<K, V> extends AbstractMapImpl<K, ConcurrentCacheAtom<V>> implements Cache<K, V> {
 
 	private static final int BUCKET_SIZE = 10;
 
@@ -43,11 +43,11 @@ public class ConcurrentCached<K, V> extends AbstractMapImpl<K, ConcurrentCacheAt
 
 	private final long ttlInMs;
 
-	public ConcurrentCached(int capacity, Mapper<K, V> loader, long ttlInMs) {
+	public ConcurrentCache(int capacity, Mapper<K, V> loader, long ttlInMs) {
 		this(capacity / BUCKET_SIZE, BUCKET_SIZE, loader, ttlInMs);
 	}
 
-	public ConcurrentCached(int buckets, int bucketSize, Mapper<K, V> loader, long ttlInMs) {
+	public ConcurrentCache(int buckets, int bucketSize, Mapper<K, V> loader, long ttlInMs) {
 		super(buckets, bucketSize);
 		this.loader = loader;
 		this.ttlInMs = ttlInMs;

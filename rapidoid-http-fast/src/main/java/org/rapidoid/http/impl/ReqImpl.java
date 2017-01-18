@@ -5,7 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufUtil;
-import org.rapidoid.cache.Cached;
+import org.rapidoid.cache.Cache;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.ChangeTrackingMap;
 import org.rapidoid.collection.Coll;
@@ -913,7 +913,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		MediaType contentType = response != null ? response.contentType() : U.or(defaultContentType, MediaType.HTML_UTF_8);
 		CachedResp cached = new CachedResp(code, contentType, body);
 
-		Cached<HTTPCacheKey, CachedResp> cache = route.cache();
+		Cache<HTTPCacheKey, CachedResp> cache = route.cache();
 		U.notNull(cache, "route.cache");
 
 		cache.set(cacheKey, cached);
