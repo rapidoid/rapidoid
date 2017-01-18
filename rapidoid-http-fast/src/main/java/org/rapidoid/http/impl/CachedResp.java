@@ -26,6 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.http.MediaType;
 
 import java.nio.ByteBuffer;
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -35,11 +36,14 @@ public class CachedResp extends RapidoidThing {
 
 	public final MediaType contentType;
 
+	public final Map<String, String> headers;
+
 	public final ByteBuffer body;
 
-	public CachedResp(int statusCode, MediaType contentType, ByteBuffer body) {
+	public CachedResp(int statusCode, MediaType contentType, Map<String, String> headers, ByteBuffer body) {
 		this.statusCode = statusCode;
 		this.contentType = contentType;
+		this.headers = headers;
 		this.body = body;
 	}
 }

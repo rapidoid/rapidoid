@@ -175,7 +175,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		Channel channel = req.channel();
 
 		HttpIO.INSTANCE.respond(HttpUtils.req(req), channel, -1, resp.statusCode,
-			req.isKeepAlive(), resp.contentType, resp.body.duplicate(), null, null);
+			req.isKeepAlive(), resp.contentType, resp.body.duplicate(), resp.headers, null);
 
 		channel.send().closeIf(!req.isKeepAlive());
 	}
