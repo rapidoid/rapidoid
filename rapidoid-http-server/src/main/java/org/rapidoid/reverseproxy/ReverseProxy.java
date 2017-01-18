@@ -67,10 +67,16 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 				public void onDone(HttpResp result, Throwable error) {
 					if (error == null) {
 
-						processResponseHeaders(result.headers(), resp);
-
 						resp.code(result.code());
 						resp.body(result.bodyBytes());
+
+						// process the response headers
+						SimpleHttpResp proxyResp = HttpUtils.proxyResponseHeaders(result.headers());
+
+						if (proxyResp.contentType != null) resp.contentType(proxyResp.contentType);
+						if (proxyResp.headers != null) resp.headers().putAll(proxyResp.headers);
+						if (proxyResp.cookies != null) resp.cookies().putAll(proxyResp.cookies);
+
 						resp.done();
 
 					} else {
@@ -96,29 +102,6 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 		}
 
 		return null;
-	}
-
-	protected void processResponseHeaders(Map<String, String> headers, Resp resp) {
-		for (Map.Entry<String, String> hdr : headers.entrySet()) {
-			String name = hdr.getKey();
-			String value = hdr.getValue();
-			String lowerName = name.toLowerCase();
-
-			if (lowerName.equals("content-type")) {
-				resp.contentType(MediaType.of(value));
-
-			} else if (!ignoreResponseHeader(lowerName)) {
-				resp.headers().put(name, value);
-			}
-		}
-	}
-
-	protected boolean ignoreResponseHeader(String name) {
-		return name.equals("transfer-encoding")
-			|| name.equals("content-length")
-			|| name.equals("connection")
-			|| name.equals("date")
-			|| name.equals("server");
 	}
 
 	@Override

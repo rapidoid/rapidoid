@@ -451,6 +451,7 @@ org.rapidoid.http.RESTResultMapper
 org.rapidoid.http.Route
 org.rapidoid.http.RouteConfig
 org.rapidoid.http.Self
+org.rapidoid.http.SimpleHttpResp
 org.rapidoid.http.View
 org.rapidoid.insight.AbstractInsightful
 org.rapidoid.insight.CounterMeasure

@@ -404,4 +404,46 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 
 		return pos;
 	}
+
+	private static boolean ignoreResponseHeaderInProxy(String name) {
+		return name.equalsIgnoreCase("Transfer-encoding")
+			|| name.equalsIgnoreCase("Content-length")
+			|| name.equalsIgnoreCase("Connection")
+			|| name.equalsIgnoreCase("Date")
+			|| name.equalsIgnoreCase("Server");
+	}
+
+	public static SimpleHttpResp proxyResponseHeaders(Map<String, String> respHeaders) {
+
+		SimpleHttpResp resp = new SimpleHttpResp();
+
+		for (Map.Entry<String, String> hdr : respHeaders.entrySet()) {
+
+			String name = hdr.getKey();
+			String value = hdr.getValue();
+
+			if (name.equalsIgnoreCase("Content-type")) {
+				resp.contentType = MediaType.of(value);
+
+			} else if (name.equalsIgnoreCase("Set-Cookie")) {
+
+				String[] parts = value.split("=", 2);
+				U.must(parts.length == 2, "Invalid value of the Set-Cookie header!");
+
+				if (resp.cookies == null) {
+					resp.cookies = U.map();
+				}
+				resp.cookies.put(parts[0], parts[1]);
+
+			} else if (!ignoreResponseHeaderInProxy(name)) {
+				if (resp.headers == null) {
+					resp.headers = U.map();
+				}
+				resp.headers.put(name, value);
+			}
+		}
+
+		return resp;
+	}
+
 }
