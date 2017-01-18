@@ -221,6 +221,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 		try {
 			conn.done = false;
+			conn.async = false;
 
 			if (EXTRA_SAFE) {
 				processNextExtraSafe(conn);
@@ -236,14 +237,10 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 			BufUtil.startWriting(conn.input());
 
-			boolean isAsync = conn.isAsync();
-
-			if (!isAsync) {
-
+			if (!conn.isAsync()) {
 				if (!conn.closed) {
 					conn.done();
 				}
-
 				conn.processedSeq(seq);
 			}
 

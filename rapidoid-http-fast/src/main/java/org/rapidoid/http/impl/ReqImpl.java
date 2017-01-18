@@ -639,7 +639,9 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	@Override
 	public Req async() {
 		this.async = true;
-		channel.async();
+
+		if (channel.onSameThread()) channel.async();
+
 		return this;
 	}
 

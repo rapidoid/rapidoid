@@ -43,10 +43,16 @@ public class HttpSyncAsyncMixTest extends IsolatedIntegrationTest {
 			return Jobs.after(3, TimeUnit.MILLISECONDS).run(() -> resp.result(n * 10).done());
 		});
 
+		// it is important to use only 1 connection
+		HttpClient client = HTTP.client().reuseConnections(true).keepAlive(true).maxConnTotal(1);
+
 		for (int i = 0; i < ROUNDS; i++) {
 			int expected = i % 2 == 0 ? i : i * 10;
-			Self.get("/?n=" + i).expect("" + expected);
+			client.get("http://localhost:8888/?n=" + i).expect("" + expected);
+			client.get("http://localhost:8888/abcd.txt").expect("ABCD");
 		}
+
+		client.close();
 	}
 
 }

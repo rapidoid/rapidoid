@@ -85,7 +85,7 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 	private volatile boolean initial;
 
-	private volatile boolean async;
+	volatile boolean async;
 
 	volatile boolean done;
 
@@ -408,6 +408,8 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 	@Override
 	public synchronized long async() {
+		U.must(onSameThread(), "The connection can be marked as 'async' only on its I/O worker thread!");
+
 		this.async = true;
 		this.done = false;
 		return handle();
