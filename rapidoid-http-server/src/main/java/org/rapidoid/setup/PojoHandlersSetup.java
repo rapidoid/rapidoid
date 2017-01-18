@@ -255,10 +255,9 @@ public class PojoHandlersSetup extends RapidoidThing {
 		// TRANSACTION
 
 		Transaction transaction = method.getAnnotation(Transaction.class);
-		TransactionMode tx = transaction != null ? transaction.value() : null;
 
-		if (tx != null) {
-			route.tx(tx);
+		if (transaction != null) {
+			route.tx(transaction.value());
 		}
 
 		// ROLES

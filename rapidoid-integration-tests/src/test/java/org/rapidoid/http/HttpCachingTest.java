@@ -46,6 +46,10 @@ public class HttpCachingTest extends IsolatedIntegrationTest {
 		AtomicInteger y = new AtomicInteger();
 		On.get("/y").cacheTTL(2000).plain(() -> y.incrementAndGet());
 
+		exerciseCaching();
+	}
+
+	public void exerciseCaching() {
 		int next = 1;
 		for (int n = 1; n <= 3; n++) {
 
@@ -63,16 +67,7 @@ public class HttpCachingTest extends IsolatedIntegrationTest {
 
 		App.beans(CachingCtrl.class);
 
-		int next = 1;
-		for (int n = 1; n <= 3; n++) {
-
-			for (int i = 0; i < 10; i++) {
-				Self.get("/x").expect("" + next++);
-				Self.get("/y").expect("" + n);
-			}
-
-			U.sleep(2100);
-		}
+		exerciseCaching();
 	}
 
 	static class CachingCtrl {
