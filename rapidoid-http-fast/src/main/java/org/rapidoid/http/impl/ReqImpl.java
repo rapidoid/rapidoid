@@ -908,7 +908,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		U.notNull(cache, "route.cache");
 
 		SimpleHttpResp proxyResp = new SimpleHttpResp();
-		proxyResp.cookies = U.map(response.cookies());
+		proxyResp.cookies = U.map(U.safe(response != null ? response.cookies() : null));
 
 		Map<String, String> headers = response != null ? response.headers() : Collections.<String, String>emptyMap();
 		HttpUtils.proxyResponseHeaders(headers, proxyResp);
