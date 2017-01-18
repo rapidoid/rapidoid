@@ -33,7 +33,7 @@ import org.rapidoid.render.Templates;
 @Since("5.1.7")
 public class Defaults extends RapidoidThing {
 
-	private static final String[] staticFilesPath = {"static", "public", "default/static", "default/public"};
+	private static final String[] staticFilesPath = {"static", "default/static"};
 
 	private static final HttpWrapper[] wrappers = {};
 
