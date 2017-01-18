@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufGroup;
+import org.rapidoid.buffer.BufUtil;
 import org.rapidoid.data.JSON;
 import org.rapidoid.expire.Expiring;
 import org.rapidoid.job.Jobs;
@@ -297,7 +298,7 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 				boolean finished = false;
 
 				synchronized (output) {
-					output.setReadOnly(false);
+					BufUtil.startWriting(output);
 
 					try {
 						finished = asyncLogic.resumeAsync();
@@ -305,7 +306,7 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 						Log.error("Error while resuming an asynchronous operation!", e);
 					}
 
-					output.setReadOnly(true);
+					BufUtil.doneWriting(output);
 				}
 
 				if (finished) {

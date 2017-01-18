@@ -4,6 +4,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
+import org.rapidoid.buffer.BufUtil;
 import org.rapidoid.cache.Cached;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.ChangeTrackingMap;
@@ -494,9 +495,9 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		long contentLength = posAfter - posBeforeBody;
 
 		if (!stopped && out.size() > 0) {
-			out.setReadOnly(false);
+			BufUtil.startWriting(out);
 			out.putNumAsText((int) posContentLengthValue, contentLength, false);
-			out.setReadOnly(true);
+			BufUtil.doneWriting(out);
 		}
 
 		completed = true;
@@ -870,7 +871,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	public OutputStream startOutputStream(int respCode) {
 		doRendering(respCode, null);
-		channel().output().setReadOnly(false);
+		BufUtil.startWriting(channel().output());
 		return channel().outputStream();
 	}
 

@@ -61,6 +61,7 @@ org.rapidoid.buffer.BufBytes
 org.rapidoid.buffer.BufGroup
 org.rapidoid.buffer.BufProvider
 org.rapidoid.buffer.BufScanner
+org.rapidoid.buffer.BufUtil
 org.rapidoid.buffer.IncompleteReadException
 org.rapidoid.buffer.MultiBuf
 org.rapidoid.buffer.SynchronizedBuf

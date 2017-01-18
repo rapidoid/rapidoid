@@ -23,6 +23,7 @@ package org.rapidoid;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.buffer.BufUtil;
 import org.rapidoid.commons.Rnd;
 import org.rapidoid.io.IO;
 import org.rapidoid.lambda.F3;
@@ -76,9 +77,9 @@ public class EchoProtocolTest extends NetTestCommons {
 
 				String in = ctx.readln();
 				synchronized (ctx.output()) {
-					ctx.output().setReadOnly(false);
+					BufUtil.startWriting(ctx.output());
 					ctx.write(in.toUpperCase()).write(CR_LF).closeIf(in.equals("bye"));
-					ctx.output().setReadOnly(true);
+					BufUtil.doneWriting(ctx.output());
 				}
 			}
 
@@ -140,7 +141,7 @@ public class EchoProtocolTest extends NetTestCommons {
 			public void process(final Channel ctx) {
 
 				if (ctx.isInitial()) {
-					ctx.output().setReadOnly(true);
+					BufUtil.doneWriting(ctx.output());
 					return;
 				}
 

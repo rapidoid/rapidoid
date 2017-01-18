@@ -3,6 +3,7 @@ package org.rapidoid.net.impl;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.BufGroup;
+import org.rapidoid.buffer.BufUtil;
 import org.rapidoid.buffer.IncompleteReadException;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.config.Conf;
@@ -212,7 +213,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		int limit = conn.input().limit();
 		int osize = conn.output().size();
 
-		conn.input().setReadOnly(true);
+		BufUtil.doneWriting(conn.input());
 
 		ConnState state = conn.state();
 		long stateN = state.n;
@@ -233,7 +234,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 				protocol.process(conn);
 			}
 
-			conn.input().setReadOnly(false);
+			BufUtil.startWriting(conn.input());
 
 			boolean isAsync = conn.isAsync();
 
@@ -259,7 +260,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 			// input not complete, so rollback
 			conn.input().position(conn.input().checkpoint());
 			conn.input().limit(limit);
-			conn.input().setReadOnly(false);
+			BufUtil.startWriting(conn.input());
 
 			state.n = stateN;
 			state.obj = stateObj;
@@ -371,10 +372,10 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 	private void writeOp(SelectionKey key, RapidoidConnection conn, SocketChannel socketChannel) throws IOException {
 
 		synchronized (conn.output) {
-			conn.output.setReadOnly(false);
+			BufUtil.startWriting(conn.output);
 			int wrote = conn.output.writeTo(socketChannel);
 			conn.output.deleteBefore(wrote);
-			conn.output.setReadOnly(true);
+			BufUtil.doneWriting(conn.output);
 		}
 
 		boolean finishedWriting, closeAfterWrite;
