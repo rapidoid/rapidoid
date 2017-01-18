@@ -22,7 +22,10 @@ package org.rapidoid.http;
 
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cache.Cached;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
@@ -52,6 +55,43 @@ public class HttpCachingTest extends IsolatedIntegrationTest {
 			}
 
 			U.sleep(2100);
+		}
+	}
+
+	@Test
+	public void testHttpCachingWithAnnotations() {
+
+		App.beans(CachingCtrl.class);
+
+		int next = 1;
+		for (int n = 1; n <= 3; n++) {
+
+			for (int i = 0; i < 10; i++) {
+				Self.get("/x").expect("" + next++);
+				Self.get("/y").expect("" + n);
+			}
+
+			U.sleep(2100);
+		}
+	}
+
+	static class CachingCtrl {
+
+		// without caching
+		AtomicInteger x = new AtomicInteger();
+
+		// with caching
+		AtomicInteger y = new AtomicInteger();
+
+		@GET
+		public Object x() {
+			return x.incrementAndGet();
+		}
+
+		@GET
+		@Cached(ttl = 2000)
+		public Object y() {
+			return y.incrementAndGet();
 		}
 	}
 

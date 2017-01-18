@@ -3,6 +3,7 @@ package org.rapidoid.setup;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.*;
 import org.rapidoid.beany.Metadata;
+import org.rapidoid.cache.Cached;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.log.Log;
@@ -150,20 +151,15 @@ public class PojoHandlersSetup extends RapidoidThing {
 
 	private void registerOrDeregister(boolean register, Object bean, String ctxPath, Method method) {
 
-		Transaction transaction = method.getAnnotation(Transaction.class);
-		TransactionMode tx = transaction != null ? transaction.value() : null;
-
-		Set<String> rolesAllowed = Secure.getRolesAllowed(method);
-		String[] roles = U.arrayOf(String.class, rolesAllowed);
-
 		for (Annotation ann : method.getAnnotations()) {
+
 			if (ann instanceof Page) {
 				Page page = (Page) ann;
 
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					OnRoute route = route(setup.page(path), tx).roles(roles);
+					OnRoute route = route(setup.page(path), method);
 
 					if (U.notEmpty(page.view())) {
 						route.view(page.view());
@@ -183,7 +179,7 @@ public class PojoHandlersSetup extends RapidoidThing {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					route(setup.get(path), tx).roles(roles).json(method, bean);
+					route(setup.get(path), method).json(method, bean);
 				} else {
 					setup.deregister(Constants.GET, path);
 				}
@@ -192,7 +188,7 @@ public class PojoHandlersSetup extends RapidoidThing {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					route(setup.post(path), tx).roles(roles).json(method, bean);
+					route(setup.post(path), method).json(method, bean);
 				} else {
 					setup.deregister(Constants.POST, path);
 				}
@@ -201,7 +197,7 @@ public class PojoHandlersSetup extends RapidoidThing {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					route(setup.put(path), tx).roles(roles).json(method, bean);
+					route(setup.put(path), method).json(method, bean);
 				} else {
 					setup.deregister(Constants.PUT, path);
 				}
@@ -210,7 +206,7 @@ public class PojoHandlersSetup extends RapidoidThing {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					route(setup.delete(path), tx).roles(roles).json(method, bean);
+					route(setup.delete(path), method).json(method, bean);
 				} else {
 					setup.deregister(Constants.DELETE, path);
 				}
@@ -219,7 +215,7 @@ public class PojoHandlersSetup extends RapidoidThing {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					route(setup.patch(path), tx).roles(roles).json(method, bean);
+					route(setup.patch(path), method).json(method, bean);
 				} else {
 					setup.deregister(Constants.PATCH, path);
 				}
@@ -228,7 +224,7 @@ public class PojoHandlersSetup extends RapidoidThing {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					route(setup.options(path), tx).roles(roles).json(method, bean);
+					route(setup.options(path), method).json(method, bean);
 				} else {
 					setup.deregister(Constants.OPTIONS, path);
 				}
@@ -237,7 +233,7 @@ public class PojoHandlersSetup extends RapidoidThing {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					route(setup.head(path), tx).roles(roles).json(method, bean);
+					route(setup.head(path), method).json(method, bean);
 				} else {
 					setup.deregister(Constants.HEAD, path);
 				}
@@ -246,7 +242,7 @@ public class PojoHandlersSetup extends RapidoidThing {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					route(setup.trace(path), tx).roles(roles).json(method, bean);
+					route(setup.trace(path), method).json(method, bean);
 				} else {
 					setup.deregister(Constants.TRACE, path);
 				}
@@ -254,9 +250,30 @@ public class PojoHandlersSetup extends RapidoidThing {
 		}
 	}
 
-	private OnRoute route(OnRoute route, TransactionMode tx) {
+	private OnRoute route(OnRoute route, Method method) {
+
+		// TRANSACTION
+
+		Transaction transaction = method.getAnnotation(Transaction.class);
+		TransactionMode tx = transaction != null ? transaction.value() : null;
+
 		if (tx != null) {
 			route.tx(tx);
+		}
+
+		// ROLES
+
+		Set<String> rolesAllowed = Secure.getRolesAllowed(method);
+		String[] roles = U.arrayOf(String.class, rolesAllowed);
+
+		route.roles(roles);
+
+		// CACHE
+
+		Cached cached = method.getAnnotation(Cached.class);
+
+		if (cached != null) {
+			route.cacheTTL(cached.ttl());
 		}
 
 		return route;
