@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.io.IO;
+import org.rapidoid.log.Log;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -56,7 +57,7 @@ public class HttpPipeliningTest extends IsolatedIntegrationTest {
 		Msc.startMeasure();
 
 		for (int i = 0; i < ROUNDS; i++) {
-			U.print("ROUND " + i);
+			Log.info("ROUND " + i);
 			COUNTER.set(0);
 
 			connect((in, reader, out) -> {

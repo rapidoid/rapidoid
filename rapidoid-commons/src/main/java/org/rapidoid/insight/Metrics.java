@@ -86,7 +86,8 @@ public class Metrics extends RapidoidInitializer implements Runnable {
 		register("threads", NUM_THREADS);
 		register("descriptors", NUM_FILE_DESC);
 
-		JMXMetrics.bootstrap();
+		// FIXME there are too many metrics
+//		JMXMetrics.bootstrap();
 
 		Metrics updateMetrics = new Metrics();
 		updateMetrics.run();
