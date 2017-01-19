@@ -1,3 +1,12 @@
+ ____             _     _       _     _
+|  _ \ __ _ _ __ (_) __| | ___ (_) __| |
+| |_) / _` | '_ \| |/ _` |/ _ \| |/ _` |
+|  _ < (_| | |_) | | (_| | (_) | | (_| |
+|_| \_\__,_| .__/|_|\__,_|\___/|_|\__,_|
+           |_|
+
+INFO | main | org.rapidoid.config.RapidoidInitializer | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
+INFO | main | org.rapidoid.config.RapidoidInitializer | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
 Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
 
 Usage:
@@ -23,17 +32,20 @@ Main configuration options:
 
 Service activation options:
   center                    - Admin Center (default: disabled)
-  ping                      - Ping service (default: disabled)
-  status                    - Status service (default: disabled)
-  overview                  - Overview service (default: disabled)
-  application               - Application services (default: disabled)
-  lifecycle                 - Lifecycle services (default: disabled)
-  jmx                       - JMX services (default: disabled)
-  metrics                   - Metrics services (default: disabled)
-  deploy                    - Application deployment services (default: disabled)
-  auth                      - Authentication services (default: disabled)
-  oauth                     - OAuth services (default: disabled)
-  entities                  - JPA Entities services (default: disabled)
+  ping                      - Simple ping (default: disabled)
+  status                    - Application and system status (default: disabled)
+  overview                  - General overview (default: disabled)
+  application               - Application management (default: disabled)
+  lifecycle                 - Lifecycle management (default: disabled)
+  processes                 - Process management (default: disabled)
+  jmx                       - JMX overview (default: disabled)
+  metrics                   - Metrics (default: disabled)
+  deploy                    - Application deployment (default: disabled)
+  auth                      - Authentication (default: disabled)
+  oauth                     - OAuth authentication (default: disabled)
+  entities                  - JPA entities management (default: disabled)
   welcome                   - Welcome page (default: disabled)
+  discovery                 - Peer discovery (transient state) (default: disabled)
+  echo                      - Echo of the request (for debugging) (default: disabled)
 
 For a complete list of options see: http://www.rapidoid.org/the-default-configuration.html
