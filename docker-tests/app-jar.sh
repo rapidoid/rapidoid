@@ -4,6 +4,12 @@ IFS=$'\n\t'
 
 ./cleanup.sh
 
+printf "\n - BUILDING app.jar\n\n"
+
+cd ../examples/getting-started
+mvn clean package -Pfull && cp target/app.jar ../../docker-tests/app3
+cd ../../docker-tests
+
 printf "\n - Testing APP-JAR (tag=$TAG)\n\n"
 
 DB_ID=$(docker run -d -e MYSQL_ROOT_PASSWORD=db-pass -e MYSQL_DATABASE=rapidoid mysql)
