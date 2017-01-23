@@ -798,6 +798,10 @@ public class Msc extends RapidoidThing implements Constants {
 		return Cls.exists("org.rapidoid.reload.Reload");
 	}
 
+	public static boolean hasRapidoidPlatform() {
+		return Cls.exists("org.rapidoid.standalone.Main");
+	}
+
 	public static boolean hasLogback() {
 		return Cls.exists("ch.qos.logback.classic.Logger");
 	}

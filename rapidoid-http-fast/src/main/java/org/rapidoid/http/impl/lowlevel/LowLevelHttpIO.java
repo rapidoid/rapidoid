@@ -195,7 +195,7 @@ class LowLevelHttpIO extends RapidoidThing implements Constants {
 			return;
 		}
 
-		Log.log(logLevel, "Error occurred when handling request!", "error", error);
+		Log.log(null, logLevel, "Error occurred when handling request!", "error", error);
 	}
 
 	HttpStatus errorAndDone(final Req req, final Throwable error, final LogLevel logLevel) {
