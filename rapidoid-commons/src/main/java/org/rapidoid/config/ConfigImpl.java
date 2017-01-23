@@ -548,11 +548,11 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	private synchronized void onFileSystemChange(String filename) {
 		mustBeRoot();
 
-		Log.info("Detected configuration file changes", "file", filename);
-
 		if (filename.endsWith(".yaml")
 			|| filename.endsWith(".yml")
 			|| filename.endsWith(".json")) {
+
+			Log.info("Detected configuration file changes", "file", filename);
 
 			reloadAndProcessChanges();
 		}

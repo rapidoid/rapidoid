@@ -38,6 +38,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.FileAttribute;
 import java.util.List;
 import java.util.Map;
@@ -142,7 +143,7 @@ public abstract class AbstractRapidoidMojo extends AbstractMojo {
 		try {
 			Path uberJarPath = Paths.get(uberJar);
 			Path appJar = uberJarPath.getParent().resolve("app.jar");
-			Files.move(uberJarPath, appJar);
+			Files.move(uberJarPath, appJar, StandardCopyOption.REPLACE_EXISTING);
 			uberJar = appJar.toFile().getAbsolutePath();
 		} catch (IOException e) {
 			throw new MojoExecutionException("Couldn't rename the file! " + ABORT, e);
