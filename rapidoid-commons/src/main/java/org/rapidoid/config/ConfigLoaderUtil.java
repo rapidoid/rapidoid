@@ -53,40 +53,13 @@ public class ConfigLoaderUtil extends RapidoidThing {
 
 		if (U.notEmpty(nameBase)) {
 
-			ConfigUtil.load("default-config.yml", config, loaded);
+			ConfigUtil.load("built-in-config.yml", config, loaded);
 
 			for (String profile : Env.profiles()) {
-				String filename = U.frmt("default-config-%s.yml", profile);
+				String filename = U.frmt("built-in-config-%s.yml", profile);
 				ConfigUtil.load(filename, config, loaded);
 			}
 		}
-	}
-
-	static void loadDefaultConfig(Config config, List<String> loaded) {
-		String nameBase = config.getFilenameBase();
-
-		if (U.notEmpty(nameBase)) {
-			String name = "default-" + nameBase;
-
-			String filename = name + ".yml";
-			filename = Msc.path(config.getPath(), filename);
-
-			ConfigUtil.load(filename, config, loaded);
-
-			for (String profile : Env.profiles()) {
-
-				filename = U.frmt(name + "-%s.yml", profile);
-				filename = Msc.path(config.getPath(), filename);
-
-				ConfigUtil.load(filename, config, loaded);
-			}
-		}
-	}
-
-	private static String filename(Config config, List<String> keys) {
-		U.must(keys.size() < 2);
-		String configName = keys.isEmpty() ? config.getFilenameBase() : keys.get(0);
-		return Msc.path(config.getPath(), configName + ConfigUtil.YML_OR_YAML_OR_JSON);
 	}
 
 }
