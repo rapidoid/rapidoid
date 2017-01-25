@@ -137,17 +137,28 @@ public class Environment extends RapidoidInitializer {
 	}
 
 	private static List<String> retrieveProfiles() {
+		List<String> profiles;
 		String profilesLst = Env.initial("profiles");
 
 		if (U.notEmpty(profilesLst)) {
-			List<String> profiles = U.list(profilesLst.split("\\s*\\,\\s*"));
+			profiles = U.list(profilesLst.split("\\s*\\,\\s*"));
 			Log.info("Configuring active profiles", "!profiles", profiles);
 			return profiles;
 
 		} else {
-			Log.info("No profiles were specified, activating 'default' profile");
-			return U.list("default");
+			if (!Msc.isStandalone()) {
+				Log.info("No profiles were specified, activating 'default' profile");
+				profiles = U.list("default");
+			} else {
+				profiles = U.list();
+			}
 		}
+
+		if (Msc.isStandalone()) {
+			profiles.add("platform");
+		}
+
+		return profiles;
 	}
 
 	public void setArgs(String... args) {

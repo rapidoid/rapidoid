@@ -1,0 +1,9 @@
+on:
+  port: 8888
+
+admin:
+  port: same
+
+app:
+  jar: /app/app.jar
+  cdn: false
