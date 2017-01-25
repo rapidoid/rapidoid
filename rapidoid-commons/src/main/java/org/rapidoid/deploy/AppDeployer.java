@@ -93,6 +93,10 @@ public class AppDeployer extends RapidoidThing {
 	}
 
 	public static void bootstrap() {
-		runIfExists(ClasspathUtil.appJar());
+		String appJar = ClasspathUtil.appJar();
+		if (U.notEmpty(appJar)) {
+			runIfExists(appJar);
+		}
 	}
+
 }

@@ -23,6 +23,7 @@ package org.rapidoid.standalone;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.deploy.AppDeployer;
 import org.rapidoid.io.IO;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
@@ -40,7 +41,9 @@ public class Main extends RapidoidThing {
 
 		Msc.setStandalone(true);
 
-		App.run(args);
+		App.run(args, "app.jar=/app/app.jar");
+
+		AppDeployer.bootstrap();
 
 		if (!Setup.isAnyRunning()) {
 			On.setup().activate();

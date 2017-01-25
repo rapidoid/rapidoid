@@ -1,5 +1,6 @@
 package org.rapidoid.goodies.deployment;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.deploy.AppDeployer;
@@ -30,7 +31,7 @@ import org.rapidoid.scan.ClasspathUtil;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class JarDeploymentHandler implements ReqHandler {
+public class JarDeploymentHandler extends RapidoidThing implements ReqHandler {
 
 	@Override
 	public Object execute(Req req) {
