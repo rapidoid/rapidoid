@@ -77,6 +77,8 @@ public class Msc extends RapidoidThing implements Constants {
 
 	private static volatile long measureStart;
 
+	private static boolean standalone;
+
 	public static final ScheduledThreadPoolExecutor EXECUTOR = new ScheduledThreadPoolExecutor(8,
 		new RapidoidThreadFactory("utils", true));
 
@@ -1193,4 +1195,12 @@ public class Msc extends RapidoidThing implements Constants {
 		return method;
 	}
 
+
+	public static void setStandalone(boolean standalone) {
+		Msc.standalone = standalone;
+	}
+
+	public static boolean isStandalone() {
+		return standalone;
+	}
 }

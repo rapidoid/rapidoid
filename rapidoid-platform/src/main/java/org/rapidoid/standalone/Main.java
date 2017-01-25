@@ -28,15 +28,19 @@ import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class Main extends RapidoidThing {
 
 	public static void main(String[] args) {
+		// Rapidoid banner
 		U.print(IO.load("rapidoid.txt"));
 
-		App.bootstrap(args);
+		Msc.setStandalone(true);
+
+		App.run(args);
 
 		if (!Setup.isAnyRunning()) {
 			On.setup().activate();
