@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
 import org.rapidoid.util.AnsiColor;
+import org.rapidoid.util.Msc;
 
 /*
  * #%L
@@ -46,6 +47,10 @@ public class NiceResponse extends RapidoidThing {
 		}
 
 		return details(msg, false);
+	}
+
+	public static Object err(Req req, Throwable err) {
+		return err(req, Msc.errorMsg(err));
 	}
 
 	public static Object deny(Req req) {

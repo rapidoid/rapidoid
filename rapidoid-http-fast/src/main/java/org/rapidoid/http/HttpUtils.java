@@ -25,14 +25,10 @@ import org.rapidoid.util.Msc;
 import org.rapidoid.util.TokenAuthData;
 import org.rapidoid.util.Tokens;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.Serializable;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.Future;
 import java.util.regex.Pattern;
 
@@ -160,60 +156,8 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 		}
 	}
 
-	public static ErrCodeAndMsg getErrorCodeAndMsg(Throwable err) {
-		Throwable cause = Msc.rootCause(err);
-
-		int code;
-		String defaultMsg;
-		String msg = cause.getMessage();
-
-		if (cause instanceof SecurityException) {
-			code = 403;
-			defaultMsg = "Access Denied!";
-
-		} else if (cause instanceof NotFound) {
-			code = 404;
-			defaultMsg = "The requested resource could not be found!";
-
-		} else if (Msc.isValidationError(cause)) {
-			code = 422;
-			defaultMsg = "Validation Error!";
-
-			if (cause.getClass().getName().equals("javax.validation.ConstraintViolationException")) {
-				Set<ConstraintViolation<?>> violations = ((ConstraintViolationException) cause).getConstraintViolations();
-
-				StringBuilder sb = new StringBuilder();
-				sb.append("Validation failed: ");
-
-				for (Iterator<ConstraintViolation<?>> it = U.safe(violations).iterator(); it.hasNext(); ) {
-					ConstraintViolation<?> v = it.next();
-
-					sb.append(v.getRootBeanClass().getSimpleName());
-					sb.append(".");
-					sb.append(v.getPropertyPath());
-					sb.append(" (");
-					sb.append(v.getMessage());
-					sb.append(")");
-
-					if (it.hasNext()) {
-						sb.append(", ");
-					}
-				}
-
-				msg = sb.toString();
-			}
-
-		} else {
-			code = 500;
-			defaultMsg = "Internal Server Error!";
-		}
-
-		msg = U.or(msg, defaultMsg);
-		return new ErrCodeAndMsg(code, msg);
-	}
-
 	public static String getErrorMessageAndSetCode(Resp resp, Throwable err) {
-		ErrCodeAndMsg codeAndMsg = getErrorCodeAndMsg(err);
+		ErrCodeAndMsg codeAndMsg = Msc.getErrorCodeAndMsg(err);
 		resp.code(codeAndMsg.code());
 		return codeAndMsg.msg();
 	}

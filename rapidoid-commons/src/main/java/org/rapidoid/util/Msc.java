@@ -29,10 +29,15 @@ import org.rapidoid.u.U;
 import org.rapidoid.validation.InvalidData;
 import org.rapidoid.wrap.BoolWrap;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.management.ManagementFactory;
-import java.lang.reflect.*;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Proxy;
 import java.net.Socket;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -1203,4 +1208,61 @@ public class Msc extends RapidoidThing implements Constants {
 	public static boolean isStandalone() {
 		return standalone;
 	}
+
+	public static String errorMsg(Throwable error) {
+		return getErrorCodeAndMsg(error).msg();
+	}
+
+	public static ErrCodeAndMsg getErrorCodeAndMsg(Throwable err) {
+		Throwable cause = Msc.rootCause(err);
+
+		int code;
+		String defaultMsg;
+		String msg = cause.getMessage();
+
+		if (cause instanceof SecurityException) {
+			code = 403;
+			defaultMsg = "Access Denied!";
+
+		} else if (cause.getClass().getSimpleName().equals("NotFound")) {
+			code = 404;
+			defaultMsg = "The requested resource could not be found!";
+
+		} else if (Msc.isValidationError(cause)) {
+			code = 422;
+			defaultMsg = "Validation Error!";
+
+			if (cause.getClass().getName().equals("javax.validation.ConstraintViolationException")) {
+				Set<ConstraintViolation<?>> violations = ((ConstraintViolationException) cause).getConstraintViolations();
+
+				StringBuilder sb = new StringBuilder();
+				sb.append("Validation failed: ");
+
+				for (Iterator<ConstraintViolation<?>> it = U.safe(violations).iterator(); it.hasNext(); ) {
+					ConstraintViolation<?> v = it.next();
+
+					sb.append(v.getRootBeanClass().getSimpleName());
+					sb.append(".");
+					sb.append(v.getPropertyPath());
+					sb.append(" (");
+					sb.append(v.getMessage());
+					sb.append(")");
+
+					if (it.hasNext()) {
+						sb.append(", ");
+					}
+				}
+
+				msg = sb.toString();
+			}
+
+		} else {
+			code = 500;
+			defaultMsg = "Internal Server Error!";
+		}
+
+		msg = U.or(msg, defaultMsg);
+		return new ErrCodeAndMsg(code, msg);
+	}
+
 }
