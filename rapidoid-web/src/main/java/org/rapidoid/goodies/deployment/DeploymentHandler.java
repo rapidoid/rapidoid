@@ -2,6 +2,7 @@ package org.rapidoid.goodies.deployment;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.deploy.AppDeployer;
 import org.rapidoid.gui.Btn;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.html.Tag;
@@ -109,7 +110,7 @@ public class DeploymentHandler extends GUI implements ReqHandler {
 			.onSuccess(new Runnable() {
 				@Override
 				public void run() {
-					new JarDeploymentHandler().deploy();
+					AppDeployer.deploy(filename);
 				}
 			}) : null;
 
@@ -132,7 +133,7 @@ public class DeploymentHandler extends GUI implements ReqHandler {
 		Btn details = null;
 		if (!staged && exists) {
 
-			List<ProcessHandle> processes = JarDeploymentHandler.DEPLOYED_PROCESSES.items();
+			List<ProcessHandle> processes = AppDeployer.processes().items();
 			if (U.notEmpty(processes)) {
 
 				String procHandleId = processes.get(0).id();

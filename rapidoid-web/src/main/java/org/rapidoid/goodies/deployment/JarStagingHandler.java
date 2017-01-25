@@ -2,15 +2,13 @@ package org.rapidoid.goodies.deployment;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.deploy.AppDeployer;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.http.NiceResponse;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
-import org.rapidoid.io.IO;
 import org.rapidoid.io.Upload;
-import org.rapidoid.log.Log;
 import org.rapidoid.scan.ClasspathUtil;
-import org.rapidoid.u.U;
 
 /*
  * #%L
@@ -36,24 +34,18 @@ import org.rapidoid.u.U;
 @Since("5.1.0")
 public class JarStagingHandler extends GUI implements ReqHandler {
 
-	private static final String SUCCESS = "Successfully staged the application.";
-
-	private static final String NOT_POSSIBLE = "Not possible!";
 
 	@Override
 	public Object execute(Req req) throws Exception {
-
-		String appJar = ClasspathUtil.appJar();
-		String stagedAppJar = appJar + ".staged";
-
-		if (U.isEmpty(appJar)) return NiceResponse.err(req, NOT_POSSIBLE);
-
 		Upload jar = req.file("file");
-		IO.save(stagedAppJar, jar.content());
 
-		Log.info("Staged application jar", "size", jar.content().length, "destination", appJar);
+		try {
+			AppDeployer.stageJar(ClasspathUtil.appJar(), jar.content());
+		} catch (Exception e) {
+			return NiceResponse.err(req, e);
+		}
 
-		return NiceResponse.ok(req, SUCCESS);
+		return NiceResponse.ok(req, "Successfully staged the application.");
 	}
 
 }

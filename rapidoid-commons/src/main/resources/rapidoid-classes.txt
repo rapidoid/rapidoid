@@ -164,6 +164,7 @@ org.rapidoid.data.MultiData
 org.rapidoid.data.Parse
 org.rapidoid.data.XML
 org.rapidoid.data.YAML
+org.rapidoid.deploy.AppDeployer
 org.rapidoid.env.Env
 org.rapidoid.env.Environment
 org.rapidoid.env.EnvMode
