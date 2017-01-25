@@ -16,7 +16,6 @@ INFO | main | org.rapidoid.env.Environment | Initialized environment | mode = PR
 INFO | main | org.rapidoid.scan.ClasspathUtil | Setting application JAR | appJar = /app/the-root/app.jar | exists = false
 INFO | main | org.rapidoid.config.ConfigImpl | Loaded configuration | files = [default-config.yml, default-config-default.yml, /app/the-root/my-config.yaml]
 INFO | main | org.rapidoid.scan.ClasspathScanner | Scanning classpath | annotated = [@Controller, @Service, @Run, @Named, @Singleton] | packages = []
-WARN | main | org.rapidoid.scan.ClasspathScanner | Classpath entry doesn't exist: /app/app.jar
 INFO | main | org.rapidoid.scan.ClasspathScanner | Finished classpath scan | time = <?>ms | searched = 0 | found = []
 INFO | server | org.rapidoid.net.impl.RapidoidServerLoop | Starting server | address = 0.0.0.0 | port = 5555 | I/O workers = 4 | sync = true | accept = non-blocking
 INFO | main | org.rapidoid.setup.Setup | Server has started | setup = app | home = http://localhost:5555
