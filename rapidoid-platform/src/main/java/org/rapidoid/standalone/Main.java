@@ -41,7 +41,7 @@ public class Main extends RapidoidThing {
 
 		Msc.setStandalone(true);
 
-		App.run(args, "app.jar=/app/app.jar");
+		App.run(args);
 
 		AppDeployer.bootstrap();
 

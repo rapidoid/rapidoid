@@ -68,8 +68,8 @@ import java.util.Map;
 public class Setup extends RapidoidInitializer implements Constants {
 
 
-	static final Setup ON = new Setup("app", "main", "0.0.0.0", 8888, IoC.defaultContext(), Conf.ROOT, Conf.ON);
-	static final Setup ADMIN = new Setup("admin", "admin", "0.0.0.0", 8888, IoC.defaultContext(), Conf.ROOT, Conf.ADMIN);
+	static final Setup ON = new Setup("app", "main", "0.0.0.0", 8080, IoC.defaultContext(), Conf.ROOT, Conf.ON);
+	static final Setup ADMIN = new Setup("admin", "admin", "0.0.0.0", 8080, IoC.defaultContext(), Conf.ROOT, Conf.ADMIN);
 
 	private static final List<Setup> instances = Coll.synchronizedList(ON, ADMIN);
 
@@ -120,7 +120,7 @@ public class Setup extends RapidoidInitializer implements Constants {
 	public static Setup create(String name) {
 		IoCContext ioc = IoC.createContext().name(name);
 		Config config = Conf.section(name);
-		Setup setup = new Setup(name, "main", "0.0.0.0", 8888, ioc, config, config);
+		Setup setup = new Setup(name, "main", "0.0.0.0", 8080, ioc, config, config);
 		instances.add(setup);
 		return setup;
 	}

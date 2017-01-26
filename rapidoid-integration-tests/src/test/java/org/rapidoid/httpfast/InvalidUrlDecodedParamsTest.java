@@ -37,7 +37,7 @@ public class InvalidUrlDecodedParamsTest extends IsolatedIntegrationTest {
 	public void testWithInvalidEncoding() {
 		On.get("/").json(req -> U.map("uri", req.uri(), "query", req.query(), "data", req.data()));
 
-		String resp = Msc.connect("localhost", 8888, (in, reader, out) -> {
+		String resp = Msc.connect("localhost", 8080, (in, reader, out) -> {
 			out.writeBytes("GET /?a=[%A%]&b=bb!&c=%&d=%% HTTP/1.0\n\n");
 			return Flow.of(reader.lines()).findLast().get();
 		});

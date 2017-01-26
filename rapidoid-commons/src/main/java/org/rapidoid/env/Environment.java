@@ -120,6 +120,10 @@ public class Environment extends RapidoidInitializer {
 		Log.info("Automatically activating mode-specific profile", "!profile", modeProfile);
 		profiles.add(modeProfile);
 
+		if (Msc.isStandalone()) {
+			profiles.add("platform");
+		}
+
 		RapidoidEnv.touch();
 
 		Log.info("Initialized environment", "!mode", mode, "!profiles", profiles);
@@ -138,6 +142,7 @@ public class Environment extends RapidoidInitializer {
 
 	private static List<String> retrieveProfiles() {
 		List<String> profiles;
+
 		String profilesLst = Env.initial("profiles");
 
 		if (U.notEmpty(profilesLst)) {
@@ -152,10 +157,6 @@ public class Environment extends RapidoidInitializer {
 			} else {
 				profiles = U.list();
 			}
-		}
-
-		if (Msc.isStandalone()) {
-			profiles.add("platform");
 		}
 
 		return profiles;

@@ -40,14 +40,14 @@ public class HttpVerbsTest extends HttpTestCommons {
 		On.head("/testHead").html(""); // no body for the HEAD verb
 		On.trace("/testTrace").html("trace:success");
 
-		eq(HTTP.get("http://localhost:8888/testGet").fetch(), "get:success");
-		eq(HTTP.post("http://localhost:8888/testPost").fetch(), "post:success");
-		eq(HTTP.put("http://localhost:8888/testPut").fetch(), "put:success");
-		eq(HTTP.delete("http://localhost:8888/testDelete").fetch(), "delete:success");
-		eq(HTTP.patch("http://localhost:8888/testPatch").fetch(), "patch:success");
-		eq(HTTP.options("http://localhost:8888/testOptions").fetch(), "options:success");
-		eq(HTTP.head("http://localhost:8888/testHead").fetch(), ""); // no body for the HEAD verb
-		eq(HTTP.trace("http://localhost:8888/testTrace").fetch(), "trace:success");
+		eq(HTTP.get("http://localhost:8080/testGet").fetch(), "get:success");
+		eq(HTTP.post("http://localhost:8080/testPost").fetch(), "post:success");
+		eq(HTTP.put("http://localhost:8080/testPut").fetch(), "put:success");
+		eq(HTTP.delete("http://localhost:8080/testDelete").fetch(), "delete:success");
+		eq(HTTP.patch("http://localhost:8080/testPatch").fetch(), "patch:success");
+		eq(HTTP.options("http://localhost:8080/testOptions").fetch(), "options:success");
+		eq(HTTP.head("http://localhost:8080/testHead").fetch(), ""); // no body for the HEAD verb
+		eq(HTTP.trace("http://localhost:8080/testTrace").fetch(), "trace:success");
 	}
 
 }

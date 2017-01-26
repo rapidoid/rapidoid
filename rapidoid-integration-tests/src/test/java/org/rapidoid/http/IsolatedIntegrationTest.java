@@ -65,9 +65,9 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 	// FIXME HEAD
 	private static final List<String> HTTP_VERBS = U.list("GET", "DELETE", "OPTIONS", "TRACE", "POST", "PUT", "PATCH");
 
-	public static final int DEFAULT_PORT = 8888;
+	public static final int DEFAULT_PORT = 8080;
 
-	public static final String LOCALHOST = "http://localhost:8888";
+	public static final String LOCALHOST = "http://localhost:8080";
 
 	@Before
 	public void openContext() {
@@ -383,6 +383,6 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 	}
 
 	protected <T> T connect(F3<T, InputStream, BufferedReader, DataOutputStream> protocol) {
-		return Msc.connect("localhost", 8888, 1000, protocol);
+		return Msc.connect("localhost", 8080, 1000, protocol);
 	}
 }

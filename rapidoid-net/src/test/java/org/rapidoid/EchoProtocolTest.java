@@ -93,7 +93,7 @@ public class EchoProtocolTest extends NetTestCommons {
 
 	private void connectAndExercise() {
 
-		Msc.connect("localhost", 8888, new F3<Void, InputStream, BufferedReader, DataOutputStream>() {
+		Msc.connect("localhost", 8080, new F3<Void, InputStream, BufferedReader, DataOutputStream>() {
 			@Override
 			public Void execute(InputStream inputStream, BufferedReader in, DataOutputStream out) throws IOException {
 				out.writeBytes("hello\n");
@@ -116,7 +116,7 @@ public class EchoProtocolTest extends NetTestCommons {
 
 				Msc.startMeasure();
 
-				Msc.connect("localhost", 8888, new F3<Void, InputStream, BufferedReader, DataOutputStream>() {
+				Msc.connect("localhost", 8080, new F3<Void, InputStream, BufferedReader, DataOutputStream>() {
 					@Override
 					public Void execute(InputStream inputStream, BufferedReader in, DataOutputStream out) throws IOException {
 						out.writeBytes(testCase);

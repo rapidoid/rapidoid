@@ -38,8 +38,8 @@ public class ReverseProxyTest extends IsolatedIntegrationTest {
 
 		On.get("/bar/hi").json("BAR HI");
 
-		proxy("/bar", "http://localhost:8888/foo");
-		proxy("/", "http://localhost:8888/foo");
+		proxy("/bar", "http://localhost:8080/foo");
+		proxy("/", "http://localhost:8080/foo");
 
 		getReq("/bar");
 		getReq("/bar/hello/");

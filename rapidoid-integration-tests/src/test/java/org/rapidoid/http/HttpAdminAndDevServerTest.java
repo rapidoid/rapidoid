@@ -35,7 +35,7 @@ public class HttpAdminAndDevServerTest extends IsolatedIntegrationTest {
 	@Test
 	public void testAdminOnAppServer() {
 		sameSetup();
-		sameRequests(8888);
+		sameRequests(8080);
 	}
 
 	@Test

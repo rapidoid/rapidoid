@@ -33,7 +33,7 @@ public class ServerBuilder extends RapidoidThing {
 
 	private volatile String address = Conf.NET.entry("address").or("0.0.0.0");
 
-	private volatile int port = Conf.NET.entry("port").or(8888);
+	private volatile int port = Conf.NET.entry("port").or(8080);
 
 	private volatile int workers = Conf.NET.entry("workers").or(Runtime.getRuntime().availableProcessors());
 

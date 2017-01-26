@@ -40,8 +40,8 @@ public class HttpServerTest extends HttpTestCommons {
 			}
 		});
 
-		eq(HTTP.get("http://localhost:8888/").fetch(), "home");
-		eq(HTTP.post("http://localhost:8888/").fetch(), "\"abc\"");
+		eq(HTTP.get("http://localhost:8080/").fetch(), "home");
+		eq(HTTP.post("http://localhost:8080/").fetch(), "\"abc\"");
 	}
 
 }

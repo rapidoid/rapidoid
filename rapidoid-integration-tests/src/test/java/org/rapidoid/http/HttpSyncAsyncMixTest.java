@@ -48,8 +48,8 @@ public class HttpSyncAsyncMixTest extends IsolatedIntegrationTest {
 
 		for (int i = 0; i < ROUNDS; i++) {
 			int expected = i % 2 == 0 ? i : i * 10;
-			client.get("http://localhost:8888/?n=" + i).expect("" + expected);
-			client.get("http://localhost:8888/abcd.txt").expect("ABCD");
+			client.get("http://localhost:8080/?n=" + i).expect("" + expected);
+			client.get("http://localhost:8080/abcd.txt").expect("ABCD");
 		}
 
 		client.close();

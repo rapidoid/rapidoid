@@ -1,20 +1,20 @@
 MyClient:
   abc:
-    GET: http://localhost:8888/test-abc
+    GET: http://localhost:8080/test-abc
 
   numbers:
-    GET: http://localhost:8888/nums
+    GET: http://localhost:8080/nums
 
   sizeOf:
-    GET: http://localhost:8888/size?s=%s
+    GET: http://localhost:8080/size?s=%s
 
   asyncSizeOf:
-    GET: http://localhost:8888/size?s=%s
+    GET: http://localhost:8080/size?s=%s
 
   theBean:
-    POST: http://localhost:8888/echo?aa=%s&bb=%s&cc=%s
+    POST: http://localhost:8080/echo?aa=%s&bb=%s&cc=%s
 
   asyncBean:
-    POST: http://localhost:8888/echo?aa=%s&bb=%s&cc=%s
+    POST: http://localhost:8080/echo?aa=%s&bb=%s&cc=%s
     data:
       aa: not-implemented
