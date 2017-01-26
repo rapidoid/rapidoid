@@ -7,7 +7,7 @@ IFS=$'\n\t'
 printf "\n - BUILDING app.jar\n\n"
 
 cd ../examples/getting-started
-mvn clean package -Pfull && cp target/app.jar ../../docker-tests/app3
+mvn clean org.rapidoid:build:jar && cp target/app.jar ../../docker-tests/app3
 cd ../../docker-tests
 
 printf "\n - Testing APP-JAR (tag=$TAG)\n\n"
@@ -19,6 +19,7 @@ sudo docker run \
     -e HIBERNATE_CONNECTION_PASSWORD=db-pass \
     -e profiles=mysql \
     -p 8888:8888 \
+    -p 8080:8080 \
     -u nobody \
     -v $(pwd)/app3:/app \
     --link $DB_ID:mysql \

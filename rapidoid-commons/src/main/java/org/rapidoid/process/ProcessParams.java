@@ -36,6 +36,10 @@ public class ProcessParams extends RapidoidThing {
 
 	private volatile Processes group = Processes.DEFAULT;
 
+	private volatile boolean printingOutput;
+
+	private volatile String linePrefix = "";
+
 	public File in() {
 		return in;
 	}
@@ -65,6 +69,24 @@ public class ProcessParams extends RapidoidThing {
 	public ProcessHandle run(String... command) {
 		this.command = command;
 		return ProcessHandle.startProcess(this);
+	}
+
+	public boolean printingOutput() {
+		return printingOutput;
+	}
+
+	public ProcessParams printingOutput(boolean printingOutput) {
+		this.printingOutput = printingOutput;
+		return this;
+	}
+
+	public String linePrefix() {
+		return linePrefix;
+	}
+
+	public ProcessParams linePrefix(String linePrefix) {
+		this.linePrefix = linePrefix;
+		return this;
 	}
 
 }

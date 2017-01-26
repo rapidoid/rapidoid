@@ -52,7 +52,10 @@ public class AppDeployer extends RapidoidThing {
 	}
 
 	private static void runJar(String appJar) {
-		Proc.group(DEPLOYED_PROCESSES).run("java", "-jar", appJar);
+		Proc.group(DEPLOYED_PROCESSES)
+			.printingOutput(true)
+			.linePrefix("[APP] ")
+			.run("java", "-jar", appJar);
 	}
 
 	public static void deploy(String appJar) {
