@@ -10,9 +10,9 @@ INFO | main | org.rapidoid.config.RapidoidInitializer | System info | os = Linux
 INFO | main | org.rapidoid.env.Env | Setting application root | root = /app | content = [/app/app.jar, /app/config.yml]
 INFO | main | org.rapidoid.env.Environment | Configuring active profiles | profiles = [mysql]
 INFO | main | org.rapidoid.env.Environment | Automatically activating mode-specific profile | profile = production
-INFO | main | org.rapidoid.env.Environment | Initialized environment | mode = PRODUCTION | profiles = [mysql, production]
+INFO | main | org.rapidoid.env.Environment | Initialized environment | mode = PRODUCTION | profiles = [mysql, production, platform]
 INFO | main | org.rapidoid.scan.ClasspathUtil | Setting application JAR | appJar = /app/app.jar | exists = true
-INFO | main | org.rapidoid.config.ConfigImpl | Loaded configuration | files = [built-in-config.yml, built-in-config-mysql.yml, /app/config.yml]
+INFO | main | org.rapidoid.config.ConfigImpl | Loaded configuration | files = [built-in-config.yml, built-in-config-mysql.yml, built-in-config-platform.yml, /app/config.yml]
 INFO | server | org.rapidoid.net.impl.RapidoidServerLoop | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
 INFO | main | org.rapidoid.setup.Setup | Server has started | setup = app | home = http://localhost:8888
 INFO | main | org.rapidoid.setup.Setup | Static resources will be served from the following locations | setup = app | locations = [static, default/static]
@@ -43,8 +43,8 @@ INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setu
 INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET | path = /_graphs/{id:.*} | roles = [administrator] | tx = NONE | mvc = false | cacheTTL = 0
 INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET,POST | path = /_deployment | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
 INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = POST | path = /_stage | roles = [administrator] | tx = NONE | mvc = false | cacheTTL = 0
-INFO | main | org.rapidoid.goodies.deployment.JarDeploymentHandler | Deploying pre-existing application JAR | filename = /app/app.jar
 INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = POST | path = /_deploy | roles = [administrator] | tx = NONE | mvc = false | cacheTTL = 0
 INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = POST | path = /_login | roles = [] | tx = NONE | mvc = false | cacheTTL = 0
 INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET | path = /_logout | roles = [logged_in] | tx = NONE | mvc = false | cacheTTL = 0
 INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET | path = /_status | roles = [administrator] | tx = NONE | mvc = false | cacheTTL = 0
+INFO | main | org.rapidoid.deploy.AppDeployer | Deploying pre-existing application JAR | filename = /app/app.jar
