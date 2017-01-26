@@ -111,7 +111,17 @@ public class DeployJarMojo extends AbstractRapidoidMojo {
 		Map<String, Object> cfg = config.toMap();
 
 		if (U.isEmpty(token)) token = U.safe(U.str(cfg.get("token")));
-		if (U.isEmpty(servers)) servers = U.safe(U.str(cfg.get("servers")));
+
+		if (U.isEmpty(servers)) {
+			Object srvrs = cfg.get("servers");
+
+			if (srvrs instanceof String) {
+				servers = (String) srvrs;
+			} else if (srvrs instanceof List) {
+				List list = (List) srvrs;
+				servers = U.join(", ", list);
+			}
+		}
 	}
 
 	private boolean doStage(Upload jar, String url) {
