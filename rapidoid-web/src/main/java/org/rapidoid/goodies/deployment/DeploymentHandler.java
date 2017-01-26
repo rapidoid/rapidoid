@@ -72,7 +72,7 @@ public class DeploymentHandler extends GUI implements ReqHandler {
 			info.add(hardcoded("<form action=\"/_stage\" class=\"dropzone\" id=\"jar-upload\"></form>"));
 
 			info.add(h3("Packaging and deploying with Maven:"));
-			String cmd = "mvn clean org.rapidoid:deploy:uber-jar";
+			String cmd = "mvn clean org.rapidoid:deploy:jar";
 
 			info.add(h6(copy(b(cmd))));
 

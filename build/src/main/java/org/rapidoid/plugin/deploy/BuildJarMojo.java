@@ -31,8 +31,8 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-@Mojo(name = "uber-jar", aggregator = true, defaultPhase = LifecyclePhase.PACKAGE)
-public class BuildUberJarMojo extends AbstractRapidoidMojo {
+@Mojo(name = "jar", aggregator = true, defaultPhase = LifecyclePhase.PACKAGE)
+public class BuildJarMojo extends AbstractRapidoidMojo {
 
 	@Parameter(defaultValue = "${project}", readonly = true, required = true)
 	protected MavenProject project;
