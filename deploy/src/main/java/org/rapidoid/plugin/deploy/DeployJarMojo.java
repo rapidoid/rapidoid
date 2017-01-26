@@ -50,10 +50,10 @@ public class DeployJarMojo extends AbstractRapidoidMojo {
 	@Parameter(defaultValue = "${session}", readonly = true, required = true)
 	protected MavenSession session;
 
-	@Parameter(defaultValue = "${token}", required = false)
+	@Parameter(defaultValue = "${token}")
 	protected String token = "";
 
-	@Parameter(defaultValue = "${servers}", required = false)
+	@Parameter(defaultValue = "${servers}")
 	protected String servers = "";
 
 	public void execute() throws MojoExecutionException {
@@ -93,12 +93,12 @@ public class DeployJarMojo extends AbstractRapidoidMojo {
 	}
 
 	private List<String> getServers() {
-		String[] srvrs = servers.split("\\s*\\,\\s*");
+		String[] srvrs = servers.split("\\s*,\\s*");
 
 		for (int i = 0; i < srvrs.length; i++) {
-			String srvr = Str.trimr(srvrs[i], "/");
-			if (!srvr.startsWith("http")) srvr = "http://" + srvr;
-			srvrs[i] = srvr;
+			String server = Str.trimr(srvrs[i], "/");
+			if (!server.startsWith("http")) server = "http://" + server;
+			srvrs[i] = server;
 		}
 
 		return U.list(srvrs);
@@ -117,6 +117,7 @@ public class DeployJarMojo extends AbstractRapidoidMojo {
 
 			if (srvrs instanceof String) {
 				servers = (String) srvrs;
+
 			} else if (srvrs instanceof List) {
 				List list = (List) srvrs;
 				servers = U.join(", ", list);
