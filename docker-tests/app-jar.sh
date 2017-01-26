@@ -32,11 +32,10 @@ sudo docker run \
 
 sleep 60 # give MySQL some time to initialize
 
-./wait-for.sh 8888
+./wait-for.sh 8080
 
-./http-get.sh app-jar-index 8888 /
-./http-get.sh app-jar-manage 8888 /manage
-
-./http-get.sh app-jar-books 8888 /books
+./http-get.sh app-jar-index 8080 /
+./http-get.sh app-jar-manage 8080 /manage
+./http-get.sh app-jar-books 8080 /books
 
 ./cleanup.sh
