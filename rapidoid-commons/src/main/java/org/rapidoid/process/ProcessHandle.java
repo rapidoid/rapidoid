@@ -75,6 +75,9 @@ public class ProcessHandle extends RapidoidThing implements Manageable {
 	private volatile long startedAt;
 	private volatile long finishedAt;
 
+	private boolean printingOutput;
+	private String linePrefix = "";
+
 	private ProcessHandle(ProcessParams params, final Process process) {
 		this.params = params;
 		this.process = process;
@@ -149,7 +152,7 @@ public class ProcessHandle extends RapidoidThing implements Manageable {
 		}
 	}
 
-	private static long readInto(BufferedReader reader, BlockingQueue<String> dest, StringBuffer... buffers) {
+	private long readInto(BufferedReader reader, BlockingQueue<String> dest, StringBuffer... buffers) {
 		long total = 0;
 
 		try {
@@ -157,6 +160,10 @@ public class ProcessHandle extends RapidoidThing implements Manageable {
 			while ((line = reader.readLine()) != null) {
 				try {
 					dest.put(line);
+
+					if (printingOutput) {
+						U.print(linePrefix + line);
+					}
 
 					for (StringBuffer buffer : buffers) {
 						buffer.append(line + "\n");
@@ -346,4 +353,23 @@ public class ProcessHandle extends RapidoidThing implements Manageable {
 	public Processes group() {
 		return group;
 	}
+
+	public boolean printingOutput() {
+		return printingOutput;
+	}
+
+	public ProcessHandle printingOutput(boolean printingOutput) {
+		this.printingOutput = printingOutput;
+		return this;
+	}
+
+	public String linePrefix() {
+		return linePrefix;
+	}
+
+	public ProcessHandle linePrefix(String linePrefix) {
+		this.linePrefix = linePrefix;
+		return this;
+	}
+
 }
