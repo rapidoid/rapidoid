@@ -35,10 +35,10 @@ import org.rapidoid.util.Msc;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.io.Writer;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
 import java.nio.file.attribute.FileAttribute;
 import java.util.List;
 import java.util.Map;
@@ -82,6 +82,19 @@ public abstract class AbstractRapidoidMojo extends AbstractMojo {
 
 		} catch (IOException e) {
 			throw new MojoExecutionException("Couldn't create temporary file! " + ABORT, e);
+		}
+
+		return assemblyFile;
+	}
+
+	protected String createTempDir(String prefix, FileAttribute<?>... attrs) throws MojoExecutionException {
+		String assemblyFile;
+
+		try {
+			assemblyFile = Files.createTempDirectory(prefix, attrs).toAbsolutePath().toString();
+
+		} catch (IOException e) {
+			throw new MojoExecutionException("Couldn't create temporary directory! " + ABORT, e);
 		}
 
 		return assemblyFile;
@@ -149,6 +162,12 @@ public abstract class AbstractRapidoidMojo extends AbstractMojo {
 			throw new MojoExecutionException("Couldn't rename the file! " + ABORT, e);
 		}
 
+		try {
+			addJarManifest(uberJar, project);
+		} catch (IOException e) {
+			throw new MojoExecutionException("Couldn't add the JAR manifest! " + ABORT, e);
+		}
+
 		String size = Msc.fileSizeReadable(uberJar);
 
 		getLog().info("");
@@ -157,6 +176,33 @@ public abstract class AbstractRapidoidMojo extends AbstractMojo {
 		getLog().info("");
 
 		return uberJar;
+	}
+
+	private void addJarManifest(String uberJar, MavenProject project) throws IOException {
+		Path path = Paths.get(uberJar);
+		URI uri = URI.create("jar:" + path.toUri());
+
+		String user = System.getProperty("user.name");
+
+		// FIXME search for the Main class
+		String mainClass = project.getGroupId() + ".Main";
+
+		String manifestContent = IO.load("manifest-template.mf")
+			.replace("$user", user)
+			.replace("$java", Msc.javaVersion())
+			.replace("$name", project.getName())
+			.replace("$version", project.getVersion())
+			.replace("$groupId", project.getGroupId())
+			.replace("$organization", project.getOrganization() != null ? U.or(project.getOrganization().getName(), "?") : "?")
+			.replace("$url", U.or(project.getUrl(), "?"))
+			.replace("$main", mainClass);
+
+		try (FileSystem fs = FileSystems.newFileSystem(uri, U.<String, Object>map())) {
+			Path manifest = fs.getPath("META-INF/MANIFEST.MF");
+			try (Writer writer = Files.newBufferedWriter(manifest, StandardCharsets.UTF_8, StandardOpenOption.CREATE)) {
+				writer.write(manifestContent);
+			}
+		}
 	}
 
 }

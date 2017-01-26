@@ -33,41 +33,4 @@
 		</plugins>
 	</build>
 
-	<profiles>
-		<profile>
-			<id>full</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-assembly-plugin</artifactId>
-						<version>2.6</version>
-						<executions>
-							<execution>
-								<id>full-jar</id>
-								<phase>package</phase>
-								<goals>
-									<goal>single</goal>
-								</goals>
-								<configuration>
-									<finalName>app</finalName>
-									<appendAssemblyId>false</appendAssemblyId>
-
-									<descriptorRefs>
-										<descriptorRef>jar-with-dependencies</descriptorRef>
-									</descriptorRefs>
-									<archive>
-										<manifest>
-											<mainClass>com.example.Main</mainClass>
-										</manifest>
-									</archive>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
-
 </project>
