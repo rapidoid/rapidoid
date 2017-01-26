@@ -608,8 +608,8 @@ org.rapidoid.oauth.OAuthProvider
 org.rapidoid.oauth.OAuthStateCheck
 org.rapidoid.oauth.OAuthTokenHandler
 org.rapidoid.plugin.deploy.AbstractRapidoidMojo
-org.rapidoid.plugin.deploy.BuildUberJarMojo
-org.rapidoid.plugin.deploy.DeployUberJarMojo
+org.rapidoid.plugin.deploy.BuildJarMojo
+org.rapidoid.plugin.deploy.DeployJarMojo
 org.rapidoid.pool.ArrayPool
 org.rapidoid.pool.Pool
 org.rapidoid.pool.Pools
