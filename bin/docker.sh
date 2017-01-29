@@ -2,8 +2,11 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 echo Building rapidoid/rapidoid:snapshot
 
+cd ${DIR}/..
 rm -f docker/rapidoid.jar
 cp ../docker-rapidoid/entrypoint.sh docker
 
