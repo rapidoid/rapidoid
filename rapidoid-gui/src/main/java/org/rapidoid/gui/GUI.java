@@ -353,6 +353,7 @@ public abstract class GUI extends HTML implements Role {
 	}
 
 	public static Btn cmd(String cmd, Object... args) {
+
 		boolean primary = cmd.startsWith("^");
 		boolean danger = cmd.startsWith("!");
 		boolean warning = cmd.startsWith("?");
@@ -365,14 +366,20 @@ public abstract class GUI extends HTML implements Role {
 
 		Btn btn = btn(caption);
 		if (primary) {
-			btn = btn.primary();
+			btn.primary();
 		} else if (danger) {
-			btn = btn.danger();
+			btn.danger();
 		} else if (warning) {
-			btn = btn.warning();
+			btn.warning();
 		}
 
-		return btn.command(cmd, args);
+		btn.command(cmd, args);
+
+		if (danger || warning) {
+			btn.confirm(U.frmt("Please confirm that you want to execute '%s'", cmd));
+		}
+
+		return btn;
 	}
 
 	public static Btn navigate(String cmd) {

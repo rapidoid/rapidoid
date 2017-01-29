@@ -47,6 +47,8 @@ public class ProcessDetailsHandler extends GUI implements ReqRespHandler {
 		U.must(handle != null, "Cannot find the process!");
 
 		info.add(h1("Process details"));
+
+		info.add(right(cmd("View all processes").small().go("/_processes")));
 		info.add(code(U.join(" ", handle.params().command())));
 
 		info.add(h2("Standard output:"));
@@ -75,6 +77,7 @@ public class ProcessDetailsHandler extends GUI implements ReqRespHandler {
 		String upperLine = line.toUpperCase();
 
 		if (upperLine.contains("[SEVERE]") || upperLine.contains(" SEVERE ")) return "proc-out proc-out-severe";
+		if (upperLine.contains("[FATAL]") || upperLine.contains(" FATAL ")) return "proc-out proc-out-severe";
 
 		if (upperLine.contains("[WARNING]") || upperLine.contains("[WARN]") ||
 			upperLine.contains(" WARNING ") || upperLine.contains(" WARN ")) return "proc-out proc-out-warning";

@@ -31,21 +31,27 @@ import org.rapidoid.u.U;
 @Since("2.3.0")
 public class Btn extends AbstractCommand<Btn> {
 
-	private Object[] contents = {};
+	private volatile Object[] contents = {};
 
-	private String kind = "default";
+	private volatile String kind = "default";
 
-	private String go;
+	private volatile String go;
 
-	private String class_;
+	private volatile String class_;
 
-	private String confirm;
+	private volatile String confirm;
+
+	private volatile String size;
 
 	@Override
 	protected Tag render() {
 		handleEventIfMatching();
 
 		String cls = U.or(class_, "btn btn-" + kind);
+
+		if (size != null) {
+			cls += " btn-" + size;
+		}
 
 		if (go != null && !hasHandler() && confirm() == null) {
 			return a(contents).href(go).class_(cls);
@@ -152,4 +158,20 @@ public class Btn extends AbstractCommand<Btn> {
 		this.confirm = confirm;
 		return this;
 	}
+
+	public Btn smallest() {
+		this.size = "xs";
+		return this;
+	}
+
+	public Btn small() {
+		this.size = "sm";
+		return this;
+	}
+
+	public Btn large() {
+		this.size = "lg";
+		return this;
+	}
+
 }

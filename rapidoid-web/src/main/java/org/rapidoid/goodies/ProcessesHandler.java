@@ -38,6 +38,7 @@ import java.util.concurrent.Callable;
 public class ProcessesHandler extends GUI implements Callable<Object> {
 
 	public static final String[] COLUMNS = {
+		"id",
 		"cmd",
 		"args",
 		"$.params().in()",
@@ -47,9 +48,11 @@ public class ProcessesHandler extends GUI implements Callable<Object> {
 		"startedAt",
 		"finishedAt",
 		"$.group().name()",
+		"(actions)"
 	};
 
 	public static final Object[] COLUMN_NAMES = {
+		"ID",
 		"Command",
 		"Arguments",
 		"Location",
@@ -59,6 +62,7 @@ public class ProcessesHandler extends GUI implements Callable<Object> {
 		"Started at",
 		"Finished at",
 		"Group",
+		"Actions",
 	};
 
 	@Override
