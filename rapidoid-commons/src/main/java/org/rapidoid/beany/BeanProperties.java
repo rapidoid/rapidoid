@@ -68,6 +68,10 @@ public class BeanProperties extends RapidoidThing implements Iterable<Prop> {
 					if (prop == null) {
 						if (JSProp.is(propName)) {
 							prop = new JSProp(propName);
+
+						} else if (ActionsProp.is(propName)) {
+							prop = new ActionsProp();
+
 						} else {
 							throw U.rte("Cannot find property '%s'!", propName);
 						}

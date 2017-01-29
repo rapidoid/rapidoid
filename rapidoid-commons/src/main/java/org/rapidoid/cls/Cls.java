@@ -1249,4 +1249,10 @@ public class Cls extends RapidoidThing {
 		return type.getAnnotation(annotation) != null;
 	}
 
+	public static Object invokeStatic(String className, String methodName, Object... args) {
+		Class<?> cls = Cls.get(className);
+		Method method = findMethodByArgs(cls, methodName, args);
+		return invokeStatic(method, args);
+	}
+
 }

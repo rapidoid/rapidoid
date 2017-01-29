@@ -2,10 +2,9 @@ package org.rapidoid.beany;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.JS;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.u.U;
-
-import javax.script.ScriptException;
+import org.rapidoid.util.Msc;
 
 /*
  * #%L
@@ -29,31 +28,27 @@ import javax.script.ScriptException;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class JSProp extends CustomReadOnlyProp implements Prop {
+public class ActionsProp extends CustomReadOnlyProp implements Prop {
 
-	private final String expr;
+	public static final String NAME = "(actions)";
 
-	public JSProp(String expr) {
-		this.expr = expr;
+	public ActionsProp() {
+		U.must(Msc.hasRapidoidGUI(), "This special property requires the rapidoid-gui module!");
 	}
 
 	public static boolean is(String propName) {
-		return propName.startsWith("$.") || propName.equals("$");
+		return propName.equalsIgnoreCase(NAME);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getRaw(Object target) {
-		try {
-			return (T) JS.eval(expr, U.map("$", target));
-		} catch (ScriptException e) {
-			throw U.rte(e);
-		}
+		return (T) Cls.invokeStatic("org.rapidoid.gui.GUIActions", "of", target);
 	}
 
 	@Override
 	public String getName() {
-		return expr;
+		return NAME;
 	}
 
 }
