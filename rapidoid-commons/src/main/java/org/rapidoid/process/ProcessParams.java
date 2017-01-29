@@ -30,6 +30,8 @@ import java.io.File;
 @Since("5.3.0")
 public class ProcessParams extends RapidoidThing {
 
+	private volatile String id;
+
 	private volatile File in;
 
 	private volatile String[] command;
@@ -68,7 +70,11 @@ public class ProcessParams extends RapidoidThing {
 
 	public ProcessHandle run(String... command) {
 		this.command = command;
-		return ProcessHandle.startProcess(this);
+
+		ProcessHandle handle = new ProcessHandle(this);
+		handle.startProcess(this);
+
+		return handle;
 	}
 
 	public boolean printingOutput() {
@@ -89,4 +95,12 @@ public class ProcessParams extends RapidoidThing {
 		return this;
 	}
 
+	public String id() {
+		return id;
+	}
+
+	public ProcessParams id(String id) {
+		this.id = id;
+		return this;
+	}
 }

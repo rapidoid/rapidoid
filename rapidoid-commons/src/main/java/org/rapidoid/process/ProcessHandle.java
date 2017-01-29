@@ -1,12 +1,10 @@
 package org.rapidoid.process;
 
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.activity.RapidoidThread;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Arr;
-import org.rapidoid.group.Manageable;
+import org.rapidoid.group.AbstractManageable;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.log.Log;
@@ -16,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -45,79 +44,73 @@ import java.util.concurrent.TimeUnit;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class ProcessHandle extends RapidoidThing implements Manageable {
+public class ProcessHandle extends AbstractManageable {
 
 	private final static Set<ProcessHandle> ALL = Coll.synchronizedSet();
 
 	private final static ProcessCrawlerThread CRAWLER = new ProcessCrawlerThread(ALL);
 
-	private final String id = UUID.randomUUID().toString();
+	private final ProcessParams params;
 
-	private volatile Processes group;
+	private final String id;
 
-	private final BlockingQueue<Object> input = new ArrayBlockingQueue<Object>(100);
+	private final BlockingQueue<Object> input = new ArrayBlockingQueue<>(100);
 
-	private final BlockingQueue<String> output = new ArrayBlockingQueue<String>(100);
+	private final BlockingQueue<String> output = null;
 
-	private final BlockingQueue<String> error = new ArrayBlockingQueue<String>(100);
+	private final BlockingQueue<String> error = null;
 
 	private final StringBuffer outBuffer = new StringBuffer();
 	private final StringBuffer errBuffer = new StringBuffer();
 	private final StringBuffer outAndErrBuffer = new StringBuffer();
 
-	private final ProcessParams params;
-	private final Process process;
+	private volatile Process process;
 
-	private volatile boolean inputDone;
-	private volatile boolean outputDone;
-	private volatile boolean errorDone;
+	private volatile Date startedAt;
+	private volatile Date finishedAt;
 
-	private volatile long startedAt;
-	private volatile long finishedAt;
-
-	private ProcessHandle(ProcessParams params, final Process process) {
+	ProcessHandle(ProcessParams params) {
 		this.params = params;
-		this.process = process;
+		this.id = params.id() != null ? params.id() : UUID.randomUUID().toString();
 
-		Thread inputProcessor = new RapidoidThread() {
+		// keep reference to the handle, used by the crawler internally
+		ALL.add(this);
+
+		// register to the process group, if configured
+		if (params.group() != null) {
+			params.group().add(this);
+		}
+
+		setupIO();
+	}
+
+	private synchronized void setupIO() {
+		Thread inputProcessor = new ProcessIOThread(this) {
 			@Override
-			public void run() {
-				try {
-					writeAll(input, process.getOutputStream());
-				} finally {
-					outputDone = true;
-				}
+			void doIO() {
+				writeAll(input, process.getOutputStream());
 			}
 		};
 
 		inputProcessor.setDaemon(true);
 		inputProcessor.start();
 
-		Thread errorProcessor = new RapidoidThread() {
+		Thread errorProcessor = new ProcessIOThread(this) {
 			@Override
-			public void run() {
-				try {
-					BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-					long total = readInto(reader, error, errBuffer, outAndErrBuffer);
-				} finally {
-					errorDone = true;
-				}
+			void doIO() {
+				BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+				readInto(reader, error, errBuffer, outAndErrBuffer);
 			}
 		};
 
 		errorProcessor.setDaemon(true);
 		errorProcessor.start();
 
-		Thread outputProcessor = new RapidoidThread() {
+		Thread outputProcessor = new ProcessIOThread(this) {
 			@Override
-			public void run() {
-				try {
-					BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-					long total = readInto(reader, output, outBuffer, outAndErrBuffer);
-
-				} finally {
-					outputDone = true;
-				}
+			void doIO() {
+				BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+				readInto(reader, output, outBuffer, outAndErrBuffer);
 			}
 		};
 
@@ -125,7 +118,7 @@ public class ProcessHandle extends RapidoidThing implements Manageable {
 		outputProcessor.start();
 	}
 
-	private static void writeAll(BlockingQueue<Object> input, OutputStream output) {
+	private synchronized static void writeAll(BlockingQueue<Object> input, OutputStream output) {
 		while (!Thread.interrupted()) {
 			try {
 				Object obj = input.take();
@@ -156,7 +149,9 @@ public class ProcessHandle extends RapidoidThing implements Manageable {
 			String line;
 			while ((line = reader.readLine()) != null) {
 				try {
-					dest.put(line);
+					if (dest != null) {
+						dest.put(line);
+					}
 
 					if (params.printingOutput()) {
 						U.print(params.linePrefix() + line);
@@ -178,31 +173,31 @@ public class ProcessHandle extends RapidoidThing implements Manageable {
 		return total;
 	}
 
-	public BlockingQueue<Object> input() {
+	public synchronized BlockingQueue<Object> input() {
 		return input;
 	}
 
-	public BlockingQueue<String> output() {
+	public synchronized BlockingQueue<String> output() {
 		return output;
 	}
 
-	public BlockingQueue<String> error() {
+	public synchronized BlockingQueue<String> error() {
 		return error;
 	}
 
-	public Process process() {
+	public synchronized Process process() {
 		return process;
 	}
 
-	public ProcessParams params() {
+	public synchronized ProcessParams params() {
 		return params;
 	}
 
-	public boolean isAlive() {
+	public synchronized boolean isAlive() {
 		return exitCode() == null;
 	}
 
-	public void receive(Operation<String> outputProcessor, Operation<String> errorProcessor) {
+	public synchronized void receive(Operation<String> outputProcessor, Operation<String> errorProcessor) {
 		String s;
 
 		int grace = 1;
@@ -222,26 +217,26 @@ public class ProcessHandle extends RapidoidThing implements Manageable {
 
 			U.sleep(10);
 
-		} while (isAlive() || !outputDone || !errorDone || (--grace) >= 0);
+		} while (isAlive() || (--grace) >= 0);
 	}
 
-	public void print() {
+	public synchronized void print() {
 		U.print(outAndError());
 	}
 
-	public String out() {
+	public synchronized String out() {
 		return outBuffer.toString();
 	}
 
-	public String err() {
+	public synchronized String err() {
 		return errBuffer.toString();
 	}
 
-	public String outAndError() {
+	public synchronized String outAndError() {
 		return outAndErrBuffer.toString();
 	}
 
-	public static ProcessHandle startProcess(ProcessParams params) {
+	synchronized void startProcess(ProcessParams params) {
 
 		ProcessBuilder builder = new ProcessBuilder().command(params.command());
 
@@ -249,7 +244,7 @@ public class ProcessHandle extends RapidoidThing implements Manageable {
 			builder.directory(params.in());
 		}
 
-		long startingAt = U.time();
+		Date startingAt = new Date();
 
 		Process process;
 		try {
@@ -258,23 +253,20 @@ public class ProcessHandle extends RapidoidThing implements Manageable {
 			throw U.rte("Cannot start process: " + U.join(" ", params.command()));
 		}
 
-		ProcessHandle handle = new ProcessHandle(params, process);
-		handle.startedAt = startingAt;
+		attach(process);
 
-		handle.group = params.group();
-		handle.group.add(handle);
-
-		ALL.add(handle);
+		this.startedAt = startingAt;
 
 		synchronized (CRAWLER) {
 			if (CRAWLER.getState() == Thread.State.NEW) CRAWLER.start();
 		}
-
-
-		return handle;
 	}
 
-	public ProcessHandle waitFor() {
+	private synchronized void attach(Process process) {
+		this.process = process;
+	}
+
+	public synchronized ProcessHandle waitFor() {
 		try {
 			process.waitFor();
 		} catch (InterruptedException e) {
@@ -284,7 +276,7 @@ public class ProcessHandle extends RapidoidThing implements Manageable {
 		return this;
 	}
 
-	public ProcessHandle waitFor(long timeout, TimeUnit unit) {
+	public synchronized ProcessHandle waitFor(long timeout, TimeUnit unit) {
 		try {
 			process.waitFor(timeout, unit);
 		} catch (InterruptedException e) {
@@ -294,25 +286,25 @@ public class ProcessHandle extends RapidoidThing implements Manageable {
 		return this;
 	}
 
-	public ProcessHandle destroy() {
+	public synchronized ProcessHandle destroy() {
 		process.destroy();
 		return this;
 	}
 
-	public ProcessHandle destroyForcibly() {
+	public synchronized ProcessHandle destroyForcibly() {
 		process.destroyForcibly();
 		return this;
 	}
 
-	public String cmd() {
+	public synchronized String cmd() {
 		return params.command()[0];
 	}
 
-	public String[] args() {
+	public synchronized String[] args() {
 		return Arr.sub(params.command(), 1, params().command().length);
 	}
 
-	public Integer exitCode() {
+	public synchronized Integer exitCode() {
 		try {
 			return process.exitValue();
 		} catch (IllegalThreadStateException e) {
@@ -320,35 +312,41 @@ public class ProcessHandle extends RapidoidThing implements Manageable {
 		}
 	}
 
-	public long duration() {
-		if (this.startedAt <= 0) return 0;
+	public synchronized long duration() {
+		if (this.startedAt == null) return 0;
 
-		long until = this.finishedAt;
-		if (until == 0) until = U.time();
+		Date until = this.finishedAt;
+		if (until == null) until = new Date();
 
-		return until - this.startedAt;
+		return until.getTime() - this.startedAt.getTime();
 	}
 
-	void onTerminated() {
-		ALL.remove(this);
-		finishedAt = U.time();
+	synchronized void onTerminated() {
+		finishedAt = new Date();
 	}
 
-	public long startedAt() {
+	public synchronized Date startedAt() {
 		return startedAt;
 	}
 
-	public long finishedAt() {
+	public synchronized Date finishedAt() {
 		return finishedAt;
 	}
 
 	@Override
-	public String id() {
+	public synchronized String id() {
 		return id;
 	}
 
-	public Processes group() {
-		return group;
+	public synchronized Processes group() {
+		return params.group();
 	}
 
+	public synchronized ProcessHandle restart() {
+		destroy();
+
+		startProcess(params);
+
+		return this;
+	}
 }

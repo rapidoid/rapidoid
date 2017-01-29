@@ -620,6 +620,7 @@ org.rapidoid.process.Proc
 org.rapidoid.process.ProcessCrawlerThread
 org.rapidoid.process.Processes
 org.rapidoid.process.ProcessHandle
+org.rapidoid.process.ProcessIOThread
 org.rapidoid.process.ProcessParams
 org.rapidoid.RapidoidModule
 org.rapidoid.RapidoidModules

@@ -46,6 +46,10 @@ public class Proc extends RapidoidThing {
 		return new ProcessParams().group(group);
 	}
 
+	public static ProcessParams id(String id) {
+		return new ProcessParams().id(id);
+	}
+
 	public ProcessParams printingOutput(boolean printingOutput) {
 		return new ProcessParams().printingOutput(printingOutput);
 	}

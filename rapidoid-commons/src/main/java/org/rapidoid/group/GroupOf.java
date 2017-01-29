@@ -99,6 +99,22 @@ public class GroupOf<E extends Manageable> extends RapidoidThing {
 		return items.get(index);
 	}
 
+	public E get(String id) {
+		E item = find(id);
+		U.must(item != null, "Cannot find item with id='%s'!", id);
+		return item;
+	}
+
+	public E find(String id) {
+		U.notNull(id, "id");
+
+		for (E item : items) {
+			if (U.eq(id, item.id())) return item;
+		}
+
+		return null;
+	}
+
 	public E remove(int index) {
 		return items.remove(index);
 	}
@@ -158,13 +174,6 @@ public class GroupOf<E extends Manageable> extends RapidoidThing {
 		int result = itemType.hashCode();
 		result = 31 * result + name.hashCode();
 		return result;
-	}
-
-	public E find(String id) {
-		for (E item : items) {
-			if (U.eq(item.id(), id)) return item;
-		}
-		return null;
 	}
 
 }
