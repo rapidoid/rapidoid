@@ -4,6 +4,9 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.html.impl.TagRenderer;
+import org.rapidoid.u.U;
+
+import java.util.List;
 
 /*
  * #%L
@@ -29,15 +32,27 @@ import org.rapidoid.html.impl.TagRenderer;
 @Since("4.1.0")
 public class MultiWidget extends AbstractWidget {
 
-	private final Object[] elements;
+	private final List<Object> elements;
 
 	public MultiWidget(Object[] elements) {
-		this.elements = elements;
+		this.elements = U.list(elements);
 	}
 
 	@Override
 	protected Object render() {
 		return GUI.hardcoded(TagRenderer.get().toHTML(elements, null));
+	}
+
+	public void add(Object element) {
+		elements.add(element);
+	}
+
+	public void remove(Object element) {
+		elements.remove(element);
+	}
+
+	public void clear() {
+		elements.clear();
 	}
 
 }
