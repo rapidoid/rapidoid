@@ -2,6 +2,9 @@ Rapidoid.initializer(function ($scope) {
 
     $scope._emit = function (event, eventId, eventArgs) {
 
+        event.preventDefault();
+        event.stopPropagation();
+
         var btn = $(event.currentTarget);
         var confirm = btn.data("confirm");
 
