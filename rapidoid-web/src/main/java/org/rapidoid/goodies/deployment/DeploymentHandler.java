@@ -2,6 +2,7 @@ package org.rapidoid.goodies.deployment;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Str;
 import org.rapidoid.deploy.AppDeployer;
 import org.rapidoid.gui.Btn;
 import org.rapidoid.gui.GUI;
@@ -110,7 +111,7 @@ public class DeploymentHandler extends GUI implements ReqHandler {
 			.onSuccess(new Runnable() {
 				@Override
 				public void run() {
-					AppDeployer.deploy(filename);
+					AppDeployer.deploy(filename, Str.trimr(filename, ".staged"));
 				}
 			}) : null;
 
@@ -118,19 +119,22 @@ public class DeploymentHandler extends GUI implements ReqHandler {
 		Btn delete = exists
 			? btn("Delete").command("delete_" + cmd)
 			.class_("btn btn-danger btn-xs")
-			.confirm("Do you want do delete the file '" + filename + "'?")
+			.confirm("Do you want to delete the file '" + filename + "'?")
 			: null;
 
 		if (delete != null) {
 			delete.onSuccess(new Runnable() {
 				@Override
 				public void run() {
+					AppDeployer.stopApp("app");
 					IO.delete(filename);
 				}
 			});
 		}
 
 		Btn details = null;
+		Btn restart = null;
+
 		if (!staged && exists) {
 
 			List<ProcessHandle> processes = AppDeployer.processes().items();
@@ -142,6 +146,15 @@ public class DeploymentHandler extends GUI implements ReqHandler {
 				details = btn("Details")
 					.class_("btn btn-default btn-xs")
 					.go(processUrl);
+
+				restart = btn("Restart")
+					.class_("btn btn-warning btn-xs")
+					.onSuccess(new Runnable() {
+						@Override
+						public void run() {
+							AppDeployer.startOrRestartApp("app", AppDeployer.defaultApp());
+						}
+					});
 			}
 		}
 
@@ -151,7 +164,7 @@ public class DeploymentHandler extends GUI implements ReqHandler {
 			"exists", exists,
 			"size", size,
 			"since", since,
-			"actions", multi(deploy, details, delete)
+			"actions", multi(deploy, details, restart, delete)
 		);
 	}
 

@@ -41,29 +41,34 @@ import java.nio.file.StandardCopyOption;
 @Since("5.3.0")
 public class AppDeployer extends RapidoidThing {
 
-	private static final Processes DEPLOYED_PROCESSES = new Processes("deployed");
+	private static final Processes DEPLOYED = new Processes("deployed");
 
-	private static void runIfExists(String appJar) {
+	public static String defaultApp() {
+		return ClasspathUtil.appJar();
+	}
+
+	private static void runIfExists(String appId, String appJar) {
 		if (new File(appJar).exists()) {
-			Log.info("Deploying pre-existing application JAR", "filename", appJar);
+			Log.info("Deploying pre-existing application JAR", "id", appId, "filename", appJar);
 
-			runJar(appJar);
+			runJar(appId, appJar);
 		}
 	}
 
-	private static void runJar(String appJar) {
-		Proc.group(DEPLOYED_PROCESSES)
+	private static void runJar(String appId, String appJar) {
+		Proc.group(DEPLOYED)
+			.id(appId)
 			.printingOutput(true)
 			.linePrefix("[APP] ")
 			.run("java", "-jar", appJar);
 	}
 
-	public static void deploy(String appJar) {
-		Log.info("Deploying JAR...", "filename", appJar);
-		U.must(U.notEmpty(appJar), "Empty application jar name was provided!");
+	public static void deploy(String stagedAppJar, String appJar) {
+		U.must(U.notEmpty(stagedAppJar), "Empty application jar name was provided!");
 
-		String stagedAppJar = appJar + ".staged";
-		U.must(new File(stagedAppJar).exists(), "Cannot deploy, the application needs to be staged first!");
+		Log.info("Deploying staged JAR...", "filename", stagedAppJar);
+
+		U.must(new File(stagedAppJar).exists(), "Cannot deploy, the application needs to be staged first, cannot find: %s", stagedAppJar);
 
 		try {
 			Files.move(Paths.get(stagedAppJar), Paths.get(appJar), StandardCopyOption.REPLACE_EXISTING);
@@ -71,14 +76,22 @@ public class AppDeployer extends RapidoidThing {
 			throw U.rte("Deployment error!", e);
 		}
 
-		for (ProcessHandle handle : DEPLOYED_PROCESSES.items()) {
-			Log.info("Terminating the previously deployed application", "process", handle.params().command());
-			handle.destroy();
-		}
-
-		runJar(appJar);
+		startOrRestartApp("app", appJar);
 
 		Log.info("Deployed JAR", "filename", appJar);
+	}
+
+	public static void startOrRestartApp(String appId, String appJar) {
+		ProcessHandle proc = DEPLOYED.find(appId);
+
+		if (proc != null) {
+			Log.info("Restarting the previously deployed application", "id", proc.id(), "process", proc.params().command());
+			proc.restart();
+
+		} else {
+			Log.info("Starting the deployed application", "id", proc.id(), "process", proc.params().command());
+			runJar(appId, appJar);
+		}
 	}
 
 	public static void stageJar(String appJar, byte[] content) {
@@ -92,14 +105,20 @@ public class AppDeployer extends RapidoidThing {
 	}
 
 	public static Processes processes() {
-		return DEPLOYED_PROCESSES;
+		return DEPLOYED;
 	}
 
 	public static void bootstrap() {
-		String appJar = ClasspathUtil.appJar();
+		String appJar = defaultApp();
 		if (U.notEmpty(appJar)) {
-			runIfExists(appJar);
+			runIfExists("app", appJar);
 		}
 	}
 
+	public static void stopApp(String appId) {
+		ProcessHandle proc = DEPLOYED.get(appId);
+
+		Log.info("Stopping application", "id", proc.id(), "process", proc.params().command());
+		proc.destroy();
+	}
 }

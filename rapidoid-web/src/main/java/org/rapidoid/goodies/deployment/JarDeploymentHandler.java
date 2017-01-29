@@ -7,7 +7,6 @@ import org.rapidoid.deploy.AppDeployer;
 import org.rapidoid.http.NiceResponse;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
-import org.rapidoid.scan.ClasspathUtil;
 
 /*
  * #%L
@@ -37,7 +36,7 @@ public class JarDeploymentHandler extends RapidoidThing implements ReqHandler {
 	public Object execute(Req req) {
 
 		try {
-			AppDeployer.deploy(ClasspathUtil.appJar());
+			AppDeployer.deploy(AppDeployer.defaultApp() + ".staged", AppDeployer.defaultApp());
 		} catch (Exception e) {
 			return NiceResponse.err(req, e);
 		}

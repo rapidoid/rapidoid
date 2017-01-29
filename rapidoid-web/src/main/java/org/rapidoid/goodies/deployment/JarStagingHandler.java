@@ -8,7 +8,6 @@ import org.rapidoid.http.NiceResponse;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
 import org.rapidoid.io.Upload;
-import org.rapidoid.scan.ClasspathUtil;
 
 /*
  * #%L
@@ -40,7 +39,7 @@ public class JarStagingHandler extends GUI implements ReqHandler {
 		Upload jar = req.file("file");
 
 		try {
-			AppDeployer.stageJar(ClasspathUtil.appJar(), jar.content());
+			AppDeployer.stageJar(AppDeployer.defaultApp(), jar.content());
 		} catch (Exception e) {
 			return NiceResponse.err(req, e);
 		}
