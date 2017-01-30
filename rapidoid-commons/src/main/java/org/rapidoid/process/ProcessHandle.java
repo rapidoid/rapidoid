@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -84,7 +85,7 @@ public class ProcessHandle extends AbstractManageable {
 		setupIO();
 	}
 
-	private synchronized void setupIO() {
+	private void setupIO() {
 		Thread inputProcessor = new ProcessIOThread(this) {
 			@Override
 			void doIO() {
@@ -118,7 +119,7 @@ public class ProcessHandle extends AbstractManageable {
 		outputProcessor.start();
 	}
 
-	private synchronized static void writeAll(BlockingQueue<Object> input, OutputStream output) {
+	private static void writeAll(BlockingQueue<Object> input, OutputStream output) {
 		while (!Thread.interrupted()) {
 			try {
 				Object obj = input.take();
@@ -194,7 +195,7 @@ public class ProcessHandle extends AbstractManageable {
 	}
 
 	public synchronized boolean isAlive() {
-		return exitCode() == null;
+		return process != null && exitCode() == null;
 	}
 
 	public synchronized void receive(Operation<String> outputProcessor, Operation<String> errorProcessor) {
@@ -253,16 +254,17 @@ public class ProcessHandle extends AbstractManageable {
 			throw U.rte("Cannot start process: " + U.join(" ", params.command()));
 		}
 
-		attach(process);
-
 		this.startedAt = startingAt;
+		this.finishedAt = null;
+
+		attach(process);
 
 		synchronized (CRAWLER) {
 			if (CRAWLER.getState() == Thread.State.NEW) CRAWLER.start();
 		}
 	}
 
-	private synchronized void attach(Process process) {
+	private void attach(Process process) {
 		this.process = process;
 	}
 
@@ -306,7 +308,7 @@ public class ProcessHandle extends AbstractManageable {
 
 	public synchronized Integer exitCode() {
 		try {
-			return process.exitValue();
+			return process != null ? process.exitValue() : null;
 		} catch (IllegalThreadStateException e) {
 			return null;
 		}
