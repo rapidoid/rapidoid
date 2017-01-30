@@ -39,14 +39,15 @@ import java.util.Map;
 @Since("2.0.0")
 public class Conf extends RapidoidThing {
 
+	private static final String CONFIG_NAME = Msc.isPlatform() ? "rapidoid" : "config";
+	public static final Config ROOT = new ConfigImpl(CONFIG_NAME, true);
+
 	private static final Map<String, Config> SECTIONS = Coll.autoExpandingMap(new Mapper<String, Config>() {
 		@Override
 		public Config map(String name) throws Exception {
 			return createSection(name);
 		}
 	});
-
-	public static final Config ROOT = new ConfigImpl("config", true);
 
 	public static final Config USERS = section("users");
 	public static final Config JOBS = section("jobs");
