@@ -340,6 +340,17 @@ public class ProcessHandle extends AbstractManageable {
 		return id;
 	}
 
+	@Override
+	public synchronized List<String> actions() {
+		List<String> actions = U.list("?Restart");
+
+		if (isAlive()) {
+			actions.add("!Terminate");
+		}
+
+		return actions;
+	}
+
 	public synchronized Processes group() {
 		return params.group();
 	}
@@ -351,4 +362,9 @@ public class ProcessHandle extends AbstractManageable {
 
 		return this;
 	}
+
+	public synchronized ProcessHandle terminate() {
+		return destroy();
+	}
+
 }
