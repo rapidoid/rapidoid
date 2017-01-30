@@ -3,10 +3,12 @@ package org.rapidoid.util;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
 
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /*
  * #%L
@@ -56,6 +58,12 @@ public class Wait extends RapidoidThing {
 			latch.await(timeout, unit);
 		} catch (InterruptedException e) {
 			throw new CancellationException();
+		}
+	}
+
+	public static void until(AtomicBoolean condition) {
+		while (!condition.get()) {
+			U.sleep(10);
 		}
 	}
 

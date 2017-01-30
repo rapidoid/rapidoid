@@ -9,6 +9,7 @@ import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Wait;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,6 +23,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /*
  * #%L
@@ -65,6 +67,9 @@ public class ProcessHandle extends AbstractManageable {
 	private final StringBuffer errBuffer = new StringBuffer();
 	private final StringBuffer outAndErrBuffer = new StringBuffer();
 
+	private final AtomicBoolean doneReadingOut = new AtomicBoolean();
+	private final AtomicBoolean doneReadingErr = new AtomicBoolean();
+
 	private volatile Process process;
 
 	private volatile Date startedAt;
@@ -99,8 +104,12 @@ public class ProcessHandle extends AbstractManageable {
 		Thread errorProcessor = new ProcessIOThread(this) {
 			@Override
 			void doIO() {
-				BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-				readInto(reader, error, errBuffer, outAndErrBuffer);
+				try {
+					BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+					readInto(reader, error, errBuffer, outAndErrBuffer);
+				} finally {
+					doneReadingErr.set(true);
+				}
 			}
 		};
 
@@ -110,8 +119,12 @@ public class ProcessHandle extends AbstractManageable {
 		Thread outputProcessor = new ProcessIOThread(this) {
 			@Override
 			void doIO() {
-				BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-				readInto(reader, output, outBuffer, outAndErrBuffer);
+				try {
+					BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+					readInto(reader, output, outBuffer, outAndErrBuffer);
+				} finally {
+					doneReadingOut.set(true);
+				}
 			}
 		};
 
@@ -198,7 +211,7 @@ public class ProcessHandle extends AbstractManageable {
 		return process != null && exitCode() == null;
 	}
 
-	public synchronized void receive(Operation<String> outputProcessor, Operation<String> errorProcessor) {
+	public void receive(Operation<String> outputProcessor, Operation<String> errorProcessor) {
 		String s;
 
 		int grace = 1;
@@ -218,23 +231,36 @@ public class ProcessHandle extends AbstractManageable {
 
 			U.sleep(10);
 
-		} while (isAlive() || (--grace) >= 0);
+		} while (isAlive() || !doneReadingOut.get() || !doneReadingErr.get() || (--grace) >= 0);
 	}
 
-	public synchronized void print() {
+	public void print() {
 		U.print(outAndError());
 	}
 
-	public synchronized String out() {
-		return outBuffer.toString();
+	public String out() {
+		Wait.until(doneReadingOut);
+
+		synchronized (this) {
+			return outBuffer.toString();
+		}
 	}
 
-	public synchronized String err() {
-		return errBuffer.toString();
+	public String err() {
+		Wait.until(doneReadingErr);
+
+		synchronized (this) {
+			return errBuffer.toString();
+		}
 	}
 
-	public synchronized String outAndError() {
-		return outAndErrBuffer.toString();
+	public String outAndError() {
+		Wait.until(doneReadingOut);
+		Wait.until(doneReadingErr);
+
+		synchronized (this) {
+			return outAndErrBuffer.toString();
+		}
 	}
 
 	synchronized void startProcess(ProcessParams params) {
@@ -256,6 +282,8 @@ public class ProcessHandle extends AbstractManageable {
 
 		this.startedAt = startingAt;
 		this.finishedAt = null;
+		this.doneReadingErr.set(false);
+		this.doneReadingOut.set(false);
 
 		attach(process);
 
@@ -268,9 +296,13 @@ public class ProcessHandle extends AbstractManageable {
 		this.process = process;
 	}
 
-	public synchronized ProcessHandle waitFor() {
+	private synchronized Process requireProcess() {
+		return process;
+	}
+
+	public ProcessHandle waitFor() {
 		try {
-			process.waitFor();
+			requireProcess().waitFor();
 		} catch (InterruptedException e) {
 			throw new CancellationException();
 		}
@@ -278,9 +310,9 @@ public class ProcessHandle extends AbstractManageable {
 		return this;
 	}
 
-	public synchronized ProcessHandle waitFor(long timeout, TimeUnit unit) {
+	public ProcessHandle waitFor(long timeout, TimeUnit unit) {
 		try {
-			process.waitFor(timeout, unit);
+			requireProcess().waitFor(timeout, unit);
 		} catch (InterruptedException e) {
 			throw new CancellationException();
 		}
@@ -288,13 +320,13 @@ public class ProcessHandle extends AbstractManageable {
 		return this;
 	}
 
-	public synchronized ProcessHandle destroy() {
-		process.destroy();
+	public ProcessHandle destroy() {
+		requireProcess().destroy();
 		return this;
 	}
 
-	public synchronized ProcessHandle destroyForcibly() {
-		process.destroyForcibly();
+	public ProcessHandle destroyForcibly() {
+		requireProcess().destroyForcibly();
 		return this;
 	}
 
