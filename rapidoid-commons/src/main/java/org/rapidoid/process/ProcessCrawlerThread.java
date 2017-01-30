@@ -49,7 +49,7 @@ public class ProcessCrawlerThread extends AbstractLoopThread {
 	}
 
 	private void visit(ProcessHandle handle) {
-		if (!handle.isAlive()) {
+		if (!handle.isAlive() && handle.finishedAt() == null) {
 			handle.onTerminated();
 		}
 	}
