@@ -12,13 +12,14 @@ INFO | main | org.rapidoid.env.Environment | Automatically activating mode-speci
 INFO | main | org.rapidoid.env.Environment | Initialized environment | mode = PRODUCTION | profiles = [production, platform]
 INFO | main | org.rapidoid.scan.ClasspathUtil | Setting application JAR | appJar = /app/app.jar | exists = false
 INFO | main | org.rapidoid.config.ConfigImpl | Loaded configuration | files = [built-in-config.yml, built-in-config-platform.yml]
+INFO | server | org.rapidoid.net.impl.RapidoidServerLoop | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
+INFO | main | org.rapidoid.setup.Setup | Server has started | setup = app | home = http://localhost:8888
+INFO | main | org.rapidoid.setup.Setup | Static resources will be served from the following locations | setup = app | locations = [static, default/static]
+INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = app | verbs = GET | path = / | roles = [] | tx = NONE | mvc = true | cacheTTL = 0
 INFO | main | org.rapidoid.util.Msc | -------------------------
 INFO | main | org.rapidoid.util.Msc | Registering Admin Center:
 INFO | main | org.rapidoid.util.Msc | -------------------------
 INFO | main | org.rapidoid.insight.Metrics | Bootstraping metrics
-INFO | server | org.rapidoid.net.impl.RapidoidServerLoop | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
-INFO | main | org.rapidoid.setup.Setup | Server has started | setup = admin | home = http://localhost:8888
-INFO | main | org.rapidoid.setup.Setup | Static resources will be served from the following locations | setup = admin | locations = [static, default/static]
 INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET,POST | path = /_ | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
 INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET,POST | path = /_entities | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
 INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET,POST | path = /_routes | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
