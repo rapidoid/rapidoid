@@ -21,7 +21,7 @@ admin-zone:
   home: /_
   brand: '<i class="fa fa-dashboard"></i> Admin'
   search: false
-  fluid: false
+  fluid: true
   menu:
     Overview: /_
     Application:

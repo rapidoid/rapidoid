@@ -7,3 +7,6 @@ admin:
 app:
   jar: /app/app.jar
   cdn: false
+
+admin-zone:
+  brand: '<i class="fa fa-dashboard"></i> Rapidoid'
