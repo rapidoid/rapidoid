@@ -63,6 +63,10 @@ public abstract class GUI extends HTML implements Role {
 
 	public static final Tag N_A = NOTHING;
 
+	public static final Tag TRUE = fa("check-square-o");
+
+	public static final Tag FALSE = fa("square-o");
+
 	public static final Btn SAVE = cmd("^Save");
 
 	public static final Btn ADD = cmd("^Add");
@@ -595,6 +599,10 @@ public abstract class GUI extends HTML implements Role {
 		if (item instanceof Date) {
 			Date date = (Date) item;
 			return span(Dates.readable(date));
+
+		} else if (item instanceof Boolean) {
+			boolean b = (Boolean) item;
+			return b ? TRUE : FALSE;
 
 		} else if (item instanceof Var<?>) {
 			Var<?> var = (Var<?>) item;
