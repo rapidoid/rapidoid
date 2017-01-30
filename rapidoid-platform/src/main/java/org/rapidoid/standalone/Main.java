@@ -35,12 +35,19 @@ import org.rapidoid.util.Msc;
 @Since("5.1.0")
 public class Main extends RapidoidThing {
 
+	private static final String[] DEFAULT_ARGS = {
+		"admin.services=center",
+	};
+
 	public static void main(String[] args) {
 		// Rapidoid banner
 		U.print(IO.load("rapidoid.txt"));
 
-		Msc.setStandalone(true);
+		if (U.isEmpty(args)) {
+			args = DEFAULT_ARGS;
+		}
 
+		Msc.setStandalone(true);
 		App.run(args);
 
 		AppDeployer.bootstrap();
