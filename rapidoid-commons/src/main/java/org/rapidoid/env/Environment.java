@@ -90,7 +90,7 @@ public class Environment extends RapidoidInitializer {
 			profilesView = Collections.unmodifiableSet(profiles);
 		}
 
-		boolean production = Msc.isStandalone() || Env.hasInitial("mode", "production") || profiles.contains("production");
+		boolean production = Msc.isPlatform() || Env.hasInitial("mode", "production") || profiles.contains("production");
 		boolean test = Env.hasInitial("mode", "test") || profiles.contains("test");
 		boolean dev = Env.hasInitial("mode", "dev") || profiles.contains("dev");
 
@@ -120,7 +120,7 @@ public class Environment extends RapidoidInitializer {
 		Log.info("Automatically activating mode-specific profile", "!profile", modeProfile);
 		profiles.add(modeProfile);
 
-		if (Msc.isStandalone()) {
+		if (Msc.isPlatform()) {
 			profiles.add("platform");
 		}
 
@@ -151,7 +151,7 @@ public class Environment extends RapidoidInitializer {
 			return profiles;
 
 		} else {
-			if (!Msc.isStandalone()) {
+			if (!Msc.isPlatform()) {
 				Log.info("No profiles were specified, activating 'default' profile");
 				profiles = U.list("default");
 			} else {

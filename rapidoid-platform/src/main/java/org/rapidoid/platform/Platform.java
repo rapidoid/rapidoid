@@ -44,7 +44,7 @@ public class Platform extends RapidoidThing {
 		// Rapidoid banner
 		U.print(IO.load("rapidoid.txt"));
 
-		Msc.setStandalone(true);
+		Msc.setPlatform(true);
 		App.run(args);
 
 		AppDeployer.bootstrap();
