@@ -708,6 +708,7 @@ org.rapidoid.setup.ServiceBootstrap
 org.rapidoid.setup.Setup
 org.rapidoid.setup.WatchForChanges
 org.rapidoid.standalone.Main
+org.rapidoid.standalone.PlatformInDevMode
 org.rapidoid.test.ExpectErrors
 org.rapidoid.test.RapidoidIntegrationTest
 org.rapidoid.test.RapidoidTest
