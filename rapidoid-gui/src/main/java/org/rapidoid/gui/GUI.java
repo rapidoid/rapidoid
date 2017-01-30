@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.AnyObj;
+import org.rapidoid.commons.Dates;
 import org.rapidoid.commons.English;
 import org.rapidoid.commons.Str;
 import org.rapidoid.gui.input.*;
@@ -51,10 +52,7 @@ import org.rapidoid.util.Msc;
 import org.rapidoid.var.Var;
 
 import java.io.Serializable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.NavigableMap;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Authors("Nikolche Mihajlovski")
@@ -594,7 +592,11 @@ public abstract class GUI extends HTML implements Role {
 
 		if (item == null) return N_A;
 
-		if (item instanceof Var<?>) {
+		if (item instanceof Date) {
+			Date date = (Date) item;
+			return span(Dates.readable(date));
+
+		} else if (item instanceof Var<?>) {
 			Var<?> var = (Var<?>) item;
 			return display(var.get());
 

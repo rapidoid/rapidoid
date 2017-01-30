@@ -129,10 +129,6 @@ public class Dates extends RapidoidThing {
 		return df.format(date);
 	}
 
-	private static SimpleDateFormat frmt(String frmt) {
-		return new SimpleDateFormat(frmt);
-	}
-
 	public static String day() {
 		return frmt("yyyy-MM-dd").format(U.time());
 	}
@@ -147,6 +143,30 @@ public class Dates extends RapidoidThing {
 
 	public static String second() {
 		return frmt("yyyy-MM-dd-HH-mm-ss").format(U.time());
+	}
+
+	public static SimpleDateFormat frmt(String frmt) {
+		return new SimpleDateFormat(frmt);
+	}
+
+	public static String frmt(String frmt, Date date) {
+		return frmt(frmt).format(date);
+	}
+
+	public static Calendar calendar(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		return cal;
+	}
+
+	public static String readable(Date date) {
+		Calendar cal = Dates.calendar(date);
+
+		if (cal.get(Calendar.YEAR) == Dates.thisYear()) {
+			return frmt("dd MMM, HH:mm", date);
+		} else {
+			return frmt("dd MMM yyyy, HH:mm", date);
+		}
 	}
 
 }
