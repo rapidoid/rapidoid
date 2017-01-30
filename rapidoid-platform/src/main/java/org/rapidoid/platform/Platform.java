@@ -26,11 +26,13 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.deploy.AppDeployer;
 import org.rapidoid.io.IO;
+import org.rapidoid.log.Log;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
 import org.rapidoid.u.U;
 import org.rapidoid.util.AppInfo;
+import org.rapidoid.util.GlobalCfg;
 import org.rapidoid.util.Msc;
 
 import java.awt.*;
@@ -43,6 +45,12 @@ public class Platform extends RapidoidThing {
 	static void start(String[] args, boolean defaults) {
 		// Rapidoid banner
 		U.print(IO.load("rapidoid.txt"));
+
+		Log.setPrefix("[PLATFORM] ");
+
+		if (GlobalCfg.uniformOutput()) {
+			Log.setShowingThread(false);
+		}
 
 		Msc.setPlatform(true);
 		App.run(args);

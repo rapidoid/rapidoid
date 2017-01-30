@@ -53,6 +53,10 @@ public class Log extends RapidoidThing {
 
 	private static volatile boolean styled = System.console() != null;
 
+	private static volatile String prefix;
+
+	private static volatile boolean showingThread = true;
+
 	private Log() {
 	}
 
@@ -92,6 +96,22 @@ public class Log extends RapidoidThing {
 
 	public static void debugging() {
 		setLogLevel(LEVEL_DEBUG);
+	}
+
+	public static String getPrefix() {
+		return prefix;
+	}
+
+	public static void setPrefix(String prefix) {
+		Log.prefix = prefix;
+	}
+
+	public static boolean isShowingThread() {
+		return showingThread;
+	}
+
+	public static void setShowingThread(boolean showingThread) {
+		Log.showingThread = showingThread;
 	}
 
 	public static boolean hasErrors() {
@@ -298,9 +318,18 @@ public class Log extends RapidoidThing {
 			// no logger is available, so log to stdout
 			StringBuilder sb = new StringBuilder();
 
+			if (prefix != null) {
+				sb.append(prefix);
+			}
+
+			// INFO, WARN...
 			sb.append(level.name());
-			sb.append(" | ");
-			sb.append(Thread.currentThread().getName());
+
+			if (showingThread) {
+				sb.append(" | ");
+				sb.append(Thread.currentThread().getName());
+			}
+
 			sb.append(" | ");
 			sb.append(topic);
 			sb.append(" | ");
