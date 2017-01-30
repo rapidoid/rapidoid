@@ -37,6 +37,8 @@ import java.util.List;
 @Since("5.1.0")
 public class HttpLoginTest extends IsolatedIntegrationTest {
 
+	volatile boolean ready = false;
+
 	@Test
 	public void testLogin() {
 		On.get("/user").json(() -> U.list(Contextual.username(), Contextual.roles()));
@@ -53,10 +55,13 @@ public class HttpLoginTest extends IsolatedIntegrationTest {
 			return U.list(Contextual.username(), Contextual.roles());
 		});
 
+		ready = true;
 		multiThreaded(150, Msc.normalOrHeavy(1500, 15000), this::randomUserLogin);
 	}
 
 	private void randomUserLogin() {
+		while (!ready) U.sleep(100); // wait
+
 		switch (Rnd.rnd(4)) {
 			case 0:
 				loginFlow("foo", "bar", U.list());
