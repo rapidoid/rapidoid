@@ -42,14 +42,15 @@ import java.net.URI;
 @Since("5.3.0")
 public class Platform extends RapidoidThing {
 
-	static void start(String[] args, boolean defaults) {
+	static void start(String[] args, @SuppressWarnings("unused") boolean defaults) {
 		// Rapidoid banner
 		U.print(IO.load("rapidoid.txt"));
 
-		Log.setPrefix("[PLATFORM] ");
+		Log.options().prefix("[PLATFORM] ");
 
 		if (GlobalCfg.uniformOutput()) {
-			Log.setShowingThread(false);
+			Log.options().showThread(false);
+			Log.options().showDateTime(false);
 		}
 
 		Msc.setPlatform(true);

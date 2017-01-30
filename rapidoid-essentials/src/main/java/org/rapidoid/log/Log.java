@@ -49,13 +49,7 @@ public class Log extends RapidoidThing {
 
 	protected static volatile LogLevel LOG_LEVEL = LEVEL_INFO;
 
-	private static volatile Callable<Logger> loggerFactory;
-
-	private static volatile boolean styled = System.console() != null;
-
-	private static volatile String prefix;
-
-	private static volatile boolean showingThread = true;
+	private static final LogOptions options = new LogOptions();
 
 	private Log() {
 	}
@@ -86,32 +80,12 @@ public class Log extends RapidoidThing {
 		return LOG_LEVEL;
 	}
 
-	public static boolean isStyled() {
-		return styled;
-	}
-
-	public static void setStyled(boolean styled) {
-		Log.styled = styled;
-	}
-
 	public static void debugging() {
 		setLogLevel(LEVEL_DEBUG);
 	}
 
-	public static String getPrefix() {
-		return prefix;
-	}
-
-	public static void setPrefix(String prefix) {
-		Log.prefix = prefix;
-	}
-
-	public static boolean isShowingThread() {
-		return showingThread;
-	}
-
-	public static void setShowingThread(boolean showingThread) {
-		Log.showingThread = showingThread;
+	public static LogOptions options() {
+		return options;
 	}
 
 	public static boolean hasErrors() {
@@ -234,7 +208,7 @@ public class Log extends RapidoidThing {
 	}
 
 	private static void appendStyled(Appendable out, Object value, boolean bold) throws IOException {
-		boolean withStyle = styled;
+		boolean withStyle = options.styled();
 
 		if (bold && withStyle) {
 			out.append("\33[1m");
@@ -318,14 +292,14 @@ public class Log extends RapidoidThing {
 			// no logger is available, so log to stdout
 			StringBuilder sb = new StringBuilder();
 
-			if (prefix != null) {
-				sb.append(prefix);
+			if (options.prefix() != null) {
+				sb.append(options.prefix());
 			}
 
 			// INFO, WARN...
 			sb.append(level.name());
 
-			if (showingThread) {
+			if (options.showThread()) {
 				sb.append(" | ");
 				sb.append(Thread.currentThread().getName());
 			}
@@ -396,16 +370,17 @@ public class Log extends RapidoidThing {
 	}
 
 	public static Logger logger() {
-		if (loggerFactory == null) {
+
+		if (options.loggerFactory() == null) {
 			synchronized (Log.class) {
-				if (loggerFactory == null) {
-					loggerFactory = createLoggerFactory();
+				if (options.loggerFactory() == null) {
+					options.loggerFactory(createLoggerFactory());
 				}
 			}
 		}
 
 		try {
-			return loggerFactory.call();
+			return options.loggerFactory().call();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

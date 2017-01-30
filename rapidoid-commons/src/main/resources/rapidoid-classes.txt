@@ -556,6 +556,7 @@ org.rapidoid.log.Log
 org.rapidoid.log.LogbackUtil
 org.rapidoid.log.LogHP
 org.rapidoid.log.LogLevel
+org.rapidoid.log.LogOptions
 org.rapidoid.log.LogStats
 org.rapidoid.log.slf4j.RapidoidLogger
 org.rapidoid.log.slf4j.RapidoidLoggerFactory

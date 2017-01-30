@@ -5,13 +5,13 @@
 |_| \_\__,_| .__/|_|\__,_|\___/|_|\__,_|
            |_|
 
-INFO | main | org.rapidoid.config.RapidoidInitializer | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
-INFO | main | org.rapidoid.config.RapidoidInitializer | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
-INFO | main | org.rapidoid.env.Env | Setting application root | root = /app | content = []
-INFO | main | org.rapidoid.env.Environment | Automatically activating mode-specific profile | profile = production
-INFO | main | org.rapidoid.env.Environment | Initialized environment | mode = PRODUCTION | profiles = [production, platform]
-INFO | main | org.rapidoid.scan.ClasspathUtil | Setting application JAR | appJar = /app/app.jar | exists = false
-INFO | main | org.rapidoid.config.ConfigImpl | Loaded configuration | files = [built-in-config.yml, built-in-config-platform.yml]
+[PLATFORM] INFO | org.rapidoid.config.RapidoidInitializer | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
+[PLATFORM] INFO | org.rapidoid.config.RapidoidInitializer | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
+[PLATFORM] INFO | org.rapidoid.env.Env | Setting application root | root = /app | content = []
+[PLATFORM] INFO | org.rapidoid.env.Environment | Automatically activating mode-specific profile | profile = production
+[PLATFORM] INFO | org.rapidoid.env.Environment | Initialized environment | mode = PRODUCTION | profiles = [production, platform]
+[PLATFORM] INFO | org.rapidoid.scan.ClasspathUtil | Setting application JAR | appJar = /app/app.jar | exists = false
+[PLATFORM] INFO | org.rapidoid.config.ConfigImpl | Loaded configuration | files = [built-in-config.yml, built-in-config-platform.yml]
 Exception in thread "main" java.lang.IllegalArgumentException: Unknown service: 'foo'!
 	at org.rapidoid.u.U.illegal(U.java:432)
 	at org.rapidoid.u.U.must(U.java:458)
@@ -24,4 +24,5 @@ Exception in thread "main" java.lang.IllegalArgumentException: Unknown service: 
 	at org.rapidoid.setup.AppBootstrap.services(AppBootstrap.java:136)
 	at org.rapidoid.setup.App.boot(App.java:98)
 	at org.rapidoid.setup.App.run(App.java:91)
-	at org.rapidoid.standalone.Main.main(Main.java:57)
+	at org.rapidoid.platform.Platform.start(Platform.java:57)
+	at org.rapidoid.platform.Main.main(Main.java:44)

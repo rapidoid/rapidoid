@@ -5,15 +5,18 @@
 |_| \_\__,_| .__/|_|\__,_|\___/|_|\__,_|
            |_|
 
-INFO | main | org.rapidoid.config.RapidoidInitializer | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
-INFO | main | org.rapidoid.config.RapidoidInitializer | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
-INFO | main | org.rapidoid.env.Env | Setting application root | root = /app/the-root | content = [/app/the-root/my-config.yaml]
-INFO | main | org.rapidoid.config.ConfigBase | Changing configuration filename base | from = config | to = my-config
-INFO | main | org.rapidoid.env.Environment | Automatically activating mode-specific profile | profile = production
-INFO | main | org.rapidoid.env.Environment | Initialized environment | mode = PRODUCTION | profiles = [production, platform]
-INFO | main | org.rapidoid.scan.ClasspathUtil | Setting application JAR | appJar = /app/app.jar | exists = false
-INFO | main | org.rapidoid.config.ConfigImpl | Loaded configuration | files = [built-in-config.yml, built-in-config-platform.yml, /app/the-root/my-config.yaml]
-INFO | server | org.rapidoid.net.impl.RapidoidServerLoop | Starting server | address = 0.0.0.0 | port = 5555 | I/O workers = 4 | sync = true | accept = non-blocking
-INFO | main | org.rapidoid.setup.Setup | Server has started | setup = app | home = http://localhost:5555
-INFO | main | org.rapidoid.setup.Setup | Static resources will be served from the following locations | setup = app | locations = [static, default/static]
-INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = app | verbs = GET | path = /_status | roles = [] | tx = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | org.rapidoid.config.RapidoidInitializer | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
+[PLATFORM] INFO | org.rapidoid.config.RapidoidInitializer | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
+[PLATFORM] INFO | org.rapidoid.env.Env | Setting application root | root = /app/the-root | content = [/app/the-root/my-config.yaml]
+[PLATFORM] INFO | org.rapidoid.config.ConfigBase | Changing configuration filename base | from = rapidoid | to = my-config
+[PLATFORM] INFO | org.rapidoid.env.Environment | Automatically activating mode-specific profile | profile = production
+[PLATFORM] INFO | org.rapidoid.env.Environment | Initialized environment | mode = PRODUCTION | profiles = [production, platform]
+[PLATFORM] INFO | org.rapidoid.scan.ClasspathUtil | Setting application JAR | appJar = /app/app.jar | exists = false
+[PLATFORM] INFO | org.rapidoid.config.ConfigImpl | Loaded configuration | files = [built-in-config.yml, built-in-config-platform.yml, /app/the-root/my-config.yaml]
+[PLATFORM] INFO | org.rapidoid.net.impl.RapidoidServerLoop | Starting server | address = 0.0.0.0 | port = 5555 | I/O workers = 4 | sync = true | accept = non-blocking
+[PLATFORM] INFO | org.rapidoid.setup.Setup | Server has started | setup = app | home = http://localhost:5555
+[PLATFORM] INFO | org.rapidoid.setup.Setup | Static resources will be served from the following locations | setup = app | locations = [static, default/static]
+[PLATFORM] INFO | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = app | verbs = GET | path = /_status | roles = [] | tx = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | org.rapidoid.util.Msc | ---------------------------------------------------
+[PLATFORM] INFO | org.rapidoid.util.Msc | ADMIN CREDENTIALS: username = admin, password = <?>
+[PLATFORM] INFO | org.rapidoid.util.Msc | ---------------------------------------------------

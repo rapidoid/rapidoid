@@ -70,7 +70,7 @@ public class Conf extends RapidoidThing {
 
 		if (Env.isInitialized()) {
 			if (!Env.production()) {
-				Log.setStyled(true);
+				Log.options().styled(true);
 			}
 		}
 
@@ -90,7 +90,7 @@ public class Conf extends RapidoidThing {
 
 			boolean fancy = LOG.entry("fancy").bool().or(Msc.hasConsole());
 			if (fancy) {
-				Log.setStyled(true);
+				Log.options().styled(true);
 			}
 
 			String logLevel = LOG.entry("level").or("info");

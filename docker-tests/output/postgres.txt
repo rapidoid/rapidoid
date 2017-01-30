@@ -5,19 +5,22 @@
 |_| \_\__,_| .__/|_|\__,_|\___/|_|\__,_|
            |_|
 
-INFO | main | org.rapidoid.config.RapidoidInitializer | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
-INFO | main | org.rapidoid.config.RapidoidInitializer | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
-INFO | main | org.rapidoid.env.Env | Setting application root | root = /app | content = []
-INFO | main | org.rapidoid.env.Environment | Configuring active profiles | profiles = [postgres]
-INFO | main | org.rapidoid.env.Environment | Automatically activating mode-specific profile | profile = production
-INFO | main | org.rapidoid.env.Environment | Initialized environment | mode = PRODUCTION | profiles = [postgres, production, platform]
-INFO | main | org.rapidoid.scan.ClasspathUtil | Setting application JAR | appJar = /app/app.jar | exists = false
-INFO | main | org.rapidoid.config.ConfigImpl | Loaded configuration | files = [built-in-config.yml, built-in-config-postgres.yml, built-in-config-platform.yml]
-INFO | server | org.rapidoid.net.impl.RapidoidServerLoop | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
-INFO | main | org.rapidoid.setup.Setup | Server has started | setup = app | home = http://localhost:8888
-INFO | main | org.rapidoid.setup.Setup | Static resources will be served from the following locations | setup = app | locations = [static, default/static]
-INFO | main | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = app | verbs = GET | path = /users | roles = [] | tx = NONE | mvc = false | cacheTTL = 0
-INFO | executor10 | org.rapidoid.jdbc.JdbcClient | Initialized JDBC API | url = jdbc:postgresql://postgres:5432/ | driver = org.postgresql.Driver | username = postgres | password = *****
-INFO | MLog-Init-Reporter | com.mchange.v2.log.MLog | MLog clients using slf4j logging.
-INFO | executor10 | com.mchange.v2.c3p0.C3P0Registry | Initializing c3p0-0.9.5.2 [built 08-December-2015 22:06:04 -0800; debug? true; trace: 10]
-INFO | executor10 | com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource | Initializing c3p0 pool... com.mchange.v2.c3p0.ComboPooledDataSource [ acquireIncrement -> 5, acquireRetryAttempts -> 30, acquireRetryDelay -> 1000, autoCommitOnClose -> false, automaticTestTable -> null, breakAfterAcquireFailure -> false, checkoutTimeout -> 0, connectionCustomizerClassName -> null, connectionTesterClassName -> com.mchange.v2.c3p0.impl.DefaultConnectionTester, contextClassLoaderSource -> caller, dataSourceName -> 1bqq1hf9l1p0ehdr1yanha0|31a54816, debugUnreturnedConnectionStackTraces -> false, description -> null, driverClass -> org.postgresql.Driver, extensions -> {}, factoryClassLocation -> null, forceIgnoreUnresolvedTransactions -> false, forceSynchronousCheckins -> false, forceUseNamedDriverClass -> false, identityToken -> 1bqq1hf9l1p0ehdr1yanha0|31a54816, idleConnectionTestPeriod -> 300, initialPoolSize -> 5, jdbcUrl -> jdbc:postgresql://postgres:5432/, maxAdministrativeTaskTime -> 0, maxConnectionAge -> 0, maxIdleTime -> 0, maxIdleTimeExcessConnections -> 0, maxPoolSize -> 100, maxStatements -> 0, maxStatementsPerConnection -> 10, minPoolSize -> 5, numHelperThreads -> 3, preferredTestQuery -> null, privilegeSpawnedThreads -> false, properties -> {user=******, password=******}, propertyCycle -> 0, statementCacheNumDeferredCloseThreads -> 0, testConnectionOnCheckin -> false, testConnectionOnCheckout -> false, unreturnedConnectionTimeout -> 0, userOverrides -> {}, usesTraditionalReflectiveProxies -> false ]
+[PLATFORM] INFO | org.rapidoid.config.RapidoidInitializer | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
+[PLATFORM] INFO | org.rapidoid.config.RapidoidInitializer | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
+[PLATFORM] INFO | org.rapidoid.env.Env | Setting application root | root = /app | content = []
+[PLATFORM] INFO | org.rapidoid.env.Environment | Configuring active profiles | profiles = [postgres]
+[PLATFORM] INFO | org.rapidoid.env.Environment | Automatically activating mode-specific profile | profile = production
+[PLATFORM] INFO | org.rapidoid.env.Environment | Initialized environment | mode = PRODUCTION | profiles = [postgres, production, platform]
+[PLATFORM] INFO | org.rapidoid.scan.ClasspathUtil | Setting application JAR | appJar = /app/app.jar | exists = false
+[PLATFORM] INFO | org.rapidoid.config.ConfigImpl | Loaded configuration | files = [built-in-config.yml, built-in-config-postgres.yml, built-in-config-platform.yml]
+[PLATFORM] INFO | org.rapidoid.net.impl.RapidoidServerLoop | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
+[PLATFORM] INFO | org.rapidoid.setup.Setup | Server has started | setup = app | home = http://localhost:8888
+[PLATFORM] INFO | org.rapidoid.setup.Setup | Static resources will be served from the following locations | setup = app | locations = [static, default/static]
+[PLATFORM] INFO | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = app | verbs = GET | path = /users | roles = [] | tx = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | org.rapidoid.util.Msc | ---------------------------------------------------
+[PLATFORM] INFO | org.rapidoid.util.Msc | ADMIN CREDENTIALS: username = admin, password = <?>
+[PLATFORM] INFO | org.rapidoid.util.Msc | ---------------------------------------------------
+[PLATFORM] INFO | org.rapidoid.jdbc.JdbcClient | Initialized JDBC API | url = jdbc:postgresql://postgres:5432/ | driver = org.postgresql.Driver | username = postgres | password = *****
+[PLATFORM] INFO | com.mchange.v2.log.MLog | MLog clients using slf4j logging.
+[PLATFORM] INFO | com.mchange.v2.c3p0.C3P0Registry | Initializing c3p0-0.9.5.2 [built 08-December-2015 22:06:04 -0800; debug? true; trace: 10]
+[PLATFORM] INFO | com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource | Initializing c3p0 pool... com.mchange.v2.c3p0.ComboPooledDataSource [ acquireIncrement -> 5, acquireRetryAttempts -> 30, acquireRetryDelay -> 1000, autoCommitOnClose -> false, automaticTestTable -> null, breakAfterAcquireFailure -> false, checkoutTimeout -> 0, connectionCustomizerClassName -> null, connectionTesterClassName -> com.mchange.v2.c3p0.impl.DefaultConnectionTester, contextClassLoaderSource -> caller, dataSourceName -> 1bqq1hf9l1um1nki61hto9|19a6fe9c, debugUnreturnedConnectionStackTraces -> false, description -> null, driverClass -> org.postgresql.Driver, extensions -> {}, factoryClassLocation -> null, forceIgnoreUnresolvedTransactions -> false, forceSynchronousCheckins -> false, forceUseNamedDriverClass -> false, identityToken -> 1bqq1hf9l1um1nki61hto9|19a6fe9c, idleConnectionTestPeriod -> 300, initialPoolSize -> 5, jdbcUrl -> jdbc:postgresql://postgres:5432/, maxAdministrativeTaskTime -> 0, maxConnectionAge -> 0, maxIdleTime -> 0, maxIdleTimeExcessConnections -> 0, maxPoolSize -> 100, maxStatements -> 0, maxStatementsPerConnection -> 10, minPoolSize -> 5, numHelperThreads -> 3, preferredTestQuery -> null, privilegeSpawnedThreads -> false, properties -> {user=******, password=******}, propertyCycle -> 0, statementCacheNumDeferredCloseThreads -> 0, testConnectionOnCheckin -> false, testConnectionOnCheckout -> false, unreturnedConnectionTimeout -> 0, userOverrides -> {}, usesTraditionalReflectiveProxies -> false ]
