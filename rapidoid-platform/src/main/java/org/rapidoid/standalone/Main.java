@@ -29,14 +29,20 @@ import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
 import org.rapidoid.u.U;
+import org.rapidoid.util.AppInfo;
 import org.rapidoid.util.Msc;
+
+import java.awt.*;
+import java.net.URI;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class Main extends RapidoidThing {
 
 	private static final String[] DEFAULT_ARGS = {
+		"app.services=welcome",
 		"admin.services=center",
+//		"users.admin.password=admin",
 	};
 
 	public static void main(String[] args) {
@@ -54,6 +60,14 @@ public class Main extends RapidoidThing {
 
 		if (!Setup.isAnyRunning()) {
 			On.setup().activate();
+		}
+
+		try {
+			if (Desktop.isDesktopSupported()) {
+				Desktop.getDesktop().browse(new URI(U.frmt("http://localhost:%s/", AppInfo.appPort)));
+			}
+		} catch (Exception e) {
+			// do nothing
 		}
 	}
 
