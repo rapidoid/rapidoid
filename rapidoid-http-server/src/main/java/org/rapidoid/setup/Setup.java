@@ -482,7 +482,9 @@ public class Setup extends RapidoidInitializer implements Constants {
 		ADMIN.routes().onInit(new Runnable() {
 			@Override
 			public void run() {
-				AuthBootstrap.bootstrapAdminCredentials();
+				if (Env.dev()) {
+					AuthBootstrap.bootstrapAdminCredentials();
+				}
 			}
 		});
 	}

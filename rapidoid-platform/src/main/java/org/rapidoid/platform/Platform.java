@@ -20,6 +20,7 @@ package org.rapidoid.platform;
  * #L%
  */
 
+import org.rapidoid.AuthBootstrap;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -51,6 +52,8 @@ public class Platform extends RapidoidThing {
 		if (!Setup.isAnyRunning()) {
 			On.setup().activate();
 		}
+
+		AuthBootstrap.bootstrapAdminCredentials();
 
 		openInBrowser();
 	}

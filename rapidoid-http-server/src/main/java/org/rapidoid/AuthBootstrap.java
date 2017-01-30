@@ -22,7 +22,6 @@ package org.rapidoid;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.env.Env;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
 import org.rapidoid.crypto.Crypto;
@@ -36,15 +35,13 @@ public class AuthBootstrap extends RapidoidThing {
 	private static volatile String generatedAdminPassword;
 
 	public static synchronized void bootstrapAdminCredentials() {
-		if (Env.dev()) {
-			Config admin = Conf.USERS.sub("admin");
+		Config admin = Conf.USERS.sub("admin");
 
-			if (!admin.has("password") && !admin.has("hash")) {
-				String pass = generatedAdminPassword();
-				admin.set("password", pass);
+		if (!admin.has("password") && !admin.has("hash")) {
+			String pass = generatedAdminPassword();
+			admin.set("password", pass);
 
-				Msc.logSection("ADMIN CREDENTIALS: username = " + AnsiColor.bold("admin") + ", password = " + AnsiColor.bold(pass));
-			}
+			Msc.logSection("ADMIN CREDENTIALS: username = " + AnsiColor.bold("admin") + ", password = " + AnsiColor.bold(pass));
 		}
 	}
 
