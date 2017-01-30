@@ -89,7 +89,7 @@ public class AppDeployer extends RapidoidThing {
 			proc.restart();
 
 		} else {
-			Log.info("Starting the deployed application", "id", proc.id(), "process", proc.params().command());
+			Log.info("Starting the deployed application");
 			runJar(appId, appJar);
 		}
 	}
@@ -116,9 +116,11 @@ public class AppDeployer extends RapidoidThing {
 	}
 
 	public static void stopApp(String appId) {
-		ProcessHandle proc = DEPLOYED.get(appId);
+		ProcessHandle proc = DEPLOYED.find(appId);
 
-		Log.info("Stopping application", "id", proc.id(), "process", proc.params().command());
-		proc.destroy();
+		if (proc != null) {
+			Log.info("Stopping application", "id", proc.id(), "process", proc.params().command());
+			proc.destroy();
+		}
 	}
 }
