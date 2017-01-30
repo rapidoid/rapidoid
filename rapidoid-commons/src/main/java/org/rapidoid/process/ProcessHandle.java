@@ -238,29 +238,16 @@ public class ProcessHandle extends AbstractManageable {
 		U.print(outAndError());
 	}
 
-	public String out() {
-		Wait.until(doneReadingOut);
-
-		synchronized (this) {
-			return outBuffer.toString();
-		}
+	public synchronized String out() {
+		return outBuffer.toString();
 	}
 
-	public String err() {
-		Wait.until(doneReadingErr);
-
-		synchronized (this) {
-			return errBuffer.toString();
-		}
+	public synchronized String err() {
+		return errBuffer.toString();
 	}
 
-	public String outAndError() {
-		Wait.until(doneReadingOut);
-		Wait.until(doneReadingErr);
-
-		synchronized (this) {
-			return outAndErrBuffer.toString();
-		}
+	public synchronized String outAndError() {
+		return outAndErrBuffer.toString();
 	}
 
 	synchronized void startProcess(ProcessParams params) {
@@ -307,6 +294,9 @@ public class ProcessHandle extends AbstractManageable {
 			throw new CancellationException();
 		}
 
+		Wait.until(doneReadingOut);
+		Wait.until(doneReadingErr);
+
 		return this;
 	}
 
@@ -316,6 +306,10 @@ public class ProcessHandle extends AbstractManageable {
 		} catch (InterruptedException e) {
 			throw new CancellationException();
 		}
+
+		// FIXME timeout
+		Wait.until(doneReadingOut);
+		Wait.until(doneReadingErr);
 
 		return this;
 	}
