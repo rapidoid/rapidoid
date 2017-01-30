@@ -611,6 +611,9 @@ org.rapidoid.oauth.OAuthLoginHandler
 org.rapidoid.oauth.OAuthProvider
 org.rapidoid.oauth.OAuthStateCheck
 org.rapidoid.oauth.OAuthTokenHandler
+org.rapidoid.platform.Main
+org.rapidoid.platform.Platform
+org.rapidoid.platform.PlatformInDevMode
 org.rapidoid.plugin.deploy.AbstractRapidoidMojo
 org.rapidoid.plugin.deploy.BuildJarMojo
 org.rapidoid.plugin.deploy.DeployJarMojo
@@ -707,8 +710,6 @@ org.rapidoid.setup.ServiceActivator
 org.rapidoid.setup.ServiceBootstrap
 org.rapidoid.setup.Setup
 org.rapidoid.setup.WatchForChanges
-org.rapidoid.standalone.Main
-org.rapidoid.standalone.PlatformInDevMode
 org.rapidoid.test.ExpectErrors
 org.rapidoid.test.RapidoidIntegrationTest
 org.rapidoid.test.RapidoidTest

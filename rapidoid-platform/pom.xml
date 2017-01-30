@@ -69,7 +69,7 @@
 							</descriptorRefs>
 							<archive>
 								<manifest>
-									<mainClass>org.rapidoid.standalone.Main</mainClass>
+									<mainClass>org.rapidoid.platform.Main</mainClass>
 								</manifest>
 							</archive>
 						</configuration>

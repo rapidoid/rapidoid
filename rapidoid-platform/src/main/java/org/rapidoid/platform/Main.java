@@ -1,4 +1,4 @@
-package org.rapidoid.standalone;
+package org.rapidoid.platform;
 
 /*
  * #%L
@@ -23,21 +23,25 @@ package org.rapidoid.standalone;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.3.0")
-public class PlatformInDevMode extends RapidoidThing {
+@Since("5.1.0")
+public class Main extends RapidoidThing {
 
-	private static final String[] DEV_MODE_ARGS = {
+	private static final String[] DEFAULT_ARGS = {
 		"app.services=welcome",
 		"admin.services=center",
-		"users.admin.password=admin",
-		"secret=my-secret",
-		"app.cdn=false",
 	};
 
 	public static void main(String[] args) {
-		Main.main(DEV_MODE_ARGS);
+		boolean defaults = U.isEmpty(args);
+
+		if (defaults) {
+			args = DEFAULT_ARGS;
+		}
+
+		Platform.start(args, defaults);
 	}
 
 }

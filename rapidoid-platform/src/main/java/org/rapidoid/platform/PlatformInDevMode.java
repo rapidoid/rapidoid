@@ -1,4 +1,4 @@
-package org.rapidoid.standalone;
+package org.rapidoid.platform;
 
 /*
  * #%L
@@ -23,52 +23,21 @@ package org.rapidoid.standalone;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.deploy.AppDeployer;
-import org.rapidoid.io.IO;
-import org.rapidoid.setup.App;
-import org.rapidoid.setup.On;
-import org.rapidoid.setup.Setup;
-import org.rapidoid.u.U;
-import org.rapidoid.util.AppInfo;
-import org.rapidoid.util.Msc;
-
-import java.awt.*;
-import java.net.URI;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class Main extends RapidoidThing {
+@Since("5.3.0")
+public class PlatformInDevMode extends RapidoidThing {
 
-	private static final String[] DEFAULT_ARGS = {
+	private static final String[] DEV_MODE_ARGS = {
 		"app.services=welcome",
 		"admin.services=center",
-//		"users.admin.password=admin",
+		"users.admin.password=admin",
+		"secret=my-secret",
+		"app.cdn=false",
 	};
 
 	public static void main(String[] args) {
-		// Rapidoid banner
-		U.print(IO.load("rapidoid.txt"));
-
-		if (U.isEmpty(args)) {
-			args = DEFAULT_ARGS;
-		}
-
-		Msc.setStandalone(true);
-		App.run(args);
-
-		AppDeployer.bootstrap();
-
-		if (!Setup.isAnyRunning()) {
-			On.setup().activate();
-		}
-
-		try {
-			if (Desktop.isDesktopSupported()) {
-				Desktop.getDesktop().browse(new URI(U.frmt("http://localhost:%s/", AppInfo.appPort)));
-			}
-		} catch (Exception e) {
-			// do nothing
-		}
+		Platform.start(DEV_MODE_ARGS, true);
 	}
 
 }
