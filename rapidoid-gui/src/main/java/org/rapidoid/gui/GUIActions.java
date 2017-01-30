@@ -22,6 +22,7 @@ package org.rapidoid.gui;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.group.Manageable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -29,16 +30,28 @@ public class GUIActions extends GUI {
 
 	public static Object of(Object target) {
 		MultiWidget actions = multi();
-		// FIXME implement
+
+		if (target instanceof Manageable) {
+			Manageable manageable = (Manageable) target;
+			for (String action : manageable.actions()) {
+				actions.add(action(manageable, action));
+			}
+		}
+
 		return actions;
 	}
 
-	private static Btn action(final String name, String style) {
-		return btn(name).class_("btn btn-xs btn-" + style).onClick(new Runnable() {
+	private static Btn action(final Manageable manageable, final String action) {
+		Btn btn = cmd(action).smallest();
+
+		final String cmd = btn.command();
+		btn.onClick(new Runnable() {
 			@Override
 			public void run() {
-				// FIXME
+				manageable.execute(cmd);
 			}
 		});
+
+		return btn;
 	}
 }

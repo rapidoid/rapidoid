@@ -23,10 +23,16 @@ package org.rapidoid.group;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
+import java.util.List;
+
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
 public interface Manageable {
 
 	String id();
+
+	List<String> actions();
+
+	Object execute(String action);
 
 }
