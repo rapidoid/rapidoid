@@ -43,10 +43,12 @@ org.rapidoid.annotation.TransactionMode
 org.rapidoid.annotation.Transient
 org.rapidoid.annotation.Valid
 org.rapidoid.AuthBootstrap
+org.rapidoid.beany.ActionsProp
 org.rapidoid.beany.AnnotatedPropertyFilter
 org.rapidoid.beany.BeanProp
 org.rapidoid.beany.BeanProperties
 org.rapidoid.beany.Beany
+org.rapidoid.beany.CustomReadOnlyProp
 org.rapidoid.beany.JSProp
 org.rapidoid.beany.MapProp
 org.rapidoid.beany.Metadata
@@ -232,6 +234,7 @@ org.rapidoid.goodies.StatusHandler
 org.rapidoid.goodies.TerminateHandler
 org.rapidoid.goodies.WelcomeHandler
 org.rapidoid.goodies.X
+org.rapidoid.group.AbstractManageable
 org.rapidoid.group.GroupOf
 org.rapidoid.group.Groups
 org.rapidoid.group.GroupStats
@@ -249,6 +252,7 @@ org.rapidoid.gui.Debug
 org.rapidoid.gui.FA
 org.rapidoid.gui.Grid
 org.rapidoid.gui.GUI
+org.rapidoid.gui.GUIActions
 org.rapidoid.gui.GuiJpaUtil
 org.rapidoid.gui.Highlight
 org.rapidoid.gui.HighlightGrid
