@@ -42,6 +42,8 @@ import java.net.URI;
 @Since("5.3.0")
 public class Platform extends RapidoidThing {
 
+	private static AppChangeWatcher appChangeWatcher = new AppChangeWatcher();
+
 	static void start(String[] args, @SuppressWarnings("unused") boolean defaults) {
 		// Rapidoid banner
 		U.print(IO.load("rapidoid.txt"));
@@ -64,6 +66,8 @@ public class Platform extends RapidoidThing {
 		}
 
 		AuthBootstrap.bootstrapAdminCredentials();
+
+		appChangeWatcher.watch("/app", "app", AppDeployer.defaultApp());
 
 		openInBrowser();
 	}
