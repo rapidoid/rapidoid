@@ -8,7 +8,9 @@ printf "\n - BUILDING app.jar\n\n"
 
 cd ../examples/getting-started
 mvn clean org.rapidoid:build:jar && cp target/app.jar ../../docker-tests/app3
+
 cd ../../docker-tests
+chmod o+r app3/app.jar
 
 printf "\n - Testing APP-JAR (tag=$TAG)\n\n"
 

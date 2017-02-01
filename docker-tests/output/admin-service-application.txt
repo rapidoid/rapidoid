@@ -5,20 +5,20 @@
 |_| \_\__,_| .__/|_|\__,_|\___/|_|\__,_|
            |_|
 
-[PLATFORM] INFO | org.rapidoid.config.RapidoidInitializer | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
-[PLATFORM] INFO | org.rapidoid.config.RapidoidInitializer | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
-[PLATFORM] INFO | org.rapidoid.env.Env | Setting application root | root = /app | content = []
-[PLATFORM] INFO | org.rapidoid.env.Environment | Automatically activating mode-specific profile | profile = production
-[PLATFORM] INFO | org.rapidoid.env.Environment | Initialized environment | mode = PRODUCTION | profiles = [production, platform]
-[PLATFORM] INFO | org.rapidoid.scan.ClasspathUtil | Setting application JAR | appJar = /app/app.jar | exists = false
-[PLATFORM] INFO | org.rapidoid.config.ConfigImpl | Loaded configuration | files = [built-in-config.yml, built-in-config-platform.yml]
-[PLATFORM] INFO | org.rapidoid.net.impl.RapidoidServerLoop | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
-[PLATFORM] INFO | org.rapidoid.setup.Setup | Server has started | setup = admin | home = http://localhost:8888
-[PLATFORM] INFO | org.rapidoid.setup.Setup | Static resources will be served from the following locations | setup = admin | locations = [static, default/static]
-[PLATFORM] INFO | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET,POST | path = /_routes | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET,POST | path = /_beans | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET,POST | path = /_config | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | org.rapidoid.http.impl.HttpRoutesImpl | Registering handler | setup = admin | verbs = GET | path = /_classpath | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | org.rapidoid.util.Msc | ---------------------------------------------------
-[PLATFORM] INFO | org.rapidoid.util.Msc | ADMIN CREDENTIALS: username = admin, password = <?>
-[PLATFORM] INFO | org.rapidoid.util.Msc | ---------------------------------------------------
+[PLATFORM] INFO | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
+[PLATFORM] INFO | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
+[PLATFORM] INFO | Setting application root | root = /app | content = []
+[PLATFORM] INFO | Automatically activating mode-specific profile | profile = production
+[PLATFORM] INFO | Initialized environment | mode = PRODUCTION | profiles = [production, platform]
+[PLATFORM] INFO | Setting application JAR | appJar = /app/app.jar | exists = false
+[PLATFORM] INFO | Loaded configuration | namespace = rapidoid | files = [built-in-config.yml, built-in-config-platform.yml]
+[PLATFORM] INFO | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
+[PLATFORM] INFO | Server has started | setup = admin | home = http://localhost:8888
+[PLATFORM] INFO | Static resources will be served from the following locations | setup = admin | locations = [static, default/static]
+[PLATFORM] INFO | Registering handler | setup = admin | verbs = GET,POST | path = /_routes | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | Registering handler | setup = admin | verbs = GET,POST | path = /_beans | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | Registering handler | setup = admin | verbs = GET,POST | path = /_config | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | Registering handler | setup = admin | verbs = GET | path = /_classpath | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | ---------------------------------------------------
+[PLATFORM] INFO | ADMIN CREDENTIALS: username = admin, password = <?>
+[PLATFORM] INFO | ---------------------------------------------------

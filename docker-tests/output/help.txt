@@ -5,8 +5,8 @@
 |_| \_\__,_| .__/|_|\__,_|\___/|_|\__,_|
            |_|
 
-[PLATFORM] INFO | org.rapidoid.config.RapidoidInitializer | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
-[PLATFORM] INFO | org.rapidoid.config.RapidoidInitializer | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
+[PLATFORM] INFO | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
+[PLATFORM] INFO | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
 Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
 
 Usage:
