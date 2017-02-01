@@ -43,7 +43,9 @@ public class LogOptions extends RapidoidThing {
 
 	private volatile boolean showDateTime = true;
 
-	private volatile DateFormat dateTimeFormat = new SimpleDateFormat("dd/MMM/yyyy:HH:mm:ss");
+	private volatile DateFormat dateTimeFormat = new SimpleDateFormat("dd/MMM/yyyy HH:mm:ss:SSS");
+
+	private volatile boolean inferCaller = true;
 
 	public Callable<Logger> loggerFactory() {
 		return loggerFactory;
@@ -96,6 +98,15 @@ public class LogOptions extends RapidoidThing {
 
 	public LogOptions dateTimeFormat(DateFormat dateTimeFormat) {
 		this.dateTimeFormat = dateTimeFormat;
+		return this;
+	}
+
+	public boolean inferCaller() {
+		return inferCaller;
+	}
+
+	public LogOptions inferCaller(boolean inferCaller) {
+		this.inferCaller = inferCaller;
 		return this;
 	}
 }

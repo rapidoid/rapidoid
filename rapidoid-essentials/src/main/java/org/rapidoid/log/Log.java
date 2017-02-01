@@ -31,6 +31,7 @@ import org.slf4j.helpers.NOPLogger;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Date;
 import java.util.concurrent.Callable;
 
 /**
@@ -282,7 +283,7 @@ public class Log extends RapidoidThing {
 			return;
 		}
 
-		if (topic == null) {
+		if (topic == null && options.inferCaller()) {
 			topic = getCallingClass();
 		}
 
@@ -299,13 +300,21 @@ public class Log extends RapidoidThing {
 			// INFO, WARN...
 			sb.append(level.name());
 
+			if (options.showDateTime()) {
+				sb.append(" | ");
+				sb.append(options().dateTimeFormat().format(new Date()));
+			}
+
 			if (options.showThread()) {
 				sb.append(" | ");
 				sb.append(Thread.currentThread().getName());
 			}
 
-			sb.append(" | ");
-			sb.append(topic);
+			if (topic != null) {
+				sb.append(" | ");
+				sb.append(topic);
+			}
+
 			sb.append(" | ");
 
 			formatLogMsg(sb, msg, key1, value1, key2, value2, key3, value3, key4, value4,

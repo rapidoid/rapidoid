@@ -47,6 +47,7 @@ public class Platform extends RapidoidThing {
 		U.print(IO.load("rapidoid.txt"));
 
 		Log.options().prefix("[PLATFORM] ");
+		Log.options().inferCaller(false);
 
 		if (GlobalCfg.uniformOutput()) {
 			Log.options().showThread(false);
