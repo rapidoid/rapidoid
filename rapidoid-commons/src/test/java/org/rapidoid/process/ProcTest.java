@@ -23,7 +23,14 @@ package org.rapidoid.process;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Str;
+import org.rapidoid.io.IO;
 import org.rapidoid.test.TestCommons;
+import org.rapidoid.u.U;
+
+import java.io.File;
+import java.net.URISyntaxException;
+import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -46,4 +53,35 @@ public class ProcTest extends TestCommons {
 		eq(processes.size(), 5);
 	}
 
+	@Test
+	public void testProcessTermination() throws URISyntaxException {
+		String jar = counterJar();
+
+		ProcessHandle proc = Proc.run("java", "-cp", jar, "com.example.Main");
+		proc.terminate();
+
+		isFalse(proc.isAlive());
+
+		List<String> lines = Str.linesOf(Proc.run("ps", "aux").waitFor().out());
+		List<String> javaPs = Str.grep("counter.jar", lines);
+
+		for (String p : javaPs) {
+			U.print(p);
+		}
+
+		eq(javaPs.size(), 0);
+	}
+
+	private String counterJar() {
+		File jar;
+
+		try {
+			jar = new File(IO.resource("counter.jar").toURI());
+		} catch (URISyntaxException e) {
+			throw U.rte(e);
+		}
+
+		isTrue(jar.exists());
+		return jar.getAbsolutePath();
+	}
 }

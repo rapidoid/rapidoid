@@ -53,6 +53,8 @@ public class ProcessHandle extends AbstractManageable {
 
 	private final static ProcessCrawlerThread CRAWLER = new ProcessCrawlerThread(ALL);
 
+	private static final long TERMINATION_TIMEOUT = 5000;
+
 	private final ProcessParams params;
 
 	private final String id;
@@ -74,6 +76,20 @@ public class ProcessHandle extends AbstractManageable {
 
 	private volatile Date startedAt;
 	private volatile Date finishedAt;
+
+	static {
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			public void run() {
+				terminateProcesses();
+			}
+		});
+	}
+
+	private static void terminateProcesses() {
+		for (ProcessHandle proc : ALL) {
+			proc.terminate();
+		}
+	}
 
 	ProcessHandle(ProcessParams params) {
 		this.params = params;
@@ -390,7 +406,28 @@ public class ProcessHandle extends AbstractManageable {
 	}
 
 	public synchronized ProcessHandle terminate() {
-		return destroy();
+		destroy();
+
+		long t = U.time();
+		while (isAlive()) {
+			U.sleep(1);
+
+			if (U.time() - t > TERMINATION_TIMEOUT) {
+				destroyForcibly();
+				break;
+			}
+		}
+
+		t = U.time();
+		while (isAlive()) {
+			U.sleep(1);
+
+			if (U.time() - t > TERMINATION_TIMEOUT) {
+				throw U.rte("Couldn't terminate the process!");
+			}
+		}
+
+		return this;
 	}
 
 }
