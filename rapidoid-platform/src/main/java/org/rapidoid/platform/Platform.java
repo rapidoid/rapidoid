@@ -67,7 +67,7 @@ public class Platform extends RapidoidThing {
 
 		AuthBootstrap.bootstrapAdminCredentials();
 
-		appChangeWatcher.watch("/app", "app", AppDeployer.defaultApp());
+		appChangeWatcher.watch("/app", "app");
 
 		openInBrowser();
 	}

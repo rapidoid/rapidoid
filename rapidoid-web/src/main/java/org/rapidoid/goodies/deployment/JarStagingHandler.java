@@ -39,7 +39,7 @@ public class JarStagingHandler extends GUI implements ReqHandler {
 		Upload jar = req.file("file");
 
 		try {
-			AppDeployer.stageJar(AppDeployer.defaultApp(), jar.content());
+			AppDeployer.stageJar(AppDeployer.appJar(), jar.content());
 		} catch (Exception e) {
 			return NiceResponse.err(req, e);
 		}

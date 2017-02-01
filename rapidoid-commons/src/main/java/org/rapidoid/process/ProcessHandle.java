@@ -268,6 +268,8 @@ public class ProcessHandle extends AbstractManageable {
 
 	synchronized void startProcess(ProcessParams params) {
 
+		Log.info("Starting process", "command", params.command());
+
 		ProcessBuilder builder = new ProcessBuilder().command(params.command());
 
 		if (params.in() != null) {

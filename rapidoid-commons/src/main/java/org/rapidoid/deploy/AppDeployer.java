@@ -43,24 +43,33 @@ public class AppDeployer extends RapidoidThing {
 
 	private static final Processes DEPLOYED = new Processes("deployed");
 
-	public static String defaultApp() {
+	private static final String CLASSPATH = System.getProperty("java.class.path");
+
+	public static String appJar() {
 		return ClasspathUtil.appJar();
 	}
 
 	private static void runIfExists(String appId, String appJar) {
-		if (new File(appJar).exists()) {
-			Log.info("Deploying pre-existing application JAR", "id", appId, "filename", appJar);
+		if (!IO.find().in("/app").getNames().isEmpty()) {
+			Log.info("Deploying pre-existing application", "id", appId);
 
-			runJar(appId, appJar);
+			runAppJar(appId);
 		}
 	}
 
-	private static void runJar(String appId, String appJar) {
+	private static void runAppJar(String appId) {
+		String appJar = appJar();
+
+		String[] appJarCmd = {"java", "-jar", appJar, "root=/app"};
+		String[] defaultAppCmd = {"java", "-cp", CLASSPATH, "org.rapidoid.platform.DefaultApp", "root=/app"};
+		String[] cmd = new File(appJar).exists() ? appJarCmd : defaultAppCmd;
+
+
 		Proc.group(DEPLOYED)
 			.id(appId)
 			.printingOutput(true)
 			.linePrefix("[APP] ")
-			.run("java", "-jar", appJar, "root=/app");
+			.run(cmd);
 	}
 
 	public static void deploy(String stagedAppJar, String appJar) {
@@ -76,12 +85,12 @@ public class AppDeployer extends RapidoidThing {
 			throw U.rte("Deployment error!", e);
 		}
 
-		startOrRestartApp("app", appJar);
+		startOrRestartApp("app");
 
 		Log.info("Deployed JAR", "filename", appJar);
 	}
 
-	public static void startOrRestartApp(String appId, String appJar) {
+	public static void startOrRestartApp(String appId) {
 		ProcessHandle proc = DEPLOYED.find(appId);
 
 		if (proc != null) {
@@ -90,7 +99,7 @@ public class AppDeployer extends RapidoidThing {
 
 		} else {
 			Log.info("Starting the deployed application");
-			runJar(appId, appJar);
+			runAppJar(appId);
 		}
 	}
 
@@ -109,7 +118,7 @@ public class AppDeployer extends RapidoidThing {
 	}
 
 	public static void bootstrap() {
-		String appJar = defaultApp();
+		String appJar = appJar();
 		if (U.notEmpty(appJar)) {
 			runIfExists("app", appJar);
 		}

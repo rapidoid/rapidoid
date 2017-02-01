@@ -152,7 +152,7 @@ public class DeploymentHandler extends GUI implements ReqHandler {
 					.onSuccess(new Runnable() {
 						@Override
 						public void run() {
-							AppDeployer.startOrRestartApp("app", AppDeployer.defaultApp());
+							AppDeployer.startOrRestartApp("app");
 						}
 					});
 			}

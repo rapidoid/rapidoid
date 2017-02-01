@@ -20,30 +20,20 @@ package org.rapidoid.platform;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.deploy.AppDeployer;
-import org.rapidoid.io.watch.Watch;
-import org.rapidoid.log.Log;
-
-import java.io.File;
+import org.rapidoid.setup.App;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class AppChangeWatcher {
+public class DefaultApp extends RapidoidThing {
 
-	public void watch(String root, String appId) {
-		Watch.dir(root, Watch.simpleListener(filename -> {
-			if (shouldRestartOnFileChange(filename)) {
-				Log.info("Detected changes on the file system, restarting the application...", "filename", filename);
-				AppDeployer.startOrRestartApp(appId);
-			}
-		}));
-	}
+	private static final String[] EXTRA_ARGS = {
+	};
 
-	private boolean shouldRestartOnFileChange(String filename) {
-		String name = new File(filename).getName();
-		return !name.startsWith(".") && !name.endsWith(".staged");
+	public static void main(String[] args) {
+		App.run(args, EXTRA_ARGS);
 	}
 
 }

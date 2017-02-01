@@ -36,7 +36,7 @@ public class JarDeploymentHandler extends RapidoidThing implements ReqHandler {
 	public Object execute(Req req) {
 
 		try {
-			AppDeployer.deploy(AppDeployer.defaultApp() + ".staged", AppDeployer.defaultApp());
+			AppDeployer.deploy(AppDeployer.appJar() + ".staged", AppDeployer.appJar());
 		} catch (Exception e) {
 			return NiceResponse.err(req, e);
 		}
