@@ -8,3 +8,4 @@ docker kill $(docker ps -q) > /dev/null 2>&1 || true
 docker rm $(docker ps -a -q) > /dev/null 2>&1  || true
 
 rm -rf app-mini/*
+rm app3/app.jar
