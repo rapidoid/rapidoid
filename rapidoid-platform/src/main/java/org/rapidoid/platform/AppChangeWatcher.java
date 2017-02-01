@@ -20,6 +20,7 @@ package org.rapidoid.platform;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.deploy.AppDeployer;
@@ -30,7 +31,7 @@ import java.io.File;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class AppChangeWatcher {
+public class AppChangeWatcher extends RapidoidThing {
 
 	public void watch(String root, String appId) {
 		Watch.dir(root, Watch.simpleListener(filename -> {
