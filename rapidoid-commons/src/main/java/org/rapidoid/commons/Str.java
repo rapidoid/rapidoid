@@ -8,6 +8,7 @@ import org.rapidoid.u.U;
 
 import javax.xml.bind.DatatypeConverter;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -288,4 +289,20 @@ public class Str extends RapidoidThing {
 		return "(?:" + sb + ")";
 	}
 
+	public static List<String> linesOf(String s) {
+		return U.list(s.split("\\n"));
+	}
+
+	public static List<String> grep(String regex, Iterable<String> lines) {
+		List<String> matching = U.list();
+		Pattern p = Pattern.compile(regex);
+
+		for (String line : lines) {
+			if (p.matcher(line).find()) {
+				matching.add(line);
+			}
+		}
+
+		return matching;
+	}
 }
