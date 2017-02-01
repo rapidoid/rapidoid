@@ -35,7 +35,7 @@ public class LogOptions extends RapidoidThing {
 
 	private volatile Callable<Logger> loggerFactory;
 
-	private volatile boolean styled = System.console() != null;
+	private volatile boolean fancy = System.console() != null;
 
 	private volatile String prefix;
 
@@ -56,12 +56,12 @@ public class LogOptions extends RapidoidThing {
 		return this;
 	}
 
-	public boolean styled() {
-		return styled;
+	public boolean fancy() {
+		return fancy;
 	}
 
-	public LogOptions styled(boolean styled) {
-		this.styled = styled;
+	public LogOptions fancy(boolean fancy) {
+		this.fancy = fancy;
 		return this;
 	}
 

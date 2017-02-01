@@ -116,7 +116,7 @@ public class Log extends RapidoidThing {
 			if (bold) {
 				msg = msg.substring(1);
 			}
-			appendStyled(out, msg, bold);
+			appendFancy(out, msg, bold);
 
 			switch (paramsN) {
 				case 0:
@@ -197,7 +197,7 @@ public class Log extends RapidoidThing {
 		out.append(key);
 		out.append(" = ");
 
-		appendStyled(out, value, bold);
+		appendFancy(out, value, bold);
 
 		if (value instanceof Throwable) {
 			Throwable err = (Throwable) value;
@@ -208,8 +208,8 @@ public class Log extends RapidoidThing {
 		}
 	}
 
-	private static void appendStyled(Appendable out, Object value, boolean bold) throws IOException {
-		boolean withStyle = options.styled();
+	private static void appendFancy(Appendable out, Object value, boolean bold) throws IOException {
+		boolean withStyle = options.fancy();
 
 		if (bold && withStyle) {
 			out.append("\33[1m");
