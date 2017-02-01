@@ -398,7 +398,7 @@ public class ProcessHandle extends AbstractManageable {
 	}
 
 	public synchronized ProcessHandle restart() {
-		destroy();
+		terminate();
 
 		startProcess(params);
 

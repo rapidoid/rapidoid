@@ -42,9 +42,9 @@ public abstract class ProcessIOThread extends RapidoidThread {
 
 			if (proc != null) {
 				doIO();
-			} else {
-				U.sleep(100);
 			}
+
+			U.sleep(10);
 		}
 	}
 
