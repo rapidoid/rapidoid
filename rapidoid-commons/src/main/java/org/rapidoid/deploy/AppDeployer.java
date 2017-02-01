@@ -60,7 +60,7 @@ public class AppDeployer extends RapidoidThing {
 			.id(appId)
 			.printingOutput(true)
 			.linePrefix("[APP] ")
-			.run("java", "-jar", appJar);
+			.run("java", "-jar", appJar, "root=/app");
 	}
 
 	public static void deploy(String stagedAppJar, String appJar) {

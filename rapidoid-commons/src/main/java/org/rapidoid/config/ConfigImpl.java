@@ -492,7 +492,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 		Conf.applyConfig(this);
 
 		if (!loaded.isEmpty()) {
-			Log.info("Loaded configuration", "!files", loaded);
+			Log.info("Loaded configuration", "namespace", getFilenameBase(), "!files", loaded);
 		} else {
 			if (useConfigFiles) {
 				Log.warn("Didn't find any configuration files", "path", getPath());
