@@ -22,7 +22,13 @@
 [PLATFORM] INFO | ---------------------------------------------------
 [PLATFORM] INFO | ADMIN CREDENTIALS: username = admin, password = <?>
 [PLATFORM] INFO | ---------------------------------------------------
-[APP] INFO | 01/Feb/2017 17:09:33:666 | main | org.rapidoid.config.RapidoidInitializer | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
-[APP] INFO | 01/Feb/2017 17:09:33:670 | main | org.rapidoid.config.RapidoidInitializer | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
-[APP] INFO | 01/Feb/2017 17:09:33:724 | main | org.rapidoid.env.Env | Setting application root | root = /app | content = [/app/the-root, /app/my-config.yaml]
-[APP] INFO | 01/Feb/2017 17:09:33:740 | main | org.rapidoid.config.ConfigBase | Changing configuration filename base | from = config | to = my-config
+[APP] INFO | 02/Feb/2017 09:39:43:183 | main | org.rapidoid.config.RapidoidInitializer | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
+[APP] INFO | 02/Feb/2017 09:39:43:184 | main | org.rapidoid.config.RapidoidInitializer | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
+[APP] INFO | 02/Feb/2017 09:39:43:208 | main | org.rapidoid.env.Env | Setting application root | root = /app | content = [/app/the-root, /app/my-config.yaml]
+[APP] INFO | 02/Feb/2017 09:39:43:215 | main | org.rapidoid.config.ConfigBase | Changing configuration filename base | from = config | to = my-config
+[APP] INFO | 02/Feb/2017 09:39:43:360 | main | org.rapidoid.env.Environment | No profiles were specified, activating 'default' profile
+[APP] INFO | 02/Feb/2017 09:39:43:364 | main | org.rapidoid.env.Environment | No production/dev/test mode was configured, inferring mode | mode = PRODUCTION
+[APP] INFO | 02/Feb/2017 09:39:43:364 | main | org.rapidoid.env.Environment | Automatically activating mode-specific profile | profile = production
+[APP] INFO | 02/Feb/2017 09:39:43:365 | main | org.rapidoid.env.Environment | Initialized environment | mode = PRODUCTION | profiles = [default, production]
+[APP] INFO | 02/Feb/2017 09:39:43:494 | main | org.rapidoid.scan.ClasspathUtil | Setting application JAR | appJar = /app/app.jar | exists = false
+[APP] INFO | 02/Feb/2017 09:39:43:496 | main | org.rapidoid.config.ConfigImpl | Loaded configuration | namespace = my-config | files = [built-in-config.yml, built-in-config-default.yml, /app/my-config.yaml]
