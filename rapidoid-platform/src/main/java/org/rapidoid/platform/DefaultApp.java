@@ -29,11 +29,8 @@ import org.rapidoid.setup.App;
 @Since("5.3.0")
 public class DefaultApp extends RapidoidThing {
 
-	private static final String[] EXTRA_ARGS = {
-	};
-
 	public static void main(String[] args) {
-		App.run(args, EXTRA_ARGS);
+		App.run(args);
 	}
 
 }

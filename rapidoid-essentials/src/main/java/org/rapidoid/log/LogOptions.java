@@ -39,9 +39,9 @@ public class LogOptions extends RapidoidThing {
 
 	private volatile String prefix;
 
-	private volatile boolean showThread = true;
+	private volatile boolean showThread = !GlobalCfg.uniformOutput();
 
-	private volatile boolean showDateTime = true;
+	private volatile boolean showDateTime = !GlobalCfg.uniformOutput();
 
 	private volatile DateFormat dateTimeFormat = new SimpleDateFormat("dd/MMM/yyyy HH:mm:ss:SSS");
 

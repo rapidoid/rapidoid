@@ -24,7 +24,7 @@ import org.rapidoid.net.AsyncLogic;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
-import org.rapidoid.util.GlobalCfg;
+import org.rapidoid.log.GlobalCfg;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.StreamUtils;
 

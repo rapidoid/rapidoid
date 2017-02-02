@@ -21,12 +21,12 @@
 [PLATFORM] INFO | ---------------------------------------------------
 [PLATFORM] INFO | ADMIN CREDENTIALS: username = admin, password = <?>
 [PLATFORM] INFO | ---------------------------------------------------
-[APP] INFO | 02/Feb/2017 09:39:39:734 | main | org.rapidoid.config.RapidoidInitializer | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
-[APP] INFO | 02/Feb/2017 09:39:39:737 | main | org.rapidoid.config.RapidoidInitializer | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
-[APP] INFO | 02/Feb/2017 09:39:39:766 | main | org.rapidoid.env.Env | Setting application root | root = /app | content = [/app/rapidoid.yml]
-[APP] INFO | 02/Feb/2017 09:39:39:982 | main | org.rapidoid.env.Environment | No profiles were specified, activating 'default' profile
-[APP] INFO | 02/Feb/2017 09:39:39:985 | main | org.rapidoid.env.Environment | No production/dev/test mode was configured, inferring mode | mode = PRODUCTION
-[APP] INFO | 02/Feb/2017 09:39:39:985 | main | org.rapidoid.env.Environment | Automatically activating mode-specific profile | profile = production
-[APP] INFO | 02/Feb/2017 09:39:39:985 | main | org.rapidoid.env.Environment | Initialized environment | mode = PRODUCTION | profiles = [default, production]
-[APP] INFO | 02/Feb/2017 09:39:40:112 | main | org.rapidoid.scan.ClasspathUtil | Setting application JAR | appJar = /app/app.jar | exists = false
-[APP] INFO | 02/Feb/2017 09:39:40:114 | main | org.rapidoid.config.ConfigImpl | Loaded configuration | namespace = config | files = [built-in-config.yml, built-in-config-default.yml]
+[APP] INFO | org.rapidoid.config.RapidoidInitializer | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
+[APP] INFO | org.rapidoid.config.RapidoidInitializer | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
+[APP] INFO | org.rapidoid.env.Env | Setting application root | root = /app | content = [/app/rapidoid.yml]
+[APP] INFO | org.rapidoid.env.Environment | No profiles were specified, activating 'default' profile
+[APP] INFO | org.rapidoid.env.Environment | No production/dev/test mode was configured, inferring mode | mode = PRODUCTION
+[APP] INFO | org.rapidoid.env.Environment | Automatically activating mode-specific profile | profile = production
+[APP] INFO | org.rapidoid.env.Environment | Initialized environment | mode = PRODUCTION | profiles = [default, production]
+[APP] INFO | org.rapidoid.scan.ClasspathUtil | Setting application JAR | appJar = /app/app.jar | exists = false
+[APP] INFO | org.rapidoid.config.ConfigImpl | Loaded configuration | namespace = config | files = [built-in-config.yml, built-in-config-default.yml]

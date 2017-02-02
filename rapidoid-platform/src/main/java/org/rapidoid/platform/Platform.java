@@ -32,7 +32,6 @@ import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
 import org.rapidoid.u.U;
 import org.rapidoid.util.AppInfo;
-import org.rapidoid.util.GlobalCfg;
 import org.rapidoid.util.Msc;
 
 import java.awt.*;
@@ -50,11 +49,6 @@ public class Platform extends RapidoidThing {
 
 		Log.options().prefix("[PLATFORM] ");
 		Log.options().inferCaller(false);
-
-		if (GlobalCfg.uniformOutput()) {
-			Log.options().showThread(false);
-			Log.options().showDateTime(false);
-		}
 
 		Msc.setPlatform(true);
 		App.run(args);

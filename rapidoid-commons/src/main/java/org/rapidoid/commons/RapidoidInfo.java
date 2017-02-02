@@ -4,7 +4,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
-import org.rapidoid.util.GlobalCfg;
+import org.rapidoid.log.GlobalCfg;
 import org.rapidoid.util.Msc;
 
 import java.io.IOException;

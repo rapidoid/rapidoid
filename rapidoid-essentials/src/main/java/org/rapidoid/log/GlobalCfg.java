@@ -1,12 +1,8 @@
-package org.rapidoid.util;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
+package org.rapidoid.log;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-essentials
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -24,12 +20,17 @@ import org.rapidoid.annotation.Since;
  * #L%
  */
 
-@Authors("Nikolche Mihajlovski")
-@Since("5.2.5")
+import org.rapidoid.RapidoidThing;
+
+/**
+ * @author Nikolche Mihajlovski
+ * @since 5.2.5
+ */
 public class GlobalCfg extends RapidoidThing {
 
-	private static final boolean uniformOutput = "true".equalsIgnoreCase(System.getenv("UNIFORM_OUTPUT"))
-		|| "true".equalsIgnoreCase(System.getenv("uniform_output"));
+	private static final boolean uniformOutput =
+		"true".equalsIgnoreCase(System.getenv("UNIFORM_OUTPUT"))
+			|| "true".equalsIgnoreCase(System.getenv("uniform_output"));
 
 	public static boolean uniformOutput() {
 		return uniformOutput;

@@ -15,7 +15,7 @@
 Exception in thread "main" java.lang.IllegalArgumentException: Unknown service: 'foo'!
 	at org.rapidoid.u.U.illegal(U.java:432)
 	at org.rapidoid.u.U.must(U.java:458)
-	at org.rapidoid.util.Msc.bootService(Msc.java:1050)
+	at org.rapidoid.util.Msc.bootService(Msc.java:1051)
 	at org.rapidoid.setup.ServiceActivator.boot(ServiceActivator.java:81)
 	at org.rapidoid.setup.ServiceActivator.bootstrapServices(ServiceActivator.java:57)
 	at org.rapidoid.setup.ServiceActivator.activateServices(ServiceActivator.java:42)
@@ -24,5 +24,5 @@ Exception in thread "main" java.lang.IllegalArgumentException: Unknown service: 
 	at org.rapidoid.setup.AppBootstrap.services(AppBootstrap.java:136)
 	at org.rapidoid.setup.App.boot(App.java:98)
 	at org.rapidoid.setup.App.run(App.java:91)
-	at org.rapidoid.platform.Platform.start(Platform.java:60)
+	at org.rapidoid.platform.Platform.start(Platform.java:54)
 	at org.rapidoid.platform.Main.main(Main.java:44)
