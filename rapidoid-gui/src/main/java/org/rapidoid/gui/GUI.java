@@ -598,7 +598,8 @@ public abstract class GUI extends HTML implements Role {
 
 		if (item instanceof Date) {
 			Date date = (Date) item;
-			return span(Dates.readable(date));
+			Tag dateSpan = span(Dates.readable(date));
+			return tooltip(dateSpan, Dates.details(date));
 
 		} else if (item instanceof Boolean) {
 			boolean b = (Boolean) item;
@@ -917,6 +918,10 @@ public abstract class GUI extends HTML implements Role {
 
 	public static void redirect(String uri) {
 		req().setHeader("X-Rapidoid-Redirect", uri);
+	}
+
+	public static Tag tooltip(Tag target, String tooltip) {
+		return target.data("toggle", "tooltip").data("placement", "top").attr("title", tooltip);
 	}
 
 }

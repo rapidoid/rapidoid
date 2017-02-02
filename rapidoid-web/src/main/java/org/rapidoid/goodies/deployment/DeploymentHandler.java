@@ -104,7 +104,7 @@ public class DeploymentHandler extends GUI implements ReqHandler {
 		boolean exists = file.exists();
 
 		String size = exists ? (file.length() / 1024) + " KB" : "";
-		String since = exists ? new Date(file.lastModified()).toString() : "";
+		Object since = exists ? GUI.display(new Date(file.lastModified())) : "";
 
 		Btn deploy = staged && exists ? btn("Deploy")
 			.class_("btn btn-primary btn-xs")
