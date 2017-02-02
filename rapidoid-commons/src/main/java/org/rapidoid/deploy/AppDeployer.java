@@ -110,7 +110,7 @@ public class AppDeployer extends RapidoidThing {
 
 		IO.save(stagedAppJar, content);
 
-		Log.info("Staged application jar", "size", content, "destination", appJar);
+		Log.info("Staged application jar", "size", content.length, "destination", appJar);
 	}
 
 	public static Processes processes() {
