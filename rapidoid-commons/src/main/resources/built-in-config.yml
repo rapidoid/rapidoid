@@ -19,24 +19,48 @@ main-zone: {}
 
 admin-zone:
   home: /_
-  brand: '<i class="fa fa-dashboard"></i> Admin'
+  brand: '<i class="fa fa-shield"></i> Rapidoid'
   search: false
   fluid: true
   menu:
     Overview: /_
+    Routes: /_routes
+    Configuration: /_config
+    Deployment: /_deployment
+    Processes: /_processes
+    Metrics: /_metrics
     Application:
-      Routes: /_routes
       Beans: /_beans
-      Configuration: /_config
-      Deploy: /_deployment
-      Terminate / Restart: /_terminate
-    Data:
       Entities: /_entities
+    Manage:
+      Terminate / Restart: /_terminate
     Details:
-      Metrics: /_metrics
-      Processes: /_processes
       Classpath: /_classpath
-    JMX:
+      Memory pool: /_jmx/mempool
+      JVM Threads: /_jmx/threads
+      Operating system: /_jmx/os
+      Garbage collection: /_jmx/gc
+      Memory: /_jmx/memory
+      Runtime: /_jmx/runtime
+      Classes: /_jmx/classes
+      Compilation: /_jmx/compilation
+
+platform-zone:
+  home: /_
+  brand: '<i class="fa fa-shield"></i> Rapidoid'
+  search: false
+  fluid: true
+  menu:
+    Overview: /_
+    Routes: /_routes
+    Configuration: /_config
+    Deployment: /_deployment
+    Processes: /_processes
+    Metrics: /_metrics
+    Manage:
+      Terminate / Restart: /_terminate
+    Details:
+      Classpath: /_classpath
       Memory pool: /_jmx/mempool
       JVM Threads: /_jmx/threads
       Operating system: /_jmx/os

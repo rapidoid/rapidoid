@@ -67,9 +67,10 @@ import java.util.Map;
 @Since("5.1.0")
 public class Setup extends RapidoidInitializer implements Constants {
 
+	private static final String ADMIN_ZONE = Msc.isPlatform() ? "platform" : "admin";
 
 	static final Setup ON = new Setup("app", "main", "0.0.0.0", 8080, IoC.defaultContext(), Conf.ROOT, Conf.ON);
-	static final Setup ADMIN = new Setup("admin", "admin", "0.0.0.0", 8080, IoC.defaultContext(), Conf.ROOT, Conf.ADMIN);
+	static final Setup ADMIN = new Setup("admin", ADMIN_ZONE, "0.0.0.0", 8080, IoC.defaultContext(), Conf.ROOT, Conf.ADMIN);
 
 	private static final List<Setup> instances = Coll.synchronizedList(ON, ADMIN);
 

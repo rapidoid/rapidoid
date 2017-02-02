@@ -6,8 +6,8 @@ import org.rapidoid.env.Env;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.setup.App;
-import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.util.List;
 import java.util.Map;
@@ -41,12 +41,15 @@ public class OverviewHandler extends GUI implements Callable<Object> {
 	public Object call() throws Exception {
 		List<Object> info = U.list();
 
-		info.add(h3(center("Application info:")));
+		info.add(h3(center("Basic overview:")));
 
 		Map<String, Object> appInfo = U.map();
 
-		appInfo.put("Application JAR", ClasspathUtil.appJar());
-		appInfo.put("Application path (root packages)", App.path());
+		if (!Msc.isPlatform()) {
+			appInfo.put("Application JAR", ClasspathUtil.appJar());
+			appInfo.put("Application path (root packages)", App.path());
+		}
+
 		appInfo.put("Active profiles", Env.profiles());
 		appInfo.put("Command line arguments", Env.args());
 
@@ -54,10 +57,6 @@ public class OverviewHandler extends GUI implements Callable<Object> {
 
 		info.add(h3(center("System metrics:")));
 		info.add(GraphsHandler.graphs(3));
-
-		info.add(h3(center("Application routes:")));
-
-		info.add(RoutesHandler.routesOf(On.setup().routes().allNonAdmin(), false));
 
 		return multi(info);
 	}
