@@ -1,0 +1,11 @@
+<form action="/_stage" class="dropzone" id="jar-upload"></form>
+
+<script>
+Dropzone.options.jarUpload = {
+  init: function() {
+    this.on("queuecomplete", function() {
+        Rapidoid.refresh();
+    });
+  }
+};
+</script>
