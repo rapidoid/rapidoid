@@ -59,6 +59,24 @@ window.Rapidoid = window.Rapidoid || {};
         });
     }
 
+    function onServerError(data) {
+        $('i:last-child', btn).remove();
+
+        var title = data.status ? "Server error: " + data.status + "!" : "Cannot connect to the server!";
+        var msg = data.statusText != "error" ? data.statusText : "";
+
+        swal(title, msg, "error");
+        console.log(data);
+    }
+
+    function _refresh() {
+        var loc = Rapidoid.location || window.location.href;
+
+        $.get(loc, {__event__: true}).done(function (data) {
+            Rapidoid.setHtml(data);
+        }).fail(onServerError);
+    }
+
     function _goAt(url) {
         window.location.href = url;
     }
@@ -197,6 +215,8 @@ window.Rapidoid = window.Rapidoid || {};
     Rapidoid.init = _init;
     Rapidoid.initialized = false;
     Rapidoid.setHtml = setHtml;
+    Rapidoid.refresh = _refresh;
+    Rapidoid.onServerError = onServerError;
 
     Rapidoid.createApp = createApp;
     Rapidoid.initializer = initializer;

@@ -27,16 +27,6 @@ Rapidoid.initializer(function ($scope) {
 
     };
 
-    function onServerError(data) {
-        $('i:last-child', btn).remove();
-
-        var title = data.status ? "Server error: " + data.status + "!" : "Cannot connect to the server!";
-        var msg = data.statusText != "error" ? data.statusText : "";
-
-        swal(title, msg, "error");
-        console.log(data);
-    }
-
     function doEmit(event, eventId, eventArgs) {
 
         var btn = $(event.currentTarget);
@@ -124,7 +114,7 @@ Rapidoid.initializer(function ($scope) {
 
                             $.get(loc, inputs).done(function (data) {
                                 Rapidoid.setHtml(data);
-                            }).fail(onServerError);
+                            }).fail(Rapidoid.onServerError);
 
                         }
                     }
@@ -179,7 +169,7 @@ Rapidoid.initializer(function ($scope) {
                 }
             }
 
-        }).fail(onServerError);
+        }).fail(Rapidoid.onServerError);
     }
 
 });
