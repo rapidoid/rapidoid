@@ -3,11 +3,11 @@ package org.rapidoid.render;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.collection.Coll;
+import org.rapidoid.cache.Cache;
+import org.rapidoid.cache.Caching;
+import org.rapidoid.env.Env;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
-
-import java.util.Map;
 
 /*
  * #%L
@@ -33,12 +33,14 @@ import java.util.Map;
 @Since("5.2.0")
 public class RapidoidTemplateFactory extends RapidoidThing implements TemplateFactory {
 
-	private final Map<String, RapidoidTemplate> compiledTemplates = Coll.autoExpandingMap(new Mapper<String, RapidoidTemplate>() {
+	private static final int CACHE_TTL = Env.dev() ? 300 : 1000;
+
+	private final Cache<String, RapidoidTemplate> compiledTemplates = Caching.of(new Mapper<String, RapidoidTemplate>() {
 		@Override
 		public RapidoidTemplate map(String filename) throws Exception {
 			return loadAndCompile(filename);
 		}
-	});
+	}).capacity(10000).ttl(CACHE_TTL).build();
 
 	public RapidoidTemplate loadAndCompile(String filename) {
 		return new RapidoidTemplate(filename, loadTemplate(filename), this);

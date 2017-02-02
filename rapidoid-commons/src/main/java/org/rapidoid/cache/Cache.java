@@ -47,4 +47,8 @@ public interface Cache<K, V> {
 	 */
 	void set(K key, V value);
 
+	/**
+	 * Clears the cache.
+	 */
+	void clear();
 }

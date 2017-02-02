@@ -34,11 +34,11 @@ public abstract class AbstractMapImpl<K, V> extends RapidoidThing implements Sim
 	protected V defaultValue;
 
 	public AbstractMapImpl(int width) {
-		this.entries = new SimpleHashTable<MapEntry<K, V>>(width);
+		this.entries = new SimpleHashTable<>(width);
 	}
 
 	public AbstractMapImpl(int width, int initialBucketSize) {
-		this.entries = new SimpleHashTable<MapEntry<K, V>>(width, initialBucketSize);
+		this.entries = new SimpleHashTable<>(width, initialBucketSize);
 	}
 
 	@Override
