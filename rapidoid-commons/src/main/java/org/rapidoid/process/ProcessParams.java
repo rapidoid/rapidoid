@@ -44,6 +44,8 @@ public class ProcessParams extends RapidoidThing {
 
 	private volatile int maxLogLines = 10000;
 
+	private volatile int terminationTimeout = 5000;
+
 	public File in() {
 		return in;
 	}
@@ -115,4 +117,12 @@ public class ProcessParams extends RapidoidThing {
 		return this;
 	}
 
+	public int terminationTimeout() {
+		return terminationTimeout;
+	}
+
+	public ProcessParams terminationTimeout(int terminationTimeout) {
+		this.terminationTimeout = terminationTimeout;
+		return this;
+	}
 }

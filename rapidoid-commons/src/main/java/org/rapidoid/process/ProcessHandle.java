@@ -54,8 +54,6 @@ public class ProcessHandle extends AbstractManageable {
 
 	private final static ProcessCrawlerThread CRAWLER = new ProcessCrawlerThread(ALL);
 
-	private static final long TERMINATION_TIMEOUT = 5000;
-
 	private final ProcessParams params;
 
 	private final String id;
@@ -70,6 +68,8 @@ public class ProcessHandle extends AbstractManageable {
 
 	private final AtomicBoolean doneReadingOut = new AtomicBoolean();
 	private final AtomicBoolean doneReadingErr = new AtomicBoolean();
+
+	private final int terminationTimeout;
 
 	private volatile Process process;
 
@@ -97,6 +97,8 @@ public class ProcessHandle extends AbstractManageable {
 		this.outBuffer = new SlidingWindowList<>(params.maxLogLines());
 		this.errBuffer = new SlidingWindowList<>(params.maxLogLines());
 		this.outAndErrBuffer = new SlidingWindowList<>(params.maxLogLines());
+
+		this.terminationTimeout = params.terminationTimeout();
 
 		// keep reference to the handle, used by the crawler internally
 		ALL.add(this);
@@ -417,7 +419,7 @@ public class ProcessHandle extends AbstractManageable {
 		while (isAlive()) {
 			U.sleep(1);
 
-			if (U.time() - t > TERMINATION_TIMEOUT) {
+			if (U.time() - t > terminationTimeout) {
 				destroyForcibly();
 				break;
 			}
@@ -427,7 +429,7 @@ public class ProcessHandle extends AbstractManageable {
 		while (isAlive()) {
 			U.sleep(1);
 
-			if (U.time() - t > TERMINATION_TIMEOUT) {
+			if (U.time() - t > terminationTimeout) {
 				throw U.rte("Couldn't terminate the process!");
 			}
 		}
