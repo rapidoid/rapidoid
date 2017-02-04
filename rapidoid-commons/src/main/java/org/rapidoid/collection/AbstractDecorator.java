@@ -24,7 +24,7 @@ import org.rapidoid.RapidoidThing;
 
 public class AbstractDecorator<T> extends RapidoidThing {
 
-	protected final T decorated;
+	protected volatile T decorated;
 
 	public AbstractDecorator(T decorated) {
 		this.decorated = decorated;

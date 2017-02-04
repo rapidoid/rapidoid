@@ -6,6 +6,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Stats;
 import org.rapidoid.u.U;
+import org.rapidoid.util.SlidingWindowList;
 
 import java.util.*;
 
@@ -40,7 +41,7 @@ public class TimeSeries extends RapidoidThing {
 	private static final long MILLIS_IN_DAY = 24 * MILLIS_IN_HOUR;
 	private static final long MILLIS_IN_MONTH = 28 * MILLIS_IN_DAY; // simplified as 4 weeks
 
-	private volatile List<TSValue> values = U.list();
+	private final List<TSValue> values;
 
 	private final Stats stats = new Stats();
 
@@ -54,8 +55,6 @@ public class TimeSeries extends RapidoidThing {
 
 	private final Map<Long, Stats> perTenSeconds = Coll.autoExpandingMap(Stats.class);
 
-	private final int maxSize;
-
 	private volatile String title;
 
 	public TimeSeries() {
@@ -63,7 +62,7 @@ public class TimeSeries extends RapidoidThing {
 	}
 
 	public TimeSeries(int maxSize) {
-		this.maxSize = maxSize;
+		this.values = new SlidingWindowList<>(maxSize);
 	}
 
 	public void put(long timestamp, double value) {
@@ -75,10 +74,6 @@ public class TimeSeries extends RapidoidThing {
 			if (pos < 0) pos = ~pos;
 
 			values.add(pos, ts);
-
-			if (values.size() > maxSize * 1.1) {
-				values = new ArrayList<TSValue>(values.subList(values.size() - maxSize, values.size()));
-			}
 		}
 
 		stats.add(value);
@@ -108,7 +103,7 @@ public class TimeSeries extends RapidoidThing {
 			if (!values.isEmpty()) {
 				return overviewOf(U.first(values).timestamp, U.last(values).timestamp);
 			} else {
-				return new TreeMap<Long, Double>();
+				return new TreeMap<>();
 			}
 		}
 	}

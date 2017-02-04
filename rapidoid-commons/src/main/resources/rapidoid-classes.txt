@@ -93,6 +93,7 @@ org.rapidoid.cls.TypeSpecificVisitor
 org.rapidoid.collection.AbstractCollectionDecorator
 org.rapidoid.collection.AbstractDecorator
 org.rapidoid.collection.AbstractIteratorDecorator
+org.rapidoid.collection.AbstractListDecorator
 org.rapidoid.collection.AbstractMapDecorator
 org.rapidoid.collection.AbstractSetDecorator
 org.rapidoid.collection.AutoExpandingMap
@@ -744,6 +745,7 @@ org.rapidoid.util.SimpleHashTable
 org.rapidoid.util.SimpleList
 org.rapidoid.util.SimpleMap
 org.rapidoid.util.SimplePersisterProvider
+org.rapidoid.util.SlidingWindowList
 org.rapidoid.util.StreamUtils
 org.rapidoid.util.TokenAuthData
 org.rapidoid.util.Tokens
