@@ -42,6 +42,8 @@ public class ProcessParams extends RapidoidThing {
 
 	private volatile String linePrefix = "";
 
+	private volatile int maxLogLines = 10000;
+
 	public File in() {
 		return in;
 	}
@@ -103,4 +105,14 @@ public class ProcessParams extends RapidoidThing {
 		this.id = id;
 		return this;
 	}
+
+	public int maxLogLines() {
+		return maxLogLines;
+	}
+
+	public ProcessParams maxLogLines(int maxLogLines) {
+		this.maxLogLines = maxLogLines;
+		return this;
+	}
+
 }

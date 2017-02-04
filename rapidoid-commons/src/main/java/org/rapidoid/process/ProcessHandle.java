@@ -9,6 +9,7 @@ import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+import org.rapidoid.util.SlidingWindowList;
 import org.rapidoid.util.Wait;
 
 import java.io.BufferedReader;
@@ -60,14 +61,12 @@ public class ProcessHandle extends AbstractManageable {
 	private final String id;
 
 	private final BlockingQueue<Object> input = new ArrayBlockingQueue<>(100);
-
 	private final BlockingQueue<String> output = null;
-
 	private final BlockingQueue<String> error = null;
 
-	private final StringBuffer outBuffer = new StringBuffer();
-	private final StringBuffer errBuffer = new StringBuffer();
-	private final StringBuffer outAndErrBuffer = new StringBuffer();
+	private final List<String> outBuffer;
+	private final List<String> errBuffer;
+	private final List<String> outAndErrBuffer;
 
 	private final AtomicBoolean doneReadingOut = new AtomicBoolean();
 	private final AtomicBoolean doneReadingErr = new AtomicBoolean();
@@ -94,6 +93,10 @@ public class ProcessHandle extends AbstractManageable {
 	ProcessHandle(ProcessParams params) {
 		this.params = params;
 		this.id = params.id() != null ? params.id() : UUID.randomUUID().toString();
+
+		this.outBuffer = new SlidingWindowList<>(params.maxLogLines());
+		this.errBuffer = new SlidingWindowList<>(params.maxLogLines());
+		this.outAndErrBuffer = new SlidingWindowList<>(params.maxLogLines());
 
 		// keep reference to the handle, used by the crawler internally
 		ALL.add(this);
@@ -172,7 +175,7 @@ public class ProcessHandle extends AbstractManageable {
 		}
 	}
 
-	private long readInto(BufferedReader reader, BlockingQueue<String> dest, StringBuffer... buffers) {
+	private long readInto(BufferedReader reader, BlockingQueue<String> dest, List<String>... buffers) {
 		long total = 0;
 
 		try {
@@ -187,8 +190,8 @@ public class ProcessHandle extends AbstractManageable {
 						U.print(params.linePrefix() + line);
 					}
 
-					for (StringBuffer buffer : buffers) {
-						buffer.append(line + "\n");
+					for (List<String> buffer : buffers) {
+						buffer.add(line);
 					}
 
 					total++;
