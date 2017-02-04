@@ -43,10 +43,10 @@ public class ProcTest extends TestCommons {
 		for (int i = 0; i < 5; i++) {
 			ProcessHandle proc = Proc.group(processes).run("java", "-version").waitFor();
 
-			String out = proc.outAndError();
+			String out = proc.outAndError().toString();
 			isTrue(out.contains("Java") || out.contains("JDK") || out.contains("JRE"));
 
-			String out2 = proc.outAndError();
+			String out2 = proc.outAndError().toString();
 			eq(out2, out);
 		}
 
@@ -62,7 +62,7 @@ public class ProcTest extends TestCommons {
 
 		isFalse(proc.isAlive());
 
-		List<String> lines = Str.linesOf(Proc.run("ps", "aux").waitFor().out());
+		List<String> lines = Proc.run("ps", "aux").waitFor().out();
 		List<String> javaPs = Str.grep("counter.jar", lines);
 
 		for (String p : javaPs) {
@@ -84,4 +84,12 @@ public class ProcTest extends TestCommons {
 		isTrue(jar.exists());
 		return jar.getAbsolutePath();
 	}
+
+	@Test
+	public void testProcessOutput() {
+		ProcessHandle proc = Proc.run("echo", "ABC\nXY").waitFor();
+
+		eq(proc.out(), U.list("ABC", "XY"));
+	}
+
 }

@@ -60,8 +60,7 @@ public class ProcessDetailsHandler extends GUI implements ReqRespHandler {
 		return multi(info);
 	}
 
-	public static List<Tag> showOutput(String out) {
-		String[] lines = out.split("\n");
+	public static List<Tag> showOutput(List<String> lines) {
 		List<Tag> els = U.list();
 
 		for (String line : lines) {

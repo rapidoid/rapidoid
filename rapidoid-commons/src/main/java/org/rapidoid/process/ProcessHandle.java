@@ -16,10 +16,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CancellationException;
@@ -94,9 +91,9 @@ public class ProcessHandle extends AbstractManageable {
 		this.params = params;
 		this.id = params.id() != null ? params.id() : UUID.randomUUID().toString();
 
-		this.outBuffer = new SlidingWindowList<>(params.maxLogLines());
-		this.errBuffer = new SlidingWindowList<>(params.maxLogLines());
-		this.outAndErrBuffer = new SlidingWindowList<>(params.maxLogLines());
+		this.outBuffer = Collections.synchronizedList(new SlidingWindowList<String>(params.maxLogLines()));
+		this.errBuffer = Collections.synchronizedList(new SlidingWindowList<String>(params.maxLogLines()));
+		this.outAndErrBuffer = Collections.synchronizedList(new SlidingWindowList<String>(params.maxLogLines()));
 
 		this.terminationTimeout = params.terminationTimeout();
 
@@ -259,16 +256,16 @@ public class ProcessHandle extends AbstractManageable {
 		U.print(outAndError());
 	}
 
-	public synchronized String out() {
-		return outBuffer.toString();
+	public List<String> out() {
+		return outBuffer;
 	}
 
-	public synchronized String err() {
-		return errBuffer.toString();
+	public List<String> err() {
+		return errBuffer;
 	}
 
-	public synchronized String outAndError() {
-		return outAndErrBuffer.toString();
+	public List<String> outAndError() {
+		return outAndErrBuffer;
 	}
 
 	synchronized void startProcess(ProcessParams params) {
