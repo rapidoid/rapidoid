@@ -16,7 +16,7 @@ sudo docker run \
     rapidoid/rapidoid:$TAG \
     profiles=mysql \
     jdbc.password=db-pass \
-    '/users <= SELECT user FROM mysql.user' \
+    '/users <= SELECT distinct(user) FROM mysql.user' \
     > output/mysql.txt 2>&1 &
 
 ./wait-for.sh 8888

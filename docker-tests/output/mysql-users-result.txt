@@ -3,6 +3,6 @@ Connection: keep-alive
 Server: Rapidoid
 Date: Sat, 10 Sep 2016 01:02:03 GMT
 Content-Type: application/json
-Content-Length: 17
+Content-Length: 38
 
-[{"user":"root"}]
+[{"user":"root"},{"user":"mysql.sys"}]
