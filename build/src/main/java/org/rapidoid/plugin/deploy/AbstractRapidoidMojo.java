@@ -30,6 +30,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HttpReq;
 import org.rapidoid.http.HttpResp;
 import org.rapidoid.io.IO;
+import org.rapidoid.log.GlobalCfg;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
@@ -101,6 +102,19 @@ public abstract class AbstractRapidoidMojo extends AbstractMojo {
 	}
 
 	protected void invoke(MavenSession session, List<String> goals, boolean updateSnapshots, Map<String, String> properties) throws MojoExecutionException {
+		if (Msc.hasMavenEmbedder() && GlobalCfg.get("maven.home") == null) {
+			invokeEmbedded(session, goals, updateSnapshots, properties);
+		} else {
+			invokeInstalled(session, goals, updateSnapshots, properties);
+		}
+	}
+
+	protected void invokeEmbedded(MavenSession session, List<String> goals, boolean updateSnapshots, Map<String, String> properties) throws MojoExecutionException {
+		EmbeddedMavenCli cli = new EmbeddedMavenCli(session);
+		cli.execute(goals, session.getRequest().getBaseDirectory(), updateSnapshots, properties);
+	}
+
+	protected void invokeInstalled(MavenSession session, List<String> goals, boolean updateSnapshots, Map<String, String> properties) throws MojoExecutionException {
 
 		InvocationRequest request = new DefaultInvocationRequest();
 
@@ -142,7 +156,7 @@ public abstract class AbstractRapidoidMojo extends AbstractMojo {
 		properties.put("assembly.appendAssemblyId", "true");
 		properties.put("assembly.attach", "false");
 
-		invoke(session, goals, false, properties);
+		invoke(session, goals, true, properties);
 
 		boolean deleted = new File(assemblyFile).delete();
 		if (!deleted) getLog().warn("Couldn't delete the temporary assembly descriptor file!");

@@ -617,11 +617,13 @@ org.rapidoid.oauth.OAuthTokenHandler
 org.rapidoid.platform.AppChangeWatcher
 org.rapidoid.platform.DefaultApp
 org.rapidoid.platform.Main
+org.rapidoid.platform.MavenUtil
 org.rapidoid.platform.Platform
 org.rapidoid.platform.PlatformInDevMode
 org.rapidoid.plugin.deploy.AbstractRapidoidMojo
 org.rapidoid.plugin.deploy.BuildJarMojo
 org.rapidoid.plugin.deploy.DeployJarMojo
+org.rapidoid.plugin.deploy.EmbeddedMavenCli
 org.rapidoid.pool.ArrayPool
 org.rapidoid.pool.Pool
 org.rapidoid.pool.Pools

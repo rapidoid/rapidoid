@@ -13,20 +13,29 @@
 	<name>Rapidoid Build Plugin</name>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-web</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- Maven Plugin API -->
+
 		<dependency>
 			<groupId>org.apache.maven</groupId>
 			<artifactId>maven-plugin-api</artifactId>
-			<version>${plugin.api.version}</version>
+			<version>${embedded-maven.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven</groupId>
 			<artifactId>maven-core</artifactId>
-			<version>${plugin.api.version}</version>
+			<version>${embedded-maven.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven</groupId>
 			<artifactId>maven-model</artifactId>
-			<version>${plugin.api.version}</version>
+			<version>${embedded-maven.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven</groupId>
@@ -48,17 +57,14 @@
 			<artifactId>maven-archiver</artifactId>
 			<version>3.1.1</version>
 		</dependency>
-		<!--
+
+		<!-- OPTIONAL - embedded Maven might be available -->
+
 		<dependency>
-			<groupId>org.codehaus.plexus</groupId>
-			<artifactId>plexus-utils</artifactId>
-			<version>1.5.5</version>
-		</dependency>
-		-->
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-web</artifactId>
-			<version>${project.version}</version>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-embedder</artifactId>
+			<version>${embedded-maven.version}</version>
+			<optional>true</optional>
 		</dependency>
 
 		<!-- PROVIDED -->

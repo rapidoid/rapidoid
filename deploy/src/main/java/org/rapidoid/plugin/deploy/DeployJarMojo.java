@@ -88,7 +88,11 @@ public class DeployJarMojo extends AbstractRapidoidMojo {
 	}
 
 	private void validateConfig() throws MojoExecutionException {
-		if (U.isEmpty(servers)) throw new MojoExecutionException("The 'servers' must be configured!");
+
+		if (U.isEmpty(servers)) {
+			throw new MojoExecutionException("The 'servers' must be configured!");
+		}
+
 		if (U.isEmpty(token)) throw new MojoExecutionException("The 'token' must be configured!");
 	}
 

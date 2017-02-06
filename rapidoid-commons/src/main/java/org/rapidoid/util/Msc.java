@@ -818,6 +818,10 @@ public class Msc extends RapidoidThing implements Constants {
 		return Cls.exists("org.slf4j.impl.StaticLoggerBinder");
 	}
 
+	public static boolean hasMavenEmbedder() {
+		return Cls.exists("org.apache.maven.cli.MavenCli");
+	}
+
 	public static boolean isValidationError(Throwable error) {
 		return (error instanceof InvalidData) || error.getClass().getName().startsWith("javax.validation.");
 	}
