@@ -100,6 +100,16 @@ public class FileSearch extends RapidoidThing {
 		return names;
 	}
 
+	public List<String> getLocations() {
+		List<String> names = U.list();
+
+		for (File file : get()) {
+			names.add(file.getParent());
+		}
+
+		return names;
+	}
+
 	public List<String> getRelativeNames() {
 		List<String> names = U.list();
 
@@ -158,7 +168,7 @@ public class FileSearch extends RapidoidThing {
 
 				if ((includeFiles && f.isFile()) || (includeDirectories && f.isDirectory())) {
 
-					String filename = f.getAbsolutePath();
+					String filename = f.getName();
 
 					if (matching == null || matching.matcher(filename).matches()) {
 						if (ignoring == null || !ignoring.matcher(filename).matches()) {
