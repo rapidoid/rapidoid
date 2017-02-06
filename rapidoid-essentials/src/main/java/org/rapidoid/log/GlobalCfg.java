@@ -21,6 +21,7 @@ package org.rapidoid.log;
  */
 
 import org.rapidoid.RapidoidThing;
+import org.rapidoid.u.U;
 
 /**
  * @author Nikolche Mihajlovski
@@ -28,12 +29,25 @@ import org.rapidoid.RapidoidThing;
  */
 public class GlobalCfg extends RapidoidThing {
 
-	private static final boolean uniformOutput =
-		"true".equalsIgnoreCase(System.getenv("UNIFORM_OUTPUT"))
-			|| "true".equalsIgnoreCase(System.getenv("uniform_output"));
+	private static final boolean uniformOutput = is("uniform_output");
 
 	public static boolean uniformOutput() {
 		return uniformOutput;
+	}
+
+	public static boolean is(String name) {
+		return "true".equalsIgnoreCase(get(name));
+	}
+
+	public static String get(String name) {
+		String value = U.or(System.getProperty(name), System.getenv(name));
+		if (value != null) return value;
+
+		value = U.or(System.getProperty(name.toUpperCase()), System.getenv(name.toUpperCase()));
+		if (value != null) return value;
+
+		value = U.or(System.getProperty(name.toLowerCase()), System.getenv(name.toLowerCase()));
+		return value;
 	}
 
 }
