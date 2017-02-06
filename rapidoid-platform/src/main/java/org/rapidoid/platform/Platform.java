@@ -36,6 +36,7 @@ import org.rapidoid.util.Msc;
 
 import java.awt.*;
 import java.net.URI;
+import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -51,6 +52,9 @@ public class Platform extends RapidoidThing {
 		Log.options().inferCaller(false);
 
 		Msc.setPlatform(true);
+
+		args = filterPlatformSpecificArgs(args);
+
 		App.run(args);
 
 		AppDeployer.bootstrap();
@@ -64,6 +68,23 @@ public class Platform extends RapidoidThing {
 		appChangeWatcher.watch("/app", "app");
 
 		openInBrowser();
+	}
+
+	private static String[] filterPlatformSpecificArgs(String[] args) {
+		List<String> remainingArgs = U.list();
+
+		for (String arg : args) {
+			if (arg.startsWith("@")) {
+				String appRef = arg.substring(1);
+				AppDownloader.download(appRef, "/app");
+				MavenUtil.findAndBuildAndDeploy("/app");
+
+			} else {
+				remainingArgs.add(arg);
+			}
+		}
+
+		return remainingArgs.toArray(new String[remainingArgs.size()]);
 	}
 
 	private static void openInBrowser() {

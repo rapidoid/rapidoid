@@ -615,6 +615,7 @@ org.rapidoid.oauth.OAuthProvider
 org.rapidoid.oauth.OAuthStateCheck
 org.rapidoid.oauth.OAuthTokenHandler
 org.rapidoid.platform.AppChangeWatcher
+org.rapidoid.platform.AppDownloader
 org.rapidoid.platform.DefaultApp
 org.rapidoid.platform.Main
 org.rapidoid.platform.MavenUtil

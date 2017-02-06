@@ -73,6 +73,16 @@
 			<artifactId>wagon-provider-api</artifactId>
 			<version>2.12</version>
 		</dependency>
+
+		<!-- TEST -->
+
+		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-test-commons</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>

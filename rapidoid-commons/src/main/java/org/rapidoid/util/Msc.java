@@ -50,6 +50,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /*
  * #%L
@@ -1269,5 +1271,36 @@ public class Msc extends RapidoidThing implements Constants {
 		msg = U.or(msg, defaultMsg);
 		return new ErrCodeAndMsg(code, msg);
 	}
+
+	public static void unzip(InputStream zip, String destFolder) {
+		try {
+			File folder = new File(destFolder);
+			folder.mkdirs();
+
+			ZipInputStream zis = new ZipInputStream(zip);
+			ZipEntry ze = zis.getNextEntry();
+
+			while (ze != null) {
+
+				if (!ze.isDirectory()) {
+					String fileName = ze.getName();
+					File newFile = new File(destFolder + File.separator + fileName);
+
+					newFile.getParentFile().mkdirs();
+
+					IO.save(newFile.getAbsolutePath(), IO.loadBytes(zis));
+				}
+
+				ze = zis.getNextEntry();
+			}
+
+			zis.closeEntry();
+			zis.close();
+
+		} catch (IOException e) {
+			throw U.rte(e);
+		}
+	}
+
 
 }
