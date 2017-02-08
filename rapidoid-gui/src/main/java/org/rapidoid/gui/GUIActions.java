@@ -42,7 +42,7 @@ public class GUIActions extends GUI {
 	}
 
 	private static Btn action(final Manageable manageable, final String action) {
-		Btn btn = cmd(action).smallest();
+		Btn btn = cmd(action, manageable.getClass().getSimpleName(), manageable.group().name(), manageable.id()).smallest();
 
 		final String cmd = btn.command();
 		btn.onClick(new Runnable() {
