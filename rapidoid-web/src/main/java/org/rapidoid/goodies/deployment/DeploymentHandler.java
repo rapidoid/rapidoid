@@ -13,7 +13,6 @@ import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
 import org.rapidoid.io.IO;
 import org.rapidoid.process.ProcessHandle;
-import org.rapidoid.render.Render;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Tokens;
@@ -71,7 +70,7 @@ public class DeploymentHandler extends GUI implements ReqHandler {
 			info.add(copy(textarea(token).rows("2").attr("readonly", "readonly").style("width:100%; font-size: 10px;")));
 
 			info.add(h3("Upload an application JAR to stage it and then deploy it:"));
-			info.add(hardcoded(Render.file("upload-jar.html").model(U.map())));
+			info.add(render("upload-jar.html"));
 
 			info.add(h3("Packaging and deploying with Maven:"));
 			String cmd = "mvn clean org.rapidoid:deploy:jar";

@@ -44,6 +44,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
+import org.rapidoid.render.Render;
 import org.rapidoid.render.Templates;
 import org.rapidoid.security.Role;
 import org.rapidoid.timeseries.TimeSeries;
@@ -924,4 +925,11 @@ public abstract class GUI extends HTML implements Role {
 		return target.data("toggle", "tooltip").data("placement", "top").attr("title", tooltip);
 	}
 
+	public static Tag render(String templateFile) {
+		return render(templateFile, U.map());
+	}
+
+	public static Tag render(String templateFile, Map<Object, Object> model) {
+		return hardcoded(Render.file(templateFile).model(model));
+	}
 }
