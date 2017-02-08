@@ -28,6 +28,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -41,6 +42,7 @@ public class BuildJarMojo extends AbstractRapidoidMojo {
 	protected MavenSession session;
 
 	public void execute() throws MojoExecutionException {
+		Msc.setMavenBuild(true);
 		buildUberJar(project, session);
 	}
 

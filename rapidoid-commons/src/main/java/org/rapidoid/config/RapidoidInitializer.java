@@ -37,14 +37,20 @@ public class RapidoidInitializer extends RapidoidThing {
 	}
 
 	private static synchronized void initialize() {
-		String proc = Msc.processName();
-		String dir = System.getProperty("user.dir");
-		String maxMem = (Runtime.getRuntime().maxMemory() / 1024 / 1024) + " MB";
 
-		Log.info("!Starting " + RapidoidInfo.nameAndInfo());
+		if (Msc.isMavenBuild()) {
+			Msc.printRapidoidBanner();
 
-		Log.info("!System info", "os", Msc.OS_NAME, "java", Msc.maybeMasked(Msc.javaVersion()),
-			"process", Msc.maybeMasked(proc), "max memory", Msc.maybeMasked(maxMem), "dir", dir);
+		} else {
+			String proc = Msc.processName();
+			String dir = System.getProperty("user.dir");
+			String maxMem = (Runtime.getRuntime().maxMemory() / 1024 / 1024) + " MB";
+
+			Log.info("!Starting " + RapidoidInfo.nameAndInfo());
+
+			Log.info("!System info", "os", Msc.OS_NAME, "java", Msc.maybeMasked(Msc.javaVersion()),
+				"process", Msc.maybeMasked(proc), "max memory", Msc.maybeMasked(maxMem), "dir", dir);
+		}
 
 		if (Msc.hasLogback()) {
 			LogbackUtil.setupLogger();

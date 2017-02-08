@@ -87,6 +87,8 @@ public class Msc extends RapidoidThing {
 
 	private static boolean platform;
 
+	private static boolean mavenBuild;
+
 	public static final ScheduledThreadPoolExecutor EXECUTOR = new ScheduledThreadPoolExecutor(8,
 		new RapidoidThreadFactory("utils", true));
 
@@ -1216,6 +1218,14 @@ public class Msc extends RapidoidThing {
 		return platform;
 	}
 
+	public static boolean isMavenBuild() {
+		return mavenBuild;
+	}
+
+	public static void setMavenBuild(boolean mavenBuild) {
+		Msc.mavenBuild = mavenBuild;
+	}
+
 	public static String errorMsg(Throwable error) {
 		return getErrorCodeAndMsg(error).msg();
 	}
@@ -1329,6 +1339,14 @@ public class Msc extends RapidoidThing {
 		} catch (IOException e) {
 			throw U.rte(e);
 		}
+	}
+
+	public static void printRapidoidBanner() {
+		U.print(IO.load("rapidoid.txt"));
+	}
+
+	public static boolean isSilent() {
+		return isMavenBuild();
 	}
 
 }

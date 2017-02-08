@@ -96,7 +96,7 @@ public class Environment extends RapidoidInitializer {
 
 		if (!production && !test && !dev) {
 			mode = inferMode();
-			Log.info("No production/dev/test mode was configured, inferring mode", "!mode", mode);
+			if (!silent()) Log.info("No production/dev/test mode was configured, inferring mode", "!mode", mode);
 
 		} else {
 			boolean onlyOne = (!production || !dev) && (!dev || !test) && (!production || !test);
@@ -117,7 +117,7 @@ public class Environment extends RapidoidInitializer {
 		}
 
 		String modeProfile = mode.name().toLowerCase();
-		Log.info("Automatically activating mode-specific profile", "!profile", modeProfile);
+		if (!silent()) Log.info("Automatically activating mode-specific profile", "!profile", modeProfile);
 		profiles.add(modeProfile);
 
 		if (Msc.isPlatform()) {
@@ -126,7 +126,11 @@ public class Environment extends RapidoidInitializer {
 
 		RapidoidEnv.touch();
 
-		Log.info("Initialized environment", "!mode", mode, "!profiles", profiles);
+		if (!silent()) Log.info("Initialized environment", "!mode", mode, "!profiles", profiles);
+	}
+
+	private static boolean silent() {
+		return Msc.isSilent();
 	}
 
 	private static EnvMode inferMode() {
@@ -147,12 +151,12 @@ public class Environment extends RapidoidInitializer {
 
 		if (U.notEmpty(profilesLst)) {
 			profiles = U.list(profilesLst.split("\\s*\\,\\s*"));
-			Log.info("Configuring active profiles", "!profiles", profiles);
+			if (!silent()) Log.info("Configuring active profiles", "!profiles", profiles);
 			return profiles;
 
 		} else {
 			if (!Msc.isPlatform()) {
-				Log.info("No profiles were specified, activating 'default' profile");
+				if (!silent()) Log.info("No profiles were specified, activating 'default' profile");
 				profiles = U.list("default");
 			} else {
 				profiles = U.list();
@@ -196,7 +200,8 @@ public class Environment extends RapidoidInitializer {
 		this.mode = null;
 		initModeAndProfiles();
 
-		Log.info("Activating custom profiles", "!activating", activeProfiles, "!resulting profiles", this.profiles, "!resulting mode", this.mode);
+		if (!silent())
+			Log.info("Activating custom profiles", "!activating", activeProfiles, "!resulting profiles", this.profiles, "!resulting mode", this.mode);
 	}
 
 	public boolean isInitialized() {

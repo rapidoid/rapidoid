@@ -26,6 +26,7 @@ import org.rapidoid.collection.Coll;
 import org.rapidoid.env.RapidoidEnv;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.util.Map;
 import java.util.Set;
@@ -86,7 +87,9 @@ public class ConfigBase extends RapidoidInitializer {
 		RapidoidEnv.touch();
 
 		if (U.neq(this.filenameBase, filenameBase)) {
-			Log.info("Changing configuration filename base", "!from", this.filenameBase, "!to", filenameBase);
+			if (!Msc.isSilent()) {
+				Log.info("Changing configuration filename base", "!from", this.filenameBase, "!to", filenameBase);
+			}
 
 			this.filenameBase = filenameBase;
 			return true;
@@ -99,7 +102,7 @@ public class ConfigBase extends RapidoidInitializer {
 		RapidoidEnv.touch();
 
 		if (U.neq(this.path, path)) {
-			Log.info("Changing configuration path", "!from", this.path, "!to", path);
+			if (!Msc.isSilent()) Log.info("Changing configuration path", "!from", this.path, "!to", path);
 
 			this.path = path;
 			return true;

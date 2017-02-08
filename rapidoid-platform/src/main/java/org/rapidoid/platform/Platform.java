@@ -52,8 +52,7 @@ public class Platform extends RapidoidThing {
 
 		interceptSpecialCommands(args);
 
-		// Rapidoid banner
-		U.print(IO.load("rapidoid.txt"));
+		Msc.printRapidoidBanner();
 
 		startPlatformAndProcessArgs(args);
 

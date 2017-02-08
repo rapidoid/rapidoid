@@ -36,6 +36,7 @@ import org.rapidoid.io.IO;
 import org.rapidoid.io.Upload;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.util.List;
 import java.util.Map;
@@ -58,6 +59,7 @@ public class DeployJarMojo extends AbstractRapidoidMojo {
 	protected String servers = "";
 
 	public void execute() throws MojoExecutionException {
+		Msc.setMavenBuild(true);
 		initConfig();
 
 		String uberJar = buildUberJar(project, session);
