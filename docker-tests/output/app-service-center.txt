@@ -28,6 +28,8 @@
 [PLATFORM] INFO | Registering handler | setup = app | verbs = GET,POST | path = /_terminate | roles = [] | tx = NONE | mvc = true | cacheTTL = 0
 [PLATFORM] INFO | Registering handler | setup = app | verbs = GET,POST | path = /_processes | roles = [] | tx = NONE | mvc = true | cacheTTL = 0
 [PLATFORM] INFO | Registering handler | setup = app | verbs = GET,POST | path = /_processes/{id} | roles = [] | tx = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | Registering handler | setup = app | verbs = GET,POST | path = /_manageables | roles = [] | tx = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | Registering handler | setup = app | verbs = GET,POST | path = /_manageables/{type}/{id} | roles = [] | tx = NONE | mvc = true | cacheTTL = 0
 [PLATFORM] INFO | Registering handler | setup = app | verbs = GET,POST | path = /_jmx/memory | roles = [] | tx = NONE | mvc = true | cacheTTL = 0
 [PLATFORM] INFO | Registering handler | setup = app | verbs = GET,POST | path = /_jmx/mempool | roles = [] | tx = NONE | mvc = true | cacheTTL = 0
 [PLATFORM] INFO | Registering handler | setup = app | verbs = GET,POST | path = /_jmx/classes | roles = [] | tx = NONE | mvc = true | cacheTTL = 0

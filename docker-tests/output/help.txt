@@ -38,6 +38,7 @@ Service activation options:
   application               - Application management (default: disabled)
   lifecycle                 - Lifecycle management (default: disabled)
   processes                 - Process management (default: disabled)
+  manageables               - Manageable objects (default: disabled)
   jmx                       - JMX overview (default: disabled)
   metrics                   - Metrics (default: disabled)
   deploy                    - Application deployment (default: disabled)

@@ -28,6 +28,8 @@
 [PLATFORM] INFO | Registering handler | setup = admin | verbs = GET,POST | path = /_terminate | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
 [PLATFORM] INFO | Registering handler | setup = admin | verbs = GET,POST | path = /_processes | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
 [PLATFORM] INFO | Registering handler | setup = admin | verbs = GET,POST | path = /_processes/{id} | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | Registering handler | setup = admin | verbs = GET,POST | path = /_manageables | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | Registering handler | setup = admin | verbs = GET,POST | path = /_manageables/{type}/{id} | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
 [PLATFORM] INFO | Registering handler | setup = admin | verbs = GET,POST | path = /_jmx/memory | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
 [PLATFORM] INFO | Registering handler | setup = admin | verbs = GET,POST | path = /_jmx/mempool | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
 [PLATFORM] INFO | Registering handler | setup = admin | verbs = GET,POST | path = /_jmx/classes | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
