@@ -29,11 +29,10 @@ admin-zone:
     Deployment: /_deployment
     Processes: /_processes
     Metrics: /_metrics
-    Objects: /_objects
+    Manageables: /_manageables
     Application:
       Beans: /_beans
       Entities: /_entities
-    Manageables: /_manageables
     System:
       Terminate / Restart: /_terminate
       Classpath: /_classpath
