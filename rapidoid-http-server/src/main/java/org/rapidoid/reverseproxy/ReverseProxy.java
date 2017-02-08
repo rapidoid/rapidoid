@@ -5,12 +5,15 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.http.*;
 import org.rapidoid.http.impl.lowlevel.HttpIO;
+import org.rapidoid.job.Jobs;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.u.U;
 
+import java.io.IOException;
 import java.net.ConnectException;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /*
  * #%L
@@ -36,6 +39,10 @@ import java.util.Map;
 @Since("5.2.0")
 public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> implements ReqRespHandler {
 
+	private static final int RETRY_AFTER_MS = 300;
+
+	private static final int TIMEOUT_MS = 10000;
+
 	private final List<ProxyMapping> mappings = U.list();
 
 	@Override
@@ -46,6 +53,12 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 
 		req.async();
 
+		process(req, resp, mapping, 1, U.time());
+
+		return req;
+	}
+
+	public void process(final Req req, final Resp resp, final ProxyMapping mapping, final int attempts, final long since) {
 		final String targetUrl = mapping.getTargetUrl(req);
 
 		Map<String, String> headers = req.headers();
@@ -81,18 +94,33 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 						resp.done();
 
 					} else {
-
-						if (error instanceof ConnectException) {
-							HttpIO.INSTANCE.errorAndDone(req, U.rte("Couldn't connect to the upstream!", error), LogLevel.DEBUG);
-						} else {
-							HttpIO.INSTANCE.errorAndDone(req, error, LogLevel.ERROR);
-						}
+						handleError(error, req, resp, mapping, attempts, since);
 					}
 				}
 
 			});
+	}
 
-		return req;
+	protected void handleError(Throwable error, final Req req, final Resp resp, final ProxyMapping mapping, final int attempts, final long since) {
+		if (error instanceof ConnectException || error instanceof IOException) {
+
+			if (HttpUtils.isGetReq(req) && (U.time() - since < TIMEOUT_MS)) {
+
+				Jobs.after(RETRY_AFTER_MS, TimeUnit.MILLISECONDS).run(new Runnable() {
+					@Override
+					public void run() {
+						process(req, resp, mapping, attempts + 1, since);
+					}
+				});
+
+			} else {
+				HttpIO.INSTANCE.errorAndDone(req, U.rte("Couldn't connect to the upstream!", error), LogLevel.DEBUG);
+			}
+
+		} else {
+
+			HttpIO.INSTANCE.errorAndDone(req, error, LogLevel.ERROR);
+		}
 	}
 
 	protected ProxyMapping findMapping(Req req) {

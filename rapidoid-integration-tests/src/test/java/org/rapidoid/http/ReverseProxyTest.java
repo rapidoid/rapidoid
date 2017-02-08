@@ -23,7 +23,11 @@ package org.rapidoid.http;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.job.Jobs;
 import org.rapidoid.setup.On;
+import org.rapidoid.setup.Setup;
+
+import java.util.concurrent.TimeUnit;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.3")
@@ -48,6 +52,22 @@ public class ReverseProxyTest extends IsolatedIntegrationTest {
 		getReq("/");
 		getReq("/hello/");
 		getReq("/hi");
+	}
+
+	@Test
+	public void shouldRetryOnConnectionErrors() {
+		proxy("/", "localhost:9999");
+
+		Setup app = Setup.create("app").port(9999);
+
+		Jobs.after(2, TimeUnit.SECONDS).run(() -> {
+			app.req(req -> "From app: " + req.uri());
+		});
+
+		getReq("/hey");
+		getReq("/there");
+
+		app.shutdown();
 	}
 
 }
