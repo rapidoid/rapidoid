@@ -73,9 +73,9 @@ public class DeploymentHandler extends GUI implements ReqHandler {
 			info.add(render("upload-jar.html"));
 
 			info.add(h3("Packaging and deploying with Maven:"));
-			String cmd = "mvn clean org.rapidoid:deploy:jar";
 
-			info.add(h6(copy(b(cmd))));
+			String cmd = "mvn clean org.rapidoid:app:deploy";
+			info.add(copy(textarea(cmd).rows("2").attr("readonly", "readonly").style("width:100%; font-size: 10px;")));
 
 			info.add(h3("HTTP API for Deployment:"));
 

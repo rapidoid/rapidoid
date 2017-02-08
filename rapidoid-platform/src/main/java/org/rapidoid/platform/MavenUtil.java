@@ -40,7 +40,7 @@ public class MavenUtil extends RapidoidThing {
 
 		if (!locations.isEmpty()) {
 			for (String basedir : locations) {
-				build(basedir, "/data/.m2/repository", U.list("-e", "-X", "-DskipTests=true", "clean", "org.rapidoid:build:jar"));
+				build(basedir, "/data/.m2/repository", U.list("-e", "-X", "-DskipTests=true", "clean", "org.rapidoid:app:build"));
 			}
 		} else {
 			Log.warn("Didn't find any pom.xml file!", "location", location);

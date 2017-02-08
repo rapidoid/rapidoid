@@ -4,10 +4,10 @@ IFS=$'\n\t'
 
 mvn install
 cd ../examples/getting-started
-mvn clean org.rapidoid:build:jar
+mvn clean org.rapidoid:app:build
 
 #cd ../guice-integration
-#mvn clean org.rapidoid:build:jar
+#mvn clean org.rapidoid:app:build
 
 cd target
 ls -l

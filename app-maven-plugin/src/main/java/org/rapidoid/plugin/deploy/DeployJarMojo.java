@@ -42,7 +42,7 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-@Mojo(name = "jar", aggregator = true, defaultPhase = LifecyclePhase.DEPLOY)
+@Mojo(name = "deploy", aggregator = true, defaultPhase = LifecyclePhase.DEPLOY)
 public class DeployJarMojo extends AbstractRapidoidMojo {
 
 	@Parameter(defaultValue = "${project}", readonly = true, required = true)

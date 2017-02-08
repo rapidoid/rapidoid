@@ -7,7 +7,7 @@ IFS=$'\n\t'
 printf "\n - BUILDING app.jar\n\n"
 
 cd ../examples/getting-started
-mvn clean org.rapidoid:build:jar && cp target/app.jar ../../docker-tests/app3
+mvn clean org.rapidoid:app:build && cp target/app.jar ../../docker-tests/app3
 
 cd ../../docker-tests
 chmod o+r app3/app.jar

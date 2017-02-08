@@ -4,4 +4,4 @@ IFS=$'\n\t'
 
 mvn install
 cd ../examples/getting-started
-mvn clean org.rapidoid:deploy:jar
+mvn clean org.rapidoid:app:deploy

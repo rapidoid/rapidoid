@@ -113,8 +113,7 @@
 		<module>rapidoid-watch</module>
 		<module>rapidoid-fluent</module>
 		<module>rapidoid-integration-tests</module>
-		<module>build</module>
-		<module>deploy</module>
+		<module>app-maven-plugin</module>
 	</modules>
 
 	<build>

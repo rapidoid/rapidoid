@@ -31,7 +31,7 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-@Mojo(name = "jar", aggregator = true, defaultPhase = LifecyclePhase.PACKAGE)
+@Mojo(name = "build", aggregator = true, defaultPhase = LifecyclePhase.PACKAGE)
 public class BuildJarMojo extends AbstractRapidoidMojo {
 
 	@Parameter(defaultValue = "${project}", readonly = true, required = true)
