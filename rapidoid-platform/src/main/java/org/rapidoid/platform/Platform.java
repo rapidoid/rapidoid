@@ -30,6 +30,7 @@ import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
+import org.rapidoid.setup.PreApp;
 import org.rapidoid.setup.Setup;
 import org.rapidoid.u.U;
 import org.rapidoid.util.AppInfo;
@@ -92,7 +93,8 @@ public class Platform extends RapidoidThing {
 
 		separateArgs(args, normalArgs, appRefs);
 
-		App.run(U.arrayOf(String.class, normalArgs));
+		PreApp.args(U.arrayOf(String.class, normalArgs));
+		App.boot();
 
 		for (String appRef : appRefs) {
 			AppDownloader.download(appRef, "/apps");
