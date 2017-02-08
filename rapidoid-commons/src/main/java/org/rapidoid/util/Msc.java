@@ -1272,6 +1272,35 @@ public class Msc extends RapidoidThing implements Constants {
 		return new ErrCodeAndMsg(code, msg);
 	}
 
+	public static String detectZipRoot(InputStream zip) {
+		Set<String> roots = U.set();
+
+		try {
+
+			ZipInputStream zis = new ZipInputStream(zip);
+			ZipEntry ze = zis.getNextEntry();
+
+			while (ze != null) {
+
+				if (ze.isDirectory()) {
+					String fileName = ze.getName();
+					String parentDir = fileName.split("/|\\\\")[0];
+					roots.add(parentDir);
+				}
+
+				ze = zis.getNextEntry();
+			}
+
+			zis.closeEntry();
+			zis.close();
+
+		} catch (IOException e) {
+			throw U.rte(e);
+		}
+
+		return roots.size() == 1 ? U.single(roots) : null;
+	}
+
 	public static void unzip(InputStream zip, String destFolder) {
 		try {
 			File folder = new File(destFolder);
@@ -1284,8 +1313,8 @@ public class Msc extends RapidoidThing implements Constants {
 
 				if (!ze.isDirectory()) {
 					String fileName = ze.getName();
-					File newFile = new File(destFolder + File.separator + fileName);
 
+					File newFile = new File(destFolder + File.separator + fileName);
 					newFile.getParentFile().mkdirs();
 
 					IO.save(newFile.getAbsolutePath(), IO.loadBytes(zis));
@@ -1301,6 +1330,5 @@ public class Msc extends RapidoidThing implements Constants {
 			throw U.rte(e);
 		}
 	}
-
 
 }

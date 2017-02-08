@@ -24,6 +24,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Str;
+import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
 import java.io.File;
@@ -169,9 +170,11 @@ public class FileSearch extends RapidoidThing {
 				if ((includeFiles && f.isFile()) || (includeDirectories && f.isDirectory())) {
 
 					String filename = f.getName();
+					Log.debug("Matching file/folder against the search criteria", "name", f.getAbsoluteFile());
 
 					if (matching == null || matching.matcher(filename).matches()) {
 						if (ignoring == null || !ignoring.matcher(filename).matches()) {
+							Log.debug("The file/folder matches", "name", f.getAbsoluteFile());
 							found.add(f);
 						}
 					}

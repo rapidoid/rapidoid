@@ -30,6 +30,7 @@ import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -40,13 +41,27 @@ public class AppDownloader extends RapidoidThing {
 
 	private static final HttpClient client = HTTP.client().followRedirects(true);
 
-	public static void download(String appRef, String destFolder) {
+	public static void download(String appRef, String appsFolder) {
 		String url = getAppUrl(appRef);
 
-		Log.info("Downloading application", "application", appRef, "url", url, "destination", destFolder);
-
+		Log.info("Downloading application", "application", appRef, "url", url);
 		byte[] zip = client.get(url).execute().bodyBytes();
-		Msc.unzip(new ByteArrayInputStream(zip), destFolder);
+
+		String zipRoot = Msc.detectZipRoot(new ByteArrayInputStream(zip));
+
+		String destination, zipDest;
+
+		if (zipRoot != null) {
+			destination = appsFolder + File.separator + zipRoot;
+			zipDest = appsFolder;
+
+		} else {
+			destination = appsFolder + File.separator + Msc.textToId(appRef);
+			zipDest = destination;
+		}
+
+		Log.info("Extracting application", "application", appRef, "destination", destination);
+		Msc.unzip(new ByteArrayInputStream(zip), zipDest);
 	}
 
 	public static String getAppUrl(String appRef) {
