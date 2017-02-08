@@ -932,4 +932,15 @@ public abstract class GUI extends HTML implements Role {
 	public static Tag render(String templateFile, Map<Object, Object> model) {
 		return hardcoded(Render.file(templateFile).model(model));
 	}
+
+	public static Tag breadcrumb(Object... segments) {
+		Tag breadcrumb = ol().class_("breadcrumb");
+
+		for (Object segment : segments) {
+			breadcrumb = breadcrumb.append(li(a_void(segment)));
+		}
+
+		return breadcrumb;
+	}
+
 }
