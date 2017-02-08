@@ -34,6 +34,7 @@ import org.rapidoid.config.ConfigImpl;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.io.IO;
 import org.rapidoid.io.Upload;
+import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
 import java.util.List;
@@ -88,12 +89,15 @@ public class DeployJarMojo extends AbstractRapidoidMojo {
 	}
 
 	private void validateConfig() throws MojoExecutionException {
-
 		if (U.isEmpty(servers)) {
-			throw new MojoExecutionException("The 'servers' must be configured!");
+			servers = "localhost";
+			Log.warn("No 'servers' were configured, using 'localhost' as default");
 		}
 
-		if (U.isEmpty(token)) throw new MojoExecutionException("The 'token' must be configured!");
+		if (U.isEmpty(token)) {
+			token = "";
+			Log.warn("No 'token' was configured, using empty token as default");
+		}
 	}
 
 	private List<String> getServers() {
