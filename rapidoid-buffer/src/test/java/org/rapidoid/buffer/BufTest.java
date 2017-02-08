@@ -29,11 +29,12 @@ import org.rapidoid.commons.Str;
 import org.rapidoid.data.BufRange;
 import org.rapidoid.data.BufRanges;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Constants;
+
+import static org.rapidoid.util.Constants.*;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class BufTest extends BufferTestCommons implements Constants {
+public class BufTest extends BufferTestCommons {
 
 	@Test
 	public void shouldAppendData() {

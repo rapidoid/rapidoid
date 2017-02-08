@@ -75,7 +75,7 @@ import java.util.zip.ZipInputStream;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Msc extends RapidoidThing implements Constants {
+public class Msc extends RapidoidThing {
 
 	private static final String SPECIAL_ARG_REGEX = "\\s*(.*?)\\s*(->|<-|:=|<=|=>|==)\\s*(.*?)\\s*";
 

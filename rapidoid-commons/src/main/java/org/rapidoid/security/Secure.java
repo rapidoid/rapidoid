@@ -9,7 +9,6 @@ import org.rapidoid.beany.Prop;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.security.annotation.*;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Constants;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -39,7 +38,7 @@ import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Secure extends RapidoidThing implements Constants {
+public class Secure extends RapidoidThing {
 
 	public static boolean hasRoleForClass(String username, Set<String> roles, String role, Class<?> clazz) {
 		return hasRole(username, roles, role, Cls.unproxy(clazz), null);

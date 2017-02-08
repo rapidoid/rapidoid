@@ -11,10 +11,11 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
 import org.rapidoid.lambda.Dynamic;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Constants;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.Future;
+
+import static org.rapidoid.util.Constants.HTTP_VERBS;
 
 /*
  * #%L
@@ -38,7 +39,7 @@ import java.util.concurrent.Future;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.4.0")
-public class DynamicRESTClient extends RapidoidThing implements Dynamic, Constants {
+public class DynamicRESTClient extends RapidoidThing implements Dynamic {
 
 	private final Class<?> clientInterface;
 

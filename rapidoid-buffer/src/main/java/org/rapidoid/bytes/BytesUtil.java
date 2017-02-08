@@ -6,9 +6,10 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Err;
 import org.rapidoid.data.BufRange;
 import org.rapidoid.data.BufRanges;
-import org.rapidoid.util.Constants;
 import org.rapidoid.util.Msc;
 import org.rapidoid.wrap.IntWrap;
+
+import static org.rapidoid.util.Constants.*;
 
 /*
  * #%L
@@ -32,7 +33,7 @@ import org.rapidoid.wrap.IntWrap;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class BytesUtil extends RapidoidThing implements Constants {
+public class BytesUtil extends RapidoidThing {
 
 	public static final byte[] CHARS_SWITCH_CASE = new byte[128];
 

@@ -35,13 +35,14 @@ import org.rapidoid.net.Server;
 import org.rapidoid.security.Role;
 import org.rapidoid.u.U;
 import org.rapidoid.util.AppInfo;
-import org.rapidoid.util.Constants;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.Once;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import static org.rapidoid.util.Constants.*;
 
 /*
  * #%L
@@ -65,7 +66,7 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class Setup extends RapidoidInitializer implements Constants {
+public class Setup extends RapidoidInitializer {
 
 	private static final String ADMIN_ZONE = Msc.isPlatform() ? "platform" : "admin";
 

@@ -27,9 +27,11 @@ import org.rapidoid.annotation.Since;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import static org.rapidoid.util.Constants.*;
+
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
-public class StreamUtils extends RapidoidThing implements Constants {
+public class StreamUtils extends RapidoidThing {
 
 	private static final String MIN_VALUE = Long.MIN_VALUE + "";
 

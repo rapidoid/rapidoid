@@ -18,13 +18,12 @@ import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.impl.MaybeReq;
 import org.rapidoid.http.impl.ReqImpl;
 import org.rapidoid.job.Jobs;
+import org.rapidoid.log.GlobalCfg;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.net.AsyncLogic;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Constants;
-import org.rapidoid.log.GlobalCfg;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.StreamUtils;
 
@@ -32,6 +31,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Map;
+
+import static org.rapidoid.util.Constants.CR_LF;
 
 /*
  * #%L
@@ -55,7 +56,7 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-class LowLevelHttpIO extends RapidoidThing implements Constants {
+class LowLevelHttpIO extends RapidoidThing {
 
 	private static final byte[] HTTP_200_OK = "HTTP/1.1 200 OK\r\n".getBytes();
 

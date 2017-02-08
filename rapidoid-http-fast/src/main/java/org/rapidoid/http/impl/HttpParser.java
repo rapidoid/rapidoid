@@ -16,11 +16,12 @@ import org.rapidoid.io.Upload;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Constants;
 import org.rapidoid.wrap.IntWrap;
 
 import java.util.List;
 import java.util.Map;
+
+import static org.rapidoid.util.Constants.*;
 
 /*
  * #%L
@@ -44,7 +45,7 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class HttpParser extends RapidoidThing implements Constants {
+public class HttpParser extends RapidoidThing {
 
 	private static final byte[] CONNECTION = "Connection:".getBytes();
 
