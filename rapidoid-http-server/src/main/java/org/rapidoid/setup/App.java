@@ -26,7 +26,6 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.config.Conf;
-import org.rapidoid.config.ConfigHelp;
 import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.data.JSON;
 import org.rapidoid.env.Env;
@@ -62,20 +61,10 @@ public class App extends RapidoidInitializer {
 
 	static volatile ClassLoader loader = App.class.getClassLoader();
 
-	public static void args(String[] args, String... extraArgs) {
-		args = Arr.concat(extraArgs, args);
-
-		ConfigHelp.processHelp(args);
-
-		Env.setArgs(args);
-
-		AppVerification.selfVerify(args);
-	}
-
 	public static AppBootstrap bootstrap(String[] args, String... extraArgs) {
 		args = Arr.concat(extraArgs, args);
 
-		args(args);
+		PreApp.args(args);
 
 		scan();
 
@@ -85,7 +74,7 @@ public class App extends RapidoidInitializer {
 	public static AppBootstrap run(String[] args, String... extraArgs) {
 		args = Arr.concat(extraArgs, args);
 
-		args(args);
+		PreApp.args(args);
 		// no implicit classpath scanning here
 
 		return boot();

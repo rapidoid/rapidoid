@@ -21,6 +21,7 @@ package org.rapidoid.util;
  */
 
 import org.apache.commons.logging.LogFactory;
+import org.apache.maven.cli.MavenCli;
 import org.apache.maven.plugin.AbstractMojo;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.junit.Test;
@@ -53,6 +54,7 @@ public class RapidoidThingsTest {
 					|| OutputStream.class.isAssignableFrom(clazz)
 					|| Map.class.isAssignableFrom(clazz)
 					|| AbstractMojo.class.isAssignableFrom(clazz)
+					|| MavenCli.class.isAssignableFrom(clazz)
 					|| LogFactory.class.isAssignableFrom(clazz)
 					|| Thread.class.isAssignableFrom(clazz), "" + cls);
 			}

@@ -20,6 +20,7 @@ package org.rapidoid.platform;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HTTP;
@@ -32,7 +33,7 @@ import java.io.ByteArrayInputStream;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class AppDownloader {
+public class AppDownloader extends RapidoidThing {
 
 	private static final String REPOSITORY_NAME = "[-\\w]+";
 	private static final String GITHUB_REPO_ZIP = "https://github.com/%s/%s/archive/master.zip";

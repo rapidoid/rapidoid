@@ -712,6 +712,7 @@ org.rapidoid.setup.OnChanges
 org.rapidoid.setup.OnError
 org.rapidoid.setup.OnRoute
 org.rapidoid.setup.PojoHandlersSetup
+org.rapidoid.setup.PreApp
 org.rapidoid.setup.ProxyConfigListener
 org.rapidoid.setup.ReloadUtil
 org.rapidoid.setup.ServiceActivator

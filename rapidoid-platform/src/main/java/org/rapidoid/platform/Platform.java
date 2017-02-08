@@ -50,12 +50,11 @@ public class Platform extends RapidoidThing {
 
 		Log.options().prefix("[PLATFORM] ");
 		Log.options().inferCaller(false);
+		Log.options().showThread(false);
 
 		Msc.setPlatform(true);
 
-		args = filterPlatformSpecificArgs(args);
-
-		App.run(args);
+		startPlatformAndProcessArgs(args);
 
 		AppDeployer.bootstrap();
 
@@ -70,21 +69,29 @@ public class Platform extends RapidoidThing {
 		openInBrowser();
 	}
 
-	private static String[] filterPlatformSpecificArgs(String[] args) {
-		List<String> remainingArgs = U.list();
+	private static void startPlatformAndProcessArgs(String[] args) {
+		List<String> normalArgs = U.list();
+		List<String> appRefs = U.list();
 
+		separateArgs(args, normalArgs, appRefs);
+
+		App.run(U.arrayOf(String.class, normalArgs));
+
+		for (String appRef : appRefs) {
+			AppDownloader.download(appRef, "/apps");
+			MavenUtil.findAndBuildAndDeploy("/apps");
+		}
+	}
+
+	private static void separateArgs(String[] args, List<String> normalArgs, List<String> appRefs) {
 		for (String arg : args) {
 			if (arg.startsWith("@")) {
 				String appRef = arg.substring(1);
-				AppDownloader.download(appRef, "/app");
-				MavenUtil.findAndBuildAndDeploy("/app");
-
+				appRefs.add(appRef);
 			} else {
-				remainingArgs.add(arg);
+				normalArgs.add(arg);
 			}
 		}
-
-		return remainingArgs.toArray(new String[remainingArgs.size()]);
 	}
 
 	private static void openInBrowser() {

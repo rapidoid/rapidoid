@@ -21,6 +21,7 @@ package org.rapidoid.platform;
  */
 
 import org.apache.maven.cli.MavenCli;
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.io.IO;
@@ -32,17 +33,17 @@ import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class MavenUtil {
+public class MavenUtil extends RapidoidThing {
 
 	public static void findAndBuildAndDeploy(String location) {
 		List<String> locations = IO.find("pom.xml").files().in(location).recursive().getLocations();
 
 		if (!locations.isEmpty()) {
 			for (String basedir : locations) {
-				buildAndDeploy(basedir, "/data/.m2/repository", U.list("-e", "-X", "clean", "org.rapidoid:deploy:jar"), true);
+				buildAndDeploy(basedir, "/data/.m2/repository", U.list("-e", "-X", "clean", "org.rapidoid:build:jar"), true);
 			}
 		} else {
-			Log.warn("Didn't find any pom.xml file!");
+			Log.warn("Didn't find any pom.xml file!", "location", location);
 		}
 	}
 

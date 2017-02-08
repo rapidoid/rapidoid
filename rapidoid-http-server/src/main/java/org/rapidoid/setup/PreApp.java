@@ -1,8 +1,8 @@
-package org.rapidoid.platform;
+package org.rapidoid.setup;
 
 /*
  * #%L
- * rapidoid-platform
+ * rapidoid-http-server
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -20,21 +20,25 @@ package org.rapidoid.platform;
  * #L%
  */
 
-import org.junit.Test;
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.commons.Arr;
+import org.rapidoid.config.ConfigHelp;
+import org.rapidoid.env.Env;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class AppDownloaderTest extends TestCommons {
+public class PreApp extends RapidoidThing {
 
-	@Test
-	public void testAppUrlConstruction() {
-		eq(AppDownloader.getAppUrl("abc"), "https://github.com/rapidoid/abc/archive/master.zip");
-		eq(AppDownloader.getAppUrl("foo/bar"), "https://github.com/foo/bar/archive/master.zip");
-		eq(AppDownloader.getAppUrl("https://a.b.c.d.e"), "https://a.b.c.d.e");
-		eq(AppDownloader.getAppUrl("a/"), "a/");
+	public static void args(String[] args, String... extraArgs) {
+		args = Arr.concat(extraArgs, args);
+
+		ConfigHelp.processHelp(args);
+
+		Env.setArgs(args);
+
+		AppVerification.selfVerify(args);
 	}
 
 }
