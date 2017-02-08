@@ -77,7 +77,8 @@ public class Field extends AbstractWidget<Field> {
 		Object target = U.or(item.value(), item);
 		String varName = propVarName(target, prop.name());
 
-		Var<Object> var = Models.propertyVar(varName, item, prop.name(), null);
+		boolean isReadOnly = mode == FormMode.SHOW;
+		Var<Object> var = Models.propertyVar(varName, item, prop.name(), null, isReadOnly);
 
 		if (mode != FormMode.SHOW) {
 			if (required) {

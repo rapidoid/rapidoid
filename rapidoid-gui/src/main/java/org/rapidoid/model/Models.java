@@ -166,8 +166,8 @@ public class Models extends RapidoidThing {
 		return new CalcProperty(name, (Calc<Object>) calc);
 	}
 
-	public static <T> Var<T> propertyVar(String name, Item item, String property, T initValue) {
-		return new ItemPropertyVar<T>(name, item, property, initValue);
+	public static <T> Var<T> propertyVar(String name, Item item, String property, T initValue, boolean readOnly) {
+		return new ItemPropertyVar<T>(name, item, property, initValue,readOnly);
 	}
 
 	public static boolean isSpecialProperty(String name) {

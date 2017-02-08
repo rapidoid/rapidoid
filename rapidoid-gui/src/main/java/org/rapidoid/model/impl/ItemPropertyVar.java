@@ -36,10 +36,13 @@ public class ItemPropertyVar<T> extends AbstractVar<T> {
 
 	private final String property;
 
-	public ItemPropertyVar(String name, Item item, String property, T initValue) {
+	private final boolean readOnly;
+
+	public ItemPropertyVar(String name, Item item, String property, T initValue, boolean readOnly) {
 		super(name);
 		this.item = item;
 		this.property = property;
+		this.readOnly = readOnly;
 
 		if (initValue != null) {
 			set(initValue);
@@ -53,12 +56,14 @@ public class ItemPropertyVar<T> extends AbstractVar<T> {
 
 	@Override
 	public void doSet(T value) {
-		T oldValue = get();
+		if (!readOnly) {
+			T oldValue = get();
 
-		if (oldValue != null) {
-			item.set(property, Cls.convert(value, oldValue.getClass()));
-		} else {
-			item.set(property, value);
+			if (oldValue != null) {
+				item.set(property, Cls.convert(value, oldValue.getClass()));
+			} else {
+				item.set(property, value);
+			}
 		}
 	}
 
