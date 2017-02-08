@@ -254,6 +254,10 @@ public class Grid extends AbstractWidget<Grid> {
 		return this;
 	}
 
+	public Grid columns(Iterable<String> columns) {
+		return columns(U.arrayOf(String.class, columns));
+	}
+
 	public String rowCmd() {
 		return rowCmd;
 	}
@@ -281,4 +285,9 @@ public class Grid extends AbstractWidget<Grid> {
 		this.headers = headers;
 		return this;
 	}
+
+	public Grid headers(Iterable<?> headers) {
+		return headers(U.array(headers));
+	}
+
 }

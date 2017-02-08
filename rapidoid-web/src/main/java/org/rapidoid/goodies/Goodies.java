@@ -80,6 +80,7 @@ public class Goodies extends RapidoidThing {
 		application(setup);
 		lifecycle(setup);
 		processes(setup);
+		manageables(setup);
 		jmx(setup);
 		metrics(setup);
 		deployment(setup);
@@ -120,6 +121,11 @@ public class Goodies extends RapidoidThing {
 	public static void processes(Setup setup) {
 		setup.page("/_processes").mvc(new ProcessesHandler());
 		setup.page("/_processes/{id}").mvc(new ProcessDetailsHandler());
+	}
+
+	public static void manageables(Setup setup) {
+		setup.page("/_manageables").mvc(new ManageablesOverviewPage());
+		setup.page("/_manageables/{type}/{id}").mvc(new ManageableDetailsPage());
 	}
 
 	public static void jmx(Setup setup) {

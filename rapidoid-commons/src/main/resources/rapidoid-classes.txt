@@ -225,6 +225,8 @@ org.rapidoid.goodies.GraphsHandler
 org.rapidoid.goodies.JMXGoodies
 org.rapidoid.goodies.LoginHandler
 org.rapidoid.goodies.LogoutHandler
+org.rapidoid.goodies.ManageableDetailsPage
+org.rapidoid.goodies.ManageablesOverviewPage
 org.rapidoid.goodies.MultiDetailsHandler
 org.rapidoid.goodies.OverviewHandler
 org.rapidoid.goodies.ProcessDetailsHandler
@@ -236,6 +238,8 @@ org.rapidoid.goodies.TerminateHandler
 org.rapidoid.goodies.WelcomeHandler
 org.rapidoid.goodies.X
 org.rapidoid.group.AbstractManageable
+org.rapidoid.group.Action
+org.rapidoid.group.AutoManageable
 org.rapidoid.group.GroupOf
 org.rapidoid.group.Groups
 org.rapidoid.group.GroupStats

@@ -29,12 +29,13 @@ admin-zone:
     Deployment: /_deployment
     Processes: /_processes
     Metrics: /_metrics
+    Objects: /_objects
     Application:
       Beans: /_beans
       Entities: /_entities
-    Manage:
+    Manageables: /_manageables
+    System:
       Terminate / Restart: /_terminate
-    Details:
       Classpath: /_classpath
       Memory pool: /_jmx/mempool
       JVM Threads: /_jmx/threads
@@ -57,9 +58,9 @@ platform-zone:
     Deployment: /_deployment
     Processes: /_processes
     Metrics: /_metrics
-    Manage:
+    Manageables: /_manageables
+    System:
       Terminate / Restart: /_terminate
-    Details:
       Classpath: /_classpath
       Memory pool: /_jmx/mempool
       JVM Threads: /_jmx/threads

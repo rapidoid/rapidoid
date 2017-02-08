@@ -63,10 +63,35 @@ public class Groups extends RapidoidThing {
 		return groups;
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <T extends Manageable> List<GroupOf<T>> find(String itemType) {
+		List<GroupOf<T>> groups = U.list();
+
+		for (GroupOf<?> group : all()) {
+			if (group.itemType().getSimpleName().equals(itemType)) {
+				groups.add((GroupOf<T>) group);
+			}
+		}
+
+		return groups;
+	}
+
 	public static <T extends Manageable> T findMember(Class<? extends T> itemType, String id) {
 
 		for (GroupOf<T> group : find(itemType)) {
 			T member = group.find(id);
+			if (member != null) {
+				return member;
+			}
+		}
+
+		return null;
+	}
+
+	public static Manageable findMember(String itemType, String id) {
+
+		for (GroupOf<Manageable> group : find(itemType)) {
+			Manageable member = group.find(id);
 			if (member != null) {
 				return member;
 			}

@@ -28,6 +28,7 @@ import org.rapidoid.commons.Str;
 import org.rapidoid.u.U;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -43,6 +44,22 @@ public abstract class AbstractManageable extends RapidoidThing implements Manage
 		} else {
 			return executeAction(action);
 		}
+	}
+
+	@Override
+	public List<String> actions() {
+		List<String> actions = U.list();
+
+		for (Method method : Cls.getMethodsAnnotated(getClass(), Action.class)) {
+			actions.add(method.getName());
+		}
+
+		return actions;
+	}
+
+	@Override
+	public List<String> overview() {
+		return U.list();
 	}
 
 	protected Object executeAction(String action) {

@@ -31,7 +31,11 @@ public interface Manageable {
 
 	String id();
 
+	GroupOf<? extends Manageable> group();
+
 	List<String> actions();
+
+	List<String> overview();
 
 	Object execute(String action);
 
