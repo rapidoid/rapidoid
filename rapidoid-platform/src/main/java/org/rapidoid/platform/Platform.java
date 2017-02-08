@@ -24,6 +24,7 @@ import org.rapidoid.AuthBootstrap;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Arr;
 import org.rapidoid.deploy.AppDeployer;
 import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
@@ -45,14 +46,13 @@ public class Platform extends RapidoidThing {
 	private static AppChangeWatcher appChangeWatcher = new AppChangeWatcher();
 
 	static void start(String[] args, @SuppressWarnings("unused") boolean defaults) {
+
+		initializePlatform();
+
+		interceptSpecialCommands(args);
+
 		// Rapidoid banner
 		U.print(IO.load("rapidoid.txt"));
-
-		Log.options().prefix("[PLATFORM] ");
-		Log.options().inferCaller(false);
-		Log.options().showThread(false);
-
-		Msc.setPlatform(true);
 
 		startPlatformAndProcessArgs(args);
 
@@ -67,6 +67,23 @@ public class Platform extends RapidoidThing {
 		appChangeWatcher.watch("/app", "app");
 
 		openInBrowser();
+	}
+
+	private static void interceptSpecialCommands(String[] args) {
+		// interpret Maven command
+		if (U.notEmpty(args) && args[0].equals("mvn")) {
+			List<String> mvnArgs = U.list(Arr.sub(args, 1, args.length));
+			int result = MavenUtil.build("/app", "/data/.m2/repository", mvnArgs);
+			System.exit(result);
+		}
+	}
+
+	private static void initializePlatform() {
+		Msc.setPlatform(true);
+
+		Log.options().prefix("[PLATFORM] ");
+		Log.options().inferCaller(false);
+		Log.options().showThread(false);
 	}
 
 	private static void startPlatformAndProcessArgs(String[] args) {

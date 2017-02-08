@@ -40,29 +40,33 @@ public class MavenUtil extends RapidoidThing {
 
 		if (!locations.isEmpty()) {
 			for (String basedir : locations) {
-				buildAndDeploy(basedir, "/data/.m2/repository", U.list("-e", "-X", "clean", "org.rapidoid:build:jar"), true);
+				build(basedir, "/data/.m2/repository", U.list("-e", "-X", "-DskipTests=true", "clean", "org.rapidoid:build:jar"));
 			}
 		} else {
 			Log.warn("Didn't find any pom.xml file!", "location", location);
 		}
 	}
 
-	public static void buildAndDeploy(String basedir, String mavenRepo, List<String> mvnArgs, boolean skipTests) {
+	public static int build(String basedir, String mavenRepo, List<String> mvnArgs) {
 		Log.info("Building Maven project", "location", basedir);
 
 		System.setProperty("maven.repo.local", mavenRepo);
 		System.setProperty("request.baseDirectory", basedir);
 		System.setProperty("maven.multiModuleProjectDirectory", basedir);
-		System.setProperty("skipTests", skipTests + "");
 
 		// make sure the Maven repository folder exists
 		new File(mavenRepo).mkdirs();
 
 		MavenCli cli = new MavenCli();
 		String[] args = U.arrayOf(String.class, mvnArgs);
+
 		int result = cli.doMain(args, basedir, System.out, System.err);
 
-		U.must(result == 0, "The Maven build failed!");
+		if (result != 0) {
+			Log.error("The Maven build failed!", "status", result);
+		}
+
+		return result;
 	}
 
 }
