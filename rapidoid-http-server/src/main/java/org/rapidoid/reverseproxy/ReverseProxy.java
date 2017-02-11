@@ -58,7 +58,7 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 		return req;
 	}
 
-	public void process(final Req req, final Resp resp, final ProxyMapping mapping, final int attempts, final long since) {
+	protected void process(final Req req, final Resp resp, final ProxyMapping mapping, final int attempts, final long since) {
 		final String targetUrl = mapping.getTargetUrl(req);
 
 		Map<String, String> headers = req.headers();

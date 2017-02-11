@@ -2,7 +2,7 @@ package org.rapidoid.plugin.deploy;
 
 /*
  * #%L
- * Rapidoid Deploy Plugin
+ * Rapidoid Build Plugin
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%

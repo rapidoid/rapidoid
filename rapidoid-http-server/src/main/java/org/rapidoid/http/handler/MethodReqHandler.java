@@ -2,7 +2,6 @@ package org.rapidoid.http.handler;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
 import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.HttpRoutes;
 import org.rapidoid.http.Req;
@@ -41,12 +40,15 @@ public class MethodReqHandler extends NParamMethodHandler {
 
 	public MethodReqHandler(FastHttp http, HttpRoutes routes, RouteOptions options, Method method, Object instance) {
 		super(http, routes, options, method, null);
+		method.setAccessible(true);
 		this.instance = instance;
 	}
 
 	@Override
 	protected Object handleReq(Channel channel, boolean isKeepAlive, Req req, Object extra) throws Exception {
-		Object result = Cls.invoke(method, instance, args(req));
+		Object[] args = args(req);
+
+		Object result = method.invoke(instance, args);
 
 		if (method.getReturnType() == void.class) {
 			U.must(result == null);
