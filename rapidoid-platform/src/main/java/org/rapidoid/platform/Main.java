@@ -32,6 +32,7 @@ public class Main extends RapidoidThing {
 	private static final String[] DEFAULT_ARGS = {
 		"app.services=welcome",
 		"admin.services=center",
+		"/ -> localhost:8080",
 	};
 
 	public static void main(String[] args) {
