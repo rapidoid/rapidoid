@@ -7,13 +7,13 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 echo Building rapidoid/rapidoid:snapshot
 
 cd ${DIR}/..
-rm -f docker/rapidoid.jar
-cp ../docker-rapidoid/entrypoint.sh docker
+rm -f local-docker-build/rapidoid.jar
+cp ../docker-rapidoid/entrypoint.sh local-docker-build
 
 bin/quick-install.sh
-cp rapidoid-platform/target/rapidoid-platform-*-SNAPSHOT.jar docker/rapidoid.jar
+cp rapidoid-platform/target/rapidoid-platform-*-SNAPSHOT.jar local-docker-build/rapidoid.jar
 
-cd docker
+cd local-docker-build
 ls -l .
 
 docker build -t rapidoid/rapidoid:snapshot .
