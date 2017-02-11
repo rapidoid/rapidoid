@@ -45,9 +45,9 @@ public class Jobs extends RapidoidInitializer {
 
 	private static final AtomicLong errorCounter = new AtomicLong();
 
-	private static ScheduledExecutorService SCHEDULER;
+	private static ScheduledThreadPoolExecutor SCHEDULER;
 
-	private static ExecutorService EXECUTOR;
+	private static ThreadPoolExecutor EXECUTOR;
 
 	private static final Once init = new Once();
 
@@ -56,8 +56,12 @@ public class Jobs extends RapidoidInitializer {
 
 	public static synchronized ScheduledExecutorService scheduler() {
 		if (SCHEDULER == null) {
+
 			int threads = JOBS.sub("scheduler").entry("threads").or(64);
-			SCHEDULER = Executors.newScheduledThreadPool(threads, new RapidoidThreadFactory("scheduler", true));
+
+			SCHEDULER = new ScheduledThreadPoolExecutor(threads, new RapidoidThreadFactory("scheduler", true));
+
+			new ManageableExecutor("scheduler", SCHEDULER);
 
 			if (init.go()) init();
 		}
@@ -67,8 +71,15 @@ public class Jobs extends RapidoidInitializer {
 
 	public static synchronized Executor executor() {
 		if (EXECUTOR == null) {
+
 			int threads = JOBS.sub("executor").entry("threads").or(64);
-			EXECUTOR = Executors.newFixedThreadPool(threads, new RapidoidThreadFactory("executor", true));
+			int maxThreads = JOBS.sub("executor").entry("maxThreads").or(1024);
+			int maxQueueSize = JOBS.sub("executor").entry("maxQueueSize").or(1000000);
+
+			BlockingQueue<Runnable> queue = new ArrayBlockingQueue<>(maxQueueSize);
+			EXECUTOR = new ThreadPoolExecutor(threads, maxThreads, 300, TimeUnit.SECONDS, queue, new RapidoidThreadFactory("executor", true));
+
+			new ManageableExecutor("executor", EXECUTOR);
 
 			if (init.go()) init();
 		}
