@@ -129,6 +129,8 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	private final HTTPCacheKey cacheKey;
 
+	private volatile boolean cached;
+
 	private final long handle;
 
 	public ReqImpl(FastHttp http, Channel channel, boolean isKeepAlive, String verb, String uri, String path,
@@ -944,11 +946,20 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	}
 
 	private boolean willSaveToCache() {
-		return cacheKey != null;
+		return cacheKey != null && !cached;
 	}
 
 	public HTTPCacheKey cacheKey() {
 		return cacheKey;
+	}
+
+	public boolean cached() {
+		return cached;
+	}
+
+	public ReqImpl cached(boolean cached) {
+		this.cached = cached;
+		return this;
 	}
 
 	private boolean isCacheable() {

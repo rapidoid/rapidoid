@@ -176,6 +176,8 @@ public class FastHttp extends AbstractHttpProcessor {
 	private void serveCached(ReqImpl req, CachedResp resp) {
 		Channel channel = req.channel();
 
+		req.cached(true);
+
 		HttpIO.INSTANCE.respond(HttpUtils.req(req), channel, -1, resp.statusCode,
 			req.isKeepAlive(), resp.contentType, resp.body.duplicate(), resp.headers, null);
 
