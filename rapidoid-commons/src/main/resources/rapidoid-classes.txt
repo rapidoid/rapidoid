@@ -80,8 +80,10 @@ org.rapidoid.cache.Cached
 org.rapidoid.cache.Caching
 org.rapidoid.cache.impl.CacheDSL
 org.rapidoid.cache.impl.CacheFactory
+org.rapidoid.cache.impl.CacheStats
 org.rapidoid.cache.impl.ConcurrentCache
 org.rapidoid.cache.impl.ConcurrentCacheAtom
+org.rapidoid.cache.impl.ManageableCache
 org.rapidoid.cls.AbstractTypeSpecificFactory
 org.rapidoid.cls.AbstractTypeSpecificVisitor
 org.rapidoid.cls.Cls

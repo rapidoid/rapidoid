@@ -36,7 +36,7 @@ public class Templates extends RapidoidThing {
 
 	public static final TemplateStore DEFAULT_STORE = new FileSystemTemplateStore(DEFAULT_PATH);
 
-	public static final RapidoidTemplateFactory DEFAULT_FACTORY = new RapidoidTemplateFactory(DEFAULT_STORE);
+	public static final RapidoidTemplateFactory DEFAULT_FACTORY = new RapidoidTemplateFactory("templates", DEFAULT_STORE);
 
 	private static volatile String[] PATH = DEFAULT_PATH;
 

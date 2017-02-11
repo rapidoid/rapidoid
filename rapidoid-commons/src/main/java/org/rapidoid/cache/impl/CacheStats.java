@@ -1,5 +1,11 @@
 package org.rapidoid.cache.impl;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import java.util.concurrent.atomic.AtomicLong;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,16 +26,14 @@ package org.rapidoid.cache.impl;
  * #L%
  */
 
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class CacheFactory extends RapidoidThing {
+public class CacheStats extends RapidoidThing {
 
-	public static <K, V> ConcurrentCache<K, V> create(CacheDSL<K, V> params) {
-		return new ConcurrentCache<K, V>(params.name(), params.capacity(), params.of(), params.ttl());
-	}
+	public final AtomicLong hits = new AtomicLong();
+
+	public final AtomicLong misses = new AtomicLong();
+
+	public final AtomicLong errors = new AtomicLong();
 
 }

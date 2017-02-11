@@ -3,6 +3,7 @@ package org.rapidoid.cache;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cache.impl.CacheStats;
 import org.rapidoid.cache.impl.ConcurrentCacheAtom;
 import org.rapidoid.commons.Rnd;
 import org.rapidoid.io.IO;
@@ -60,7 +61,7 @@ public class SimpleCachingTest extends TestCommons {
 
 	@Test
 	public void testCachedValue() {
-		final ConcurrentCacheAtom<String> cached = new ConcurrentCacheAtom<String>(ABC, 10);
+		final ConcurrentCacheAtom<String> cached = new ConcurrentCacheAtom<String>(ABC, 10, new CacheStats());
 
 		Msc.benchmarkMT(100, "reads", 10000000, new Runnable() {
 			@Override

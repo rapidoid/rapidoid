@@ -56,6 +56,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetadata, IRequest, MaybeReq {
 
 	public static final long UNDEFINED = Long.MAX_VALUE;
+
 	private final FastHttp http;
 
 	private final Channel channel;

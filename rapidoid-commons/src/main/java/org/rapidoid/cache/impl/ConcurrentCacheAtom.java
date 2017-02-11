@@ -53,9 +53,12 @@ public class ConcurrentCacheAtom<V> extends RapidoidThing implements CacheAtom<V
 
 	private volatile long expiresAt;
 
-	public ConcurrentCacheAtom(Callable<V> loader, long ttlInMs) {
+	private final CacheStats stats;
+
+	public ConcurrentCacheAtom(Callable<V> loader, long ttlInMs, CacheStats stats) {
 		this.loader = loader;
 		this.ttlInMs = ttlInMs;
+		this.stats = stats;
 	}
 
 	/**
@@ -141,11 +144,14 @@ public class ConcurrentCacheAtom<V> extends RapidoidThing implements CacheAtom<V
 	private void updateStats(boolean missed, boolean hasError) {
 		if (hasError) {
 			errors.incrementAndGet();
+			stats.errors.incrementAndGet();
 		} else {
 			if (missed) {
 				misses.incrementAndGet();
+				stats.misses.incrementAndGet();
 			} else {
 				hits.incrementAndGet();
+				stats.hits.incrementAndGet();
 			}
 		}
 	}

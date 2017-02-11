@@ -61,6 +61,7 @@ public class RouteImpl extends RapidoidThing implements Route {
 		if (options == null || options.cacheTTL() <= 0) return null;
 
 		return Caching.of(HTTPCacheKey.class, CachedResp.class)
+			.name(verb + " " + path)
 			.ttl(options.cacheTTL())
 			.build();
 	}

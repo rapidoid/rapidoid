@@ -29,6 +29,8 @@ import org.rapidoid.cache.Cache;
 @Since("5.3.0")
 public class CacheDSL<K, V> extends RapidoidThing {
 
+	private volatile String name;
+
 	private volatile org.rapidoid.lambda.Mapper<K, V> of = null;
 
 	private volatile int capacity = 1024;
@@ -42,6 +44,15 @@ public class CacheDSL<K, V> extends RapidoidThing {
 
 	public org.rapidoid.lambda.Mapper<K, V> of() {
 		return this.of;
+	}
+
+	public String name() {
+		return name;
+	}
+
+	public CacheDSL name(String name) {
+		this.name = name;
+		return this;
 	}
 
 	public CacheDSL<K, V> capacity(int capacity) {

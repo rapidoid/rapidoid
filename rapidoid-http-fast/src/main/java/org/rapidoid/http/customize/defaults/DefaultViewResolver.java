@@ -48,7 +48,7 @@ public class DefaultViewResolver extends AbstractViewResolver<TemplateFactory> {
 
 	@Override
 	protected TemplateFactory createViewFactory(final ResourceLoader templateLoader) {
-		return new RapidoidTemplateFactory(store(templateLoader));
+		return new RapidoidTemplateFactory("views", store(templateLoader));
 	}
 
 	protected View view(final Template template) {

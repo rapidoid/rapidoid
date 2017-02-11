@@ -33,14 +33,7 @@ import org.rapidoid.u.U;
 @Since("5.2.0")
 public class RapidoidTemplateFactory extends RapidoidThing implements TemplateFactory {
 
-	private static final int CACHE_TTL = Env.dev() ? 300 : 1000;
-
-	private final Cache<String, RapidoidTemplate> compiledTemplates = Caching.of(new Mapper<String, RapidoidTemplate>() {
-		@Override
-		public RapidoidTemplate map(String filename) throws Exception {
-			return loadAndCompile(filename);
-		}
-	}).capacity(10000).ttl(CACHE_TTL).build();
+	private static final int CACHE_TTL = Env.dev() ? 100 : Integer.MAX_VALUE;
 
 	public RapidoidTemplate loadAndCompile(String filename) {
 		return new RapidoidTemplate(filename, loadTemplate(filename), this);
@@ -48,8 +41,17 @@ public class RapidoidTemplateFactory extends RapidoidThing implements TemplateFa
 
 	private final TemplateStore templateStore;
 
-	public RapidoidTemplateFactory(TemplateStore templateStore) {
+	private final Cache<String, RapidoidTemplate> compiledTemplates;
+
+	public RapidoidTemplateFactory(String name, TemplateStore templateStore) {
 		this.templateStore = templateStore;
+
+		compiledTemplates = Caching.of(new Mapper<String, RapidoidTemplate>() {
+			@Override
+			public RapidoidTemplate map(String filename) throws Exception {
+				return loadAndCompile(filename);
+			}
+		}).name(name).capacity(10000).ttl(CACHE_TTL).build();
 	}
 
 	@Override

@@ -24,6 +24,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cache.impl.CacheDSL;
+import org.rapidoid.cache.impl.CacheStats;
 import org.rapidoid.cache.impl.ConcurrentCacheAtom;
 import org.rapidoid.lambda.Mapper;
 
@@ -37,12 +38,13 @@ public class Caching extends RapidoidThing {
 		return new CacheDSL<K, V>().of(of);
 	}
 
+	@SuppressWarnings("unused")
 	public static <K, V> CacheDSL<K, V> of(Class<K> keyClass, Class<V> valueClass) {
 		return new CacheDSL<>();
 	}
 
 	public static <T> CacheAtom<T> atom(Callable<T> loader, long ttlInMs) {
-		return new ConcurrentCacheAtom<>(loader, ttlInMs);
+		return new ConcurrentCacheAtom<>(loader, ttlInMs, new CacheStats());
 	}
 
 }

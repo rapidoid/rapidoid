@@ -81,4 +81,7 @@ public class SimpleHashTable<T> extends RapidoidThing {
 		getBucket(index).clear();
 	}
 
+	public int bucketCount() {
+		return buckets.length;
+	}
 }

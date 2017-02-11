@@ -39,16 +39,23 @@ public class ConcurrentCache<K, V> extends AbstractMapImpl<K, ConcurrentCacheAto
 
 	private static final int BUCKET_SIZE = 10;
 
+	private final String name;
+
 	private final Mapper<K, V> loader;
 
 	private final long ttlInMs;
 
-	public ConcurrentCache(int capacity, Mapper<K, V> loader, long ttlInMs) {
-		this(capacity / BUCKET_SIZE, BUCKET_SIZE, loader, ttlInMs);
+	private final CacheStats stats = new CacheStats();
+
+	public ConcurrentCache(String name, int capacity, Mapper<K, V> loader, long ttlInMs) {
+		this(name, capacity / BUCKET_SIZE, BUCKET_SIZE, loader, ttlInMs);
+		new ManageableCache(this);
 	}
 
-	public ConcurrentCache(int buckets, int bucketSize, Mapper<K, V> loader, long ttlInMs) {
+	public ConcurrentCache(String name, int buckets, int bucketSize, Mapper<K, V> loader, long ttlInMs) {
 		super(buckets, bucketSize);
+
+		this.name = name;
 		this.loader = loader;
 		this.ttlInMs = ttlInMs;
 
@@ -93,7 +100,7 @@ public class ConcurrentCache<K, V> extends AbstractMapImpl<K, ConcurrentCacheAto
 			return entry.value.get();
 
 		} else {
-			ConcurrentCacheAtom<V> atom = new ConcurrentCacheAtom<>(loaderFor(key), ttlInMs);
+			ConcurrentCacheAtom<V> atom = new ConcurrentCacheAtom<>(loaderFor(key), ttlInMs, stats);
 
 			putAtom(key, bucket, atom);
 
@@ -155,10 +162,36 @@ public class ConcurrentCache<K, V> extends AbstractMapImpl<K, ConcurrentCacheAto
 		if (entry != null) {
 			entry.value.set(value);
 		} else {
-			ConcurrentCacheAtom<V> atom = new ConcurrentCacheAtom<>(loaderFor(key), ttlInMs);
+			ConcurrentCacheAtom<V> atom = new ConcurrentCacheAtom<>(loaderFor(key), ttlInMs, stats);
 			atom.set(value);
 			putAtom(key, bucket, atom);
 		}
+	}
+
+	public long ttlInMs() {
+		return ttlInMs;
+	}
+
+	public CacheStats stats() {
+		return stats;
+	}
+
+	public String name() {
+		return name;
+	}
+
+	public int size() {
+		int size = 0;
+
+		for (int i = 0; i < entries.bucketCount(); i++) {
+			SimpleList<MapEntry<K, ConcurrentCacheAtom<V>>> bucket = entries.bucket(i);
+
+			synchronized (bucket) {
+				size += bucket.size();
+			}
+		}
+
+		return size;
 	}
 
 }
