@@ -943,4 +943,8 @@ public abstract class GUI extends HTML implements Role {
 		return breadcrumb;
 	}
 
+	public static Tag autoRefresh(long intervalMs) {
+		return script(U.frmt("Rapidoid.setAutoRefreshInterval(%s);", intervalMs));
+	}
+
 }

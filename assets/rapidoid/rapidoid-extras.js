@@ -19,6 +19,8 @@ window.Rapidoid = window.Rapidoid || {};
     // rel="stylesheet">');
     // }
 
+    var refresher;
+
     function _init() {
         if (Rapidoid.initialized) {
             return;
@@ -75,6 +77,13 @@ window.Rapidoid = window.Rapidoid || {};
         $.get(loc, {__event__: true}).done(function (data) {
             Rapidoid.setHtml(data);
         }).fail(onServerError);
+    }
+
+    function setAutoRefreshInterval(refreshInterval) {
+        if (refresher !== undefined) {
+            clearInterval(refresher);
+        }
+        refresher = window.setInterval(_refresh, refreshInterval);
     }
 
     function _goAt(url) {
@@ -216,6 +225,7 @@ window.Rapidoid = window.Rapidoid || {};
     Rapidoid.initialized = false;
     Rapidoid.setHtml = setHtml;
     Rapidoid.refresh = _refresh;
+    Rapidoid.setAutoRefreshInterval = setAutoRefreshInterval;
     Rapidoid.onServerError = onServerError;
 
     Rapidoid.createApp = createApp;

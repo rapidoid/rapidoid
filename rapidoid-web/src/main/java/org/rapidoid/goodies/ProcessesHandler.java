@@ -92,6 +92,7 @@ public class ProcessesHandler extends GUI implements Callable<Object> {
 
 		info.add(grid);
 
+		info.add(autoRefresh(1000));
 		return multi(info);
 	}
 

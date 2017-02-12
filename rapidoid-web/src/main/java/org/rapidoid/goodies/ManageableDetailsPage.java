@@ -66,6 +66,7 @@ public class ManageableDetailsPage extends GUI implements ReqRespHandler {
 
 		info.add(show(target, U.arrayOf(String.class, columns)));
 
+		info.add(autoRefresh(1000));
 		return info;
 	}
 

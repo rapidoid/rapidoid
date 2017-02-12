@@ -9,6 +9,7 @@ import org.rapidoid.gui.GUI;
 import org.rapidoid.gui.Grid;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -53,6 +54,7 @@ public class ManageablesOverviewPage extends GUI implements Callable<Object> {
 			}
 		}
 
+		info.add(autoRefresh(1000));
 		return multi(info);
 	}
 
