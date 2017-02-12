@@ -26,8 +26,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.setup.On;
 
-import java.util.concurrent.TimeUnit;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
 public class HttpSyncAsyncMixTest extends IsolatedIntegrationTest {
@@ -40,7 +38,7 @@ public class HttpSyncAsyncMixTest extends IsolatedIntegrationTest {
 		On.get("/").plain((Resp resp, Integer n) -> {
 			if (n % 2 == 0) return n;
 
-			return Jobs.after(3, TimeUnit.MILLISECONDS).run(() -> resp.result(n * 10).done());
+			return Jobs.after(3).milliseconds(() -> resp.result(n * 10).done());
 		});
 
 		// it is important to use only 1 connection

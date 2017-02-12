@@ -29,8 +29,6 @@ import org.rapidoid.log.Log;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
-import java.util.concurrent.TimeUnit;
-
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class AsyncHttpServerTest extends IsolatedIntegrationTest {
@@ -44,11 +42,11 @@ public class AsyncHttpServerTest extends IsolatedIntegrationTest {
 			req.async();
 			U.must(req.isAsync());
 
-			Jobs.after(10, TimeUnit.MILLISECONDS).run(() -> {
+			Jobs.after(10).milliseconds(() -> {
 
 				IO.write(req.out(), "O");
 
-				Jobs.after(10, TimeUnit.MILLISECONDS).run(() -> {
+				Jobs.after(10).milliseconds(() -> {
 					IO.write(req.out(), "K");
 					req.done();
 				});
@@ -64,11 +62,11 @@ public class AsyncHttpServerTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testAsyncHttpServer2() {
-		On.req(req -> Jobs.after(10, TimeUnit.MILLISECONDS).run(() -> {
+		On.req(req -> Jobs.after(10).milliseconds(() -> {
 
 			IO.write(req.out(), "A");
 
-			Jobs.after(10, TimeUnit.MILLISECONDS).run(() -> {
+			Jobs.after(10).milliseconds(() -> {
 				IO.write(req.out(), "SYNC");
 				req.done();
 			});

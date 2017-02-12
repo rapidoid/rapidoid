@@ -33,7 +33,6 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.11")
@@ -444,7 +443,7 @@ public class HttpHtmlApiTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void test35() {
-		On.get("/future").html((Req req, Resp resp) -> Jobs.after(1, TimeUnit.SECONDS).run(() -> {
+		On.get("/future").html((Req req, Resp resp) -> Jobs.after(1).seconds(() -> {
 			resp.result("finished!").done();
 		}));
 

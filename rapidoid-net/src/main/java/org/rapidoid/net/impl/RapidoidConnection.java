@@ -28,7 +28,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 /*
@@ -281,7 +280,7 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 		if (seq < handle - 1) {
 			// too early
 
-			Jobs.after(1, TimeUnit.MILLISECONDS).run(new Runnable() {
+			Jobs.after(1).milliseconds(new Runnable() {
 				@Override
 				public void run() {
 					resume(handle, asyncLogic);

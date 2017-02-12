@@ -179,6 +179,10 @@ public class Jobs extends RapidoidInitializer {
 		}
 	}
 
+	public static JobsDelayDSL after(long delay) {
+		return new JobsDelayDSL(delay);
+	}
+
 	public static JobsDSL after(long delay, TimeUnit unit) {
 		return new JobsDSL(delay, -1, unit);
 	}

@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /*
  * #%L
@@ -106,7 +105,7 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 
 			if (HttpUtils.isGetReq(req) && (U.time() - since < TIMEOUT_MS)) {
 
-				Jobs.after(RETRY_AFTER_MS, TimeUnit.MILLISECONDS).run(new Runnable() {
+				Jobs.after(RETRY_AFTER_MS).milliseconds(new Runnable() {
 					@Override
 					public void run() {
 						process(req, resp, mapping, attempts + 1, since);
