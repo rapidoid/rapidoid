@@ -595,4 +595,13 @@ public class ConfigImpl extends RapidoidThing implements Config {
 		}
 	}
 
+	@Override
+	public Config defaultOrCustom(String name) {
+		U.must(U.notEmpty(name), "The configuration name cannot be empty! Use name 'default' for the default configuration.");
+
+		if (name.equalsIgnoreCase("default")) return this;
+
+		String configKey = U.last(keys()) + "-" + name;
+		return parent().sub(configKey);
+	}
 }

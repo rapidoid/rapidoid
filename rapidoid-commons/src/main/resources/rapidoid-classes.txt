@@ -512,8 +512,8 @@ org.rapidoid.jdbc.C3P0ConnectionPool
 org.rapidoid.jdbc.ConnectionPool
 org.rapidoid.jdbc.JDBC
 org.rapidoid.jdbc.JdbcClient
-org.rapidoid.jdbc.JDBCConfig
 org.rapidoid.jdbc.NoConnectionPool
+org.rapidoid.jdbc.ReadWriteMode
 org.rapidoid.jdbc.SQLModule
 org.rapidoid.job.CallbackExecutorJob
 org.rapidoid.job.ContextPreservingJobWrapper

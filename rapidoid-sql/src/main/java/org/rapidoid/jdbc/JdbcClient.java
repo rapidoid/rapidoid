@@ -1,8 +1,10 @@
 package org.rapidoid.jdbc;
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
+import org.rapidoid.config.Config;
+import org.rapidoid.group.AutoManageable;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
@@ -32,7 +34,7 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class JdbcClient extends RapidoidThing {
+public class JdbcClient extends AutoManageable<JdbcClient> {
 
 	private volatile boolean initialized;
 
@@ -43,6 +45,41 @@ public class JdbcClient extends RapidoidThing {
 
 	private volatile boolean usePool = true;
 	private volatile ConnectionPool pool;
+
+	private volatile ReadWriteMode mode = ReadWriteMode.READ_WRITE;
+
+	private final Config config;
+
+	public JdbcClient(String name) {
+		super(name);
+
+		this.config = Conf.JDBC.defaultOrCustom(name);
+
+		configure();
+	}
+
+	public void configure() {
+		url(config.entry("url").str().getOrNull());
+		username(config.entry("username").str().getOrNull());
+		password(config.entry("password").str().getOrNull());
+		driver(config.entry("driver").str().getOrNull());
+
+		if (U.isEmpty(driver) && U.notEmpty(url)) {
+			driver(inferDriverFromUrl(url));
+		}
+	}
+
+	public static String inferDriverFromUrl(String url) {
+		if (url.startsWith("jdbc:mysql:")) {
+			return "com.mysql.jdbc.Driver";
+		} else if (url.startsWith("jdbc:h2:")) {
+			return "org.hibernate.dialect.H2Dialect";
+		} else if (url.startsWith("jdbc:hsqldb:")) {
+			return "org.hsqldb.jdbc.JDBCDriver";
+		}
+
+		return null;
+	}
 
 	public synchronized JdbcClient username(String username) {
 		if (U.neq(this.username, username)) {
@@ -93,6 +130,14 @@ public class JdbcClient extends RapidoidThing {
 		return this;
 	}
 
+	public synchronized JdbcClient mode(ReadWriteMode mode) {
+		if (U.neq(this.mode, mode)) {
+			this.mode = mode;
+			this.initialized = false;
+		}
+		return this;
+	}
+
 	/**
 	 * Use <code>usePool(true)</code> instead.
 	 */
@@ -115,8 +160,8 @@ public class JdbcClient extends RapidoidThing {
 	}
 
 	private void registerJDBCDriver() {
-		if (driver == null) {
-			driver = JDBCConfig.driver();
+		if (driver == null && url != null) {
+			driver = inferDriverFromUrl(url);
 		}
 
 		validateArgNotNull("driver", driver);
@@ -321,8 +366,26 @@ public class JdbcClient extends RapidoidThing {
 		return usePool;
 	}
 
+	public ReadWriteMode mode() {
+		return mode;
+	}
+
 	public JdbcClient init() {
 		ensureIsInitialized();
 		return this;
+	}
+
+	@Override
+	public String toString() {
+		return "JdbcClient{" +
+			"initialized=" + initialized +
+			", username='" + username + '\'' +
+			", password='" + "*" + '\'' +
+			", driver='" + driver + '\'' +
+			", url='" + url + '\'' +
+			", usePool=" + usePool +
+			", pool=" + pool +
+			", mode=" + mode +
+			'}';
 	}
 }

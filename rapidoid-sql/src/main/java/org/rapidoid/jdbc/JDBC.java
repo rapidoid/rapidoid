@@ -6,6 +6,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.collection.Coll;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
@@ -38,90 +39,86 @@ import java.util.UUID;
 @Since("3.0.0")
 public class JDBC extends RapidoidThing {
 
-	private static volatile JdbcClient DEFAULT;
+	private static final Map<String, JdbcClient> APIS = Coll.autoExpandingMap(String.class, JdbcClient.class);
 
 	public static synchronized void reset() {
-		DEFAULT = null;
+		APIS.clear();
 	}
 
+	/**
+	 * Use JDBC#api instead.
+	 */
+	@Deprecated
 	public static JdbcClient newApi() {
-		return new JdbcClient();
+		return api(UUID.randomUUID().toString());
 	}
 
-	public static synchronized JdbcClient setup(String url, String driver, String username, String password) {
-		DEFAULT = new JdbcClient();
-
-		DEFAULT.url(url);
-		DEFAULT.driver(driver);
-		DEFAULT.username(username);
-		DEFAULT.password(password);
-
-		return DEFAULT;
+	public static synchronized JdbcClient api() {
+		return APIS.get("default");
 	}
 
+	public static synchronized JdbcClient api(String name) {
+		return APIS.get(name);
+	}
+
+	/**
+	 * Use JDBC#api instead.
+	 */
+	@Deprecated
 	public static synchronized JdbcClient defaultApi() {
-		if (DEFAULT == null) {
-			String url = JDBCConfig.url();
-			String driver = JDBCConfig.driver();
-			String username = JDBCConfig.username();
-			String password = JDBCConfig.password();
-
-			DEFAULT = setup(url, driver, username, password);
-		}
-
-		return DEFAULT;
+		return api();
 	}
 
 	public static JdbcClient username(String username) {
-		return defaultApi().username(username);
+		return api().username(username);
 	}
 
 	public static JdbcClient password(String password) {
-		return defaultApi().password(password);
+		return api().password(password);
 	}
 
 	public static JdbcClient driver(String driver) {
-		return defaultApi().driver(driver);
+		return api().driver(driver);
 	}
 
 	public static JdbcClient url(String url) {
-		return defaultApi().url(url);
+		return api().url(url);
 	}
 
 	public static JdbcClient mysql(String host, int port, String databaseName) {
-		return defaultApi().mysql(host, port, databaseName);
+		return api().mysql(host, port, databaseName);
 	}
 
 	public static JdbcClient h2(String databaseName) {
-		return defaultApi().h2(databaseName);
+		return api().h2(databaseName);
 	}
 
 	public static JdbcClient hsql(String databaseName) {
-		return defaultApi().hsql(databaseName);
+		return api().hsql(databaseName);
 	}
 
 	public static int execute(String sql, Object... args) {
-		return defaultApi().execute(sql, args);
+		return api().execute(sql, args);
 	}
 
 	public static void tryToExecute(String sql, Object... args) {
-		defaultApi().tryToExecute(sql, args);
+		api().tryToExecute(sql, args);
 	}
 
 	public static <T> List<T> query(Class<T> resultType, String sql, Object... args) {
-		return defaultApi().query(resultType, sql, args);
+		return api().query(resultType, sql, args);
 	}
 
 	public static <T> List<Map<String, Object>> query(String sql, Object... args) {
-		return defaultApi().query(sql, args);
+		return api().query(sql, args);
 	}
 
 	public static Connection getConnection() {
-		return defaultApi().getConnection();
+		return api().getConnection();
 	}
 
 	public static void release(Connection connection) {
-		defaultApi().release(connection);
+		api().release(connection);
 	}
 
 	public static PreparedStatement prepare(Connection conn, String sql, Object... args) {

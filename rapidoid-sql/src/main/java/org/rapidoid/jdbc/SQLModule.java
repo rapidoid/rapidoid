@@ -53,7 +53,7 @@ public class SQLModule extends RapidoidThing implements RapidoidModule {
 	}
 
 	private void cleanInMemDatabases() {
-		JdbcClient jdbc = JDBC.defaultApi().usePool(false);
+		JdbcClient jdbc = JDBC.api().usePool(false);
 
 		if (HSQLDB_DRIVER.equals(jdbc.driver())) {
 			Log.info("Dropping all objects in the HSQLDB database");

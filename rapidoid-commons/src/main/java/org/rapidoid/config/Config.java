@@ -102,4 +102,5 @@ public interface Config extends BasicConfig {
 
 	void removeChangeListener(Operation<ConfigChanges> configChangeListener);
 
+	Config defaultOrCustom(String name);
 }

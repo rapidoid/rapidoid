@@ -48,38 +48,38 @@ public class JDBCTest extends SQLTestCommons {
 			eq(e.getCause().getClass(), CommunicationsException.class);
 		}
 
-		isFalse(JDBC.defaultApi().usePool());
+		isFalse(JDBC.api().usePool());
 	}
 
 	@Test
 	public void testWithH2() {
 		JDBC.h2("test");
-		insertAndCheckData(JDBC.defaultApi());
+		insertAndCheckData(JDBC.api());
 	}
 
 	@Test
 	public void testWithH2AndC3P0() {
 		new C3P0ConnectionPool(JDBC.h2("test"));
-		insertAndCheckData(JDBC.defaultApi());
+		insertAndCheckData(JDBC.api());
 	}
 
 	@Test
 	public void testWithHSQLDB() {
 		JDBC.hsql("test");
-		insertAndCheckData(JDBC.defaultApi());
-		isTrue(JDBC.defaultApi().usePool());
+		insertAndCheckData(JDBC.api());
+		isTrue(JDBC.api().usePool());
 	}
 
 	@Test
 	public void testWithHSQLDBAndC3P0() {
 		new C3P0ConnectionPool(JDBC.hsql("test"));
-		insertAndCheckData(JDBC.defaultApi());
+		insertAndCheckData(JDBC.api());
 	}
 
 	@Test
 	public void testMultiAPI() {
-		JdbcClient client1 = JDBC.newApi().hsql("test");
-		JdbcClient client2 = JDBC.newApi().h2("test");
+		JdbcClient client1 = JDBC.api("a").hsql("test");
+		JdbcClient client2 = JDBC.api("b").h2("test");
 
 		insertAndCheckData(client1);
 		insertAndCheckData(client2);
@@ -113,6 +113,13 @@ public class JDBCTest extends SQLTestCommons {
 		Movie movie2 = movies.get(1);
 		eq(movie2.id, 20);
 		eq(movie2.getTitle(), "Hackers");
+	}
+
+	@Test
+	public void testDefaultAPI() {
+		JdbcClient jdbc = JDBC.api();
+		JdbcClient jdbc2 = JDBC.api("default");
+		isTrue(jdbc == jdbc2);
 	}
 
 }
