@@ -51,4 +51,10 @@ public interface Cache<K, V> {
 	 * Clears the cache.
 	 */
 	void clear();
+
+	/**
+	 * Notifies the cache that it's being bypassed due to any reason (useful for stats).
+	 */
+	void bypass();
+
 }

@@ -70,7 +70,8 @@ public abstract class AbstractManageable extends RapidoidThing implements Manage
 		for (Prop prop : props) {
 			TypeKind kind = Cls.kindOf(prop.getType());
 
-			if (kind.isPrimitive() || kind.isNumber() || kind.isArray() || kind == TypeKind.STRING) {
+			if (kind.isPrimitive() || kind.isNumber() || kind.isArray()
+				|| kind == TypeKind.STRING || kind == TypeKind.DATE) {
 				ps.add(prop.getName());
 			}
 		}

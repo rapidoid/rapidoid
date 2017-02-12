@@ -36,4 +36,6 @@ public class CacheStats extends RapidoidThing {
 
 	public final AtomicLong errors = new AtomicLong();
 
+	public final AtomicLong bypassed = new AtomicLong();
+
 }

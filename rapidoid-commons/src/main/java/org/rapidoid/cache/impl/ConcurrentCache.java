@@ -207,4 +207,8 @@ public class ConcurrentCache<K, V> extends AbstractMapImpl<K, ConcurrentCacheAto
 		return capacity;
 	}
 
+	@Override
+	public void bypass() {
+		stats.bypassed.incrementAndGet();
+	}
 }

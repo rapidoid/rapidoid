@@ -41,7 +41,7 @@ public class ManageableCache extends AutoManageable<ManageableCache> {
 
 	@Override
 	public List<String> getManageableProperties() {
-		return U.list("id", "size", "capacity", "hitRate", "hits", "misses", "errors", "ttl");
+		return U.list("id", "size", "capacity", "hitRate", "hits", "misses", "bypassed", "errors", "ttl");
 	}
 
 	@Action
@@ -65,8 +65,12 @@ public class ManageableCache extends AutoManageable<ManageableCache> {
 		return cache.stats().errors.get();
 	}
 
+	public long bypassed() {
+		return cache.stats().bypassed.get();
+	}
+
 	public String hitRate() {
-		long total = hits() + misses() + errors();
+		long total = hits() + misses() + errors() + bypassed();
 		return total != 0 ? Math.round(hits() * 10000.0 / total) / 100.0 + " %" : "";
 	}
 

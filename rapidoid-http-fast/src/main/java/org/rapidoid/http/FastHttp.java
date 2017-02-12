@@ -157,15 +157,22 @@ public class FastHttp extends AbstractHttpProcessor {
 		// if the HTTP request is not cacheable, the cache key will be null
 		HTTPCacheKey cacheKey = req.cacheKey();
 
-		if (cacheKey != null) {
-			Cache<HTTPCacheKey, CachedResp> cache = req.route().cache();
+		Route route = req.route();
+
+		if (route != null) {
+			Cache<HTTPCacheKey, CachedResp> cache = route.cache();
 
 			if (cache != null) {
-				CachedResp resp = cache.getIfExists(cacheKey);
+				if (cacheKey != null) {
+					CachedResp resp = cache.getIfExists(cacheKey);
 
-				if (resp != null) {
-					serveCached(req, resp);
-					return true;
+					if (resp != null) {
+						serveCached(req, resp);
+						return true;
+					}
+
+				} else {
+					cache.bypass(); // notify it's not cacheable
 				}
 			}
 		}
