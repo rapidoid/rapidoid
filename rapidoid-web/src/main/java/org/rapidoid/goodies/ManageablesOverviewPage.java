@@ -71,7 +71,7 @@ public class ManageablesOverviewPage extends GUI implements Callable<Object> {
 			.toUri(new Mapper<Manageable, String>() {
 				@Override
 				public String map(Manageable handle) throws Exception {
-					return U.frmt("/_manageables/%s/%s", group.itemType().getSimpleName(), handle.id());
+					return Msc.uri("_manageables", handle.getClass().getSimpleName(), Msc.urlEncode(handle.id()));
 				}
 			})
 			.pageSize(20);

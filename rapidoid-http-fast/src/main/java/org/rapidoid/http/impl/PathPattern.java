@@ -7,6 +7,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Str;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -134,7 +135,10 @@ public class PathPattern extends RapidoidThing {
 
 			for (Map.Entry<String, String> e : groups.entrySet()) {
 				U.notNull(MATCHER_GROUP != null, "Regex matcher");
+
 				String val = Cls.invoke(MATCHER_GROUP, matcher, e.getValue());
+				val = Msc.urlDecodeOrKeepOriginal(val);
+
 				params.put(e.getKey(), val);
 			}
 		}

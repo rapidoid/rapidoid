@@ -651,14 +651,14 @@ public class Msc extends RapidoidThing {
 	}
 
 	public static String uri(String... parts) {
-		return "/" + constructPath("/", false, parts);
+		return "/" + constructPath("/", false, false, parts);
 	}
 
 	public static String path(String... parts) {
-		return constructPath(File.separator, true, parts);
+		return constructPath(File.separator, true, false, parts);
 	}
 
-	private static String constructPath(String separator, boolean preserveFirstSegment, String... parts) {
+	private static String constructPath(String separator, boolean preserveFirstSegment, boolean uriEscape, String... parts) {
 		String s = "";
 
 		for (int i = 0; i < parts.length; i++) {
@@ -678,6 +678,9 @@ public class Msc extends RapidoidThing {
 				if (!s.isEmpty() && !s.endsWith(separator)) {
 					s += separator;
 				}
+
+				if (uriEscape) part = urlEncode(part);
+
 				s += part;
 			}
 		}
