@@ -356,7 +356,10 @@ public class ConfigImpl extends RapidoidThing implements Config {
 
 	@Override
 	public Config parent() {
-		return isRoot ? null : root.sub(baseKeys.subList(0, baseKeys.size() - 1));
+		if (isRoot) return null;
+
+		List<String> parentsKeys = baseKeys.subList(0, baseKeys.size() - 1);
+		return parentsKeys.isEmpty() ? root : root.sub(parentsKeys);
 	}
 
 	@Override
