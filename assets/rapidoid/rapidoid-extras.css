@@ -541,3 +541,24 @@ ul.pagination {
 .proc-out-warning {
     background-color: #FFC;
 }
+
+/***** Buttons */
+
+.btn-danger {
+    border-color: #AAA;
+    background-color: #FAA;
+    color: black;
+}
+
+.btn-warning {
+    border-color: #AAA;
+    background-color: #FC9;
+    color: black;
+}
+
+/***** Navigation breadcrumbs */
+
+ol.breadcrumb > li > a {
+    font-weight: bold;
+    color: #005;
+}
