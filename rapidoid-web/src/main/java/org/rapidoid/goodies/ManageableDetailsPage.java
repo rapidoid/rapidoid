@@ -46,7 +46,7 @@ public class ManageableDetailsPage extends GUI implements ReqRespHandler {
 		Manageable target = Groups.findMember(type, id);
 		U.must(target != null, "Cannot find the manageable!");
 
-		List<String> columns = target.overview();
+		List<String> columns = target.getManageableProperties();
 
 		if (U.notEmpty(columns)) {
 			return multi(info(target, columns));

@@ -387,7 +387,7 @@ public class ProcessHandle extends AbstractManageable {
 	}
 
 	@Override
-	public synchronized List<String> actions() {
+	public synchronized List<String> getManageableActions() {
 		List<String> actions = U.list("?Restart");
 
 		if (isAlive()) {

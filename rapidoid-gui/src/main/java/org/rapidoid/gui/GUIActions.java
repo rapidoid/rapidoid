@@ -33,7 +33,7 @@ public class GUIActions extends GUI {
 
 		if (target instanceof Manageable) {
 			Manageable manageable = (Manageable) target;
-			for (String action : manageable.actions()) {
+			for (String action : manageable.getManageableActions()) {
 				actions.add(action(manageable, action));
 			}
 		}
@@ -48,7 +48,7 @@ public class GUIActions extends GUI {
 		btn.onClick(new Runnable() {
 			@Override
 			public void run() {
-				manageable.execute(cmd);
+				manageable.runManageableAction(cmd);
 			}
 		});
 

@@ -33,10 +33,10 @@ public interface Manageable {
 
 	GroupOf<? extends Manageable> group();
 
-	List<String> actions();
+	List<String> getManageableActions();
 
-	List<String> overview();
+	List<String> getManageableProperties();
 
-	Object execute(String action);
+	Object runManageableAction(String action);
 
 }

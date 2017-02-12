@@ -23,7 +23,11 @@ package org.rapidoid.group;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.beany.BeanProperties;
+import org.rapidoid.beany.Beany;
+import org.rapidoid.beany.Prop;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.cls.TypeKind;
 import org.rapidoid.commons.Str;
 import org.rapidoid.u.U;
 
@@ -35,19 +39,19 @@ import java.util.List;
 public abstract class AbstractManageable extends RapidoidThing implements Manageable {
 
 	@Override
-	public Object execute(String action) {
+	public Object runManageableAction(String action) {
 		Method method = Cls.findMethod(getClass(), Str.uncapitalized(action));
 
 		if (method != null) {
 			return Cls.invoke(method, this);
 
 		} else {
-			return executeAction(action);
+			return doManageableAction(action);
 		}
 	}
 
 	@Override
-	public List<String> actions() {
+	public List<String> getManageableActions() {
 		List<String> actions = U.list();
 
 		for (Method method : Cls.getMethodsAnnotated(getClass(), Action.class)) {
@@ -58,11 +62,23 @@ public abstract class AbstractManageable extends RapidoidThing implements Manage
 	}
 
 	@Override
-	public List<String> overview() {
-		return U.list();
+	public List<String> getManageableProperties() {
+		BeanProperties props = Beany.propertiesOf(this);
+
+		List<String> ps = U.list();
+
+		for (Prop prop : props) {
+			TypeKind kind = Cls.kindOf(prop.getType());
+
+			if (kind.isPrimitive() || kind.isNumber() || kind.isArray() || kind == TypeKind.STRING) {
+				ps.add(prop.getName());
+			}
+		}
+
+		return ps;
 	}
 
-	protected Object executeAction(String action) {
+	protected Object doManageableAction(String action) {
 		throw U.rte("Cannot handle action '%s'!", action);
 	}
 

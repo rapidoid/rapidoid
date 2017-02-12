@@ -35,12 +35,13 @@ public class ManageableCache extends AutoManageable<ManageableCache> {
 	private final ConcurrentCache<?, ?> cache;
 
 	public ManageableCache(ConcurrentCache<?, ?> cache) {
+		super(cache.name());
 		this.cache = cache;
 	}
 
 	@Override
-	public List<String> overview() {
-		return U.list("name", "size", "hits", "misses", "errors", "ttl");
+	public List<String> getManageableProperties() {
+		return U.list("id", "size", "hits", "misses", "errors", "ttl");
 	}
 
 	@Action
@@ -62,10 +63,6 @@ public class ManageableCache extends AutoManageable<ManageableCache> {
 
 	public long errors() {
 		return cache.stats().errors.get();
-	}
-
-	public String name() {
-		return cache.name();
 	}
 
 	public int size() {

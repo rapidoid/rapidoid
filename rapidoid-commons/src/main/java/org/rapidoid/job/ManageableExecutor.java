@@ -32,23 +32,17 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Since("5.3.0")
 public class ManageableExecutor extends AutoManageable<ManageableExecutor> {
 
-	private final String name;
-
 	private final ThreadPoolExecutor executor;
 
-	public ManageableExecutor(String name, ThreadPoolExecutor executor) {
-		this.name = name;
+	public ManageableExecutor(String id, ThreadPoolExecutor executor) {
+		super(id);
 		this.executor = executor;
 	}
 
 	@Override
-	public List<String> overview() {
-		return U.list("name", "activeCount", "taskCount", "completedTaskCount",
+	public List<String> getManageableProperties() {
+		return U.list("id", "activeCount", "taskCount", "completedTaskCount",
 			"maximumPoolSize", "corePoolSize", "largestPoolSize");
-	}
-
-	public String getName() {
-		return name;
 	}
 
 	public boolean isShutdown() {

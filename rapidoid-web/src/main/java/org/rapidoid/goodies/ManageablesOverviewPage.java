@@ -45,7 +45,7 @@ public class ManageablesOverviewPage extends GUI implements Callable<Object> {
 			List<? extends Manageable> items = group.items();
 
 			if (U.notEmpty(items)) {
-				List<String> columns = U.first(items).overview();
+				List<String> columns = U.first(items).getManageableProperties();
 
 				if (U.notEmpty(columns)) {
 					addInfo(info, group, items, columns);

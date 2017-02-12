@@ -39,9 +39,15 @@ public abstract class AutoManageable<T extends AutoManageable> extends AbstractM
 		}
 	});
 
-	private final String defaultId = UUID.randomUUID().toString();
+	private final String id;
 
 	public AutoManageable() {
+		this(UUID.randomUUID().toString());
+	}
+
+	public AutoManageable(String id) {
+		this.id = id;
+
 		group().add(me());
 	}
 
@@ -57,7 +63,7 @@ public abstract class AutoManageable<T extends AutoManageable> extends AbstractM
 
 	@Override
 	public String id() {
-		return defaultId;
+		return id;
 	}
 
 }
