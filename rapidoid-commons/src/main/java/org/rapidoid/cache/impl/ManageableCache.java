@@ -41,11 +41,11 @@ public class ManageableCache extends AutoManageable<ManageableCache> {
 
 	@Override
 	public List<String> getManageableProperties() {
-		return U.list("id", "size", "hits", "misses", "errors", "ttl");
+		return U.list("id", "size", "hitRate", "hits", "misses", "errors", "ttl");
 	}
 
 	@Action
-	public void clear() {
+	public void purge() {
 		cache.clear();
 	}
 
@@ -63,6 +63,11 @@ public class ManageableCache extends AutoManageable<ManageableCache> {
 
 	public long errors() {
 		return cache.stats().errors.get();
+	}
+
+	public String hitRate() {
+		long total = hits() + misses() + errors();
+		return total != 0 ? Math.round(hits() * 10000.0 / total) / 100.0 + " %" : "";
 	}
 
 	public int size() {
