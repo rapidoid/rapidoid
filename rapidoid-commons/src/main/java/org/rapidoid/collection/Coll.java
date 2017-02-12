@@ -10,6 +10,7 @@ import org.rapidoid.datamodel.DataItems;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
 
+import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -245,19 +246,48 @@ public class Coll extends RapidoidThing {
 		return new ArrayBlockingQueue<T>(maxSize);
 	}
 
-	public static <K, V> Map<K, V> autoExpandingMap(final Class<?> clazz) {
-		return autoExpandingMap(new Mapper<K, V>() {
+	public static <K, V> Map<K, V> autoExpandingMap(final Class<K> keyClass, final Class<V> valueClass) {
+		try {
+			// search for the key-based constructor
+			final Constructor<V> constructor = valueClass.getConstructor(keyClass);
 
-			@SuppressWarnings("unchecked")
-			@Override
-			public V map(K src) throws Exception {
-				try {
-					return (V) clazz.newInstance();
-				} catch (Exception e) {
-					throw U.rte(e);
+			return autoExpandingMap(new Mapper<K, V>() {
+
+				@SuppressWarnings("unchecked")
+				@Override
+				public V map(K key) throws Exception {
+					try {
+						return (V) constructor.newInstance(key);
+					} catch (Exception e) {
+						throw U.rte(e);
+					}
 				}
+			});
+
+		} catch (NoSuchMethodException e) {
+
+			// otherwise, use the default constructor
+			Constructor<V> constructor;
+			try {
+				constructor = valueClass.getConstructor();
+			} catch (NoSuchMethodException e2) {
+				throw U.rte("Couldn't find a matching constructor for the auto-expanding map!");
 			}
-		});
+
+			final Constructor<V> defConstructor = constructor;
+			return autoExpandingMap(new Mapper<K, V>() {
+
+				@SuppressWarnings("unchecked")
+				@Override
+				public V map(K key) throws Exception {
+					try {
+						return (V) defConstructor.newInstance();
+					} catch (Exception e) {
+						throw U.rte(e);
+					}
+				}
+			});
+		}
 	}
 
 	@SuppressWarnings("serial")

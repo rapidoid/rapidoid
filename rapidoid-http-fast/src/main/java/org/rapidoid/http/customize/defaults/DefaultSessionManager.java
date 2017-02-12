@@ -45,7 +45,7 @@ public class DefaultSessionManager extends RapidoidThing implements SessionManag
 		final AtomicLong refCounter = new AtomicLong();
 	}
 
-	private final Map<String, SessionHolder> sessions = Coll.autoExpandingMap(SessionHolder.class);
+	private final Map<String, SessionHolder> sessions = Coll.autoExpandingMap(String.class, SessionHolder.class);
 
 	@Override
 	public Map<String, Serializable> loadSession(Req req, String sessionId) throws Exception {

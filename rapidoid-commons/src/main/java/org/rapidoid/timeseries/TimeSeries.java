@@ -45,15 +45,15 @@ public class TimeSeries extends RapidoidThing {
 
 	private final Stats stats = new Stats();
 
-	private final Map<Long, Stats> monthly = Coll.autoExpandingMap(Stats.class);
+	private final Map<Long, Stats> monthly = Coll.autoExpandingMap(Long.class, Stats.class);
 
-	private final Map<Long, Stats> daily = Coll.autoExpandingMap(Stats.class);
+	private final Map<Long, Stats> daily = Coll.autoExpandingMap(Long.class, Stats.class);
 
-	private final Map<Long, Stats> hourly = Coll.autoExpandingMap(Stats.class);
+	private final Map<Long, Stats> hourly = Coll.autoExpandingMap(Long.class, Stats.class);
 
-	private final Map<Long, Stats> minutely = Coll.autoExpandingMap(Stats.class);
+	private final Map<Long, Stats> minutely = Coll.autoExpandingMap(Long.class, Stats.class);
 
-	private final Map<Long, Stats> perTenSeconds = Coll.autoExpandingMap(Stats.class);
+	private final Map<Long, Stats> perTenSeconds = Coll.autoExpandingMap(Long.class, Stats.class);
 
 	private volatile String title;
 
