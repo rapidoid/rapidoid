@@ -41,15 +41,20 @@ public class ConcurrentCache<K, V> extends AbstractMapImpl<K, ConcurrentCacheAto
 
 	private final String name;
 
+	private final int capacity;
+
 	private final Mapper<K, V> loader;
 
 	private final long ttlInMs;
 
 	private final CacheStats stats = new CacheStats();
 
-	public ConcurrentCache(String name, int capacity, Mapper<K, V> loader, long ttlInMs) {
-		this(name, capacity / BUCKET_SIZE, BUCKET_SIZE, loader, ttlInMs);
-		new ManageableCache(this);
+	public static <K, V> ConcurrentCache<K, V> create(String name, int capacity, Mapper<K, V> loader, long ttlInMs) {
+		if (capacity > BUCKET_SIZE * 2) {
+			return new ConcurrentCache<>(name, capacity / BUCKET_SIZE, BUCKET_SIZE, loader, ttlInMs);
+		} else {
+			return new ConcurrentCache<>(name, 1, capacity, loader, ttlInMs);
+		}
 	}
 
 	public ConcurrentCache(String name, int buckets, int bucketSize, Mapper<K, V> loader, long ttlInMs) {
@@ -67,6 +72,10 @@ public class ConcurrentCache<K, V> extends AbstractMapImpl<K, ConcurrentCacheAto
 				crawl();
 			}
 		});
+
+		this.capacity = buckets * bucketSize;
+
+		new ManageableCache(this);
 	}
 
 	private void crawl() {
@@ -192,6 +201,10 @@ public class ConcurrentCache<K, V> extends AbstractMapImpl<K, ConcurrentCacheAto
 		}
 
 		return size;
+	}
+
+	public int capacity() {
+		return capacity;
 	}
 
 }

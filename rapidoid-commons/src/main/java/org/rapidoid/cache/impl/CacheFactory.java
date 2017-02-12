@@ -29,7 +29,7 @@ import org.rapidoid.annotation.Since;
 public class CacheFactory extends RapidoidThing {
 
 	public static <K, V> ConcurrentCache<K, V> create(CacheDSL<K, V> params) {
-		return new ConcurrentCache<K, V>(params.name(), params.capacity(), params.of(), params.ttl());
+		return ConcurrentCache.create(params.name(), params.capacity(), params.of(), params.ttl());
 	}
 
 }

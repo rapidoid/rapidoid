@@ -407,6 +407,11 @@ public class OnRoute extends RapidoidThing {
 		return this;
 	}
 
+	public OnRoute cacheCapacity(int cacheCapacity) {
+		options.cacheCapacity(cacheCapacity);
+		return this;
+	}
+
 	public RouteOptions options() {
 		return options;
 	}

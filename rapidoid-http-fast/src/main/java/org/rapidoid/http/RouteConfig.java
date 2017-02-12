@@ -66,4 +66,8 @@ public interface RouteConfig {
 	long cacheTTL();
 
 	RouteOptions cacheTTL(long cacheTTL);
+
+	int cacheCapacity();
+
+	RouteOptions cacheCapacity(int cacheCapacity);
 }

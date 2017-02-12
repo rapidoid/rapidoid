@@ -63,6 +63,7 @@ public class RouteImpl extends RapidoidThing implements Route {
 		return Caching.of(HTTPCacheKey.class, CachedResp.class)
 			.name(verb + " " + path)
 			.ttl(options.cacheTTL())
+			.capacity(options.cacheCapacity())
 			.build();
 	}
 

@@ -41,7 +41,7 @@ public class ManageableCache extends AutoManageable<ManageableCache> {
 
 	@Override
 	public List<String> getManageableProperties() {
-		return U.list("id", "size", "hitRate", "hits", "misses", "errors", "ttl");
+		return U.list("id", "size", "capacity", "hitRate", "hits", "misses", "errors", "ttl");
 	}
 
 	@Action
@@ -72,5 +72,9 @@ public class ManageableCache extends AutoManageable<ManageableCache> {
 
 	public int size() {
 		return cache.size();
+	}
+
+	public int capacity() {
+		return cache.capacity();
 	}
 }
