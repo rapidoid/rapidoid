@@ -61,7 +61,8 @@ public class ManageableDetailsPage extends GUI implements ReqRespHandler {
 
 		GroupOf<? extends Manageable> group = target.group();
 
-		info.add(breadcrumb(group.itemType().getSimpleName(), group.name(), target.id()));
+		String type = target.getManageableType();
+		info.add(breadcrumb(type, group.name(), target.id()));
 
 		info.add(show(target, U.arrayOf(String.class, columns)));
 

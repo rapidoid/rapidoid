@@ -44,7 +44,12 @@ public class ManageableCache extends AutoManageable<ManageableCache> {
 		return U.list("id", "size", "capacity", "hitRate", "hits", "misses", "bypassed", "errors", "ttl");
 	}
 
-	@Action
+	@Override
+	public String getManageableType() {
+		return "Cache";
+	}
+
+	@Action(name = "!purge")
 	public void purge() {
 		cache.clear();
 	}

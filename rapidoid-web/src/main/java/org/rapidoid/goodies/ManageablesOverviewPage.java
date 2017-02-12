@@ -60,7 +60,8 @@ public class ManageablesOverviewPage extends GUI implements Callable<Object> {
 		columns.add("(Actions)");
 		final String groupName = group.name();
 
-		info.add(breadcrumb(group.itemType().getSimpleName(), groupName));
+		String type = U.first(items).getManageableType();
+		info.add(breadcrumb(type, groupName));
 
 		Grid grid = grid(items)
 			.columns(columns)

@@ -55,7 +55,8 @@ public abstract class AbstractManageable extends RapidoidThing implements Manage
 		List<String> actions = U.list();
 
 		for (Method method : Cls.getMethodsAnnotated(getClass(), Action.class)) {
-			actions.add(method.getName());
+			Action action = method.getAnnotation(Action.class);
+			actions.add(!action.name().isEmpty() ? action.name() : method.getName());
 		}
 
 		return actions;
@@ -68,11 +69,13 @@ public abstract class AbstractManageable extends RapidoidThing implements Manage
 		List<String> ps = U.list();
 
 		for (Prop prop : props) {
-			TypeKind kind = Cls.kindOf(prop.getType());
+			if (!prop.getName().contains("manageable")) {
+				TypeKind kind = Cls.kindOf(prop.getType());
 
-			if (kind.isPrimitive() || kind.isNumber() || kind.isArray()
-				|| kind == TypeKind.STRING || kind == TypeKind.DATE) {
-				ps.add(prop.getName());
+				if (kind.isPrimitive() || kind.isNumber() || kind.isArray()
+					|| kind == TypeKind.STRING || kind == TypeKind.DATE) {
+					ps.add(prop.getName());
+				}
 			}
 		}
 
@@ -81,6 +84,11 @@ public abstract class AbstractManageable extends RapidoidThing implements Manage
 
 	protected Object doManageableAction(String action) {
 		throw U.rte("Cannot handle action '%s'!", action);
+	}
+
+	@Override
+	public String getManageableType() {
+		return getClass().getSimpleName();
 	}
 
 }

@@ -388,4 +388,9 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 			", mode=" + mode +
 			'}';
 	}
+
+	@Override
+	public String getManageableType() {
+		return "JDBC";
+	}
 }

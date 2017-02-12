@@ -40,6 +40,11 @@ public class ManageableExecutor extends AutoManageable<ManageableExecutor> {
 	}
 
 	@Override
+	public String getManageableType() {
+		return "Jobs";
+	}
+
+	@Override
 	public List<String> getManageableProperties() {
 		return U.list("id", "activeCount", "taskCount", "completedTaskCount",
 			"maximumPoolSize", "corePoolSize", "largestPoolSize");

@@ -387,6 +387,11 @@ public class ProcessHandle extends AbstractManageable {
 	}
 
 	@Override
+	public String getManageableType() {
+		return "Processes";
+	}
+
+	@Override
 	public synchronized List<String> getManageableActions() {
 		List<String> actions = U.list("?Restart");
 
