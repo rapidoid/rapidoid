@@ -137,18 +137,23 @@ Rapidoid.initializer(function ($scope) {
 
             if (data["!errors"]) {
                 $('.field-error').html('');
+
                 errors = data["!errors"];
+
                 for (var h in errors) {
                     var err = errors[h];
-
                     var x = document.querySelectorAll("input,textarea,option");
+
                     for (var i = 0; i < x.length; i++) {
                         var t = $(x[i]);
                         var _h = t.attr('_h');
+
                         if (_h == h) {
                             $(t).next('.field-error').html(err);
                         }
                     }
+
+                    $("body").addClass("with-validation-errors");
                 }
 
             } else {
