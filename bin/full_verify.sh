@@ -4,4 +4,4 @@ echo Will need sudo...
 sudo echo Got sudo
 
 docker-tests/cleanup.sh
-mvn clean install && bin/verify.sh
+mvn clean install && docker-tests/retest.sh
