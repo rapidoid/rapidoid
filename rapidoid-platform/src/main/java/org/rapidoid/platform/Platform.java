@@ -53,6 +53,8 @@ public class Platform extends RapidoidThing {
 
 		Msc.printRapidoidBanner();
 
+		printArgs(args, defaults);
+
 		startPlatformAndProcessArgs(args);
 
 		AppDeployer.bootstrap();
@@ -66,6 +68,19 @@ public class Platform extends RapidoidThing {
 		appChangeWatcher.watch("/app", "app");
 
 		openInBrowser();
+	}
+
+	private static void printArgs(String[] args, boolean defaults) {
+		if (defaults) {
+			Log.info("No command-line arguments were specified, using the defaults:");
+		} else {
+			Log.info("Command-line arguments:");
+		}
+
+		for (String arg : args) {
+			Log.info("  " + arg);
+		}
+		Log.info("");
 	}
 
 	private static void interceptSpecialCommands(String[] args) {
