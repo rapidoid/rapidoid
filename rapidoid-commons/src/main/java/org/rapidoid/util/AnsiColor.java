@@ -3,6 +3,7 @@ package org.rapidoid.util;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.log.GlobalCfg;
 
 /*
  * #%L
@@ -97,7 +98,7 @@ public class AnsiColor extends RapidoidThing {
 	}
 
 	private static String code(String code, String text) {
-		return "\33[" + code + "m" + text + "\33[0m";
+		return !GlobalCfg.uniformOutput() ? "\33[" + code + "m" + text + "\33[0m" : text;
 	}
 
 }
