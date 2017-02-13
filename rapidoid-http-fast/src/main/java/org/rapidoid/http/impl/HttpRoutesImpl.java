@@ -288,6 +288,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 
 	@Override
 	public synchronized void addGenericHandler(HttpHandler handler) {
+		Log.info("Registering generic handler", "!setup", this.customization.name());
 		genericHandlers.add(handler);
 	}
 
@@ -445,8 +446,10 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 			TransactionMode txm = opts.transactionMode();
 			String tx = txm != TransactionMode.NONE ? AnsiColor.bold(txm.name()) : txm.name();
 
-			Log.info("Registering handler", "!setup", this.customization.name(), "!verbs", verbs, "!path", path,
+			int space = Math.max(30 - verbs.length() - path.length(), 1);
+			Log.info(httpVerbColor(verbs) + AnsiColor.bold(" " + path) + Str.mul(" ", space), "setup", this.customization.name(),
 				"!roles", opts.roles(), "tx", tx, "mvc", opts.mvc(), "cacheTTL", opts.cacheTTL());
+
 		} else {
 			Log.info("Deregistering handler", "setup", this.customization.name(), "!verbs", verbs, "!path", path);
 		}
@@ -460,6 +463,17 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 			} else {
 				deregister(verb, path);
 			}
+		}
+	}
+
+	private String httpVerbColor(String verb) {
+		switch (verb.toUpperCase()) {
+			case "GET,POST":
+				return AnsiColor.yellow(verb);
+			case "GET":
+				return AnsiColor.lightBlue(verb);
+			default:
+				return AnsiColor.lightPurple(verb);
 		}
 	}
 

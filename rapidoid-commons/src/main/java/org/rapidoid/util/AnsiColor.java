@@ -3,7 +3,6 @@ package org.rapidoid.util;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.env.Env;
 
 /*
  * #%L
@@ -30,75 +29,75 @@ import org.rapidoid.env.Env;
 public class AnsiColor extends RapidoidThing {
 
 	public static String bold(String text) {
-		return code("1m", text);
+		return code("1", text);
 	}
 
 	public static String black(String text) {
-		return code("0;30m", text);
+		return code("0;30", text);
 	}
 
 	public static String darkGray(String text) {
-		return code("1;30m", text);
+		return code("1;30", text);
 	}
 
 	public static String red(String text) {
-		return code("0;31m", text);
+		return code("0;31", text);
 	}
 
 	public static String lightRed(String text) {
-		return code("1;31m", text);
+		return code("1;31", text);
 	}
 
 	public static String green(String text) {
-		return code("0;32m", text);
+		return code("0;32", text);
 	}
 
 	public static String lightGreen(String text) {
-		return code("1;32m", text);
+		return code("1;32", text);
 	}
 
 	public static String brownOrange(String text) {
-		return code("0;33m", text);
+		return code("0;33", text);
 	}
 
 	public static String yellow(String text) {
-		return code("1;33m", text);
+		return code("1;33", text);
 	}
 
 	public static String blue(String text) {
-		return code("0;34m", text);
+		return code("0;34", text);
 	}
 
 	public static String lightBlue(String text) {
-		return code("1;34m", text);
+		return code("1;34", text);
 	}
 
 	public static String purple(String text) {
-		return code("0;35m", text);
+		return code("0;35", text);
 	}
 
 	public static String lightPurple(String text) {
-		return code("1;35m", text);
+		return code("1;35", text);
 	}
 
 	public static String cyan(String text) {
-		return code("0;36m", text);
+		return code("0;36", text);
 	}
 
 	public static String lightCyan(String text) {
-		return code("1;36m", text);
+		return code("1;36", text);
 	}
 
 	public static String lightGray(String text) {
-		return code("0;37m", text);
+		return code("0;37", text);
 	}
 
 	public static String white(String text) {
-		return code("1;37m", text);
+		return code("1;37", text);
 	}
 
 	private static String code(String code, String text) {
-		return Env.dev() ? "\33[" + code + text + "\33[0m" : text;
+		return "\33[" + code + "m" + text + "\33[0m";
 	}
 
 }
