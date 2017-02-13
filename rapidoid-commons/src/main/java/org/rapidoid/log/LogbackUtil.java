@@ -27,6 +27,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
+import org.slf4j.ILoggerFactory;
 import org.slf4j.LoggerFactory;
 
 @Authors("Nikolche Mihajlovski")
@@ -34,11 +35,15 @@ import org.slf4j.LoggerFactory;
 public class LogbackUtil extends RapidoidThing {
 
 	public static void setupLogger() {
-		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+		ILoggerFactory loggerFactory = LoggerFactory.getILoggerFactory();
 
-		if (U.isEmpty(lc.getCopyOfPropertyMap())) {
-			Logger root = lc.getLogger(Logger.ROOT_LOGGER_NAME);
-			root.setLevel(Level.INFO);
+		if (loggerFactory instanceof LoggerContext) {
+			LoggerContext lc = (LoggerContext) loggerFactory;
+
+			if (U.isEmpty(lc.getCopyOfPropertyMap())) {
+				Logger root = lc.getLogger(Logger.ROOT_LOGGER_NAME);
+				root.setLevel(Level.INFO);
+			}
 		}
 	}
 
