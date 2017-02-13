@@ -5,6 +5,9 @@
 |_| \_\__,_| .__/|_|\__,_|\___/|_|\__,_|
            |_|
 
+[PLATFORM] INFO | Command-line arguments:
+[PLATFORM] INFO |   admin.services=overview
+[PLATFORM] INFO | 
 [PLATFORM] INFO | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
 [PLATFORM] INFO | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
 [PLATFORM] INFO | Setting application root | root = /app | content = []
@@ -15,7 +18,7 @@
 [PLATFORM] INFO | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
 [PLATFORM] INFO | Server has started | setup = admin | home = http://localhost:8888
 [PLATFORM] INFO | Static resources will be served from the following locations | setup = admin | locations = [static, default/static]
-[PLATFORM] INFO | Registering handler | setup = admin | verbs = GET,POST | path = /_ | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /_                     | setup = admin | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
 [PLATFORM] INFO | ---------------------------------------------------
 [PLATFORM] INFO | ADMIN CREDENTIALS: username = admin, password = <?>
 [PLATFORM] INFO | ---------------------------------------------------

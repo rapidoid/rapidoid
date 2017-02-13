@@ -5,6 +5,9 @@
 |_| \_\__,_| .__/|_|\__,_|\___/|_|\__,_|
            |_|
 
+[PLATFORM] INFO | Command-line arguments:
+[PLATFORM] INFO |   docker-self-verify
+[PLATFORM] INFO | 
 [PLATFORM] INFO | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
 [PLATFORM] INFO | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
 [PLATFORM] INFO | Setting application root | root = /app | content = []
