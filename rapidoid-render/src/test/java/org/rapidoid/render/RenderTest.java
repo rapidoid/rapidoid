@@ -31,9 +31,9 @@ public class RenderTest extends AbstractRenderTest {
 
 	private final static Object[] VALUES = {"abc", 123, 3.14, true, false, U.list(), U.set(1, 2), U.map(1, "one", "two", 2)};
 
-	private final static Object[] TRUE_VALUES = {"abc", "", 0, 123, 3.14, true, U.list("a", true, false), U.set(false, 2), U.map(1, "one", "two", 2)};
+	private final static Object[] TRUE_VALUES = {"abc", 0, 123, 3.14, true, U.list("a", true, false), U.set(false, 2), U.map(1, "one", "two", 2)};
 
-	private final static Object[] FALSE_VALUES = {null, false, U.set(), U.list(), U.map()};
+	private final static Object[] FALSE_VALUES = {"", null, false, U.set(), U.list(), U.map()};
 
 	private static final String IF_TEMPLATE = "{{?x}}[${x}]{{/x}}";
 

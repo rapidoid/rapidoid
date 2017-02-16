@@ -145,6 +145,7 @@ public class RenderCtxImpl extends RapidoidThing implements RenderCtx {
 
 		return val != null
 			&& !Boolean.FALSE.equals(val)
+			&& !"".equals(val)
 			&& (!Coll.isCollection(val) || !U.isEmpty((Collection<?>) val))
 			&& (!Coll.isMap(val) || !U.isEmpty((Map<?, ?>) val));
 	}
