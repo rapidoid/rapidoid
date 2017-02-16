@@ -20,6 +20,9 @@ package org.rapidoid.plugin.deploy;
  * #L%
  */
 
+import javassist.Modifier;
+import javassist.bytecode.ClassFile;
+import javassist.bytecode.MethodInfo;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -30,20 +33,19 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HttpReq;
 import org.rapidoid.http.HttpResp;
 import org.rapidoid.io.IO;
+import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.GlobalCfg;
+import org.rapidoid.scan.Scan;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystem;
 import java.nio.file.*;
 import java.nio.file.attribute.FileAttribute;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -156,7 +158,7 @@ public abstract class AbstractRapidoidMojo extends AbstractMojo {
 		properties.put("assembly.appendAssemblyId", "true");
 		properties.put("assembly.attach", "false");
 
-		invoke(session, goals, true, properties);
+		invoke(session, goals, false, properties);
 
 		boolean deleted = new File(assemblyFile).delete();
 		if (!deleted) getLog().warn("Couldn't delete the temporary assembly descriptor file!");
@@ -176,8 +178,12 @@ public abstract class AbstractRapidoidMojo extends AbstractMojo {
 			throw new MojoExecutionException("Couldn't rename the file! " + ABORT, e);
 		}
 
+		String mainClass = findMainClass(project);
+		getLog().info("");
+		getLog().info("The main class is: " + mainClass);
+
 		try {
-			addJarManifest(uberJar, project);
+			addJarManifest(uberJar, project, mainClass);
 		} catch (IOException e) {
 			throw new MojoExecutionException("Couldn't add the JAR manifest! " + ABORT, e);
 		}
@@ -192,14 +198,11 @@ public abstract class AbstractRapidoidMojo extends AbstractMojo {
 		return uberJar;
 	}
 
-	private void addJarManifest(String uberJar, MavenProject project) throws IOException {
+	private void addJarManifest(String uberJar, MavenProject project, String mainClass) throws IOException {
 		Path path = Paths.get(uberJar);
 		URI uri = URI.create("jar:" + path.toUri());
 
 		String user = System.getProperty("user.name");
-
-		// FIXME search for the Main class
-		String mainClass = project.getGroupId() + ".Main";
 
 		String manifestContent = IO.load("manifest-template.mf")
 			.replace("$user", user)
@@ -209,7 +212,7 @@ public abstract class AbstractRapidoidMojo extends AbstractMojo {
 			.replace("$groupId", project.getGroupId())
 			.replace("$organization", project.getOrganization() != null ? U.or(project.getOrganization().getName(), "?") : "?")
 			.replace("$url", U.or(project.getUrl(), "?"))
-			.replace("$main", mainClass);
+			.replace("$main", U.safe(mainClass));
 
 		try (FileSystem fs = FileSystems.newFileSystem(uri, U.<String, Object>map())) {
 			Path manifest = fs.getPath("META-INF/MANIFEST.MF");
@@ -217,6 +220,118 @@ public abstract class AbstractRapidoidMojo extends AbstractMojo {
 				writer.write(manifestContent);
 			}
 		}
+	}
+
+	protected String findMainClass(MavenProject project) {
+		List<String> mainClasses = U.list();
+
+		try {
+			for (String path : project.getCompileClasspathElements()) {
+
+				if (new File(path).isDirectory()) {
+					getLog().info("Scanning classpath directory: " + path);
+					scanForMainClass(path, mainClasses);
+
+				} else if (!path.endsWith(".jar")) {
+					getLog().warn("Ignoring classpath entry: " + path);
+				}
+			}
+
+		} catch (Exception e) {
+			throw U.rte(e);
+		}
+
+		switch (mainClasses.size()) {
+			case 0:
+				getLog().warn("Couldn't find the main class!");
+				return null;
+
+			case 1:
+				return U.first(mainClasses);
+
+			default:
+				getLog().warn("Found multiple main classes, trying to pick the right one: " + mainClasses);
+				return pickMainClass(mainClasses, project);
+		}
+	}
+
+	private String pickMainClass(List<String> mainClasses, MavenProject project) {
+
+		// the.group.id.Main
+		String byGroupId = project.getGroupId() + ".Main";
+		if (mainClasses.contains(byGroupId)) return byGroupId;
+
+		List<String> namedMain = U.list();
+		List<String> withGroupIdPkg = U.list();
+
+		for (String name : mainClasses) {
+			if (name.equals("Main")) return "Main";
+
+			if (name.endsWith(".Main")) {
+				namedMain.add(name);
+			}
+
+			if (name.startsWith(project.getGroupId() + ".")) {
+				withGroupIdPkg.add(name);
+			}
+		}
+
+		// the.group.id.foo.bar.Main
+		getLog().info("Candidates by group ID: " + withGroupIdPkg);
+		if (withGroupIdPkg.size() == 1) return U.single(withGroupIdPkg);
+
+		// foo.bar.Main
+		getLog().info("Candidates named Main: " + namedMain);
+		if (namedMain.size() == 1) return U.single(namedMain);
+
+		namedMain.retainAll(withGroupIdPkg);
+		getLog().info("Candidates by group ID - named Main: " + namedMain);
+		if (namedMain.size() == 1) return U.single(namedMain);
+
+		// the.group.id.foo.bar.Main (the shortest name)
+		Collections.sort(withGroupIdPkg, new Comparator<String>() {
+			@Override
+			public int compare(String s1, String s2) {
+				return s1.length() - s2.length();
+			}
+		});
+		getLog().info("Candidates by group ID - picking one with the shortest name: " + withGroupIdPkg);
+
+		return U.first(withGroupIdPkg);
+	}
+
+	private static void scanForMainClass(String path, Collection<String> mainClasses) {
+		mainClasses.addAll(Scan.classpath(path).bytecodeFilter(new Predicate<InputStream>() {
+			@Override
+			public boolean eval(InputStream input) throws Exception {
+				return hasMainMethod(new ClassFile(new DataInputStream(input)));
+			}
+		}).getAll());
+	}
+
+	private static boolean hasMainMethod(ClassFile cls) {
+		int flags = cls.getAccessFlags();
+
+		if (Modifier.isInterface(flags)
+			|| Modifier.isAnnotation(flags)
+			|| Modifier.isEnum(flags)) return false;
+
+		for (Object m : cls.getMethods()) {
+			if (m instanceof MethodInfo) {
+				if (isMainMethod((MethodInfo) m)) return true;
+			}
+		}
+
+		return false;
+	}
+
+	private static boolean isMainMethod(MethodInfo method) {
+		int flags = method.getAccessFlags();
+
+		return method.getName().equals("main")
+			&& Modifier.isPublic(flags)
+			&& Modifier.isStatic(flags)
+			&& U.eq(method.getDescriptor(), "([Ljava/lang/String;)V"); // TODO find more elegant solution
 	}
 
 }
