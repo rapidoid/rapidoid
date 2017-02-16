@@ -33,7 +33,7 @@ import org.rapidoid.util.Msc;
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
 @Mojo(name = "build", aggregator = true, defaultPhase = LifecyclePhase.PACKAGE)
-public class BuildJarMojo extends AbstractRapidoidMojo {
+public class AppBuildMojo extends AbstractRapidoidMojo {
 
 	@Parameter(defaultValue = "${project}", readonly = true, required = true)
 	protected MavenProject project;

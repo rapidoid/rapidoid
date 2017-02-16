@@ -632,8 +632,8 @@ org.rapidoid.platform.MavenUtil
 org.rapidoid.platform.Platform
 org.rapidoid.platform.PlatformInDevMode
 org.rapidoid.plugin.deploy.AbstractRapidoidMojo
-org.rapidoid.plugin.deploy.BuildJarMojo
-org.rapidoid.plugin.deploy.DeployJarMojo
+org.rapidoid.plugin.deploy.AppBuildMojo
+org.rapidoid.plugin.deploy.AppDeployMojo
 org.rapidoid.plugin.deploy.EmbeddedMavenCli
 org.rapidoid.pool.ArrayPool
 org.rapidoid.pool.Pool
