@@ -37,6 +37,7 @@ import org.rapidoid.util.Msc;
 
 import java.awt.*;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
@@ -71,6 +72,9 @@ public class Platform extends RapidoidThing {
 	}
 
 	private static void printArgs(String[] args, boolean defaults) {
+		// don't print the args when displaying help
+		if (Arrays.equals(args, new String[]{"--help"})) return;
+
 		if (defaults) {
 			Log.info("No command-line arguments were specified, using the defaults:");
 		} else {
