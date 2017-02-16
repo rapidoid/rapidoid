@@ -20,15 +20,14 @@ package org.rapidoid.jdbc;
  * #L%
  */
 
-import org.rapidoid.RapidoidModule;
-import org.rapidoid.RapidoidThing;
+import org.rapidoid.AbstractRapidoidModule;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.RapidoidModuleDesc;
 import org.rapidoid.log.Log;
 
 @Authors("Nikolche Mihajlovski")
 @RapidoidModuleDesc(name = "SQL", order = 500)
-public class SQLModule extends RapidoidThing implements RapidoidModule {
+public class SQLModule extends AbstractRapidoidModule {
 
 	private static final String HSQLDB_DRIVER = "org.hsqldb.jdbc.JDBCDriver";
 
@@ -41,14 +40,13 @@ public class SQLModule extends RapidoidThing implements RapidoidModule {
 	public static final String H2_DROP_ALL = "DROP ALL OBJECTS DELETE FILES";
 
 	@Override
-	public void beforeTest(Object test) {
-		JDBC.reset();
+	public void afterTest(Object test) {
+		cleanInMemDatabases();
+		cleanUp();
 	}
 
 	@Override
-	public void afterTest(Object test) {
-		cleanInMemDatabases();
-
+	public void cleanUp() {
 		JDBC.reset();
 	}
 
@@ -66,5 +64,4 @@ public class SQLModule extends RapidoidThing implements RapidoidModule {
 			jdbc.execute(H2_DROP_ALL);
 		}
 	}
-
 }

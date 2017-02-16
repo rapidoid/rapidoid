@@ -1,8 +1,8 @@
-package org.rapidoid.io.watch;
+package org.rapidoid;
 
 /*
  * #%L
- * rapidoid-watch
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -20,19 +20,47 @@ package org.rapidoid.io.watch;
  * #L%
  */
 
-import org.rapidoid.AbstractRapidoidModule;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.RapidoidModuleDesc;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-@RapidoidModuleDesc(name = "Watch", order = 600)
-public class WatchModule extends AbstractRapidoidModule {
+public abstract class AbstractRapidoidModule implements RapidoidModule {
 
 	@Override
-	public void cleanUp() {
-		Watch.cancelAll();
+	public String name() {
+		return desc().name();
+	}
+
+	@Override
+	public int order() {
+		return desc().order();
+	}
+
+	@Override
+	public abstract void cleanUp();
+
+	@Override
+	public void beforeTest(Object test) {
+		cleanUp();
+	}
+
+	@Override
+	public void initTest(Object test) {
+		// do nothing
+	}
+
+	@Override
+	public void afterTest(Object test) {
+		cleanUp();
+	}
+
+	protected RapidoidModuleDesc desc() {
+		RapidoidModuleDesc annotation = getClass().getAnnotation(RapidoidModuleDesc.class);
+		U.must(annotation != null, "The Rapidoid module must be annotated with: %s", RapidoidModuleDesc.class);
+		return annotation;
 	}
 
 }

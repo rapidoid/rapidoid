@@ -27,7 +27,15 @@ import org.rapidoid.annotation.Since;
 @Since("5.3.0")
 public interface RapidoidModule {
 
+	String name();
+
+	int order();
+
+	void cleanUp();
+
 	void beforeTest(Object test);
+
+	void initTest(Object test);
 
 	void afterTest(Object test);
 

@@ -20,8 +20,7 @@ package org.rapidoid.commons;
  * #L%
  */
 
-import org.rapidoid.RapidoidModule;
-import org.rapidoid.RapidoidThing;
+import org.rapidoid.AbstractRapidoidModule;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.RapidoidModuleDesc;
 import org.rapidoid.annotation.Since;
@@ -30,19 +29,10 @@ import org.rapidoid.util.Msc;
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
 @RapidoidModuleDesc(name = "Commons", order = 100)
-public class CommonsModule extends RapidoidThing implements RapidoidModule {
+public class CommonsModule extends AbstractRapidoidModule {
 
 	@Override
-	public void beforeTest(Object test) {
-		cleanUp();
-	}
-
-	@Override
-	public void afterTest(Object test) {
-		cleanUp();
-	}
-
-	private void cleanUp() {
+	public void cleanUp() {
 		Msc.reset();
 	}
 

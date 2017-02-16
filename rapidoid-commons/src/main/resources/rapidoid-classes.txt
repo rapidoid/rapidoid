@@ -1,3 +1,4 @@
+org.rapidoid.AbstractRapidoidModule
 org.rapidoid.activity.AbstractLoopThread
 org.rapidoid.activity.AbstractThreadActivity
 org.rapidoid.activity.Activity

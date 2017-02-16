@@ -20,12 +20,10 @@ package org.rapidoid.http;
  * #L%
  */
 
-import org.rapidoid.RapidoidModule;
-import org.rapidoid.RapidoidThing;
+import org.rapidoid.AbstractRapidoidModule;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.RapidoidModuleDesc;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ioc.IoC;
 import org.rapidoid.jpa.JPAUtil;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.My;
@@ -36,22 +34,10 @@ import org.rapidoid.u.U;
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
 @RapidoidModuleDesc(name = "HTTP", order = 700)
-public class HttpModule extends RapidoidThing implements RapidoidModule {
+public class HttpModule extends AbstractRapidoidModule {
 
 	@Override
-	public void beforeTest(Object test) {
-		cleanUp();
-
-		App.beans(IoC.defaultContext().getManagedInstances());
-		App.beans(IoC.defaultContext().getManagedClasses());
-	}
-
-	@Override
-	public void afterTest(Object test) {
-		cleanUp();
-	}
-
-	private void cleanUp() {
+	public void cleanUp() {
 		JPAUtil.reset(); // FIXME JPA module
 
 		My.reset();

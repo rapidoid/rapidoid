@@ -21,11 +21,11 @@ package org.rapidoid;
  */
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.RapidoidModuleDesc;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.u.U;
 
+import java.lang.reflect.Modifier;
 import java.util.*;
 
 @Authors("Nikolche Mihajlovski")
@@ -35,11 +35,7 @@ public class RapidoidModules extends RapidoidThing {
 	private static final Comparator<RapidoidModule> MODULE_COMPARATOR = new Comparator<RapidoidModule>() {
 		@Override
 		public int compare(RapidoidModule mod1, RapidoidModule mod2) {
-
-			RapidoidModuleDesc desc1 = mod1.getClass().getAnnotation(RapidoidModuleDesc.class);
-			RapidoidModuleDesc desc2 = mod2.getClass().getAnnotation(RapidoidModuleDesc.class);
-
-			return desc1.order() - desc2.order();
+			return mod1.order() - mod2.order();
 		}
 	};
 
@@ -67,10 +63,16 @@ public class RapidoidModules extends RapidoidThing {
 
 	private static void addBuiltInModules(List<RapidoidModule> modules) {
 		for (String clsName : Cls.getRapidoidClasses()) {
+
 			if (clsName.endsWith("Module")) {
 				Class<?> cls = Cls.getClassIfExists(clsName);
 
-				if (cls != null && RapidoidModule.class.isAssignableFrom(cls) && !cls.isInterface()) {
+				boolean isModule = cls != null
+					&& !cls.isInterface()
+					&& RapidoidModule.class.isAssignableFrom(cls)
+					&& !Modifier.isAbstract(cls.getModifiers());
+
+				if (isModule) {
 					modules.add((RapidoidModule) Cls.newInstance(cls));
 				}
 			}
@@ -102,8 +104,7 @@ public class RapidoidModules extends RapidoidThing {
 
 	private static void validate(List<RapidoidModule> modules) {
 		for (RapidoidModule module : modules) {
-			RapidoidModuleDesc desc = module.getClass().getAnnotation(RapidoidModuleDesc.class);
-			U.must(desc != null, "The module must be annotated with %s!", RapidoidModuleDesc.class);
+			U.notNull(module.name(), "the name of module %s", module.getClass().getSimpleName());
 		}
 	}
 

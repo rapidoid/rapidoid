@@ -20,8 +20,7 @@ package org.rapidoid.ioc.impl;
  * #L%
  */
 
-import org.rapidoid.RapidoidModule;
-import org.rapidoid.RapidoidThing;
+import org.rapidoid.AbstractRapidoidModule;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.RapidoidModuleDesc;
 import org.rapidoid.annotation.Since;
@@ -30,25 +29,16 @@ import org.rapidoid.ioc.IoC;
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
 @RapidoidModuleDesc(name = "IoC", order = 300)
-public class IoCModule extends RapidoidThing implements RapidoidModule {
+public class IoCModule extends AbstractRapidoidModule {
 
 	@Override
-	public void beforeTest(Object test) {
-		cleanUp();
-
-		// unsuccessful autowire might have some side-effects
-		if (!IoC.autowire(test)) {
-			cleanUp();
-		}
-	}
-
-	@Override
-	public void afterTest(Object test) {
-		cleanUp();
-	}
-
-	private void cleanUp() {
+	public void cleanUp() {
 		IoC.reset();
+	}
+
+	@Override
+	public void initTest(Object test) {
+		IoC.autowire(test);
 	}
 
 }
