@@ -16,22 +16,24 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-quick</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-platform</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 
 		<!-- TEST -->
 
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>deploy</artifactId>
+			<artifactId>rapidoid-quick</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-platform</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>app</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
