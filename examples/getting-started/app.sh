@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-mvn org.rapidoid:app:invoke $@
+mvn org.rapidoid:app:$@
