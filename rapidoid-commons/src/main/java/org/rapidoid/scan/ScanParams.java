@@ -4,9 +4,11 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Operation;
+import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
+import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Collection;
@@ -36,68 +38,90 @@ import java.util.List;
 @Since("2.5.0")
 public class ScanParams extends RapidoidThing {
 
-	private String[] packages = null;
+	private volatile String[] packages;
 
-	private String matching = null;
+	private volatile String matching;
 
-	private Class<? extends java.lang.annotation.Annotation>[] annotated = null;
+	private volatile Class<? extends java.lang.annotation.Annotation>[] annotated;
 
-	private ClassLoader classLoader = null;
+	private volatile ClassLoader classLoader;
 
-	public synchronized ScanParams in(String... packages) {
+	private volatile String[] classpath;
+
+	private volatile Predicate<InputStream> bytecodeFilter;
+
+	public ScanParams in(String... packages) {
 		this.packages = packages;
 		return this;
 	}
 
-	public synchronized ScanParams in(Iterable<String> packages) {
+	public ScanParams in(Iterable<String> packages) {
 		return in(U.arrayOf(String.class, packages));
 	}
 
-	public synchronized String[] in() {
+	public String[] in() {
 		return this.packages;
 	}
 
-	public synchronized ScanParams matching(String matching) {
+	public ScanParams matching(String matching) {
 		this.matching = matching;
 		return this;
 	}
 
-	public synchronized String matching() {
+	public String matching() {
 		return this.matching;
 	}
 
-	public synchronized ScanParams annotated(Class<? extends Annotation>... annotated) {
+	public ScanParams annotated(Class<? extends Annotation>... annotated) {
 		this.annotated = annotated;
 		return this;
 	}
 
 	@SuppressWarnings("unchecked")
-	public synchronized ScanParams annotated(Collection<Class<? extends Annotation>> annotated) {
+	public ScanParams annotated(Collection<Class<? extends Annotation>> annotated) {
 		return annotated(U.arrayOf(Class.class, annotated));
 	}
 
-	public synchronized Class<? extends Annotation>[] annotated() {
+	public Class<? extends Annotation>[] annotated() {
 		return this.annotated;
 	}
 
-	public synchronized ScanParams classLoader(ClassLoader classLoader) {
+	public ScanParams classLoader(ClassLoader classLoader) {
 		this.classLoader = classLoader;
 		return this;
 	}
 
-	public synchronized ClassLoader classLoader() {
+	public ClassLoader classLoader() {
 		return this.classLoader;
 	}
 
-	public synchronized List<String> getAll() {
+	public String[] classpath() {
+		return classpath;
+	}
+
+	public ScanParams classpath(String... classpath) {
+		this.classpath = classpath;
+		return this;
+	}
+
+	public Predicate<InputStream> bytecodeFilter() {
+		return bytecodeFilter;
+	}
+
+	public ScanParams bytecodeFilter(Predicate<InputStream> bytecodeFilter) {
+		this.bytecodeFilter = bytecodeFilter;
+		return this;
+	}
+
+	public List<String> getAll() {
 		return ClasspathUtil.getClasses(this);
 	}
 
-	public synchronized List<Class<?>> loadAll() {
+	public List<Class<?>> loadAll() {
 		return ClasspathUtil.loadClasses(this);
 	}
 
-	public synchronized void forEach(Operation<Class<?>> classOperation) {
+	public void forEach(Operation<Class<?>> classOperation) {
 		for (Class<?> cls : loadAll()) {
 			try {
 				classOperation.execute(cls);
@@ -117,7 +141,9 @@ public class ScanParams extends RapidoidThing {
 		if (!Arrays.equals(packages, that.packages)) return false;
 		if (matching != null ? !matching.equals(that.matching) : that.matching != null) return false;
 		if (!Arrays.equals(annotated, that.annotated)) return false;
-		return classLoader != null ? classLoader.equals(that.classLoader) : that.classLoader == null;
+		if (classLoader != null ? !classLoader.equals(that.classLoader) : that.classLoader != null) return false;
+		if (!Arrays.equals(classpath, that.classpath)) return false;
+		return bytecodeFilter != null ? bytecodeFilter.equals(that.bytecodeFilter) : that.bytecodeFilter == null;
 	}
 
 	@Override
@@ -126,7 +152,8 @@ public class ScanParams extends RapidoidThing {
 		result = 31 * result + (matching != null ? matching.hashCode() : 0);
 		result = 31 * result + Arrays.hashCode(annotated);
 		result = 31 * result + (classLoader != null ? classLoader.hashCode() : 0);
+		result = 31 * result + Arrays.hashCode(classpath);
+		result = 31 * result + (bytecodeFilter != null ? bytecodeFilter.hashCode() : 0);
 		return result;
 	}
-
 }

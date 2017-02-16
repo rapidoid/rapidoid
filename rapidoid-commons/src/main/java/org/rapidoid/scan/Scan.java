@@ -3,8 +3,10 @@ package org.rapidoid.scan;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.lambda.Predicate;
 import org.rapidoid.u.U;
 
+import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.List;
@@ -58,11 +60,19 @@ public class Scan extends RapidoidThing {
 		return new ScanParams().classLoader(classLoader);
 	}
 
-	public static synchronized List<String> getAll() {
+	public static ScanParams classpath(String... classpath) {
+		return new ScanParams().classpath(classpath);
+	}
+
+	public static ScanParams bytecodeFilter(Predicate<InputStream> bytecodeFilter) {
+		return new ScanParams().bytecodeFilter(bytecodeFilter);
+	}
+
+	public static List<String> getAll() {
 		return ClasspathUtil.getClasses(new ScanParams());
 	}
 
-	public static synchronized List<Class<?>> loadAll() {
+	public static List<Class<?>> loadAll() {
 		return ClasspathUtil.loadClasses(new ScanParams());
 	}
 

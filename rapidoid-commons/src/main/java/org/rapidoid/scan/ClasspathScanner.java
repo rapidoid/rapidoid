@@ -27,7 +27,9 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Str;
+import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Mapper;
+import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -78,11 +80,12 @@ public class ClasspathScanner extends RapidoidThing {
 			Log.info("Scanning classpath", "!annotated", Msc.annotations(params.annotated()), "!packages", Arrays.toString(pkgs));
 		}
 
+		Set<String> classpath = U.notEmpty(params.classpath()) ? U.set(params.classpath()) : ClasspathUtil.getClasspath();
 		AtomicInteger searched = new AtomicInteger();
 		Set<String> classes = U.set();
 
 		for (String pkg : pkgs) {
-			classes.addAll(retrieveClasses(pkg, params.annotated(), pattern, params.classLoader(), searched));
+			classes.addAll(retrieveClasses(classpath, pkg, params.annotated(), params.bytecodeFilter(), pattern, params.classLoader(), searched));
 		}
 
 		List<String> classList = U.list(classes);
@@ -94,15 +97,14 @@ public class ClasspathScanner extends RapidoidThing {
 		return classList;
 	}
 
-	private static List<String> retrieveClasses(String packageName, Class<? extends Annotation>[] annotated,
+	private static List<String> retrieveClasses(Set<String> classpath, String packageName,
+	                                            Class<? extends Annotation>[] annotated, Predicate<InputStream> bytecodeFilter,
 	                                            Pattern regex, ClassLoader classLoader, AtomicInteger searched) {
 
 		List<String> classes = U.list();
 
 		String pkgName = U.safe(packageName);
 		String pkgPath = pkgName.replace('.', File.separatorChar);
-
-		Set<String> classpath = ClasspathUtil.getClasspath();
 
 		Log.trace("Starting classpath scan", "package", packageName, "annotated", annotated, "regex", regex, "loader", classLoader);
 
@@ -126,7 +128,7 @@ public class ClasspathScanner extends RapidoidThing {
 						}
 
 						if (startingDir.exists()) {
-							getClassesFromDir(classes, cpEntry, startingDir, pkgName, regex, annotated, searched);
+							getClassesFromDir(classes, cpEntry, startingDir, pkgName, regex, annotated, bytecodeFilter, searched);
 						}
 					} else {
 						Log.trace("Skipping directory", "root", cpEntry.getAbsolutePath());
@@ -146,7 +148,7 @@ public class ClasspathScanner extends RapidoidThing {
 		for (String jarName : jars) {
 			if (shouldScanJAR(jarName)) {
 				Log.trace("Scanning JAR", "name", jarName);
-				getClassesFromJAR(jarName, classes, packageName, regex, annotated, classLoader, searched);
+				getClassesFromJAR(jarName, classes, packageName, regex, annotated, bytecodeFilter, classLoader, searched);
 			} else {
 				Log.trace("Skipping JAR", "name", jarName);
 			}
@@ -165,7 +167,7 @@ public class ClasspathScanner extends RapidoidThing {
 	}
 
 	private static void getClassesFromDir(Collection<String> classes, File root, File dir, String pkg, Pattern regex,
-	                                      Class<? extends Annotation>[] annotated, AtomicInteger searched) {
+	                                      Class<? extends Annotation>[] annotated, Predicate<InputStream> bytecodeFilter, AtomicInteger searched) {
 
 		U.must(dir.isDirectory());
 		Log.trace("Traversing directory", "root", root, "dir", dir);
@@ -178,21 +180,21 @@ public class ClasspathScanner extends RapidoidThing {
 
 		for (File file : files) {
 			if (file.isDirectory()) {
-				getClassesFromDir(classes, root, file, pkg, regex, annotated, searched);
+				getClassesFromDir(classes, root, file, pkg, regex, annotated, bytecodeFilter, searched);
 			} else {
 				String rootPath = Str.trimr(root.getAbsolutePath(), File.separatorChar);
 				int from = rootPath.length() + 1;
 				String relName = file.getAbsolutePath().substring(from);
 
 				if (!ignore(relName)) {
-					scanFile(classes, regex, annotated, relName, file, null, null, searched);
+					scanFile(classes, regex, annotated, bytecodeFilter, relName, file, null, null, searched);
 				}
 			}
 		}
 	}
 
 	private static void scanFile(Collection<String> classes, Pattern regex,
-	                             Class<? extends Annotation>[] annotated, String relName,
+	                             Class<? extends Annotation>[] annotated, Predicate<InputStream> bytecodeFilter, String relName,
 	                             File file, ZipFile zip, ZipEntry entry, AtomicInteger searched) {
 
 		Log.trace("scanned file", "file", relName);
@@ -206,9 +208,22 @@ public class ClasspathScanner extends RapidoidThing {
 				try {
 
 					InputStream input = file != null ? new FileInputStream(file) : zip.getInputStream(entry);
-					ClassFile classFile = new ClassFile(new DataInputStream(input));
 
-					if (U.isEmpty(annotated) || isAnnotated(classFile, annotated)) {
+					boolean include;
+
+					if (U.isEmpty(annotated)) {
+						include = true;
+
+					} else {
+						ClassFile classFile = new ClassFile(new DataInputStream(input));
+						include = isAnnotated(classFile, annotated);
+					}
+
+					if (include && bytecodeFilter != null) {
+						include = Lmbd.eval(bytecodeFilter, input);
+					}
+
+					if (include) {
 						classes.add(clsName);
 					}
 
@@ -238,8 +253,8 @@ public class ClasspathScanner extends RapidoidThing {
 	}
 
 	public static List<String> getClassesFromJAR(String jarName, List<String> classes, String pkg, Pattern regex,
-	                                             Class<? extends Annotation>[] annotated, ClassLoader classLoader,
-	                                             AtomicInteger searched) {
+	                                             Class<? extends Annotation>[] annotated, Predicate<InputStream> bytecodeFilter,
+	                                             ClassLoader classLoader, AtomicInteger searched) {
 
 		ZipFile zip = null;
 
@@ -257,7 +272,7 @@ public class ClasspathScanner extends RapidoidThing {
 
 					if (!ignore(name)) {
 						if (U.isEmpty(pkg) || name.startsWith(pkgPath) || name.startsWith(pkgPath2)) {
-							scanFile(classes, regex, annotated, name, null, zip, zipEntry, searched);
+							scanFile(classes, regex, annotated, bytecodeFilter, name, null, zip, zipEntry, searched);
 						}
 					}
 				}
