@@ -42,7 +42,7 @@ public class AuthBootstrap extends RapidoidThing {
 			admin.set("password", pass);
 
 			String maybePass = "" + Msc.maybeMasked(pass);
-			Msc.logSection("ADMIN CREDENTIALS: username = " + AnsiColor.bold("admin") + ", password = " + AnsiColor.bold(maybePass));
+			Msc.logSection(AnsiColor.lightBlue("ADMIN CREDENTIALS:") + " username = admin, password = " + maybePass);
 		}
 	}
 

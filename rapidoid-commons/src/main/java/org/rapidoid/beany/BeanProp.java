@@ -199,7 +199,11 @@ public class BeanProp extends RapidoidThing implements Prop {
 
 		// FIXME when target class isn't the property declaring class
 
-		value = Cls.convert(value, getType());
+		try {
+			value = Cls.convert(value, getType());
+		} catch (Exception e) {
+			throw U.rte("Failed to set value to the bean property: " + getDeclaringType() + "#" + getName());
+		}
 
 		switch (propKind) {
 			case NORMAL:
