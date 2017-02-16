@@ -27,15 +27,15 @@ import org.rapidoid.RapidoidModule;
 import org.rapidoid.RapidoidModules;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.IntegrationTest;
-import org.rapidoid.annotation.RapidoidModuleDesc;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.beany.Metadata;
 import org.rapidoid.env.Env;
 import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.6")
-@IntegrationTest
 public abstract class RapidoidIntegrationTest extends RapidoidTest {
 
 	@Before
@@ -63,19 +63,44 @@ public abstract class RapidoidIntegrationTest extends RapidoidTest {
 	}
 
 	public static void before(Object test) {
+		Msc.logSection("INITIALIZE");
+
 		for (RapidoidModule mod : RapidoidModules.getAllAvailable()) {
-			RapidoidModuleDesc ann = mod.getClass().getAnnotation(RapidoidModuleDesc.class);
-			Log.debug("Initializing module before the test", "module", ann.name(), "order", ann.order());
+			Log.debug("Initializing module before the test", "module", mod.name(), "order", mod.order());
 			mod.beforeTest(test);
 		}
 
 		Log.debug("All modules are initialized");
+
+		runMainClass(test);
+
+		for (RapidoidModule mod : RapidoidModules.getAllAvailable()) {
+			Log.debug("Initializing the test", "module", mod.name(), "order", mod.order());
+			mod.initTest(test);
+		}
+
+		Msc.logSection("START TEST");
+	}
+
+	private static void runMainClass(Object test) {
+		IntegrationTest testInfo = Metadata.getAnnotationRecursive(test.getClass(), IntegrationTest.class);
+
+		U.must(testInfo != null, "the integration test or its parent class must be annotated with: %s", IntegrationTest.class);
+
+		Class<?> main = testInfo.main();
+		String[] args = testInfo.args();
+
+		Msc.invokeMain(main, args);
 	}
 
 	public static void after(Object test) {
+		Msc.logSection("END TEST");
+
 		for (RapidoidModule mod : RapidoidModules.getAllAvailable()) {
 			mod.afterTest(test);
 		}
+
+		Msc.logSection("FINISHED");
 	}
 
 }

@@ -1,9 +1,9 @@
 package com.example;
 
-import org.rapidoid.annotation.ScanPackages;
+import org.rapidoid.annotation.IntegrationTest;
 import org.rapidoid.test.RapidoidIntegrationTest;
 
-@ScanPackages("com.example")
+@IntegrationTest(main = Main.class)
 public abstract class AbstractIntegrationTest extends RapidoidIntegrationTest {
 
 }

@@ -31,4 +31,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
 public @interface IntegrationTest {
+
+	Class<?> main();
+
+	String[] args() default {};
+
 }
