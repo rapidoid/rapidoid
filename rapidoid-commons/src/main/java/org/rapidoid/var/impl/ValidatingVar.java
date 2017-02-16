@@ -5,8 +5,9 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
-import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
+
+import java.util.Set;
 
 /*
  * #%L
@@ -39,22 +40,36 @@ public class ValidatingVar<T> extends DecoratorVar<T> {
 		super(var);
 		this.isValid = isValid;
 		this.message = message;
+
+		validate(get());
+	}
+
+	@Override
+	public Set<String> errors() {
+		return super.errors();
 	}
 
 	@Override
 	protected void doSet(T value) {
 		var.set(value);
+		validate(value);
+	}
 
+	private boolean validate(T value) {
 		boolean valid;
+
 		try {
 			valid = Lmbd.eval(isValid, value);
 
 		} catch (Exception e) {
 			Log.error("Validator failed!", e);
-			throw U.rte("Invalid value!");
+			errors().add("Invalid value!");
+			return false;
 		}
 
-		U.must(valid, message);
+		if (!valid) errors().add(message);
+
+		return valid;
 	}
 
 }
