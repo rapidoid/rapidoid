@@ -1,6 +1,5 @@
 package com.example;
 
-import org.rapidoid.annotation.Run;
 import org.rapidoid.annotation.Valid;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.log.Log;
@@ -10,7 +9,6 @@ import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
-@Run
 public class Main {
 
 	public static void main(String[] args) {
