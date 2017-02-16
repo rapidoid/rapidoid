@@ -16,6 +16,7 @@ import org.rapidoid.commons.Str;
 import org.rapidoid.io.IO;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
+import org.rapidoid.util.TUUID;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
 
@@ -543,6 +544,9 @@ public class Cls extends RapidoidThing {
 			case UUID:
 				return (T) UUID.fromString(value);
 
+			case TUUID:
+				return (T) TUUID.fromString(value);
+
 			default:
 				throw U.rte("Cannot convert String to type '%s'!", toType);
 		}
@@ -667,6 +671,13 @@ public class Cls extends RapidoidThing {
 					return (T) Msc.bytesToUUID((byte[]) value);
 				} else {
 					throw U.rte("Cannot convert the value '%s' to UUID!", value);
+				}
+
+			case TUUID:
+				if (value instanceof byte[]) {
+					return (T) TUUID.fromBytes(((byte[]) value));
+				} else {
+					throw U.rte("Cannot convert the value '%s' to TUUID!", value);
 				}
 
 

@@ -29,6 +29,7 @@ import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Deleted;
 import org.rapidoid.util.None;
+import org.rapidoid.util.TUUID;
 
 import java.nio.ByteBuffer;
 import java.util.Date;
@@ -89,6 +90,9 @@ public class SerializationTest extends AbstractCommonsTest {
 		data.put("STRING", "ABCDE foo bar !=-");
 		data.put("DATE", new Date());
 		data.put("UUID", uuid(1));
+
+		data.put("TUUID1", new TUUID(100, 200, 300));
+		data.put("TUUID2", new TUUID(230523650259L, -12304923697L, 12930175223L));
 
 		data.put("BOOLEAN_ARR", new boolean[]{true, false, true});
 		data.put("BYTE_ARR", new byte[]{10, 20, 30});

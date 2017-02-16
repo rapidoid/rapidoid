@@ -7,6 +7,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
+import org.rapidoid.util.TUUID;
 
 import java.nio.ByteBuffer;
 import java.util.*;
@@ -134,6 +135,14 @@ public class TypeSpecificSerializer extends AbstractTypeSpecificVisitor<ByteBuff
 	public Void process(ByteBuffer buf, UUID value) {
 		process(buf, value.getMostSignificantBits());
 		process(buf, value.getLeastSignificantBits());
+		return null;
+	}
+
+	@Override
+	public Void process(ByteBuffer buf, TUUID value) {
+		process(buf, value.time());
+		process(buf, value.uuidHigh());
+		process(buf, value.uuidLow());
 		return null;
 	}
 

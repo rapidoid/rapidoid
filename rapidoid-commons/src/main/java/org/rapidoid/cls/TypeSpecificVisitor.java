@@ -2,6 +2,7 @@ package org.rapidoid.cls;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.util.TUUID;
 
 import java.util.*;
 
@@ -74,6 +75,8 @@ public interface TypeSpecificVisitor<T, R> {
 	R process(T context, Date value);
 
 	R process(T context, UUID value);
+
+	R process(T context, TUUID value);
 
 	R process(T context, boolean[] arr);
 

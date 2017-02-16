@@ -6,6 +6,7 @@ import org.rapidoid.cls.AbstractTypeSpecificFactory;
 import org.rapidoid.cls.TypeKind;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
+import org.rapidoid.util.TUUID;
 
 import java.nio.ByteBuffer;
 import java.util.*;
@@ -101,10 +102,12 @@ public class TypeSpecificDeserializer extends AbstractTypeSpecificFactory<ByteBu
 
 	@Override
 	public UUID uuid(ByteBuffer buf) {
-		long mostSigBits = longValue(buf);
-		long leastSigBits = longValue(buf);
+		return new UUID(longValue(buf), longValue(buf));
+	}
 
-		return new UUID(mostSigBits, leastSigBits);
+	@Override
+	public TUUID tuuid(ByteBuffer buf) {
+		return new TUUID(longValue(buf), longValue(buf), longValue(buf));
 	}
 
 	@Override

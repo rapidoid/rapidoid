@@ -139,6 +139,9 @@ public abstract class AbstractTypeSpecificFactory<T> extends RapidoidThing imple
 			case DELETED:
 				return deletedValue(context);
 
+			case TUUID:
+				return tuuid(context);
+
 			default:
 				throw Err.notExpected();
 		}

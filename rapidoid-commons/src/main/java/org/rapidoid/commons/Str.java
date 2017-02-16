@@ -252,8 +252,16 @@ public class Str extends RapidoidThing {
 		return DatatypeConverter.printBase64Binary(data);
 	}
 
+	public static String toBase64(byte[] data, char plusReplacement, char slashReplacement) {
+		return toBase64(data).replace('+', plusReplacement).replace('/', slashReplacement);
+	}
+
 	public static byte[] fromBase64(String base64) {
 		return DatatypeConverter.parseBase64Binary(base64);
+	}
+
+	public static byte[] fromBase64(String base64, char plusReplacement, char slashReplacement) {
+		return fromBase64(base64.replace(plusReplacement, '+').replace(slashReplacement, '/'));
 	}
 
 	public static String wildcardToRegex(String pattern) {

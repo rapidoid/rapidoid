@@ -1,11 +1,13 @@
 package org.rapidoid.data;
 
 import com.fasterxml.jackson.core.Base64Variants;
+import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.deser.DeserializerCache;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.DefaultSerializerProvider;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 import org.rapidoid.RapidoidThing;
@@ -14,6 +16,7 @@ import org.rapidoid.env.Env;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
+import org.rapidoid.util.TUUID;
 
 import java.io.OutputStream;
 import java.util.Map;
@@ -53,6 +56,8 @@ public class JSON extends RapidoidThing {
 		mapper.setBase64Variant(Base64Variants.MODIFIED_FOR_URL);
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
+		mapper.registerModule(tuuidModule());
+
 		if (!Env.dev()) {
 			mapper.registerModule(new AfterburnerModule());
 		}
@@ -65,6 +70,8 @@ public class JSON extends RapidoidThing {
 		mapper.setBase64Variant(Base64Variants.MODIFIED_FOR_URL);
 		mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
 
+		mapper.registerModule(tuuidModule());
+
 		if (!Env.dev()) {
 			mapper.registerModule(new AfterburnerModule());
 		}
@@ -75,6 +82,15 @@ public class JSON extends RapidoidThing {
 		mapper.setDefaultPrettyPrinter(pp);
 
 		return mapper;
+	}
+
+	public static SimpleModule tuuidModule() {
+		SimpleModule tuuidModule = new SimpleModule("TUUIDModule", new Version(1, 0, 0, null, "org.rapidoid", "rapidoid-commons"));
+
+		tuuidModule.addSerializer(TUUID.class, new TUUIDSerializer());
+		tuuidModule.addDeserializer(TUUID.class, new TUUIDDeserializer());
+
+		return tuuidModule;
 	}
 
 	public static synchronized void reset() {

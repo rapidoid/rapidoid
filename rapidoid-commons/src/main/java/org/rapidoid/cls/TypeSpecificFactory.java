@@ -4,6 +4,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.util.Deleted;
 import org.rapidoid.util.None;
+import org.rapidoid.util.TUUID;
 
 import java.util.*;
 
@@ -78,6 +79,8 @@ public interface TypeSpecificFactory<T> {
 	Date date(T context);
 
 	UUID uuid(T context);
+
+	TUUID tuuid(T context);
 
 	boolean[] booleanArr(T context);
 

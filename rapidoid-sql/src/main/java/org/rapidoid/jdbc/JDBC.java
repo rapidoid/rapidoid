@@ -9,6 +9,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
+import org.rapidoid.util.TUUID;
 
 import java.sql.*;
 import java.util.List;
@@ -146,6 +147,10 @@ public class JDBC extends RapidoidThing {
 				UUID uuid = (UUID) arg;
 				byte[] bytes = Msc.uuidToBytes(uuid);
 				stmt.setBytes(i + 1, bytes);
+
+			} else if (arg instanceof TUUID) {
+				TUUID tuuid = (TUUID) arg;
+				stmt.setBytes(i + 1, tuuid.toBytes());
 
 			} else {
 				stmt.setObject(i + 1, arg);

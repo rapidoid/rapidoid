@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Err;
 import org.rapidoid.u.U;
+import org.rapidoid.util.TUUID;
 
 import java.util.Date;
 import java.util.List;
@@ -142,6 +143,9 @@ public abstract class AbstractTypeSpecificVisitor<T, R> extends RapidoidThing im
 
 			case DELETED:
 				return processDeleted(context);
+
+			case TUUID:
+				return process(context, (TUUID) value);
 
 			default:
 				throw Err.notExpected();

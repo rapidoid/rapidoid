@@ -167,6 +167,8 @@ org.rapidoid.datamodel.PagingIterator
 org.rapidoid.datamodel.Range
 org.rapidoid.data.MultiData
 org.rapidoid.data.Parse
+org.rapidoid.data.TUUIDDeserializer
+org.rapidoid.data.TUUIDSerializer
 org.rapidoid.data.XML
 org.rapidoid.data.YAML
 org.rapidoid.deploy.AppDeployer
@@ -761,6 +763,7 @@ org.rapidoid.util.SlidingWindowList
 org.rapidoid.util.StreamUtils
 org.rapidoid.util.TokenAuthData
 org.rapidoid.util.Tokens
+org.rapidoid.util.TUUID
 org.rapidoid.util.Usage
 org.rapidoid.util.Wait
 org.rapidoid.u.U

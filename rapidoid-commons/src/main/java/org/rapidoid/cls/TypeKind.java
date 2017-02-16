@@ -97,7 +97,9 @@ public enum TypeKind implements TypeConstants {
 	MAP(Map.class, OBJ, NAN, UNCLEAR, NOT_ARR),
 
 	NONE(None.class, OBJ, NAN, CONCRETE, NOT_ARR),
-	DELETED(Deleted.class, OBJ, NAN, CONCRETE, NOT_ARR);
+	DELETED(Deleted.class, OBJ, NAN, CONCRETE, NOT_ARR),
+
+	TUUID(org.rapidoid.util.TUUID.class, OBJ, NAN, CONCRETE, NOT_ARR);
 
 	private static final Map<Class<?>, TypeKind> KINDS = initKinds();
 
