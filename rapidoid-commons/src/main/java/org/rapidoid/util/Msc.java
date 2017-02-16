@@ -857,7 +857,10 @@ public class Msc extends RapidoidThing {
 
 	public static void invokeMain(Class<?> clazz, String[] args) {
 		Method main = Cls.getMethod(clazz, "main", String[].class);
+
 		U.must(main.getReturnType() == void.class);
+		U.must(Modifier.isPublic(main.getModifiers()));
+		U.must(Modifier.isStatic(main.getModifiers()));
 
 		Cls.invokeStatic(main, new Object[]{args});
 	}

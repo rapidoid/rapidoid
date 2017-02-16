@@ -842,7 +842,7 @@ public class Cls extends RapidoidThing {
 
 			return constr.newInstance();
 		} catch (Exception e) {
-			throw U.rte(e);
+			throw U.rte("Couldn't instantiate " + clazz, e);
 		}
 	}
 
