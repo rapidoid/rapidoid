@@ -27,7 +27,7 @@ import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public abstract class AbstractRapidoidModule implements RapidoidModule {
+public abstract class AbstractRapidoidModule extends RapidoidThing implements RapidoidModule {
 
 	@Override
 	public String name() {
