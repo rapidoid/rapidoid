@@ -31,7 +31,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.env.Env;
 import org.rapidoid.log.Log;
-import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")
@@ -85,12 +84,14 @@ public abstract class RapidoidIntegrationTest extends RapidoidTest {
 	private static void runMainClass(Object test) {
 		IntegrationTest testInfo = Metadata.getAnnotationRecursive(test.getClass(), IntegrationTest.class);
 
-		U.must(testInfo != null, "the integration test or its parent class must be annotated with: %s", IntegrationTest.class);
+		if (testInfo != null) {
+			Msc.logSection("RUN MAIN");
 
-		Class<?> main = testInfo.main();
-		String[] args = testInfo.args();
+			Class<?> main = testInfo.main();
+			String[] args = testInfo.args();
 
-		Msc.invokeMain(main, args);
+			Msc.invokeMain(main, args);
+		}
 	}
 
 	public static void after(Object test) {
