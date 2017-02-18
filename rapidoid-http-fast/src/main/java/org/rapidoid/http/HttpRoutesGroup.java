@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.impl.HttpRoutesImpl;
+import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
 import java.util.Date;
@@ -100,6 +101,7 @@ public class HttpRoutesGroup extends RapidoidThing {
 			U.sleep(1);
 			if (ready()) {
 				initialized = true;
+				Log.info("Initialized HTTP routes");
 			}
 		}
 	}
