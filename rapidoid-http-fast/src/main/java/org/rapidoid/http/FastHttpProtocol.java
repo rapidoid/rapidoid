@@ -46,6 +46,7 @@ public class FastHttpProtocol extends RapidoidThing implements Protocol {
 	@SuppressWarnings("unchecked")
 	public void process(Channel channel) {
 		if (channel.isInitial()) {
+			processor.waitToInitialize();
 			return;
 		}
 

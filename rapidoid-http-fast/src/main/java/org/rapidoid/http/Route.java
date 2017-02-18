@@ -27,6 +27,8 @@ import org.rapidoid.http.handler.HttpHandler;
 import org.rapidoid.http.impl.CachedResp;
 import org.rapidoid.http.impl.HTTPCacheKey;
 
+import java.util.Date;
+
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public interface Route {
@@ -40,4 +42,7 @@ public interface Route {
 	RouteConfig config();
 
 	Cache<HTTPCacheKey, CachedResp> cache();
+
+	Date lastChangedAt();
+
 }

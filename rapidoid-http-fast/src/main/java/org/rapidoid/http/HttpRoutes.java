@@ -59,4 +59,6 @@ public interface HttpRoutes {
 
 	void onInit(Runnable onInit);
 
+	boolean isEmpty();
+
 }

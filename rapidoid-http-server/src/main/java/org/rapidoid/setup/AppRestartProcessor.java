@@ -38,7 +38,11 @@ public class AppRestartProcessor extends AbstractHttpProcessor {
 	@Override
 	public void onRequest(Channel channel, RapidoidHelper data) {
 
-		App.restartIfDirty();
+		boolean restarted = App.restartIfDirty();
+
+		if (restarted) {
+			waitToInitialize();
+		}
 
 		next.onRequest(channel, data);
 	}

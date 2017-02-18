@@ -422,6 +422,7 @@ org.rapidoid.http.HttpReq
 org.rapidoid.http.HttpResp
 org.rapidoid.http.HttpResponseCodes
 org.rapidoid.http.HttpRoutes
+org.rapidoid.http.HttpRoutesGroup
 org.rapidoid.http.HttpStatus
 org.rapidoid.http.HttpUtils
 org.rapidoid.http.HttpVerb

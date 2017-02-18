@@ -53,4 +53,8 @@ public class NotFoundHttpProcessor extends AbstractHttpProcessor {
 		channel.send().closeIf(!isKeepAlive);
 	}
 
+	@Override
+	public void waitToInitialize() {
+		// do nothing
+	}
 }

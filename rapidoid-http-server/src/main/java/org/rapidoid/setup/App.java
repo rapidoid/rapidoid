@@ -220,15 +220,18 @@ public class App extends RapidoidInitializer {
 		}
 	}
 
-	static void restartIfDirty() {
+	static boolean restartIfDirty() {
 		if (dirty) {
 			synchronized (Setup.class) {
 				if (dirty) {
 					restartApp();
 					dirty = false;
+					return true;
 				}
 			}
 		}
+
+		return false;
 	}
 
 	public static List<Class<?>> findBeans(String... packages) {

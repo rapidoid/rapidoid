@@ -96,6 +96,8 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 	private volatile boolean initialized;
 	private volatile Runnable onInit;
 
+	private volatile Date lastChangedAt = new Date();
+
 	public HttpRoutesImpl(Customization customization) {
 		this.customization = customization;
 		staticResourcesHandler = new StaticResourcesHandler(customization);
@@ -191,6 +193,8 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 			default:
 				throw Err.notExpected();
 		}
+
+		notifyChanged();
 	}
 
 	private void deregister(HttpVerb verb, String path) {
@@ -280,6 +284,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 				throw Err.notExpected();
 		}
 
+		notifyChanged();
 	}
 
 	private boolean isPattern(String path) {
@@ -290,11 +295,13 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 	public synchronized void addGenericHandler(HttpHandler handler) {
 		Log.info("Registering generic handler", "!setup", this.customization.name());
 		genericHandlers.add(handler);
+		notifyChanged();
 	}
 
 	@Override
 	public synchronized void removeGenericHandler(HttpHandler handler) {
 		genericHandlers.remove(handler);
+		notifyChanged();
 	}
 
 	public HandlerMatch findHandler(Buf buf, boolean isGet, BufRange verb, BufRange path) {
@@ -464,6 +471,8 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 				deregister(verb, path);
 			}
 		}
+
+		notifyChanged();
 	}
 
 	private String httpVerbColor(String verb) {
@@ -504,6 +513,8 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 
 		initialized = false;
 		onInit = null;
+
+		notifyChanged();
 	}
 
 	@Override
@@ -585,6 +596,12 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 	@Override
 	public void onInit(Runnable onInit) {
 		this.onInit = onInit;
+		notifyChanged();
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return routes.isEmpty() && genericHandlers.isEmpty() && staticResourcesHandler == null;
 	}
 
 	private synchronized void initialize() {
@@ -594,6 +611,15 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 		Runnable initializer = onInit;
 
 		if (initializer != null) initializer.run();
+
+		notifyChanged();
 	}
 
+	public Date lastChangedAt() {
+		return lastChangedAt;
+	}
+
+	private void notifyChanged() {
+		lastChangedAt = new Date();
+	}
 }

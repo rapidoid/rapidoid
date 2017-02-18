@@ -37,4 +37,5 @@ public interface HttpProcessor extends Constants {
 
 	Server listen(int port);
 
+	void waitToInitialize();
 }

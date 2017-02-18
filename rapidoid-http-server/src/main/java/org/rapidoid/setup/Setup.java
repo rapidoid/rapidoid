@@ -12,10 +12,7 @@ import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.data.JSON;
 import org.rapidoid.env.Env;
 import org.rapidoid.env.RapidoidEnv;
-import org.rapidoid.http.FastHttp;
-import org.rapidoid.http.HttpRoutes;
-import org.rapidoid.http.ReqHandler;
-import org.rapidoid.http.ReqRespHandler;
+import org.rapidoid.http.*;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.ViewResolver;
 import org.rapidoid.http.handler.HttpHandler;
@@ -165,9 +162,9 @@ public class Setup extends RapidoidInitializer {
 
 			if (http == null) {
 				if (isAppOrAdminOnSameServer()) {
-					http = new FastHttp(U.array(ON.routes, ADMIN.routes), ON.serverConfig);
+					http = new FastHttp(new HttpRoutesGroup(ON.routes, ADMIN.routes), ON.serverConfig);
 				} else {
-					http = new FastHttp(U.array(routes), serverConfig);
+					http = new FastHttp(new HttpRoutesGroup(routes), serverConfig);
 				}
 			}
 		}
