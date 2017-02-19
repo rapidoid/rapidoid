@@ -21,9 +21,15 @@ package org.rapidoid.jpa;
  */
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Entity
 public class Movie extends AbstractEntity {
+
+	@Id
+	@GeneratedValue
+	public Long id;
 
 	private String title;
 
@@ -32,6 +38,15 @@ public class Movie extends AbstractEntity {
 
 	public Movie(String title) {
 		this.title = title;
+	}
+
+	@Override
+	public Object getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getTitle() {

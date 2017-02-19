@@ -31,6 +31,8 @@ import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.ValidationException;
 import javax.validation.constraints.NotNull;
 
@@ -86,8 +88,20 @@ public class HttpBeanValidationTest extends IsolatedIntegrationTest {
 
 @Entity
 class Foo extends AbstractEntity {
+	@Id
+	@GeneratedValue
+	public Long id;
+
 	@NotNull
 	public Long num;
+
+	@Override
+	public Object getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
 }
 
 @Service
