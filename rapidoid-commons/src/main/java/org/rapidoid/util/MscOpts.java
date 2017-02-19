@@ -29,6 +29,8 @@ import org.rapidoid.cls.Cls;
 @Since("5.3.0")
 public class MscOpts extends RapidoidThing {
 
+	private static final String appsPath = "/data/apps";
+
 	private static final boolean hasValidation = Cls.exists("javax.validation.Validation");
 	private static final boolean hasJPA = Cls.exists("javax.persistence.Entity");
 	private static final boolean hasHibernate = Cls.exists("org.hibernate.cfg.Configuration");
@@ -40,6 +42,7 @@ public class MscOpts extends RapidoidThing {
 	private static final boolean hasLogback = Cls.exists("ch.qos.logback.classic.Logger");
 	private static final boolean hasSlf4jImpl = Cls.exists("org.slf4j.impl.StaticLoggerBinder");
 	private static final boolean hasMavenEmbedder = Cls.exists("org.apache.maven.cli.MavenCli");
+
 	private static final boolean isRestOnly = !hasRapidoidHTML();
 
 	public static boolean hasValidation() {
@@ -90,4 +93,7 @@ public class MscOpts extends RapidoidThing {
 		return isRestOnly;
 	}
 
+	public static String appsPath() {
+		return appsPath;
+	}
 }

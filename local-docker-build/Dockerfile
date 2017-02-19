@@ -7,7 +7,7 @@ ENV RAPIDOID_TMP /tmp/rapidoid
 WORKDIR /opt
 EXPOSE 8888
 
-VOLUME ["/data", "/apps"]
+VOLUME ["/data"]
 
 ENV RAPIDOID_VERSION 5.x.y-SNAPSHOT
 

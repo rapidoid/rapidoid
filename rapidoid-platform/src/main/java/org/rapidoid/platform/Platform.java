@@ -34,8 +34,10 @@ import org.rapidoid.setup.Setup;
 import org.rapidoid.u.U;
 import org.rapidoid.util.AppInfo;
 import org.rapidoid.util.Msc;
+import org.rapidoid.util.MscOpts;
 
 import java.awt.*;
+import java.io.File;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
@@ -114,8 +116,9 @@ public class Platform extends RapidoidThing {
 		App.boot();
 
 		for (String appRef : appRefs) {
-			AppDownloader.download(appRef, "/apps");
-			MavenUtil.findAndBuildAndDeploy("/apps");
+			new File(MscOpts.appsPath()).mkdirs();
+			AppDownloader.download(appRef, MscOpts.appsPath());
+			MavenUtil.findAndBuildAndDeploy(MscOpts.appsPath());
 		}
 	}
 
