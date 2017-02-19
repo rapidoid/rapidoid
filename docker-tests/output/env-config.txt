@@ -33,5 +33,6 @@
 [APP] INFO | org.rapidoid.env.Environment | No production/dev/test mode was configured, inferring mode | mode = PRODUCTION
 [APP] INFO | org.rapidoid.env.Environment | Automatically activating mode-specific profile | profile = production
 [APP] INFO | org.rapidoid.env.Environment | Initialized environment | mode = PRODUCTION | profiles = [default, production]
+[PLATFORM] INFO | Initialized HTTP routes
 [APP] INFO | org.rapidoid.scan.ClasspathUtil | Setting application JAR | appJar = /app/app.jar | exists = false
 [APP] INFO | org.rapidoid.config.ConfigImpl | Loaded configuration | namespace = my-config | files = [built-in-config.yml, built-in-config-default.yml, /app/my-config.yaml]

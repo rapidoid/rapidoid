@@ -23,3 +23,4 @@
 [PLATFORM] INFO | ---------------------------------------------------
 [PLATFORM] INFO | ADMIN CREDENTIALS: username = admin, password = <?>
 [PLATFORM] INFO | ---------------------------------------------------
+[PLATFORM] INFO | Initialized HTTP routes
