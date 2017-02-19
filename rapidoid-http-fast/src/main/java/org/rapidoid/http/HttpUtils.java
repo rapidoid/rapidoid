@@ -60,6 +60,8 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 
 	private static final String PAGE_RELOAD = "<h2>&nbsp;Reloading...</h2><script>location.reload();</script>";
 
+	private static final MediaType DEFAULT_CONTENT_TYPE = Msc.hasRapidoidHTML() ? MediaType.HTML_UTF_8 : MediaType.JSON;
+
 	private static final byte[] EMPTY_RESPONSE = {};
 
 	public static volatile Pattern REGEX_VALID_HTTP_RESOURCE = Pattern.compile("(?:/[A-Za-z0-9_\\-\\.]+)*/?");
@@ -393,7 +395,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 	}
 
 	public static MediaType getDefaultContentType() {
-		return Msc.hasRapidoidHTML() ? MediaType.HTML_UTF_8 : MediaType.JSON;
+		return DEFAULT_CONTENT_TYPE;
 	}
 
 }

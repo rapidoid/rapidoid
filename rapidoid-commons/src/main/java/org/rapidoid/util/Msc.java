@@ -76,6 +76,8 @@ public class Msc extends RapidoidThing implements Constants {
 
 	public static final String OS_NAME = System.getProperty("os.name");
 
+	private static final boolean IS_REST_ONLY = !hasRapidoidHTML();
+
 	private static volatile String uid;
 
 	private static volatile long measureStart;
@@ -840,7 +842,7 @@ public class Msc extends RapidoidThing implements Constants {
 	}
 
 	public static boolean isRestOnly() {
-		return !hasRapidoidHTML();
+		return IS_REST_ONLY;
 	}
 
 	public static boolean isValidationError(Throwable error) {
