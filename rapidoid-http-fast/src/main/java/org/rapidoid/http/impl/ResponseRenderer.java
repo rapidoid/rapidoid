@@ -45,7 +45,7 @@ import java.util.Map;
 @Since("5.1.0")
 public class ResponseRenderer extends RapidoidThing {
 
-	public static byte[] render(ReqImpl req, Resp resp) {
+	public static byte[] renderMvc(ReqImpl req, Resp resp) {
 
 		Object result = resp.result();
 
@@ -54,8 +54,8 @@ public class ResponseRenderer extends RapidoidThing {
 		if (shouldRenderView(resp)) {
 			content = renderView(req, resp, result);
 		} else {
-			Object cnt = U.or(result, "");
-			content = new String(HttpUtils.responseToBytes(req, cnt, MediaType.HTML_UTF_8, null));
+			Object respResult = U.or(result, "");
+			content = new String(HttpUtils.responseToBytes(req, respResult, MediaType.HTML_UTF_8, null));
 		}
 
 		return renderPage(req, content);

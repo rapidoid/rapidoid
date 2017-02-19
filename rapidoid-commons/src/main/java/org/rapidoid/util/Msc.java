@@ -809,6 +809,10 @@ public class Msc extends RapidoidThing {
 		return Cls.exists("org.rapidoid.gui.GUI");
 	}
 
+	public static boolean hasRapidoidHTML() {
+		return Cls.exists("org.rapidoid.html.HTML");
+	}
+
 	public static boolean hasRapidoidWatch() {
 		return Cls.exists("org.rapidoid.reload.Reload");
 	}
@@ -827,6 +831,10 @@ public class Msc extends RapidoidThing {
 
 	public static boolean hasMavenEmbedder() {
 		return Cls.exists("org.apache.maven.cli.MavenCli");
+	}
+
+	public static boolean isRestOnly() {
+		return !hasRapidoidHTML();
 	}
 
 	public static boolean isValidationError(Throwable error) {

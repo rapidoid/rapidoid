@@ -65,7 +65,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 
 	private volatile int code = 200;
 
-	private volatile MediaType contentType = MediaType.HTML_UTF_8;
+	private volatile MediaType contentType = HttpUtils.getDefaultContentType();
 
 	private final Map<String, String> headers = Coll.synchronizedMap();
 
@@ -326,7 +326,11 @@ public class RespImpl extends RapidoidThing implements Resp {
 	@Override
 	public synchronized Resp view(String view) {
 		this.view = view;
-		this.mvc(true);
+
+		if (view != null) {
+			this.mvc(true);
+		}
+
 		return this;
 	}
 
@@ -337,6 +341,11 @@ public class RespImpl extends RapidoidThing implements Resp {
 
 	@Override
 	public synchronized Resp mvc(boolean mvc) {
+
+		if (mvc) {
+			U.must(Msc.hasRapidoidHTML(), "The rapidoid-html module must be included for the MVC feature!");
+		}
+
 		this.mvc = mvc;
 		return this;
 	}
@@ -475,7 +484,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 
 	public byte[] renderToBytes() {
 		if (mvc()) {
-			byte[] bytes = ResponseRenderer.render(req, this);
+			byte[] bytes = ResponseRenderer.renderMvc(req, this);
 			HttpUtils.postProcessResponse(this); // the response might have been changed, so post-process again
 			return bytes;
 
