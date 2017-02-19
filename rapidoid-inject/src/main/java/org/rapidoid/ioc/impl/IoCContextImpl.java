@@ -16,6 +16,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.scan.Scan;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
+import org.rapidoid.util.MscOpts;
 
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Constructor;
@@ -335,11 +336,11 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 			return U.or(wrapper, this);
 		}
 
-		if (cls.equals("javax.persistence.EntityManager") && Msc.hasRapidoidJPA()) {
+		if (cls.equals("javax.persistence.EntityManager") && MscOpts.hasRapidoidJPA()) {
 			return OptionalJPAUtil.getSharedContextAwareEntityManagerProxy();
 		}
 
-		if (cls.equals("javax.persistence.EntityManagerFactory") && Msc.hasRapidoidJPA()) {
+		if (cls.equals("javax.persistence.EntityManagerFactory") && MscOpts.hasRapidoidJPA()) {
 			return OptionalJPAUtil.getSharedEntityManagerFactoryProxy();
 		}
 

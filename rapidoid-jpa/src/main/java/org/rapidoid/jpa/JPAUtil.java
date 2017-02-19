@@ -12,6 +12,7 @@ import org.rapidoid.jpa.impl.JPAInternals;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
+import org.rapidoid.util.MscOpts;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -75,7 +76,7 @@ public class JPAUtil extends RapidoidThing {
 	}
 
 	public static void bootstrap(String[] path, Class<?>... providedEntities) {
-		if (Msc.hasHibernate()) {
+		if (MscOpts.hasHibernate()) {
 
 			if (emf() == null) {
 				bootstrapJPA(path, providedEntities);

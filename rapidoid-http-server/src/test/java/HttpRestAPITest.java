@@ -30,7 +30,7 @@ import org.rapidoid.setup.On;
 import org.rapidoid.test.ExpectErrors;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
+import org.rapidoid.util.MscOpts;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.9")
@@ -47,8 +47,8 @@ public class HttpRestAPITest extends TestCommons {
 
 	@Test
 	public void testIncludedModules() {
-		isFalse(Msc.hasRapidoidHTML());
-		isFalse(Msc.hasRapidoidGUI());
+		isFalse(MscOpts.hasRapidoidHTML());
+		isFalse(MscOpts.hasRapidoidGUI());
 	}
 
 	@Test

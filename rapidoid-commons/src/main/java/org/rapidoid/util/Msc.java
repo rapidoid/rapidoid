@@ -789,54 +789,6 @@ public class Msc extends RapidoidThing {
 		}
 	}
 
-	public static boolean hasValidation() {
-		return Cls.exists("javax.validation.Validation");
-	}
-
-	public static boolean hasJPA() {
-		return Cls.exists("javax.persistence.Entity");
-	}
-
-	public static boolean hasHibernate() {
-		return Cls.exists("org.hibernate.cfg.Configuration");
-	}
-
-	public static boolean hasRapidoidJPA() {
-		return Cls.exists("org.rapidoid.jpa.JPA");
-	}
-
-	public static boolean hasRapidoidGUI() {
-		return Cls.exists("org.rapidoid.gui.GUI");
-	}
-
-	public static boolean hasRapidoidHTML() {
-		return Cls.exists("org.rapidoid.html.HTML");
-	}
-
-	public static boolean hasRapidoidWatch() {
-		return Cls.exists("org.rapidoid.reload.Reload");
-	}
-
-	public static boolean hasRapidoidPlatform() {
-		return Cls.exists("org.rapidoid.standalone.Main");
-	}
-
-	public static boolean hasLogback() {
-		return Cls.exists("ch.qos.logback.classic.Logger");
-	}
-
-	public static boolean hasSlf4jImpl() {
-		return Cls.exists("org.slf4j.impl.StaticLoggerBinder");
-	}
-
-	public static boolean hasMavenEmbedder() {
-		return Cls.exists("org.apache.maven.cli.MavenCli");
-	}
-
-	public static boolean isRestOnly() {
-		return !hasRapidoidHTML();
-	}
-
 	public static boolean isValidationError(Throwable error) {
 		return (error instanceof InvalidData) || error.getClass().getName().startsWith("javax.validation.");
 	}

@@ -19,6 +19,7 @@ import org.rapidoid.http.customize.RolesProvider;
 import org.rapidoid.net.AsyncLogic;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
+import org.rapidoid.util.MscOpts;
 import org.rapidoid.util.Tokens;
 import org.rapidoid.web.Screen;
 import org.rapidoid.web.ScreenBean;
@@ -343,7 +344,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 	public synchronized Resp mvc(boolean mvc) {
 
 		if (mvc) {
-			U.must(Msc.hasRapidoidHTML(), "The rapidoid-html module must be included for the MVC feature!");
+			U.must(MscOpts.hasRapidoidHTML(), "The rapidoid-html module must be included for the MVC feature!");
 		}
 
 		this.mvc = mvc;
@@ -417,7 +418,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 	}
 
 	private Screen createScreen() {
-		Screen screen = Msc.hasRapidoidGUI() ? GUIUtil.newPage() : new ScreenBean();
+		Screen screen = MscOpts.hasRapidoidGUI() ? GUIUtil.newPage() : new ScreenBean();
 		initScreen(screen);
 		return screen;
 	}

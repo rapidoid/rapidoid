@@ -35,6 +35,7 @@ import org.rapidoid.http.customize.PageDecorator;
 import org.rapidoid.http.customize.ViewResolver;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
+import org.rapidoid.util.MscOpts;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
@@ -139,7 +140,7 @@ public class ResponseRenderer extends RapidoidThing {
 	}
 
 	private static Object wrapGuiContent(Object content) {
-		if (Msc.hasRapidoidGUI()) {
+		if (MscOpts.hasRapidoidGUI()) {
 			Object[] items = null;
 
 			if (content instanceof Collection<?>) {

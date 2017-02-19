@@ -41,6 +41,7 @@ import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.scan.Scan;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
+import org.rapidoid.util.MscOpts;
 
 import java.util.List;
 import java.util.Set;
@@ -130,7 +131,7 @@ public class App extends RapidoidInitializer {
 	}
 
 	private static synchronized void restartApp() {
-		if (!Msc.hasRapidoidWatch()) {
+		if (!MscOpts.hasRapidoidWatch()) {
 			Log.warn("Cannot reload/restart the application, module rapidoid-watch is missing!");
 		}
 
@@ -173,7 +174,7 @@ public class App extends RapidoidInitializer {
 		Setup.initDefaults(); // this changes the config
 		Conf.reset(); // reset the config again
 
-		if (Msc.hasRapidoidJPA()) {
+		if (MscOpts.hasRapidoidJPA()) {
 			loader = ReloadUtil.reloader();
 			ClasspathUtil.setDefaultClassLoader(loader);
 		}

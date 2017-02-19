@@ -4,7 +4,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
+import org.rapidoid.util.MscOpts;
 
 /*
  * #%L
@@ -33,7 +33,7 @@ public class ActionsProp extends CustomReadOnlyProp implements Prop {
 	public static final String NAME = "(actions)";
 
 	public ActionsProp() {
-		U.must(Msc.hasRapidoidGUI(), "This special property requires the rapidoid-gui module!");
+		U.must(MscOpts.hasRapidoidGUI(), "This special property requires the rapidoid-gui module!");
 	}
 
 	public static boolean is(String propName) {

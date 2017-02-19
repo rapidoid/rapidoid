@@ -50,6 +50,7 @@ import org.rapidoid.security.Role;
 import org.rapidoid.timeseries.TimeSeries;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
+import org.rapidoid.util.MscOpts;
 import org.rapidoid.var.Var;
 
 import java.io.Serializable;
@@ -874,11 +875,11 @@ public abstract class GUI extends HTML implements Role {
 	}
 
 	private static boolean isEntity(Object item) {
-		return Msc.hasRapidoidJPA() && GuiJpaUtil.isEntity(item);
+		return MscOpts.hasRapidoidJPA() && GuiJpaUtil.isEntity(item);
 	}
 
 	private static Object getIdentifier(Object bean) {
-		return Msc.hasRapidoidJPA() ? GuiJpaUtil.getIdentifier(bean) : null;
+		return MscOpts.hasRapidoidJPA() ? GuiJpaUtil.getIdentifier(bean) : null;
 	}
 
 	public static String uri(String path, Map<String, String> query) {

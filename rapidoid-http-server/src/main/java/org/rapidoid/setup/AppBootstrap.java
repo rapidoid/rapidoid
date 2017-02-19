@@ -26,7 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
+import org.rapidoid.util.MscOpts;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -42,7 +42,7 @@ public class AppBootstrap extends RapidoidThing {
 	private static final ServiceBootstrap jpa = new ServiceBootstrap() {
 		@Override
 		protected void bootstrap() {
-			if (Msc.hasJPA()) {
+			if (MscOpts.hasJPA()) {
 				JPA.bootstrap(App.path());
 			}
 		}

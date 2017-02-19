@@ -38,6 +38,7 @@ import org.rapidoid.log.GlobalCfg;
 import org.rapidoid.scan.Scan;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
+import org.rapidoid.util.MscOpts;
 
 import java.io.*;
 import java.net.URI;
@@ -104,7 +105,7 @@ public abstract class AbstractRapidoidMojo extends AbstractMojo {
 	}
 
 	protected void invoke(MavenSession session, List<String> goals, boolean updateSnapshots, Map<String, String> properties) throws MojoExecutionException {
-		if (Msc.hasMavenEmbedder() && GlobalCfg.get("maven.home") == null) {
+		if (MscOpts.hasMavenEmbedder() && GlobalCfg.get("maven.home") == null) {
 			invokeEmbedded(session, goals, updateSnapshots, properties);
 		} else {
 			invokeInstalled(session, goals, updateSnapshots, properties);

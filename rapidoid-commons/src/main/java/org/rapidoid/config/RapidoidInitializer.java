@@ -7,6 +7,7 @@ import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogbackUtil;
 import org.rapidoid.util.Msc;
+import org.rapidoid.util.MscOpts;
 
 /*
  * #%L
@@ -52,7 +53,7 @@ public class RapidoidInitializer extends RapidoidThing {
 				"process", Msc.maybeMasked(proc), "max memory", Msc.maybeMasked(maxMem), "dir", dir);
 		}
 
-		if (Msc.hasLogback()) {
+		if (MscOpts.hasLogback()) {
 			LogbackUtil.setupLogger();
 		}
 	}

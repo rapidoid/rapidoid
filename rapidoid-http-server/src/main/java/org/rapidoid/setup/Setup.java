@@ -33,6 +33,7 @@ import org.rapidoid.security.Role;
 import org.rapidoid.u.U;
 import org.rapidoid.util.AppInfo;
 import org.rapidoid.util.Msc;
+import org.rapidoid.util.MscOpts;
 import org.rapidoid.util.Once;
 
 import java.util.Collections;
@@ -182,7 +183,7 @@ public class Setup extends RapidoidInitializer {
 
 			HttpProcessor proc = processor != null ? processor : http();
 
-			if (Env.dev() && !On.changes().isIgnored() && Msc.hasRapidoidWatch()) {
+			if (Env.dev() && !On.changes().isIgnored() && MscOpts.hasRapidoidWatch()) {
 				proc = new AppRestartProcessor(this, proc);
 				On.changes().byDefaultRestart();
 			}

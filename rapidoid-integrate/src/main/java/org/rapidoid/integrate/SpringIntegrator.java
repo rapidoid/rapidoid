@@ -8,7 +8,7 @@ import org.rapidoid.ioc.BeanProvider;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
+import org.rapidoid.util.MscOpts;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -53,7 +53,7 @@ public abstract class SpringIntegrator extends RapidoidThing implements Runnable
 			initProfiles();
 		}
 
-		if (useEmf() && JPA.getEmf() == null && Msc.hasJPA()) {
+		if (useEmf() && JPA.getEmf() == null && MscOpts.hasJPA()) {
 			initJPA();
 		}
 

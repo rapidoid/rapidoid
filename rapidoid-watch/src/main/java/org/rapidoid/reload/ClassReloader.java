@@ -7,7 +7,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
+import org.rapidoid.util.MscOpts;
 
 import java.io.File;
 import java.lang.annotation.Annotation;
@@ -168,7 +168,7 @@ public class ClassReloader extends ClassLoader {
 	}
 
 	private boolean isEntity(String classname) {
-		return Msc.hasRapidoidJPA() && OptionalJPAUtil.isEntity(classname);
+		return MscOpts.hasRapidoidJPA() && OptionalJPAUtil.isEntity(classname);
 	}
 
 	private static String getClassRelativePath(String classname) {

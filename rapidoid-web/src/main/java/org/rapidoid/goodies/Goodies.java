@@ -21,6 +21,7 @@ import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
+import org.rapidoid.util.MscOpts;
 
 import java.lang.reflect.Method;
 
@@ -142,7 +143,7 @@ public class Goodies extends RapidoidThing {
 	public static void entities(Setup setup) {
 		setup.page("/_entities").mvc(new EntitiesHandler());
 
-		if (Msc.hasJPA()) {
+		if (MscOpts.hasJPA()) {
 			for (Class<?> type : JPA.getEntityJavaTypes()) {
 				String uri = GUI.typeUri(type);
 				String contextPath = HttpUtils.zone(setup.custom(), setup.zone()).entry("home").or("/_");

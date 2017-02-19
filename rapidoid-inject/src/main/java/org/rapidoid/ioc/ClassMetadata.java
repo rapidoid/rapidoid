@@ -7,7 +7,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
+import org.rapidoid.util.MscOpts;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
@@ -98,7 +98,7 @@ public class ClassMetadata extends RapidoidThing {
 			fields.addAll(Cls.getFieldsAnnotated(clazz, annotation));
 		}
 
-		if (Msc.hasJPA()) {
+		if (MscOpts.hasJPA()) {
 			Class<Annotation> javaxPersistenceContext = Cls.get("javax.persistence.PersistenceContext");
 			List<Field> emFields = Cls.getFieldsAnnotated(clazz, javaxPersistenceContext);
 
