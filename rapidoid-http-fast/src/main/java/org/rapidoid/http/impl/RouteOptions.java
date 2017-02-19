@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.collection.Coll;
+import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.MediaType;
 import org.rapidoid.http.RouteConfig;
@@ -37,7 +38,7 @@ import java.util.Set;
 @Since("5.1.0")
 public class RouteOptions extends RapidoidThing implements RouteConfig {
 
-	private volatile MediaType contentType = MediaType.HTML_UTF_8;
+	private volatile MediaType contentType = HttpUtils.getDefaultContentType();
 
 	private volatile String view;
 

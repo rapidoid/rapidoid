@@ -392,4 +392,8 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 		}
 	}
 
+	public static MediaType getDefaultContentType() {
+		return Msc.hasRapidoidHTML() ? MediaType.HTML_UTF_8 : MediaType.JSON;
+	}
+
 }

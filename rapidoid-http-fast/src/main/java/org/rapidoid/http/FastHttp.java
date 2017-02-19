@@ -205,7 +205,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		String query = Msc.urlDecodeOrKeepOriginal(helper.query.str(buf));
 		String zone = null;
 
-		MediaType contentType = MediaType.HTML_UTF_8;
+		MediaType contentType = HttpUtils.getDefaultContentType();
 
 		if (handler != null) {
 			contentType = handler.contentType();
@@ -238,7 +238,7 @@ public class FastHttp extends AbstractHttpProcessor {
 	}
 
 	protected void internalServerError(Channel channel, boolean isKeepAlive, Req req) {
-		MediaType contentType = req != null ? req.contentType() : MediaType.HTML_UTF_8;
+		MediaType contentType = req != null ? req.contentType() : HttpUtils.getDefaultContentType();
 
 		HttpIO.startResponse(channel, 500, isKeepAlive, contentType);
 

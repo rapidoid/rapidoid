@@ -431,7 +431,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	}
 
 	private void startResponse(int code, boolean unknownContentLength) {
-		MediaType contentType = MediaType.HTML_UTF_8;
+		MediaType contentType = HttpUtils.getDefaultContentType();
 
 		if (tokenChanged.get()) {
 			HttpUtils.saveTokenBeforeRenderingHeaders(this, token);
@@ -442,7 +442,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		}
 
 		if (response != null) {
-			contentType = U.or(response.contentType(), MediaType.HTML_UTF_8);
+			contentType = U.or(response.contentType(), contentType);
 		}
 
 		renderResponseHeaders(code, contentType, unknownContentLength);

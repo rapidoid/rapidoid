@@ -68,6 +68,7 @@ public abstract class TestCommons {
 		System.out.println("--------------------------------------------------------------------------------");
 
 		hasError = false;
+		//callIfExists("org.rapidoid.util.Msc", "reset");
 
 		String s = File.separator;
 		String resultsDir = "src" + s + "test" + s + "resources" + s + TEST_RESULTS_FOLDER + s + getTestName();
