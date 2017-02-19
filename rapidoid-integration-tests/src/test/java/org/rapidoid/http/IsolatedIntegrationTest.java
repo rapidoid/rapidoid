@@ -297,7 +297,7 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 		}
 	}
 
-	private void testReq(int port, String verb, String uri, Map<String, ?> data, String json) {
+	protected void testReq(int port, String verb, String uri, Map<String, ?> data, String json) {
 		String resp = fetch(port, verb, uri, data, json);
 		String reqName = reqName(port, verb, uri);
 

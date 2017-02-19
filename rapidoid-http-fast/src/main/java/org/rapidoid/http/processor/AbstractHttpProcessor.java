@@ -61,6 +61,8 @@ public abstract class AbstractHttpProcessor extends RapidoidThing implements Htt
 
 	@Override
 	public void waitToInitialize() {
-		next.waitToInitialize();
+		if (next != null) {
+			next.waitToInitialize();
+		}
 	}
 }

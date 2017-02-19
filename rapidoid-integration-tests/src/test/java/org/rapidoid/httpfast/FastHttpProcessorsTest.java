@@ -38,8 +38,8 @@ public class FastHttpProcessorsTest extends IsolatedIntegrationTest {
 		HttpProcessor http = new LoggingHttpProcessor(new NotFoundHttpProcessor());
 		Server server = http.listen(12345);
 
-		notFound(12345, "/");
-		notFound(12345, "/abc");
+		testReq(12345, "GET", "/", null, null);
+		testReq(12345, "GET", "/abc", null, null);
 
 		server.shutdown();
 	}

@@ -27,16 +27,10 @@ import org.rapidoid.http.MediaType;
 import org.rapidoid.http.impl.lowlevel.HttpIO;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.RapidoidHelper;
-import org.rapidoid.render.Templates;
-import org.rapidoid.u.U;
-
-import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class NotFoundHttpProcessor extends AbstractHttpProcessor {
-
-	private static final Map<String, Map<String, String>> MODEL = U.map("req", U.map("contextPath", ""));
 
 	public NotFoundHttpProcessor() {
 		super(null);
@@ -46,15 +40,8 @@ public class NotFoundHttpProcessor extends AbstractHttpProcessor {
 	public void onRequest(Channel channel, RapidoidHelper data) {
 		boolean isKeepAlive = data.isKeepAlive.value;
 
-		String content = Templates.load("404.html").render(MODEL);
-
-		HttpIO.INSTANCE.respond(HttpUtils.noReq(), channel, -1, 404, isKeepAlive, MediaType.HTML_UTF_8, content.getBytes(), null, null);
+		HttpIO.INSTANCE.respond(HttpUtils.noReq(), channel, -1, 404, isKeepAlive, MediaType.PLAIN_TEXT_UTF_8, "Not found!".getBytes(), null, null);
 
 		channel.send().closeIf(!isKeepAlive);
-	}
-
-	@Override
-	public void waitToInitialize() {
-		// do nothing
 	}
 }
