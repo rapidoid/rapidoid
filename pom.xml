@@ -211,11 +211,6 @@
 						<includes>
 							<include>**/*.java</include>
 						</includes>
-						<excludes>
-							<exclude>**/hkdf/Hash.java</exclude>
-							<exclude>**/hkdf/Hkdf.java</exclude>
-							<exclude>**/netnix/AES.java</exclude>
-						</excludes>
 					</configuration>
 					<executions>
 						<execution>
