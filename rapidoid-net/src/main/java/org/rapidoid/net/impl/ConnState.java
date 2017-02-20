@@ -35,6 +35,14 @@ public class ConnState extends RapidoidThing implements Resetable {
 
 	public volatile Object obj;
 
+	public ConnState() {
+	}
+
+	public ConnState(long n, Object obj) {
+		this.n = n;
+		this.obj = obj;
+	}
+
 	/* COMMENTED OUT FOR PRODUCTION (the log is used for debugging during development): */
 
 	// private final List<String> log = Collections.synchronizedList(U.<String> list());
@@ -57,6 +65,15 @@ public class ConnState extends RapidoidThing implements Resetable {
 
 		/* COMMENTED OUT FOR PRODUCTION: */
 		// return log;
+	}
+
+	public ConnState copy() {
+		return new ConnState(n, obj);
+	}
+
+	public void copyFrom(ConnState state) {
+		this.n = state.n;
+		this.obj = state.obj;
 	}
 
 }

@@ -115,4 +115,16 @@ public interface ProtocolContext<T> {
 
 	ConnState state();
 
+	/* X-SPECIFIC */
+
+	Channel nextOp(int nextOp);
+
+	Channel nextWrite();
+
+	Channel mode(int mode);
+
+	T restart();
+
+	ChannelHolder createHolder();
+
 }

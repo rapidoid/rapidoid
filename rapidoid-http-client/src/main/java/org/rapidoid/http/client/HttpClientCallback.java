@@ -1,12 +1,13 @@
-package org.rapidoid.net;
+package org.rapidoid.http.client;
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.buffer.Buf;
+import org.rapidoid.data.BufRanges;
 
 /*
  * #%L
- * rapidoid-net
+ * rapidoid-http-client
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -25,21 +26,11 @@ import org.rapidoid.annotation.Since;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class TCP extends RapidoidThing {
+@Since("NET_EXTRAS")
+public interface HttpClientCallback {
 
-	public static ServerBuilder server() {
-		return new ServerBuilder();
-	}
+	void onResult(Buf buffer, BufRanges head, BufRanges body);
 
-	public static TCPClientBuilder client() {
-		return new TCPClientBuilder();
-	}
-
-	public static TCPClient connect(String host, int port, Protocol protocol) {
-		TCPClient client = client().host(host).port(port).protocol(protocol).build();
-		client.start();
-		return client;
-	}
+	void onError(Throwable error);
 
 }

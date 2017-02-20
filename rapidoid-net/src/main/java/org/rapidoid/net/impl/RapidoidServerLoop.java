@@ -212,7 +212,7 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 
 	public synchronized RapidoidConnection newConnection() {
 		int rndWorker = Rnd.rnd(ioWorkers.length);
-		return ioWorkers[rndWorker].newConnection();
+		return ioWorkers[rndWorker].newConnection(false);
 	}
 
 	public synchronized void process(RapidoidConnection conn) {

@@ -13,6 +13,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.net.AsyncLogic;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.net.abstracts.ChannelHolder;
 import org.rapidoid.net.abstracts.IRequest;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
@@ -102,6 +103,14 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 	private volatile long expiresAt;
 
+	private volatile ChannelHolderImpl holder;
+
+	public volatile int nextOp = SelectionKey.OP_READ;
+
+	public volatile int mode = 0;
+
+	private volatile boolean autoReconnect;
+
 	public RapidoidConnection(RapidoidWorker worker, BufGroup bufs) {
 		this.worker = worker;
 		this.input = bufs.newBuf("input#" + connId());
@@ -137,6 +146,11 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 		writeSeq.set(-1);
 		expiresAt = 0;
 		state.reset();
+
+		holder = null;
+		mode = 0;
+		autoReconnect = false;
+		nextOp = SelectionKey.OP_READ;
 	}
 
 	@Override
@@ -486,4 +500,64 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 		return output.size() == 0;
 	}
 
+	public ChannelHolderImpl holder() {
+		return holder;
+	}
+
+	public RapidoidConnection holder(ChannelHolderImpl holder) {
+		this.holder = holder;
+		return this;
+	}
+
+	public int nextOp() {
+		return nextOp;
+	}
+
+	@Override
+	public RapidoidConnection nextOp(int nextOp) {
+		this.nextOp = nextOp;
+		return this;
+	}
+
+	public int mode() {
+		return mode;
+	}
+
+	@Override
+	public RapidoidConnection mode(int mode) {
+		this.mode = mode;
+		return this;
+	}
+
+	public boolean autoReconnect() {
+		return autoReconnect;
+	}
+
+	public RapidoidConnection autoReconnect(boolean autoReconnect) {
+		this.autoReconnect = autoReconnect;
+		return this;
+	}
+
+	@Override
+	public Channel restart() {
+		return null; // FIXME
+	}
+
+	@Override
+	public ChannelHolder createHolder() {
+		return null; // FIXME
+	}
+
+	@Override
+	public Channel nextWrite() {
+		return null; // FIXME
+	}
+
+	public ChannelHolderImpl getHolder() {
+		return holder;
+	}
+
+	public void setHolder(ChannelHolderImpl holder) {
+		this.holder = holder;
+	}
 }

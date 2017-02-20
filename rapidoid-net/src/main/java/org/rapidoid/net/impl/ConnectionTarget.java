@@ -25,45 +25,40 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.u.U;
 
+import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 
 @Authors("Nikolche Mihajlovski")
-@Since("3.0.0")
-public class RapidoidChannel {
+@Since("NET_EXTRAS")
+public class ConnectionTarget {
 
-	final SocketChannel socketChannel;
-	final boolean isClient;
+	volatile SocketChannel socketChannel;
+
+	final InetSocketAddress addr;
+
+	volatile long retryAfter;
+
 	final Protocol protocol;
+
 	final ChannelHolderImpl holder;
+
 	final boolean autoreconnecting;
+
 	final ConnState state;
 
-	public RapidoidChannel(SocketChannel socketChannel, boolean isClient, Protocol protocol, ChannelHolderImpl holder,
-	                       boolean autoreconnecting, ConnState state) {
+	public ConnectionTarget(SocketChannel socketChannel, InetSocketAddress addr, Protocol protocol,
+	                        ChannelHolderImpl holder, boolean autoreconnecting, ConnState state) {
 
-		U.notNull(socketChannel, "socket channel");
-		U.notNull(protocol, "channel protocol");
-		U.notNull(holder, "channel holder");
+		U.notNull(protocol, "connection protocol");
+		U.notNull(holder, "connection holder");
 
 		this.socketChannel = socketChannel;
-		this.isClient = isClient;
+		this.addr = addr;
 		this.protocol = protocol;
+		this.retryAfter = U.time();
 		this.holder = holder;
 		this.autoreconnecting = autoreconnecting;
 		this.state = state;
-	}
-
-	public RapidoidChannel(SocketChannel socketChannel, boolean isClient, Protocol protocol) {
-
-		U.notNull(socketChannel, "socket channel");
-		U.notNull(protocol, "channel protocol");
-
-		this.socketChannel = socketChannel;
-		this.isClient = isClient;
-		this.protocol = protocol;
-		this.holder = null;
-		this.autoreconnecting = false;
-		this.state = null;
 	}
 
 }

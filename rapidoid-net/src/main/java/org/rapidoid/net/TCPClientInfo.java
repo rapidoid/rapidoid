@@ -1,6 +1,5 @@
 package org.rapidoid.net;
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
@@ -25,21 +24,9 @@ import org.rapidoid.annotation.Since;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class TCP extends RapidoidThing {
+@Since("NET_EXTRAS")
+public interface TCPClientInfo {
 
-	public static ServerBuilder server() {
-		return new ServerBuilder();
-	}
-
-	public static TCPClientBuilder client() {
-		return new TCPClientBuilder();
-	}
-
-	public static TCPClient connect(String host, int port, Protocol protocol) {
-		TCPClient client = client().host(host).port(port).protocol(protocol).build();
-		client.start();
-		return client;
-	}
+	long messagesProcessed();
 
 }

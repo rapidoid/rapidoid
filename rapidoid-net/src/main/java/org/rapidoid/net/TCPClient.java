@@ -1,8 +1,10 @@
 package org.rapidoid.net;
 
-import org.rapidoid.RapidoidThing;
+import org.rapidoid.activity.Activity;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.net.abstracts.ChannelHolder;
+import org.rapidoid.net.impl.ConnState;
 
 /*
  * #%L
@@ -25,21 +27,15 @@ import org.rapidoid.annotation.Since;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class TCP extends RapidoidThing {
+@Since("NET_EXTRAS")
+public interface TCPClient extends Activity<TCPClient> {
 
-	public static ServerBuilder server() {
-		return new ServerBuilder();
-	}
+	ChannelHolder connect(String serverHost, int serverPort, Protocol clientProtocol, boolean autoreconnecting,
+	                      ConnState state);
 
-	public static TCPClientBuilder client() {
-		return new TCPClientBuilder();
-	}
+	ChannelHolder[] connect(String serverHost, int serverPort, Protocol clientProtocol, int connections,
+	                        boolean autoreconnecting, ConnState state);
 
-	public static TCPClient connect(String host, int port, Protocol protocol) {
-		TCPClient client = client().host(host).port(port).protocol(protocol).build();
-		client.start();
-		return client;
-	}
+	TCPClientInfo info();
 
 }
