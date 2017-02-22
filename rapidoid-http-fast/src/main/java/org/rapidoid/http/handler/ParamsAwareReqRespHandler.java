@@ -1,4 +1,4 @@
-package org.rapidoid.http;
+package org.rapidoid.http.handler;
 
 /*
  * #%L
@@ -22,45 +22,27 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.customize.Customization;
-import org.rapidoid.http.handler.HttpHandler;
-
-import java.util.Set;
+import org.rapidoid.http.FastHttp;
+import org.rapidoid.http.HttpRoutes;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.ReqRespHandler;
+import org.rapidoid.http.impl.RouteOptions;
+import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public interface HttpRoutes {
+@Since("5.3.0")
+public class ParamsAwareReqRespHandler extends AbstractDecoratingHttpHandler {
 
-	void on(String verb, String path, HttpHandler handler);
+	private final ReqRespHandler handler;
 
-	void on(String verb, String path, ReqHandler handler);
+	public ParamsAwareReqRespHandler(FastHttp http, HttpRoutes routes, RouteOptions options, ReqRespHandler handler) {
+		super(http, routes, options);
+		this.handler = handler;
+	}
 
-	void on(String verb, String path, ReqRespHandler handler);
-
-	void remove(String verb, String path);
-
-	void addGenericHandler(HttpHandler handler);
-
-	void removeGenericHandler(HttpHandler handler);
-
-	void reset();
-
-	Set<Route> all();
-
-	Set<Route> allAdmin();
-
-	Set<Route> allNonAdmin();
-
-	Customization custom();
-
-	Route find(HttpVerb verb, String path);
-
-	boolean hasRouteOrResource(HttpVerb verb, String uri);
-
-	Runnable onInit();
-
-	void onInit(Runnable onInit);
-
-	boolean isEmpty();
+	@Override
+	protected Object handleReq(Channel ctx, boolean isKeepAlive, Req req, Object extra) throws Exception {
+		return handler.execute(req, req.response());
+	}
 
 }

@@ -26,7 +26,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.config.ConfigImpl;
 import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.IsolatedIntegrationTest;
-import org.rapidoid.http.Req;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.impl.HttpRoutesImpl;
 import org.rapidoid.net.Server;
@@ -43,9 +42,9 @@ public class HttpHandlerTest extends IsolatedIntegrationTest {
 		HttpRoutesImpl routes = new HttpRoutesImpl(customization);
 		FastHttp http = new FastHttp(routes);
 
-		routes.on("get", "/abc", Req::data);
+		routes.on("get", "/abc", (req, resp) -> resp.json(req.data()));
 
-		routes.on("get,post", "/xyz", req -> U.list(req.uri(), req.data()));
+		routes.on("get,post", "/xyz", (req, resp) -> resp.html(U.list(req.uri(), req.data())));
 
 		Server server = http.listen(7779);
 

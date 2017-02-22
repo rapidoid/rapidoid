@@ -13,13 +13,11 @@ import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Err;
 import org.rapidoid.commons.Str;
 import org.rapidoid.data.BufRange;
-import org.rapidoid.http.HttpRoutes;
-import org.rapidoid.http.HttpVerb;
-import org.rapidoid.http.ReqHandler;
-import org.rapidoid.http.Route;
+import org.rapidoid.http.*;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.handler.HttpHandler;
 import org.rapidoid.http.handler.ParamsAwareReqHandler;
+import org.rapidoid.http.handler.ParamsAwareReqRespHandler;
 import org.rapidoid.http.handler.StaticResourcesHandler;
 import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
@@ -418,11 +416,14 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 
 	@Override
 	public synchronized void on(String verb, String path, ReqHandler handler) {
-		addOrRemove(true, verb, path, handler(handler, new RouteOptions()));
+		HttpHandler hnd = new ParamsAwareReqHandler(null, null, new RouteOptions(), handler);
+		addOrRemove(true, verb, path, hnd);
 	}
 
-	public HttpHandler handler(ReqHandler reqHandler, RouteOptions options) {
-		return new ParamsAwareReqHandler(null, null, options, reqHandler);
+	@Override
+	public synchronized void on(String verb, String path, ReqRespHandler handler) {
+		HttpHandler hnd = new ParamsAwareReqRespHandler(null, null, new RouteOptions(), handler);
+		addOrRemove(true, verb, path, hnd);
 	}
 
 	@Override

@@ -407,6 +407,7 @@ org.rapidoid.http.handler.param.ParamRetrievers
 org.rapidoid.http.handler.param.ReqParamRetriever
 org.rapidoid.http.handler.param.RespParamRetriever
 org.rapidoid.http.handler.ParamsAwareReqHandler
+org.rapidoid.http.handler.ParamsAwareReqRespHandler
 org.rapidoid.http.handler.param.ScreenParamRetriever
 org.rapidoid.http.handler.param.UploadParamRetriever
 org.rapidoid.http.handler.param.UploadsParamRetriever
