@@ -31,6 +31,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static org.rapidoid.util.Constants.CR_LF;
 
@@ -87,6 +88,8 @@ class LowLevelHttpIO extends RapidoidThing {
 	private static final boolean MANDATORY_HEADER_CONTENT_TYPE;
 
 	private static final byte[] UNIFORM_DATE = "Sat, 10 Sep 2016 01:02:03 GMT".getBytes();
+
+	private static final AtomicLong ASYNC_ID_GEN = new AtomicLong();
 
 	static {
 		for (int len = 0; len < CONTENT_LENGTHS.length; len++) {
@@ -351,7 +354,16 @@ class LowLevelHttpIO extends RapidoidThing {
 			}
 		}
 
+		final long id = ASYNC_ID_GEN.incrementAndGet();
+
 		channel.resume(handle, new AsyncLogic() {
+
+			@Override
+			public String toString() {
+				String bb = (body instanceof byte[]) ? new String((byte[]) body) : U.str(body);
+				return U.str(U.join(":", "#" + id, channel, code, bb, isKeepAlive, contentType));
+			}
+
 			@Override
 			public boolean resumeAsync() {
 

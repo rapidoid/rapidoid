@@ -134,7 +134,7 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 		protocol = null;
 		requestId = 0;
 		readSeq.set(0);
-		writeSeq.set(-1);
+		writeSeq.set(0);
 		expiresAt = 0;
 		state.reset();
 	}
@@ -222,6 +222,11 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 	}
 
 	void processedSeq(long processedHandle) {
+
+		if (processedHandle == 0) return; // a new connection
+
+		U.must(processedHandle > 0);
+
 		boolean increased = writeSeq.compareAndSet(processedHandle - 1, processedHandle);
 
 		if (!increased) {

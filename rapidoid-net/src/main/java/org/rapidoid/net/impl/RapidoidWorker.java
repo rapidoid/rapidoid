@@ -241,6 +241,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 				if (!conn.closed) {
 					conn.done();
 				}
+
 				conn.processedSeq(seq);
 			}
 
