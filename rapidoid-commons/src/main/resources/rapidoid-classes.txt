@@ -59,6 +59,13 @@ org.rapidoid.beany.PropertySelector
 org.rapidoid.beany.PropertySelectorByName
 org.rapidoid.beany.PropKind
 org.rapidoid.beany.SerializableBean
+org.rapidoid.benchmark.common.Fortune
+org.rapidoid.benchmark.common.Helper
+org.rapidoid.benchmark.common.Message
+org.rapidoid.benchmark.highlevel.FortunesHandler
+org.rapidoid.benchmark.highlevel.Main
+org.rapidoid.benchmark.lowlevel.Main
+org.rapidoid.benchmark.lowlevel.PlaintextAndJsonServer
 org.rapidoid.buffer.Buf
 org.rapidoid.buffer.BufBytes
 org.rapidoid.buffer.BufGroup
@@ -127,6 +134,7 @@ org.rapidoid.concurrent.Promise
 org.rapidoid.concurrent.Promises
 org.rapidoid.config.BasicConfig
 org.rapidoid.config.bean.APIConfig
+org.rapidoid.config.bean.PagesConfig
 org.rapidoid.config.bean.ProxyConfig
 org.rapidoid.config.Conf
 org.rapidoid.config.Config
@@ -626,6 +634,12 @@ org.rapidoid.oauth.OAuthLoginHandler
 org.rapidoid.oauth.OAuthProvider
 org.rapidoid.oauth.OAuthStateCheck
 org.rapidoid.oauth.OAuthTokenHandler
+org.rapidoid.performance.BenchmarkCenter
+org.rapidoid.performance.BenchmarkForker
+org.rapidoid.performance.BenchmarkResults
+org.rapidoid.performance.BenchmarkRunner
+org.rapidoid.performance.Perf
+org.rapidoid.performance.WrkSetup
 org.rapidoid.platform.AppChangeWatcher
 org.rapidoid.platform.AppDownloader
 org.rapidoid.platform.DefaultApp
@@ -695,7 +709,6 @@ org.rapidoid.security.annotation.CanDelete
 org.rapidoid.security.annotation.CanInsert
 org.rapidoid.security.annotation.CanManage
 org.rapidoid.security.annotation.CanRead
-org.rapidoid.security.annotation.DevMode
 org.rapidoid.security.annotation.LoggedIn
 org.rapidoid.security.annotation.Manager
 org.rapidoid.security.annotation.Moderator
@@ -710,7 +723,6 @@ org.rapidoid.serialize.Serialize
 org.rapidoid.serialize.TypeSpecificDeserializer
 org.rapidoid.serialize.TypeSpecificSerializer
 org.rapidoid.setup.Admin
-org.rapidoid.setup.APIConfigListener
 org.rapidoid.setup.App
 org.rapidoid.setup.AppBootstrap
 org.rapidoid.setup.AppRestartListener
@@ -725,7 +737,6 @@ org.rapidoid.setup.OnError
 org.rapidoid.setup.OnRoute
 org.rapidoid.setup.PojoHandlersSetup
 org.rapidoid.setup.PreApp
-org.rapidoid.setup.ProxyConfigListener
 org.rapidoid.setup.ReloadUtil
 org.rapidoid.setup.ServiceActivator
 org.rapidoid.setup.ServiceBootstrap
@@ -788,9 +799,15 @@ org.rapidoid.var.impl.SimpleVar
 org.rapidoid.var.impl.ValidatingVar
 org.rapidoid.var.Var
 org.rapidoid.var.Vars
+org.rapidoid.web.APIConfigListener
+org.rapidoid.web.GenericConfigListener
+org.rapidoid.web.GenericRouteConfigListener
+org.rapidoid.web.PagesConfigListener
+org.rapidoid.web.ProxyConfigListener
 org.rapidoid.web.Rapidoid
 org.rapidoid.web.Screen
 org.rapidoid.web.ScreenBean
+org.rapidoid.web.WebModule
 org.rapidoid.wrap.BoolWrap
 org.rapidoid.wrap.CharWrap
 org.rapidoid.wrap.DoubleWrap
