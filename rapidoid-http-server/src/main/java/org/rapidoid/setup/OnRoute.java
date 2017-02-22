@@ -357,7 +357,12 @@ public class OnRoute extends RapidoidThing {
 	}
 
 	private RouteOptions opts(MediaType contentType) {
-		options.contentType(contentType);
+
+		// don't change if already customized
+		if (options.contentType() == null || !options.contentTypeCustomized()) {
+			options.contentType(contentType);
+		}
+
 		return options;
 	}
 

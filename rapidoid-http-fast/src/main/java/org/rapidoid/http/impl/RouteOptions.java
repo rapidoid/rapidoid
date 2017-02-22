@@ -40,6 +40,8 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 
 	private volatile MediaType contentType = HttpUtils.getDefaultContentType();
 
+	private volatile boolean contentTypeCustomized;
+
 	private volatile String view;
 
 	private volatile boolean mvc;
@@ -60,13 +62,18 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 
 	@Override
 	public String toString() {
-		String prefix = mvc ? "MVC" : "";
-		return prefix + "{" +
-			(contentType != null ? "contentType=" + contentType.info() : "") +
-			(view != null ? ", view='" + view + '\'' : "") +
-			(transactionMode != null ? ", transactionMode='" + transactionMode + '\'' : "") +
-			(U.notEmpty(roles) ? ", roles=" + roles : "") +
-			(U.notEmpty(wrappers) ? ", wrappers=" + wrappers : "") +
+		return "RouteOptions{" +
+			"contentType=" + contentType +
+			", contentTypeCustomized=" + contentTypeCustomized +
+			", view='" + view + '\'' +
+			", mvc=" + mvc +
+			", zone='" + zone + '\'' +
+			", managed=" + managed +
+			", transactionMode=" + transactionMode +
+			", roles=" + roles +
+			", wrappers=" + Arrays.toString(wrappers) +
+			", cacheTTL=" + cacheTTL +
+			", cacheCapacity=" + cacheCapacity +
 			'}';
 	}
 
@@ -78,6 +85,7 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 	@Override
 	public RouteOptions contentType(MediaType contentType) {
 		this.contentType = contentType;
+		this.contentTypeCustomized = true;
 		return this;
 	}
 
@@ -183,18 +191,22 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 	public RouteOptions copy() {
 		RouteOptions copy = new RouteOptions();
 
-		copy.contentType(contentType());
-		copy.view(view());
-		copy.mvc(mvc());
-		copy.transactionMode(transactionMode());
-		copy.roles(U.arrayOf(String.class, roles));
-		copy.wrappers(wrappers());
-		copy.zone(zone());
-		copy.managed(managed());
-		copy.cacheTTL(cacheTTL());
-		copy.cacheCapacity(cacheCapacity());
+		copy.contentType = this.contentType;
+		copy.view = this.view;
+		copy.mvc = this.mvc;
+		copy.transactionMode = this.transactionMode;
+		Coll.assign(copy.roles, this.roles);
+		copy.wrappers = U.array(this.wrappers);
+		copy.zone = this.zone;
+		copy.managed = this.managed;
+		copy.cacheTTL = this.cacheTTL;
+		copy.cacheCapacity = this.cacheCapacity;
 
 		return copy;
+	}
+
+	public boolean contentTypeCustomized() {
+		return contentTypeCustomized;
 	}
 
 	@Override
