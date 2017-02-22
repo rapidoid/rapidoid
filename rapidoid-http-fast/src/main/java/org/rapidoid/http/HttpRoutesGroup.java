@@ -34,7 +34,7 @@ import java.util.Date;
 @Since("5.3.0")
 public class HttpRoutesGroup extends RapidoidThing {
 
-	private static final int ROUTE_SETUP_WAITING_TIME_MS = 500;
+	private static final int ROUTE_SETUP_WAITING_TIME_MS = 300;
 
 	private final HttpRoutesImpl[] routes;
 
@@ -100,8 +100,12 @@ public class HttpRoutesGroup extends RapidoidThing {
 		while (!initialized) {
 			U.sleep(1);
 			if (ready()) {
-				initialized = true;
-				Log.info("Initialized HTTP routes");
+				synchronized (this) {
+					if (!initialized) {
+						initialized = true;
+						Log.info("Initialized HTTP routes");
+					}
+				}
 			}
 		}
 	}
