@@ -60,6 +60,8 @@ public class App extends RapidoidInitializer {
 	private static volatile boolean restarted;
 	private static volatile boolean managed;
 
+	private static volatile AppBootstrap boot;
+
 	private static final Set<Class<?>> invoked = Coll.synchronizedSet();
 
 	static volatile ClassLoader loader = App.class.getClassLoader();
@@ -83,14 +85,19 @@ public class App extends RapidoidInitializer {
 		return boot();
 	}
 
-	public static AppBootstrap boot() {
-		for (RapidoidModule module : RapidoidModules.getAll()) {
-			module.boot();
+	public synchronized static AppBootstrap boot() {
+		if (boot == null) {
+
+			boot = new AppBootstrap();
+
+			for (RapidoidModule module : RapidoidModules.getAll()) {
+				module.boot();
+			}
+
+			boot.services();
 		}
 
-		AppBootstrap bootstrap = new AppBootstrap();
-		bootstrap.services();
-		return bootstrap;
+		return boot;
 	}
 
 	public static void profiles(String... profiles) {
@@ -207,6 +214,7 @@ public class App extends RapidoidInitializer {
 		dirty = false;
 		path = null;
 		loader = App.class.getClassLoader();
+		boot = null;
 		Setup.initDefaults();
 		AppBootstrap.reset();
 		invoked.clear();

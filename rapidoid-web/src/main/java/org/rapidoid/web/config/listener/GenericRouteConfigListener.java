@@ -24,7 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HttpVerb;
 import org.rapidoid.http.MediaType;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.OnRoute;
 import org.rapidoid.u.U;
 import org.rapidoid.web.config.bean.AbstractRouteConfig;
@@ -45,7 +45,7 @@ public abstract class GenericRouteConfigListener<T extends AbstractRouteConfig> 
 		String uri;
 
 		if (verbUri.length == 1) {
-			verb = HttpVerb.GET;
+			verb = null;
 			uri = verbUri[0];
 
 		} else if (verbUri.length == 2) {
@@ -61,18 +61,25 @@ public abstract class GenericRouteConfigListener<T extends AbstractRouteConfig> 
 
 	private void addRoute(T config, HttpVerb verb, String uri) {
 
-		OnRoute route = On.route(verb.name(), uri);
+		OnRoute route = addRoute(verb, uri);
 
 		if (config.contentType != null) route.contentType(MediaType.of(config.contentType));
-		if (config.roles != null) route.roles(config.roles);
 		if (config.managed != null) route.managed(config.managed);
 		if (config.transaction != null) route.transaction(config.transaction);
+
 		if (config.cacheTTL != null) route.cacheTTL(config.cacheTTL);
 		if (config.cacheCapacity != null) route.cacheCapacity(config.cacheCapacity);
 
-		addHandler(config, verb, uri, route);
+		if (config.roles != null) {
+			route.roles(config.roles);
+			App.boot().auth();
+		}
+
+		addHandler(config, uri, route);
 	}
 
-	protected abstract void addHandler(final T config, final HttpVerb verb, final String uri, OnRoute route);
+	protected abstract OnRoute addRoute(HttpVerb verb, String uri);
+
+	protected abstract void addHandler(final T config, final String uri, OnRoute route);
 
 }

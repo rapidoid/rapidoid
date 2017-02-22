@@ -23,7 +23,7 @@ package org.rapidoid.web.handler;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.HttpVerb;
+import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.Resp;
@@ -37,16 +37,13 @@ public class APIHandler extends RapidoidThing implements ReqRespHandler {
 
 	private final APIConfig api;
 
-	private final HttpVerb verb;
-
-	public APIHandler(APIConfig api, HttpVerb verb) {
+	public APIHandler(APIConfig api) {
 		this.api = api;
-		this.verb = verb;
 	}
 
 	@Override
 	public Object execute(Req req, Resp resp) {
-		if (verb == HttpVerb.GET) {
+		if (HttpUtils.isGetReq(req)) {
 			return JDBC.query(api.sql);
 		} else {
 			int changes = JDBC.execute(api.sql);

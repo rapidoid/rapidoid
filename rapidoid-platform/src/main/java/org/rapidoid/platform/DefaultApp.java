@@ -30,7 +30,7 @@ import org.rapidoid.setup.App;
 public class DefaultApp extends RapidoidThing {
 
 	public static void main(String[] args) {
-		App.run(args).auth();
+		App.run(args);
 	}
 
 }

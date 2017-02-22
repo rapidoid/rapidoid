@@ -23,6 +23,7 @@ package org.rapidoid.web.config.listener;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HttpVerb;
+import org.rapidoid.setup.On;
 import org.rapidoid.setup.OnRoute;
 import org.rapidoid.u.U;
 import org.rapidoid.web.config.bean.PageConfig;
@@ -37,19 +38,28 @@ public class PagesConfigListener extends GenericRouteConfigListener<PageConfig> 
 	}
 
 	@Override
-	protected void addHandler(PageConfig page, HttpVerb verb, String uri, OnRoute route) {
+	protected OnRoute addRoute(HttpVerb verb, String uri) {
+		if (verb == null) {
+			return On.page(uri);
+		} else {
+			U.must(verb == HttpVerb.GET || verb == HttpVerb.POST, "Only GET and POST verbs are supported for pages!");
+			return On.route(verb.name(), uri);
+		}
+	}
 
-		U.must(verb == HttpVerb.GET || verb == HttpVerb.POST, "Only GET and POST verbs are supported for pages!");
+	@Override
+	protected void addHandler(PageConfig page, String uri, OnRoute route) {
 
 		if (page.view != null) route.view(page.view);
 		if (page.zone != null) route.zone(page.zone);
 
 		PageHandler handler = new PageHandler(page);
 
-		if (U.bool(page.mvc)) {
-			route.mvc(handler);
-		} else {
+		// MVC by default
+		if (Boolean.FALSE.equals(page.mvc)) {
 			route.html(handler);
+		} else {
+			route.mvc(handler);
 		}
 	}
 

@@ -25,8 +25,9 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HttpVerb;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.OnRoute;
-import org.rapidoid.web.handler.APIHandler;
+import org.rapidoid.u.U;
 import org.rapidoid.web.config.bean.APIConfig;
+import org.rapidoid.web.handler.APIHandler;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -37,8 +38,14 @@ public class APIConfigListener extends GenericRouteConfigListener<APIConfig> {
 	}
 
 	@Override
-	protected void addHandler(APIConfig api, HttpVerb verb, String uri, OnRoute route) {
-		On.route(verb.name(), uri).json(new APIHandler(api, verb));
+	protected OnRoute addRoute(HttpVerb verb, String uri) {
+		verb = U.or(verb, HttpVerb.GET);
+		return On.route(verb.name(), uri);
+	}
+
+	@Override
+	protected void addHandler(APIConfig api, String uri, OnRoute route) {
+		route.json(new APIHandler(api));
 	}
 
 }
