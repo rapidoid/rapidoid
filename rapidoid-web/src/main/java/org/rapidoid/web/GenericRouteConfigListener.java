@@ -1,8 +1,8 @@
-package org.rapidoid;
+package org.rapidoid.web;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-web
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -22,23 +22,39 @@ package org.rapidoid;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.HttpVerb;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public interface RapidoidModule {
+public abstract class GenericRouteConfigListener<T> extends GenericConfigListener<T> {
 
-	String name();
+	public GenericRouteConfigListener(Class<T> type) {
+		super(type);
+	}
 
-	int order();
+	@Override
+	protected void applyEntry(String key, T config) {
+		String[] verbUri = key.split("\\s+");
 
-	void boot();
+		final HttpVerb verb;
+		String uri;
 
-	void cleanUp();
+		if (verbUri.length == 1) {
+			verb = HttpVerb.GET;
+			uri = verbUri[0];
 
-	void beforeTest(Object test);
+		} else if (verbUri.length == 2) {
+			verb = HttpVerb.from(verbUri[0]);
+			uri = verbUri[1];
 
-	void initTest(Object test);
+		} else {
+			throw U.rte("Invalid route!");
+		}
 
-	void afterTest(Object test);
+		addHandler(config, verb, uri);
+	}
+
+	protected abstract void addHandler(final T config, final HttpVerb verb, final String uri);
 
 }

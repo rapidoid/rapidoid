@@ -1,8 +1,8 @@
-package org.rapidoid;
+package org.rapidoid.web;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-web
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -20,25 +20,33 @@ package org.rapidoid;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.ConfigChanges;
+import org.rapidoid.config.bean.ProxyConfig;
+import org.rapidoid.lambda.Operation;
+import org.rapidoid.reverseproxy.Reverse;
+
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public interface RapidoidModule {
+public class ProxyConfigListener extends RapidoidThing implements Operation<ConfigChanges> {
 
-	String name();
+	@Override
+	public void execute(ConfigChanges changes) throws Exception {
+		for (Map.Entry<String, ProxyConfig> e : changes.getAddedOrChangedAs(ProxyConfig.class).entrySet()) {
 
-	int order();
+			String uri = e.getKey().trim();
+			ProxyConfig proxy = e.getValue();
 
-	void boot();
+			applyProxyEntry(uri, proxy);
+		}
+	}
 
-	void cleanUp();
-
-	void beforeTest(Object test);
-
-	void initTest(Object test);
-
-	void afterTest(Object test);
+	private void applyProxyEntry(String uri, ProxyConfig proxy) {
+		Reverse.proxy().map(uri).to(proxy.upstream.split("\\s*\\,\\s*"));
+	}
 
 }

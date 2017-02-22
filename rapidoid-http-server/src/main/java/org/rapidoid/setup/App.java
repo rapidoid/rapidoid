@@ -20,6 +20,8 @@ package org.rapidoid.setup;
  * #L%
  */
 
+import org.rapidoid.RapidoidModule;
+import org.rapidoid.RapidoidModules;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
@@ -82,16 +84,13 @@ public class App extends RapidoidInitializer {
 	}
 
 	public static AppBootstrap boot() {
-		registerConfigListeners();
+		for (RapidoidModule module : RapidoidModules.getAll()) {
+			module.boot();
+		}
 
 		AppBootstrap bootstrap = new AppBootstrap();
 		bootstrap.services();
 		return bootstrap;
-	}
-
-	public static void registerConfigListeners() {
-		Conf.PROXY.addChangeListener(new ProxyConfigListener());
-		Conf.API.addChangeListener(new APIConfigListener());
 	}
 
 	public static void profiles(String... profiles) {

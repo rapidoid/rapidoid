@@ -1,8 +1,8 @@
-package org.rapidoid;
+package org.rapidoid.web;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-web
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -20,52 +20,33 @@ package org.rapidoid;
  * #L%
  */
 
+import org.rapidoid.AbstractRapidoidModule;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.RapidoidModuleDesc;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
+import org.rapidoid.config.Conf;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public abstract class AbstractRapidoidModule extends RapidoidThing implements RapidoidModule {
+@RapidoidModuleDesc(name = "Web", order = 10000)
+public class WebModule extends AbstractRapidoidModule {
 
-	@Override
-	public String name() {
-		return desc().name();
-	}
-
-	@Override
-	public int order() {
-		return desc().order();
-	}
+	private static final ProxyConfigListener PROXY_CONFIG_LISTENER = new ProxyConfigListener();
+	private static final APIConfigListener API_CONFIG_LISTENER = new APIConfigListener();
+	private static final PagesConfigListener PAGES_CONFIG_LISTENER = new PagesConfigListener();
 
 	@Override
 	public void boot() {
-		// do nothing
+		Conf.PROXY.addChangeListener(PROXY_CONFIG_LISTENER);
+		Conf.API.addChangeListener(API_CONFIG_LISTENER);
+		Conf.PAGES.addChangeListener(PAGES_CONFIG_LISTENER);
 	}
 
 	@Override
-	public abstract void cleanUp();
-
-	@Override
-	public void beforeTest(Object test) {
-		cleanUp();
-	}
-
-	@Override
-	public void initTest(Object test) {
-		// do nothing
-	}
-
-	@Override
-	public void afterTest(Object test) {
-		cleanUp();
-	}
-
-	protected RapidoidModuleDesc desc() {
-		RapidoidModuleDesc annotation = getClass().getAnnotation(RapidoidModuleDesc.class);
-		U.must(annotation != null, "The Rapidoid module must be annotated with: %s", RapidoidModuleDesc.class);
-		return annotation;
+	public void cleanUp() {
+		Conf.PROXY.removeChangeListener(PROXY_CONFIG_LISTENER);
+		Conf.PROXY.removeChangeListener(API_CONFIG_LISTENER);
+		Conf.PROXY.removeChangeListener(PAGES_CONFIG_LISTENER);
 	}
 
 }

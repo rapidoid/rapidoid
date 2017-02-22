@@ -1,4 +1,4 @@
-package org.rapidoid;
+package org.rapidoid.config.bean;
 
 /*
  * #%L
@@ -20,25 +20,31 @@ package org.rapidoid;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public interface RapidoidModule {
+public class PagesConfig extends RapidoidThing {
 
-	String name();
+	public volatile String sql;
 
-	int order();
+	public volatile String[] roles;
 
-	void boot();
+	public PagesConfig() {
+	}
 
-	void cleanUp();
+	public PagesConfig(String sql) {
+		this.sql = sql;
+	}
 
-	void beforeTest(Object test);
+	public String[] roles() {
+		return roles;
+	}
 
-	void initTest(Object test);
-
-	void afterTest(Object test);
-
+	public PagesConfig roles(String[] roles) {
+		this.roles = roles;
+		return this;
+	}
 }

@@ -1,8 +1,8 @@
-package org.rapidoid;
+package org.rapidoid.web;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-web
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -20,25 +20,35 @@ package org.rapidoid;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.ConfigChanges;
+import org.rapidoid.lambda.Operation;
+
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public interface RapidoidModule {
+public abstract class GenericConfigListener<T> extends RapidoidThing implements Operation<ConfigChanges> {
 
-	String name();
+	protected final Class<T> type;
 
-	int order();
+	public GenericConfigListener(Class<T> type) {
+		this.type = type;
+	}
 
-	void boot();
+	@Override
+	public void execute(ConfigChanges changes) throws Exception {
+		for (Map.Entry<String, T> e : changes.getAddedOrChangedAs(type).entrySet()) {
 
-	void cleanUp();
+			String key = e.getKey().trim();
+			T config = e.getValue();
 
-	void beforeTest(Object test);
+			applyEntry(key, config);
+		}
+	}
 
-	void initTest(Object test);
-
-	void afterTest(Object test);
+	protected abstract void applyEntry(String key, final T config);
 
 }
