@@ -82,7 +82,7 @@ public class ProcessHandle extends AbstractManageable {
 	}
 
 	private static void terminateProcesses() {
-		for (ProcessHandle proc : ALL) {
+		for (ProcessHandle proc : Coll.copyOf(ALL)) {
 			proc.terminate();
 		}
 	}

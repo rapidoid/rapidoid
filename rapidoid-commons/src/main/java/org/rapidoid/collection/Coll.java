@@ -415,4 +415,13 @@ public class Coll extends RapidoidThing {
 		return JSON.parseMap(JSON.stringify(map)); // FIXME proper implementation
 	}
 
+	public static <T> Set<T> copyOf(Set<T> src) {
+		Set<T> copy;
+
+		synchronized (src) {
+			copy = U.set(src);
+		}
+
+		return copy;
+	}
 }
