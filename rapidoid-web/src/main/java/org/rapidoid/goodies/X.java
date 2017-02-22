@@ -298,15 +298,15 @@ public class X extends RapidoidThing {
 		setup.get(baseUri).json(X.index(entityType));
 		setup.get(baseUri + "/{id}").json(X.read(entityType));
 
-		setup.post(baseUri).tx().json(X.insert(entityType));
-		setup.put(baseUri + "/{id}").tx().json(X.update(entityType));
-		setup.delete(baseUri + "/{id}").tx().json(X.delete(entityType));
+		setup.post(baseUri).transaction().json(X.insert(entityType));
+		setup.put(baseUri + "/{id}").transaction().json(X.update(entityType));
+		setup.delete(baseUri + "/{id}").transaction().json(X.delete(entityType));
 
 		// GUI
 		setup.page(baseUri + "/manage").mvc(X.manage(entityType, baseUri));
-		setup.page(baseUri + "/add").tx().mvc(X.add(entityType, baseUri));
-		setup.page(baseUri + "/{id}/view").tx().mvc(X.view(entityType, baseUri));
-		setup.page(baseUri + "/{id}/edit").tx().mvc(X.edit(entityType, baseUri));
+		setup.page(baseUri + "/add").transaction().mvc(X.add(entityType, baseUri));
+		setup.page(baseUri + "/{id}/view").transaction().mvc(X.view(entityType, baseUri));
+		setup.page(baseUri + "/{id}/edit").transaction().mvc(X.edit(entityType, baseUri));
 	}
 
 }

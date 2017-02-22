@@ -451,12 +451,12 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 		if (add) {
 			RouteOptions opts = handler.options();
 
-			TransactionMode txm = opts.transactionMode();
+			TransactionMode txm = opts.transaction();
 			String tx = txm != TransactionMode.NONE ? AnsiColor.bold(txm.name()) : txm.name();
 
 			int space = Math.max(30 - verbs.length() - path.length(), 1);
 			Log.info(httpVerbColor(verbs) + AnsiColor.bold(" " + path) + Str.mul(" ", space), "setup", this.customization.name(),
-				"!roles", opts.roles(), "tx", tx, "mvc", opts.mvc(), "cacheTTL", opts.cacheTTL());
+				"!roles", opts.roles(), "transaction", tx, "mvc", opts.mvc(), "cacheTTL", opts.cacheTTL());
 
 		} else {
 			Log.info("Deregistering handler", "setup", this.customization.name(), "!verbs", verbs, "!path", path);

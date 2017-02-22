@@ -22,38 +22,38 @@
 [PLATFORM] INFO | Static resources will be served from the following locations | setup = app | locations = [static, default/static]
 [PLATFORM] INFO | Registering generic handler | setup = app
 [PLATFORM] INFO | Reverse proxy mapping | uriPrefix = / | upstreams = [http://localhost:8080]
-[PLATFORM] INFO | GET /                           | setup = app | roles = [] | tx = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET /                           | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
 [PLATFORM] INFO | -------------------------
 [PLATFORM] INFO | Registering Admin Center:
 [PLATFORM] INFO | -------------------------
 [PLATFORM] INFO | Bootstraping metrics
-[PLATFORM] INFO | GET,POST /_                     | setup = admin | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_entities             | setup = admin | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_routes               | setup = admin | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_beans                | setup = admin | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_config               | setup = admin | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET /_classpath                 | setup = admin | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_terminate            | setup = admin | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_processes            | setup = admin | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_processes/{id}       | setup = admin | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_manageables          | setup = admin | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_manageables/{type}/{id}  | setup = admin | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_jmx/memory           | setup = admin | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_jmx/mempool          | setup = admin | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_jmx/classes          | setup = admin | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_jmx/os               | setup = admin | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_jmx/threads          | setup = admin | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_jmx/compilation      | setup = admin | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_jmx/runtime          | setup = admin | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_jmx/gc               | setup = admin | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_metrics              | setup = admin | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET /_graphs/{id:.*}            | setup = admin | roles = [administrator] | tx = NONE | mvc = false | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_deployment           | setup = admin | roles = [administrator] | tx = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | POST /_stage                    | setup = admin | roles = [administrator] | tx = NONE | mvc = false | cacheTTL = 0
-[PLATFORM] INFO | POST /_deploy                   | setup = admin | roles = [administrator] | tx = NONE | mvc = false | cacheTTL = 0
-[PLATFORM] INFO | POST /_login                    | setup = admin | roles = [] | tx = NONE | mvc = false | cacheTTL = 0
-[PLATFORM] INFO | GET /_logout                    | setup = admin | roles = [logged_in] | tx = NONE | mvc = false | cacheTTL = 0
-[PLATFORM] INFO | GET /_status                    | setup = admin | roles = [administrator] | tx = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /_                     | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /_entities             | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /_routes               | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /_beans                | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /_config               | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET /_classpath                 | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /_terminate            | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /_processes            | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /_processes/{id}       | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /_manageables          | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /_manageables/{type}/{id}  | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /_jmx/memory           | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /_jmx/mempool          | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /_jmx/classes          | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /_jmx/os               | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /_jmx/threads          | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /_jmx/compilation      | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /_jmx/runtime          | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /_jmx/gc               | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /_metrics              | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET /_graphs/{id:.*}            | setup = admin | roles = [administrator] | transaction = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /_deployment           | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | POST /_stage                    | setup = admin | roles = [administrator] | transaction = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | POST /_deploy                   | setup = admin | roles = [administrator] | transaction = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | POST /_login                    | setup = admin | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | GET /_logout                    | setup = admin | roles = [logged_in] | transaction = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | GET /_status                    | setup = admin | roles = [administrator] | transaction = NONE | mvc = false | cacheTTL = 0
 [PLATFORM] INFO | ---------------------------------------------------
 [PLATFORM] INFO | ADMIN CREDENTIALS: username = admin, password = <?>
 [PLATFORM] INFO | ---------------------------------------------------

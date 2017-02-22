@@ -66,7 +66,7 @@ public abstract class GenericRouteConfigListener<T extends AbstractRouteConfig> 
 		if (config.contentType != null) route.contentType(MediaType.of(config.contentType));
 		if (config.roles != null) route.roles(config.roles);
 		if (config.managed != null) route.managed(config.managed);
-		if (config.transaction != null) route.tx(config.transaction);
+		if (config.transaction != null) route.transaction(config.transaction);
 		if (config.cacheTTL != null) route.cacheTTL(config.cacheTTL);
 		if (config.cacheCapacity != null) route.cacheCapacity(config.cacheCapacity);
 

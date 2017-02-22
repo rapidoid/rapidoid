@@ -18,9 +18,9 @@
 [PLATFORM] INFO | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
 [PLATFORM] INFO | Server has started | setup = app | home = http://localhost:8888
 [PLATFORM] INFO | Static resources will be served from the following locations | setup = app | locations = [static, default/static]
-[PLATFORM] INFO | GET,POST /_deployment           | setup = app | roles = [] | tx = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | POST /_stage                    | setup = app | roles = [] | tx = NONE | mvc = false | cacheTTL = 0
-[PLATFORM] INFO | POST /_deploy                   | setup = app | roles = [] | tx = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /_deployment           | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | POST /_stage                    | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | POST /_deploy                   | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
 [PLATFORM] INFO | ---------------------------------------------------
 [PLATFORM] INFO | ADMIN CREDENTIALS: username = admin, password = <?>
 [PLATFORM] INFO | ---------------------------------------------------

@@ -42,7 +42,7 @@ public class JPATransactionRollbackTest extends IsolatedIntegrationTest {
 	public void testTxRollback() {
 		JPA.bootstrap(path());
 
-		On.post("/books").tx().json((@Valid Book b) -> {
+		On.post("/books").transaction().json((@Valid Book b) -> {
 			JPA.save(b);
 			throw U.rte("Intentional error!");
 		});

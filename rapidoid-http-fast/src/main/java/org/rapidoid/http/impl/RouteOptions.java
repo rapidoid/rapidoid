@@ -50,7 +50,7 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 
 	private volatile boolean managed = true;
 
-	private volatile TransactionMode transactionMode = TransactionMode.NONE;
+	private volatile TransactionMode transaction = TransactionMode.NONE;
 
 	private final Set<String> roles = Coll.synchronizedSet();
 
@@ -69,7 +69,7 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 			", mvc=" + mvc +
 			", zone='" + zone + '\'' +
 			", managed=" + managed +
-			", transactionMode=" + transactionMode +
+			", transaction=" + transaction +
 			", roles=" + roles +
 			", wrappers=" + Arrays.toString(wrappers) +
 			", cacheTTL=" + cacheTTL +
@@ -112,13 +112,13 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 	}
 
 	@Override
-	public TransactionMode transactionMode() {
-		return transactionMode;
+	public TransactionMode transaction() {
+		return transaction;
 	}
 
 	@Override
-	public RouteOptions transactionMode(TransactionMode transactionMode) {
-		this.transactionMode = transactionMode;
+	public RouteOptions transaction(TransactionMode transaction) {
+		this.transaction = transaction;
 		return this;
 	}
 
@@ -194,7 +194,7 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 		copy.contentType = this.contentType;
 		copy.view = this.view;
 		copy.mvc = this.mvc;
-		copy.transactionMode = this.transactionMode;
+		copy.transaction = this.transaction;
 		Coll.assign(copy.roles, this.roles);
 		copy.wrappers = U.array(this.wrappers);
 		copy.zone = this.zone;
@@ -223,7 +223,7 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 		if (contentType != null ? !contentType.equals(that.contentType) : that.contentType != null) return false;
 		if (view != null ? !view.equals(that.view) : that.view != null) return false;
 		if (zone != null ? !zone.equals(that.zone) : that.zone != null) return false;
-		if (transactionMode != that.transactionMode) return false;
+		if (transaction != that.transaction) return false;
 		if (roles != null ? !roles.equals(that.roles) : that.roles != null) return false;
 		return Arrays.equals(wrappers, that.wrappers);
 	}
@@ -235,7 +235,7 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 		result = 31 * result + (mvc ? 1 : 0);
 		result = 31 * result + (zone != null ? zone.hashCode() : 0);
 		result = 31 * result + (managed ? 1 : 0);
-		result = 31 * result + (transactionMode != null ? transactionMode.hashCode() : 0);
+		result = 31 * result + (transaction != null ? transaction.hashCode() : 0);
 		result = 31 * result + (roles != null ? roles.hashCode() : 0);
 		result = 31 * result + Arrays.hashCode(wrappers);
 		result = 31 * result + (int) (cacheTTL ^ (cacheTTL >>> 32));

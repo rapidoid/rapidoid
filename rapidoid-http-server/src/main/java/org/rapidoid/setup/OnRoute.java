@@ -388,13 +388,30 @@ public class OnRoute extends RapidoidThing {
 		return this;
 	}
 
+	/**
+	 * Use transaction(...) instead.
+	 */
+	@Deprecated
 	public OnRoute tx(TransactionMode txMode) {
-		options.transactionMode(txMode);
+		options.transaction(txMode);
 		return this;
 	}
 
+	/**
+	 * Use transaction() instead.
+	 */
+	@Deprecated
 	public OnRoute tx() {
-		return tx(TransactionMode.AUTO);
+		return transaction();
+	}
+
+	public OnRoute transaction(TransactionMode txMode) {
+		options.transaction(txMode);
+		return this;
+	}
+
+	public OnRoute transaction() {
+		return transaction(TransactionMode.AUTO);
 	}
 
 	public OnRoute zone(String zone) {

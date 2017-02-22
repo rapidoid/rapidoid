@@ -121,7 +121,7 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 
 		req.response().view(options.view()).contentType(options.contentType()).mvc(options.mvc());
 
-		TransactionMode txMode = U.or(options.transactionMode(), TransactionMode.NONE);
+		TransactionMode txMode = U.or(options.transaction(), TransactionMode.NONE);
 
 		if (txMode == TransactionMode.AUTO) {
 			txMode = HttpUtils.isGetReq(req) ? TransactionMode.READ_ONLY : TransactionMode.READ_WRITE;
