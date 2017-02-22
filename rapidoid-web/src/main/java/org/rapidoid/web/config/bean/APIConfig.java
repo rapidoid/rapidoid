@@ -1,8 +1,8 @@
-package org.rapidoid.config.bean;
+package org.rapidoid.web.config.bean;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-web
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -20,21 +20,19 @@ package org.rapidoid.config.bean;
  * #L%
  */
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class APIConfig extends RapidoidThing {
-
-	public volatile String sql;
+public class APIConfig extends AbstractRouteConfig {
 
 	public APIConfig() {
 	}
 
-	public APIConfig(String sql) {
-		this.sql = sql;
+	public APIConfig(String shortcut) {
+		this.sql = shortcut;
 	}
+
 
 }

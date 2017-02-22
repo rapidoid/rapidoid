@@ -1,8 +1,8 @@
-package org.rapidoid.config.bean;
+package org.rapidoid.web.config.listener;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-web
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -23,28 +23,32 @@ package org.rapidoid.config.bean;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.ConfigChanges;
+import org.rapidoid.lambda.Operation;
+
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class PagesConfig extends RapidoidThing {
+public abstract class GenericConfigListener<T> extends RapidoidThing implements Operation<ConfigChanges> {
 
-	public volatile String sql;
+	protected final Class<T> type;
 
-	public volatile String[] roles;
-
-	public PagesConfig() {
+	public GenericConfigListener(Class<T> type) {
+		this.type = type;
 	}
 
-	public PagesConfig(String sql) {
-		this.sql = sql;
+	@Override
+	public void execute(ConfigChanges changes) throws Exception {
+		for (Map.Entry<String, T> e : changes.getAddedOrChangedAs(type).entrySet()) {
+
+			String key = e.getKey().trim();
+			T config = e.getValue();
+
+			applyEntry(key, config);
+		}
 	}
 
-	public String[] roles() {
-		return roles;
-	}
+	protected abstract void applyEntry(String key, final T config);
 
-	public PagesConfig roles(String[] roles) {
-		this.roles = roles;
-		return this;
-	}
 }

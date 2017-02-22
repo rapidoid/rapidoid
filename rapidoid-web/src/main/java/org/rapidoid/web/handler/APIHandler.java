@@ -1,4 +1,4 @@
-package org.rapidoid.web;
+package org.rapidoid.web.handler;
 
 /*
  * #%L
@@ -20,36 +20,32 @@ package org.rapidoid.web;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.bean.APIConfig;
 import org.rapidoid.http.HttpVerb;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.Resp;
 import org.rapidoid.jdbc.JDBC;
-import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
+import org.rapidoid.web.config.bean.APIConfig;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class APIConfigListener extends GenericRouteConfigListener<APIConfig> {
+public class APIHandler extends RapidoidThing implements ReqRespHandler {
 
-	public APIConfigListener() {
-		super(APIConfig.class);
+	private final APIConfig api;
+
+	private final HttpVerb verb;
+
+	public APIHandler(APIConfig api, HttpVerb verb) {
+		this.api = api;
+		this.verb = verb;
 	}
 
 	@Override
-	protected void addHandler(final APIConfig api, final HttpVerb verb, String uri) {
-		On.route(verb.name(), uri).json(new ReqRespHandler() {
-			@Override
-			public Object execute(Req req, Resp resp) throws Exception {
-				return handle(verb, api);
-			}
-		});
-	}
-
-	public Object handle(HttpVerb verb, APIConfig api) {
+	public Object execute(Req req, Resp resp) {
 		if (verb == HttpVerb.GET) {
 			return JDBC.query(api.sql);
 		} else {
@@ -57,4 +53,5 @@ public class APIConfigListener extends GenericRouteConfigListener<APIConfig> {
 			return U.map("success", true, "changes", changes); // FIXME improve
 		}
 	}
+
 }

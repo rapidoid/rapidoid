@@ -25,6 +25,9 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.RapidoidModuleDesc;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
+import org.rapidoid.web.config.listener.APIConfigListener;
+import org.rapidoid.web.config.listener.PagesConfigListener;
+import org.rapidoid.web.config.listener.ProxyConfigListener;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")

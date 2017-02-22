@@ -1,8 +1,8 @@
-package org.rapidoid.config.bean;
+package org.rapidoid.web.config.listener;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-web
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -20,21 +20,25 @@ package org.rapidoid.config.bean;
  * #L%
  */
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.HttpVerb;
+import org.rapidoid.setup.On;
+import org.rapidoid.setup.OnRoute;
+import org.rapidoid.web.handler.APIHandler;
+import org.rapidoid.web.config.bean.APIConfig;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class ProxyConfig extends RapidoidThing {
+public class APIConfigListener extends GenericRouteConfigListener<APIConfig> {
 
-	public String upstream;
-
-	public ProxyConfig() {
+	public APIConfigListener() {
+		super(APIConfig.class);
 	}
 
-	public ProxyConfig(String upstream) {
-		this.upstream = upstream;
+	@Override
+	protected void addHandler(APIConfig api, HttpVerb verb, String uri, OnRoute route) {
+		On.route(verb.name(), uri).json(new APIHandler(api, verb));
 	}
 
 }

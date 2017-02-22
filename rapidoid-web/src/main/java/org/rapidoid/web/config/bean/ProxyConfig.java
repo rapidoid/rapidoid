@@ -1,4 +1,4 @@
-package org.rapidoid.web;
+package org.rapidoid.web.config.bean;
 
 /*
  * #%L
@@ -23,32 +23,18 @@ package org.rapidoid.web;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.ConfigChanges;
-import org.rapidoid.lambda.Operation;
-
-import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public abstract class GenericConfigListener<T> extends RapidoidThing implements Operation<ConfigChanges> {
+public class ProxyConfig extends RapidoidThing {
 
-	protected final Class<T> type;
+	public String upstream;
 
-	public GenericConfigListener(Class<T> type) {
-		this.type = type;
+	public ProxyConfig() {
 	}
 
-	@Override
-	public void execute(ConfigChanges changes) throws Exception {
-		for (Map.Entry<String, T> e : changes.getAddedOrChangedAs(type).entrySet()) {
-
-			String key = e.getKey().trim();
-			T config = e.getValue();
-
-			applyEntry(key, config);
-		}
+	public ProxyConfig(String shortcut) {
+		this.upstream = shortcut;
 	}
-
-	protected abstract void applyEntry(String key, final T config);
 
 }

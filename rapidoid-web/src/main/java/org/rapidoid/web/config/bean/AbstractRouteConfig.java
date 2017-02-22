@@ -1,4 +1,4 @@
-package org.rapidoid.web;
+package org.rapidoid.web.config.bean;
 
 /*
  * #%L
@@ -23,30 +23,24 @@ package org.rapidoid.web;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.ConfigChanges;
-import org.rapidoid.config.bean.ProxyConfig;
-import org.rapidoid.lambda.Operation;
-import org.rapidoid.reverseproxy.Reverse;
-
-import java.util.Map;
+import org.rapidoid.annotation.TransactionMode;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class ProxyConfigListener extends RapidoidThing implements Operation<ConfigChanges> {
+public abstract class AbstractRouteConfig extends RapidoidThing {
 
-	@Override
-	public void execute(ConfigChanges changes) throws Exception {
-		for (Map.Entry<String, ProxyConfig> e : changes.getAddedOrChangedAs(ProxyConfig.class).entrySet()) {
+	public volatile String contentType;
 
-			String uri = e.getKey().trim();
-			ProxyConfig proxy = e.getValue();
+	public volatile String sql;
 
-			applyProxyEntry(uri, proxy);
-		}
-	}
+	public volatile String[] roles;
 
-	private void applyProxyEntry(String uri, ProxyConfig proxy) {
-		Reverse.proxy().map(uri).to(proxy.upstream.split("\\s*\\,\\s*"));
-	}
+	public volatile Boolean managed;
+
+	public volatile TransactionMode transaction;
+
+	public volatile Long cacheTTL;
+
+	public volatile Integer cacheCapacity;
 
 }

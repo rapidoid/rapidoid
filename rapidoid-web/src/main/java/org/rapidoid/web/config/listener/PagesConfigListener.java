@@ -1,4 +1,4 @@
-package org.rapidoid.web;
+package org.rapidoid.web.config.listener;
 
 /*
  * #%L
@@ -23,38 +23,34 @@ package org.rapidoid.web;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HttpVerb;
+import org.rapidoid.setup.OnRoute;
 import org.rapidoid.u.U;
+import org.rapidoid.web.config.bean.PageConfig;
+import org.rapidoid.web.handler.PageHandler;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public abstract class GenericRouteConfigListener<T> extends GenericConfigListener<T> {
+public class PagesConfigListener extends GenericRouteConfigListener<PageConfig> {
 
-	public GenericRouteConfigListener(Class<T> type) {
-		super(type);
+	public PagesConfigListener() {
+		super(PageConfig.class);
 	}
 
 	@Override
-	protected void applyEntry(String key, T config) {
-		String[] verbUri = key.split("\\s+");
+	protected void addHandler(PageConfig page, HttpVerb verb, String uri, OnRoute route) {
 
-		final HttpVerb verb;
-		String uri;
+		U.must(verb == HttpVerb.GET || verb == HttpVerb.POST, "Only GET and POST verbs are supported for pages!");
 
-		if (verbUri.length == 1) {
-			verb = HttpVerb.GET;
-			uri = verbUri[0];
+		if (page.view != null) route.view(page.view);
+		if (page.zone != null) route.zone(page.zone);
 
-		} else if (verbUri.length == 2) {
-			verb = HttpVerb.from(verbUri[0]);
-			uri = verbUri[1];
+		PageHandler handler = new PageHandler(page);
 
+		if (U.bool(page.mvc)) {
+			route.mvc(handler);
 		} else {
-			throw U.rte("Invalid route!");
+			route.html(handler);
 		}
-
-		addHandler(config, verb, uri);
 	}
-
-	protected abstract void addHandler(final T config, final HttpVerb verb, final String uri);
 
 }
