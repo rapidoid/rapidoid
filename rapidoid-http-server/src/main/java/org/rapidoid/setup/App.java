@@ -229,9 +229,9 @@ public class App extends RapidoidInitializer {
 	}
 
 	static boolean restartIfDirty() {
-		if (dirty) {
+		if (dirty && mainClassName != null) {
 			synchronized (Setup.class) {
-				if (dirty) {
+				if (dirty && mainClassName != null) {
 					restartApp();
 					dirty = false;
 					return true;
