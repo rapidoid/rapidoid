@@ -44,9 +44,9 @@ public class APIHandler extends RapidoidThing implements ReqRespHandler {
 	@Override
 	public Object execute(Req req, Resp resp) {
 		if (HttpUtils.isGetReq(req)) {
-			return JDBC.query(api.sql);
+			return JDBC.query(api.sql, req.params());
 		} else {
-			int changes = JDBC.execute(api.sql);
+			int changes = JDBC.execute(api.sql, req.params());
 			return U.map("success", true, "changes", changes); // FIXME improve
 		}
 	}

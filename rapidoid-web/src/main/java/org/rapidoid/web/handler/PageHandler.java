@@ -30,6 +30,9 @@ import org.rapidoid.http.Resp;
 import org.rapidoid.jdbc.JDBC;
 import org.rapidoid.web.config.bean.PageConfig;
 
+import java.util.List;
+import java.util.Map;
+
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
 public class PageHandler extends RapidoidThing implements ReqRespHandler {
@@ -42,7 +45,8 @@ public class PageHandler extends RapidoidThing implements ReqRespHandler {
 
 	@Override
 	public Object execute(Req req, Resp resp) {
-		return GUI.grid(JDBC.query(page.sql));
+		List<Map<String, Object>> items = JDBC.query(page.sql, req.params());
+		return GUI.grid(items);
 	}
 
 }
