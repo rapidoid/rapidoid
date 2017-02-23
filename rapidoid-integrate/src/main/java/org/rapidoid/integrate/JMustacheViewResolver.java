@@ -7,6 +7,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.http.View;
 import org.rapidoid.http.customize.ResourceLoader;
 import org.rapidoid.http.impl.AbstractViewResolver;
+import org.rapidoid.u.U;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -47,13 +48,17 @@ import java.io.StringReader;
 public class JMustacheViewResolver extends AbstractViewResolver<Mustache.Compiler> {
 
 	@Override
-	public View getView(String viewName, final ResourceLoader templateLoader) throws Exception {
+	public View getView(String viewName, final ResourceLoader resourceLoader) throws Exception {
+		String filename = filename(viewName);
 
-		Mustache.TemplateLoader loader = loader(templateLoader);
+		byte[] bytes = resourceLoader.load(filename);
+		if (bytes == null) return null;
 
-		String template = new String(templateLoader.load(filename(viewName)));
+		Mustache.TemplateLoader loader = loader(resourceLoader);
 
-		Mustache.Compiler compiler = getViewFactory(templateLoader);
+		String template = new String(bytes);
+
+		Mustache.Compiler compiler = getViewFactory(resourceLoader);
 
 		Template mustache = compiler.withLoader(loader).compile(template);
 
@@ -69,7 +74,10 @@ public class JMustacheViewResolver extends AbstractViewResolver<Mustache.Compile
 		return new Mustache.TemplateLoader() {
 			@Override
 			public Reader getTemplate(String name) throws Exception {
-				return new StringReader(new String(templateLoader.load(filename(name))));
+				String filename = filename(name);
+				byte[] bytes = templateLoader.load(filename);
+				U.must(bytes != null, "The JMustache template '%s' doesn't exist!", filename);
+				return new StringReader(new String(bytes));
 			}
 		};
 	}

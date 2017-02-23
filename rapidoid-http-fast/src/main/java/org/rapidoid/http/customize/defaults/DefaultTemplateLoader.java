@@ -40,7 +40,7 @@ public class DefaultTemplateLoader extends RapidoidThing implements ResourceLoad
 	@Override
 	public byte[] load(String resourceName) throws Exception {
 		String[] path = Templates.withDefaultPath(templatesPath);
-		return Res.from(resourceName, path).mustExist().getBytes();
+		return Res.from(resourceName, path).getBytesOrNull();
 	}
 
 	public String[] templatesPath() {

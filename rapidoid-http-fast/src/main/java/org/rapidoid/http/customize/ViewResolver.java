@@ -28,6 +28,14 @@ import org.rapidoid.http.View;
 @Since("5.2.0")
 public interface ViewResolver {
 
-	View getView(String viewName, ResourceLoader templateLoader) throws Exception;
+	/**
+	 * Retrieves a view with the specified name, if such view exists.
+	 *
+	 * @param viewName       the view name e.g. "index" or "items"
+	 * @param resourceLoader the loader that should be used to load view-related resources (e.g. templates)
+	 * @return the view if found, <code>null</code> otherwise
+	 * @throws Exception unexpected exceptions could happen, so the caller is forced to handle them
+	 */
+	View getView(String viewName, ResourceLoader resourceLoader) throws Exception;
 
 }
