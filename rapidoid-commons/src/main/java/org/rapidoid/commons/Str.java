@@ -64,8 +64,9 @@ public class Str extends RapidoidThing {
 		return CAMEL_SPLITTER_PATTERN.split(s);
 	}
 
-	public static String camelPhrase(String s) {
-		return capitalized(U.join(" ", camelSplit(s)).toLowerCase());
+	public static String phrase(String s) {
+		String[] parts = s.contains("_") ? s.split("_") : camelSplit(s);
+		return capitalized(U.join(" ", parts).toLowerCase());
 	}
 
 	public static String replace(String s, String[][] repls) {
