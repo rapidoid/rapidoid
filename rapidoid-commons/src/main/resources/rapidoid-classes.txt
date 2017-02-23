@@ -166,11 +166,12 @@ org.rapidoid.data.BufRanges
 org.rapidoid.data.Data
 org.rapidoid.data.JSON
 org.rapidoid.data.KeyValueRanges
-org.rapidoid.datamodel.AbstractDataItems
-org.rapidoid.datamodel.DataItems
+org.rapidoid.datamodel.impl.PagingIterator
+org.rapidoid.datamodel.impl.ResultsImpl
 org.rapidoid.datamodel.IRange
-org.rapidoid.datamodel.PagingIterator
+org.rapidoid.datamodel.PageableData
 org.rapidoid.datamodel.Range
+org.rapidoid.datamodel.Results
 org.rapidoid.data.MultiData
 org.rapidoid.data.Parse
 org.rapidoid.data.TUUIDDeserializer
@@ -521,6 +522,7 @@ org.rapidoid.jdbc.C3P0ConnectionPool
 org.rapidoid.jdbc.ConnectionPool
 org.rapidoid.jdbc.JDBC
 org.rapidoid.jdbc.JdbcClient
+org.rapidoid.jdbc.JdbcData
 org.rapidoid.jdbc.JdbcUtil
 org.rapidoid.jdbc.NoConnectionPool
 org.rapidoid.jdbc.ReadWriteMode
@@ -535,7 +537,6 @@ org.rapidoid.job.PredefinedContextJobWrapper
 org.rapidoid.jpa.AbstractEntity
 org.rapidoid.jpa.DAO
 org.rapidoid.jpa.EMFUtil
-org.rapidoid.jpa.Entities
 org.rapidoid.jpa.impl.CustomDescriptor
 org.rapidoid.jpa.impl.CustomHibernatePersistenceProvider
 org.rapidoid.jpa.impl.EntityManagerWrapper
@@ -549,7 +550,6 @@ org.rapidoid.jpa.JPA
 org.rapidoid.jpa.JPATool
 org.rapidoid.jpa.JPAUtil
 org.rapidoid.jpa.JPQL
-org.rapidoid.jpa.Results
 org.rapidoid.lambda.Calc
 org.rapidoid.lambda.Customizer
 org.rapidoid.lambda.Dynamic

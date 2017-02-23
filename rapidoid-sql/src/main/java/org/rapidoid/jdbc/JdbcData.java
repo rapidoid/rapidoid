@@ -1,8 +1,8 @@
-package org.rapidoid.jpa.impl;
+package org.rapidoid.jdbc;
 
 /*
  * #%L
- * rapidoid-jpa
+ * rapidoid-sql
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -24,32 +24,35 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.datamodel.PageableData;
-import org.rapidoid.jpa.JPA;
-import org.rapidoid.jpa.JPAUtil;
 
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class JPACriteriaQueryEntities<T> extends RapidoidThing implements PageableData<T> {
+@Since("5.3.0")
+public class JdbcData<T> extends RapidoidThing implements PageableData<T> {
 
-	private final CriteriaQuery<T> criteria;
+	private final JdbcClient jdbc;
+	private final Class<T> resultType;
+	private final String sql;
+	private final Map<String, ?> namedArgs;
+	private final Object[] args;
 
-	public JPACriteriaQueryEntities(CriteriaQuery<T> criteria) {
-		this.criteria = criteria;
+	public JdbcData(JdbcClient jdbc, Class<T> resultType, String sql, Map<String, ?> namedArgs, Object[] args) {
+		this.jdbc = jdbc;
+		this.resultType = resultType;
+		this.sql = sql;
+		this.namedArgs = namedArgs;
+		this.args = args;
 	}
 
 	@Override
 	public List<T> getPage(long start, long length) {
-		TypedQuery<T> query = JPA.em().createQuery(this.criteria);
-		return JPAUtil.getPage(query, (int) start, (int) length);
+		return jdbc.runQuery(resultType, sql, namedArgs, args, start, length);
 	}
 
 	@Override
 	public long getCount() {
-		// TODO find a better way
-		return -1; // unknown
+		return jdbc.getQueryCount(sql, namedArgs, args);
 	}
 }

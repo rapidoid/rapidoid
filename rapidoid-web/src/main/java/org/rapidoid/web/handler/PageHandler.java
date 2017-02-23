@@ -24,6 +24,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Err;
+import org.rapidoid.datamodel.Results;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.gui.Grid;
 import org.rapidoid.http.Current;
@@ -31,6 +32,7 @@ import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.Resp;
 import org.rapidoid.jdbc.JDBC;
+import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
 import org.rapidoid.web.config.bean.PageConfig;
 import org.rapidoid.web.config.bean.PageGuiConfig;
@@ -52,7 +54,7 @@ public class PageHandler extends RapidoidThing implements ReqRespHandler {
 	public Object execute(Req req, Resp resp) {
 
 		if (page.sql != null) {
-			return sqlGrid(page.sql);
+			return grid(sqlItems(page.sql));
 		}
 
 		if (U.notEmpty(page.gui)) {
@@ -77,7 +79,7 @@ public class PageHandler extends RapidoidThing implements ReqRespHandler {
 
 		switch (gui.type) {
 			case grid:
-				item = sqlGrid(gui.sql);
+				item = grid(sqlItems(gui.sql));
 				break;
 
 			default:
@@ -96,10 +98,14 @@ public class PageHandler extends RapidoidThing implements ReqRespHandler {
 		return item;
 	}
 
-	public Grid sqlGrid(String sql) {
+	private Results sqlItems(String sql) {
+		return JDBC.query(sql, req().params());
+	}
+
+	public Grid grid(Results items) {
 		Req req = req();
 
-		Grid grid = GUI.grid(JDBC.query(sql, req.params()));
+		Grid grid = GUI.grid(items);
 
 		String q = req.param("find", null);
 		if (q != null) grid.highlightRegex(Pattern.quote(q));

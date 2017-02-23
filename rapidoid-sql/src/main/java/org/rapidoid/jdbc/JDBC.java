@@ -3,9 +3,9 @@ package org.rapidoid.jdbc;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
+import org.rapidoid.datamodel.Results;
 
 import java.sql.Connection;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -107,19 +107,19 @@ public class JDBC extends JdbcUtil {
 		return api().tryToExecute(sql, namedArgs);
 	}
 
-	public static <T> List<T> query(Class<T> resultType, String sql, Object... args) {
+	public static <T> Results<T> query(Class<T> resultType, String sql, Object... args) {
 		return api().query(resultType, sql, args);
 	}
 
-	public static <T> List<T> query(Class<T> resultType, String sql, Map<String, ?> namedArgs) {
+	public static <T> Results<T> query(Class<T> resultType, String sql, Map<String, ?> namedArgs) {
 		return api().query(resultType, sql, namedArgs);
 	}
 
-	public static List<Map<String, Object>> query(String sql, Object... args) {
+	public static Results<Map<String, Object>> query(String sql, Object... args) {
 		return api().query(sql, args);
 	}
 
-	public static List<Map<String, Object>> query(String sql, Map<String, ?> namedArgs) {
+	public static Results<Map<String, Object>> query(String sql, Map<String, ?> namedArgs) {
 		return api().query(sql, namedArgs);
 	}
 

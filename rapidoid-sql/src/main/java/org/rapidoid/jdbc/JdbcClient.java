@@ -4,6 +4,8 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
+import org.rapidoid.datamodel.Results;
+import org.rapidoid.datamodel.impl.ResultsImpl;
 import org.rapidoid.group.AutoManageable;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
@@ -296,15 +298,20 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 		return 0;
 	}
 
-	public <T> List<T> query(Class<T> resultType, String sql, Map<String, ?> namedArgs) {
+	public <T> Results<T> query(Class<T> resultType, String sql, Map<String, ?> namedArgs) {
 		return doQuery(resultType, sql, namedArgs, null);
 	}
 
-	public <T> List<T> query(Class<T> resultType, String sql, Object... args) {
+	public <T> Results<T> query(Class<T> resultType, String sql, Object... args) {
 		return doQuery(resultType, sql, null, args);
 	}
 
-	private <T> List<T> doQuery(Class<T> resultType, String sql, Map<String, ?> namedArgs, Object[] args) {
+	private <T> Results<T> doQuery(Class<T> resultType, String sql, Map<String, ?> namedArgs, Object[] args) {
+		JdbcData<T> data = new JdbcData<>(this, resultType, sql, namedArgs, args);
+		return new ResultsImpl<>(data);
+	}
+
+	<T> List<T> runQuery(Class<T> resultType, String sql, Map<String, ?> namedArgs, Object[] args, long start, long length) {
 		ensureIsInitialized();
 
 		Connection conn = provideConnection();
@@ -331,11 +338,16 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 		}
 	}
 
-	public List<Map<String, Object>> query(String sql, Object... args) {
+	long getQueryCount(String sql, Map<String, ?> namedArgs, Object[] args) {
+		// FIXME find a better way
+		return -1; // unknown
+	}
+
+	public Results<Map<String, Object>> query(String sql, Object... args) {
 		return U.cast(query(Map.class, sql, args));
 	}
 
-	public List<Map<String, Object>> query(String sql, Map<String, ?> namedArgs) {
+	public Results<Map<String, Object>> query(String sql, Map<String, ?> namedArgs) {
 		return U.cast(query(Map.class, sql, namedArgs));
 	}
 

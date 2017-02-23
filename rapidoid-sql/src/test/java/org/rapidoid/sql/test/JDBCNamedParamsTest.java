@@ -26,6 +26,9 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.jdbc.JDBC;
 import org.rapidoid.u.U;
 
+import java.util.List;
+import java.util.Map;
+
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
 public class JDBCNamedParamsTest extends SQLTestCommons {
@@ -38,8 +41,12 @@ public class JDBCNamedParamsTest extends SQLTestCommons {
 		eq(JDBC.tryToExecute("INSERT INTO movie VALUES ($id, $name)", U.map("id", 20, "name", "Hackers")), 1);
 		eq(JDBC.execute("INSERT INTO movie VALUES ($id, '$abc')", U.map("id", 30, "xx", "yy")), 1);
 
-		eq(JDBC.query("SELECT title as T FROM movie WHERE id = $id", U.map("id", 20)), U.list(U.map("T", "Hackers")));
-		eq(JDBC.query("SELECT count(*) as N FROM movie WHERE id = $ID AND title = '$abc'", U.map("ID", 30)), U.list(U.map("N", 1L)));
+		List<Map<String, Object>> movies1 = JDBC.query("SELECT title as T FROM movie WHERE id = $id", U.map("id", 20)).all();
+		eq(movies1, U.list(U.map("T", "Hackers")));
+
+
+		List<Map<String, Object>> movies2 = JDBC.query("SELECT count(*) as N FROM movie WHERE id = $ID AND title = '$abc'", U.map("ID", 30)).all();
+		eq(movies2, U.list(U.map("N", 1L)));
 	}
 
 }

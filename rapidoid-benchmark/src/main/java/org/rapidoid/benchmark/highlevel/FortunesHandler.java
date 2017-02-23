@@ -44,7 +44,7 @@ public class FortunesHandler implements ReqRespHandler {
 	@Override
 	public Object execute(Req req, Resp resp) throws Exception {
 
-		List<Fortune> fortunes = jdbc.query(Fortune.class, "SELECT * FROM fortune");
+		List<Fortune> fortunes = jdbc.query(Fortune.class, "SELECT * FROM fortune").all();
 
 		fortunes.add(new Fortune(0, "Additional fortune added at request time."));
 

@@ -6,6 +6,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.datamodel.Results;
 import org.rapidoid.u.U;
 
 import javax.persistence.EntityManager;
@@ -282,7 +283,7 @@ public class JPA extends RapidoidThing {
 		return JPAUtil.emf() != null;
 	}
 
-	public static <T> Entities<T> of(Class<T> clazz) {
+	public static <T> Results<T> of(Class<T> clazz) {
 		JPATool jpa = tool();
 		try {
 			return jpa.of(clazz);
@@ -300,7 +301,7 @@ public class JPA extends RapidoidThing {
 		}
 	}
 
-	public static <T> Entities<T> find(CriteriaQuery<T> criteria) {
+	public static <T> Results<T> find(CriteriaQuery<T> criteria) {
 		JPATool jpa = tool();
 		try {
 			return jpa.find(criteria);
