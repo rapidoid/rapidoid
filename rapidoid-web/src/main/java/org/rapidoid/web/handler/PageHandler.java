@@ -24,14 +24,17 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.GUI;
+import org.rapidoid.gui.Grid;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.Resp;
 import org.rapidoid.jdbc.JDBC;
+import org.rapidoid.u.U;
 import org.rapidoid.web.config.bean.PageConfig;
 
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -46,7 +49,19 @@ public class PageHandler extends RapidoidThing implements ReqRespHandler {
 	@Override
 	public Object execute(Req req, Resp resp) {
 		List<Map<String, Object>> items = JDBC.query(page.sql, req.params());
-		return GUI.grid(items);
+
+		Grid grid = GUI.grid(items);
+
+		String q = req.param("find", null);
+		if (q != null) grid.highlightRegex(Pattern.quote(q));
+
+		String highlight = req.param("$highlight", null);
+		if (highlight != null) grid.highlightRegex(Pattern.quote(highlight));
+
+		String pageSize = req.param("$pageSize", null);
+		if (pageSize != null) grid.pageSize(U.num(pageSize));
+
+		return grid;
 	}
 
 }
