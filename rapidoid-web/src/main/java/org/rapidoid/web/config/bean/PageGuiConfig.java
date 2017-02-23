@@ -20,27 +20,28 @@ package org.rapidoid.web.config.bean;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
-import java.util.Map;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class PageConfig extends AbstractRouteConfig {
+public class PageGuiConfig extends RapidoidThing {
 
-	public volatile Boolean mvc;
+	public volatile PageGuiType type = PageGuiType.grid;
 
-	public volatile String view;
+	public volatile String caption;
 
-	public volatile String zone;
+	public volatile String header;
 
-	public volatile Map<String, PageGuiConfig> gui;
+	public volatile String footer;
 
-	public PageConfig() {
+	public volatile String sql;
+
+	public PageGuiConfig() {
 	}
 
-	public PageConfig(String shortcut) {
+	public PageGuiConfig(String shortcut) {
 		this.sql = shortcut;
 	}
 

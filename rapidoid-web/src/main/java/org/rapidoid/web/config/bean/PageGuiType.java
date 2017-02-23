@@ -23,25 +23,10 @@ package org.rapidoid.web.config.bean;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
-import java.util.Map;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class PageConfig extends AbstractRouteConfig {
+public enum PageGuiType {
 
-	public volatile Boolean mvc;
-
-	public volatile String view;
-
-	public volatile String zone;
-
-	public volatile Map<String, PageGuiConfig> gui;
-
-	public PageConfig() {
-	}
-
-	public PageConfig(String shortcut) {
-		this.sql = shortcut;
-	}
+	grid, form;
 
 }

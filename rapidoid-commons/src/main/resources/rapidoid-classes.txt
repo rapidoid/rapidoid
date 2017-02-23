@@ -800,6 +800,8 @@ org.rapidoid.var.Vars
 org.rapidoid.web.config.bean.AbstractRouteConfig
 org.rapidoid.web.config.bean.APIConfig
 org.rapidoid.web.config.bean.PageConfig
+org.rapidoid.web.config.bean.PageGuiConfig
+org.rapidoid.web.config.bean.PageGuiType
 org.rapidoid.web.config.bean.ProxyConfig
 org.rapidoid.web.config.listener.APIConfigListener
 org.rapidoid.web.config.listener.GenericConfigListener

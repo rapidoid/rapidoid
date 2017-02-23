@@ -23,16 +23,18 @@ package org.rapidoid.web.handler;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Err;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.gui.Grid;
+import org.rapidoid.http.Current;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.Resp;
 import org.rapidoid.jdbc.JDBC;
 import org.rapidoid.u.U;
 import org.rapidoid.web.config.bean.PageConfig;
+import org.rapidoid.web.config.bean.PageGuiConfig;
 
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -48,9 +50,56 @@ public class PageHandler extends RapidoidThing implements ReqRespHandler {
 
 	@Override
 	public Object execute(Req req, Resp resp) {
-		List<Map<String, Object>> items = JDBC.query(page.sql, req.params());
 
-		Grid grid = GUI.grid(items);
+		if (page.sql != null) {
+			return sqlGrid(page.sql);
+		}
+
+		if (U.notEmpty(page.gui)) {
+			return guiModel(page.gui);
+		}
+
+		return GUI.N_A;
+	}
+
+	private Object guiModel(Map<String, PageGuiConfig> gui) {
+		Map<Object, Object> model = U.map();
+
+		for (Map.Entry<String, PageGuiConfig> e : gui.entrySet()) {
+			model.put(e.getKey(), gui(e.getValue()));
+		}
+
+		return model;
+	}
+
+	private Object gui(PageGuiConfig gui) {
+		Object item;
+
+		switch (gui.type) {
+			case grid:
+				item = sqlGrid(gui.sql);
+				break;
+
+			default:
+				throw Err.notReady();
+		}
+
+
+		if (U.notEmpty(gui.caption)) {
+			item = GUI.multi(GUI.titleBox(gui.caption), item);
+		}
+
+		if (U.notEmpty(gui.header) || U.notEmpty(gui.footer)) {
+			item = GUI.panel(item).header(gui.header).footer(gui.footer);
+		}
+
+		return item;
+	}
+
+	public Grid sqlGrid(String sql) {
+		Req req = req();
+
+		Grid grid = GUI.grid(JDBC.query(sql, req.params()));
 
 		String q = req.param("find", null);
 		if (q != null) grid.highlightRegex(Pattern.quote(q));
@@ -59,9 +108,14 @@ public class PageHandler extends RapidoidThing implements ReqRespHandler {
 		if (highlight != null) grid.highlightRegex(Pattern.quote(highlight));
 
 		String pageSize = req.param("$pageSize", null);
+
 		if (pageSize != null) grid.pageSize(U.num(pageSize));
 
 		return grid;
+	}
+
+	private Req req() {
+		return Current.request();
 	}
 
 }
