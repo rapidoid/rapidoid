@@ -270,7 +270,6 @@ org.rapidoid.gui.GUI
 org.rapidoid.gui.GUIActions
 org.rapidoid.gui.GuiJpaUtil
 org.rapidoid.gui.Highlight
-org.rapidoid.gui.HighlightGrid
 org.rapidoid.gui.HtmlPage
 org.rapidoid.gui.HtmlPageUtils
 org.rapidoid.gui.I18N
