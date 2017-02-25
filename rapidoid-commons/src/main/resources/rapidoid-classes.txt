@@ -124,6 +124,7 @@ org.rapidoid.commons.RapidoidInfo
 org.rapidoid.commons.Rnd
 org.rapidoid.commons.Stats
 org.rapidoid.commons.Str
+org.rapidoid.commons.StringRewriter
 org.rapidoid.concurrent.Callback
 org.rapidoid.concurrent.Callbacks
 org.rapidoid.concurrent.Future

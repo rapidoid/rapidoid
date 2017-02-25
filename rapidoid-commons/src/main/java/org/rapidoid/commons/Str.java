@@ -3,6 +3,7 @@ package org.rapidoid.commons;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
 
@@ -57,6 +58,13 @@ public class Str extends RapidoidThing {
 		{"\"", "\\\\\""},
 	};
 
+	private static final Mapper<String[], String> MASK_REPLACER = new Mapper<String[], String>() {
+		@Override
+		public String map(String[] src) throws Exception {
+			return Str.mul("\u0000", src[0].length());
+		}
+	};
+
 	private Str() {
 	}
 
@@ -78,33 +86,44 @@ public class Str extends RapidoidThing {
 		return s;
 	}
 
-	public static String replace(String s, String regex, Mapper<String[], String> replacer) {
-		return replace(s, Pattern.compile(regex), replacer);
+	public static String mask(String target, Pattern regex) {
+		return Str.replace(target, regex, MASK_REPLACER);
 	}
 
-	public static String replace(String s, Pattern regex, Mapper<String[], String> replacer) {
-		StringBuffer output = new StringBuffer();
-		Matcher matcher = regex.matcher(s);
+	public static String replace(String target, String regex, Mapper<String[], String> replacer) {
+		return replace(target, Pattern.compile(regex), replacer);
+	}
 
-		while (matcher.find()) {
-			int len = matcher.groupCount() + 1;
+	public static String replace(String target, Pattern regex, Mapper<String[], String> replacer) {
+		return replace(target, target, regex, replacer);
+	}
+
+	public static String replace(String target, String mask, Pattern regex, Mapper<String[], String> replacer) {
+		U.must(target.length() == mask.length());
+
+		StringBuffer output = new StringBuffer();
+		Matcher m = regex.matcher(mask);
+		int pos = 0;
+
+		while (m.find()) {
+
+			int len = m.groupCount() + 1;
 			String[] groups = new String[len];
 
 			for (int i = 0; i < groups.length; i++) {
-				groups[i] = matcher.group(i);
+				groups[i] = m.group(i);
 			}
 
-			Object value;
-			try {
-				value = replacer.map(groups);
-			} catch (Exception e) {
-				throw U.rte(e);
-			}
+			String replacement = Lmbd.eval(replacer, groups);
 
-			matcher.appendReplacement(output, U.str(value).replace("$", "\\$"));
+			output.append(target.substring(pos, m.start()));
+			output.append(replacement);
+
+			pos = m.end();
 		}
 
-		matcher.appendTail(output);
+		output.append(target.substring(pos));
+
 		return output.toString();
 	}
 

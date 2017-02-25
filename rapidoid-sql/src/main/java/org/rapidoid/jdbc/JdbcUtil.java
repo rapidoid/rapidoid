@@ -6,7 +6,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.commons.Str;
+import org.rapidoid.commons.StringRewriter;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -16,7 +16,6 @@ import java.sql.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 /*
  * #%L
@@ -42,7 +41,7 @@ import java.util.regex.Pattern;
 @Since("5.3.0")
 public class JdbcUtil extends RapidoidThing {
 
-	private static final Pattern NAMED_PARAM = Pattern.compile("\\$(\\w+)\\b");
+	private static final StringRewriter NAMED_PARAMS_REWRITER = new StringRewriter(StringRewriter.ALL_QUOTES, "\\$(\\w+)\\b");
 
 	public static PreparedStatement prepare(Connection conn, String sql, final Map<String, ?> namedArgs, Object[] args) {
 		try {
@@ -66,7 +65,7 @@ public class JdbcUtil extends RapidoidThing {
 	}
 
 	private static String substituteNamedParams(String sql, final Map<String, ?> namedArgs, final List<Object> arguments) {
-		return Str.replace(sql, NAMED_PARAM, new Mapper<String[], String>() {
+		return NAMED_PARAMS_REWRITER.rewrite(sql, new Mapper<String[], String>() {
 			@Override
 			public String map(String[] groups) throws Exception {
 				String name = groups[1];
