@@ -388,4 +388,8 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 		return DEFAULT_CONTENT_TYPE;
 	}
 
+	public static void validateViewName(String view) {
+		U.must(!view.startsWith("/"), "Invalid view name: '%s'", view);
+	}
+
 }

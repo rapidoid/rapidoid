@@ -96,6 +96,7 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 
 	@Override
 	public RouteOptions view(String view) {
+		HttpUtils.validateViewName(view);
 		this.view = view;
 		return this;
 	}

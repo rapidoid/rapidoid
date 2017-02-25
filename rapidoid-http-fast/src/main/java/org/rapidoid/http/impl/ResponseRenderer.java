@@ -78,6 +78,8 @@ public class ResponseRenderer extends RapidoidThing {
 	public static boolean renderView(ReqImpl req, Resp resp, Object result, boolean mandatory, ByteArrayOutputStream out) {
 
 		String viewName = resp.view();
+		HttpUtils.validateViewName(viewName);
+
 		Customization custom = Customization.of(req);
 
 		ViewResolver viewResolver = custom.viewResolver();
