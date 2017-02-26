@@ -36,9 +36,9 @@ public class StringRewriter extends RapidoidThing {
 
 	public static final String MASK_DOUBLE_QUOTES = "\"[^\"]*\"";
 
-	public static final String MASK_X_QUOTES = "`[^`]*`";
+	public static final String MASK_BACKTICKS = "`[^`]*`";
 
-	public static final String[] ALL_QUOTES = {MASK_QUOTES, MASK_DOUBLE_QUOTES, MASK_X_QUOTES};
+	public static final String[] ALL_QUOTES = {MASK_QUOTES, MASK_DOUBLE_QUOTES, MASK_BACKTICKS};
 
 	private final Pattern escape;
 

@@ -42,7 +42,7 @@ public class Tokens extends RapidoidThing {
 	public static final String _SCOPE = "_scope";
 	public static final String _EXPIRES = "_expires";
 
-	public static String serialize(Map<String, Serializable> token) {
+	public static String serialize(Map<String, ? extends Serializable> token) {
 		if (U.notEmpty(token)) {
 			byte[] tokenBytes = serializeToken(token);
 			byte[] tokenEncrypted = Crypto.encrypt(tokenBytes);
@@ -53,7 +53,7 @@ public class Tokens extends RapidoidThing {
 		}
 	}
 
-	private static byte[] serializeToken(Map<String, Serializable> token) {
+	private static byte[] serializeToken(Map<String, ? extends Serializable> token) {
 		byte[] dest = new byte[2500];
 
 		try {
@@ -78,7 +78,7 @@ public class Tokens extends RapidoidThing {
 		}
 	}
 
-	public static TokenAuthData getAuth(Map<String, Serializable> token) {
+	public static TokenAuthData getAuth(Map<String, ? extends Serializable> token) {
 		TokenAuthData data = new TokenAuthData();
 
 		data.user = (String) token.get(_USER);

@@ -57,7 +57,7 @@ public class DeploymentHandler extends GUI implements ReqHandler {
 
 		if (ClasspathUtil.hasAppJar()) {
 
-			Map<String, Serializable> tokenData = U.<String, Serializable>map(Tokens._USER, Current.username(), Tokens._SCOPE, SCOPES);
+			Map<String, String> tokenData = U.map(Tokens._USER, Current.username(), Tokens._SCOPE, SCOPES);
 			String token = Tokens.serialize(tokenData);
 
 			String appJar = ClasspathUtil.appJar();
