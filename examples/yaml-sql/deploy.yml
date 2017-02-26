@@ -1,0 +1,6 @@
+# list of servers to deploy the application to
+servers:
+ - localhost:8888
+
+# the token for the deployment API (replace this when you configure a secret in Rapidoid)
+token: 'h9rEDvGTJiDKsJ$g4NYtmxPpsAQsn$cdVeRKqq7$8db1p5lwf6MlskRgILQOjSMrYj_xRm$AZseMXtjboZEITxKKtBQq5icORjjysf94ss8OevZHhgYl0ZS0NfgojS72$2caUOEwf6ldHZ0RPYrzyNLhBOGNlM6RYMV_I0l3LYNTc5pHI4afi2_T6n2HmQ8nniJ9fQ=='
