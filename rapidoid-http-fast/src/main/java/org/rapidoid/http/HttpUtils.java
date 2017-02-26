@@ -257,7 +257,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 	}
 
 	public static BasicConfig zone(Customization custom, String zone) {
-		Config appConfig = custom.config().sub("app");
+		Config appConfig = custom.config().sub("gui");
 
 		if (zone != null) {
 			String zoneKey = zone + "-zone";

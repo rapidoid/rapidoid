@@ -136,7 +136,7 @@ public class HtmlPage extends ScreenBean {
 		model.put("fluid", fluid());
 		model.put("cdn", cdn());
 
-		List<String> assets = (List<String>) Conf.APP.entry("assets").getOrNull();
+		List<String> assets = (List<String>) Conf.GUI.entry("assets").getOrNull();
 
 		if (U.notEmpty(assets)) {
 			for (String asset : assets) {

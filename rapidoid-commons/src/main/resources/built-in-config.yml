@@ -7,12 +7,14 @@ admin:
   address: 0.0.0.0
 
 app:
+  contextPath: ''
+  home: /
+
+gui:
   search: false
   navbar: true
   fluid: false
   cdn: auto
-  contextPath: ''
-  home: /
   menu: {}
 
 main-zone: {}

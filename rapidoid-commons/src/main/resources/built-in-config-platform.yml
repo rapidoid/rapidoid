@@ -6,6 +6,8 @@ admin:
 
 app:
   jar: /app/app.jar
+
+gui:
   cdn: false
 
 platform-zone:
