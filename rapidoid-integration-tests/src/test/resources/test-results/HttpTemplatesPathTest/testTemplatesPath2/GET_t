@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 2031
+Content-Length: 2075
 
 <!DOCTYPE html>
 <html lang="en">
@@ -34,6 +34,7 @@ Content-Length: 2031
     window.Rapidoid.loginUri = '/_login';
     window.Rapidoid.logoutUri = '/_logout';
     window.Rapidoid.profileUri = '/_profile';
+    window.Rapidoid.graphsUri = '/_graphs';
 </script>
 </head>
 
