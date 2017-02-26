@@ -35,4 +35,6 @@ public interface BasicConfig extends ToMap<String, Object> {
 
 	BasicConfig sub(String... keys);
 
+	BasicConfig or(BasicConfig alternative);
+
 }
