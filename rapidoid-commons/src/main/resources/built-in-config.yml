@@ -19,7 +19,7 @@ main-zone: {}
 
 admin-zone:
   home: /_
-  brand: '<i class="fa fa-shield"></i> Rapidoid'
+  brand: '<i class="fa fa-dashboard"></i> Admin Center'
   search: false
   fluid: true
   menu:
@@ -33,31 +33,6 @@ admin-zone:
     Application:
       Beans: /_beans
       Entities: /_entities
-    System:
-      Terminate / Restart: /_terminate
-      Classpath: /_classpath
-      Memory pool: /_jmx/mempool
-      JVM Threads: /_jmx/threads
-      Operating system: /_jmx/os
-      Garbage collection: /_jmx/gc
-      Memory: /_jmx/memory
-      Runtime: /_jmx/runtime
-      Classes: /_jmx/classes
-      Compilation: /_jmx/compilation
-
-platform-zone:
-  home: /_
-  brand: '<i class="fa fa-shield"></i> Rapidoid'
-  search: false
-  fluid: true
-  menu:
-    Overview: /_
-    Routes: /_routes
-    Configuration: /_config
-    Deployment: /_deployment
-    Processes: /_processes
-    Metrics: /_metrics
-    Manageables: /_manageables
     System:
       Terminate / Restart: /_terminate
       Classpath: /_classpath

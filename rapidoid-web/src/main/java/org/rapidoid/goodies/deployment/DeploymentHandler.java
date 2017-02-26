@@ -15,10 +15,10 @@ import org.rapidoid.io.IO;
 import org.rapidoid.process.ProcessHandle;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 import org.rapidoid.util.Tokens;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +47,7 @@ import java.util.Map;
 @Since("5.1.0")
 public class DeploymentHandler extends GUI implements ReqHandler {
 
-	public static final String SCOPES = "POST:/_stage, POST:/_deploy, GET:POST:/_deployment";
+	public static final String SCOPES = "POST:/rapidoid/stage, POST:/rapidoid/deploy, GET:POST:/rapidoid/deployment";
 
 	private static final String DEPLOYMENT_HELP = "Application deployment works by uploading a JAR and executing it in a child Java process.";
 
@@ -141,7 +141,7 @@ public class DeploymentHandler extends GUI implements ReqHandler {
 			if (U.notEmpty(processes)) {
 
 				String procHandleId = processes.get(0).id();
-				String processUrl = U.frmt("%s/_processes/%s", req.contextPath(), procHandleId);
+				String processUrl = Msc.specialUri("processes/" + procHandleId);
 
 				details = btn("Details")
 					.class_("btn btn-default btn-xs")
@@ -172,14 +172,14 @@ public class DeploymentHandler extends GUI implements ReqHandler {
 	private List<Map<String, ?>> apisInfo() {
 		return U.list(
 			apiInfo("Staging of the application JAR",
-				verb(HttpVerb.POST), "/_stage",
+				verb(HttpVerb.POST), "/rapidoid/stage",
 				U.map("_token", "Deployment token", "file", "<your-jar>"),
-				"curl -F 'file=@app.jar' 'http://example.com/_stage?_token=..."),
+				"curl -F 'file=@app.jar' 'http://example.com/rapidoid/stage?_token=..."),
 
 			apiInfo("Deployment of the staged JAR",
-				verb(HttpVerb.POST), "/_deploy",
+				verb(HttpVerb.POST), "/rapidoid/deploy",
 				U.map("_token", "Deployment token"),
-				"curl -X POST 'http://example.com/_deploy?_token=...")
+				"curl -X POST 'http://example.com/rapidoid/deploy?_token=...")
 		);
 	}
 

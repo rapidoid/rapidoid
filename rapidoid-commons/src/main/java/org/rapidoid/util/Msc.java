@@ -1315,4 +1315,13 @@ public class Msc extends RapidoidThing {
 		return isMavenBuild();
 	}
 
+	public static String specialUriPrefix() {
+		return Msc.isPlatform() ? "/rapidoid/" : "/_";
+	}
+
+	public static String specialUri(String suffix) {
+		U.must(!suffix.startsWith("/"), "The URI suffix must not start with '/'");
+		return specialUriPrefix() + suffix;
+	}
+
 }

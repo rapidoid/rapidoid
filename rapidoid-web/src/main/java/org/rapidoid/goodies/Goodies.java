@@ -13,7 +13,6 @@ import org.rapidoid.goodies.discovery.DiscoveryState;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.HttpVerb;
-import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.insight.Metrics;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.security.Role;
@@ -60,11 +59,6 @@ public class Goodies extends RapidoidThing {
 		}
 	}
 
-	public static void auth(Setup setup) {
-		setup.post("/_login").roles().json(new LoginHandler());
-		setup.get("/_logout").roles(Role.LOGGED_IN).json(new LogoutHandler());
-	}
-
 	public static void bootstrapAppGoodies(Setup setup) {
 		Msc.logSection("Registering App services:");
 
@@ -89,64 +83,69 @@ public class Goodies extends RapidoidThing {
 		status(setup);
 	}
 
+	public static void auth(Setup setup) {
+		setup.post(uri("login")).roles().json(new LoginHandler());
+		setup.get(uri("logout")).roles(Role.LOGGED_IN).json(new LogoutHandler());
+	}
+
 	public static void ping(Setup setup) {
-		setup.get("/_ping").plain("OK");
+		setup.get(uri("ping")).plain("OK");
 	}
 
 	public static void lifecycle(Setup setup) {
-		setup.page("/_terminate").mvc(new TerminateHandler());
+		setup.page(uri("terminate")).mvc(new TerminateHandler());
 	}
 
 	public static void overview(Setup setup) {
-		setup.page("/_").mvc(new OverviewHandler());
+		setup.page(uri("")).mvc(new OverviewHandler());
 	}
 
 	public static void application(Setup setup) {
-		setup.page("/_routes").mvc(new RoutesHandler());
-		setup.page("/_beans").mvc(new BeansHandler());
-		setup.page("/_config").mvc(new ConfigHandler());
-		setup.get("/_classpath").mvc(new ClasspathHandler());
+		setup.page(uri("routes")).mvc(new RoutesHandler());
+		setup.page(uri("beans")).mvc(new BeansHandler());
+		setup.page(uri("config")).mvc(new ConfigHandler());
+		setup.get(uri("classpath")).mvc(new ClasspathHandler());
 	}
 
 	public static void deployment(Setup setup) {
-		setup.page("/_deployment").mvc(new DeploymentHandler());
-		setup.post("/_stage").json(new JarStagingHandler());
-		setup.post("/_deploy").json(new JarDeploymentHandler());
+		setup.page(uri("deployment")).mvc(new DeploymentHandler());
+		setup.post(uri("stage")).json(new JarStagingHandler());
+		setup.post(uri("deploy")).json(new JarDeploymentHandler());
 	}
 
 	public static void metrics(Setup setup) {
-		setup.page("/_metrics").mvc(new GraphsHandler());
-		setup.get("/_graphs/{id:.*}").json(new GraphDataHandler());
+		setup.page(uri("metrics")).mvc(new GraphsHandler());
+		setup.get(uri("graphs/{id:.*}")).json(new GraphDataHandler());
 	}
 
 	public static void processes(Setup setup) {
-		setup.page("/_processes").mvc(new ProcessesHandler());
-		setup.page("/_processes/{id}").mvc(new ProcessDetailsHandler());
+		setup.page(uri("processes")).mvc(new ProcessesHandler());
+		setup.page(uri("processes/{id}")).mvc(new ProcessDetailsHandler());
 	}
 
 	public static void manageables(Setup setup) {
-		setup.page("/_manageables").mvc(new ManageablesOverviewPage());
-		setup.page("/_manageables/{type}/{id}").mvc(new ManageableDetailsPage());
+		setup.page(uri("manageables")).mvc(new ManageablesOverviewPage());
+		setup.page(uri("manageables/{type}/{id}")).mvc(new ManageableDetailsPage());
 	}
 
 	public static void jmx(Setup setup) {
-		setup.page("/_jmx/memory").mvc(JMX.memory());
-		setup.page("/_jmx/mempool").mvc(JMX.memoryPool());
-		setup.page("/_jmx/classes").mvc(JMX.classes());
-		setup.page("/_jmx/os").mvc(JMX.os());
-		setup.page("/_jmx/threads").mvc(JMX.threads());
-		setup.page("/_jmx/compilation").mvc(JMX.compilation());
-		setup.page("/_jmx/runtime").mvc(JMX.runtime());
-		setup.page("/_jmx/gc").mvc(JMX.gc());
+		setup.page(uri("jmx/memory")).mvc(JMX.memory());
+		setup.page(uri("jmx/mempool")).mvc(JMX.memoryPool());
+		setup.page(uri("jmx/classes")).mvc(JMX.classes());
+		setup.page(uri("jmx/os")).mvc(JMX.os());
+		setup.page(uri("jmx/threads")).mvc(JMX.threads());
+		setup.page(uri("jmx/compilation")).mvc(JMX.compilation());
+		setup.page(uri("jmx/runtime")).mvc(JMX.runtime());
+		setup.page(uri("jmx/gc")).mvc(JMX.gc());
 	}
 
 	public static void entities(Setup setup) {
-		setup.page("/_entities").mvc(new EntitiesHandler());
+		setup.page(uri("entities")).mvc(new EntitiesHandler());
 
 		if (MscOpts.hasJPA()) {
 			for (Class<?> type : JPA.getEntityJavaTypes()) {
 				String uri = GUI.typeUri(type);
-				String contextPath = HttpUtils.zone(setup.custom(), setup.zone()).entry("home").or("/_");
+				String contextPath = HttpUtils.zone(setup.custom(), setup.zone()).entry("home").or(uri(""));
 				X.scaffold(setup, Msc.uri(contextPath, uri), type);
 			}
 		}
@@ -163,28 +162,27 @@ public class Goodies extends RapidoidThing {
 
 	public static void welcome(Setup setup) {
 		if (!setup.routes().hasRouteOrResource(HttpVerb.GET, "/")) {
-			On.get("/").view("_welcome").mvc(welcome());
+			On.get("/").view("_welcome").mvc(new WelcomeHandler());
 		}
 	}
 
-	public static ReqRespHandler welcome() {
-		return new WelcomeHandler();
-	}
-
 	public static void status(Setup setup) {
-		setup.get("/_status").json(new StatusHandler());
+		setup.get(uri("status")).json(new StatusHandler());
 	}
 
 	public static void discovery(Setup setup) {
 		DiscoveryState state = new DiscoveryState();
 
-		setup.post("/_discovery/{scope}/register").json(new DiscoveryRegistrationHandler(state));
-
-		setup.get("/_discovery/{scope}").json(new DiscoveryIndexHandler(state));
+		setup.post(uri("discovery/{scope}/register")).json(new DiscoveryRegistrationHandler(state));
+		setup.get(uri("discovery/{scope}")).json(new DiscoveryIndexHandler(state));
 	}
 
 	public static void echo(Setup setup) {
-		setup.get("/_echo").json(new EchoHandler());
+		setup.get(uri("echo")).json(new EchoHandler());
+	}
+
+	private static String uri(String path) {
+		return Msc.specialUri(path);
 	}
 
 }

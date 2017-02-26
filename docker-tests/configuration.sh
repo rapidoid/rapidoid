@@ -17,6 +17,6 @@ docker run \
 
 ./wait-for.sh 4444
 
-./http-get.sh configuration-req 4444 /_status
+./http-get.sh configuration-req 4444 /rapidoid/status
 
 ./cleanup.sh

@@ -22,33 +22,33 @@
 [PLATFORM] INFO | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
 [PLATFORM] INFO | Server has started | setup = app | home = http://localhost:8888
 [PLATFORM] INFO | Static resources will be served from the following locations | setup = app | locations = [static, default/static]
-[PLATFORM] INFO | GET,POST /_                     | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_entities             | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_routes               | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_beans                | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_config               | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET /_classpath                 | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_terminate            | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_processes            | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_processes/{id}       | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_manageables          | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_manageables/{type}/{id}  | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_jmx/memory           | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_jmx/mempool          | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_jmx/classes          | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_jmx/os               | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_jmx/threads          | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_jmx/compilation      | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_jmx/runtime          | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_jmx/gc               | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_metrics              | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET /_graphs/{id:.*}            | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /_deployment           | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | POST /_stage                    | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
-[PLATFORM] INFO | POST /_deploy                   | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
-[PLATFORM] INFO | POST /_login                    | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
-[PLATFORM] INFO | GET /_logout                    | setup = app | roles = [logged_in] | transaction = NONE | mvc = false | cacheTTL = 0
-[PLATFORM] INFO | GET /_status                    | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid              | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/entities     | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/routes       | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/beans        | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/config       | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET /rapidoid/classpath         | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/terminate    | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/processes    | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/processes/{id}  | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/manageables  | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/manageables/{type}/{id}  | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/jmx/memory   | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/jmx/mempool  | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/jmx/classes  | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/jmx/os       | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/jmx/threads  | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/jmx/compilation  | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/jmx/runtime  | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/jmx/gc       | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/metrics      | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET /rapidoid/graphs/{id:.*}    | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/deployment   | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | POST /rapidoid/stage            | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | POST /rapidoid/deploy           | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | POST /rapidoid/login            | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | GET /rapidoid/logout            | setup = app | roles = [logged_in] | transaction = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | GET /rapidoid/status            | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
 [PLATFORM] INFO | ---------------------------------------------------
 [PLATFORM] INFO | ADMIN CREDENTIALS: username = admin, password = <?>
 [PLATFORM] INFO | ---------------------------------------------------

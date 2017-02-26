@@ -9,6 +9,7 @@ import org.rapidoid.gui.Grid;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.process.ProcessHandle;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -85,7 +86,7 @@ public class ProcessesHandler extends GUI implements Callable<Object> {
 			.toUri(new Mapper<ProcessHandle, String>() {
 				@Override
 				public String map(ProcessHandle handle) throws Exception {
-					return U.frmt("/_processes/%s", handle.id());
+					return Msc.specialUri("processes/" + handle.id());
 				}
 			})
 			.pageSize(100);

@@ -32,15 +32,18 @@ import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
 import org.rapidoid.log.Log;
+import org.rapidoid.render.Template;
+import org.rapidoid.render.Templates;
 import org.rapidoid.setup.Setup;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 import org.rapidoid.value.Value;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class OAuth extends RapidoidThing {
 
-	private static final String LOGIN_BTN = "<div class=\"row-fluid\"><div class=\"col-md-3\"><a href=\"/_%sLogin\" class=\"btn btn-default btn-block\">Login with %s</a></div></div>";
+	private static final Template LOGIN_BTN = Templates.load("oauth-login-button.html");
 
 	private static OAuthStateCheck STATE_CHECK;
 
@@ -74,23 +77,23 @@ public class OAuth extends RapidoidThing {
 		for (OAuthProvider provider : providers) {
 			String name = provider.getName().toLowerCase();
 
-			String loginPath = "/_" + name + "Login";
-			String callbackPath = "/_" + name + "OauthCallback";
+			String loginUri = Msc.specialUri(name + "Login");
+			String callbackUri = Msc.specialUri(name + "OauthCallback");
 
 			Config providerConfig = OAUTH.sub(name);
 			Value<String> clientId = providerConfig.entry("clientId").str();
 			Value<String> clientSecret = providerConfig.entry("clientSecret").str();
 
-			setup.get(loginPath).html(new OAuthLoginHandler(provider, DOMAIN));
-			setup.get(callbackPath).html(new OAuthTokenHandler(provider, setup.custom(), DOMAIN, stateCheck, clientId, clientSecret, callbackPath));
+			setup.get(loginUri).html(new OAuthLoginHandler(provider, DOMAIN));
+			setup.get(callbackUri).html(new OAuthTokenHandler(provider, setup.custom(), DOMAIN, stateCheck, clientId, clientSecret, callbackUri));
 
-			loginHtml.append(U.frmt(LOGIN_BTN, name, provider.getName()));
+			loginHtml.append(LOGIN_BTN.render(U.map("uri", loginUri, "provider", provider.getName())));
 		}
 
 		loginHtml.append("</div>");
 		final String loginPage = loginHtml.toString();
 
-		setup.get("/_oauth").mvc(new ReqHandler() {
+		setup.get(Msc.specialUri("oauth")).mvc(new ReqHandler() {
 			@Override
 			public Object execute(Req x) throws Exception {
 				return GUI.hardcoded(loginPage);
@@ -110,7 +113,7 @@ public class OAuth extends RapidoidThing {
 		Value<String> clientId = providerConfig.entry("clientId").str();
 		Value<String> clientSecret = providerConfig.entry("clientSecret").str();
 
-		String callbackPath = "/_" + name + "OauthCallback";
+		String callbackPath = Msc.specialUri(name + "OauthCallback");
 
 		boolean popup = req.param("popup", null) != null;
 

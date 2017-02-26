@@ -98,6 +98,11 @@ public class HtmlPage extends ScreenBean {
 		model.put("appUrl", ReqInfoUtils.appUrl());
 		model.put("adminUrl", ReqInfoUtils.adminUrl());
 
+		model.put("loginUri", Msc.specialUri("login"));
+		model.put("logoutUri", Msc.specialUri("logout"));
+		model.put("profileUri", Msc.specialUri("profile"));
+		model.put("graphsUri", Msc.specialUri("graphs"));
+
 		model.put("dev", Msc.isDev());
 		model.put("admin", "admin".equalsIgnoreCase(req.zone()));
 
