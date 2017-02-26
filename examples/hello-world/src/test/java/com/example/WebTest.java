@@ -12,7 +12,7 @@ import java.util.Map;
  * This test will execute the main class specified in the annotation.
  */
 @IntegrationTest(main = Main.class)
-public class HelloWorldTest extends RapidoidIntegrationTest {
+public class WebTest extends RapidoidIntegrationTest {
 
 	@Test
 	public void testHelloWorld() {
