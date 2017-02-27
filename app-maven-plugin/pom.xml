@@ -10,7 +10,7 @@
 
 	<artifactId>app</artifactId>
 	<packaging>maven-plugin</packaging>
-	<name>Rapidoid Build Plugin</name>
+	<name>Rapidoid App Plugin</name>
 
 	<dependencies>
 
