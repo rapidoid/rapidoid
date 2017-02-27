@@ -12,10 +12,4 @@ cd docker-tests
 ./retest.sh
 
 cd ../examples
-
-for eg in $(ls)
-do
- cd $eg
- mvn clean install
- cd ..
-done
+mvn clean install
