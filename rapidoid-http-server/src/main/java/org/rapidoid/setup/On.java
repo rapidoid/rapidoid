@@ -41,6 +41,10 @@ public class On extends RapidoidThing {
 		return SETUP.route(verb, path);
 	}
 
+	public static synchronized OnRoute any(String path) {
+		return SETUP.any(path);
+	}
+
 	public static synchronized OnRoute get(String path) {
 		return SETUP.get(path);
 	}

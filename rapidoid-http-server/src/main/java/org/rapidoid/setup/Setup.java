@@ -274,6 +274,11 @@ public class Setup extends RapidoidInitializer {
 		return new OnRoute(http(), defaults, routes, verb.toUpperCase(), path);
 	}
 
+	public OnRoute any(String path) {
+		activate();
+		return new OnRoute(http(), defaults, routes, ANY, path);
+	}
+
 	public OnRoute get(String path) {
 		activate();
 		return new OnRoute(http(), defaults, routes, GET, path);

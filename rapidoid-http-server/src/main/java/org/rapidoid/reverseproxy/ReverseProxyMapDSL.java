@@ -64,7 +64,10 @@ public class ReverseProxyMapDSL extends RapidoidThing {
 
 		ReverseProxy proxy = createReverseProxy();
 
-		OnRoute route = On.get(uriPrefix + "/*");
+		U.must(uriPrefix.startsWith("/"), "The URI prefix must start with '/'");
+
+		String path = uriPrefix.equals("/") ? "/*" : uriPrefix + "/*";
+		OnRoute route = On.any(path);
 
 		if (roles != null) route.roles(roles);
 		if (cacheTTL != null) route.cacheTTL(cacheTTL);
