@@ -47,8 +47,8 @@ import java.util.Set;
 @Since("5.0.0")
 public class HtmlPage extends ScreenBean {
 
-	public static volatile String commonJs = "/application.js";
-	public static volatile String commonCss = "/application.css";
+	public static volatile String commonJs = "/_rapidoid/application.js";
+	public static volatile String commonCss = "/_rapidoid/application.css";
 
 	private static volatile Template PAGE_TEMPLATE = Templates.load("page.html");
 	private static volatile Template PAGE_AJAX_TEMPLATE = Templates.load("page-ajax.html");
