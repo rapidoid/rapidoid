@@ -26,6 +26,8 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.config.ConfigChanges;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.reverseproxy.Reverse;
+import org.rapidoid.reverseproxy.ReverseProxyMapDSL;
+import org.rapidoid.setup.App;
 import org.rapidoid.web.config.bean.ProxyConfig;
 
 import java.util.Map;
@@ -45,8 +47,19 @@ public class ProxyConfigListener extends RapidoidThing implements Operation<Conf
 		}
 	}
 
-	private void applyProxyEntry(String uri, ProxyConfig proxy) {
-		Reverse.proxy().map(uri).to(proxy.upstream.split("\\s*\\,\\s*"));
+	private void applyProxyEntry(String uri, ProxyConfig config) {
+		ReverseProxyMapDSL proxy = Reverse.proxy(uri);
+
+		if (config.upstreams != null) proxy.to(config.upstreams);
+		if (config.cacheTTL != null) proxy.cacheTTL(config.cacheTTL);
+		if (config.cacheCapacity != null) proxy.cacheCapacity(config.cacheCapacity);
+
+		if (config.roles != null) {
+			proxy.roles(config.roles);
+			App.boot().auth();
+		}
+
+		proxy.add();
 	}
 
 }

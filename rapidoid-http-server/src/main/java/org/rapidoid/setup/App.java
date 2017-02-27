@@ -37,7 +37,6 @@ import org.rapidoid.ioc.IoC;
 import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.log.Log;
 import org.rapidoid.render.Templates;
-import org.rapidoid.reverseproxy.Reverse;
 import org.rapidoid.scan.ClasspathScanner;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.scan.Scan;
@@ -218,7 +217,6 @@ public class App extends RapidoidInitializer {
 		Setup.initDefaults();
 		AppBootstrap.reset();
 		invoked.clear();
-		Reverse.reset();
 	}
 
 	public static void notifyChanges() {

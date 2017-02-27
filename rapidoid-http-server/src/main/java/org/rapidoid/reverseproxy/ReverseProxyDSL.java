@@ -1,8 +1,12 @@
-package org.rapidoid.web.config.bean;
+package org.rapidoid.reverseproxy;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 /*
  * #%L
- * rapidoid-web
+ * rapidoid-http-server
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -20,30 +24,12 @@ package org.rapidoid.web.config.bean;
  * #L%
  */
 
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.reverseproxy.ProxyUpstream;
-
-import java.util.List;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class ProxyConfig extends RapidoidThing {
+public class ReverseProxyDSL extends RapidoidThing {
 
-	public volatile List<String> upstreams;
-
-	public volatile String[] roles;
-
-	public volatile Long cacheTTL;
-
-	public volatile Integer cacheCapacity;
-
-	public ProxyConfig() {
-	}
-
-	public ProxyConfig(String shortcut) {
-		this.upstreams = ProxyUpstream.parse(shortcut);
+	public ReverseProxyMapDSL map(String uriPrefix) {
+		return new ReverseProxyMapDSL(uriPrefix);
 	}
 
 }

@@ -44,6 +44,13 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 
 	private final List<ProxyMapping> mappings = U.list();
 
+	public ReverseProxy() {
+	}
+
+	public ReverseProxy(ProxyMapping mapping) {
+		mappings.add(mapping);
+	}
+
 	@Override
 	public Object execute(final Req req, final Resp resp) throws Exception {
 
@@ -139,10 +146,6 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 			.keepCookies(false)
 			.maxConnTotal(maxConnTotal())
 			.maxConnPerRoute(maxConnPerRoute());
-	}
-
-	public ReverseProxyMapDSL map(String uriPrefix) {
-		return new ReverseProxyMapDSL(this, uriPrefix);
 	}
 
 	public List<ProxyMapping> mappings() {
