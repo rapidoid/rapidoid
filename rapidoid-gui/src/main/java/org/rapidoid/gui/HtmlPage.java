@@ -205,6 +205,7 @@ public class HtmlPage extends ScreenBean {
 		has.put("path", HtmlPageUtils.HAS_PATH);
 		has.put("zone", HtmlPageUtils.HAS_ZONE);
 		has.put("page", HtmlPageUtils.HAS_PAGE);
+		has.put("special_page", HtmlPageUtils.HAS_SPECIAL_PAGE);
 
 		return has;
 	}

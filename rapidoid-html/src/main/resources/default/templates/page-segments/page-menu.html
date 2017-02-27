@@ -45,11 +45,11 @@
             <i class="fa fa-user"></i> ${username}
         </a>
         </li>
-        {{?has.page.$_logout}}
+        {{?has.special_page.logout}}
         <li>
             <a href="${req.contextPath}${logoutUri}" data-toggle="tooltip" data-placement="bottom" title="Logout"><i class="fa fa-sign-out"></i></a>
         </li>
-        {{/has.page.$_logout}}
+        {{/has.special_page.logout}}
     </ul>
     {{/username}}
 
