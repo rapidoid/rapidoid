@@ -23,6 +23,7 @@ package org.rapidoid.http;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.env.Env;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.impl.HttpRoutesImpl;
 import org.rapidoid.log.Log;
@@ -34,7 +35,7 @@ import java.util.Date;
 @Since("5.3.0")
 public class HttpRoutesGroup extends RapidoidThing {
 
-	private static final int ROUTE_SETUP_WAITING_TIME_MS = 300;
+	private static final int ROUTE_SETUP_WAITING_TIME_MS = Env.test() ? 300 : 500;
 
 	private final HttpRoutesImpl[] routes;
 
