@@ -91,8 +91,11 @@ public class PathPattern extends RapidoidThing {
 			}
 		});
 
-		if (regex.endsWith("/*")) {
-			regex = Str.sub(regex, 0, -1) + ".*";
+		if (regex.equals("/*")) {
+			regex = "/.*";
+
+		} else if (regex.endsWith("/*")) {
+			regex = Str.trimr(regex, "/*") + "(?:/.*)?";
 		}
 
 		Pattern pattern = Pattern.compile(regex);
