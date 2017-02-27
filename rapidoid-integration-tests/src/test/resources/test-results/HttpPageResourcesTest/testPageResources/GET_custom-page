@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 2267
+Content-Length: 2246
 
 <!DOCTYPE html>
 <html lang="en">
@@ -21,7 +21,7 @@ Content-Length: 2267
 <link href="/_rapidoid/font-awesome/css/font-awesome-4.5.0.min.css" rel="stylesheet">
 <link href="/_rapidoid/rapidoid.min.css" rel="stylesheet">
 
-<link href="/_rapidoid/application.css" rel="stylesheet">
+<link href="/application.css" rel="stylesheet">
 <link href="/custom-page.css" rel="stylesheet">
 
 <link href="/img/favicon.png" rel="shortcut icon">
@@ -34,7 +34,7 @@ Content-Length: 2267
     window.Rapidoid.contextPath = '';
     window.Rapidoid.loginUri = '/_login';
     window.Rapidoid.logoutUri = '/_logout';
-    window.Rapidoid.profileUri = '/_profile';
+    window.Rapidoid.profileUri = '/profile';
     window.Rapidoid.graphsUri = '/_graphs';
 </script>
 </head>
@@ -46,7 +46,7 @@ Content-Length: 2267
 <script src="/_rapidoid/angular-1.5.8.min.js"></script>
 <script src="/_rapidoid/rapidoid.min.js"></script>
 
-<script src="/_rapidoid/application.js"></script>
+<script src="/application.js"></script>
 <script src="/custom-page.js"></script>
 
 <div ng-controller="Main" ng-app="app">
