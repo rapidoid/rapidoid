@@ -18,9 +18,9 @@ gui:
       About: /about
 
 api:
-  /pi: select 3.14 as Pi
+  /pi: pi.sql
   /g: select 9.81 as G
 
 pages:
-  /: select 3.14 as Pi, 9.81 as G
+  /: sql/pages.sql
   /about: ''

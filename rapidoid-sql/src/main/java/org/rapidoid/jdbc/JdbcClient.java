@@ -7,6 +7,7 @@ import org.rapidoid.config.Config;
 import org.rapidoid.datamodel.Results;
 import org.rapidoid.datamodel.impl.ResultsImpl;
 import org.rapidoid.group.AutoManageable;
+import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -249,6 +250,8 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 	private int doExecute(String sql, Map<String, ?> namedArgs, Object[] args) {
 		ensureIsInitialized();
 
+		sql = toSql(sql);
+
 		Log.debug("SQL", "sql", sql, "args", args);
 
 		Connection conn = provideConnection();
@@ -307,6 +310,7 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 	}
 
 	private <T> Results<T> doQuery(Class<T> resultType, String sql, Map<String, ?> namedArgs, Object[] args) {
+		sql = toSql(sql);
 		JdbcData<T> data = new JdbcData<>(this, resultType, sql, namedArgs, args);
 		return new ResultsImpl<>(data);
 	}
@@ -341,6 +345,14 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 	long getQueryCount(String sql, Map<String, ?> namedArgs, Object[] args) {
 		// FIXME find a better way
 		return -1; // unknown
+	}
+
+	private static String toSql(String sql) {
+		if (sql.endsWith(".sql")) {
+			sql = Res.from(sql).mustExist().getContent();
+		}
+
+		return sql;
 	}
 
 	public Results<Map<String, Object>> query(String sql, Object... args) {
