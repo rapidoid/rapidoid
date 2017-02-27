@@ -40,7 +40,7 @@ public class NotFoundHttpProcessor extends AbstractHttpProcessor {
 	public void onRequest(Channel channel, RapidoidHelper data) {
 		boolean isKeepAlive = data.isKeepAlive.value;
 
-		HttpIO.INSTANCE.respond(HttpUtils.noReq(), channel, -1, 404, isKeepAlive, MediaType.PLAIN_TEXT_UTF_8, "Not found!".getBytes(), null, null);
+		HttpIO.INSTANCE.respond(HttpUtils.noReq(), channel, -1, -1, 404, isKeepAlive, MediaType.PLAIN_TEXT_UTF_8, "Not found!".getBytes(), null, null);
 
 		channel.send().closeIf(!isKeepAlive);
 	}

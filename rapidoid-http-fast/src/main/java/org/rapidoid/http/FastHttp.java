@@ -188,7 +188,7 @@ public class FastHttp extends AbstractHttpProcessor {
 
 		req.cached(true);
 
-		HttpIO.INSTANCE.respond(HttpUtils.req(req), channel, -1, resp.statusCode,
+		HttpIO.INSTANCE.respond(HttpUtils.req(req), channel, -1, -1, resp.statusCode,
 			req.isKeepAlive(), resp.contentType, resp.body.duplicate(), resp.headers, null);
 
 		channel.send().closeIf(!req.isKeepAlive());
@@ -284,7 +284,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		JsonResponseRenderer jsonRenderer = Customization.of(req).jsonResponseRenderer();
 		byte[] body = HttpUtils.responseToBytes(req, INTERNAL_SERVER_ERROR, contentType, jsonRenderer);
 
-		HttpIO.INSTANCE.respond(HttpUtils.maybe(req), channel, -1, 500, isKeepAlive, contentType, body, null, null);
+		HttpIO.INSTANCE.respond(HttpUtils.maybe(req), channel, -1, -1, 500, isKeepAlive, contentType, body, null, null);
 	}
 
 	private boolean handleError(Channel channel, boolean isKeepAlive, Req req, Throwable e) {

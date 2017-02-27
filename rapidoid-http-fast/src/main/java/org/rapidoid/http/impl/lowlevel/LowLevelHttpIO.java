@@ -329,7 +329,7 @@ class LowLevelHttpIO extends RapidoidThing {
 		Req req = maybeReq.getReqOrNull();
 
 		if (req != null) {
-			channel.resume(req.handle(), logic);
+			channel.resume(req.connectionId(), req.handle(), logic);
 		} else {
 			logic.resumeAsync();
 		}
@@ -340,7 +340,7 @@ class LowLevelHttpIO extends RapidoidThing {
 		channel.close();
 	}
 
-	void respond(final MaybeReq maybeReq, final Channel channel, long handle,
+	void respond(final MaybeReq maybeReq, final Channel channel, long connId, long handle,
 	             final int code, final boolean isKeepAlive, final MediaType contentType, final Object body,
 	             final Map<String, String> headers, final Map<String, String> cookies) {
 
@@ -354,9 +354,17 @@ class LowLevelHttpIO extends RapidoidThing {
 			}
 		}
 
+		if (connId < 0) {
+			if (req != null) {
+				connId = req.connectionId();
+			} else {
+				connId = channel.connId();
+			}
+		}
+
 		final long id = ASYNC_ID_GEN.incrementAndGet();
 
-		channel.resume(handle, new AsyncLogic() {
+		channel.resume(connId, handle, new AsyncLogic() {
 
 			@Override
 			public String toString() {

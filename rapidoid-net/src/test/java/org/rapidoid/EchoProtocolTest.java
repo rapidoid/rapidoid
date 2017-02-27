@@ -147,12 +147,13 @@ public class EchoProtocolTest extends NetTestCommons {
 
 				final String in = ctx.readln();
 				final long handle = ctx.async();
+				final long connId = ctx.connId();
 
 				Msc.EXECUTOR.schedule(new Runnable() {
 					@Override
 					public void run() {
 
-						ctx.resume(handle, new AsyncLogic() {
+						ctx.resume(connId, handle, new AsyncLogic() {
 
 							@Override
 							public boolean resumeAsync() {

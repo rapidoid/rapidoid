@@ -131,7 +131,11 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	private volatile boolean cached;
 
+	private final long connId;
+
 	private final long handle;
+
+	private final long requestId;
 
 	public ReqImpl(FastHttp http, Channel channel, boolean isKeepAlive, String verb, String uri, String path,
 	               String query, byte[] body, Map<String, String> params, Map<String, String> headers,
@@ -157,7 +161,9 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		this.zone = zone;
 		this.routes = routes;
 		this.route = route;
+		this.connId = channel.connId();
 		this.handle = channel.handle();
+		this.requestId = channel.requestId();
 		this.custom = routes != null ? routes.custom() : http.custom();
 		this.cacheKey = createCacheKey();
 	}
@@ -272,12 +278,12 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	@Override
 	public long connectionId() {
-		return channel.connId();
+		return connId;
 	}
 
 	@Override
 	public long requestId() {
-		return channel.requestId();
+		return requestId;
 	}
 
 	@Override
@@ -474,7 +480,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		completed = responseBody != null;
 
 		HttpIO.INSTANCE.respond(
-			HttpUtils.maybe(this), channel, handle,
+			HttpUtils.maybe(this), channel, connId, handle,
 			code, isKeepAlive, contentType, responseBody,
 			response != null ? response.headers() : null,
 			response != null ? response.cookies() : null

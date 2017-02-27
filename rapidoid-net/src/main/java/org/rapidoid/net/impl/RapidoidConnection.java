@@ -58,6 +58,8 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 	private static final AtomicLong ID_N = new AtomicLong();
 
+	private static final AtomicLong SERIAL_N = new AtomicLong();
+
 	public final RapidoidWorker worker;
 
 	public final Buf input;
@@ -80,7 +82,9 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 	private volatile CtxListener listener;
 
-	private final long id = ID_N.incrementAndGet();
+	private final long serialN = SERIAL_N.incrementAndGet();
+
+	private volatile long id;
 
 	private volatile boolean initial;
 
@@ -104,8 +108,8 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 	public RapidoidConnection(RapidoidWorker worker, BufGroup bufs) {
 		this.worker = worker;
-		this.input = bufs.newBuf("input#" + connId());
-		this.output = bufs.newBuf("output#" + connId());
+		this.input = bufs.newBuf("input#" + serialN);
+		this.output = bufs.newBuf("output#" + serialN);
 
 		reset();
 	}
@@ -118,6 +122,7 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 			request = null;
 		}
 
+		id = ID_N.incrementAndGet();
 		key = null;
 		closed = true;
 		closing = false;
@@ -279,22 +284,27 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 	}
 
 	@Override
-	public void resume(final long handle, final AsyncLogic asyncLogic) {
+	public void resume(final long expectedConnId, final long handle, final AsyncLogic asyncLogic) {
+
+		if (expectedConnId != connId()) return;
+
 		long seq = writeSeq.get();
 
 		if (seq < handle - 1) {
 			// too early
 
-			Jobs.after(1).milliseconds(new Runnable() {
+			Jobs.after(1).microseconds(new Runnable() {
 				@Override
 				public void run() {
-					resume(handle, asyncLogic);
+					resume(expectedConnId, handle, asyncLogic);
 				}
 			});
 
 		} else if (seq == handle - 1) {
 
 			synchronized (this) {
+
+				if (expectedConnId != connId()) return;
 
 				U.must(seq == writeSeq.get());
 
@@ -319,7 +329,7 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 			}
 
 		} else {
-			Log.error("Tried to resume a job that already has finished!", "handle", handle, "currentHandle", seq);
+			Log.error("Tried to resume a job that already has finished!", "handle", handle, "currentHandle", seq, "job", asyncLogic);
 			throw U.rte("Tried to resume a job that already has finished!");
 		}
 	}
