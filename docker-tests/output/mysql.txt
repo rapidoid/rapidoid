@@ -12,8 +12,14 @@
 [PLATFORM] INFO | 
 [PLATFORM] INFO | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
 [PLATFORM] INFO | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
+[PLATFORM] INFO | Replacing configuration shortcut | shortcut = /users <= SELECT distinct(user) FROM mysql.user | key = api./users | value = SELECT distinct(user) FROM mysql.user
+[PLATFORM] INFO | Replacing configuration shortcut | shortcut = /users <= SELECT distinct(user) FROM mysql.user | key = api./users | value = SELECT distinct(user) FROM mysql.user
 [PLATFORM] INFO | Setting application root | root = /app | content = []
+[PLATFORM] INFO | Replacing configuration shortcut | shortcut = /users <= SELECT distinct(user) FROM mysql.user | key = api./users | value = SELECT distinct(user) FROM mysql.user
+[PLATFORM] INFO | Replacing configuration shortcut | shortcut = /users <= SELECT distinct(user) FROM mysql.user | key = api./users | value = SELECT distinct(user) FROM mysql.user
 [PLATFORM] INFO | Configuring active profiles | profiles = [mysql]
+[PLATFORM] INFO | Replacing configuration shortcut | shortcut = /users <= SELECT distinct(user) FROM mysql.user | key = api./users | value = SELECT distinct(user) FROM mysql.user
+[PLATFORM] INFO | Replacing configuration shortcut | shortcut = /users <= SELECT distinct(user) FROM mysql.user | key = api./users | value = SELECT distinct(user) FROM mysql.user
 [PLATFORM] INFO | Automatically activating mode-specific profile | profile = production
 [PLATFORM] INFO | Initialized environment | mode = PRODUCTION | profiles = [mysql, production, platform]
 [PLATFORM] INFO | Setting application JAR | appJar = /app/app.jar | exists = false
