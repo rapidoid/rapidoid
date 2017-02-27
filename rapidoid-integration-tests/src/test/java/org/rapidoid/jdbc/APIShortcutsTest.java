@@ -26,14 +26,13 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.setup.App;
-import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.5")
-public class SqlRoutesTest extends IsolatedIntegrationTest {
+public class APIShortcutsTest extends IsolatedIntegrationTest {
 
 	@Test
-	public void testSqlRoutes() {
+	public void testAPIShortcuts() {
 		String all = "SELECT * FROM nums";
 		String add = "insert into nums values (3, 'three')";
 
@@ -46,8 +45,8 @@ public class SqlRoutesTest extends IsolatedIntegrationTest {
 
 		isFalse(Conf.API.isEmpty());
 
-		eq(Conf.API.get("/nums"), U.map("sql", all));
-		eq(Conf.API.get("POST /add"), U.map("sql", add));
+		eq(Conf.API.get("/nums"), all);
+		eq(Conf.API.get("POST /add"), add);
 
 		onlyPost("/add");
 		onlyGet("/nums");

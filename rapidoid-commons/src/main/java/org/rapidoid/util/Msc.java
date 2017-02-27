@@ -1096,16 +1096,22 @@ public class Msc extends RapidoidThing {
 		switch (sep) {
 
 			case "->":
-				left = "proxy." + left + ".upstream"; // FIXME use :
+				left = "proxy." + left;
 				break;
 
 			case "<=":
-				left = "api." + left + ".sql";
+				left = "api." + left;
+				break;
+
+			case "<-":
+				left = "pages." + left;
 				break;
 
 			default:
 				throw U.rte("Argument operator not supported: " + sep);
 		}
+
+		Log.info("Replacing configuration shortcut", "shortcut", arg, "key", left, "value", right);
 
 		arguments.put(left, right);
 	}
