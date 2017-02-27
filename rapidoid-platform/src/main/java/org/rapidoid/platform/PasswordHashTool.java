@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.crypto.Crypto;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.io.BufferedReader;
 import java.io.Console;
@@ -73,13 +74,29 @@ public class PasswordHashTool extends RapidoidThing {
 			return console.readPassword(msg);
 
 		} else {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 			U.print(msg);
-			try {
-				return reader.readLine().toCharArray();
-			} catch (IOException e) {
-				throw U.rte(e);
+			return readLine().toCharArray();
+		}
+	}
+
+	private static String readLine() {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+		try {
+			String line = reader.readLine();
+
+			if (line == null) {
+				if (Msc.dockerized()) {
+					throw U.rte("Couldn't read from the standard input! Please make sure you run the docker command with '-it'");
+				} else {
+					throw U.rte("Couldn't read from the standard input!");
+				}
 			}
+
+			return line;
+
+		} catch (IOException e) {
+			throw U.rte(e);
 		}
 	}
 
