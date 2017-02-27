@@ -81,6 +81,8 @@ public class ReverseProxyMapDSL extends RapidoidThing {
 	private ReverseProxy createReverseProxy() {
 		List<ProxyUpstream> proxyUpstreams = U.list();
 
+		U.notNull(upstreams, "proxy upstreams");
+
 		for (String upstream : upstreams) {
 			proxyUpstreams.add(new ProxyUpstream(upstream));
 		}

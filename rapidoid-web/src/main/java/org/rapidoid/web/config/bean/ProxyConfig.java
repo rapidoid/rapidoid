@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.reverseproxy.ProxyUpstream;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
@@ -46,4 +47,13 @@ public class ProxyConfig extends RapidoidThing {
 		this.upstreams = ProxyUpstream.parse(shortcut);
 	}
 
+	@Override
+	public String toString() {
+		return "ProxyConfig{" +
+			"upstreams=" + upstreams +
+			", roles=" + Arrays.toString(roles) +
+			", cacheTTL=" + cacheTTL +
+			", cacheCapacity=" + cacheCapacity +
+			'}';
+	}
 }

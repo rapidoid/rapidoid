@@ -44,10 +44,6 @@ public class ProxyMapping extends RapidoidThing {
 		this.upstreams = upstreams;
 	}
 
-	public boolean matches(Req req) {
-		return req.path().startsWith(prefix);
-	}
-
 	public String getTargetUrl(Req req) {
 		ProxyUpstream upstream = loadBalancer.pickUpstream(req, upstreams);
 

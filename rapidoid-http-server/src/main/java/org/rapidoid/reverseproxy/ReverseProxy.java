@@ -11,7 +11,6 @@ import org.rapidoid.u.U;
 
 import java.io.IOException;
 import java.net.ConnectException;
-import java.util.List;
 import java.util.Map;
 
 /*
@@ -42,13 +41,10 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 
 	private static final int TIMEOUT_MS = 10000;
 
-	private final List<ProxyMapping> mappings = U.list();
-
-	public ReverseProxy() {
-	}
+	private final ProxyMapping mapping;
 
 	public ReverseProxy(ProxyMapping mapping) {
-		mappings.add(mapping);
+		this.mapping = mapping;
 	}
 
 	@Override
@@ -62,6 +58,10 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 		process(req, resp, mapping, 1, U.time());
 
 		return req;
+	}
+
+	protected ProxyMapping findMapping(Req req) {
+		return mapping; // customizable for more complex logic
 	}
 
 	protected void process(final Req req, final Resp resp, final ProxyMapping mapping, final int attempts, final long since) {
@@ -129,16 +129,6 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 		}
 	}
 
-	protected ProxyMapping findMapping(Req req) {
-		for (ProxyMapping mapping : mappings) {
-			if (mapping.matches(req)) {
-				return mapping;
-			}
-		}
-
-		return null;
-	}
-
 	@Override
 	protected HttpClient createClient() {
 		return HTTP.client()
@@ -146,14 +136,6 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 			.keepCookies(false)
 			.maxConnTotal(maxConnTotal())
 			.maxConnPerRoute(maxConnPerRoute());
-	}
-
-	public List<ProxyMapping> mappings() {
-		return mappings;
-	}
-
-	public void reset() {
-		mappings.clear();
 	}
 
 }
