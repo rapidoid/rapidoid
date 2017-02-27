@@ -644,6 +644,7 @@ org.rapidoid.platform.AppDownloader
 org.rapidoid.platform.DefaultApp
 org.rapidoid.platform.Main
 org.rapidoid.platform.MavenUtil
+org.rapidoid.platform.PasswordHashTool
 org.rapidoid.platform.Platform
 org.rapidoid.platform.PlatformInDevMode
 org.rapidoid.plugin.app.AbstractRapidoidMojo

@@ -96,16 +96,24 @@ public class Platform extends RapidoidThing {
 		String cmd = args[0];
 		String[] cmdArgs = Arr.sub(args, 1, args.length);
 
-		// interpret "mvn" command
-		if (cmd.equals("mvn")) {
-			int result = MavenUtil.build("/app", "/data/.m2/repository", U.list(cmdArgs));
-			System.exit(result);
-		}
+		switch (cmd) {
+			case "mvn":
+				// interpret the "mvn" command
+				int result = MavenUtil.build("/app", "/data/.m2/repository", U.list(cmdArgs));
+				System.exit(result);
+				break;
 
-		// interpret "benchmark" command
-		if (cmd.equals("benchmark")) {
-			BenchmarkCenter.main(cmdArgs);
-			System.exit(0);
+			case "benchmark":
+				// interpret the "benchmark" command
+				BenchmarkCenter.main(cmdArgs);
+				System.exit(0);
+				break;
+
+			case "password":
+				// interpret the "password" command
+				PasswordHashTool.generatePasswordHash(cmdArgs);
+				System.exit(0);
+				break;
 		}
 	}
 

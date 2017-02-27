@@ -209,7 +209,7 @@ public class Crypto extends RapidoidThing {
 		return Str.toBase64(hash) + "$" + Str.toBase64(salt) + "$" + iterations;
 	}
 
-	public static boolean passwordMatches(String password, String saltedHash) {
+	public static boolean passwordMatches(char[] password, String saltedHash) {
 		String[] parts = saltedHash.split("\\$");
 
 		if (parts.length != 3) {
@@ -226,8 +226,12 @@ public class Crypto extends RapidoidThing {
 			return false;
 		}
 
-		byte[] realHash = pbkdf2(password.toCharArray(), salt, iterations, 256);
+		byte[] realHash = pbkdf2(password, salt, iterations, 256);
 		return Arrays.equals(expectedHash, realHash);
+	}
+
+	public static boolean passwordMatches(String password, String saltedHash) {
+		return passwordMatches(password.toCharArray(), saltedHash);
 	}
 
 	public static byte[] randomBytes(int byteCount) {
