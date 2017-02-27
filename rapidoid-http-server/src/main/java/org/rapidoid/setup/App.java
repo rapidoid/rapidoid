@@ -159,6 +159,7 @@ public class App extends RapidoidInitializer {
 		}
 
 		App.path = null;
+		App.boot = null;
 
 		Conf.reset();
 		Env.reset();
