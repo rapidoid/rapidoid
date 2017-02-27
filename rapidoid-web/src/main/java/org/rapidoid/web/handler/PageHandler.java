@@ -32,7 +32,6 @@ import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.Resp;
 import org.rapidoid.jdbc.JDBC;
-import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
 import org.rapidoid.web.config.bean.PageConfig;
 import org.rapidoid.web.config.bean.PageGuiConfig;
@@ -86,7 +85,6 @@ public class PageHandler extends RapidoidThing implements ReqRespHandler {
 				throw Err.notReady();
 		}
 
-
 		if (U.notEmpty(gui.caption)) {
 			item = GUI.multi(GUI.titleBox(gui.caption), item);
 		}
@@ -105,7 +103,7 @@ public class PageHandler extends RapidoidThing implements ReqRespHandler {
 	public Grid grid(Results items) {
 		Req req = req();
 
-		Grid grid = GUI.grid(items);
+		Grid grid = GUI.grid(items.all());
 
 		String q = req.param("find", null);
 		if (q != null) grid.highlightRegex(Pattern.quote(q));

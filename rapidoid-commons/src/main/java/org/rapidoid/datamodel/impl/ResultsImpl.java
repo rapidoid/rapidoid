@@ -51,7 +51,7 @@ public class ResultsImpl<T> extends RapidoidThing implements Results<T> {
 
 	@Override
 	public final List<T> all() {
-		return retrievePage(0, Integer.MAX_VALUE);
+		return retrievePage(0, Long.MAX_VALUE);
 	}
 
 	@Override

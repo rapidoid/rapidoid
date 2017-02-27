@@ -2,6 +2,7 @@ package org.rapidoid.jdbc;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Err;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
 import org.rapidoid.datamodel.Results;
@@ -317,6 +318,14 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 
 	<T> List<T> runQuery(Class<T> resultType, String sql, Map<String, ?> namedArgs, Object[] args, long start, long length) {
 		ensureIsInitialized();
+
+		U.must(start >= 0);
+		U.must(length >= 0);
+
+		if (start > 0 || length < Long.MAX_VALUE) {
+			// FIXME paging
+			throw Err.notReady();
+		}
 
 		Connection conn = provideConnection();
 		PreparedStatement stmt = null;

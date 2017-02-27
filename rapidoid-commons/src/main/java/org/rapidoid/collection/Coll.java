@@ -363,6 +363,7 @@ public class Coll extends RapidoidThing {
 		});
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> List<T> range(Iterable<T> items, int from, int to) {
 		U.must(from <= to, "'from' must be <= 'to'!");
 
@@ -371,8 +372,8 @@ public class Coll extends RapidoidThing {
 		}
 
 		if (items instanceof Results) {
-			Results dataItems = (Results) items;
-			return dataItems.page(from, to - from);
+			Results results = (Results) items;
+			return results.page(from, to - from);
 		}
 
 		List<?> list = (items instanceof List<?>) ? (List<?>) items : U.list(items);
