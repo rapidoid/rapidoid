@@ -100,7 +100,7 @@ public class HtmlPage extends ScreenBean {
 
 		model.put("loginUri", Msc.specialUri("login"));
 		model.put("logoutUri", Msc.specialUri("logout"));
-		model.put("profileUri", Msc.specialUri("profile"));
+		model.put("profileUri", Msc.semiSpecialUri("profile"));
 		model.put("graphsUri", Msc.specialUri("graphs"));
 
 		model.put("dev", Msc.isDev());

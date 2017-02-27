@@ -1330,4 +1330,9 @@ public class Msc extends RapidoidThing {
 		return specialUriPrefix() + suffix;
 	}
 
+	public static String semiSpecialUri(String suffix) {
+		U.must(!suffix.startsWith("/"), "The URI suffix must not start with '/'");
+		return Msc.isPlatform() ? "/rapidoid/" + suffix : "/" + suffix;
+	}
+
 }
