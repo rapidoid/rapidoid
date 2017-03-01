@@ -49,7 +49,7 @@ public class ConfigOptions extends RapidoidThing {
 		opts.add(opt("production", "run in PRODUCTION mode", "auto-detected"));
 		opts.add(opt("test", "run in TEST mode", "auto-detected"));
 
-		opts.add(opt("secret=<SECRET>", "configure app-specific secret for encryption", "random"));
+		opts.add(opt("secret=<SECRET>", "configure secret key for cryptography", "random"));
 		opts.add(opt("profiles=<P1,P2...>", "comma-separated list of application profiles (e.g. mysql,prod)", "the 'default' profile"));
 
 		opts.add(opt("on.port=<P>", "the default App server will listen at port P", 8888));

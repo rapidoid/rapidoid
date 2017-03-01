@@ -71,7 +71,7 @@ public class Main {
 			dbUrl = "jdbc:postgresql://" + dbHost + ":5432/hello_world?" + Helper.POSTGRES_CONFIG;
 		}
 
-		JdbcClient mysqlJdbc = JDBC.newApi()
+		JdbcClient mysqlJdbc = JDBC.api("benchmark")
 			.url(dbUrl)
 			.username("benchmarkdbuser")
 			.password("benchmarkdbpass")

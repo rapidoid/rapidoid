@@ -50,7 +50,7 @@ public class SQLModule extends AbstractRapidoidModule {
 		JDBC.reset();
 	}
 
-	private void cleanInMemDatabases() {
+	public static void cleanInMemDatabases() {
 		JdbcClient jdbc = JDBC.api().usePool(false);
 
 		if (HSQLDB_DRIVER.equals(jdbc.driver())) {
