@@ -95,7 +95,11 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 	}
 
 	private HttpStatus handleDecorating(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
-		ctx.async();
+
+		if (!ctx.isAsync()) {
+			// first checks if not async, to avoid exceptions when running the second time from non-IO thread
+			ctx.async();
+		}
 
 		execHandlerJob(ctx, isKeepAlive, options.contentType(), req, extra);
 
