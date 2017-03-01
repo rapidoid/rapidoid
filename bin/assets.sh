@@ -40,6 +40,9 @@ cp $DISTRO_CSS $DOCS/rapidoid.min.css
 cp rapidoid-html/src/main/resources/default/static/_rapidoid/bootstrap/css/theme-default.css $DOCS/theme-default.css
 done
 
+cp $DISTRO_JS rapidoid-html/src/main/resources/default/static/
+cp $DISTRO_CSS rapidoid-html/src/main/resources/default/static/
+
 # cp ../rapidoid.github.io/docs.css ../java8org.github.io/docs.css
 
 echo
