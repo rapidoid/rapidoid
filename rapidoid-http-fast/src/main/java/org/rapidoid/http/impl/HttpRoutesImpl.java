@@ -72,15 +72,15 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 	final BufMap<HttpHandler> traceHandlers = new BufMapImpl<HttpHandler>();
 	final BufMap<HttpHandler> anyHandlers = new BufMapImpl<HttpHandler>();
 
-	final Map<PathPattern, HttpHandler> paternGetHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
-	final Map<PathPattern, HttpHandler> paternPostHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
-	final Map<PathPattern, HttpHandler> paternPutHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
-	final Map<PathPattern, HttpHandler> paternDeleteHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
-	final Map<PathPattern, HttpHandler> paternPatchHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
-	final Map<PathPattern, HttpHandler> paternOptionsHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
-	final Map<PathPattern, HttpHandler> paternHeadHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
-	final Map<PathPattern, HttpHandler> paternTraceHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
-	final Map<PathPattern, HttpHandler> paternAnyHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
+	final Map<PathPattern, HttpHandler> patternGetHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
+	final Map<PathPattern, HttpHandler> patternPostHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
+	final Map<PathPattern, HttpHandler> patternPutHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
+	final Map<PathPattern, HttpHandler> patternDeleteHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
+	final Map<PathPattern, HttpHandler> patternPatchHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
+	final Map<PathPattern, HttpHandler> patternOptionsHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
+	final Map<PathPattern, HttpHandler> patternHeadHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
+	final Map<PathPattern, HttpHandler> patternTraceHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
+	final Map<PathPattern, HttpHandler> patternAnyHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
 
 	private final Customization customization;
 
@@ -130,7 +130,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 						getHandlers.put(path, handler);
 					}
 				} else {
-					paternGetHandlers.put(pathPattern, handler);
+					patternGetHandlers.put(pathPattern, handler);
 				}
 				break;
 
@@ -138,7 +138,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 				if (!isPattern) {
 					postHandlers.put(path, handler);
 				} else {
-					paternPostHandlers.put(pathPattern, handler);
+					patternPostHandlers.put(pathPattern, handler);
 				}
 				break;
 
@@ -146,7 +146,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 				if (!isPattern) {
 					putHandlers.put(path, handler);
 				} else {
-					paternPutHandlers.put(pathPattern, handler);
+					patternPutHandlers.put(pathPattern, handler);
 				}
 				break;
 
@@ -154,7 +154,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 				if (!isPattern) {
 					deleteHandlers.put(path, handler);
 				} else {
-					paternDeleteHandlers.put(pathPattern, handler);
+					patternDeleteHandlers.put(pathPattern, handler);
 				}
 				break;
 
@@ -162,7 +162,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 				if (!isPattern) {
 					patchHandlers.put(path, handler);
 				} else {
-					paternPatchHandlers.put(pathPattern, handler);
+					patternPatchHandlers.put(pathPattern, handler);
 				}
 				break;
 
@@ -170,7 +170,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 				if (!isPattern) {
 					optionsHandlers.put(path, handler);
 				} else {
-					paternOptionsHandlers.put(pathPattern, handler);
+					patternOptionsHandlers.put(pathPattern, handler);
 				}
 				break;
 
@@ -178,7 +178,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 				if (!isPattern) {
 					headHandlers.put(path, handler);
 				} else {
-					paternHeadHandlers.put(pathPattern, handler);
+					patternHeadHandlers.put(pathPattern, handler);
 				}
 				break;
 
@@ -186,7 +186,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 				if (!isPattern) {
 					traceHandlers.put(path, handler);
 				} else {
-					paternTraceHandlers.put(pathPattern, handler);
+					patternTraceHandlers.put(pathPattern, handler);
 				}
 				break;
 
@@ -194,7 +194,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 				if (!isPattern) {
 					anyHandlers.put(path, handler);
 				} else {
-					paternAnyHandlers.put(pathPattern, handler);
+					patternAnyHandlers.put(pathPattern, handler);
 				}
 				break;
 
@@ -228,7 +228,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 
 					getHandlers.remove(path);
 				} else {
-					paternGetHandlers.remove(pathPattern);
+					patternGetHandlers.remove(pathPattern);
 				}
 				break;
 
@@ -236,7 +236,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 				if (!isPattern) {
 					postHandlers.remove(path);
 				} else {
-					paternPostHandlers.remove(pathPattern);
+					patternPostHandlers.remove(pathPattern);
 				}
 				break;
 
@@ -244,7 +244,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 				if (!isPattern) {
 					putHandlers.remove(path);
 				} else {
-					paternPutHandlers.remove(pathPattern);
+					patternPutHandlers.remove(pathPattern);
 				}
 				break;
 
@@ -252,7 +252,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 				if (!isPattern) {
 					deleteHandlers.remove(path);
 				} else {
-					paternDeleteHandlers.remove(pathPattern);
+					patternDeleteHandlers.remove(pathPattern);
 				}
 				break;
 
@@ -260,7 +260,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 				if (!isPattern) {
 					patchHandlers.remove(path);
 				} else {
-					paternPatchHandlers.remove(pathPattern);
+					patternPatchHandlers.remove(pathPattern);
 				}
 				break;
 
@@ -268,7 +268,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 				if (!isPattern) {
 					optionsHandlers.remove(path);
 				} else {
-					paternOptionsHandlers.remove(pathPattern);
+					patternOptionsHandlers.remove(pathPattern);
 				}
 				break;
 
@@ -276,7 +276,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 				if (!isPattern) {
 					headHandlers.remove(path);
 				} else {
-					paternHeadHandlers.remove(pathPattern);
+					patternHeadHandlers.remove(pathPattern);
 				}
 				break;
 
@@ -284,7 +284,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 				if (!isPattern) {
 					traceHandlers.remove(path);
 				} else {
-					paternTraceHandlers.remove(pathPattern);
+					patternTraceHandlers.remove(pathPattern);
 				}
 				break;
 
@@ -292,7 +292,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 				if (!isPattern) {
 					anyHandlers.remove(path);
 				} else {
-					paternAnyHandlers.remove(pathPattern);
+					patternAnyHandlers.remove(pathPattern);
 				}
 				break;
 
@@ -339,7 +339,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 				HandlerMatch handler = getHandlers.get(buf, path);
 
 				if (handler == null) handler = anyHandlers.get(buf, path);
-				if (handler == null) handler = matchByPattern(paternGetHandlers, buf.get(path));
+				if (handler == null) handler = matchByPattern(patternGetHandlers, buf.get(path));
 
 				return handler;
 			}
@@ -349,7 +349,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 			HandlerMatch handler = postHandlers.get(buf, path);
 
 			if (handler == null) handler = anyHandlers.get(buf, path);
-			if (handler == null) handler = matchByPattern(paternPostHandlers, buf.get(path));
+			if (handler == null) handler = matchByPattern(patternPostHandlers, buf.get(path));
 
 			return handler;
 
@@ -358,7 +358,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 			HandlerMatch handler = putHandlers.get(buf, path);
 
 			if (handler == null) handler = anyHandlers.get(buf, path);
-			if (handler == null) handler = matchByPattern(paternPutHandlers, buf.get(path));
+			if (handler == null) handler = matchByPattern(patternPutHandlers, buf.get(path));
 
 			return handler;
 
@@ -367,7 +367,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 			HandlerMatch handler = deleteHandlers.get(buf, path);
 
 			if (handler == null) handler = anyHandlers.get(buf, path);
-			if (handler == null) handler = matchByPattern(paternDeleteHandlers, buf.get(path));
+			if (handler == null) handler = matchByPattern(patternDeleteHandlers, buf.get(path));
 
 			return handler;
 
@@ -376,7 +376,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 			HandlerMatch handler = patchHandlers.get(buf, path);
 
 			if (handler == null) handler = anyHandlers.get(buf, path);
-			if (handler == null) handler = matchByPattern(paternPatchHandlers, buf.get(path));
+			if (handler == null) handler = matchByPattern(patternPatchHandlers, buf.get(path));
 
 			return handler;
 
@@ -385,7 +385,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 			HandlerMatch handler = optionsHandlers.get(buf, path);
 
 			if (handler == null) handler = anyHandlers.get(buf, path);
-			if (handler == null) handler = matchByPattern(paternOptionsHandlers, buf.get(path));
+			if (handler == null) handler = matchByPattern(patternOptionsHandlers, buf.get(path));
 
 			return handler;
 
@@ -394,7 +394,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 			HandlerMatch handler = headHandlers.get(buf, path);
 
 			if (handler == null) handler = anyHandlers.get(buf, path);
-			if (handler == null) handler = matchByPattern(paternHeadHandlers, buf.get(path));
+			if (handler == null) handler = matchByPattern(patternHeadHandlers, buf.get(path));
 
 			return handler;
 
@@ -403,7 +403,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 			HandlerMatch handler = traceHandlers.get(buf, path);
 
 			if (handler == null) handler = anyHandlers.get(buf, path);
-			if (handler == null) handler = matchByPattern(paternTraceHandlers, buf.get(path));
+			if (handler == null) handler = matchByPattern(patternTraceHandlers, buf.get(path));
 
 			return handler;
 		}
@@ -425,7 +425,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 			}
 		}
 
-		if (handlers != paternAnyHandlers) return matchByPattern(paternAnyHandlers, path);
+		if (handlers != patternAnyHandlers) return matchByPattern(patternAnyHandlers, path);
 
 		return null;
 	}
@@ -524,15 +524,15 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 		anyHandlers.clear();
 		genericHandlers.clear();
 
-		paternGetHandlers.clear();
-		paternPostHandlers.clear();
-		paternPutHandlers.clear();
-		paternDeleteHandlers.clear();
-		paternPatchHandlers.clear();
-		paternOptionsHandlers.clear();
-		paternHeadHandlers.clear();
-		paternTraceHandlers.clear();
-		paternAnyHandlers.clear();
+		patternGetHandlers.clear();
+		patternPostHandlers.clear();
+		patternPutHandlers.clear();
+		patternDeleteHandlers.clear();
+		patternPatchHandlers.clear();
+		patternOptionsHandlers.clear();
+		patternHeadHandlers.clear();
+		patternTraceHandlers.clear();
+		patternAnyHandlers.clear();
 
 		staticResourcesHandler = new StaticResourcesHandler(customization);
 
