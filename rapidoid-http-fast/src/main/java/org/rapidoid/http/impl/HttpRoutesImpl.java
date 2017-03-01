@@ -521,6 +521,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 		putHandlers.clear();
 		deleteHandlers.clear();
 		optionsHandlers.clear();
+		anyHandlers.clear();
 		genericHandlers.clear();
 
 		paternGetHandlers.clear();
@@ -531,6 +532,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 		paternOptionsHandlers.clear();
 		paternHeadHandlers.clear();
 		paternTraceHandlers.clear();
+		paternAnyHandlers.clear();
 
 		staticResourcesHandler = new StaticResourcesHandler(customization);
 

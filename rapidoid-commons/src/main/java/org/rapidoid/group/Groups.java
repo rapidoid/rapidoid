@@ -100,4 +100,10 @@ public class Groups extends RapidoidThing {
 		return null;
 	}
 
+	public static void reset() {
+		for (GroupOf<?> group : all()) {
+			group.clear();
+		}
+		ALL.clear();
+	}
 }
