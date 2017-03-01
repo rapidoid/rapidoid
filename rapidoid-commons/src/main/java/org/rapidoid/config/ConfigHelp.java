@@ -60,6 +60,7 @@ public class ConfigHelp extends RapidoidThing {
 		if (Msc.dockerized()) {
 			show("  docker run -it --rm --net=host -v $(pwd):/app rapidoid app.services=welcome admin.services=center users.admin.password=my-pass");
 			show("  docker run -it --rm -p 80:8888 -v $(pwd):/app -u nobody rapidoid app.services=welcome,ping admin.services=center users.admin.password=my-pass");
+			show("  docker run -it --rm rapidoid password");
 		} else {
 			show("  java -cp <yourapp>.jar com.example.Main on.port=9090 on.address=127.0.0.1 app.services=ping,jmx admin.services=center production users.admin.password=my-pass");
 		}
@@ -79,7 +80,14 @@ public class ConfigHelp extends RapidoidThing {
 
 	private static void showOpts(List<ConfigOption> opts) {
 		for (ConfigOption opt : opts) {
-			String desc = U.frmt("%s (default: %s)", opt.getDesc(), opt.getDefaultValue());
+
+			Object def = opt.getDefaultValue();
+			String desc = opt.getDesc();
+
+			if (def != null) {
+				desc = U.frmt("%s (default: %s)", desc, def);
+			}
+
 			opt(opt.getName(), desc);
 		}
 	}
