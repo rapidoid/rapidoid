@@ -74,6 +74,7 @@ org.rapidoid.buffer.BufScanner
 org.rapidoid.buffer.BufUtil
 org.rapidoid.buffer.IncompleteReadException
 org.rapidoid.buffer.MultiBuf
+org.rapidoid.buffer.SSLDestination
 org.rapidoid.buffer.SynchronizedBuf
 org.rapidoid.bufstruct.BufMap
 org.rapidoid.bufstruct.BufMapImpl
@@ -620,6 +621,7 @@ org.rapidoid.net.impl.RapidoidChannel
 org.rapidoid.net.impl.RapidoidConnection
 org.rapidoid.net.impl.RapidoidHelper
 org.rapidoid.net.impl.RapidoidServerLoop
+org.rapidoid.net.impl.RapidoidTLS
 org.rapidoid.net.impl.RapidoidWorker
 org.rapidoid.net.impl.RapidoidWorkerThread
 org.rapidoid.net.Protocol
@@ -775,6 +777,7 @@ org.rapidoid.util.SimpleList
 org.rapidoid.util.SimpleMap
 org.rapidoid.util.SimplePersisterProvider
 org.rapidoid.util.SlidingWindowList
+org.rapidoid.util.SSLUtil
 org.rapidoid.util.StreamUtils
 org.rapidoid.util.TokenAuthData
 org.rapidoid.util.Tokens

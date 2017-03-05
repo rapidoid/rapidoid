@@ -5,6 +5,7 @@ import org.apache.http.client.RedirectStrategy;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.*;
 import org.apache.http.concurrent.FutureCallback;
+import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.DefaultConnectionReuseStrategy;
@@ -28,10 +29,15 @@ import org.rapidoid.io.IO;
 import org.rapidoid.io.Upload;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
+import org.rapidoid.util.SSLUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -75,7 +81,7 @@ public class HttpClientUtil extends RapidoidThing {
 		}
 	};
 
-	static CloseableHttpAsyncClient client(HttpClient client) {
+	static CloseableHttpAsyncClient client(HttpClient client) throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
 
 		ConnectionReuseStrategy reuseStrategy = client.reuseConnections() ? new DefaultConnectionReuseStrategy() : new NoConnectionReuseStrategy();
 
@@ -87,6 +93,11 @@ public class HttpClientUtil extends RapidoidThing {
 			.setMaxConnTotal(client.maxConnTotal())
 			.setConnectionReuseStrategy(reuseStrategy)
 			.setRedirectStrategy(client.followRedirects() ? new DefaultRedirectStrategy() : NO_REDIRECTS);
+
+		if (!client.validateSSL()) {
+			builder.setSSLContext(SSLUtil.createTrustingContext());
+			builder.setSSLHostnameVerifier(new AllowAllHostnameVerifier());
+		}
 
 		if (!U.isEmpty(client.cookies())) {
 			BasicCookieStore cookieStore = new BasicCookieStore();

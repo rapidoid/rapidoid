@@ -60,11 +60,17 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 	private static final AtomicLong SERIAL_N = new AtomicLong();
 
-	public final RapidoidWorker worker;
+	final boolean hasTLS;
+
+	final RapidoidTLS tls;
+
+	final RapidoidWorker worker;
 
 	public final Buf input;
 
 	public final Buf output;
+
+	final Buf outgoing;
 
 	private final ConnState state = new ConnState();
 
@@ -74,9 +80,9 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 	private volatile boolean closeAfterWrite = false;
 
-	public volatile boolean closed = true;
+	volatile boolean closed = true;
 
-	public volatile boolean closing = false;
+	volatile boolean closing = false;
 
 	volatile int completedInputPos;
 
@@ -108,8 +114,13 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 	public RapidoidConnection(RapidoidWorker worker, BufGroup bufs) {
 		this.worker = worker;
+
+		this.hasTLS = worker.sslContext() != null;
+		this.tls = hasTLS ? new RapidoidTLS(worker.sslContext(), this) : null;
+
 		this.input = bufs.newBuf("input#" + serialN);
 		this.output = bufs.newBuf("output#" + serialN);
+		this.outgoing = hasTLS ? bufs.newBuf("outgoing#" + serialN) : this.output;
 
 		reset();
 	}
@@ -128,6 +139,7 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 		closing = false;
 		input.clear();
 		output.clear();
+		outgoing.clear();
 		closeAfterWrite = false;
 		waitingToWrite = false;
 		completedInputPos = 0;
@@ -142,6 +154,8 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 		writeSeq.set(0);
 		expiresAt = 0;
 		state.reset();
+
+		if (tls != null) tls.reset();
 	}
 
 	@Override
@@ -254,8 +268,14 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 	}
 
 	private synchronized void askToSend() {
-		synchronized (output) {
-			if (!waitingToWrite && output.size() > 0) {
+		synchronized (outgoing) {
+			if (hasTLS) {
+				synchronized (output) {
+					tls.wrapToOutgoing();
+				}
+			}
+
+			if (!waitingToWrite && outgoing.size() > 0) {
 				waitingToWrite = true;
 				worker.wantToWrite(this);
 			}
@@ -498,7 +518,7 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 	}
 
 	public boolean finishedWriting() {
-		return output.size() == 0;
+		return outgoing.size() == 0;
 	}
 
 }

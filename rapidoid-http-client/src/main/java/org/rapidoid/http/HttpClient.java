@@ -9,6 +9,7 @@ import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Future;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.LazyInit;
+import org.rapidoid.util.MscOpts;
 
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -56,6 +57,8 @@ public class HttpClient extends RapidoidThing {
 	private volatile int maxConnTotal = 0;
 
 	private volatile int maxRedirects = 5;
+
+	private volatile boolean validateSSL = !MscOpts.isTestingHttps();
 
 	private final Map<String, String> cookies = Coll.synchronizedMap();
 
@@ -154,6 +157,15 @@ public class HttpClient extends RapidoidThing {
 
 	public int maxRedirects() {
 		return this.maxRedirects;
+	}
+
+	public boolean validateSSL() {
+		return validateSSL;
+	}
+
+	public HttpClient validateSSL(boolean validateSSL) {
+		this.validateSSL = validateSSL;
+		return this;
 	}
 
 	public HttpClient cookie(String name, String value) {

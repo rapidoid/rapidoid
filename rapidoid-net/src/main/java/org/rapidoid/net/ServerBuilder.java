@@ -6,6 +6,9 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.net.impl.RapidoidServerLoop;
+import org.rapidoid.util.SSLUtil;
+
+import javax.net.ssl.SSLContext;
 
 /*
  * #%L
@@ -48,6 +51,8 @@ public class ServerBuilder extends RapidoidThing {
 	private volatile Class<? extends org.rapidoid.net.impl.DefaultExchange<?>> exchangeClass = null;
 
 	private volatile Class<? extends org.rapidoid.net.impl.RapidoidHelper> helperClass = RapidoidHelper.class;
+
+	private volatile SSLContext sslContext = SSLUtil.createSelfSignedContext();
 
 	public ServerBuilder address(String address) {
 		this.address = address;
@@ -128,8 +133,17 @@ public class ServerBuilder extends RapidoidThing {
 		return this;
 	}
 
+	public SSLContext sslContext() {
+		return sslContext;
+	}
+
+	public ServerBuilder sslContext(SSLContext sslContext) {
+		this.sslContext = sslContext;
+		return this;
+	}
+
 	public Server build() {
-		return new RapidoidServerLoop(protocol, exchangeClass, helperClass, address, port, workers, bufSizeKB, noDelay, syncBufs);
+		return new RapidoidServerLoop(protocol, exchangeClass, helperClass, address, port, workers, bufSizeKB, noDelay, syncBufs, sslContext);
 	}
 
 }

@@ -27,6 +27,8 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.u.U;
 
+import javax.net.ssl.SSLContext;
+
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class RapidoidWorkerThread extends RapidoidThread {
@@ -47,8 +49,12 @@ public class RapidoidWorkerThread extends RapidoidThread {
 
 	private final boolean syncBufs;
 
+	private final SSLContext sslContext;
+
 	public RapidoidWorkerThread(int workerIndex, Protocol protocol, Class<? extends DefaultExchange<?>> exchangeClass,
-	                            Class<? extends RapidoidHelper> helperClass, int bufSizeKB, boolean noDelay, boolean syncBufs) {
+	                            Class<? extends RapidoidHelper> helperClass, int bufSizeKB, boolean noDelay,
+	                            boolean syncBufs, SSLContext sslContext) {
+
 		super("server" + (workerIndex + 1));
 
 		this.workerIndex = workerIndex;
@@ -58,6 +64,7 @@ public class RapidoidWorkerThread extends RapidoidThread {
 		this.bufSizeKB = bufSizeKB;
 		this.noDelay = noDelay;
 		this.syncBufs = syncBufs;
+		this.sslContext = sslContext;
 	}
 
 	@Override
@@ -65,7 +72,7 @@ public class RapidoidWorkerThread extends RapidoidThread {
 		RapidoidHelper helper = Cls.newInstance(helperClass, exchangeClass);
 		helper.requestIdGen = workerIndex; // to generate UNIQUE request ID (+= MAX_IO_WORKERS)
 
-		worker = new RapidoidWorker("server" + (workerIndex + 1), protocol, helper, bufSizeKB, noDelay, syncBufs);
+		worker = new RapidoidWorker("server" + (workerIndex + 1), protocol, helper, bufSizeKB, noDelay, syncBufs, sslContext);
 
 		worker.run();
 	}
