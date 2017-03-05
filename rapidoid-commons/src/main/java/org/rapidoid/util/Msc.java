@@ -24,6 +24,7 @@ import org.rapidoid.group.Groups;
 import org.rapidoid.insight.Insights;
 import org.rapidoid.io.IO;
 import org.rapidoid.io.Res;
+import org.rapidoid.job.Jobs;
 import org.rapidoid.lambda.*;
 import org.rapidoid.log.GlobalCfg;
 import org.rapidoid.log.Log;
