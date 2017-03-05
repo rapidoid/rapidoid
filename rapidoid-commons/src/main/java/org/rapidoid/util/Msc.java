@@ -992,6 +992,7 @@ public class Msc extends RapidoidThing {
 		AppInfo.reset();
 		Conf.reset();
 		Groups.reset();
+		Jobs.reset();
 		Env.reset();
 
 		Ctxs.reset();
