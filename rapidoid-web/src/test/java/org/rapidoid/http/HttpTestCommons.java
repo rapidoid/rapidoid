@@ -93,7 +93,7 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	protected String localhost(int port, String uri) {
-		return "http://localhost:" + port + uri;
+		return Msc.http() + "://localhost:" + port + uri;
 	}
 
 	protected String get(String uri) {

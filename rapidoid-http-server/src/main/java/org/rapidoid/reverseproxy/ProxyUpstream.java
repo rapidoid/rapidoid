@@ -24,6 +24,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.util.List;
 
@@ -49,11 +50,7 @@ public class ProxyUpstream extends RapidoidThing {
 		List<String> refinedUpstreams = U.list();
 
 		for (String upstream : upstreams) {
-			if (!upstream.startsWith("http://") && !upstream.startsWith("https://")) {
-				upstream = "http://" + upstream;
-			}
-
-			refinedUpstreams.add(upstream);
+			refinedUpstreams.add(Msc.urlWithProtocol(upstream));
 		}
 
 		return refinedUpstreams;

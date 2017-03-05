@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 /*
  * #%L
@@ -33,7 +34,7 @@ public class Self extends RapidoidThing {
 	public static String localUrl(String urlPath) {
 		U.must(urlPath.startsWith("/"), "Invalid URL path, it must start with '/'!");
 		int port = Conf.ON.entry("port").or(8080);
-		return "http://localhost:" + port + urlPath;
+		return Msc.http() + "://localhost:" + port + urlPath;
 	}
 
 	public static HttpReq req(HttpVerb verb, String urlPath) {

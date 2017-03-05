@@ -66,7 +66,7 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 
 	public static final int DEFAULT_PORT = 8080;
 
-	public static final String LOCALHOST = "http://localhost:8080";
+	public static final String LOCALHOST = Msc.http() + "://localhost:8080";
 
 	@Before
 	public void openContext() {
@@ -129,7 +129,7 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 	}
 
 	protected String localhost(int port, String uri) {
-		return "http://localhost:" + port + uri;
+		return Msc.http() + "://localhost:" + port + uri;
 	}
 
 	protected void defaultServerSetup() {

@@ -1337,4 +1337,16 @@ public class Msc extends RapidoidThing {
 		return Msc.isPlatform() ? "/rapidoid/" + suffix : "/" + suffix;
 	}
 
+	public static String http() {
+		return MscOpts.isTestingHttps() ? "https" : "http";
+	}
+
+	public static String urlWithProtocol(String url) {
+		if (url.startsWith("http://") || url.startsWith("https://")) {
+			return url;
+		} else {
+			return Msc.http() + "://" + url;
+		}
+	}
+
 }

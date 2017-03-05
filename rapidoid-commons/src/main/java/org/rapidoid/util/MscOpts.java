@@ -45,6 +45,8 @@ public class MscOpts extends RapidoidThing {
 
 	private static final boolean isRestOnly = !hasRapidoidHTML();
 
+	private static final boolean isTestingHttps = "true".equals(System.getProperty("RAPIDOID_TEST_HTTPS"));
+
 	public static boolean hasValidation() {
 		return hasValidation;
 	}
@@ -95,5 +97,9 @@ public class MscOpts extends RapidoidThing {
 
 	public static String appsPath() {
 		return appsPath;
+	}
+
+	public static boolean isTestingHttps() {
+		return isTestingHttps;
 	}
 }

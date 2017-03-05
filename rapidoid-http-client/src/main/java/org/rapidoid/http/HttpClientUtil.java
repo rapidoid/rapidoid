@@ -132,6 +132,8 @@ public class HttpClientUtil extends RapidoidThing {
 
 		String url = config.url();
 
+		url = Msc.urlWithProtocol(url);
+
 		HttpRequestBase req = createReq(config, url);
 
 		for (Map.Entry<String, String> e : headers.entrySet()) {
