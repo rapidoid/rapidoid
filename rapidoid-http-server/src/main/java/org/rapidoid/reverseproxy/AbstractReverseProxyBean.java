@@ -3,6 +3,8 @@ package org.rapidoid.reverseproxy;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
+import org.rapidoid.config.Config;
 import org.rapidoid.http.HttpClient;
 import org.rapidoid.util.LazyInit;
 
@@ -32,11 +34,17 @@ import java.util.concurrent.Callable;
 @Since("5.2.0")
 public abstract class AbstractReverseProxyBean<T> extends RapidoidThing {
 
-	private volatile boolean reuseConnections = true;
+	private static final Config CFG = Conf.REVERSE_PROXY;
 
-	private volatile int maxConnTotal = 100;
+	private volatile long retryDelay = CFG.entry("retryDelay").or(300);
 
-	private volatile int maxConnPerRoute = 100;
+	private volatile long timeout = CFG.entry("timeout").or(10000);
+
+	private volatile boolean reuseConnections = CFG.entry("reuseConnections").or(true);
+
+	private volatile int maxConnections = CFG.entry("maxConnections").or(100);
+
+	private volatile int maxConnectionsPerRoute = CFG.entry("maxConnectionsPerRoute").or(100);
 
 	private final LazyInit<HttpClient> client = new LazyInit<HttpClient>(new Callable<HttpClient>() {
 		@Override
@@ -61,22 +69,40 @@ public abstract class AbstractReverseProxyBean<T> extends RapidoidThing {
 		return me();
 	}
 
-	public int maxConnTotal() {
-		return maxConnTotal;
+	public long retryDelay() {
+		return retryDelay;
 	}
 
-	public T maxConnTotal(int maxConnTotal) {
-		this.maxConnTotal = maxConnTotal;
-		return me();
+	public AbstractReverseProxyBean retryDelay(int retryDelay) {
+		this.retryDelay = retryDelay;
+		return this;
 	}
 
-	public int maxConnPerRoute() {
-		return maxConnPerRoute;
+	public long timeout() {
+		return timeout;
 	}
 
-	public T maxConnPerRoute(int maxConnPerRoute) {
-		this.maxConnPerRoute = maxConnPerRoute;
-		return me();
+	public AbstractReverseProxyBean timeout(int timeout) {
+		this.timeout = timeout;
+		return this;
+	}
+
+	public int maxConnections() {
+		return maxConnections;
+	}
+
+	public AbstractReverseProxyBean maxConnections(int maxConnections) {
+		this.maxConnections = maxConnections;
+		return this;
+	}
+
+	public int maxConnectionsPerRoute() {
+		return maxConnectionsPerRoute;
+	}
+
+	public AbstractReverseProxyBean maxConnectionsPerRoute(int maxConnectionsPerRoute) {
+		this.maxConnectionsPerRoute = maxConnectionsPerRoute;
+		return this;
 	}
 
 	public HttpClient client() {

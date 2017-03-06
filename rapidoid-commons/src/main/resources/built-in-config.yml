@@ -117,6 +117,13 @@ http:
     server: true
     contentType: true
 
+reverse-proxy:
+  timeout: 10000
+  retryDelay: 300
+  maxConnections: 100
+  maxConnectionsPerRoute: 100
+  reuseConnections: true
+
 token:
   ttl: 0 # unlimited
 

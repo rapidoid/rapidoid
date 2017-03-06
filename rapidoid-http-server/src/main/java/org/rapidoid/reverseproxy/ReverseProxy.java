@@ -8,6 +8,7 @@ import org.rapidoid.http.impl.lowlevel.HttpIO;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.io.IOException;
 import java.net.ConnectException;
@@ -37,10 +38,6 @@ import java.util.Map;
 @Since("5.2.0")
 public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> implements ReqRespHandler {
 
-	private static final int RETRY_AFTER_MS = 300;
-
-	private static final int TIMEOUT_MS = 10000;
-
 	private final ProxyMapping mapping;
 
 	public ReverseProxy(ProxyMapping mapping) {
@@ -64,10 +61,11 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 		return mapping; // customizable for more complex logic
 	}
 
-	protected void process(final Req req, final Resp resp, final ProxyMapping mapping, final int attempts, final long since) {
+	private void process(final Req req, final Resp resp, final ProxyMapping mapping, final int attempts, final long since) {
 		final String targetUrl = mapping.getTargetUrl(req);
 
-		Map<String, String> headers = req.headers();
+		Map<String, String> headers = U.map(req.headers());
+
 		headers.remove("transfer-encoding");
 		headers.remove("content-length");
 
@@ -107,12 +105,12 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 			});
 	}
 
-	protected void handleError(Throwable error, final Req req, final Resp resp, final ProxyMapping mapping, final int attempts, final long since) {
+	private void handleError(Throwable error, final Req req, final Resp resp, final ProxyMapping mapping, final int attempts, final long since) {
 		if (error instanceof ConnectException || error instanceof IOException) {
 
-			if (HttpUtils.isGetReq(req) && (U.time() - since < TIMEOUT_MS)) {
+			if (HttpUtils.isGetReq(req) && !Msc.timedOut(since, timeout())) {
 
-				Jobs.after(RETRY_AFTER_MS).milliseconds(new Runnable() {
+				Jobs.after(retryDelay()).milliseconds(new Runnable() {
 					@Override
 					public void run() {
 						process(req, resp, mapping, attempts + 1, since);
@@ -134,8 +132,8 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 		return HTTP.client()
 			.reuseConnections(reuseConnections())
 			.keepCookies(false)
-			.maxConnTotal(maxConnTotal())
-			.maxConnPerRoute(maxConnPerRoute());
+			.maxConnTotal(maxConnections())
+			.maxConnPerRoute(maxConnectionsPerRoute());
 	}
 
 }
