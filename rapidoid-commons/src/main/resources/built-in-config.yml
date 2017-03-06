@@ -123,6 +123,12 @@ reverse-proxy:
   maxConnections: 100
   maxConnectionsPerRoute: 100
   reuseConnections: true
+  setHeaders:
+    X-Forwarded-For: true
+    X-Client-IP: false
+    X-Real-IP: false
+    X-Username: false
+    X-Roles: false
 
 token:
   ttl: 0 # unlimited

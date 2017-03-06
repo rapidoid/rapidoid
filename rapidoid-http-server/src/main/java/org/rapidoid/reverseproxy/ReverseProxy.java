@@ -69,6 +69,8 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 		headers.remove("transfer-encoding");
 		headers.remove("content-length");
 
+		addExtraRequestHeaders(req, headers);
+
 		HttpClient client = getOrCreateClient();
 
 		client.req()
@@ -103,6 +105,30 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 				}
 
 			});
+	}
+
+	private void addExtraRequestHeaders(Req req, Map<String, String> headers) {
+		String clientIpAddress = req.clientIpAddress();
+
+		if (setXUsernameHeader()) headers.put("X-Username", U.safe(Current.username()));
+
+		if (setXRolesHeader()) headers.put("X-Roles", U.join(", ", Current.roles()));
+
+		if (setXClientIPHeader()) headers.put("X-Client-IP", clientIpAddress);
+
+		if (setXRealIPHeader()) headers.put("X-Real-IP", req.realIpAddress());
+
+		if (setXForwardedForHeader()) {
+			String forwardedFor = headers.get("X-Forwarded-For");
+
+			if (U.notEmpty(forwardedFor)) {
+				forwardedFor += ", " + clientIpAddress;
+			} else {
+				forwardedFor = clientIpAddress;
+			}
+
+			headers.put("X-Forwarded-For", forwardedFor);
+		}
 	}
 
 	private void handleError(Throwable error, final Req req, final Resp resp, final ProxyMapping mapping, final int attempts, final long since) {
