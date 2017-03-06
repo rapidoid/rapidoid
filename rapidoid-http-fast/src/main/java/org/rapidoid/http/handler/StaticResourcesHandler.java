@@ -55,7 +55,7 @@ public class StaticResourcesHandler extends AbstractHttpHandler {
 			String[] staticFilesLocations = customization.staticFilesPath();
 			if (!U.isEmpty(staticFilesLocations)) {
 
-				Res res = HttpUtils.staticPage(req, staticFilesLocations);
+				Res res = HttpUtils.staticResource(req, staticFilesLocations);
 				if (res != null) {
 
 					StaticFilesSecurity staticFilesSecurity = customization.staticFilesSecurity();

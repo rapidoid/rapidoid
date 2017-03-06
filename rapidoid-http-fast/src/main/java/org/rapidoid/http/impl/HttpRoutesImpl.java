@@ -91,6 +91,8 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 
 	private volatile HttpHandler staticResourcesHandler;
 
+	private volatile HttpHandler builtInResourcesHandler;
+
 	private final Set<Route> routes = Coll.synchronizedSet();
 
 	private volatile boolean initialized;
@@ -100,7 +102,8 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 
 	public HttpRoutesImpl(Customization customization) {
 		this.customization = customization;
-		staticResourcesHandler = new StaticResourcesHandler(customization);
+		this.staticResourcesHandler = new StaticResourcesHandler(customization);
+		this.builtInResourcesHandler = new StaticResourcesHandler(customization);
 	}
 
 	private void register(HttpVerb verb, String path, HttpHandler handler) {
@@ -613,6 +616,10 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 
 	public HttpHandler staticResourcesHandler() {
 		return staticResourcesHandler;
+	}
+
+	public HttpHandler builtInResourcesHandler() {
+		return builtInResourcesHandler;
 	}
 
 	@Override

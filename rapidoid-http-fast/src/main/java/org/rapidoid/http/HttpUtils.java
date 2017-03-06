@@ -135,7 +135,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 		resp.contentType(mediaType);
 	}
 
-	public static Res staticPage(Req req, String... possibleLocations) {
+	public static Res staticResource(Req req, String... possibleLocations) {
 		String resName = resName(req);
 
 		if (resName == null) return null;
