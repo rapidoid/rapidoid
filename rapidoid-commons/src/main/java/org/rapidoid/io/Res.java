@@ -163,7 +163,7 @@ public class Res extends RapidoidThing {
 
 	protected void loadResource() {
 		// micro-caching the file content, expires after 500ms
-		if (U.time() - lastUpdatedOn >= 500) {
+		if (Msc.timedOut(lastUpdatedOn, 500)) {
 			boolean hasChanged;
 
 			synchronized (this) {

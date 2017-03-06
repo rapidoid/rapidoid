@@ -28,6 +28,7 @@ import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.impl.HttpRoutesImpl;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.util.Date;
 
@@ -85,7 +86,7 @@ public class HttpRoutesGroup extends RapidoidThing {
 
 	public boolean ready() {
 		long lastChangedAt = lastChangedAt().getTime();
-		return !isEmpty() && (U.time() - lastChangedAt > ROUTE_SETUP_WAITING_TIME_MS);
+		return !isEmpty() && Msc.timedOut(lastChangedAt, ROUTE_SETUP_WAITING_TIME_MS);
 	}
 
 	public void reset() {

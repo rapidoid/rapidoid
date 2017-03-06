@@ -432,7 +432,7 @@ public class ProcessHandle extends AbstractManageable {
 		while (isAlive()) {
 			U.sleep(1);
 
-			if (U.time() - t > terminationTimeout) {
+			if (Msc.timedOut(t, terminationTimeout)) {
 				destroyForcibly();
 				break;
 			}
@@ -442,7 +442,7 @@ public class ProcessHandle extends AbstractManageable {
 		while (isAlive()) {
 			U.sleep(1);
 
-			if (U.time() - t > terminationTimeout) {
+			if (Msc.timedOut(t, terminationTimeout)) {
 				throw U.rte("Couldn't terminate the process!");
 			}
 		}

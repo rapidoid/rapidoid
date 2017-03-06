@@ -1351,4 +1351,7 @@ public class Msc extends RapidoidThing {
 		}
 	}
 
+	public static boolean timedOut(long since, long timeout) {
+		return U.time() - since > timeout;
+	}
 }
