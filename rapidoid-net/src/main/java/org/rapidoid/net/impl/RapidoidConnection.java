@@ -151,6 +151,8 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 	@Override
 	public synchronized InetSocketAddress getAddress() {
+		if (key == null) return null;
+
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 		SocketAddress addr = socketChannel.socket().getRemoteSocketAddress();
 		if (addr instanceof InetSocketAddress) {
@@ -369,7 +371,8 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 	@Override
 	public String address() {
-		return getAddress().getAddress().getHostAddress();
+		InetSocketAddress inetSocketAddress = getAddress();
+		return inetSocketAddress != null ? inetSocketAddress.getAddress().getHostAddress() : null;
 	}
 
 	@Override

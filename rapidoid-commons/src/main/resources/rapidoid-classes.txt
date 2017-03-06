@@ -730,6 +730,7 @@ org.rapidoid.setup.AppRestartListener
 org.rapidoid.setup.AppRestartProcessor
 org.rapidoid.setup.AppVerification
 org.rapidoid.setup.CustomizableSetupAwarePersisterProvider
+org.rapidoid.setup.DefaultSetup
 org.rapidoid.setup.IGoodies
 org.rapidoid.setup.My
 org.rapidoid.setup.On

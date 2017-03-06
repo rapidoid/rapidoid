@@ -38,7 +38,7 @@ public class HttpHandlerTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testFastHttpHandler() {
-		Customization customization = new Customization("example", My.custom(), new ConfigImpl(), new ConfigImpl());
+		Customization customization = new Customization("example", My.custom(), new ConfigImpl());
 		HttpRoutesImpl routes = new HttpRoutesImpl(customization);
 		FastHttp http = new FastHttp(routes);
 
