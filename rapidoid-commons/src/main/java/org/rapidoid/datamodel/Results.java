@@ -33,6 +33,8 @@ public interface Results<T> extends Iterable<T> {
 
 	List<T> page(long start, long length);
 
+	T single();
+
 	T first();
 
 	T last();

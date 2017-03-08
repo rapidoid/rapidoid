@@ -60,6 +60,11 @@ public class ResultsImpl<T> extends RapidoidThing implements Results<T> {
 	}
 
 	@Override
+	public T single() {
+		return U.single(retrievePage(0, 2));
+	}
+
+	@Override
 	public final T first() {
 		return U.single(retrievePage(0, 1));
 	}
