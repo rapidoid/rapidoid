@@ -56,6 +56,19 @@ public class HttpUtilsTest extends TestCommons {
 	}
 
 	@Test
+	public void testUnicodeResourceNames() {
+		eq(HttpUtils.resName("/Николче"), "Николче");
+		eq(HttpUtils.resName("/咖啡"), "咖啡");
+		eq(HttpUtils.resName("/咖啡.html"), "咖啡");
+		eq(HttpUtils.resName("/foo/咖啡/bar.html"), "foo/咖啡/bar");
+		eq(HttpUtils.resName("/編程/编程.html"), "編程/编程");
+
+		eq(HttpUtils.resNameFromRoutePath("/Николче/{x}"), "Николче/x");
+		eq(HttpUtils.resNameFromRoutePath("/Dlf3фок/{id:\\d+}"), "Dlf3фок/id");
+		eq(HttpUtils.resNameFromRoutePath("/咖啡/{a:.*}-{b}/foo"), "咖啡/a-b/foo");
+	}
+
+	@Test
 	public void testInvalidResources() {
 		for (String resName : invalidResNames) {
 			eq(HttpUtils.resName(resName), null);

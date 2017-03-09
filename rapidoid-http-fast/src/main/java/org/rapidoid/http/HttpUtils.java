@@ -65,7 +65,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 		}
 	};
 
-	public static volatile Pattern REGEX_VALID_HTTP_RESOURCE = Pattern.compile("(?:/[A-Za-z0-9_\\-\\.]+)*/?");
+	public static volatile Pattern REGEX_VALID_HTTP_RESOURCE = Pattern.compile("(?U)(?:/[\\w+\\-\\.]+)*/?");
 
 	private static final Mapper<String[], String> PATH_PARAM_EXTRACTOR = new Mapper<String[], String>() {
 		@Override
