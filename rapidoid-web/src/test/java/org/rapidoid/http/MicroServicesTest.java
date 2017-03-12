@@ -46,8 +46,8 @@ public class MicroServicesTest extends HttpTestCommons {
 		});
 
 		// a blocking call
-		eq(REST.get("http://localhost:8080/?n=7", Integer.class).intValue(), 8);
-		eq(REST.post("http://localhost:8080/?n=7", Integer.class).intValue(), 8);
+		eq(REST.get(localhost("/?n=7"), Integer.class).intValue(), 8);
+		eq(REST.post(localhost("/?n=7"), Integer.class).intValue(), 8);
 
 		int count = 1000;
 		final CountDownLatch latch = new CountDownLatch(count);
@@ -77,9 +77,9 @@ public class MicroServicesTest extends HttpTestCommons {
 			};
 
 			if (i % 2 == 0) {
-				REST.get("http://localhost:8080/?n=" + i, Integer.class, callback);
+				REST.get(localhost("/?n=" + i), Integer.class, callback);
 			} else {
-				REST.post("http://localhost:8080/?n=" + i, Integer.class, callback);
+				REST.post(localhost("/?n=" + i), Integer.class, callback);
 			}
 		}
 

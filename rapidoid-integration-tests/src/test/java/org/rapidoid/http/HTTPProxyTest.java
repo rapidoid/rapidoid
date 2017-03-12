@@ -26,6 +26,8 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.Setup;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -33,7 +35,8 @@ public class HTTPProxyTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testProxy() {
-		App.run(new String[0], "/->http://localhost:5555,http://localhost:6666");
+		String http = Msc.http();
+		App.run(new String[0], U.frmt("/->%s://localhost:5555,%s://localhost:6666", http, http));
 
 		Setup x = Setup.create("x").port(5555);
 		x.get("/who").html("X");

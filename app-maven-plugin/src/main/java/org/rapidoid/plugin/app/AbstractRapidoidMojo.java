@@ -2,7 +2,7 @@ package org.rapidoid.plugin.app;
 
 /*
  * #%L
- * Rapidoid Build Plugin
+ * Rapidoid App Plugin
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%

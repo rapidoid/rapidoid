@@ -33,7 +33,7 @@ import org.rapidoid.u.U;
 @Since("4.1.0")
 public class AsyncHttpServerTest extends IsolatedIntegrationTest {
 
-	@Test
+	@Test(timeout = 15000)
 	public void testAsyncHttpServer() {
 		Log.debugging();
 
@@ -60,7 +60,7 @@ public class AsyncHttpServerTest extends IsolatedIntegrationTest {
 		Self.post("/").expect("OK").benchmark(1, 100, 10000);
 	}
 
-	@Test
+	@Test(timeout = 15000)
 	public void testAsyncHttpServer2() {
 		On.req(req -> Jobs.after(10).milliseconds(() -> {
 

@@ -25,21 +25,29 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
 
+import java.io.File;
+import java.util.List;
+
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class Main extends RapidoidThing {
 
-	private static final String[] DEFAULT_ARGS = {
-		"app.services=welcome",
-		"admin.services=center",
-		"/ -> localhost:8080",
-	};
+	private static final List<String> DEFAULT_ARGS = U.list(
+		"admin.services=center"
+	);
 
 	public static void main(String[] args) {
 		boolean defaults = U.isEmpty(args);
 
 		if (defaults) {
-			args = DEFAULT_ARGS;
+
+			if (new File("/app/app.jar").exists()) {
+				DEFAULT_ARGS.add("/ -> localhost:8080");
+			} else {
+				DEFAULT_ARGS.add("app.services=welcome");
+			}
+
+			args = U.arrayOf(String.class, DEFAULT_ARGS);
 		}
 
 		Platform.start(args, defaults);

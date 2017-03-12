@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 4455
+Content-Length: 4587
 
 
 <!--
@@ -27,14 +27,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link href="/bootstrap/css/bootstrap-3.3.6.min.css" rel="stylesheet">
-    <link href="/font-awesome/css/font-awesome-4.5.0.min.css" rel="stylesheet">
-    <link href="/rapidoid.min.css" rel="stylesheet">
-    <link href="/login.css" rel="stylesheet">
+    <link href="/_rapidoid/bootstrap/css/bootstrap-3.3.6.min.css" rel="stylesheet">
+    <link href="/_rapidoid/font-awesome/css/font-awesome-4.5.0.min.css" rel="stylesheet">
+    <link href="/_rapidoid/rapidoid.min.css" rel="stylesheet">
+    <link href="/_rapidoid/login.css" rel="stylesheet">
 
 <script>
     window.Rapidoid = window.Rapidoid || {};
     window.Rapidoid.contextPath = '';
+    window.Rapidoid.loginUri = '/_login';
 </script>
 
 </head>
@@ -91,11 +92,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     </div>
 </div>
 
-<script src="/jquery-2.2.3.min.js"></script>
-<script src="/bootstrap/js/bootstrap-3.3.6.min.js"></script>
-<script src="/angular-1.5.8.min.js"></script>
-<script src="/rapidoid.min.js"></script>
-<script src="/login.js"></script>
+<script src="/_rapidoid/jquery-2.2.3.min.js"></script>
+<script src="/_rapidoid/bootstrap/js/bootstrap-3.3.6.min.js"></script>
+<script src="/_rapidoid/angular-1.5.8.min.js"></script>
+<script src="/_rapidoid/rapidoid.min.js"></script>
+<script src="/_rapidoid/login.js"></script>
 
 </body>
 </html>

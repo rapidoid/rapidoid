@@ -40,11 +40,14 @@ import java.io.StringReader;
 public class MustacheJavaViewResolver extends AbstractViewResolver<DefaultMustacheFactory> {
 
 	@Override
-	public View getView(String viewName, ResourceLoader templateLoader) throws Exception {
+	public View getView(String viewName, ResourceLoader resourceLoader) throws Exception {
+		String filename = filename(viewName);
 
-		DefaultMustacheFactory mf = getViewFactory(templateLoader);
+		if (resourceLoader.load(filename) == null) return null;
 
-		Mustache mustache = mf.compile(filename(viewName));
+		DefaultMustacheFactory mf = getViewFactory(resourceLoader);
+
+		Mustache mustache = mf.compile(filename);
 
 		return view(mustache);
 	}
@@ -70,7 +73,9 @@ public class MustacheJavaViewResolver extends AbstractViewResolver<DefaultMustac
 			@Override
 			public Reader getReader(String name) {
 				try {
-					return new StringReader(new String(templateLoader.load(name)));
+					byte[] bytes = templateLoader.load(name);
+					U.must(bytes != null, "The Mustache.java template '%s' doesn't exist!", name);
+					return new StringReader(new String(bytes));
 				} catch (Exception e) {
 					throw U.rte(e);
 				}

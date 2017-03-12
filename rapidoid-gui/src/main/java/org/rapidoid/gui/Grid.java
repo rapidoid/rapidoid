@@ -51,6 +51,7 @@ public class Grid extends AbstractWidget<Grid> {
 	private volatile String[] columns = {};
 	private volatile Object[] headers = {};
 	private volatile String rowCmd;
+	private volatile String highlightRegex;
 
 	private volatile Mapper<Object, String> toUri;
 
@@ -214,6 +215,11 @@ public class Grid extends AbstractWidget<Grid> {
 	}
 
 	protected TdTag cell(Object value) {
+		if (U.notEmpty(highlightRegex)) {
+			String s = String.valueOf(value);
+			value = GUI.highlight(s, highlightRegex);
+		}
+
 		return td(value);
 	}
 
@@ -290,4 +296,12 @@ public class Grid extends AbstractWidget<Grid> {
 		return headers(U.array(headers));
 	}
 
+	public String highlightRegex() {
+		return highlightRegex;
+	}
+
+	public Grid highlightRegex(String highlightRegex) {
+		this.highlightRegex = highlightRegex;
+		return this;
+	}
 }

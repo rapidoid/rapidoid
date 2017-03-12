@@ -68,7 +68,7 @@ public class ExpirationCrawlerThread extends RapidoidThread {
 	}
 
 	private void crawl() {
-		for (Iterable<? extends Expiring> coll : U.list(collections)) {
+		for (Iterable<? extends Expiring> coll : Coll.copyOf(collections)) {
 			long now = U.time();
 
 			for (Expiring target : coll) {

@@ -56,7 +56,7 @@ public class JDBCPoolC3P0Test extends IsolatedIntegrationTest {
 		final Map<String, ?> expected = U.map("id", 123, "name", "xyz");
 
 		Msc.benchmarkMT(100, "select", 100000, () -> {
-			Map<String, Object> record = U.single(JDBC.query("select id, name from abc"));
+			Map<String, Object> record = U.single(JDBC.query("select id, name from abc").all());
 			record = Msc.lowercase(record);
 			eq(record, expected);
 		});
@@ -85,7 +85,7 @@ public class JDBCPoolC3P0Test extends IsolatedIntegrationTest {
 		final Map<String, ?> expected = U.map("id", 123, "name", "xyz");
 
 		Msc.benchmarkMT(100, "select", 100000, () -> {
-			Map<String, Object> record = U.single(JDBC.query("select id, name from abc"));
+			Map<String, Object> record = U.single(JDBC.query("select id, name from abc").all());
 			record = Msc.lowercase(record);
 			eq(record, expected);
 		});

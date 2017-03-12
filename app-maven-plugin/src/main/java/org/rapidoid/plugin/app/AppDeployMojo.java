@@ -2,7 +2,7 @@ package org.rapidoid.plugin.app;
 
 /*
  * #%L
- * Rapidoid Build Plugin
+ * Rapidoid App Plugin
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -80,13 +80,13 @@ public class AppDeployMojo extends AbstractRapidoidMojo {
 
 		boolean ok = true;
 		for (String server : targetServers) {
-			ok &= doStage(jar, server + "/_stage");
+			ok &= doStage(jar, server + "/rapidoid/stage");
 		}
 
 		failIf(!ok, "The staging failed on at least 1 server. Aborting the deployment!");
 
 		for (String server : targetServers) {
-			doDeploy(server + "/_deploy");
+			doDeploy(server + "/rapidoid/deploy");
 		}
 	}
 

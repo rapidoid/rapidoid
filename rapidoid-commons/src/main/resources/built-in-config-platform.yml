@@ -6,7 +6,28 @@ admin:
 
 app:
   jar: /app/app.jar
-  cdn: false
 
-admin-zone:
-  brand: '<i class="fa fa-dashboard"></i> Rapidoid'
+platform-zone:
+  home: /rapidoid
+  brand: '<i class="fa fa-shield"></i> Rapidoid'
+  search: false
+  fluid: true
+  menu:
+    Overview: /rapidoid
+    Routes: /rapidoid/routes
+    Configuration: /rapidoid/config
+    Deployment: /rapidoid/deployment
+    Processes: /rapidoid/processes
+    Metrics: /rapidoid/metrics
+    Manageables: /rapidoid/manageables
+    System:
+      Terminate / Restart: /rapidoid/terminate
+      Classpath: /rapidoid/classpath
+      Memory pool: /rapidoid/jmx/mempool
+      JVM Threads: /rapidoid/jmx/threads
+      Operating system: /rapidoid/jmx/os
+      Garbage collection: /rapidoid/jmx/gc
+      Memory: /rapidoid/jmx/memory
+      Runtime: /rapidoid/jmx/runtime
+      Classes: /rapidoid/jmx/classes
+      Compilation: /rapidoid/jmx/compilation

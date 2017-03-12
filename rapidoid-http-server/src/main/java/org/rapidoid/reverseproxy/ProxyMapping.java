@@ -34,30 +34,14 @@ public class ProxyMapping extends RapidoidThing {
 
 	private final String prefix;
 
-	private volatile List<ProxyUpstream> upstreams;
+	private final LoadBalancer loadBalancer;
 
-	private volatile LoadBalancer loadBalancer = new RoundRobinLoadBalancer();
+	private final List<ProxyUpstream> upstreams;
 
-	public ProxyMapping(String prefix, List<ProxyUpstream> upstreams) {
+	public ProxyMapping(String prefix, LoadBalancer loadBalancer, List<ProxyUpstream> upstreams) {
 		this.prefix = prefix;
+		this.loadBalancer = loadBalancer;
 		this.upstreams = upstreams;
-	}
-
-	public String prefix() {
-		return prefix;
-	}
-
-	public List<ProxyUpstream> upstreams() {
-		return upstreams;
-	}
-
-	public ProxyMapping upstreams(List<ProxyUpstream> upstreams) {
-		this.upstreams = upstreams;
-		return this;
-	}
-
-	public boolean matches(Req req) {
-		return req.path().startsWith(prefix);
 	}
 
 	public String getTargetUrl(Req req) {
@@ -66,15 +50,6 @@ public class ProxyMapping extends RapidoidThing {
 		String trimmed = prefix.equals("/") ? req.uri() : Str.triml(req.uri(), prefix);
 
 		return upstream.url() + trimmed;
-	}
-
-	public LoadBalancer loadBalancer() {
-		return loadBalancer;
-	}
-
-	public ProxyMapping loadBalancer(LoadBalancer loadBalancer) {
-		this.loadBalancer = loadBalancer;
-		return this;
 	}
 
 }

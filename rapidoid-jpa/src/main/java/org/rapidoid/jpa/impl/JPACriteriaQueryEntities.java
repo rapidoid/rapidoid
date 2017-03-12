@@ -20,20 +20,20 @@ package org.rapidoid.jpa.impl;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.datamodel.AbstractDataItems;
-import org.rapidoid.jpa.Entities;
+import org.rapidoid.datamodel.PageableData;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.jpa.JPAUtil;
 
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class JPACriteriaQueryEntities<T> extends AbstractDataItems implements Entities<T> {
+public class JPACriteriaQueryEntities<T> extends RapidoidThing implements PageableData<T> {
 
 	private final CriteriaQuery<T> criteria;
 
@@ -41,20 +41,15 @@ public class JPACriteriaQueryEntities<T> extends AbstractDataItems implements En
 		this.criteria = criteria;
 	}
 
-	private Query query() {
-		return JPA.em().createQuery(this.criteria);
-	}
-
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<T> all() {
-		return query().getResultList();
+	public List<T> getPage(long start, long length) {
+		TypedQuery<T> query = JPA.em().createQuery(this.criteria);
+		return JPAUtil.getPage(query, start, length);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<T> page(int start, int length) {
-		return JPAUtil.getPage(query(), start, length);
+	public long getCount() {
+		// TODO find a better way
+		return -1; // unknown
 	}
-
 }

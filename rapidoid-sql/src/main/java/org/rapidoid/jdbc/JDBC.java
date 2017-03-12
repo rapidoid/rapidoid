@@ -1,18 +1,11 @@
 package org.rapidoid.jdbc;
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.beany.Beany;
-import org.rapidoid.beany.Prop;
-import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.Coll;
-import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
-import org.rapidoid.util.TUUID;
+import org.rapidoid.datamodel.Results;
 
-import java.sql.*;
-import java.util.List;
+import java.sql.Connection;
 import java.util.Map;
 import java.util.UUID;
 
@@ -38,7 +31,7 @@ import java.util.UUID;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class JDBC extends RapidoidThing {
+public class JDBC extends JdbcUtil {
 
 	private static final Map<String, JdbcClient> APIS = Coll.autoExpandingMap(String.class, JdbcClient.class);
 
@@ -102,16 +95,32 @@ public class JDBC extends RapidoidThing {
 		return api().execute(sql, args);
 	}
 
-	public static void tryToExecute(String sql, Object... args) {
-		api().tryToExecute(sql, args);
+	public static int execute(String sql, Map<String, ?> namedArgs) {
+		return api().execute(sql, namedArgs);
 	}
 
-	public static <T> List<T> query(Class<T> resultType, String sql, Object... args) {
+	public static int tryToExecute(String sql, Object... args) {
+		return api().tryToExecute(sql, args);
+	}
+
+	public static int tryToExecute(String sql, Map<String, ?> namedArgs) {
+		return api().tryToExecute(sql, namedArgs);
+	}
+
+	public static <T> Results<T> query(Class<T> resultType, String sql, Object... args) {
 		return api().query(resultType, sql, args);
 	}
 
-	public static <T> List<Map<String, Object>> query(String sql, Object... args) {
+	public static <T> Results<T> query(Class<T> resultType, String sql, Map<String, ?> namedArgs) {
+		return api().query(resultType, sql, namedArgs);
+	}
+
+	public static Results<Map<String, Object>> query(String sql, Object... args) {
 		return api().query(sql, args);
+	}
+
+	public static Results<Map<String, Object>> query(String sql, Map<String, ?> namedArgs) {
+		return api().query(sql, namedArgs);
 	}
 
 	public static Connection getConnection() {
@@ -120,95 +129,6 @@ public class JDBC extends RapidoidThing {
 
 	public static void release(Connection connection) {
 		api().release(connection);
-	}
-
-	public static PreparedStatement prepare(Connection conn, String sql, Object... args) {
-		try {
-			PreparedStatement stmt = conn.prepareStatement(sql);
-
-			bind(stmt, args);
-
-			return stmt;
-
-		} catch (SQLException e) {
-			throw new RuntimeException("Cannot create prepared statement!", e);
-		}
-	}
-
-	public static void bind(PreparedStatement stmt, Object... args) throws SQLException {
-		for (int i = 0; i < args.length; i++) {
-			Object arg = args[i];
-
-			if (arg instanceof byte[]) {
-				byte[] bytes = (byte[]) arg;
-				stmt.setBytes(i + 1, bytes);
-
-			} else if (arg instanceof UUID) {
-				UUID uuid = (UUID) arg;
-				byte[] bytes = Msc.uuidToBytes(uuid);
-				stmt.setBytes(i + 1, bytes);
-
-			} else if (arg instanceof TUUID) {
-				TUUID tuuid = (TUUID) arg;
-				stmt.setBytes(i + 1, tuuid.toBytes());
-
-			} else {
-				stmt.setObject(i + 1, arg);
-			}
-		}
-	}
-
-	public static <T> List<T> rows(Class<T> resultType, ResultSet rs) throws SQLException {
-		List<T> rows = U.list();
-
-		ResultSetMetaData meta = rs.getMetaData();
-		int columnsN = meta.getColumnCount();
-		Prop[] props = new Prop[columnsN];
-
-		for (int i = 0; i < props.length; i++) {
-			String name = meta.getColumnLabel(i + 1);
-			props[i] = Beany.property(resultType, name, false);
-		}
-
-		while (rs.next()) {
-			T row = Cls.newInstance(resultType);
-
-			for (int i = 0; i < columnsN; i++) {
-				if (props[i] != null) {
-					Object value = rs.getObject(i + 1); // 1-indexed
-					props[i].set(row, value);
-				}
-			}
-
-			rows.add(row);
-		}
-
-		return rows;
-	}
-
-	public static List<Map<String, Object>> rows(ResultSet rs) throws SQLException {
-		List<Map<String, Object>> rows = U.list();
-
-		while (rs.next()) {
-			rows.add(row(rs));
-		}
-
-		return rows;
-	}
-
-	public static Map<String, Object> row(ResultSet rs) throws SQLException {
-		Map<String, Object> row = U.map();
-
-		ResultSetMetaData meta = rs.getMetaData();
-		int columnsNumber = meta.getColumnCount();
-
-		for (int i = 1; i <= columnsNumber; i++) {
-			String name = meta.getColumnLabel(i);
-			Object value = rs.getObject(i);
-			row.put(name, value);
-		}
-
-		return row;
 	}
 
 }

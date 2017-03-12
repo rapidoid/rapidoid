@@ -118,4 +118,5 @@ public class StrTest extends AbstractCommonsTest {
 	public void testMapRendering() {
 		eq(Str.render(U.map("xx", 1, "yy", "ABC"), "value [${key}] is ${value}", "::"), "value [xx] is 1::value [yy] is ABC");
 	}
+
 }

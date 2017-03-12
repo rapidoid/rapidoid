@@ -2,11 +2,16 @@ package org.rapidoid.jdbc;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Err;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
+import org.rapidoid.datamodel.Results;
+import org.rapidoid.datamodel.impl.ResultsImpl;
 import org.rapidoid.group.AutoManageable;
+import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.sql.*;
 import java.util.List;
@@ -236,7 +241,17 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 	}
 
 	public int execute(String sql, Object... args) {
+		return doExecute(sql, null, args);
+	}
+
+	public int execute(String sql, Map<String, ?> namedArgs) {
+		return doExecute(sql, namedArgs, null);
+	}
+
+	private int doExecute(String sql, Map<String, ?> namedArgs, Object[] args) {
 		ensureIsInitialized();
+
+		sql = toSql(sql);
 
 		Log.debug("SQL", "sql", sql, "args", args);
 
@@ -244,7 +259,7 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 		PreparedStatement stmt = null;
 
 		try {
-			stmt = JDBC.prepare(conn, sql, args);
+			stmt = JDBC.prepare(conn, sql, namedArgs, args);
 
 			String q = sql.trim().toUpperCase();
 
@@ -267,25 +282,57 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 		}
 	}
 
-	public void tryToExecute(String sql, Object... args) {
+	public int tryToExecute(String sql, Object... args) {
+		return doTryToExecute(sql, null, args);
+	}
+
+	public int tryToExecute(String sql, Map<String, ?> namedArgs) {
+		return doTryToExecute(sql, namedArgs, null);
+	}
+
+	private int doTryToExecute(String sql, Map<String, ?> namedArgs, Object[] args) {
 		try {
-			execute(sql, args);
+			return doExecute(sql, namedArgs, args);
 
 		} catch (Exception e) {
 			// ignore the exception
-			Log.warn("Ignoring exception", "error", U.safe(e.getMessage()));
+			Log.warn("Ignoring JDBC error", "error", Msc.errorMsg(e));
 		}
+
+		return 0;
 	}
 
-	public <T> List<T> query(Class<T> resultType, String sql, Object... args) {
+	public <T> Results<T> query(Class<T> resultType, String sql, Map<String, ?> namedArgs) {
+		return doQuery(resultType, sql, namedArgs, null);
+	}
+
+	public <T> Results<T> query(Class<T> resultType, String sql, Object... args) {
+		return doQuery(resultType, sql, null, args);
+	}
+
+	private <T> Results<T> doQuery(Class<T> resultType, String sql, Map<String, ?> namedArgs, Object[] args) {
+		sql = toSql(sql);
+		JdbcData<T> data = new JdbcData<>(this, resultType, sql, namedArgs, args);
+		return new ResultsImpl<>(data);
+	}
+
+	<T> List<T> runQuery(Class<T> resultType, String sql, Map<String, ?> namedArgs, Object[] args, long start, long length) {
 		ensureIsInitialized();
+
+		U.must(start >= 0);
+		U.must(length >= 0);
+
+		if (start > 0 || length < Long.MAX_VALUE) {
+			// FIXME paging
+			throw Err.notReady();
+		}
 
 		Connection conn = provideConnection();
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 
 		try {
-			stmt = JDBC.prepare(conn, sql, args);
+			stmt = JDBC.prepare(conn, sql, namedArgs, args);
 			rs = stmt.executeQuery();
 
 			if (resultType.equals(Map.class)) {
@@ -304,8 +351,25 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 		}
 	}
 
-	public List<Map<String, Object>> query(String sql, Object... args) {
+	long getQueryCount(String sql, Map<String, ?> namedArgs, Object[] args) {
+		// FIXME find a better way
+		return -1; // unknown
+	}
+
+	private static String toSql(String sql) {
+		if (sql.endsWith(".sql")) {
+			sql = Res.from(sql).mustExist().getContent();
+		}
+
+		return sql;
+	}
+
+	public Results<Map<String, Object>> query(String sql, Object... args) {
 		return U.cast(query(Map.class, sql, args));
+	}
+
+	public Results<Map<String, Object>> query(String sql, Map<String, ?> namedArgs) {
+		return U.cast(query(Map.class, sql, namedArgs));
 	}
 
 	private Connection provideConnection() {

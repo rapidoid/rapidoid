@@ -40,7 +40,7 @@ public class JPACustomizationTest extends IsolatedIntegrationTest {
 	public void testCustomEMWithReq() {
 		JPA.bootstrap(path());
 
-		On.post("/tx").tx().json(() -> JPA.insert(new Book("posted")));
+		On.post("/tx").transaction().json(() -> JPA.insert(new Book("posted")));
 
 		AtomicInteger n = new AtomicInteger();
 
@@ -87,7 +87,7 @@ public class JPACustomizationTest extends IsolatedIntegrationTest {
 	public void testCustomEMFWithReq() {
 		JPA.bootstrap(path());
 
-		On.post("/tx").tx().json(() -> JPA.insert(new Book("posted")));
+		On.post("/tx").transaction().json(() -> JPA.insert(new Book("posted")));
 
 		AtomicInteger n = new AtomicInteger();
 

@@ -50,6 +50,7 @@ public class RapidoidThingsTest {
 				U.must(RapidoidThing.class.isAssignableFrom(clazz)
 					|| clazz == TestCommons.class
 					|| cls.startsWith("org.rapidoid.fluent.")
+					|| cls.startsWith("org.rapidoid.benchmark.")
 					|| Exception.class.isAssignableFrom(clazz)
 					|| ClassLoader.class.isAssignableFrom(clazz)
 					|| HibernatePersistenceProvider.class.isAssignableFrom(clazz)

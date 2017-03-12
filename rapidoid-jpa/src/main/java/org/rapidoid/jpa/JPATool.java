@@ -3,6 +3,8 @@ package org.rapidoid.jpa;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.datamodel.Results;
+import org.rapidoid.datamodel.impl.ResultsImpl;
 import org.rapidoid.jpa.impl.JPACriteriaQueryEntities;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.u.U;
@@ -263,11 +265,11 @@ public class JPATool extends RapidoidThing {
 		return em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(entity);
 	}
 
-	public <T> Entities<T> find(CriteriaQuery<T> query) {
-		return new JPACriteriaQueryEntities<T>(query);
+	public <T> Results<T> find(CriteriaQuery<T> query) {
+		return new ResultsImpl<>(new JPACriteriaQueryEntities<T>(query));
 	}
 
-	public <T> Entities<T> of(Class<T> clazz) {
+	public <T> Results<T> of(Class<T> clazz) {
 		CriteriaQuery<T> query = cb().createQuery(clazz);
 		query.from(clazz);
 		return find(query);

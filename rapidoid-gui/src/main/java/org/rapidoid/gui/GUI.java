@@ -51,6 +51,7 @@ import org.rapidoid.timeseries.TimeSeries;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.MscOpts;
+import org.rapidoid.util.TUUID;
 import org.rapidoid.var.Var;
 
 import java.io.Serializable;
@@ -606,6 +607,18 @@ public abstract class GUI extends HTML implements Role {
 		} else if (item instanceof Boolean) {
 			boolean b = (Boolean) item;
 			return b ? TRUE : FALSE;
+
+		} else if (item instanceof UUID) {
+			UUID uuid = (UUID) item;
+			return uuid.toString();
+
+		} else if (item instanceof TUUID) {
+			TUUID tuuid = (TUUID) item;
+			return tuuid.toString();
+
+		} else if (item instanceof byte[]) {
+			byte[] bytes = (byte[]) item;
+			return Str.toHex(bytes);
 
 		} else if (item instanceof Var<?>) {
 			Var<?> var = (Var<?>) item;

@@ -48,7 +48,7 @@ public class PathPatternTest extends TestCommons {
 		match("/*", "/.*", "/", empty);
 		match("/*", "/.*", "/xy", empty);
 
-		match("/msgs/*", "/msgs/.*", "/msgs/abc", empty);
+		match("/msgs/*", "/msgs(?:/.*)?", "/msgs/abc", empty);
 
 		match("/{cat}", "/" + g(1), "/books", U.map("cat", "books"));
 		match("/{_}/view", "/" + g(1) + "/view", "/movies/view", U.map("_", "movies"));

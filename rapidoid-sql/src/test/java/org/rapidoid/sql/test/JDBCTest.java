@@ -96,13 +96,13 @@ public class JDBCTest extends SQLTestCommons {
 			client.execute("INSERT INTO movie VALUES (?, ?)", 100 + i, "movie" + i);
 		}
 
-		List<Map<String, Object>> rows = client.query("SELECT * FROM movie WHERE id < ?", 25);
+		List<Map<String, Object>> rows = client.query("SELECT * FROM movie WHERE id < ?", 25).all();
 
 		eq(rows.size(), 2);
 		eq(Msc.lowercase(rows.get(0)), U.map("id", 10, "title", "rambo"));
 		eq(Msc.lowercase(rows.get(1)), U.map("id", 20, "title", "hackers"));
 
-		List<Movie> movies = client.query(Movie.class, "SELECT * FROM movie WHERE id < ?", 25);
+		List<Movie> movies = client.query(Movie.class, "SELECT * FROM movie WHERE id < ?", 25).all();
 
 		eq(movies.size(), 2);
 

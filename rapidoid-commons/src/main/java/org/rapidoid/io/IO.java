@@ -234,21 +234,38 @@ public class IO extends RapidoidThing {
 		save(filename, content, 3);
 	}
 
+	public static void append(String filename, byte[] content) {
+		writeToFile(filename, content, true, 3);
+	}
+
 	public static void save(String filename, byte[] content, int retries) {
+		writeToFile(filename, content, false, retries);
+	}
+
+	private static void writeToFile(String filename, byte[] content, boolean append, int retries) {
 		FileOutputStream out = null;
 		try {
-			out = new FileOutputStream(filename);
+			out = new FileOutputStream(filename, append);
 			out.write(content);
 			close(out, false);
+
 		} catch (FileNotFoundException e) {
 			if (retries > 0) {
-				new File(filename).getParentFile().mkdirs();
+
+				try {
+					new File(filename).getCanonicalFile().getParentFile().mkdirs();
+				} catch (IOException e1) {
+					throw U.rte(e1);
+				}
+
 				U.sleep(200);
 				save(filename, content, retries - 1);
+
 			} else {
 				close(out, true);
 				throw U.rte(e);
 			}
+
 		} catch (Exception e) {
 			close(out, true);
 			throw U.rte(e);

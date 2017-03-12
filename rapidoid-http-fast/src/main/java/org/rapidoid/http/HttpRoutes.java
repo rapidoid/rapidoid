@@ -35,6 +35,8 @@ public interface HttpRoutes {
 
 	void on(String verb, String path, ReqHandler handler);
 
+	void on(String verb, String path, ReqRespHandler handler);
+
 	void remove(String verb, String path);
 
 	void addGenericHandler(HttpHandler handler);

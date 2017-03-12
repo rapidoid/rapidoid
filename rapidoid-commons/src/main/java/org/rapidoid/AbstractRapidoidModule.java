@@ -40,6 +40,11 @@ public abstract class AbstractRapidoidModule extends RapidoidThing implements Ra
 	}
 
 	@Override
+	public void boot() {
+		// do nothing
+	}
+
+	@Override
 	public abstract void cleanUp();
 
 	@Override

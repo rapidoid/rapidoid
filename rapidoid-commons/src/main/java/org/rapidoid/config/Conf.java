@@ -56,7 +56,9 @@ public class Conf extends RapidoidThing {
 	public static final Config HIBERNATE = section("hibernate");
 	public static final Config C3P0 = section("c3p0");
 	public static final Config APP = section("app");
+	public static final Config GUI = section("gui");
 	public static final Config HTTP = section("http");
+	public static final Config REVERSE_PROXY = section("reverse-proxy");
 	public static final Config NET = section("net");
 	public static final Config ON = section("on");
 	public static final Config ADMIN = section("admin");
@@ -64,6 +66,7 @@ public class Conf extends RapidoidThing {
 	public static final Config PROXY = section("proxy");
 	public static final Config LOG = section("log");
 	public static final Config API = section("api");
+	public static final Config PAGES = section("pages");
 
 	static void applyConfig(Config config) {
 		RapidoidEnv.touch();

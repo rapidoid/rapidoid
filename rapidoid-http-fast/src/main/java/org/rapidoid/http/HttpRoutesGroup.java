@@ -23,10 +23,12 @@ package org.rapidoid.http;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.env.Env;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.impl.HttpRoutesImpl;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.util.Date;
 
@@ -34,7 +36,7 @@ import java.util.Date;
 @Since("5.3.0")
 public class HttpRoutesGroup extends RapidoidThing {
 
-	private static final int ROUTE_SETUP_WAITING_TIME_MS = 500;
+	private static final int ROUTE_SETUP_WAITING_TIME_MS = Env.test() ? 300 : 500;
 
 	private final HttpRoutesImpl[] routes;
 
@@ -84,7 +86,7 @@ public class HttpRoutesGroup extends RapidoidThing {
 
 	public boolean ready() {
 		long lastChangedAt = lastChangedAt().getTime();
-		return !isEmpty() && (U.time() - lastChangedAt > ROUTE_SETUP_WAITING_TIME_MS);
+		return !isEmpty() && Msc.timedOut(lastChangedAt, ROUTE_SETUP_WAITING_TIME_MS);
 	}
 
 	public void reset() {
@@ -100,8 +102,12 @@ public class HttpRoutesGroup extends RapidoidThing {
 		while (!initialized) {
 			U.sleep(1);
 			if (ready()) {
-				initialized = true;
-				Log.info("Initialized HTTP routes");
+				synchronized (this) {
+					if (!initialized) {
+						initialized = true;
+						Log.info("Initialized HTTP routes");
+					}
+				}
 			}
 		}
 	}

@@ -11,19 +11,20 @@ printf "Bumping version from $OLD_VER to $NEW_VER...\n\n"
 
 REPL="s/$OLD_VER/$NEW_VER/g"
 
-for TARGET in $(find examples -name pom.xml) ../docker-rapidoid/Dockerfile
- do
+for TARGET in $(find examples -name pom.xml)
+do
     echo "Processing $TARGET"
     sed -i "$REPL" "$TARGET"
- done
+    git add "$TARGET"
+done
+
 echo
 
 if [[ "$RAP_DIRTY" ]]; then
   echo "Dirty git index, cannot commit"
 else
   echo "Clean git index, will commit..."
-  git add examples/getting-started/pom.xml
-  git commit -m "Bumped version from $OLD_VER to $NEW_VER."
+  git commit -m "Bumped Rapidoid version from $OLD_VER to $NEW_VER."
 fi
 
 printf "\n--- Going to rapidoid.github.io ---\n\n"

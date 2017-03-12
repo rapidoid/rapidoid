@@ -36,7 +36,6 @@ import org.rapidoid.jpa.JPA;
 import org.rapidoid.jpa.JPAUtil;
 import org.rapidoid.lambda.F3;
 import org.rapidoid.log.Log;
-import org.rapidoid.reverseproxy.ProxyMapping;
 import org.rapidoid.reverseproxy.Reverse;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.setup.Admin;
@@ -67,7 +66,7 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 
 	public static final int DEFAULT_PORT = 8080;
 
-	public static final String LOCALHOST = "http://localhost:8080";
+	public static final String LOCALHOST = Msc.http() + "://localhost:8080";
 
 	@Before
 	public void openContext() {
@@ -130,7 +129,7 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 	}
 
 	protected String localhost(int port, String uri) {
-		return "http://localhost:" + port + uri;
+		return Msc.http() + "://localhost:" + port + uri;
 	}
 
 	protected void defaultServerSetup() {
@@ -378,8 +377,8 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 		JPA.transaction(action);
 	}
 
-	protected ProxyMapping proxy(String match, String upstreams) {
-		return Reverse.proxy().map(match).to(upstreams);
+	protected void proxy(String match, String upstreams) {
+		Reverse.proxy(match).to(upstreams).add();
 	}
 
 	protected <T> T connect(F3<T, InputStream, BufferedReader, DataOutputStream> protocol) {

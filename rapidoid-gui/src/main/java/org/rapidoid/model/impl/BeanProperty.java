@@ -93,7 +93,8 @@ public class BeanProperty extends AbstractProperty {
 		if (prop.equals("id")) {
 			return "ID";
 		}
-		return Str.camelPhrase(prop);
+
+		return Str.phrase(prop);
 	}
 
 	@Override

@@ -75,7 +75,7 @@ public class ManageableCache extends AutoManageable<ManageableCache> {
 	}
 
 	public String hitRate() {
-		long total = hits() + misses() + errors() + bypassed();
+		long total = cache.stats().total();
 		return total != 0 ? Math.round(hits() * 10000.0 / total) / 100.0 + " %" : "";
 	}
 

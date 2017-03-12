@@ -28,7 +28,7 @@ import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.data.BufRange;
 import org.rapidoid.util.AbstractMapImpl;
 import org.rapidoid.util.MapEntry;
-import org.rapidoid.util.SimpleList;
+import org.rapidoid.util.SimpleBucket;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
@@ -38,8 +38,8 @@ public class BufMapImpl<T> extends AbstractMapImpl<byte[], T> implements BufMap<
 		this(100);
 	}
 
-	public BufMapImpl(int width) {
-		super(width);
+	public BufMapImpl(int capacity) {
+		super(capacity, -1);
 	}
 
 	private long hash(String key) {
@@ -55,7 +55,7 @@ public class BufMapImpl<T> extends AbstractMapImpl<byte[], T> implements BufMap<
 	public void put(String key, T value) {
 		assert key.length() >= 1;
 
-		MapEntry<byte[], T> route = new MapEntry<byte[], T>(key.getBytes(), value);
+		MapEntry<byte[], T> route = new MapEntry<>(key.getBytes(), value);
 
 		long hash = hash(key);
 
@@ -66,7 +66,7 @@ public class BufMapImpl<T> extends AbstractMapImpl<byte[], T> implements BufMap<
 	public T get(Buf buf, BufRange key) {
 		long hash = hash(buf.bytes(), key);
 
-		SimpleList<MapEntry<byte[], T>> candidates = entries.bucket(hash);
+		SimpleBucket<MapEntry<byte[], T>> candidates = entries.bucket(hash);
 
 		if (candidates != null) {
 			for (int i = 0; i < candidates.size(); i++) {
@@ -87,7 +87,7 @@ public class BufMapImpl<T> extends AbstractMapImpl<byte[], T> implements BufMap<
 
 		long hash = hash(key);
 
-		SimpleList<MapEntry<byte[], T>> bucket = this.entries.bucket(hash);
+		SimpleBucket<MapEntry<byte[], T>> bucket = this.entries.bucket(hash);
 
 		if (bucket == null) {
 			return false;

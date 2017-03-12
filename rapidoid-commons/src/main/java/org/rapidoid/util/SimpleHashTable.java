@@ -3,6 +3,8 @@ package org.rapidoid.util;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Rnd;
+import org.rapidoid.u.U;
 
 /*
  * #%L
@@ -28,37 +30,52 @@ import org.rapidoid.annotation.Since;
 @Since("2.0.0")
 public class SimpleHashTable<T> extends RapidoidThing {
 
-	protected static final int DEFAULT_BUCKET_SIZE = 5;
+	private static final int DEFAULT_BUCKET_SIZE = 8;
 
-	public final SimpleList<T>[] buckets;
+	public final SimpleBucket<T>[] buckets;
 
-	public SimpleHashTable(int width) {
-		this(width, DEFAULT_BUCKET_SIZE);
-	}
+	public final int factor;
+
+	private final int hashMask;
+
+	private final int xor = Rnd.rnd();
 
 	@SuppressWarnings("unchecked")
-	public SimpleHashTable(int width, int initialBucketSize) {
+	public SimpleHashTable(int capacity, int bucketSize) {
+		U.must(capacity >= 2, "The capacity is too small!");
+
+		if (bucketSize <= 0) bucketSize = DEFAULT_BUCKET_SIZE;
+
+		int factor = Msc.log2(Math.max(capacity / bucketSize, 1));
+
+		int width = (int) Math.pow(2, factor);
+		int realCapacity = width * bucketSize;
+		U.must(capacity <= realCapacity);
+
 		this.buckets = new SimpleList[width];
+		this.factor = factor;
+		this.hashMask = Msc.bitMask(factor);
+
 		for (int i = 0; i < buckets.length; i++) {
-			buckets[i] = newList(initialBucketSize);
+			buckets[i] = createBucket(bucketSize);
 		}
 	}
 
-	protected SimpleList<T> newList(int initialBucketSize) {
-		return new SimpleList<T>(initialBucketSize);
+	protected SimpleBucket<T> createBucket(int bucketSize) {
+		return new SimpleList<>(bucketSize);
 	}
 
 	public void put(long key, T value) {
 		bucket(key).add(value);
 	}
 
-	public SimpleList<T> bucket(long key) {
+	public SimpleBucket<T> bucket(long key) {
 		int index = index(key);
-		return getBucket(index);
+		return getBucketAt(index);
 	}
 
-	protected SimpleList<T> getBucket(int index) {
-		SimpleList<T> list;
+	public SimpleBucket<T> getBucketAt(int index) {
+		SimpleBucket<T> list;
 
 		// after construction, other threads might need some time to see the new references
 		while ((list = buckets[index]) == null) {
@@ -68,7 +85,7 @@ public class SimpleHashTable<T> extends RapidoidThing {
 	}
 
 	public int index(long key) {
-		return (int) (Math.abs(key) % buckets.length);
+		return (int) ((key ^ xor) & hashMask);
 	}
 
 	public void clear() {
@@ -78,7 +95,7 @@ public class SimpleHashTable<T> extends RapidoidThing {
 	}
 
 	protected void clearBucket(int index) {
-		getBucket(index).clear();
+		getBucketAt(index).clear();
 	}
 
 	public int bucketCount() {

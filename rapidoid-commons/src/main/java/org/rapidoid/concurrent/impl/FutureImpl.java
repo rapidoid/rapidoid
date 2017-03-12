@@ -4,6 +4,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.commons.Err;
 import org.rapidoid.concurrent.Future;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.util.concurrent.TimeoutException;
 
@@ -67,7 +68,7 @@ public class FutureImpl<T> extends RapidoidThing implements Future<T> {
 		long waitingSince = U.time();
 
 		while (!isDone()) {
-			if (U.time() - waitingSince > timeoutMs) {
+			if (Msc.timedOut(waitingSince, timeoutMs)) {
 				throw new TimeoutException();
 			}
 

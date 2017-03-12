@@ -8,6 +8,7 @@ import org.rapidoid.http.*;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.ErrorHandler;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.util.Map;
 
@@ -121,6 +122,7 @@ public class DefaultErrorHandler extends RapidoidThing implements ErrorHandler {
 		if (error instanceof SecurityException) {
 			resp.model("embedded", req.attr("_embedded", false));
 			resp.model("req", req);
+			resp.model("loginUri", Msc.specialUri("login"));
 			return resp.code(403).view("login").mvc(true);
 
 		} else {

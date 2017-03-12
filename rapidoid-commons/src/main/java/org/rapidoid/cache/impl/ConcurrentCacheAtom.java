@@ -24,41 +24,35 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cache.CacheAtom;
+import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Resetable;
 
 import java.util.concurrent.Callable;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class ConcurrentCacheAtom<V> extends RapidoidThing implements CacheAtom<V>, Callable<V> {
+public class ConcurrentCacheAtom<K, V> extends RapidoidThing implements CacheAtom<V>, Callable<V> {
 
-	private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+	protected final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
-	private final Callable<V> loader;
+	protected final K key;
 
-	private final long ttlInMs;
+	protected final Mapper<K, V> loader;
 
-	private final AtomicLong hits = new AtomicLong();
+	protected final long ttlInMs;
 
-	private final AtomicLong misses = new AtomicLong();
+	protected volatile CachedValue<V> cachedValue;
 
-	private final AtomicLong errors = new AtomicLong();
+	long approxAccessCounter;
 
-	private volatile V value;
-
-	private volatile boolean cacheValid = false;
-
-	private volatile long expiresAt;
-
-	private final CacheStats stats;
-
-	public ConcurrentCacheAtom(Callable<V> loader, long ttlInMs, CacheStats stats) {
+	public ConcurrentCacheAtom(K key, Mapper<K, V> loader, long ttlInMs) {
+		this.key = key;
 		this.loader = loader;
 		this.ttlInMs = ttlInMs;
-		this.stats = stats;
 	}
 
 	/**
@@ -83,27 +77,56 @@ public class ConcurrentCacheAtom<V> extends RapidoidThing implements CacheAtom<V
 	 * The synchronization is based on the {@link ReentrantReadWriteLock} documentation.
 	 */
 	private V retrieveCachedValue(boolean loadIfExpired, boolean updateStats) {
+
 		V result;
 		V oldValue = null;
 		Throwable error = null;
 		boolean missed = false;
-		long now = U.time();
 
-		lock.readLock().lock(); // ----------------- START LOCKS -----------------
+		// race conditions are allowed
+		this.approxAccessCounter++;
 
-		if (!cacheValid || now > expiresAt) {
+		long now;
 
-			lock.readLock().unlock();
-			lock.writeLock().lock();
+		CachedValue<V> cached = cachedValue; // read the cached value
+
+		if (cached != null) {
+
+			long expiresAt = cached.expiresAt;
+			if (expiresAt == Long.MAX_VALUE) {
+				updateStats(false, false);
+				return cached.value;
+			}
+
+			now = U.time();
+			if (now <= expiresAt) {
+				updateStats(false, false);
+				return cached.value;
+			}
+
+		} else {
+			now = U.time();
+		}
+
+		// ----------------- START LOCKS -----------------
+
+		readLock();
+
+		cached = cachedValue; // read the cached value again, inside the read lock
+
+		if (cached == null || now > cached.expiresAt) {
+
+			readUnlock();
+			writeLock();
 
 			// double-check: another thread might have acquired write lock and changed state already
-			if (!cacheValid || now > expiresAt) {
+			if (cached == null || now > cached.expiresAt) {
 
 				V newValue;
 
 				if (loadIfExpired) {
 					try {
-						newValue = loader != null ? loader.call() : null;
+						newValue = loader != null ? loader.map(key) : null;
 
 					} catch (Throwable e) {
 						error = e;
@@ -120,13 +143,14 @@ public class ConcurrentCacheAtom<V> extends RapidoidThing implements CacheAtom<V
 			}
 
 			// downgrade by acquiring read lock before releasing write lock
-			lock.readLock().lock();
-			lock.writeLock().unlock();
+			readLock();
+			writeUnlock();
 		}
 
-		result = value; // read the cached value
+		cached = cachedValue;
+		result = cached != null ? cached.value : null; // read the cached value
 
-		lock.readLock().unlock(); // ----------------- END LOCKS -----------------
+		readUnlock();
 
 		releaseOldValue(oldValue); // release the old value - outside of lock
 
@@ -141,19 +165,36 @@ public class ConcurrentCacheAtom<V> extends RapidoidThing implements CacheAtom<V
 		return result;
 	}
 
-	private void updateStats(boolean missed, boolean hasError) {
-		if (hasError) {
-			errors.incrementAndGet();
-			stats.errors.incrementAndGet();
-		} else {
-			if (missed) {
-				misses.incrementAndGet();
-				stats.misses.incrementAndGet();
-			} else {
-				hits.incrementAndGet();
-				stats.hits.incrementAndGet();
+	private void readLock() {
+		try {
+			if (!lock.readLock().tryLock(10, TimeUnit.SECONDS)) {
+				throw new RuntimeException("Couldn't acquire READ lock!");
 			}
+		} catch (InterruptedException e) {
+			throw new CancellationException();
 		}
+	}
+
+	private void readUnlock() {
+		lock.readLock().unlock();
+	}
+
+	private void writeLock() {
+		try {
+			if (!lock.writeLock().tryLock(10, TimeUnit.SECONDS)) {
+				throw new RuntimeException("Couldn't acquire WRITE lock!");
+			}
+		} catch (InterruptedException e) {
+			throw new CancellationException();
+		}
+	}
+
+	private void writeUnlock() {
+		lock.writeLock().unlock();
+	}
+
+	protected void updateStats(boolean missed, boolean hasError) {
+		// do nothing
 	}
 
 	/**
@@ -161,9 +202,9 @@ public class ConcurrentCacheAtom<V> extends RapidoidThing implements CacheAtom<V
 	 */
 	@Override
 	public void set(V value) {
-		lock.writeLock().lock();
+		writeLock();
 		V oldValue = setValueInsideWriteLock(value);
-		lock.writeLock().unlock();
+		writeUnlock();
 
 		releaseOldValue(oldValue); // release the old value - outside of lock
 	}
@@ -172,17 +213,15 @@ public class ConcurrentCacheAtom<V> extends RapidoidThing implements CacheAtom<V
 	 * Sets new cached value, executes inside already acquired write lock.
 	 */
 	private V setValueInsideWriteLock(V newValue) {
-		V oldValue = this.value;
+		CachedValue<V> cached = cachedValue; // read the cached value
+		V oldValue = cached != null ? cached.value : null;
 
-		boolean isRealValue = newValue != null;
+		if (newValue != null) {
+			long expiresAt = ttlInMs > 0 ? U.time() + ttlInMs : Long.MAX_VALUE;
+			cachedValue = new CachedValue<>(newValue, expiresAt);
 
-		this.value = newValue;
-		this.cacheValid = isRealValue;
-
-		if (isRealValue) {
-			this.expiresAt = ttlInMs > 0 ? U.time() + ttlInMs : Long.MAX_VALUE;
 		} else {
-			this.expiresAt = 0;
+			cachedValue = null;
 		}
 
 		return oldValue;
@@ -193,9 +232,9 @@ public class ConcurrentCacheAtom<V> extends RapidoidThing implements CacheAtom<V
 	 */
 	@Override
 	public void invalidate() {
-		lock.writeLock().lock();
+		writeLock();
 		V oldValue = setValueInsideWriteLock(null);
-		lock.writeLock().unlock();
+		writeUnlock();
 
 		releaseOldValue(oldValue); // release the old value - outside of lock
 	}
@@ -220,21 +259,13 @@ public class ConcurrentCacheAtom<V> extends RapidoidThing implements CacheAtom<V
 		return get();
 	}
 
-	public AtomicLong getHits() {
-		return hits;
-	}
-
-	public AtomicLong getMisses() {
-		return misses;
-	}
-
-	public AtomicLong getErrors() {
-		return errors;
-	}
-
 	@Override
 	public String toString() {
-		return "ConcurrentCached [ttlInMs=" + ttlInMs + ", hits=" + hits + ", misses=" + misses + ", errors=" + errors
-			+ ", value=" + value + ", cacheValid=" + cacheValid + ", expiresAt=" + expiresAt + "]";
+		return "ConcurrentCacheAtom{" +
+			"lock=" + lock +
+			", loader=" + loader +
+			", ttlInMs=" + ttlInMs +
+			", cachedValue=" + cachedValue +
+			'}';
 	}
 }

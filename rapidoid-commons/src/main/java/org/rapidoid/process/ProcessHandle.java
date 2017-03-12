@@ -8,7 +8,9 @@ import org.rapidoid.group.AbstractManageable;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.log.Log;
+import org.rapidoid.log.LogLevel;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 import org.rapidoid.util.SlidingWindowList;
 import org.rapidoid.util.Wait;
 
@@ -82,7 +84,7 @@ public class ProcessHandle extends AbstractManageable {
 	}
 
 	private static void terminateProcesses() {
-		for (ProcessHandle proc : ALL) {
+		for (ProcessHandle proc : Coll.copyOf(ALL)) {
 			proc.terminate();
 		}
 	}
@@ -253,7 +255,15 @@ public class ProcessHandle extends AbstractManageable {
 	}
 
 	public void print() {
-		U.print(outAndError());
+		for (String line : outAndError()) {
+			U.print(line);
+		}
+	}
+
+	public void log(LogLevel level) {
+		for (String line : outAndError()) {
+			Log.log("PROCESS", level, line);
+		}
 	}
 
 	public List<String> out() {
@@ -304,6 +314,7 @@ public class ProcessHandle extends AbstractManageable {
 	}
 
 	private synchronized Process requireProcess() {
+		U.must(process != null, "The handle must have a process attached!");
 		return process;
 	}
 
@@ -335,12 +346,12 @@ public class ProcessHandle extends AbstractManageable {
 	}
 
 	public ProcessHandle destroy() {
-		requireProcess().destroy();
+		if (process != null) process.destroy();
 		return this;
 	}
 
 	public ProcessHandle destroyForcibly() {
-		requireProcess().destroyForcibly();
+		if (process != null) process.destroyForcibly();
 		return this;
 	}
 
@@ -421,7 +432,7 @@ public class ProcessHandle extends AbstractManageable {
 		while (isAlive()) {
 			U.sleep(1);
 
-			if (U.time() - t > terminationTimeout) {
+			if (Msc.timedOut(t, terminationTimeout)) {
 				destroyForcibly();
 				break;
 			}
@@ -431,7 +442,7 @@ public class ProcessHandle extends AbstractManageable {
 		while (isAlive()) {
 			U.sleep(1);
 
-			if (U.time() - t > terminationTimeout) {
+			if (Msc.timedOut(t, terminationTimeout)) {
 				throw U.rte("Couldn't terminate the process!");
 			}
 		}

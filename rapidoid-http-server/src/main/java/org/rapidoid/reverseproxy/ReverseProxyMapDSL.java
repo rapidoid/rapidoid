@@ -4,6 +4,9 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
+import org.rapidoid.setup.On;
+import org.rapidoid.setup.OnRoute;
+import org.rapidoid.setup.Setup;
 import org.rapidoid.u.U;
 
 import java.util.List;
@@ -32,49 +35,101 @@ import java.util.List;
 @Since("5.2.0")
 public class ReverseProxyMapDSL extends RapidoidThing {
 
-	private final ReverseProxy proxy;
-
 	private final String uriPrefix;
 
-	public ReverseProxyMapDSL(ReverseProxy proxy, String uriPrefix) {
-		this.proxy = proxy;
+	private volatile List<String> upstreams;
+
+	private volatile String[] roles;
+
+	private volatile Long cacheTTL;
+
+	private volatile Integer cacheCapacity;
+
+	private volatile LoadBalancer loadBalancer;
+
+	public ReverseProxyMapDSL(String uriPrefix) {
 		this.uriPrefix = uriPrefix;
 	}
 
-	public ProxyMapping to(String... upstreams) {
+	public ReverseProxyMapDSL to(String... upstreams) {
 		return to(U.list(upstreams));
 	}
 
-	public ProxyMapping to(List<String> upstreams) {
+	public ReverseProxyMapDSL to(List<String> upstreams) {
+		this.upstreams = ProxyUpstream.refine(upstreams);
+		return this;
+	}
 
-		upstreams = refine(upstreams);
-
+	public ReverseProxy addTo(Setup setup) {
 		Log.info("!Reverse proxy mapping", "!uriPrefix", uriPrefix, "!upstreams", upstreams);
 
+		ReverseProxy proxy = createReverseProxy();
+
+		U.must(uriPrefix.startsWith("/"), "The URI prefix must start with '/'");
+
+		String path = uriPrefix.equals("/") ? "/*" : uriPrefix + "/*";
+		OnRoute route = setup.any(path);
+
+		if (roles != null) route.roles(roles);
+		if (cacheTTL != null) route.cacheTTL(cacheTTL);
+		if (cacheCapacity != null) route.cacheCapacity(cacheCapacity);
+
+		route.serve(proxy);
+
+		return proxy;
+	}
+
+	public ReverseProxy add() {
+		return addTo(On.setup());
+	}
+
+	private ReverseProxy createReverseProxy() {
 		List<ProxyUpstream> proxyUpstreams = U.list();
+
+		U.notNull(upstreams, "proxy upstreams");
 
 		for (String upstream : upstreams) {
 			proxyUpstreams.add(new ProxyUpstream(upstream));
 		}
 
-		ProxyMapping mapping = new ProxyMapping(uriPrefix, proxyUpstreams);
-		proxy.mappings().add(mapping);
-
-		return mapping;
+		LoadBalancer balancer = loadBalancer != null ? loadBalancer : new RoundRobinLoadBalancer();
+		ProxyMapping mapping = new ProxyMapping(uriPrefix, balancer, proxyUpstreams);
+		return new ReverseProxy(mapping);
 	}
 
-	private static List<String> refine(List<String> upstreams) {
-		List<String> refinedUpstreams = U.list();
-
-		for (String upstream : upstreams) {
-			if (!upstream.startsWith("http://") && !upstream.startsWith("https://")) {
-				upstream = "http://" + upstream;
-			}
-
-			refinedUpstreams.add(upstream);
-		}
-
-		return refinedUpstreams;
+	public String[] roles() {
+		return roles;
 	}
 
+	public ReverseProxyMapDSL roles(String... roles) {
+		this.roles = roles;
+		return this;
+	}
+
+	public Long cacheTTL() {
+		return cacheTTL;
+	}
+
+	public ReverseProxyMapDSL cacheTTL(long cacheTTL) {
+		this.cacheTTL = cacheTTL;
+		return this;
+	}
+
+	public Integer cacheCapacity() {
+		return cacheCapacity;
+	}
+
+	public ReverseProxyMapDSL cacheCapacity(int cacheCapacity) {
+		this.cacheCapacity = cacheCapacity;
+		return this;
+	}
+
+	public LoadBalancer loadBalancer() {
+		return loadBalancer;
+	}
+
+	public ReverseProxyMapDSL loadBalancer(LoadBalancer loadBalancer) {
+		this.loadBalancer = loadBalancer;
+		return this;
+	}
 }

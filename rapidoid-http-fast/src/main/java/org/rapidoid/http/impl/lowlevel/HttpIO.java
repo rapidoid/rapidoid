@@ -89,18 +89,18 @@ public class HttpIO extends RapidoidThing {
 		impl.writeBadRequest(channel);
 	}
 
-	public void respond(MaybeReq maybeReq, Channel channel, long handle,
+	public void respond(MaybeReq maybeReq, Channel channel, long connId, long handle,
 	                    int code, boolean isKeepAlive, MediaType contentType,
 	                    byte[] body, Map<String, String> headers, Map<String, String> cookies) {
 
-		impl.respond(maybeReq, channel, handle, code, isKeepAlive, contentType, body, headers, cookies);
+		impl.respond(maybeReq, channel, connId, handle, code, isKeepAlive, contentType, body, headers, cookies);
 	}
 
-	public void respond(MaybeReq maybeReq, Channel channel, long handle,
+	public void respond(MaybeReq maybeReq, Channel channel, long connId, long handle,
 	                    int code, boolean isKeepAlive, MediaType contentType,
 	                    ByteBuffer body, Map<String, String> headers, Map<String, String> cookies) {
 
-		impl.respond(maybeReq, channel, handle, code, isKeepAlive, contentType, body, headers, cookies);
+		impl.respond(maybeReq, channel, connId, handle, code, isKeepAlive, contentType, body, headers, cookies);
 	}
 
 }

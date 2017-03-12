@@ -36,14 +36,14 @@ docker run -d \
 ./wait-for.sh 8080
 ./wait-for.sh 9090
 
-./http-get.sh app-proxy-req1 80 /app/_status
-./http-get.sh app-proxy-req2 80 /app/_status
-./http-get.sh app-proxy-req3 80 /app/_status
-./http-get.sh app-proxy-req4 80 /app/_status
-./http-get.sh app-proxy-req5 80 /app/_status
+./http-get.sh app-proxy-req1 80 /app/rapidoid/status
+./http-get.sh app-proxy-req2 80 /app/rapidoid/status
+./http-get.sh app-proxy-req3 80 /app/rapidoid/status
+./http-get.sh app-proxy-req4 80 /app/rapidoid/status
+./http-get.sh app-proxy-req5 80 /app/rapidoid/status
 
-./http-get.sh proxy-req1 80 /_status
-./http-get.sh proxy-req2 80 /_status
-./http-get.sh proxy-req3 80 /_status
+./http-get.sh proxy-req1 80 /rapidoid/status
+./http-get.sh proxy-req2 80 /rapidoid/status
+./http-get.sh proxy-req3 80 /rapidoid/status
 
 ./cleanup.sh

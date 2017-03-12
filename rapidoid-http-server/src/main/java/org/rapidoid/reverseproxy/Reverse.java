@@ -3,7 +3,6 @@ package org.rapidoid.reverseproxy;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.On;
 
 /*
  * #%L
@@ -29,26 +28,16 @@ import org.rapidoid.setup.On;
 @Since("5.2.0")
 public class Reverse extends RapidoidThing {
 
-	private static volatile ReverseProxy DEFAULT_PROXY;
-
-	public static synchronized ReverseProxy proxy() {
-		if (DEFAULT_PROXY == null) {
-			DEFAULT_PROXY = newProxy();
-			On.req(DEFAULT_PROXY);
-		}
-
-		return DEFAULT_PROXY;
+	/**
+	 * Use proxy(uriPrefix) instead
+	 */
+	@Deprecated
+	public static synchronized ReverseProxyDSL proxy() {
+		return new ReverseProxyDSL();
 	}
 
-	public static ReverseProxy newProxy() {
-		return new ReverseProxy();
-	}
-
-	public static synchronized void reset() {
-		if (DEFAULT_PROXY != null) {
-			DEFAULT_PROXY.reset();
-			DEFAULT_PROXY = null;
-		}
+	public static synchronized ReverseProxyMapDSL proxy(String uriPrefix) {
+		return new ReverseProxyDSL().map(uriPrefix);
 	}
 
 }

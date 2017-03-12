@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
 import org.rapidoid.util.AppInfo;
+import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.2")
@@ -40,7 +41,7 @@ public class ReqInfoUtils extends RapidoidThing {
 			String hostname = req.host().split(":")[0];
 
 			if (AppInfo.isAdminServerActive) {
-				String path = req.contextPath() + "/_";
+				String path = req.contextPath() + Msc.specialUriPrefix();
 				return appAndAdminOnSamePort ? path : "http://" + hostname + ":" + adminPort + path;
 			}
 		}

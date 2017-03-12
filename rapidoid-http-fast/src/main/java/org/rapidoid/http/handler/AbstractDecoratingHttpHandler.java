@@ -4,11 +4,12 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.ctx.With;
+import org.rapidoid.datamodel.Results;
 import org.rapidoid.http.*;
 import org.rapidoid.http.customize.Customization;
-import org.rapidoid.http.impl.lowlevel.HttpIO;
 import org.rapidoid.http.impl.MaybeReq;
 import org.rapidoid.http.impl.RouteOptions;
+import org.rapidoid.http.impl.lowlevel.HttpIO;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.LogLevel;
@@ -77,7 +78,7 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 		MaybeReq maybeReq = HttpUtils.maybe(req);
 
 		try {
-			result = handleReq(ctx, isKeepAlive, req, extra);
+			result = handleReqAndPostProcess(ctx, isKeepAlive, req, extra);
 
 		} catch (Exception e) {
 			HttpIO.INSTANCE.writeResponse(maybeReq, ctx, isKeepAlive, 500, contentType, "Internal server error!".getBytes());
@@ -94,7 +95,11 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 	}
 
 	private HttpStatus handleDecorating(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
-		ctx.async();
+
+		if (!ctx.isAsync()) {
+			// first checks if not async, to avoid exceptions when running the second time from non-IO thread
+			ctx.async();
+		}
 
 		execHandlerJob(ctx, isKeepAlive, options.contentType(), req, extra);
 
@@ -121,7 +126,7 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 
 		req.response().view(options.view()).contentType(options.contentType()).mvc(options.mvc());
 
-		TransactionMode txMode = U.or(options.transactionMode(), TransactionMode.NONE);
+		TransactionMode txMode = U.or(options.transaction(), TransactionMode.NONE);
 
 		if (txMode == TransactionMode.AUTO) {
 			txMode = HttpUtils.isGetReq(req) ? TransactionMode.READ_ONLY : TransactionMode.READ_WRITE;
@@ -219,7 +224,7 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 				@Override
 				public void run() {
 					try {
-						result.set(handleReq(channel, isKeepAlive, req, extra));
+						result.set(handleReqAndPostProcess(channel, isKeepAlive, req, extra));
 					} catch (Exception e) {
 						throw U.rte("Error occured inside the transactional web handler!", e);
 					}
@@ -229,7 +234,7 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 			return result.get();
 
 		} else {
-			return handleReq(channel, isKeepAlive, req, extra);
+			return handleReqAndPostProcess(channel, isKeepAlive, req, extra);
 		}
 	}
 
@@ -269,7 +274,7 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 					if (next < wrappers.length) {
 						val = wrap(channel, isKeepAlive, req, next, extra, wrappers);
 					} else {
-						val = handleReq(channel, isKeepAlive, req, extra);
+						val = handleReqAndPostProcess(channel, isKeepAlive, req, extra);
 					}
 
 					return transformation != null ? transformation.map(val) : val;
@@ -295,6 +300,16 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 	}
 
 	protected abstract Object handleReq(Channel ctx, boolean isKeepAlive, Req req, Object extra) throws Exception;
+
+	protected Object handleReqAndPostProcess(Channel ctx, boolean isKeepAlive, Req req, Object extra) throws Exception {
+		Object result = handleReq(ctx, isKeepAlive, req, extra);
+
+		if (result instanceof Results) {
+			result = ((Results) result).all();
+		}
+
+		return result;
+	}
 
 	public void complete(Channel ctx, boolean isKeepAlive, MediaType contentType, Req req, Object result) {
 

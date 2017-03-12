@@ -8,10 +8,10 @@ import org.rapidoid.http.impl.lowlevel.HttpIO;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.io.IOException;
 import java.net.ConnectException;
-import java.util.List;
 import java.util.Map;
 
 /*
@@ -38,11 +38,11 @@ import java.util.Map;
 @Since("5.2.0")
 public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> implements ReqRespHandler {
 
-	private static final int RETRY_AFTER_MS = 300;
+	private final ProxyMapping mapping;
 
-	private static final int TIMEOUT_MS = 10000;
-
-	private final List<ProxyMapping> mappings = U.list();
+	public ReverseProxy(ProxyMapping mapping) {
+		this.mapping = mapping;
+	}
 
 	@Override
 	public Object execute(final Req req, final Resp resp) throws Exception {
@@ -57,12 +57,19 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 		return req;
 	}
 
-	protected void process(final Req req, final Resp resp, final ProxyMapping mapping, final int attempts, final long since) {
+	protected ProxyMapping findMapping(Req req) {
+		return mapping; // customizable for more complex logic
+	}
+
+	private void process(final Req req, final Resp resp, final ProxyMapping mapping, final int attempts, final long since) {
 		final String targetUrl = mapping.getTargetUrl(req);
 
-		Map<String, String> headers = req.headers();
+		Map<String, String> headers = U.map(req.headers());
+
 		headers.remove("transfer-encoding");
 		headers.remove("content-length");
+
+		addExtraRequestHeaders(req, headers);
 
 		HttpClient client = getOrCreateClient();
 
@@ -100,12 +107,36 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 			});
 	}
 
-	protected void handleError(Throwable error, final Req req, final Resp resp, final ProxyMapping mapping, final int attempts, final long since) {
+	private void addExtraRequestHeaders(Req req, Map<String, String> headers) {
+		String clientIpAddress = req.clientIpAddress();
+
+		if (setXUsernameHeader()) headers.put("X-Username", U.safe(Current.username()));
+
+		if (setXRolesHeader()) headers.put("X-Roles", U.join(", ", Current.roles()));
+
+		if (setXClientIPHeader()) headers.put("X-Client-IP", clientIpAddress);
+
+		if (setXRealIPHeader()) headers.put("X-Real-IP", req.realIpAddress());
+
+		if (setXForwardedForHeader()) {
+			String forwardedFor = headers.get("X-Forwarded-For");
+
+			if (U.notEmpty(forwardedFor)) {
+				forwardedFor += ", " + clientIpAddress;
+			} else {
+				forwardedFor = clientIpAddress;
+			}
+
+			headers.put("X-Forwarded-For", forwardedFor);
+		}
+	}
+
+	private void handleError(Throwable error, final Req req, final Resp resp, final ProxyMapping mapping, final int attempts, final long since) {
 		if (error instanceof ConnectException || error instanceof IOException) {
 
-			if (HttpUtils.isGetReq(req) && (U.time() - since < TIMEOUT_MS)) {
+			if (HttpUtils.isGetReq(req) && !Msc.timedOut(since, timeout())) {
 
-				Jobs.after(RETRY_AFTER_MS).milliseconds(new Runnable() {
+				Jobs.after(retryDelay()).milliseconds(new Runnable() {
 					@Override
 					public void run() {
 						process(req, resp, mapping, attempts + 1, since);
@@ -122,35 +153,13 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 		}
 	}
 
-	protected ProxyMapping findMapping(Req req) {
-		for (ProxyMapping mapping : mappings) {
-			if (mapping.matches(req)) {
-				return mapping;
-			}
-		}
-
-		return null;
-	}
-
 	@Override
 	protected HttpClient createClient() {
 		return HTTP.client()
 			.reuseConnections(reuseConnections())
 			.keepCookies(false)
-			.maxConnTotal(maxConnTotal())
-			.maxConnPerRoute(maxConnPerRoute());
-	}
-
-	public ReverseProxyMapDSL map(String uriPrefix) {
-		return new ReverseProxyMapDSL(this, uriPrefix);
-	}
-
-	public List<ProxyMapping> mappings() {
-		return mappings;
-	}
-
-	public void reset() {
-		mappings.clear();
+			.maxConnTotal(maxConnections())
+			.maxConnPerRoute(maxConnectionsPerRoute());
 	}
 
 }

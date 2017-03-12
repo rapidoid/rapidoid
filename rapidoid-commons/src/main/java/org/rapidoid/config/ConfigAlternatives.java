@@ -32,11 +32,11 @@ import java.util.Map;
 @Since("5.1.0")
 public class ConfigAlternatives extends RapidoidThing implements BasicConfig {
 
-	private final Config primary;
+	private final BasicConfig primary;
 
-	private final Config alternative;
+	private final BasicConfig alternative;
 
-	public ConfigAlternatives(Config primary, Config alternative) {
+	public ConfigAlternatives(BasicConfig primary, BasicConfig alternative) {
 		this.primary = primary;
 		this.alternative = alternative;
 	}
@@ -65,4 +65,10 @@ public class ConfigAlternatives extends RapidoidThing implements BasicConfig {
 		map.putAll(primary.toMap());
 		return map;
 	}
+
+	@Override
+	public ConfigAlternatives or(BasicConfig alternative) {
+		return new ConfigAlternatives(this, alternative);
+	}
+
 }

@@ -326,12 +326,12 @@ public class RespImpl extends RapidoidThing implements Resp {
 
 	@Override
 	public synchronized Resp view(String view) {
-		this.view = view;
-
 		if (view != null) {
+			HttpUtils.validateViewName(view);
 			this.mvc(true);
 		}
 
+		this.view = view;
 		return this;
 	}
 
@@ -414,7 +414,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 
 	@Override
 	public void resume(AsyncLogic asyncLogic) {
-		req.channel().resume(req.handle(), asyncLogic);
+		req.channel().resume(req.connectionId(), req.handle(), asyncLogic);
 	}
 
 	private Screen createScreen() {

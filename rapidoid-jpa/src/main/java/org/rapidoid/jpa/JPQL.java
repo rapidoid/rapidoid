@@ -22,7 +22,8 @@ package org.rapidoid.jpa;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.datamodel.AbstractDataItems;
+import org.rapidoid.datamodel.PageableData;
+import org.rapidoid.datamodel.impl.ResultsImpl;
 import org.rapidoid.u.U;
 
 import javax.persistence.Query;
@@ -31,7 +32,7 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class JPQL extends AbstractDataItems implements Results {
+public class JPQL extends ResultsImpl implements PageableData {
 
 	private final String jpql;
 
@@ -40,9 +41,15 @@ public class JPQL extends AbstractDataItems implements Results {
 	private final Object[] args;
 
 	public JPQL(String jpql, Map<String, ?> namedArgs, Object[] args) {
+		super(null);
 		this.jpql = jpql;
 		this.namedArgs = namedArgs;
 		this.args = args;
+	}
+
+	@Override
+	protected PageableData data() {
+		return this;
 	}
 
 	public JPQL(String jpql) {
@@ -76,17 +83,6 @@ public class JPQL extends AbstractDataItems implements Results {
 		return q;
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> List<T> all() {
-		return query().getResultList();
-	}
-
-	@Override
-	public <T> List<T> page(int start, int length) {
-		return JPAUtil.getPage(query(), start, length);
-	}
-
 	public String jpql() {
 		return jpql;
 	}
@@ -97,5 +93,16 @@ public class JPQL extends AbstractDataItems implements Results {
 
 	public Object[] args() {
 		return args;
+	}
+
+	@Override
+	public List getPage(long start, long length) {
+		return JPAUtil.getPage(query(), start, length);
+	}
+
+	@Override
+	public long getCount() {
+		// TODO find a better way
+		return -1; // unknown
 	}
 }

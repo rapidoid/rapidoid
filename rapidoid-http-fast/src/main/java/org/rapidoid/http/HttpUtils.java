@@ -8,7 +8,6 @@ import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.commons.Str;
 import org.rapidoid.config.BasicConfig;
 import org.rapidoid.config.Conf;
-import org.rapidoid.config.Config;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.data.BufRanges;
@@ -66,7 +65,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 		}
 	};
 
-	public static volatile Pattern REGEX_VALID_HTTP_RESOURCE = Pattern.compile("(?:/[A-Za-z0-9_\\-\\.]+)*/?");
+	private static volatile Pattern REGEX_VALID_HTTP_RESOURCE = Pattern.compile("(?U)(?:/[\\w\\-\\.]+)*/?");
 
 	private static final Mapper<String[], String> PATH_PARAM_EXTRACTOR = new Mapper<String[], String>() {
 		@Override
@@ -136,7 +135,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 		resp.contentType(mediaType);
 	}
 
-	public static Res staticPage(Req req, String... possibleLocations) {
+	public static Res staticResource(Req req, String... possibleLocations) {
 		String resName = resName(req);
 
 		if (resName == null) return null;
@@ -257,14 +256,14 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 	}
 
 	public static BasicConfig zone(Customization custom, String zone) {
-		Config appConfig = custom.config().sub("app");
+		BasicConfig defaultConfig = custom.config().sub("gui").or(custom.config().sub("app"));
 
 		if (zone != null) {
 			String zoneKey = zone + "-zone";
-			return custom.config().sub(zoneKey).or(appConfig);
+			return custom.config().sub(zoneKey).or(defaultConfig);
 
 		} else {
-			return appConfig;
+			return defaultConfig;
 		}
 	}
 
@@ -386,6 +385,10 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 
 	public static MediaType getDefaultContentType() {
 		return DEFAULT_CONTENT_TYPE;
+	}
+
+	public static void validateViewName(String view) {
+		U.must(!view.startsWith("/"), "Invalid view name: '%s'", view);
 	}
 
 }

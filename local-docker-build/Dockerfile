@@ -11,8 +11,10 @@ VOLUME ["/data"]
 
 ENV RAPIDOID_VERSION 5.x.y-SNAPSHOT
 
+COPY wrk /usr/local/bin/
+COPY pipeline.lua /opt/
+
 COPY entrypoint.sh /opt/
-COPY wrk /opt/
 COPY rapidoid.jar $RAPIDOID_JAR
 
 RUN set -xe \

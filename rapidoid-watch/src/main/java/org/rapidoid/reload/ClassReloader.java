@@ -114,6 +114,8 @@ public class ClassReloader extends ClassLoader {
 	}
 
 	public Class<?> loadClass(String classname) throws ClassNotFoundException {
+		U.notNull(classname, "classname");
+
 		Log.debug("Loading class", "name", classname);
 
 		Class<?> cls = findLoadedClass(classname);

@@ -23,7 +23,7 @@ package org.rapidoid.process;
 import org.rapidoid.activity.AbstractLoopThread;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
+import org.rapidoid.collection.Coll;
 
 import java.util.Set;
 
@@ -43,7 +43,7 @@ public class ProcessCrawlerThread extends AbstractLoopThread {
 	@Override
 	protected void loop() {
 		// use a copy because the handles set is synchronized
-		for (ProcessHandle handle : U.set(handles)) {
+		for (ProcessHandle handle : Coll.copyOf(handles)) {
 			visit(handle);
 		}
 	}

@@ -74,8 +74,6 @@ public interface Config extends BasicConfig {
 
 	Properties toProperties();
 
-	BasicConfig or(Config alternative);
-
 	String getFilenameBase();
 
 	Config setFilenameBase(String filenameBase);

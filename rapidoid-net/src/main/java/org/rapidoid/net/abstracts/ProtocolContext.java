@@ -93,7 +93,7 @@ public interface ProtocolContext<T> {
 	// due to async() web handling option, it ain't over till the fat lady sings "done"
 	long async();
 
-	void resume(long handle, AsyncLogic asyncLogic);
+	void resume(long connId, long handle, AsyncLogic asyncLogic);
 
 	/* READ */
 

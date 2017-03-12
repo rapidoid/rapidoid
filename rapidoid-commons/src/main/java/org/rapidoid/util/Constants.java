@@ -69,6 +69,8 @@ public interface Constants {
 
 	String SEPARATOR_LINE = "\n--------------------------------------------------------------\n";
 
+	String ANY = "ANY";
+
 	String GET = "GET";
 
 	String POST = "POST";

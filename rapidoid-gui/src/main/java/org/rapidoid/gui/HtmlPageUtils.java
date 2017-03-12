@@ -7,6 +7,7 @@ import org.rapidoid.gui.reqinfo.IReqInfo;
 import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.http.HttpVerb;
 import org.rapidoid.render.Getter;
+import org.rapidoid.util.Msc;
 
 /*
  * #%L
@@ -36,6 +37,13 @@ public class HtmlPageUtils extends RapidoidThing {
 		@Override
 		public Object get(String page) {
 			return ReqInfo.get().hasRoute(HttpVerb.GET, strToUri(page));
+		}
+	};
+
+	static final Getter HAS_SPECIAL_PAGE = new Getter() {
+		@Override
+		public Object get(String page) {
+			return ReqInfo.get().hasRoute(HttpVerb.GET, Msc.specialUri(page));
 		}
 	};
 

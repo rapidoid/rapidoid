@@ -56,6 +56,8 @@ public class FastHttp extends AbstractHttpProcessor {
 
 	private static final String INTERNAL_SERVER_ERROR = "Internal Server Error!";
 
+	private static final byte[] BUILT_IN_RES_PATH = "/_rapidoid/".getBytes();
+
 	private final HttpRoutesGroup routesGroup;
 
 	private final Map<String, Object> attributes = Coll.synchronizedMap();
@@ -96,22 +98,35 @@ public class FastHttp extends AbstractHttpProcessor {
 		Route matchingRoute = null;
 		HandlerMatch match = null;
 
-		for (HttpRoutesImpl r : routesGroup.all()) {
-			match = r.findHandler(buf, isGet, verb, path);
-			if (match != null) {
-				matchingRoutes = r;
-				matchingRoute = match.getRoute();
-				break;
-			}
-		}
-
-		if (match == null && isGet) {
+		if (isGet && shouldServeBuiltInResources(buf, path)) {
 			for (HttpRoutesImpl r : routesGroup.all()) {
-				match = r.staticResourcesHandler();
+				match = r.builtInResourcesHandler();
 				if (match != null) {
 					matchingRoutes = r;
 					matchingRoute = match.getRoute();
 					break;
+				}
+			}
+
+		} else {
+
+			for (HttpRoutesImpl r : routesGroup.all()) {
+				match = r.findHandler(buf, isGet, verb, path);
+				if (match != null) {
+					matchingRoutes = r;
+					matchingRoute = match.getRoute();
+					break;
+				}
+			}
+
+			if (match == null && isGet) {
+				for (HttpRoutesImpl r : routesGroup.all()) {
+					match = r.staticResourcesHandler();
+					if (match != null) {
+						matchingRoutes = r;
+						matchingRoute = match.getRoute();
+						break;
+					}
 				}
 			}
 		}
@@ -148,6 +163,12 @@ public class FastHttp extends AbstractHttpProcessor {
 		if (status != HttpStatus.ASYNC) {
 			channel.closeIf(!isKeepAlive);
 		}
+	}
+
+	private boolean shouldServeBuiltInResources(Buf buf, BufRange path) {
+		return path.length > BUILT_IN_RES_PATH.length
+			&& buf.get(path.start + 1) == '_' // quick check
+			&& BytesUtil.startsWith(buf.bytes(), path, BUILT_IN_RES_PATH, true);
 	}
 
 	@Override
@@ -188,7 +209,7 @@ public class FastHttp extends AbstractHttpProcessor {
 
 		req.cached(true);
 
-		HttpIO.INSTANCE.respond(HttpUtils.req(req), channel, -1, resp.statusCode,
+		HttpIO.INSTANCE.respond(HttpUtils.req(req), channel, -1, -1, resp.statusCode,
 			req.isKeepAlive(), resp.contentType, resp.body.duplicate(), resp.headers, null);
 
 		channel.send().closeIf(!req.isKeepAlive());
@@ -284,7 +305,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		JsonResponseRenderer jsonRenderer = Customization.of(req).jsonResponseRenderer();
 		byte[] body = HttpUtils.responseToBytes(req, INTERNAL_SERVER_ERROR, contentType, jsonRenderer);
 
-		HttpIO.INSTANCE.respond(HttpUtils.maybe(req), channel, -1, 500, isKeepAlive, contentType, body, null, null);
+		HttpIO.INSTANCE.respond(HttpUtils.maybe(req), channel, -1, -1, 500, isKeepAlive, contentType, body, null, null);
 	}
 
 	private boolean handleError(Channel channel, boolean isKeepAlive, Req req, Throwable e) {

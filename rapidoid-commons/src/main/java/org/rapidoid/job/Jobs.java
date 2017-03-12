@@ -54,6 +54,10 @@ public class Jobs extends RapidoidInitializer {
 	private Jobs() {
 	}
 
+	public static synchronized void reset() {
+		errorCounter.set(0);
+	}
+
 	public static synchronized ScheduledExecutorService scheduler() {
 		if (SCHEDULER == null) {
 

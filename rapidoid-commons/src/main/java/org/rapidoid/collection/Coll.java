@@ -6,7 +6,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Err;
 import org.rapidoid.data.JSON;
-import org.rapidoid.datamodel.DataItems;
+import org.rapidoid.datamodel.Results;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
 
@@ -363,6 +363,7 @@ public class Coll extends RapidoidThing {
 		});
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> List<T> range(Iterable<T> items, int from, int to) {
 		U.must(from <= to, "'from' must be <= 'to'!");
 
@@ -370,9 +371,9 @@ public class Coll extends RapidoidThing {
 			return Collections.emptyList();
 		}
 
-		if (items instanceof DataItems) {
-			DataItems dataItems = (DataItems) items;
-			return dataItems.page(from, to - from);
+		if (items instanceof Results) {
+			Results results = (Results) items;
+			return results.page(from, to - from);
 		}
 
 		List<?> list = (items instanceof List<?>) ? (List<?>) items : U.list(items);
@@ -413,6 +414,26 @@ public class Coll extends RapidoidThing {
 
 	public static Map<String, Object> deepCopyOf(Map<String, Object> map) {
 		return JSON.parseMap(JSON.stringify(map)); // FIXME proper implementation
+	}
+
+	public static <T> Set<T> copyOf(Set<T> src) {
+		Set<T> copy;
+
+		synchronized (src) {
+			copy = U.set(src);
+		}
+
+		return copy;
+	}
+
+	public static <T> List<T> copyOf(List<T> src) {
+		List<T> copy;
+
+		synchronized (src) {
+			copy = U.list(src);
+		}
+
+		return copy;
 	}
 
 }

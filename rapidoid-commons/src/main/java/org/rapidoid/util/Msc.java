@@ -9,6 +9,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Profiles;
 import org.rapidoid.annotation.Run;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cache.Caching;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Arr;
@@ -20,9 +21,11 @@ import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.env.Env;
 import org.rapidoid.event.Events;
+import org.rapidoid.group.Groups;
 import org.rapidoid.insight.Insights;
 import org.rapidoid.io.IO;
 import org.rapidoid.io.Res;
+import org.rapidoid.job.Jobs;
 import org.rapidoid.lambda.*;
 import org.rapidoid.log.GlobalCfg;
 import org.rapidoid.log.Log;
@@ -253,15 +256,24 @@ public class Msc extends RapidoidThing {
 		}
 	}
 
-	public static void benchmark(String name, int count, Runnable runnable) {
-		doBenchmark(name, count, runnable, false);
+	public static void benchmark(String name, int count, final Runnable runnable) {
+		doBenchmark(name, count, new BenchmarkOperation() {
+			@Override
+			public void run(int iteration) {
+				runnable.run();
+			}
+		}, false);
 	}
 
-	public static void doBenchmark(String name, int count, Runnable runnable, boolean silent) {
+	public static void benchmark(String name, int count, BenchmarkOperation operation) {
+		doBenchmark(name, count, operation, false);
+	}
+
+	public static void doBenchmark(String name, int count, BenchmarkOperation operation, boolean silent) {
 		long start = U.time();
 
 		for (int i = 0; i < count; i++) {
-			runnable.run();
+			operation.run(i);
 		}
 
 		if (!silent) {
@@ -269,17 +281,8 @@ public class Msc extends RapidoidThing {
 		}
 	}
 
-	public static void benchmark(String name, int count, Operation<Integer> operation) {
-		long start = U.time();
-
-		for (int i = 0; i < count; i++) {
-			Lmbd.call(operation, i);
-		}
-
-		benchmarkComplete(name, count, start);
-	}
-
 	public static void benchmarkComplete(String name, int count, long startTime) {
+
 		long end = U.time();
 		long ms = end - startTime;
 
@@ -289,7 +292,17 @@ public class Msc extends RapidoidThing {
 
 		double avg = ((double) count / (double) ms);
 
-		String avgs = avg > 1 ? Math.round(avg) + "K" : Math.round(avg * 1000) + "";
+		String avgs;
+
+		if (avg > 1) {
+			if (avg < 1000) {
+				avgs = Math.round(avg) + "K";
+			} else {
+				avgs = Math.round(avg / 100) / 10.0 + "M";
+			}
+		} else {
+			avgs = Math.round(avg * 1000) + "";
+		}
 
 		String data = String.format("%s: %s in %s ms (%s/sec)", name, count, ms, avgs);
 
@@ -297,7 +310,7 @@ public class Msc extends RapidoidThing {
 	}
 
 	public static void benchmarkMT(int threadsN, final String name, final int count, final CountDownLatch outsideLatch,
-	                               final Runnable runnable) {
+	                               final BenchmarkOperation operation) {
 
 		U.must(count % threadsN == 0, "The number of thread must be a factor of the total count!");
 		final int countPerThread = count / threadsN;
@@ -316,7 +329,7 @@ public class Msc extends RapidoidThing {
 					Ctxs.attach(ctx != null ? ctx.span() : null);
 
 					try {
-						doBenchmark(name, countPerThread, runnable, true);
+						doBenchmark(name, countPerThread, operation, true);
 						if (outsideLatch == null) {
 							latch.countDown();
 						}
@@ -341,7 +354,16 @@ public class Msc extends RapidoidThing {
 	}
 
 	public static void benchmarkMT(int threadsN, final String name, final int count, final Runnable runnable) {
-		benchmarkMT(threadsN, name, count, null, runnable);
+		benchmarkMT(threadsN, name, count, null, new BenchmarkOperation() {
+			@Override
+			public void run(int iteration) {
+				runnable.run();
+			}
+		});
+	}
+
+	public static void benchmarkMT(int threadsN, final String name, final int count, final BenchmarkOperation operation) {
+		benchmarkMT(threadsN, name, count, null, operation);
 	}
 
 	public static String urlEncode(String value) {
@@ -990,7 +1012,10 @@ public class Msc extends RapidoidThing {
 		Res.reset();
 		AppInfo.reset();
 		Conf.reset();
+		Groups.reset();
+		Jobs.reset();
 		Env.reset();
+		Caching.reset();
 
 		Ctxs.reset();
 		U.must(Ctxs.get() == null);
@@ -1096,16 +1121,22 @@ public class Msc extends RapidoidThing {
 		switch (sep) {
 
 			case "->":
-				left = "proxy." + left + ".upstream"; // FIXME use :
+				left = "proxy." + left;
 				break;
 
 			case "<=":
-				left = "api." + left + ".sql";
+				left = "api." + left;
+				break;
+
+			case "<-":
+				left = "pages." + left;
 				break;
 
 			default:
 				throw U.rte("Argument operator not supported: " + sep);
 		}
+
+		Log.info("Replacing configuration shortcut", "shortcut", arg, "key", left, "value", right);
 
 		arguments.put(left, right);
 	}
@@ -1313,6 +1344,50 @@ public class Msc extends RapidoidThing {
 
 	public static boolean isSilent() {
 		return isMavenBuild();
+	}
+
+	public static String specialUriPrefix() {
+		return Msc.isPlatform() ? "/rapidoid/" : "/_";
+	}
+
+	public static String specialUri(String suffix) {
+		U.must(!suffix.startsWith("/"), "The URI suffix must not start with '/'");
+		return specialUriPrefix() + suffix;
+	}
+
+	public static String semiSpecialUri(String suffix) {
+		U.must(!suffix.startsWith("/"), "The URI suffix must not start with '/'");
+		return Msc.isPlatform() ? "/rapidoid/" + suffix : "/" + suffix;
+	}
+
+	public static String http() {
+		return MscOpts.isTestingHttps() ? "https" : "http";
+	}
+
+	public static String urlWithProtocol(String url) {
+		if (url.startsWith("http://") || url.startsWith("https://")) {
+			return url;
+		} else {
+			return Msc.http() + "://" + url;
+		}
+	}
+
+	public static boolean timedOut(long since, long timeout) {
+		return U.time() - since > timeout;
+	}
+
+	public static int log2(int n) {
+		U.must(n > 0);
+
+		int factor = 32 - Integer.numberOfLeadingZeros(n - 1);
+
+		U.must(n <= Math.pow(2, factor));
+
+		return factor;
+	}
+
+	public static int bitMask(int bits) {
+		return (1 << bits) - 1;
 	}
 
 }

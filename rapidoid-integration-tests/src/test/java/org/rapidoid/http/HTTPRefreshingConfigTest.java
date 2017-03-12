@@ -47,7 +47,7 @@ public class HTTPRefreshingConfigTest extends IsolatedIntegrationTest {
 		Conf.reset();
 		Conf.setPath(cfgDir);
 
-		App.registerConfigListeners();
+		App.boot();
 
 		List<ConfigChanges> rootChanges = Coll.synchronizedList();
 		List<ConfigChanges> apiChanges = Coll.synchronizedList();

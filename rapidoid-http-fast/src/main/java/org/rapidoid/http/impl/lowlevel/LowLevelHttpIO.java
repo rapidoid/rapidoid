@@ -31,6 +31,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static org.rapidoid.util.Constants.CR_LF;
 
@@ -87,6 +88,8 @@ class LowLevelHttpIO extends RapidoidThing {
 	private static final boolean MANDATORY_HEADER_CONTENT_TYPE;
 
 	private static final byte[] UNIFORM_DATE = "Sat, 10 Sep 2016 01:02:03 GMT".getBytes();
+
+	private static final AtomicLong ASYNC_ID_GEN = new AtomicLong();
 
 	static {
 		for (int len = 0; len < CONTENT_LENGTHS.length; len++) {
@@ -326,7 +329,7 @@ class LowLevelHttpIO extends RapidoidThing {
 		Req req = maybeReq.getReqOrNull();
 
 		if (req != null) {
-			channel.resume(req.handle(), logic);
+			channel.resume(req.connectionId(), req.handle(), logic);
 		} else {
 			logic.resumeAsync();
 		}
@@ -337,7 +340,7 @@ class LowLevelHttpIO extends RapidoidThing {
 		channel.close();
 	}
 
-	void respond(final MaybeReq maybeReq, final Channel channel, long handle,
+	void respond(final MaybeReq maybeReq, final Channel channel, long connId, long handle,
 	             final int code, final boolean isKeepAlive, final MediaType contentType, final Object body,
 	             final Map<String, String> headers, final Map<String, String> cookies) {
 
@@ -351,7 +354,24 @@ class LowLevelHttpIO extends RapidoidThing {
 			}
 		}
 
-		channel.resume(handle, new AsyncLogic() {
+		if (connId < 0) {
+			if (req != null) {
+				connId = req.connectionId();
+			} else {
+				connId = channel.connId();
+			}
+		}
+
+		final long id = ASYNC_ID_GEN.incrementAndGet();
+
+		channel.resume(connId, handle, new AsyncLogic() {
+
+			@Override
+			public String toString() {
+				String bb = (body instanceof byte[]) ? new String((byte[]) body) : U.str(body);
+				return U.str(U.join(":", "#" + id, channel, code, bb, isKeepAlive, contentType));
+			}
+
 			@Override
 			public boolean resumeAsync() {
 

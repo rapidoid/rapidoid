@@ -98,6 +98,11 @@ public class HtmlPage extends ScreenBean {
 		model.put("appUrl", ReqInfoUtils.appUrl());
 		model.put("adminUrl", ReqInfoUtils.adminUrl());
 
+		model.put("loginUri", Msc.specialUri("login"));
+		model.put("logoutUri", Msc.specialUri("logout"));
+		model.put("profileUri", Msc.semiSpecialUri("profile"));
+		model.put("graphsUri", Msc.specialUri("graphs"));
+
 		model.put("dev", Msc.isDev());
 		model.put("admin", "admin".equalsIgnoreCase(req.zone()));
 
@@ -131,7 +136,7 @@ public class HtmlPage extends ScreenBean {
 		model.put("fluid", fluid());
 		model.put("cdn", cdn());
 
-		List<String> assets = (List<String>) Conf.APP.entry("assets").getOrNull();
+		List<String> assets = (List<String>) Conf.GUI.entry("assets").getOrNull();
 
 		if (U.notEmpty(assets)) {
 			for (String asset : assets) {
@@ -200,6 +205,7 @@ public class HtmlPage extends ScreenBean {
 		has.put("path", HtmlPageUtils.HAS_PATH);
 		has.put("zone", HtmlPageUtils.HAS_ZONE);
 		has.put("page", HtmlPageUtils.HAS_PAGE);
+		has.put("special_page", HtmlPageUtils.HAS_SPECIAL_PAGE);
 
 		return has;
 	}

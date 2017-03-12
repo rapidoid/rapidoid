@@ -31,6 +31,8 @@ public interface RapidoidModule {
 
 	int order();
 
+	void boot();
+
 	void cleanUp();
 
 	void beforeTest(Object test);

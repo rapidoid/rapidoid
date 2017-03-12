@@ -1,0 +1,26 @@
+jdbc:
+  driver: com.mysql.jdbc.Driver
+  url: jdbc:mysql://localhost:3306
+  username: root
+  password: root
+
+gui:
+  title: The Constants
+  brand: The Constants
+  search: false
+  fluid: false
+  menu:
+    Constants: /
+    API (right):
+      Pi: /pi
+      G: /g
+    Help:
+      About: /about
+
+api:
+  /pi: pi.sql
+  /g: select 9.81 as G
+
+pages:
+  /: sql/pages.sql
+  /about: ''

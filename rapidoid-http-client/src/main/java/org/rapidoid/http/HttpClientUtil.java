@@ -28,6 +28,7 @@ import org.rapidoid.io.IO;
 import org.rapidoid.io.Upload;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -132,6 +133,8 @@ public class HttpClientUtil extends RapidoidThing {
 
 		String url = config.url();
 
+		url = Msc.urlWithProtocol(url);
+
 		HttpRequestBase req = createReq(config, url);
 
 		for (Map.Entry<String, String> e : headers.entrySet()) {
@@ -142,9 +145,19 @@ public class HttpClientUtil extends RapidoidThing {
 			req.addHeader("Cookie", joinCookiesAsHeader(cookies));
 		}
 
-		if (config.verb() == HttpVerb.POST || config.verb() == HttpVerb.PUT || config.verb() == HttpVerb.PATCH) {
-			HttpEntityEnclosingRequestBase entityEnclosingReq = (HttpEntityEnclosingRequestBase) req;
-			entityEnclosingReq.setEntity(config.body() != null ? byteBody(config) : paramsBody(config.data(), config.files()));
+		switch (config.verb()) {
+			case POST:
+			case PUT:
+			case PATCH:
+				HttpEntityEnclosingRequestBase entityEnclosingReq = (HttpEntityEnclosingRequestBase) req;
+
+				if (config.body() != null) {
+					entityEnclosingReq.setEntity(byteBody(config));
+
+				} else if (U.notEmpty(config.data()) || U.notEmpty(config.files())) {
+					entityEnclosingReq.setEntity(paramsBody(config.data(), config.files()));
+				}
+				break;
 		}
 
 		req.setConfig(reqConfig(config));

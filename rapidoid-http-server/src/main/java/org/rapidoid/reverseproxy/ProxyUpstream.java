@@ -23,6 +23,10 @@ package org.rapidoid.reverseproxy;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
+
+import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
@@ -37,4 +41,19 @@ public class ProxyUpstream extends RapidoidThing {
 	public String url() {
 		return url;
 	}
+
+	public static List<String> parse(String upstreams) {
+		return U.list(upstreams.split("\\s*,\\s*"));
+	}
+
+	static List<String> refine(List<String> upstreams) {
+		List<String> refinedUpstreams = U.list();
+
+		for (String upstream : upstreams) {
+			refinedUpstreams.add(Msc.urlWithProtocol(upstream));
+		}
+
+		return refinedUpstreams;
+	}
+
 }

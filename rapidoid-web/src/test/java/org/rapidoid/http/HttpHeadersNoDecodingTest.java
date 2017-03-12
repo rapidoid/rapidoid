@@ -41,9 +41,9 @@ public class HttpHeadersNoDecodingTest extends HttpTestCommons {
 		String a = "x-y+z++=123";
 		String b = "c!@#d35f=-+1#";
 
-		HttpClient client = HTTP.client().host("http://localhost:8080/").cookie("b+b-b", b);
+		HttpClient client = HTTP.client().host(localhost("/")).cookie("b+b-b", b);
 
-		String resp = client.get("http://localhost:8080/").header("a+a-a", a).fetch();
+		String resp = client.get(localhost("/")).header("a+a-a", a).fetch();
 
 		eq(resp, a + ":::" + b);
 	}

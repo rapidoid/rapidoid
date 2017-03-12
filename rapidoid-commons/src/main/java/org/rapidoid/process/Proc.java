@@ -50,11 +50,11 @@ public class Proc extends RapidoidThing {
 		return new ProcessParams().id(id);
 	}
 
-	public ProcessParams printingOutput(boolean printingOutput) {
+	public static ProcessParams printingOutput(boolean printingOutput) {
 		return new ProcessParams().printingOutput(printingOutput);
 	}
 
-	public ProcessParams linePrefix(String linePrefix) {
+	public static ProcessParams linePrefix(String linePrefix) {
 		return new ProcessParams().linePrefix(linePrefix);
 	}
 

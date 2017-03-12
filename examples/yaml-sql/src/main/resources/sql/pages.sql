@@ -1,0 +1,1 @@
+select 3.14 as Pi, 9.81 as G

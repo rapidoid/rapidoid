@@ -71,8 +71,8 @@ mkdir output
 ./simple-test-bg.sh app-service-welcome app.services=welcome
 ./simple-test-bg.sh admin-service-welcome admin.services=welcome
 
-./simple-fetch.sh ping 8888 /_ping app.services=ping
-./simple-fetch.sh status 8888 /_status app.services=status id=rapidoid.xyz-123
+./simple-fetch.sh ping 8888 /rapidoid/ping app.services=ping
+./simple-fetch.sh status 8888 /rapidoid/status app.services=status id=rapidoid.xyz-123
 
 printf "\n - DONE\n\n"
 

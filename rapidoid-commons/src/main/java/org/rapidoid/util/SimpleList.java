@@ -29,15 +29,15 @@ import java.util.Arrays;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class SimpleList<T> extends RapidoidThing {
+public class SimpleList<T> extends RapidoidThing implements SimpleBucket<T> {
 
 	public T[] array;
 
-	private int size = 0;
+	protected int size = 0;
 
-	private int position = 0;
+	protected int position = 0;
 
-	private final int growFactor;
+	protected final int growFactor;
 
 	public SimpleList(int capacity) {
 		this(capacity, 2);
@@ -49,44 +49,32 @@ public class SimpleList<T> extends RapidoidThing {
 		this.array = (T[]) new Object[capacity];
 	}
 
+	@Override
 	public void clear() {
 		size = 0;
 		position = 0;
 	}
 
+	@Override
 	public int size() {
 		return size;
 	}
 
+	@Override
 	public T get(int index) {
 		return array[index];
 	}
 
-	public void add(T obj) {
+	@Override
+	public T add(T obj) {
 		if (size == array.length) {
 			array = Arrays.copyOf(array, array.length * growFactor);
 		}
 		array[size++] = obj;
+		return null;
 	}
 
-	public T addRotating(T obj) {
-		if (size < array.length) {
-			add(obj);
-			return null;
-
-		} else {
-			T oldValue = array[position];
-			array[position] = obj;
-			position++;
-
-			if (position >= array.length) {
-				position = 0;
-			}
-
-			return oldValue;
-		}
-	}
-
+	@Override
 	public void delete(int index) {
 		Err.bounds(index, 0, size - 1);
 
@@ -108,4 +96,5 @@ public class SimpleList<T> extends RapidoidThing {
 
 		return "[" + sb.toString() + "]";
 	}
+
 }

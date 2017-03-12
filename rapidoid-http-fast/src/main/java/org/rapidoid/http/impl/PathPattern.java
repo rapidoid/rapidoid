@@ -80,20 +80,22 @@ public class PathPattern extends RapidoidThing {
 
 				String groupId = "g" + counter.incrementAndGet();
 
-				U.must(!groups.containsKey(name), "Cannot have multiple path parameters with the same name: '%s'",
-					name);
+				U.must(!groups.containsKey(name), "Cannot have multiple path parameters with the same name: '%s'", name);
 				groups.put(name, groupId);
 
 				if (!groups.isEmpty()) {
 					U.must(MATCHER_GROUP != null, "Named Regex groups are supported starting from JDK 7!");
 				}
 
-				return "(?<" + groupId + ">" + regex.replaceAll("\\\\", "\\\\\\\\") + ")";
+				return "(?<" + groupId + ">" + regex + ")";
 			}
 		});
 
-		if (regex.endsWith("/*")) {
-			regex = Str.sub(regex, 0, -1) + ".*";
+		if (regex.equals("/*")) {
+			regex = "/.*";
+
+		} else if (regex.endsWith("/*")) {
+			regex = Str.trimr(regex, "/*") + "(?:/.*)?";
 		}
 
 		Pattern pattern = Pattern.compile(regex);

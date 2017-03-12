@@ -38,7 +38,7 @@ public class HttpTransactionTest extends IsolatedIntegrationTest {
 		On.get("/allBooks").json(() -> JPA.of(Book.class).all());
 		On.post("/books").json((Book b) -> JPA.insert(b));
 
-		On.post("/del").tx().json((Long id) -> {
+		On.post("/del").transaction().json((Long id) -> {
 			JPA.delete(Book.class, id);
 			JPA.flush(); // optional
 			return U.list("DEL " + id, JPA.getAllEntities());

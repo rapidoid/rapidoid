@@ -10,6 +10,7 @@ import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.Resp;
 import org.rapidoid.process.ProcessHandle;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class ProcessDetailsHandler extends GUI implements ReqRespHandler {
 
 		info.add(h1("Process details"));
 
-		info.add(right(cmd("View all processes").small().go("/_processes")));
+		info.add(right(cmd("View all processes").small().go(Msc.specialUri("processes"))));
 		info.add(code(U.join(" ", handle.params().command())));
 
 		info.add(h2("Standard output:"));

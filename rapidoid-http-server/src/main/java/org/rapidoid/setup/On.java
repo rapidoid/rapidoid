@@ -3,6 +3,7 @@ package org.rapidoid.setup;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
 import org.rapidoid.http.HttpRoutes;
 import org.rapidoid.http.ReqHandler;
@@ -35,98 +36,100 @@ import org.rapidoid.http.impl.RouteOptions;
 @Since("4.3.0")
 public class On extends RapidoidThing {
 
-	private static final Setup SETUP = Setup.ON;
+	public static synchronized Setup setup() {
+		return Setup.on();
+	}
 
 	public static synchronized OnRoute route(String verb, String path) {
-		return SETUP.route(verb, path);
+		return setup().route(verb, path);
+	}
+
+	public static synchronized OnRoute any(String path) {
+		return setup().any(path);
 	}
 
 	public static synchronized OnRoute get(String path) {
-		return SETUP.get(path);
+		return setup().get(path);
 	}
 
 	public static synchronized OnRoute post(String path) {
-		return SETUP.post(path);
+		return setup().post(path);
 	}
 
 	public static synchronized OnRoute put(String path) {
-		return SETUP.put(path);
+		return setup().put(path);
 	}
 
 	public static synchronized OnRoute delete(String path) {
-		return SETUP.delete(path);
+		return setup().delete(path);
 	}
 
 	public static synchronized OnRoute patch(String path) {
-		return SETUP.patch(path);
+		return setup().patch(path);
 	}
 
 	public static synchronized OnRoute options(String path) {
-		return SETUP.options(path);
+		return setup().options(path);
 	}
 
 	public static synchronized OnRoute head(String path) {
-		return SETUP.head(path);
+		return setup().head(path);
 	}
 
 	public static synchronized OnRoute trace(String path) {
-		return SETUP.trace(path);
+		return setup().trace(path);
 	}
 
 	public static synchronized OnRoute page(String path) {
-		return SETUP.page(path);
+		return setup().page(path);
 	}
 
 	public static synchronized Setup req(ReqHandler handler) {
-		return SETUP.req(handler);
+		return setup().req(handler);
 	}
 
 	public static synchronized Setup req(ReqRespHandler handler) {
-		return SETUP.req(handler);
+		return setup().req(handler);
 	}
 
 	public static synchronized Setup req(HttpHandler handler) {
-		return SETUP.req(handler);
+		return setup().req(handler);
 	}
 
-	public static synchronized Setup port(int port) {
-		return SETUP.port(port);
+	public static synchronized void port(int port) {
+		Conf.ON.set("port", port);
 	}
 
-	public static synchronized Setup address(String address) {
-		return SETUP.address(address);
+	public static synchronized void address(String address) {
+		Conf.ON.set("address", address);
 	}
 
 	public static synchronized OnError error(Class<? extends Throwable> error) {
-		return SETUP.error(error);
+		return setup().error(error);
 	}
 
 	public static Setup deregister(String verb, String path) {
-		return SETUP.deregister(verb, path);
+		return setup().deregister(verb, path);
 	}
 
 	public static Setup deregister(Object... controllers) {
-		return SETUP.deregister(controllers);
-	}
-
-	public static synchronized Setup setup() {
-		return SETUP;
+		return setup().deregister(controllers);
 	}
 
 	public static Config config() {
-		return SETUP.config();
+		return setup().config();
 	}
 
 	public static Customization custom() {
-		return SETUP.custom();
+		return setup().custom();
 	}
 
 	public static HttpRoutes routes() {
-		return SETUP.routes();
+		return setup().routes();
 	}
 
 	public static RouteOptions defaults() {
-		return SETUP.defaults();
+		return setup().defaults();
 	}
 
 	public static OnChanges changes() {

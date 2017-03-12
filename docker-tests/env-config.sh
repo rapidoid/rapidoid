@@ -20,6 +20,6 @@ docker run \
 
 ./wait-for.sh 5555
 
-./http-get.sh env-config-req 5555 /_status
+./http-get.sh env-config-req 5555 /rapidoid/status
 
 ./cleanup.sh

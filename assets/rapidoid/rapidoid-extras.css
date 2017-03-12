@@ -492,12 +492,12 @@ ul.pagination {
 }
 
 .gutter.gutter-horizontal {
-    background-image: url('/grips/vertical.png');
+    background-image: url('/_rapidoid/grips/vertical.png');
     cursor: ew-resize;
 }
 
 .gutter.gutter-vertical {
-    background-image: url('/grips/horizontal.png');
+    background-image: url('/_rapidoid/grips/horizontal.png');
     cursor: ns-resize;
 }
 

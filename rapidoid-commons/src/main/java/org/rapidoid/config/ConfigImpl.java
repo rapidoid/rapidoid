@@ -406,7 +406,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	}
 
 	@Override
-	public ConfigAlternatives or(Config alternative) {
+	public ConfigAlternatives or(BasicConfig alternative) {
 		return new ConfigAlternatives(this, alternative);
 	}
 

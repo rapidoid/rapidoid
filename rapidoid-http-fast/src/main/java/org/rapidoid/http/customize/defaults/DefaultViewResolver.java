@@ -9,6 +9,7 @@ import org.rapidoid.render.RapidoidTemplateFactory;
 import org.rapidoid.render.Template;
 import org.rapidoid.render.TemplateFactory;
 import org.rapidoid.render.TemplateStore;
+import org.rapidoid.u.U;
 
 import java.io.OutputStream;
 
@@ -37,13 +38,16 @@ import java.io.OutputStream;
 public class DefaultViewResolver extends AbstractViewResolver<TemplateFactory> {
 
 	@Override
-	public View getView(String viewName, final ResourceLoader templateLoader) throws Exception {
+	public View getView(String viewName, final ResourceLoader resourceLoader) throws Exception {
+		String filename = filename(viewName);
 
-		TemplateFactory templateFactory = getViewFactory(templateLoader);
+		if (resourceLoader.load(filename) == null) return null;
 
-		Template template = templateFactory.load(filename(viewName));
+		TemplateFactory templateFactory = getViewFactory(resourceLoader);
 
-		return view(template);
+		Template template = templateFactory.load(filename);
+
+		return template != null ? view(template) : null;
 	}
 
 	@Override
@@ -64,7 +68,9 @@ public class DefaultViewResolver extends AbstractViewResolver<TemplateFactory> {
 		return new TemplateStore() {
 			@Override
 			public String loadTemplate(String name) throws Exception {
-				return new String(templateLoader.load(name));
+				byte[] bytes = templateLoader.load(name);
+				U.must(bytes != null, "The Rapidoid template '%s' doesn't exist!", name);
+				return new String(bytes);
 			}
 		};
 	}

@@ -28,7 +28,7 @@ import org.rapidoid.u.U;
 @Since("5.1.0")
 public enum HttpVerb {
 
-	GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD, TRACE;
+	GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD, TRACE, ANY;
 
 	public static HttpVerb from(String verb) {
 		try {
