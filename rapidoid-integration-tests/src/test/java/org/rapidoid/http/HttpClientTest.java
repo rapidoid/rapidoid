@@ -55,7 +55,7 @@ public class HttpClientTest extends IsolatedIntegrationTest {
 
 			int count1 = 1000;
 			for (int i = 0; i < count1; i++) {
-				client.get("localhost", 8888, GET_LOCALHOST, hcb);
+				client.get("localhost", 8080, GET_LOCALHOST, hcb);
 			}
 
 			waiting();
