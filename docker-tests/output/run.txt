@@ -6,28 +6,19 @@
            |_|
 
 [PLATFORM] INFO | No command-line arguments were specified, using the defaults:
-[PLATFORM] INFO |   app.services=welcome
 [PLATFORM] INFO |   admin.services=center
-[PLATFORM] INFO |   / -> localhost:8080
+[PLATFORM] INFO |   app.services=welcome
 [PLATFORM] INFO | 
 [PLATFORM] INFO | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
 [PLATFORM] INFO | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
-[PLATFORM] INFO | Replacing configuration shortcut | shortcut = / -> localhost:8080 | key = proxy./ | value = localhost:8080
-[PLATFORM] INFO | Replacing configuration shortcut | shortcut = / -> localhost:8080 | key = proxy./ | value = localhost:8080
 [PLATFORM] INFO | Setting application root | root = /app | content = []
-[PLATFORM] INFO | Replacing configuration shortcut | shortcut = / -> localhost:8080 | key = proxy./ | value = localhost:8080
-[PLATFORM] INFO | Replacing configuration shortcut | shortcut = / -> localhost:8080 | key = proxy./ | value = localhost:8080
-[PLATFORM] INFO | Replacing configuration shortcut | shortcut = / -> localhost:8080 | key = proxy./ | value = localhost:8080
-[PLATFORM] INFO | Replacing configuration shortcut | shortcut = / -> localhost:8080 | key = proxy./ | value = localhost:8080
 [PLATFORM] INFO | Automatically activating mode-specific profile | profile = production
 [PLATFORM] INFO | Initialized environment | mode = PRODUCTION | profiles = [production, platform]
 [PLATFORM] INFO | Setting application JAR | appJar = /app/app.jar | exists = false
 [PLATFORM] INFO | Loaded configuration | namespace = rapidoid | files = [built-in-config.yml, built-in-config-platform.yml]
-[PLATFORM] INFO | Reverse proxy mapping | uriPrefix = / | upstreams = [http://localhost:8080]
 [PLATFORM] INFO | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
 [PLATFORM] INFO | Server has started | setup = app | home = http://localhost:8888
 [PLATFORM] INFO | Static resources will be served from the following locations | setup = app | locations = [static, default/static]
-[PLATFORM] INFO | ANY /*                          | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
 [PLATFORM] INFO | GET /                           | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
 [PLATFORM] INFO | -------------------------
 [PLATFORM] INFO | Registering Admin Center:
