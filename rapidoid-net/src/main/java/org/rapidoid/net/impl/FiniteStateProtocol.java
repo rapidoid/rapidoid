@@ -20,6 +20,7 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.LogHP;
@@ -30,7 +31,7 @@ import org.rapidoid.util.Constants;
 
 @Authors("Nikolche Mihajlovski")
 @Since("NET_EXTRAS")
-public abstract class FiniteStateProtocol implements Constants, Protocol {
+public abstract class FiniteStateProtocol extends RapidoidThing implements Constants, Protocol {
 
 	private static final int MAX_STATES = 20;
 

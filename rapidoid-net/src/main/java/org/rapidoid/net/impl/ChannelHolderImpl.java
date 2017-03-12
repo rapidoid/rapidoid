@@ -20,6 +20,7 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.net.abstracts.Channel;
@@ -29,7 +30,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @Authors("Nikolche Mihajlovski")
 @Since("NET_EXTRAS")
-public class ChannelHolderImpl implements ChannelHolder {
+public class ChannelHolderImpl extends RapidoidThing implements ChannelHolder {
 
 	private static final AtomicLong COUNTER = new AtomicLong();
 

@@ -20,6 +20,7 @@ package org.rapidoid.http.client;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
@@ -31,7 +32,7 @@ import org.rapidoid.data.BufRanges;
 
 @Authors("Nikolche Mihajlovski")
 @Since("NET_EXTRAS")
-public class BlockingHttpClientCallback implements HttpClientCallback {
+public class BlockingHttpClientCallback extends RapidoidThing implements HttpClientCallback {
 
 	private final Promise<byte[]> promise = Promises.create();
 

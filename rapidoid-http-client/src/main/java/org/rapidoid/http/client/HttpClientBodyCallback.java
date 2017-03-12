@@ -1,5 +1,6 @@
 package org.rapidoid.http.client;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
@@ -29,7 +30,7 @@ import org.rapidoid.job.Jobs;
 
 @Authors("Nikolche Mihajlovski")
 @Since("NET_EXTRAS")
-public class HttpClientBodyCallback implements HttpClientCallback {
+public class HttpClientBodyCallback extends RapidoidThing implements HttpClientCallback {
 
 	private final Callback<String> bodyCallback;
 

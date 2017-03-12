@@ -20,6 +20,7 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.net.Protocol;
@@ -30,7 +31,7 @@ import java.nio.channels.SocketChannel;
 
 @Authors("Nikolche Mihajlovski")
 @Since("NET_EXTRAS")
-public class ConnectionTarget {
+public class ConnectionTarget extends RapidoidThing {
 
 	volatile SocketChannel socketChannel;
 

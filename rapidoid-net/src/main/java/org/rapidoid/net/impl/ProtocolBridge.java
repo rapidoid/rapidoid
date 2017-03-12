@@ -1,5 +1,6 @@
 package org.rapidoid.net.impl;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
@@ -30,11 +31,11 @@ import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("NET_EXTRAS")
-public abstract class ProtocolBridge {
+public abstract class ProtocolBridge extends RapidoidThing {
 
-	abstract protected void peer1(Channel ctx);
+	protected abstract void peer1(Channel ctx);
 
-	abstract protected void peer2(Channel ctx);
+	protected abstract void peer2(Channel ctx);
 
 	public Protocol peer1() {
 		return new Protocol() {

@@ -20,6 +20,7 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.net.Protocol;
@@ -28,8 +29,8 @@ import org.rapidoid.u.U;
 import java.nio.channels.SocketChannel;
 
 @Authors("Nikolche Mihajlovski")
-@Since("3.0.0")
-public class RapidoidChannel {
+@Since("2.0.0")
+public class RapidoidChannel extends RapidoidThing {
 
 	final SocketChannel socketChannel;
 	final boolean isClient;
