@@ -3,14 +3,16 @@ package org.rapidoid.cache.impl;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cache.Cache;
-import org.rapidoid.job.Jobs;
+import org.rapidoid.cache.Caching;
+import org.rapidoid.commons.Rnd;
 import org.rapidoid.lambda.Mapper;
-import org.rapidoid.u.U;
+import org.rapidoid.log.Log;
 import org.rapidoid.util.AbstractMapImpl;
 import org.rapidoid.util.MapEntry;
-import org.rapidoid.util.SimpleList;
+import org.rapidoid.util.Msc;
+import org.rapidoid.util.SimpleBucket;
 
-import java.util.concurrent.Callable;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /*
@@ -35,9 +37,9 @@ import java.util.concurrent.TimeUnit;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class ConcurrentCache<K, V> extends AbstractMapImpl<K, ConcurrentCacheAtom<V>> implements Cache<K, V> {
+public class ConcurrentCache<K, V> extends AbstractMapImpl<K, ConcurrentCacheAtom<K, V>> implements Cache<K, V> {
 
-	private static final int BUCKET_SIZE = 10;
+	private static final int DESIRED_BUCKET_SIZE = 8;
 
 	private final String name;
 
@@ -49,45 +51,77 @@ public class ConcurrentCache<K, V> extends AbstractMapImpl<K, ConcurrentCacheAto
 
 	private final CacheStats stats = new CacheStats();
 
-	public static <K, V> ConcurrentCache<K, V> create(String name, int capacity, Mapper<K, V> loader, long ttlInMs) {
-		if (capacity > BUCKET_SIZE * 2) {
-			return new ConcurrentCache<>(name, capacity / BUCKET_SIZE, BUCKET_SIZE, loader, ttlInMs);
-		} else {
-			return new ConcurrentCache<>(name, 1, capacity, loader, ttlInMs);
+	private final boolean statistics;
+
+	private final int l1Xor = Rnd.rnd();
+
+	private static final int L1_SEGMENTS = 32;
+
+	private static final int L1_SEGMENT_SIZE = 16;
+
+	@SuppressWarnings("unchecked")
+	private final L1CacheSegment<K, V>[] l1Cache = new L1CacheSegment[L1_SEGMENTS];
+
+	private final int l1BitMask = Msc.bitMask(Msc.log2(L1_SEGMENTS));
+
+	public static <K, V> ConcurrentCache<K, V> create(String name, int capacity, Mapper<K, V> loader, long ttlInMs,
+	                                                  ScheduledThreadPoolExecutor scheduler, boolean statistics, boolean manageable) {
+
+		if (scheduler == null) {
+			scheduler = Caching.scheduler();
 		}
+
+		return new ConcurrentCache<>(name, capacity, loader, ttlInMs, scheduler, statistics, manageable);
 	}
 
-	public ConcurrentCache(String name, int buckets, int bucketSize, Mapper<K, V> loader, long ttlInMs) {
-		super(buckets, bucketSize);
+	public ConcurrentCache(String name, int capacity, Mapper<K, V> loader, long ttlInMs,
+	                       ScheduledThreadPoolExecutor scheduler, boolean statistics, boolean manageable) {
+
+		super(new ConcurrentCacheTable<K, V>(capacity, DESIRED_BUCKET_SIZE));
+
+		for (int i = 0; i < l1Cache.length; i++) {
+			l1Cache[i] = new L1CacheSegment<>(L1_SEGMENT_SIZE);
+		}
 
 		this.name = name;
 		this.loader = loader;
 		this.ttlInMs = ttlInMs;
+		this.statistics = statistics;
 
-		U.must(buckets > 0 && bucketSize > 0, "The capacity is too small!");
+		scheduleCrawl(ttlInMs, scheduler);
 
-		Jobs.every(1, TimeUnit.SECONDS).run(new Runnable() {
-			@Override
-			public void run() {
-				crawl();
-			}
-		});
+		this.capacity = capacity;
 
-		this.capacity = buckets * bucketSize;
+		if (manageable) {
+			new ManageableCache(this);
+		}
+	}
 
-		new ManageableCache(this);
+	private void scheduleCrawl(long ttlInMs, ScheduledThreadPoolExecutor scheduler) {
+		if (ttlInMs > 0) {
+			scheduler.scheduleWithFixedDelay(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						crawl();
+					} catch (Exception e) {
+						Log.error("Error occurred while crawling the cache!", e);
+					}
+				}
+			}, 1, 1, TimeUnit.SECONDS);
+		}
 	}
 
 	private void crawl() {
-		SimpleList<MapEntry<K, ConcurrentCacheAtom<V>>>[] buckets = entries.buckets;
+		SimpleBucket<MapEntry<K, ConcurrentCacheAtom<K, V>>>[] buckets = entries.buckets;
 
-		for (SimpleList<MapEntry<K, ConcurrentCacheAtom<V>>> bucket : buckets) {
+		for (SimpleBucket<MapEntry<K, ConcurrentCacheAtom<K, V>>> bucket : buckets) {
 			if (bucket != null) {
 				for (int i = 0; i < bucket.size(); i++) {
-					MapEntry<K, ConcurrentCacheAtom<V>> entry = bucket.get(i);
+					MapEntry<K, ConcurrentCacheAtom<K, V>> entry = bucket.get(i);
 
 					if (entry != null) {
-						ConcurrentCacheAtom<V> cachedCalc = entry.value;
+						ConcurrentCacheAtom<K, V> cachedCalc = entry.value;
 						if (cachedCalc != null) {
 							cachedCalc.checkTTL();
 						}
@@ -95,6 +129,8 @@ public class ConcurrentCache<K, V> extends AbstractMapImpl<K, ConcurrentCacheAto
 				}
 			}
 		}
+
+		if (statistics) stats.crawls.incrementAndGet();
 	}
 
 	/**
@@ -102,42 +138,37 @@ public class ConcurrentCache<K, V> extends AbstractMapImpl<K, ConcurrentCacheAto
 	 */
 	@Override
 	public V get(final K key) {
-		SimpleList<MapEntry<K, ConcurrentCacheAtom<V>>> bucket = entries.bucket(key.hashCode());
-		MapEntry<K, ConcurrentCacheAtom<V>> entry = findEntry(key, bucket);
+		int hash = key.hashCode();
+		L1CacheSegment<K, V> l1 = l1Segment(hash);
+
+		ConcurrentCacheAtom<K, V> l1atom = l1.find(key);
+
+		if (l1atom != null) {
+			if (statistics) stats.l1Hits.incrementAndGet();
+			return l1atom.get();
+		} else {
+			if (statistics) stats.l1Misses.incrementAndGet();
+		}
+
+		SimpleBucket<MapEntry<K, ConcurrentCacheAtom<K, V>>> bucket = l2segment(hash);
+		MapEntry<K, ConcurrentCacheAtom<K, V>> entry = findEntry(key, bucket);
 
 		if (entry != null) {
-			return entry.value.get();
+			l1.add(hash, entry.value);
+
+			ConcurrentCacheAtom<K, V> atom = entry.value;
+			return atom.get();
 
 		} else {
-			ConcurrentCacheAtom<V> atom = new ConcurrentCacheAtom<>(loaderFor(key), ttlInMs, stats);
+			ConcurrentCacheAtom<K, V> atom = createAtom(key);
 
-			putAtom(key, bucket, atom);
+			// this new atom might be ignored if other atom with the same key was inserted concurrently
+			entry = putAtom(key, bucket, atom);
+
+			l1.add(hash, entry.value);
 
 			return atom.get();
 		}
-	}
-
-	public void putAtom(K key, SimpleList<MapEntry<K, ConcurrentCacheAtom<V>>> bucket, ConcurrentCacheAtom<V> atom) {
-		synchronized (bucket) {
-			MapEntry<K, ConcurrentCacheAtom<V>> oldEntry = bucket.addRotating(new MapEntry<>(key, atom));
-
-			if (oldEntry != null) {
-				oldEntry.value.invalidate();
-			}
-		}
-	}
-
-	private Callable<V> loaderFor(final K key) {
-		if (loader == null) {
-			return null;
-		}
-
-		return new Callable<V>() {
-			@Override
-			public V call() throws Exception {
-				return loader.map(key);
-			}
-		};
 	}
 
 	/**
@@ -145,8 +176,53 @@ public class ConcurrentCache<K, V> extends AbstractMapImpl<K, ConcurrentCacheAto
 	 */
 	@Override
 	public V getIfExists(K key) {
-		MapEntry<K, ConcurrentCacheAtom<V>> entry = findEntry(key);
-		return entry != null ? entry.value.get() : null;
+		int hash = key.hashCode();
+		L1CacheSegment<K, V> l1 = l1Segment(hash);
+
+		ConcurrentCacheAtom<K, V> l1atom = l1.find(key);
+
+		if (l1atom != null) {
+			if (statistics) stats.l1Hits.incrementAndGet();
+			return l1atom.getIfExists();
+		} else {
+			if (statistics) stats.l1Misses.incrementAndGet();
+		}
+
+		MapEntry<K, ConcurrentCacheAtom<K, V>> entry = findEntry(key);
+		if (entry != null) {
+			l1.add(hash, entry.value);
+			return entry.value.getIfExists();
+
+		} else {
+			return null;
+		}
+	}
+
+	private ConcurrentCacheAtom<K, V> createAtom(K key) {
+		return statistics
+			? new ConcurrentCacheAtomWithStats<>(key, loader, ttlInMs, stats)
+			: new ConcurrentCacheAtom<>(key, loader, ttlInMs);
+	}
+
+	/**
+	 * Searches again in synchronized way then putting the atom.
+	 *
+	 * @return new or existing entry for the specified key
+	 */
+	private MapEntry<K, ConcurrentCacheAtom<K, V>> putAtom(K key, SimpleBucket<MapEntry<K, ConcurrentCacheAtom<K, V>>> bucket,
+	                                                       ConcurrentCacheAtom<K, V> atom) {
+		synchronized (bucket) {
+
+			// search again inside lock, maybe it was added in meantime
+			MapEntry<K, ConcurrentCacheAtom<K, V>> entry = findEntry(key, bucket);
+
+			if (entry == null) {
+				entry = new MapEntry<>(key, atom);
+				bucket.add(entry);
+			}
+
+			return entry;
+		}
 	}
 
 	/**
@@ -154,9 +230,18 @@ public class ConcurrentCache<K, V> extends AbstractMapImpl<K, ConcurrentCacheAto
 	 */
 	@Override
 	public void invalidate(K key) {
-		MapEntry<K, ConcurrentCacheAtom<V>> entry = findEntry(key);
-		if (entry != null) {
-			entry.value.invalidate();
+		int hash = key.hashCode();
+
+		l1Segment(hash).invalidate(key);
+
+		SimpleBucket<MapEntry<K, ConcurrentCacheAtom<K, V>>> bucket = l2segment(hash);
+
+		synchronized (bucket) {
+			MapEntry<K, ConcurrentCacheAtom<K, V>> entry = findEntry(key, bucket);
+
+			if (entry != null) {
+				entry.value.invalidate();
+			}
 		}
 	}
 
@@ -165,15 +250,22 @@ public class ConcurrentCache<K, V> extends AbstractMapImpl<K, ConcurrentCacheAto
 	 */
 	@Override
 	public void set(K key, V value) {
-		SimpleList<MapEntry<K, ConcurrentCacheAtom<V>>> bucket = entries.bucket(key.hashCode());
-		MapEntry<K, ConcurrentCacheAtom<V>> entry = findEntry(key, bucket);
+		int hash = key.hashCode();
 
-		if (entry != null) {
-			entry.value.set(value);
-		} else {
-			ConcurrentCacheAtom<V> atom = new ConcurrentCacheAtom<>(loaderFor(key), ttlInMs, stats);
-			atom.set(value);
-			putAtom(key, bucket, atom);
+		l1Segment(hash).set(key, value);
+
+		SimpleBucket<MapEntry<K, ConcurrentCacheAtom<K, V>>> bucket = l2segment(hash);
+
+		synchronized (bucket) {
+			MapEntry<K, ConcurrentCacheAtom<K, V>> entry = findEntry(key, bucket);
+
+			if (entry != null) {
+				entry.value.set(value);
+			} else {
+				ConcurrentCacheAtom<K, V> atom = createAtom(key);
+				atom.set(value);
+				putAtom(key, bucket, atom);
+			}
 		}
 	}
 
@@ -181,6 +273,7 @@ public class ConcurrentCache<K, V> extends AbstractMapImpl<K, ConcurrentCacheAto
 		return ttlInMs;
 	}
 
+	@Override
 	public CacheStats stats() {
 		return stats;
 	}
@@ -189,11 +282,12 @@ public class ConcurrentCache<K, V> extends AbstractMapImpl<K, ConcurrentCacheAto
 		return name;
 	}
 
+	@Override
 	public int size() {
 		int size = 0;
 
-		for (int i = 0; i < entries.bucketCount(); i++) {
-			SimpleList<MapEntry<K, ConcurrentCacheAtom<V>>> bucket = entries.bucket(i);
+		for (int index = 0; index < entries.bucketCount(); index++) {
+			SimpleBucket<MapEntry<K, ConcurrentCacheAtom<K, V>>> bucket = entries.getBucketAt(index);
 
 			synchronized (bucket) {
 				size += bucket.size();
@@ -201,6 +295,14 @@ public class ConcurrentCache<K, V> extends AbstractMapImpl<K, ConcurrentCacheAto
 		}
 
 		return size;
+	}
+
+	private L1CacheSegment<K, V> l1Segment(int hash) {
+		return l1Cache[(hash ^ l1Xor) & l1BitMask];
+	}
+
+	private SimpleBucket<MapEntry<K, ConcurrentCacheAtom<K, V>>> l2segment(int hash) {
+		return entries.bucket(hash);
 	}
 
 	public int capacity() {
@@ -211,4 +313,5 @@ public class ConcurrentCache<K, V> extends AbstractMapImpl<K, ConcurrentCacheAto
 	public void bypass() {
 		stats.bypassed.incrementAndGet();
 	}
+
 }

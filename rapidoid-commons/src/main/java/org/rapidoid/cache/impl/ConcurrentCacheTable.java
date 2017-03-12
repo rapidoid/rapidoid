@@ -1,4 +1,4 @@
-package org.rapidoid.cache;
+package org.rapidoid.cache.impl;
 
 /*
  * #%L
@@ -22,47 +22,21 @@ package org.rapidoid.cache;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.cache.impl.CacheStats;
+import org.rapidoid.util.MapEntry;
+import org.rapidoid.util.SimpleBucket;
+import org.rapidoid.util.SimpleHashTable;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.3.0")
-public interface Cache<K, V> {
+@Since("5.3.3")
+public class ConcurrentCacheTable<K, V> extends SimpleHashTable<MapEntry<K, ConcurrentCacheAtom<K, V>>> {
 
-	/**
-	 * Returns the cached value for the given key, recalculating/reloading it if expired.
-	 */
-	V get(K key);
+	public ConcurrentCacheTable(int capacity, int desiredBucketSize) {
+		super(capacity, desiredBucketSize);
+	}
 
-	/**
-	 * Retrieves the cached value for the given key if it exists, or <code>null</code> otherwise.
-	 */
-	V getIfExists(K key);
-
-	/**
-	 * Invalidates the cached value for the given key.
-	 */
-	void invalidate(K key);
-
-	/**
-	 * Sets a new cached value for the given key.
-	 */
-	void set(K key, V value);
-
-	/**
-	 * Clears the cache.
-	 */
-	void clear();
-
-	int size();
-
-	/**
-	 * Notifies the cache that it's being bypassed due to any reason (useful for stats).
-	 */
-	void bypass();
-
-	/**
-	 * Retrieves the cache statistics.
-	 */
-	CacheStats stats();
+	@Override
+	protected SimpleBucket<MapEntry<K, ConcurrentCacheAtom<K, V>>> createBucket(int bucketSize) {
+		return new CacheBucket<>(bucketSize);
+	}
 
 }

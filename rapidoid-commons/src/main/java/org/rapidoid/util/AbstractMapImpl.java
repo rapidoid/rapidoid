@@ -33,12 +33,12 @@ public abstract class AbstractMapImpl<K, V> extends RapidoidThing implements Sim
 
 	protected V defaultValue;
 
-	public AbstractMapImpl(int width) {
-		this.entries = new SimpleHashTable<>(width);
+	public AbstractMapImpl(SimpleHashTable<MapEntry<K, V>> entries) {
+		this.entries = entries;
 	}
 
-	public AbstractMapImpl(int width, int initialBucketSize) {
-		this.entries = new SimpleHashTable<>(width, initialBucketSize);
+	public AbstractMapImpl(int capacity, int bucketSize) {
+		this(new SimpleHashTable<MapEntry<K, V>>(capacity, bucketSize));
 	}
 
 	@Override
@@ -57,11 +57,11 @@ public abstract class AbstractMapImpl<K, V> extends RapidoidThing implements Sim
 	}
 
 	protected MapEntry<K, V> findEntry(K key) {
-		SimpleList<MapEntry<K, V>> bucket = entries.bucket(key.hashCode());
-		return findEntry(key, bucket);
+		int hash = key.hashCode();
+		return findEntry(key, entries.bucket(hash));
 	}
 
-	protected MapEntry<K, V> findEntry(K key, SimpleList<MapEntry<K, V>> bucket) {
+	protected MapEntry<K, V> findEntry(K key, SimpleBucket<MapEntry<K, V>> bucket) {
 		for (int i = 0; i < bucket.size(); i++) {
 			MapEntry<K, V> entry = bucket.get(i);
 

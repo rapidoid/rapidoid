@@ -95,20 +95,9 @@ public class MultiBuf extends OutputStream implements Buf, Constants {
 		this.name = name;
 		this.singleCap = (int) Math.pow(2, factor);
 		this.factor = factor;
-		this.addrMask = addrMask();
+		this.addrMask = Msc.bitMask(factor);
 
 		assert invariant(true);
-	}
-
-	private int addrMask() {
-		int mask = 1;
-
-		for (int i = 0; i < factor - 1; i++) {
-			mask <<= 1;
-			mask |= 1;
-		}
-
-		return mask;
 	}
 
 	@Override

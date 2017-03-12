@@ -38,4 +38,40 @@ public class CacheStats extends RapidoidThing {
 
 	public final AtomicLong bypassed = new AtomicLong();
 
+	public final AtomicLong crawls = new AtomicLong();
+
+	public final AtomicLong l1Hits = new AtomicLong();
+
+	public final AtomicLong l1Misses = new AtomicLong();
+
+	public void reset() {
+		// basic
+		hits.set(0);
+		misses.set(0);
+		errors.set(0);
+		bypassed.set(0);
+
+		// additional
+		crawls.set(0);
+		l1Hits.set(0);
+		l1Misses.set(0);
+	}
+
+	public long total() {
+		// without the additional stats
+		return hits.get() + misses.get() + errors.get() + bypassed.get();
+	}
+
+	@Override
+	public String toString() {
+		return "CacheStats{" +
+			"hits=" + hits +
+			", misses=" + misses +
+			", errors=" + errors +
+			", bypassed=" + bypassed +
+			", crawls=" + crawls +
+			", l1Hits=" + l1Hits +
+			", l1Misses=" + l1Misses +
+			'}';
+	}
 }

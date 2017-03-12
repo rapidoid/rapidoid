@@ -1,5 +1,9 @@
 package org.rapidoid.cache.impl;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.util.SimpleList;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,18 +24,35 @@ package org.rapidoid.cache.impl;
  * #L%
  */
 
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cache.CacheDSL;
-
 @Authors("Nikolche Mihajlovski")
-@Since("5.3.0")
-public class CacheFactory extends RapidoidThing {
+@Since("5.3.3")
+public class CacheBucket<T> extends SimpleList<T> {
 
-	public static <K, V> ConcurrentCache<K, V> create(CacheDSL<K, V> params) {
-		return ConcurrentCache.create(params.name(), params.capacity(), params.loader(), params.ttl(),
-			params.crawler(), params.statistics(), params.manageable());
+	public CacheBucket(int capacity) {
+		super(capacity);
+	}
+
+	public CacheBucket(int capacity, int growFactor) {
+		super(capacity, growFactor);
+	}
+
+	@Override
+	public T add(T obj) {
+		if (size < array.length) {
+			array[size++] = obj;
+			return null;
+
+		} else {
+			T oldValue = array[position];
+			array[position] = obj;
+			position++;
+
+			if (position >= array.length) {
+				position = 0;
+			}
+
+			return oldValue;
+		}
 	}
 
 }

@@ -1,4 +1,4 @@
-package org.rapidoid.cache.impl;
+package org.rapidoid.cache;
 
 /*
  * #%L
@@ -23,7 +23,10 @@ package org.rapidoid.cache.impl;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.cache.Cache;
+import org.rapidoid.cache.impl.CacheFactory;
+import org.rapidoid.lambda.Mapper;
+
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -31,19 +34,42 @@ public class CacheDSL<K, V> extends RapidoidThing {
 
 	private volatile String name;
 
-	private volatile org.rapidoid.lambda.Mapper<K, V> of = null;
+	private volatile Mapper<K, V> loader;
 
 	private volatile int capacity = 1024;
 
 	private volatile long ttl = 0;
 
-	public CacheDSL<K, V> of(org.rapidoid.lambda.Mapper<K, V> of) {
-		this.of = of;
+	private volatile ScheduledThreadPoolExecutor crawler;
+
+	private volatile boolean statistics;
+
+	private volatile boolean manageable;
+
+	/**
+	 * Please use loader(...) instead.
+	 */
+	@Deprecated
+	public CacheDSL<K, V> of(Mapper<K, V> of) {
+		this.loader = of;
 		return this;
 	}
 
-	public org.rapidoid.lambda.Mapper<K, V> of() {
-		return this.of;
+	/**
+	 * Please use loader() instead.
+	 */
+	@Deprecated
+	public Mapper<K, V> of() {
+		return this.loader;
+	}
+
+	public Mapper<K, V> loader() {
+		return loader;
+	}
+
+	public CacheDSL<K, V> loader(Mapper<K, V> loader) {
+		this.loader = loader;
+		return this;
 	}
 
 	public String name() {
@@ -71,6 +97,33 @@ public class CacheDSL<K, V> extends RapidoidThing {
 
 	public long ttl() {
 		return this.ttl;
+	}
+
+	public ScheduledThreadPoolExecutor crawler() {
+		return crawler;
+	}
+
+	public CacheDSL crawler(ScheduledThreadPoolExecutor crawler) {
+		this.crawler = crawler;
+		return this;
+	}
+
+	public boolean statistics() {
+		return statistics;
+	}
+
+	public CacheDSL statistics(boolean statistics) {
+		this.statistics = statistics;
+		return this;
+	}
+
+	public boolean manageable() {
+		return manageable;
+	}
+
+	public CacheDSL manageable(boolean manageable) {
+		this.manageable = manageable;
+		return this;
 	}
 
 	public Cache<K, V> build() {

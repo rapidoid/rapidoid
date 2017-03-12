@@ -85,12 +85,17 @@ org.rapidoid.bytes.StringBytes
 org.rapidoid.cache.Cache
 org.rapidoid.cache.CacheAtom
 org.rapidoid.cache.Cached
+org.rapidoid.cache.CacheDSL
 org.rapidoid.cache.Caching
-org.rapidoid.cache.impl.CacheDSL
+org.rapidoid.cache.impl.CacheBucket
+org.rapidoid.cache.impl.CachedValue
 org.rapidoid.cache.impl.CacheFactory
 org.rapidoid.cache.impl.CacheStats
 org.rapidoid.cache.impl.ConcurrentCache
 org.rapidoid.cache.impl.ConcurrentCacheAtom
+org.rapidoid.cache.impl.ConcurrentCacheAtomWithStats
+org.rapidoid.cache.impl.ConcurrentCacheTable
+org.rapidoid.cache.impl.L1CacheSegment
 org.rapidoid.cache.impl.ManageableCache
 org.rapidoid.cls.AbstractTypeSpecificFactory
 org.rapidoid.cls.AbstractTypeSpecificVisitor
@@ -753,6 +758,7 @@ org.rapidoid.timeseries.TSValue
 org.rapidoid.util.AbstractMapImpl
 org.rapidoid.util.AnsiColor
 org.rapidoid.util.AppInfo
+org.rapidoid.util.BenchmarkOperation
 org.rapidoid.util.Bufs
 org.rapidoid.util.ByType
 org.rapidoid.util.Constants
@@ -771,6 +777,7 @@ org.rapidoid.util.NullOutputStream
 org.rapidoid.util.Once
 org.rapidoid.util.Resetable
 org.rapidoid.util.RuntimeInfo
+org.rapidoid.util.SimpleBucket
 org.rapidoid.util.SimpleHashTable
 org.rapidoid.util.SimpleList
 org.rapidoid.util.SimpleMap
