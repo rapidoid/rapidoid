@@ -52,16 +52,16 @@ public class AppChangeWatcher extends RapidoidThing implements Operation<String>
 		}
 	}
 
+	public AppChangeWatcher active(boolean active) {
+		this.active = active;
+		return this;
+	}
+
 	private synchronized void onAppChanged(String filename) {
 		if (active) {
 			Log.info("Detected file system changes of the application", "filename", filename);
 
-			active = false;
-			try {
-				AppDeployer.notifyAppChanged(root, appId, filename);
-			} finally {
-				active = true;
-			}
+			AppDeployer.notifyAppChanged(root, appId, filename);
 		}
 	}
 }

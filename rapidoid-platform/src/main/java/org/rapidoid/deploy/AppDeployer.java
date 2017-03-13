@@ -45,6 +45,8 @@ public class AppDeployer extends RapidoidThing {
 
 	private static final String CLASSPATH = System.getProperty("java.class.path");
 
+	private static final AppChangeWatcher APP_CHANGE_WATCHER = new AppChangeWatcher("/app", "app");
+
 	private static void runIfExists(String appId, String appJar) {
 		if (Msc.hasMainApp()) {
 			Log.info("Deploying pre-existing application", "id", appId);
@@ -75,16 +77,24 @@ public class AppDeployer extends RapidoidThing {
 
 		U.must(new File(stagedAppJar).exists(), "Cannot deploy, the application needs to be staged first, cannot find: %s", stagedAppJar);
 
+		APP_CHANGE_WATCHER.active(false);
+
 		try {
 			Files.move(Paths.get(stagedAppJar), Paths.get(appJar), StandardCopyOption.REPLACE_EXISTING);
+			startOrRestartApp("app");
+
 		} catch (IOException e) {
 			throw U.rte("Deployment error!", e);
+		} finally {
+			APP_CHANGE_WATCHER.active(true);
 		}
 
 		Log.info("Deployed JAR", "filename", appJar);
 	}
 
-	public static void startOrRestartApp(String appId) {
+	static void startOrRestartApp(String appId) {
+		Msc.logSection("Restarting the application");
+
 		ProcessHandle proc = DEPLOYED.find(appId);
 
 		if (proc != null) {
@@ -97,7 +107,7 @@ public class AppDeployer extends RapidoidThing {
 		runAppJar(appId);
 	}
 
-	public static void stageJar(String appJar, byte[] content) {
+	static void stageJar(String appJar, byte[] content) {
 		String stagedAppJar = appJar + ".staged";
 
 		U.must(U.notEmpty(appJar), "Empty application jar name was provided!");
@@ -107,7 +117,7 @@ public class AppDeployer extends RapidoidThing {
 		Log.info("Staged application jar", "size", content.length, "destination", appJar);
 	}
 
-	public static Processes processes() {
+	static Processes processes() {
 		return DEPLOYED;
 	}
 
@@ -116,9 +126,11 @@ public class AppDeployer extends RapidoidThing {
 		if (U.notEmpty(appJar)) {
 			runIfExists("app", appJar);
 		}
+
+		APP_CHANGE_WATCHER.watch();
 	}
 
-	public static void stopApp(String appId) {
+	static void stopApp(String appId) {
 		ProcessHandle proc = DEPLOYED.find(appId);
 
 		if (proc != null) {
@@ -127,8 +139,7 @@ public class AppDeployer extends RapidoidThing {
 		}
 	}
 
-	public static void notifyAppChanged(String root, String appId, String filename) {
-		Msc.logSection("Restarting the application in: " + root);
+	static void notifyAppChanged(String root, String appId, String filename) {
 		startOrRestartApp(appId);
 	}
 }
