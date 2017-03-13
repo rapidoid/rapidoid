@@ -261,6 +261,7 @@ org.rapidoid.group.GroupOf
 org.rapidoid.group.Groups
 org.rapidoid.group.GroupStats
 org.rapidoid.group.Manageable
+org.rapidoid.group.ManageableBean
 org.rapidoid.gui.base.AbstractCommand
 org.rapidoid.gui.base.AbstractInput
 org.rapidoid.gui.base.AbstractOption

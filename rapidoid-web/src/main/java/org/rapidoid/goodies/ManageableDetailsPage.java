@@ -10,8 +10,10 @@ import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.Resp;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.util.List;
+import java.util.Map;
 
 /*
  * #%L
@@ -61,12 +63,15 @@ public class ManageableDetailsPage extends GUI implements ReqRespHandler {
 
 		GroupOf<? extends Manageable> group = target.group();
 
-		String type = target.getManageableType();
-		info.add(breadcrumb(type, group.name(), target.id()));
+		String kind = group.kind();
+		String back = Msc.specialUri("manageables");
+
+		Map<String, String> breadcrumb = U.map(kind, back, group.name(), back, target.id(), "#");
+		info.add(breadcrumb(breadcrumb));
 
 		info.add(show(target, U.arrayOf(String.class, columns)));
 
-		info.add(autoRefresh(1000));
+		info.add(autoRefresh(2000));
 		return info;
 	}
 

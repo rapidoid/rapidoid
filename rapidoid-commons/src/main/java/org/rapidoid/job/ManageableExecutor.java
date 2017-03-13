@@ -23,6 +23,7 @@ package org.rapidoid.job;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.group.AutoManageable;
+import org.rapidoid.group.ManageableBean;
 import org.rapidoid.u.U;
 
 import java.util.List;
@@ -30,6 +31,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
+@ManageableBean(kind = "jobs")
 public class ManageableExecutor extends AutoManageable<ManageableExecutor> {
 
 	private final ThreadPoolExecutor executor;
@@ -37,11 +39,6 @@ public class ManageableExecutor extends AutoManageable<ManageableExecutor> {
 	public ManageableExecutor(String id, ThreadPoolExecutor executor) {
 		super(id);
 		this.executor = executor;
-	}
-
-	@Override
-	public String getManageableType() {
-		return "Jobs";
 	}
 
 	@Override

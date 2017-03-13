@@ -8,6 +8,7 @@ import org.rapidoid.config.Config;
 import org.rapidoid.datamodel.Results;
 import org.rapidoid.datamodel.impl.ResultsImpl;
 import org.rapidoid.group.AutoManageable;
+import org.rapidoid.group.ManageableBean;
 import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
@@ -39,6 +40,7 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
+@ManageableBean(kind = "jdbc")
 public class JdbcClient extends AutoManageable<JdbcClient> {
 
 	private volatile boolean initialized;
@@ -453,8 +455,4 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 			'}';
 	}
 
-	@Override
-	public String getManageableType() {
-		return "JDBC";
-	}
 }

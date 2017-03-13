@@ -957,6 +957,16 @@ public abstract class GUI extends HTML implements Role {
 		return breadcrumb;
 	}
 
+	public static Tag breadcrumb(Map<?, String> segments) {
+		Tag breadcrumb = ol().class_("breadcrumb");
+
+		for (Map.Entry<?, String> e : segments.entrySet()) {
+			breadcrumb = breadcrumb.append(li(a(e.getKey()).href(e.getValue())));
+		}
+
+		return breadcrumb;
+	}
+
 	public static Tag autoRefresh(long intervalMs) {
 		return script(U.frmt("Rapidoid.setAutoRefreshInterval(%s);", intervalMs));
 	}

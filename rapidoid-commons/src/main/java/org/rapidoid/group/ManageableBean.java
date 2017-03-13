@@ -1,5 +1,15 @@
 package org.rapidoid.group;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,23 +30,13 @@ package org.rapidoid.group;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import java.util.List;
-
+@Target({TYPE})
+@Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
-@Since("5.3.0")
-public interface Manageable {
+@Since("5.3.3")
+@Documented
+public @interface ManageableBean {
 
-	String id();
-
-	GroupOf<? extends Manageable> group();
-
-	List<String> getManageableActions();
-
-	List<String> getManageableProperties();
-
-	Object runManageableAction(String action);
+	String kind();
 
 }
