@@ -104,4 +104,11 @@ public class L1CacheSegment<K, V> extends RapidoidThing {
 		}
 	}
 
+	public void clear() {
+		for (int i = 0; i < keys.length; i++) {
+			keys[i] = null;
+			atoms[i] = null;
+		}
+		this.latest = null;
+	}
 }

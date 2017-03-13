@@ -314,4 +314,13 @@ public class ConcurrentCache<K, V> extends AbstractMapImpl<K, ConcurrentCacheAto
 		stats.bypassed.incrementAndGet();
 	}
 
+	@Override
+	public synchronized void clear() {
+		super.clear();
+
+		for (L1CacheSegment<K, V> l1 : l1Cache) {
+			l1.clear();
+		}
+	}
+
 }
