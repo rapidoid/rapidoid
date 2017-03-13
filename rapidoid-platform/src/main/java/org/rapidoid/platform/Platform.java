@@ -26,7 +26,9 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.commons.RapidoidInfo;
+import org.rapidoid.deploy.AppChangeWatcher;
 import org.rapidoid.deploy.AppDeployer;
+import org.rapidoid.deploy.AppDownloader;
 import org.rapidoid.log.Log;
 import org.rapidoid.performance.BenchmarkCenter;
 import org.rapidoid.setup.App;
@@ -48,7 +50,7 @@ import java.util.List;
 @Since("5.3.0")
 public class Platform extends RapidoidThing {
 
-	private static AppChangeWatcher appChangeWatcher = new AppChangeWatcher();
+	private static AppChangeWatcher appChangeWatcher = new AppChangeWatcher("/app", "app");
 
 	static void start(String[] args, @SuppressWarnings("unused") boolean defaults) {
 
@@ -70,7 +72,7 @@ public class Platform extends RapidoidThing {
 
 		AuthBootstrap.bootstrapAdminCredentials();
 
-		appChangeWatcher.watch("/app", "app");
+		appChangeWatcher.watch();
 
 		openInBrowser();
 	}

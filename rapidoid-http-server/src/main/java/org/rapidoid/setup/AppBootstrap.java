@@ -26,6 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 import org.rapidoid.util.MscOpts;
 
 @Authors("Nikolche Mihajlovski")
@@ -222,8 +223,15 @@ public class AppBootstrap extends RapidoidThing {
 	}
 
 	static IGoodies getGoodies() {
-		Class<?> goodiesClass = Cls.getClassIfExists("org.rapidoid.goodies.RapidoidGoodies");
-		U.must(goodiesClass != null, "Cannot find the Goodies, is module 'rapidoid-web' missing?");
+		Class<?> goodiesClass;
+
+		if (Msc.isPlatform()) {
+			goodiesClass = Cls.get("org.rapidoid.goodies.RapidoidPlatformGoodies");
+
+		} else {
+			goodiesClass = Cls.getClassIfExists("org.rapidoid.goodies.RapidoidGoodies");
+			U.must(goodiesClass != null, "Cannot find the Goodies, is module 'rapidoid-web' missing?");
+		}
 
 		return (IGoodies) Cls.newInstance(goodiesClass);
 	}

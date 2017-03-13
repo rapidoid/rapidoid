@@ -184,7 +184,12 @@ org.rapidoid.data.TUUIDDeserializer
 org.rapidoid.data.TUUIDSerializer
 org.rapidoid.data.XML
 org.rapidoid.data.YAML
+org.rapidoid.deploy.AppChangeWatcher
 org.rapidoid.deploy.AppDeployer
+org.rapidoid.deploy.AppDownloader
+org.rapidoid.deploy.DeploymentHandler
+org.rapidoid.deploy.JarDeploymentHandler
+org.rapidoid.deploy.JarStagingHandler
 org.rapidoid.env.Env
 org.rapidoid.env.Environment
 org.rapidoid.env.EnvMode
@@ -226,9 +231,6 @@ org.rapidoid.fluent.utils.StreamUtils
 org.rapidoid.goodies.BeansHandler
 org.rapidoid.goodies.ClasspathHandler
 org.rapidoid.goodies.ConfigHandler
-org.rapidoid.goodies.deployment.DeploymentHandler
-org.rapidoid.goodies.deployment.JarDeploymentHandler
-org.rapidoid.goodies.deployment.JarStagingHandler
 org.rapidoid.goodies.DetailsHandler
 org.rapidoid.goodies.discovery.DiscoveryIndexHandler
 org.rapidoid.goodies.discovery.DiscoveryRegistrationHandler
@@ -246,9 +248,11 @@ org.rapidoid.goodies.ManageableDetailsPage
 org.rapidoid.goodies.ManageablesOverviewPage
 org.rapidoid.goodies.MultiDetailsHandler
 org.rapidoid.goodies.OverviewHandler
+org.rapidoid.goodies.PlatformGoodies
 org.rapidoid.goodies.ProcessDetailsHandler
 org.rapidoid.goodies.ProcessesHandler
 org.rapidoid.goodies.RapidoidGoodies
+org.rapidoid.goodies.RapidoidPlatformGoodies
 org.rapidoid.goodies.RoutesHandler
 org.rapidoid.goodies.StatusHandler
 org.rapidoid.goodies.TerminateHandler
@@ -645,8 +649,6 @@ org.rapidoid.performance.BenchmarkResults
 org.rapidoid.performance.BenchmarkRunner
 org.rapidoid.performance.Perf
 org.rapidoid.performance.WrkSetup
-org.rapidoid.platform.AppChangeWatcher
-org.rapidoid.platform.AppDownloader
 org.rapidoid.platform.DefaultApp
 org.rapidoid.platform.Main
 org.rapidoid.platform.MavenUtil

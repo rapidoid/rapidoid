@@ -1392,4 +1392,19 @@ public class Msc extends RapidoidThing {
 		return (1 << bits) - 1;
 	}
 
+	public static boolean hasMainApp() {
+		List<String> appContent = IO.find().in("/app").ignoreRegex("(static|\\..*|.*~)").getNames();
+		return !appContent.isEmpty();
+	}
+
+	public static boolean isAppResource(String filename) {
+		String name = new File(filename).getName();
+		return !name.startsWith(".") && !name.endsWith("~") && !name.endsWith(".staged");
+	}
+
+	public static String mainAppJar() {
+		U.must(isPlatform());
+		return "/app/app.jar";
+	}
+
 }

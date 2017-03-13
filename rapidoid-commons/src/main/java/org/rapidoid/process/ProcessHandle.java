@@ -444,6 +444,7 @@ public class ProcessHandle extends AbstractManageable {
 			}
 		}
 
+		Log.info("Terminated process", "id", id());
 		return this;
 	}
 

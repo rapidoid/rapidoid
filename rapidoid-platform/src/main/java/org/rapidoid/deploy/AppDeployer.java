@@ -8,8 +8,8 @@ import org.rapidoid.log.Log;
 import org.rapidoid.process.Proc;
 import org.rapidoid.process.ProcessHandle;
 import org.rapidoid.process.Processes;
-import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,7 +19,7 @@ import java.nio.file.StandardCopyOption;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-platform
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -45,12 +45,8 @@ public class AppDeployer extends RapidoidThing {
 
 	private static final String CLASSPATH = System.getProperty("java.class.path");
 
-	public static String appJar() {
-		return ClasspathUtil.appJar();
-	}
-
 	private static void runIfExists(String appId, String appJar) {
-		if (!IO.find().in("/app").getNames().isEmpty()) {
+		if (Msc.hasMainApp()) {
 			Log.info("Deploying pre-existing application", "id", appId);
 
 			runAppJar(appId);
@@ -58,12 +54,12 @@ public class AppDeployer extends RapidoidThing {
 	}
 
 	private static void runAppJar(String appId) {
-		String appJar = appJar();
+		String appJar = Msc.mainAppJar();
 
 		String[] appJarCmd = {"java", "-jar", appJar, "root=/app"};
 		String[] defaultAppCmd = {"java", "-cp", CLASSPATH, "org.rapidoid.platform.DefaultApp", "root=/app"};
-		String[] cmd = new File(appJar).exists() ? appJarCmd : defaultAppCmd;
 
+		String[] cmd = new File(appJar).exists() ? appJarCmd : defaultAppCmd;
 
 		Proc.group(DEPLOYED)
 			.id(appId)
@@ -85,8 +81,6 @@ public class AppDeployer extends RapidoidThing {
 			throw U.rte("Deployment error!", e);
 		}
 
-		startOrRestartApp("app");
-
 		Log.info("Deployed JAR", "filename", appJar);
 	}
 
@@ -94,13 +88,13 @@ public class AppDeployer extends RapidoidThing {
 		ProcessHandle proc = DEPLOYED.find(appId);
 
 		if (proc != null) {
-			Log.info("Restarting the previously deployed application", "id", proc.id(), "process", proc.params().command());
-			proc.restart();
-
-		} else {
-			Log.info("Starting the deployed application");
-			runAppJar(appId);
+			Log.info("Stopping the previously deployed application", "id", proc.id(), "process", proc.params().command());
+			proc.terminate();
+			DEPLOYED.remove(proc);
 		}
+
+		Log.info("Starting the deployed application");
+		runAppJar(appId);
 	}
 
 	public static void stageJar(String appJar, byte[] content) {
@@ -118,7 +112,7 @@ public class AppDeployer extends RapidoidThing {
 	}
 
 	public static void bootstrap() {
-		String appJar = appJar();
+		String appJar = Msc.mainAppJar();
 		if (U.notEmpty(appJar)) {
 			runIfExists("app", appJar);
 		}
@@ -131,5 +125,10 @@ public class AppDeployer extends RapidoidThing {
 			Log.info("Stopping application", "id", proc.id(), "process", proc.params().command());
 			proc.destroy();
 		}
+	}
+
+	public static void notifyAppChanged(String root, String appId, String filename) {
+		Msc.logSection("Restarting the application in: " + root);
+		startOrRestartApp(appId);
 	}
 }

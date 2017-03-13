@@ -1,4 +1,4 @@
-package org.rapidoid.platform;
+package org.rapidoid.deploy;
 
 /*
  * #%L

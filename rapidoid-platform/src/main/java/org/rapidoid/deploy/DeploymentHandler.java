@@ -1,9 +1,8 @@
-package org.rapidoid.goodies.deployment;
+package org.rapidoid.deploy;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Str;
-import org.rapidoid.deploy.AppDeployer;
 import org.rapidoid.gui.Btn;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.html.Tag;
@@ -13,7 +12,6 @@ import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
 import org.rapidoid.io.IO;
 import org.rapidoid.process.ProcessHandle;
-import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.Tokens;
@@ -25,7 +23,7 @@ import java.util.Map;
 
 /*
  * #%L
- * rapidoid-web
+ * rapidoid-platform
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -55,36 +53,29 @@ public class DeploymentHandler extends GUI implements ReqHandler {
 	public Object execute(Req req) throws Exception {
 		List<Object> info = U.list();
 
-		if (ClasspathUtil.hasAppJar()) {
+		Map<String, String> tokenData = U.map(Tokens._USER, Current.username(), Tokens._SCOPE, SCOPES);
+		String token = Tokens.serialize(tokenData);
 
-			Map<String, String> tokenData = U.map(Tokens._USER, Current.username(), Tokens._SCOPE, SCOPES);
-			String token = Tokens.serialize(tokenData);
+		String appJar = Msc.mainAppJar();
+		String stagedAppJar = appJar + ".staged";
 
-			String appJar = ClasspathUtil.appJar();
-			String stagedAppJar = appJar + ".staged";
+		info.add(h3("Deployment status:"));
+		info.add(grid(jarsInfo(appJar, stagedAppJar, req)));
 
-			info.add(h3("Deployment status:"));
-			info.add(grid(jarsInfo(appJar, stagedAppJar, req)));
+		info.add(h3("Your deployment token is:"));
+		info.add(copy(textarea(token).rows("2").attr("readonly", "readonly").style("width:100%; font-size: 10px;")));
 
-			info.add(h3("Your deployment token is:"));
-			info.add(copy(textarea(token).rows("2").attr("readonly", "readonly").style("width:100%; font-size: 10px;")));
+		info.add(h3("Upload an application JAR to stage it and then deploy it:"));
+		info.add(render("upload-jar.html"));
 
-			info.add(h3("Upload an application JAR to stage it and then deploy it:"));
-			info.add(render("upload-jar.html"));
+		info.add(h3("Packaging and deploying with Maven:"));
 
-			info.add(h3("Packaging and deploying with Maven:"));
+		String cmd = "mvn clean org.rapidoid:app:deploy";
+		info.add(copy(textarea(cmd).rows("2").attr("readonly", "readonly").style("width:100%; font-size: 10px;")));
 
-			String cmd = "mvn clean org.rapidoid:app:deploy";
-			info.add(copy(textarea(cmd).rows("2").attr("readonly", "readonly").style("width:100%; font-size: 10px;")));
+		info.add(h3("HTTP API for Deployment:"));
 
-			info.add(h3("HTTP API for Deployment:"));
-
-			info.add(grid(apisInfo()));
-
-		} else {
-			info.add(h3(WARN, " No ", b("app.jar"), " file was configured on the classpath, so application deployment is disabled!"));
-			info.add(h4(DEPLOYMENT_HELP));
-		}
+		info.add(grid(apisInfo()));
 
 		return multi(info);
 	}

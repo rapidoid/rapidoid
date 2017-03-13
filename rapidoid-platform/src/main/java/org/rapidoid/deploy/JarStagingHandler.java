@@ -1,16 +1,17 @@
-package org.rapidoid.goodies.deployment;
+package org.rapidoid.deploy;
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.deploy.AppDeployer;
+import org.rapidoid.gui.GUI;
 import org.rapidoid.http.NiceResponse;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
+import org.rapidoid.io.Upload;
+import org.rapidoid.util.Msc;
 
 /*
  * #%L
- * rapidoid-web
+ * rapidoid-platform
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -30,18 +31,20 @@ import org.rapidoid.http.ReqHandler;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class JarDeploymentHandler extends RapidoidThing implements ReqHandler {
+public class JarStagingHandler extends GUI implements ReqHandler {
+
 
 	@Override
-	public Object execute(Req req) {
+	public Object execute(Req req) throws Exception {
+		Upload jar = req.file("file");
 
 		try {
-			AppDeployer.deploy(AppDeployer.appJar() + ".staged", AppDeployer.appJar());
+			AppDeployer.stageJar(Msc.mainAppJar(), jar.content());
 		} catch (Exception e) {
 			return NiceResponse.err(req, e);
 		}
 
-		return NiceResponse.ok(req, "Successfully deployed the application");
+		return NiceResponse.ok(req, "Successfully staged the application.");
 	}
 
 }

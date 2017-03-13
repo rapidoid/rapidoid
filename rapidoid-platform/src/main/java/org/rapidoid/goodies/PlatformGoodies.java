@@ -1,4 +1,4 @@
-package org.rapidoid.platform;
+package org.rapidoid.goodies;
 
 /*
  * #%L
@@ -20,31 +20,26 @@ package org.rapidoid.platform;
  * #L%
  */
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.deploy.AppDeployer;
-import org.rapidoid.io.watch.Watch;
-import org.rapidoid.log.Log;
-
-import java.io.File;
+import org.rapidoid.deploy.DeploymentHandler;
+import org.rapidoid.deploy.JarDeploymentHandler;
+import org.rapidoid.deploy.JarStagingHandler;
+import org.rapidoid.setup.Setup;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.3.0")
-public class AppChangeWatcher extends RapidoidThing {
+@Since("5.3.3")
+public class PlatformGoodies extends Goodies {
 
-	public void watch(String root, String appId) {
-		Watch.dir(root, Watch.simpleListener(filename -> {
-			if (shouldRestartOnFileChange(filename)) {
-				Log.info("Detected changes on the file system, restarting the application...", "filename", filename);
-				AppDeployer.startOrRestartApp(appId);
-			}
-		}));
+	public static void deployment(Setup setup) {
+		setup.page(uri("deployment")).mvc(new DeploymentHandler());
+		setup.post(uri("stage")).json(new JarStagingHandler());
+		setup.post(uri("deploy")).json(new JarDeploymentHandler());
 	}
 
-	private boolean shouldRestartOnFileChange(String filename) {
-		String name = new File(filename).getName();
-		return !name.startsWith(".") && !name.endsWith(".staged");
+	public static void platformAdminCenter(Setup setup) {
+		adminCenter(setup);
+		deployment(setup);
 	}
 
 }

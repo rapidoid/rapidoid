@@ -24,8 +24,8 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
-import java.io.File;
 import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
@@ -41,7 +41,7 @@ public class Main extends RapidoidThing {
 
 		if (defaults) {
 
-			if (new File("/app/app.jar").exists()) {
+			if (Msc.hasMainApp()) {
 				DEFAULT_ARGS.add("/ -> localhost:8080");
 			} else {
 				DEFAULT_ARGS.add("app.services=welcome");
