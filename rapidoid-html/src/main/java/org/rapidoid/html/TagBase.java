@@ -51,7 +51,11 @@ public interface TagBase<TAG extends Tag> {
 
 	TAG attr(String attr, String value);
 
+	TAG attr(String attr, int value);
+
 	TAG data(String dataAttr, String value);
+
+	TAG data(String dataAttr, int value);
 
 	TAG ng(String ngAttr, String value);
 

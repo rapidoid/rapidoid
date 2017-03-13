@@ -174,8 +174,18 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 	}
 
 	@Override
+	public Tag attr(String attr, int value) {
+		return attr(attr, value + "");
+	}
+
+	@Override
 	public Tag data(String dataAttr, String value) {
 		return attr("data-" + dataAttr, value);
+	}
+
+	@Override
+	public Tag data(String dataAttr, int value) {
+		return data(dataAttr, value + "");
 	}
 
 	@Override
