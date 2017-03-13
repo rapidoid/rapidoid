@@ -14,7 +14,7 @@
 [PLATFORM] INFO | Changing configuration filename base | from = rapidoid | to = my-config
 [PLATFORM] INFO | Automatically activating mode-specific profile | profile = production
 [PLATFORM] INFO | Initialized environment | mode = PRODUCTION | profiles = [production, platform]
-[PLATFORM] INFO | Setting application JAR | appJar = /app/app.jar | exists = false
+[PLATFORM] INFO | Setting application JAR | appJar = /app/the-root/app.jar | exists = false
 [PLATFORM] INFO | Loaded configuration | namespace = my-config | files = [built-in-config.yml, built-in-config-platform.yml, /app/the-root/my-config.yaml]
 [PLATFORM] INFO | Starting server | address = 0.0.0.0 | port = 5555 | I/O workers = 4 | sync = true | accept = non-blocking
 [PLATFORM] INFO | Server has started | setup = app | home = http://localhost:5555

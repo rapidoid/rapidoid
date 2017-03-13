@@ -55,12 +55,12 @@
 [PLATFORM] INFO | GET,POST /rapidoid/jmx/gc       | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
 [PLATFORM] INFO | GET,POST /rapidoid/metrics      | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
 [PLATFORM] INFO | GET /rapidoid/graphs/{id:.*}    | setup = app | roles = [administrator] | transaction = NONE | mvc = false | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/deployment   | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | POST /rapidoid/stage            | setup = app | roles = [administrator] | transaction = NONE | mvc = false | cacheTTL = 0
-[PLATFORM] INFO | POST /rapidoid/deploy           | setup = app | roles = [administrator] | transaction = NONE | mvc = false | cacheTTL = 0
 [PLATFORM] INFO | POST /rapidoid/login            | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
 [PLATFORM] INFO | GET /rapidoid/logout            | setup = app | roles = [logged_in] | transaction = NONE | mvc = false | cacheTTL = 0
 [PLATFORM] INFO | GET /rapidoid/status            | setup = app | roles = [administrator] | transaction = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/deployment   | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | POST /rapidoid/stage            | setup = app | roles = [administrator] | transaction = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | POST /rapidoid/deploy           | setup = app | roles = [administrator] | transaction = NONE | mvc = false | cacheTTL = 0
 [PLATFORM] INFO | Deploying pre-existing application | id = app
 [PLATFORM] INFO | Starting process | command = [java, -jar, /app/app.jar, root=/app]
 [PLATFORM] INFO | ---------------------------------------------------
