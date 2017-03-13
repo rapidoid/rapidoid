@@ -51,7 +51,7 @@ public class RapidoidTemplateFactory extends RapidoidThing implements TemplateFa
 			public RapidoidTemplate map(String filename) throws Exception {
 				return loadAndCompile(filename);
 			}
-		}).name(name).capacity(10000).ttl(CACHE_TTL).build();
+		}).name(name).capacity(10000).ttl(CACHE_TTL).manageable(true).statistics(true).build();
 	}
 
 	@Override
