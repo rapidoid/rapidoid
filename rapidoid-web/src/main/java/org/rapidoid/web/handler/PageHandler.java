@@ -52,8 +52,8 @@ public class PageHandler extends RapidoidThing implements ReqRespHandler {
 	@Override
 	public Object execute(Req req, Resp resp) {
 
-		if (page.sql != null) {
-			return grid(sqlItems(page.sql));
+		if (U.notEmpty(page.sql)) {
+			return guiOf(page, sqlItems(page.sql));
 		}
 
 		if (U.notEmpty(page.gui)) {
@@ -78,7 +78,7 @@ public class PageHandler extends RapidoidThing implements ReqRespHandler {
 
 		switch (gui.type) {
 			case grid:
-				item = grid(sqlItems(gui.sql));
+				item = grid(gui, sqlItems(gui.sql));
 				break;
 
 			default:
@@ -100,10 +100,20 @@ public class PageHandler extends RapidoidThing implements ReqRespHandler {
 		return JDBC.query(sql, req().params());
 	}
 
-	public Grid grid(Results items) {
+	public Object guiOf(PageConfig gui, Results items) {
+
+		if (gui.single) {
+			Object item = U.single(items.all()); // FIXME use paging
+			return GUI.details(item);
+		}
+
+		return grid(new PageGuiConfig(), items);
+	}
+
+	public Grid grid(final PageGuiConfig gui, Results items) {
 		Req req = req();
 
-		Grid grid = GUI.grid(items.all());
+		Grid grid = GUI.grid(items.all()); // FIXME use paging
 
 		String q = req.param("find", null);
 		if (q != null) grid.highlightRegex(Pattern.quote(q));

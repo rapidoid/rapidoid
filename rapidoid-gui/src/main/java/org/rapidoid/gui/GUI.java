@@ -971,4 +971,8 @@ public abstract class GUI extends HTML implements Role {
 		return script(U.frmt("Rapidoid.setAutoRefreshInterval(%s);", intervalMs));
 	}
 
+	public static Object details(Object item) {
+		return mid6(GUI.show(item));
+	}
+
 }
