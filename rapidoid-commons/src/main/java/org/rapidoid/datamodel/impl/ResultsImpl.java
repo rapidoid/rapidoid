@@ -95,4 +95,16 @@ public class ResultsImpl<T> extends RapidoidThing implements Results<T> {
 
 		return count;
 	}
+
+	@Override
+	public boolean isSingle() {
+		long count = data().getCount();
+
+		if (count >= 0) {
+			return count == 1;
+
+		} else {
+			return retrievePage(0, 2).size() == 1;
+		}
+	}
 }
