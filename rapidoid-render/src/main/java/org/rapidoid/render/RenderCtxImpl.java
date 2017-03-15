@@ -47,6 +47,8 @@ public class RenderCtxImpl extends RapidoidThing implements RenderCtx {
 	private volatile String ext;
 	private volatile TemplateFactory factory;
 
+	private volatile boolean busy;
+
 	@Override
 	public void printAscii(String s) throws IOException {
 		StreamUtils.writeAscii(out, s);
@@ -199,6 +201,14 @@ public class RenderCtxImpl extends RapidoidThing implements RenderCtx {
 
 	public void reset() {
 		this.model.clear();
+		this.busy = false;
 	}
 
+	public boolean busy() {
+		return busy;
+	}
+
+	public void claim() {
+		this.busy = true;
+	}
 }

@@ -48,26 +48,28 @@ public class RapidoidTemplate extends RapidoidThing implements Template {
 	}
 
 	void doRenderMulti(RapidoidThreadLocals locals, OutputStream output, List<Object> model) {
-		RenderCtxImpl renderCtx = initRenderCtx(locals);
+		// start using the render context
+		RenderCtxImpl renderCtx = getRenderCtx(locals);
 
 		renderCtx.out(output).factory(factory).filename(filename).multiModel(model);
-
 		template.render(renderCtx);
 
+		// stop using the render context
 		renderCtx.reset();
 	}
 
 	void doRender(RapidoidThreadLocals locals, OutputStream output, Object model) {
-		RenderCtxImpl renderCtx = initRenderCtx(locals);
+		// start using the render context
+		RenderCtxImpl renderCtx = getRenderCtx(locals);
 
 		renderCtx.out(output).factory(factory).filename(filename).model(model);
-
 		template.render(renderCtx);
 
+		// stop using the render context
 		renderCtx.reset();
 	}
 
-	private RenderCtxImpl initRenderCtx(RapidoidThreadLocals locals) {
+	private RenderCtxImpl getRenderCtx(RapidoidThreadLocals locals) {
 		RenderCtxImpl renderCtx = (RenderCtxImpl) locals.renderContext;
 
 		if (renderCtx == null) {
@@ -75,7 +77,12 @@ public class RapidoidTemplate extends RapidoidThing implements Template {
 			locals.renderContext = renderCtx;
 		}
 
-		return renderCtx;
+		if (!renderCtx.busy()) {
+			renderCtx.claim();
+			return renderCtx;
+		} else {
+			return new RenderCtxImpl();
+		}
 	}
 
 	public void renderMultiModel(OutputStream output, Object... model) {
