@@ -133,6 +133,26 @@ public class JdbcUtil extends RapidoidThing {
 		return rows;
 	}
 
+	private static Object convertResultValue(String type, Object value) {
+		byte[] bytes;
+
+		switch (type) {
+
+			case "TUUID":
+				U.must(value instanceof byte[], "Expecting byte[] value to convert to TUUID!");
+				bytes = (byte[]) value;
+				return TUUID.fromBytes(bytes);
+
+			case "UUID":
+				U.must(value instanceof byte[], "Expecting byte[] value to convert to UUID!");
+				bytes = (byte[]) value;
+				return Msc.bytesToUUID(bytes);
+
+			default:
+				throw U.rte("Unknown type: '%s'", type);
+		}
+	}
+
 	public static List<Map<String, Object>> rows(ResultSet rs) throws SQLException {
 		List<Map<String, Object>> rows = U.list();
 
@@ -150,8 +170,17 @@ public class JdbcUtil extends RapidoidThing {
 		int columnsNumber = meta.getColumnCount();
 
 		for (int i = 1; i <= columnsNumber; i++) {
+
 			String name = meta.getColumnLabel(i);
 			Object value = rs.getObject(i);
+
+			String[] nameParts = name.split("__");
+
+			if (nameParts.length == 2) {
+				name = nameParts[0];
+				value = convertResultValue(nameParts[1], value);
+			}
+
 			row.put(name, value);
 		}
 
