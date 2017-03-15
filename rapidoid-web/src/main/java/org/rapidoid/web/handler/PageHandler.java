@@ -32,6 +32,8 @@ import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.Resp;
 import org.rapidoid.jdbc.JDBC;
+import org.rapidoid.lambda.Mapper;
+import org.rapidoid.render.Render;
 import org.rapidoid.u.U;
 import org.rapidoid.web.config.bean.PageConfig;
 import org.rapidoid.web.config.bean.PageGuiConfig;
@@ -122,8 +124,16 @@ public class PageHandler extends RapidoidThing implements ReqRespHandler {
 		if (highlight != null) grid.highlightRegex(Pattern.quote(highlight));
 
 		String pageSize = req.param("$pageSize", null);
-
 		if (pageSize != null) grid.pageSize(U.num(pageSize));
+
+		if (U.notEmpty(gui.uri)) {
+			grid.toUri(new Mapper<Object, String>() {
+				@Override
+				public String map(Object item) throws Exception {
+					return Render.template(gui.uri).model(item);
+				}
+			});
+		}
 
 		return grid;
 	}
