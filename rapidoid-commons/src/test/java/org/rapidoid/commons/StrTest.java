@@ -119,4 +119,23 @@ public class StrTest extends AbstractCommonsTest {
 		eq(Str.render(U.map("xx", 1, "yy", "ABC"), "value [${key}] is ${value}", "::"), "value [xx] is 1::value [yy] is ABC");
 	}
 
+	@Test
+	public void testWebSafeBinary() {
+		verifyWebSafeBinaryEncoding(new byte[]{0, 123, -23, 44, 0, 0, 30, 20}, "AHvpLAA:AHhQ=");
+		verifyWebSafeBinaryEncoding(new byte[]{0, 123, -23, 44, 0, 0, 30}, "AHvpLAA:AHg==");
+		verifyWebSafeBinaryEncoding(new byte[]{0, 123, -23, 44, 0, 0}, "AHvpLAA:A");
+		verifyWebSafeBinaryEncoding(new byte[]{0, 123, -23, 44, 0}, "AHvpLAA:=");
+		verifyWebSafeBinaryEncoding(new byte[]{0, 123, -23, 44}, "AHvpLA=:=");
+	}
+
+	private void verifyWebSafeBinaryEncoding(byte[] bytes, String encoded) {
+		String binary = Str.toWebSafeBinary(bytes);
+		eq(binary, encoded);
+
+		isTrue(Str.isWebSafeBinary(binary));
+
+		byte[] bytes2 = Str.fromWebSafeBinary(binary);
+		eq(bytes2, bytes);
+	}
+
 }

@@ -60,7 +60,7 @@ public class RenderCtxImpl extends RapidoidThing implements RenderCtx {
 	@Override
 	public void printValue(Object value, boolean escape) throws IOException {
 		if (!escape) {
-			printUTF8(U.str(value));
+			printUTF8(str(value));
 			return;
 		}
 
@@ -87,7 +87,15 @@ public class RenderCtxImpl extends RapidoidThing implements RenderCtx {
 			return;
 		}
 
-		StreamUtils.writeUTF8HtmlEscaped(out, U.str(value));
+		StreamUtils.writeUTF8HtmlEscaped(out, str(value));
+	}
+
+	private String str(Object value) {
+		if (value instanceof byte[]) {
+			return Str.toWebSafeBinary((byte[]) value);
+		}
+
+		return U.str(value);
 	}
 
 	@Override

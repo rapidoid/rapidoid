@@ -618,7 +618,7 @@ public abstract class GUI extends HTML implements Role {
 
 		} else if (item instanceof byte[]) {
 			byte[] bytes = (byte[]) item;
-			return Str.toHex(bytes);
+			return Str.toWebSafeBinary(bytes);
 
 		} else if (item instanceof Var<?>) {
 			Var<?> var = (Var<?>) item;

@@ -1173,6 +1173,7 @@ public class Msc extends RapidoidThing {
 	}
 
 	public static UUID bytesToUUID(byte[] bytes) {
+		U.must(bytes.length == 16, "Expected 16 bytes, got: %s", bytes.length);
 		ByteBuffer buf = ByteBuffer.wrap(bytes);
 		return new UUID(buf.getLong(), buf.getLong());
 	}
