@@ -11,6 +11,7 @@ import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.TUUID;
+import org.rapidoid.util.WebData;
 
 import java.sql.*;
 import java.util.List;
@@ -85,6 +86,11 @@ public class JdbcUtil extends RapidoidThing {
 	public static void bind(PreparedStatement stmt, Object[] args) throws SQLException {
 		for (int i = 0; i < args.length; i++) {
 			Object arg = args[i];
+
+			if (arg instanceof WebData) {
+				// unwrap the arg to a real value represented by the web data
+				arg = ((WebData) arg).unwrap();
+			}
 
 			if (arg instanceof byte[]) {
 				byte[] bytes = (byte[]) arg;

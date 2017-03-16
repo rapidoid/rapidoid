@@ -20,18 +20,14 @@ package org.rapidoid.web.handler;
  * #L%
  */
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Err;
 import org.rapidoid.datamodel.Results;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.gui.Grid;
-import org.rapidoid.http.Current;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.Resp;
-import org.rapidoid.jdbc.JDBC;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.render.Render;
 import org.rapidoid.u.U;
@@ -43,7 +39,7 @@ import java.util.regex.Pattern;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class PageHandler extends RapidoidThing implements ReqRespHandler {
+public class PageHandler extends GenericHandler {
 
 	private final PageConfig page;
 
@@ -98,11 +94,7 @@ public class PageHandler extends RapidoidThing implements ReqRespHandler {
 		return item;
 	}
 
-	private Results sqlItems(String sql) {
-		return JDBC.query(sql, req().params());
-	}
-
-	public Object guiOf(PageConfig gui, Results items) {
+	private Object guiOf(PageConfig gui, Results items) {
 
 		if (gui.single) {
 			Object item = U.single(items.all()); // FIXME use paging
@@ -136,10 +128,6 @@ public class PageHandler extends RapidoidThing implements ReqRespHandler {
 		}
 
 		return grid;
-	}
-
-	private Req req() {
-		return Current.request();
 	}
 
 }

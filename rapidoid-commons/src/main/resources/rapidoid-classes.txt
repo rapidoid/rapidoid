@@ -792,6 +792,7 @@ org.rapidoid.util.Tokens
 org.rapidoid.util.TUUID
 org.rapidoid.util.Usage
 org.rapidoid.util.Wait
+org.rapidoid.util.WebData
 org.rapidoid.u.U
 org.rapidoid.validation.InvalidData
 org.rapidoid.validation.Validators
@@ -823,6 +824,7 @@ org.rapidoid.web.config.listener.GenericRouteConfigListener
 org.rapidoid.web.config.listener.PagesConfigListener
 org.rapidoid.web.config.listener.ProxyConfigListener
 org.rapidoid.web.handler.APIHandler
+org.rapidoid.web.handler.GenericHandler
 org.rapidoid.web.handler.PageHandler
 org.rapidoid.web.Rapidoid
 org.rapidoid.web.Screen

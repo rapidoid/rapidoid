@@ -391,4 +391,14 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 		U.must(!view.startsWith("/"), "Invalid view name: '%s'", view);
 	}
 
+	public static Map<String, WebData> webParams(Req req) {
+		Map<String, WebData> webParams = U.map();
+
+		for (Map.Entry<String, String> e : req.params().entrySet()) {
+			webParams.put(e.getKey(), new WebData(e.getValue()));
+		}
+
+		return webParams;
+	}
+
 }

@@ -20,34 +20,30 @@ package org.rapidoid.web.handler;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.datamodel.Results;
+import org.rapidoid.http.Current;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.Resp;
-import org.rapidoid.u.U;
-import org.rapidoid.web.config.bean.APIConfig;
+import org.rapidoid.http.ReqRespHandler;
+import org.rapidoid.jdbc.JDBC;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.3.0")
-public class APIHandler extends GenericHandler {
+@Since("5.3.3")
+public abstract class GenericHandler extends RapidoidThing implements ReqRespHandler {
 
-	private final APIConfig api;
-
-	public APIHandler(APIConfig api) {
-		this.api = api;
+	protected Results sqlItems(String sql) {
+		return JDBC.query(sql, HttpUtils.webParams(req()));
 	}
 
-	@Override
-	public Object execute(Req req, Resp resp) {
+	protected int executeSql(String sql) {
+		return JDBC.execute(sql, HttpUtils.webParams(req()));
+	}
 
-		if (HttpUtils.isGetReq(req)) {
-			return sqlItems(api.sql).all(); // FIXME support paging
-
-		} else {
-			int changes = executeSql(api.sql);
-			return U.map("success", true, "changes", changes); // FIXME improve
-		}
+	protected Req req() {
+		return Current.request();
 	}
 
 }
