@@ -66,7 +66,6 @@ public class AppDeployer extends RapidoidThing {
 		Proc.group(DEPLOYED)
 			.id(appId)
 			.printingOutput(true)
-			.linePrefix("[APP] ")
 			.run(cmd);
 	}
 
