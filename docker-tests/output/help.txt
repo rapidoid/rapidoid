@@ -32,8 +32,10 @@ Main configuration options:
   admin.services=<S1,S2...> - comma-separated list of services to bootstrap on the Admin server (default: none)
 
 Supported commands:
+  dev                       - CLI shortcut for convenient local development setup
   password                  - Generate salted password hash
   mvn                       - Run embedded Maven
+  help                      - Show help
 
 Service activation options:
   center                    - Admin Center

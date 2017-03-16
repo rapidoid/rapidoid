@@ -478,7 +478,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 			TransactionMode txm = opts.transaction();
 			String tx = txm != TransactionMode.NONE ? AnsiColor.bold(txm.name()) : txm.name();
 
-			int space = Math.max(30 - verbs.length() - path.length(), 1);
+			int space = Math.max(45 - verbs.length() - path.length(), 1);
 			Log.info(httpVerbColor(verbs) + AnsiColor.bold(" " + path) + Str.mul(" ", space), "setup", this.customization.name(),
 				"!roles", opts.roles(), "transaction", tx, "mvc", opts.mvc(), "cacheTTL", opts.cacheTTL());
 

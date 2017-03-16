@@ -19,7 +19,7 @@
 [PLATFORM] INFO | Starting server | address = 0.0.0.0 | port = 5555 | I/O workers = 4 | sync = true | accept = non-blocking
 [PLATFORM] INFO | Server has started | setup = app | home = http://localhost:5555
 [PLATFORM] INFO | Static resources will be served from the following locations | setup = app | locations = [static, default/static]
-[PLATFORM] INFO | GET /rapidoid/status            | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | GET /rapidoid/status                           | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
 [PLATFORM] INFO | Deploying pre-existing application | id = app
 [PLATFORM] INFO | Starting process | command = [java, -cp, /opt/rapidoid.jar, org.rapidoid.platform.DefaultApp, root=/app]
 [PLATFORM] INFO | ---------------------------------------------------
