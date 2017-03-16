@@ -40,8 +40,12 @@ public class SimpleHashTable<T> extends RapidoidThing {
 
 	private final int xor = Rnd.rnd();
 
-	@SuppressWarnings("unchecked")
 	public SimpleHashTable(int capacity, int bucketSize) {
+		this(capacity, bucketSize, true);
+	}
+
+	@SuppressWarnings("unchecked")
+	public SimpleHashTable(int capacity, int bucketSize, boolean unbounded) {
 		U.must(capacity >= 2, "The capacity is too small!");
 
 		if (bucketSize <= 0) bucketSize = DEFAULT_BUCKET_SIZE;
@@ -57,11 +61,12 @@ public class SimpleHashTable<T> extends RapidoidThing {
 		this.hashMask = Msc.bitMask(factor);
 
 		for (int i = 0; i < buckets.length; i++) {
-			buckets[i] = createBucket(bucketSize);
+			buckets[i] = createBucket(bucketSize, unbounded);
 		}
 	}
 
-	protected SimpleBucket<T> createBucket(int bucketSize) {
+	protected SimpleBucket<T> createBucket(int bucketSize, boolean unbounded) {
+		U.must(unbounded, "Only unbounded buckets are supported!");
 		return new SimpleList<>(bucketSize);
 	}
 

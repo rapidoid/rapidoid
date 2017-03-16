@@ -94,9 +94,9 @@ org.rapidoid.cache.impl.CacheStats
 org.rapidoid.cache.impl.ConcurrentCache
 org.rapidoid.cache.impl.ConcurrentCacheAtom
 org.rapidoid.cache.impl.ConcurrentCacheAtomWithStats
-org.rapidoid.cache.impl.ConcurrentCacheTable
 org.rapidoid.cache.impl.L1CacheSegment
 org.rapidoid.cache.impl.ManageableCache
+org.rapidoid.cache.impl.SimpleCacheTable
 org.rapidoid.cls.AbstractTypeSpecificFactory
 org.rapidoid.cls.AbstractTypeSpecificVisitor
 org.rapidoid.cls.Cls

@@ -25,18 +25,23 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.util.MapEntry;
 import org.rapidoid.util.SimpleBucket;
 import org.rapidoid.util.SimpleHashTable;
+import org.rapidoid.util.SimpleList;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.3")
-public class ConcurrentCacheTable<K, V> extends SimpleHashTable<MapEntry<K, ConcurrentCacheAtom<K, V>>> {
+public class SimpleCacheTable<K, V> extends SimpleHashTable<MapEntry<K, ConcurrentCacheAtom<K, V>>> {
 
-	public ConcurrentCacheTable(int capacity, int desiredBucketSize) {
-		super(capacity, desiredBucketSize);
+	SimpleCacheTable(int capacity, int desiredBucketSize, boolean unbounded) {
+		super(capacity, desiredBucketSize, unbounded);
 	}
 
 	@Override
-	protected SimpleBucket<MapEntry<K, ConcurrentCacheAtom<K, V>>> createBucket(int bucketSize) {
-		return new CacheBucket<>(bucketSize);
+	protected SimpleBucket<MapEntry<K, ConcurrentCacheAtom<K, V>>> createBucket(int bucketSize, boolean unbounded) {
+		if (unbounded) {
+			return new SimpleList<>(bucketSize);
+		} else {
+			return new CacheBucket<>(bucketSize);
+		}
 	}
 
 }

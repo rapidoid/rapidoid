@@ -71,13 +71,16 @@ public class ConcurrentCache<K, V> extends AbstractMapImpl<K, ConcurrentCacheAto
 			scheduler = Caching.scheduler();
 		}
 
-		return new ConcurrentCache<>(name, capacity, loader, ttlInMs, scheduler, statistics, manageable);
+		boolean unbounded = capacity == 0;
+		if (unbounded) capacity = 65536; // initial capacity
+
+		return new ConcurrentCache<>(name, capacity, loader, ttlInMs, scheduler, statistics, manageable, unbounded);
 	}
 
-	public ConcurrentCache(String name, int capacity, Mapper<K, V> loader, long ttlInMs,
-	                       ScheduledThreadPoolExecutor scheduler, boolean statistics, boolean manageable) {
+	private ConcurrentCache(String name, int capacity, Mapper<K, V> loader, long ttlInMs,
+	                        ScheduledThreadPoolExecutor scheduler, boolean statistics, boolean manageable, boolean unbounded) {
 
-		super(new ConcurrentCacheTable<K, V>(capacity, DESIRED_BUCKET_SIZE));
+		super(new SimpleCacheTable<K, V>(capacity, DESIRED_BUCKET_SIZE, unbounded));
 
 		for (int i = 0; i < l1Cache.length; i++) {
 			l1Cache[i] = new L1CacheSegment<>(L1_SEGMENT_SIZE);
