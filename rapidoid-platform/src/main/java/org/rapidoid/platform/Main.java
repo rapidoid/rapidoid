@@ -23,34 +23,66 @@ package org.rapidoid.platform;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Arr;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
+import java.util.Collections;
 import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class Main extends RapidoidThing {
 
-	private static final List<String> DEFAULT_ARGS = U.list(
+	private static final String[] DEFAULT_ARGS = {
 		"admin.services=center"
-	);
+	};
+
+	private static final String[] DEV_CMD_ARGS = {
+		"admin.services=center",
+		"users.admin.password=admin",
+		"secret=NOT-A-REAL-SECRET"
+	};
 
 	public static void main(String[] args) {
-		boolean defaults = U.isEmpty(args);
 
-		if (defaults) {
+		boolean noArgs = U.isEmpty(args);
+		List<String> opts = U.list();
 
-			if (Msc.hasMainApp()) {
-				DEFAULT_ARGS.add("/ -> localhost:8080");
-			} else {
-				DEFAULT_ARGS.add("app.services=welcome");
-			}
+		if (noArgs) {
+			defaultSetup(opts);
 
-			args = U.arrayOf(String.class, DEFAULT_ARGS);
+		} else if (args[0].equals("dev")) {
+			devSetup(args, opts);
+
+		} else {
+			Collections.addAll(opts, args);
 		}
 
-		Platform.start(args, defaults);
+		run(opts, noArgs);
+	}
+
+	private static void defaultSetup(List<String> opts) {
+		Collections.addAll(opts, DEFAULT_ARGS);
+		optionalAppSetup(opts);
+	}
+
+	private static void devSetup(String[] args, List<String> opts) {
+		Collections.addAll(opts, DEV_CMD_ARGS);
+		optionalAppSetup(opts);
+		Collections.addAll(opts, Arr.sub(args, 1, args.length));
+	}
+
+	private static void optionalAppSetup(List<String> opts) {
+		if (Msc.hasMainApp()) {
+			opts.add("/ -> localhost:8080");
+		} else {
+			opts.add("app.services=welcome");
+		}
+	}
+
+	private static void run(List<String> opts, boolean defaults) {
+		Platform.start(U.arrayOf(String.class, opts), defaults);
 	}
 
 }
