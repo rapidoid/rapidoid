@@ -26,6 +26,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.commons.RapidoidInfo;
+import org.rapidoid.config.ConfigHelp;
 import org.rapidoid.deploy.AppDeployer;
 import org.rapidoid.deploy.AppDownloader;
 import org.rapidoid.log.Log;
@@ -42,7 +43,6 @@ import org.rapidoid.util.MscOpts;
 import java.awt.*;
 import java.io.File;
 import java.net.URI;
-import java.util.Arrays;
 import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
@@ -74,7 +74,7 @@ public class Platform extends RapidoidThing {
 
 	private static void printArgs(String[] args, boolean defaults) {
 		// don't print the args when displaying help
-		if (Arrays.equals(args, new String[]{"--help"})) return;
+		if (ConfigHelp.isHelpRequested(args)) return;
 
 		if (defaults) {
 			Log.info("No command-line arguments were specified, using the defaults:");

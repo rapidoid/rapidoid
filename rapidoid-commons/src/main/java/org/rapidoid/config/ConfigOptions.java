@@ -94,6 +94,7 @@ public class ConfigOptions extends RapidoidThing {
 		opts.add(cmd("dev", "CLI shortcut for convenient local development setup"));
 		opts.add(cmd("password", "Generate salted password hash"));
 		opts.add(cmd("mvn", "Run embedded Maven"));
+		opts.add(cmd("help", "Show help"));
 
 		return opts;
 	}
