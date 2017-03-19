@@ -13,6 +13,7 @@ import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Err;
 import org.rapidoid.commons.Str;
 import org.rapidoid.data.BufRange;
+import org.rapidoid.env.Env;
 import org.rapidoid.http.*;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.handler.HttpHandler;
@@ -24,6 +25,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.AnsiColor;
 import org.rapidoid.util.Constants;
+import org.rapidoid.util.Msc;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -51,6 +53,8 @@ import java.util.regex.Pattern;
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
+
+	private static final int ROUTE_SETUP_WAITING_TIME_MS = Env.test() ? 300 : 500;
 
 	private static final Pattern PATTERN_PATTERN = Pattern.compile("[^\\w/-]");
 
@@ -98,6 +102,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 	private volatile boolean initialized;
 	private volatile Runnable onInit;
 
+	private volatile boolean stable;
 	private volatile Date lastChangedAt = new Date();
 
 	public HttpRoutesImpl(Customization customization) {
@@ -544,6 +549,10 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 		initialized = false;
 		onInit = null;
 
+		customization.reset();
+		stable = false;
+		lastChangedAt = null;
+
 		notifyChanged();
 	}
 
@@ -656,4 +665,24 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 	private void notifyChanged() {
 		lastChangedAt = new Date();
 	}
+
+	public boolean ready() {
+		long lastChangedAt = lastChangedAt().getTime();
+		return !isEmpty() && Msc.timedOut(lastChangedAt, ROUTE_SETUP_WAITING_TIME_MS);
+	}
+
+	public void waitToStabilize() {
+		while (!stable) {
+			U.sleep(1);
+			if (ready()) {
+				synchronized (this) {
+					if (!stable) {
+						stable = true;
+						Log.debug("Stabilized HTTP routes");
+					}
+				}
+			}
+		}
+	}
+
 }

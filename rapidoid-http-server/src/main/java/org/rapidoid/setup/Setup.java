@@ -172,9 +172,9 @@ public class Setup extends RapidoidInitializer {
 			if (http == null) {
 				if (isAppOrAdminOnSameServer()) {
 					U.must(on().routes == admin().routes);
-					http = new FastHttp(new HttpRoutesGroup(on().routes), on().serverConfig);
+					http = new FastHttp(on().routes, on().serverConfig);
 				} else {
-					http = new FastHttp(new HttpRoutesGroup(routes), serverConfig);
+					http = new FastHttp(routes, serverConfig);
 				}
 			}
 		}
