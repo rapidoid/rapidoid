@@ -30,7 +30,6 @@
 [PLATFORM] INFO | ---------------------------------------------------
 [PLATFORM] INFO | ADMIN CREDENTIALS: username = admin, password = <?>
 [PLATFORM] INFO | ---------------------------------------------------
-[PLATFORM] INFO | Initialized HTTP routes
 [PLATFORM] INFO | Initialized JDBC API | url = jdbc:postgresql://postgres:5432/ | driver = org.postgresql.Driver | username = postgres | password = *****
 [PLATFORM] INFO | com.mchange.v2.log.MLog | MLog clients using slf4j logging.
 [PLATFORM] INFO | com.mchange.v2.c3p0.C3P0Registry | Initializing c3p0-0.9.5.2 [built 08-December-2015 22:06:04 -0800; debug? true; trace: 10]

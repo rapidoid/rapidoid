@@ -31,6 +31,5 @@ INFO | org.rapidoid.env.Environment | No profiles were specified, activating 'de
 INFO | org.rapidoid.env.Environment | No production/dev/test mode was configured, inferring mode | mode = PRODUCTION
 INFO | org.rapidoid.env.Environment | Automatically activating mode-specific profile | profile = production
 INFO | org.rapidoid.env.Environment | Initialized environment | mode = PRODUCTION | profiles = [default, production]
-[PLATFORM] INFO | Initialized HTTP routes
 INFO | org.rapidoid.scan.ClasspathUtil | Setting application JAR | appJar = /app/app.jar | exists = false
 INFO | org.rapidoid.config.ConfigImpl | Loaded configuration | namespace = config | files = [built-in-config.yml, built-in-config-default.yml]

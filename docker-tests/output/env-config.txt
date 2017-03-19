@@ -29,7 +29,6 @@ INFO | org.rapidoid.config.RapidoidInitializer | Starting Rapidoid v<?>, built o
 INFO | org.rapidoid.config.RapidoidInitializer | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
 INFO | org.rapidoid.env.Env | Setting application root | root = /app | content = [/app/the-root, /app/my-config.yaml]
 INFO | org.rapidoid.config.ConfigBase | Changing configuration filename base | from = config | to = my-config
-[PLATFORM] INFO | Initialized HTTP routes
 INFO | org.rapidoid.env.Environment | No profiles were specified, activating 'default' profile
 INFO | org.rapidoid.env.Environment | No production/dev/test mode was configured, inferring mode | mode = PRODUCTION
 INFO | org.rapidoid.env.Environment | Automatically activating mode-specific profile | profile = production
