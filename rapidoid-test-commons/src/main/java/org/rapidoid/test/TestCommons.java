@@ -64,7 +64,7 @@ public abstract class TestCommons {
 	@Before
 	public final void initTest() {
 		System.out.println("--------------------------------------------------------------------------------");
-		String info = ADJUST_TESTS ? " [ADJUST]" : "";
+		String info = getTestInfo();
 		System.out.println(" @" + ManagementFactory.getRuntimeMXBean().getName() + " TEST " + getClass().getCanonicalName() + info);
 		System.out.println("--------------------------------------------------------------------------------");
 
@@ -84,6 +84,16 @@ public abstract class TestCommons {
 
 			initialized = true;
 		}
+	}
+
+	private String getTestInfo() {
+		String info = ADJUST_TESTS ? " [ADJUST] " : "";
+
+		if (System.getenv("HEAVY") != null || System.getProperty("HEAVY") != null) {
+			info += "[HEAVY]";
+		}
+
+		return info;
 	}
 
 	@After
