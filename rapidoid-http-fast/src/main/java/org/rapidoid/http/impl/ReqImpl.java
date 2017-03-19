@@ -121,11 +121,11 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	private final MediaType defaultContentType;
 
-	private volatile HttpRoutesImpl routes;
+	private final HttpRoutesImpl routes;
 
 	private final Route route;
 
-	private volatile Customization custom;
+	private final Customization custom;
 
 	private final HTTPCacheKey cacheKey;
 
@@ -626,12 +626,6 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	@Override
 	public HttpRoutes routes() {
 		return routes;
-	}
-
-	public ReqImpl routes(HttpRoutesImpl routes) {
-		this.routes = routes;
-		this.custom = routes != null ? routes.custom() : http.custom();
-		return this;
 	}
 
 	@Override
