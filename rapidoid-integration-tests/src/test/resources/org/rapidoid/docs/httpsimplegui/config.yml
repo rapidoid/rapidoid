@@ -1,0 +1,10 @@
+gui:
+  brand: 'Cool app!'
+  title: 'the head title'
+  search: true
+  menu:
+    Home: /
+    Portfolio: /portfolio
+    About:
+      About Us: /about
+      About You: /

@@ -751,6 +751,7 @@ org.rapidoid.setup.ServiceActivator
 org.rapidoid.setup.ServiceBootstrap
 org.rapidoid.setup.Setup
 org.rapidoid.setup.WatchForChanges
+org.rapidoid.test.Doc
 org.rapidoid.test.ExpectErrors
 org.rapidoid.test.RapidoidIntegrationTest
 org.rapidoid.test.RapidoidTest

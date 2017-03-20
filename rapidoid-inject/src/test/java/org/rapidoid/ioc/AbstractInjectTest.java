@@ -31,7 +31,7 @@ public abstract class AbstractInjectTest extends TestCommons {
 	@Before
 	public void openContext() {
 		Msc.reset();
-		Conf.ROOT.setPath(getTestName());
+		Conf.ROOT.setPath(getTestNamespace());
 		IoC.reset();
 	}
 

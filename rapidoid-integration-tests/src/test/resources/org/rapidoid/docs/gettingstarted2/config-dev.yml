@@ -1,0 +1,10 @@
+hibernate:
+  format_sql: false
+  show_sql: true
+
+c3p0:
+  debug: true
+
+hibernate:
+  hbm2ddl:
+    auto: update
