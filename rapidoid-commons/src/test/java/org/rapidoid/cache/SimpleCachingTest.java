@@ -148,8 +148,8 @@ public class SimpleCachingTest extends TestCommons {
 		double l1HitRate = stats.l1Hits.get() * 1.0 / stats.l1Misses.get();
 		Log.info("L1 hit rate", "rate", l1HitRate);
 
-		isTrue(0.9 < l1HitRate);
-		isTrue(l1HitRate < 1.1);
+		isTrue(0.8 < l1HitRate);
+		isTrue(l1HitRate < 1.2);
 	}
 
 	private void loadCacheValues(Cache<Integer, ?> cache, int countTo) {
