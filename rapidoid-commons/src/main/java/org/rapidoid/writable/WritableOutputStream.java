@@ -1,5 +1,6 @@
 package org.rapidoid.writable;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
@@ -29,7 +30,7 @@ import java.io.OutputStream;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.4")
-public class WritableOutputStream implements Writable {
+public class WritableOutputStream extends RapidoidThing implements Writable {
 
 	private final OutputStream outputStream;
 

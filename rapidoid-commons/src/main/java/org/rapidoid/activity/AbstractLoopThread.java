@@ -48,8 +48,10 @@ public abstract class AbstractLoopThread extends RapidoidThread {
 	public final void run() {
 		while (!Thread.interrupted()) {
 			try {
+
 				loop();
-				U.sleep(sleepMs);
+
+				if (sleepMs > 0) U.sleep(sleepMs);
 
 			} catch (ThreadDeath e) {
 				Log.error("Received ThreadDeath error, terminating!", e);
@@ -65,6 +67,6 @@ public abstract class AbstractLoopThread extends RapidoidThread {
 		}
 	}
 
-	protected abstract void loop();
+	protected abstract void loop() throws Exception;
 
 }
