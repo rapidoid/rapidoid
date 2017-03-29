@@ -73,9 +73,6 @@ public class Platform extends RapidoidThing {
 	}
 
 	private static void printArgs(String[] args, boolean defaults) {
-		// don't print the args when displaying help
-		if (ConfigHelp.isHelpRequested(args)) return;
-
 		if (defaults) {
 			Log.info("No command-line arguments were specified, using the defaults:");
 		} else {
@@ -89,6 +86,7 @@ public class Platform extends RapidoidThing {
 	}
 
 	private static void interceptSpecialCommands(String[] args) {
+		ConfigHelp.processHelp(args);
 
 		String cmd = args[0];
 		String[] cmdArgs = Arr.sub(args, 1, args.length);
@@ -98,12 +96,6 @@ public class Platform extends RapidoidThing {
 				// interpret the "mvn" command
 				int result = MavenUtil.build("/app", "/data/.m2/repository", U.list(cmdArgs));
 				System.exit(result);
-				break;
-
-			case "benchmark":
-				// interpret the "benchmark" command
-				BenchmarkCenter.main(cmdArgs);
-				System.exit(0);
 				break;
 
 			case "password":
@@ -126,9 +118,10 @@ public class Platform extends RapidoidThing {
 		List<String> normalArgs = U.list();
 		List<String> appRefs = U.list();
 
-		separateArgs(args, normalArgs, appRefs);
+		String cmd = separateArgs(args, normalArgs, appRefs);
 
 		PreApp.args(U.arrayOf(String.class, normalArgs));
+
 		App.boot();
 
 		for (String appRef : appRefs) {
@@ -136,17 +129,44 @@ public class Platform extends RapidoidThing {
 			AppDownloader.download(appRef, MscOpts.appsPath());
 			MavenUtil.findAndBuildAndDeploy(MscOpts.appsPath());
 		}
+
+		if (U.notEmpty(cmd)) executeCommand(cmd);
 	}
 
-	private static void separateArgs(String[] args, List<String> normalArgs, List<String> appRefs) {
-		for (String arg : args) {
+	private static void executeCommand(String cmd) {
+		switch (cmd) {
+			case "benchmark":
+				benchmark();
+				break;
+		}
+	}
+
+	private static void benchmark() {
+		BenchmarkCenter.run();
+		System.exit(0);
+	}
+
+	private static String separateArgs(String[] args, List<String> normalArgs, List<String> appRefs) {
+		String cmd = null;
+
+		for (int i = 0; i < args.length; i++) {
+			String arg = args[i];
+
 			if (arg.startsWith("@")) {
 				String appRef = arg.substring(1);
 				appRefs.add(appRef);
+
 			} else {
-				normalArgs.add(arg);
+				if (i == 0 && !arg.contains("=")) {
+					cmd = args[0];
+
+				} else {
+					normalArgs.add(arg);
+				}
 			}
 		}
+
+		return cmd;
 	}
 
 	private static void openInBrowser() {

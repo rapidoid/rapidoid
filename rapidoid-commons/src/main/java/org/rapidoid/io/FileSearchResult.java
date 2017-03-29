@@ -28,7 +28,7 @@ import java.io.File;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.5")
-public class FileSearchResult extends RapidoidThing {
+public class FileSearchResult extends RapidoidThing implements Comparable<FileSearchResult> {
 
 	private final File file;
 
@@ -54,4 +54,8 @@ public class FileSearchResult extends RapidoidThing {
 		return relativeName;
 	}
 
+	@Override
+	public int compareTo(FileSearchResult that) {
+		return this.absoluteName.compareTo(that.absoluteName);
+	}
 }
