@@ -136,3 +136,6 @@ token:
 log:
   level: info
   fancy: false # auto
+
+benchmark:
+  plan: r1:d5:c64

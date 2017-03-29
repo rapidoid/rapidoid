@@ -67,6 +67,7 @@ public class Conf extends RapidoidThing {
 	public static final Config LOG = section("log");
 	public static final Config API = section("api");
 	public static final Config PAGES = section("pages");
+	public static final Config BENCHMARK = section("benchmark");
 
 	static void applyConfig(Config config) {
 		RapidoidEnv.touch();

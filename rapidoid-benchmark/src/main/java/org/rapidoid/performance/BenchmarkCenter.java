@@ -23,13 +23,20 @@ package org.rapidoid.performance;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
+import org.rapidoid.env.Env;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
 public class BenchmarkCenter extends RapidoidThing {
 
 	public static void main(String[] args) {
-		BenchmarkForker forker = new BenchmarkForker(args);
+		Env.setArgs(args);
+		run();
+	}
+
+	public static void run() {
+		BenchmarkForker forker = new BenchmarkForker();
 		forker.clear();
 
 		if (forker.hasTarget()) {
@@ -45,11 +52,19 @@ public class BenchmarkCenter extends RapidoidThing {
 
 	private static void runBuiltInBenchmarks(BenchmarkForker forker) {
 
-		forker.benchmark(org.rapidoid.benchmark.lowlevel.Main.class, "/plaintext");
-		forker.benchmark(org.rapidoid.benchmark.lowlevel.Main.class, "/json");
+		String run = Conf.BENCHMARK.entry("run").or("/plaintext,/json,/fortunes,http-fast");
 
-		forker.benchmark(org.rapidoid.benchmark.highlevel.Main.class, "/plaintext");
-		forker.benchmark(org.rapidoid.benchmark.highlevel.Main.class, "/json");
+		for (String demo : run.split(",")) {
+			demo = demo.trim();
+			if (!demo.isEmpty()) {
+				if (demo.equals("http-fast")) {
+					forker.benchmark(org.rapidoid.benchmark.lowlevel.Main.class, "/plaintext");
+					forker.benchmark(org.rapidoid.benchmark.lowlevel.Main.class, "/json");
+				} else {
+					forker.benchmark(org.rapidoid.benchmark.highlevel.Main.class, demo);
+				}
+			}
+		}
 	}
 
 }
