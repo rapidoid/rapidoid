@@ -33,24 +33,23 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Since("5.1.0")
 public class TemplateCompiler extends RapidoidThing {
 
-	public static final AtomicInteger ID_GEN = new AtomicInteger();
+	private static final AtomicInteger ID_GEN = new AtomicInteger();
 
-	public static TemplateRenderer compile(XNode node) {
+	public static TemplateRenderer compile(XNode node, Class<?> modelType) {
 		try {
 			Map<String, String> expressions = U.map();
-			String source = TemplateToCode.generate(node, expressions);
-			return tryToCompile(source, expressions);
+			Map<String, String> constants = U.map();
 
-		} catch (NotFoundException e) {
-			throw U.rte(e);
-		} catch (CannotCompileException e) {
-			throw U.rte(e);
+			String source = TemplateToCode.generate(node, expressions, constants, modelType);
+
+			return tryToCompile(source, expressions, constants, modelType);
+
 		} catch (Exception e) {
 			throw U.rte(e);
 		}
 	}
 
-	private static TemplateRenderer tryToCompile(String source, Map<String, String> expressions) throws NotFoundException, CannotCompileException,
+	private static TemplateRenderer tryToCompile(String source, Map<String, String> expressions, Map<String, String> constants, Class<?> modelType) throws NotFoundException, CannotCompileException,
 		InstantiationException, IllegalAccessException {
 
 		ClassPool cp = ClassPool.getDefault();
@@ -60,6 +59,17 @@ public class TemplateCompiler extends RapidoidThing {
 		cls.addInterface(cp.get(TemplateRenderer.class.getCanonicalName()));
 		cls.addConstructor(CtNewConstructor.defaultConstructor(cls));
 
+		addExpressions(expressions, cls);
+		addConstants(constants, cls);
+
+		CtClass[] params = {cp.get(RenderCtx.class.getCanonicalName())};
+		CtClass clsVoid = cp.get(void.class.getCanonicalName());
+		cls.addMethod(CtNewMethod.make(Modifier.PUBLIC, clsVoid, "render", params, new CtClass[0], source, cls));
+
+		return (TemplateRenderer) cls.toClass().newInstance();
+	}
+
+	private static void addExpressions(Map<String, String> expressions, CtClass cls) throws CannotCompileException {
 		for (Map.Entry<String, String> expr : expressions.entrySet()) {
 			String fld = "private static final org.rapidoid.render.retriever.ValueRetriever %s = org.rapidoid.render.retriever.Retriever.of(%s);";
 
@@ -70,15 +80,19 @@ public class TemplateCompiler extends RapidoidThing {
 
 			cls.addField(CtField.make(field, cls));
 		}
-
-		CtClass[] params = {cp.get(RenderCtx.class.getCanonicalName())};
-		CtClass clsVoid = cp.get(void.class.getCanonicalName());
-		cls.addMethod(CtNewMethod.make(Modifier.PUBLIC, clsVoid, "render", params, new CtClass[0], source, cls));
-
-		return (TemplateRenderer) cls.toClass().newInstance();
 	}
 
-	public static String retrieverId(String expr) {
+	private static void addConstants(Map<String, String> constants, CtClass cls) throws CannotCompileException {
+		for (Map.Entry<String, String> expr : constants.entrySet()) {
+			String fld = "private static final %s = (%s);";
+
+			String field = U.frmt(fld, expr.getKey(), expr.getValue());
+
+			cls.addField(CtField.make(field, cls));
+		}
+	}
+
+	static String retrieverId(String expr) {
 		String id = expr.replaceAll("[^A-Za-z0-9_]", "\\$");
 		return "_$_" + id + "_$_";
 	}

@@ -23,8 +23,7 @@ package org.rapidoid.activity;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-
-import java.io.ByteArrayOutputStream;
+import org.rapidoid.writable.ReusableWritable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
@@ -47,27 +46,27 @@ public class RapidoidThreadLocals extends RapidoidThing {
 		}
 	}
 
-	private final ByteArrayOutputStream jsonRenderingStream = new ByteArrayOutputStream();
+	private final ReusableWritable jsonRenderingStream = new ReusableWritable(1024);
 
-	private final ByteArrayOutputStream pageRenderingStream = new ByteArrayOutputStream();
+	private final ReusableWritable pageRenderingStream = new ReusableWritable(1024);
 
-	private final ByteArrayOutputStream templateRenderingStream = new ByteArrayOutputStream();
+	private final ReusableWritable templateRenderingOutput = new ReusableWritable(1024);
 
 	public Object renderContext;
 
-	public ByteArrayOutputStream jsonRenderingStream() {
+	public ReusableWritable jsonRenderingStream() {
 		jsonRenderingStream.reset();
 		return jsonRenderingStream;
 	}
 
-	public ByteArrayOutputStream pageRenderingStream() {
+	public ReusableWritable pageRenderingStream() {
 		pageRenderingStream.reset();
 		return pageRenderingStream;
 	}
 
-	public ByteArrayOutputStream templateRenderingStream() {
-		templateRenderingStream.reset();
-		return templateRenderingStream;
+	public ReusableWritable templateRenderingOutput() {
+		templateRenderingOutput.reset();
+		return templateRenderingOutput;
 	}
 
 }

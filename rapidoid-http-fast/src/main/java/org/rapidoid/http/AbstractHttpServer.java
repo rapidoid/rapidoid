@@ -28,17 +28,16 @@ import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.commons.Dates;
 import org.rapidoid.data.BufRange;
 import org.rapidoid.data.JSON;
-import org.rapidoid.http.impl.lowlevel.HttpIO;
 import org.rapidoid.http.impl.HttpParser;
 import org.rapidoid.http.impl.MaybeReq;
+import org.rapidoid.http.impl.lowlevel.HttpIO;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.Server;
 import org.rapidoid.net.TCP;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.util.Msc;
-
-import java.io.ByteArrayOutputStream;
+import org.rapidoid.writable.ReusableWritable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.1")
@@ -168,9 +167,13 @@ public abstract class AbstractHttpServer extends RapidoidThing implements Protoc
 
 	protected void writeJsonBody(MaybeReq req, Channel ctx, Object value) {
 		writeContentTypeHeader(ctx, MediaType.JSON);
-		ByteArrayOutputStream os = Msc.locals().jsonRenderingStream();
-		JSON.stringify(value, os);
-		HttpIO.INSTANCE.writeContentLengthAndBody(req, ctx, os);
+
+		ReusableWritable out = Msc.locals().jsonRenderingStream();
+		JSON.stringify(value, out);
+
+		HttpIO.INSTANCE.writeContentLengthHeader(ctx, out.size());
+		HttpIO.INSTANCE.closeHeaders(req, ctx.output());
+		ctx.write(out.array(), 0, out.size());
 	}
 
 	protected HttpStatus serializeToJson(MaybeReq req, Channel ctx, boolean isKeepAlive, Object value) {

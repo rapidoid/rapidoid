@@ -1,4 +1,4 @@
-package org.rapidoid.util;
+package org.rapidoid.writable;
 
 /*
  * #%L
@@ -29,8 +29,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.2.0")
-public class StreamUtilsTest extends TestCommons {
+@Since("5.3.4")
+public class WritableUtilsTest extends TestCommons {
 
 	@Test
 	public void testUri() throws IOException {
@@ -44,16 +44,17 @@ public class StreamUtilsTest extends TestCommons {
 		}
 	}
 
-	public void check(long n1, long n2, long n3) throws IOException {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
+	private void check(long n1, long n2, long n3) throws IOException {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		WritableOutputStream out = new WritableOutputStream(baos);
 
-		StreamUtils.putNumAsText(out, n1);
-		out.write(',');
-		StreamUtils.putNumAsText(out, n2);
-		out.write(':');
-		StreamUtils.putNumAsText(out, n3);
+		WritableUtils.putNumAsText(out, n1);
+		baos.write(',');
+		WritableUtils.putNumAsText(out, n2);
+		baos.write(':');
+		WritableUtils.putNumAsText(out, n3);
 
-		String s = new String(out.toByteArray());
+		String s = new String(baos.toByteArray());
 		eq(s, n1 + "," + n2 + ":" + n3);
 	}
 

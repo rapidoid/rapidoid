@@ -786,7 +786,6 @@ org.rapidoid.util.SimpleList
 org.rapidoid.util.SimpleMap
 org.rapidoid.util.SimplePersisterProvider
 org.rapidoid.util.SlidingWindowList
-org.rapidoid.util.StreamUtils
 org.rapidoid.util.TokenAuthData
 org.rapidoid.util.Tokens
 org.rapidoid.util.TUUID
@@ -837,3 +836,7 @@ org.rapidoid.wrap.FloatWrap
 org.rapidoid.wrap.IntWrap
 org.rapidoid.wrap.LongWrap
 org.rapidoid.wrap.ShortWrap
+org.rapidoid.writable.ReusableWritable
+org.rapidoid.writable.Writable
+org.rapidoid.writable.WritableOutputStream
+org.rapidoid.writable.WritableUtils

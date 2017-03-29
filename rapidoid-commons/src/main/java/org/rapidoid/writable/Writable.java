@@ -1,8 +1,11 @@
-package org.rapidoid.render;
+package org.rapidoid.writable;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 /*
  * #%L
- * rapidoid-render
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -20,17 +23,14 @@ package org.rapidoid.render;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
 @Authors("Nikolche Mihajlovski")
-@Since("5.2.0")
-public interface TemplateFactory {
+@Since("5.3.4")
+public interface Writable {
 
-	Template load(String filename, Class<?> modelType);
+	void writeByte(byte byteValue);
 
-	Template compile(String source, Class<?> modelType);
+	void writeBytes(byte[] src);
 
-	void reset();
+	void writeBytes(byte[] src, int offset, int length);
 
 }

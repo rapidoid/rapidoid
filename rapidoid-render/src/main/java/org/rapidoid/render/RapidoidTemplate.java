@@ -6,8 +6,10 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
+import org.rapidoid.writable.ReusableWritable;
+import org.rapidoid.writable.Writable;
+import org.rapidoid.writable.WritableOutputStream;
 
-import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.util.List;
 
@@ -47,7 +49,7 @@ public class RapidoidTemplate extends RapidoidThing implements Template {
 		this.factory = factory;
 	}
 
-	void doRenderMulti(RapidoidThreadLocals locals, OutputStream output, List<Object> model) {
+	void doRenderMulti(RapidoidThreadLocals locals, Writable output, List<Object> model) {
 		// start using the render context
 		RenderCtxImpl renderCtx = getRenderCtx(locals);
 
@@ -58,7 +60,7 @@ public class RapidoidTemplate extends RapidoidThing implements Template {
 		renderCtx.reset();
 	}
 
-	void doRender(RapidoidThreadLocals locals, OutputStream output, Object model) {
+	void doRender(RapidoidThreadLocals locals, Writable output, Object model) {
 		// start using the render context
 		RenderCtxImpl renderCtx = getRenderCtx(locals);
 
@@ -86,11 +88,16 @@ public class RapidoidTemplate extends RapidoidThing implements Template {
 	}
 
 	public void renderMultiModel(OutputStream output, Object... model) {
-		doRenderMulti(Msc.locals(), output, U.list(model));
+		doRenderMulti(Msc.locals(), new WritableOutputStream(output), U.list(model));
 	}
 
 	@Override
 	public void renderTo(OutputStream output, Object model) {
+		renderTo(new WritableOutputStream(output), model);
+	}
+
+	@Override
+	public void renderTo(Writable output, Object model) {
 		doRender(Msc.locals(), output, model);
 	}
 
@@ -98,11 +105,11 @@ public class RapidoidTemplate extends RapidoidThing implements Template {
 	public byte[] renderToBytes(Object model) {
 		RapidoidThreadLocals locals = Msc.locals();
 
-		ByteArrayOutputStream out = locals.templateRenderingStream();
+		ReusableWritable out = locals.templateRenderingOutput();
 
 		doRender(locals, out, model);
 
-		return out.toByteArray();
+		return out.copy();
 	}
 
 	@Override

@@ -33,7 +33,7 @@ import org.rapidoid.u.U;
 @Since("5.2.0")
 public class RapidoidTemplateFactory extends RapidoidThing implements TemplateFactory {
 
-	private static final int CACHE_TTL = Env.dev() ? 100 : Integer.MAX_VALUE;
+	private static final int CACHE_TTL = Env.dev() ? 100 : 0;
 
 	public RapidoidTemplate loadAndCompile(String filename) {
 		return new RapidoidTemplate(filename, loadTemplate(filename), this);
@@ -60,13 +60,13 @@ public class RapidoidTemplateFactory extends RapidoidThing implements TemplateFa
 	}
 
 	@Override
-	public Template load(String filename) {
+	public Template load(String filename, Class<?> modelType) {
 		return compiledTemplates.get(filename);
 	}
 
 	@Override
-	public Template compile(String source) {
-		return new RapidoidTemplate(null, TemplateParser.parse(source).compile(), this);
+	public Template compile(String source, Class<?> modelType) {
+		return new RapidoidTemplate(null, TemplateParser.parse(source).compile(modelType), this);
 	}
 
 	protected TemplateRenderer loadTemplate(String filename) {

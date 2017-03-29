@@ -1,14 +1,15 @@
-package org.rapidoid.render;
+package org.rapidoid.writable;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.writable.Writable;
+import org.rapidoid.u.U;
 
+import java.io.IOException;
 import java.io.OutputStream;
 
 /*
  * #%L
- * rapidoid-render
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -27,15 +28,39 @@ import java.io.OutputStream;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public interface Template {
+@Since("5.3.4")
+public class WritableOutputStream implements Writable {
 
-	void renderTo(OutputStream output, Object model);
+	private final OutputStream outputStream;
 
-	void renderTo(Writable output, Object model);
+	public WritableOutputStream(OutputStream outputStream) {
+		this.outputStream = outputStream;
+	}
 
-	byte[] renderToBytes(Object model);
+	@Override
+	public void writeByte(byte byteValue) {
+		try {
+			outputStream.write(byteValue);
+		} catch (IOException e) {
+			throw U.rte(e);
+		}
+	}
 
-	String render(Object model);
+	@Override
+	public void writeBytes(byte[] src) {
+		try {
+			outputStream.write(src);
+		} catch (IOException e) {
+			throw U.rte(e);
+		}
+	}
 
+	@Override
+	public void writeBytes(byte[] src, int offset, int length) {
+		try {
+			outputStream.write(src, offset, length);
+		} catch (IOException e) {
+			throw U.rte(e);
+		}
+	}
 }

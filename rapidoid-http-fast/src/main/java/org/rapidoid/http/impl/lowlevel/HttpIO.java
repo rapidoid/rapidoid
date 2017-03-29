@@ -103,4 +103,8 @@ public class HttpIO extends RapidoidThing {
 		impl.respond(maybeReq, channel, connId, handle, code, isKeepAlive, contentType, body, headers, cookies);
 	}
 
+
+	public void closeHeaders(MaybeReq req, Buf out) {
+		impl.closeHeaders(req, out);
+	}
 }

@@ -33,6 +33,8 @@ public interface RenderCtx {
 
 	void printAscii(String s) throws IOException;
 
+	void printAscii(byte[] bytes) throws IOException;
+
 	void printUTF8(String s) throws IOException;
 
 	void printValue(Object value, boolean escape) throws IOException;

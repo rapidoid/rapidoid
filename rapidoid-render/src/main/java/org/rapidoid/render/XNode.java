@@ -32,6 +32,7 @@ import java.util.List;
 public class XNode extends RapidoidThing {
 
 	enum OP {
+
 		OP_ROOT('\0'), // the root node
 		OP_TEXT(' '), // normal text
 		OP_IF('?'), // {{?items}} ... {{/items}}
@@ -57,8 +58,12 @@ public class XNode extends RapidoidThing {
 		this.text = text;
 	}
 
+	public TemplateRenderer compile(Class<?> modelType) {
+		return TemplateCompiler.compile(this, modelType);
+	}
+
 	public TemplateRenderer compile() {
-		return TemplateCompiler.compile(this);
+		return compile(Object.class);
 	}
 
 }

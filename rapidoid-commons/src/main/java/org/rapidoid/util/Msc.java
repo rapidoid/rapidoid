@@ -32,6 +32,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.validation.InvalidData;
 import org.rapidoid.wrap.BoolWrap;
+import org.rapidoid.writable.ReusableWritable;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -122,13 +123,13 @@ public class Msc extends RapidoidThing {
 
 	public static byte[] serialize(Object value) {
 		try {
-			ByteArrayOutputStream output = new ByteArrayOutputStream();
+			ReusableWritable output = new ReusableWritable();
 
 			ObjectOutputStream out = new ObjectOutputStream(output);
 			out.writeObject(value);
 			output.close();
 
-			return output.toByteArray();
+			return output.copy();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

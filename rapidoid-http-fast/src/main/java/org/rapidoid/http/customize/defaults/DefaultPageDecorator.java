@@ -8,7 +8,8 @@ import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
 import org.rapidoid.http.customize.PageDecorator;
 import org.rapidoid.u.U;
-import org.rapidoid.util.StreamUtils;
+import org.rapidoid.writable.WritableUtils;
+import org.rapidoid.writable.WritableOutputStream;
 import org.rapidoid.web.Screen;
 
 import java.io.OutputStream;
@@ -49,7 +50,7 @@ public class DefaultPageDecorator extends RapidoidThing implements PageDecorator
 		Resp resp = req.response();
 
 		if (isFullPage(req, content)) {
-			StreamUtils.writeUTF8(out, content);
+			WritableUtils.writeUTF8(new WritableOutputStream(out), content);
 			return;
 		}
 

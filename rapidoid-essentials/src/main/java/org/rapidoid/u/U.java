@@ -232,6 +232,16 @@ public class U extends RapidoidThing {
 		return array;
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <T> T[] arrayOf(Iterable<? extends T> items) {
+		Iterator<? extends T> it = items.iterator();
+
+		must(it.hasNext(), "Cannot infer the array type from empty collection!");
+		Class<T> type = (Class<T>) it.next().getClass();
+
+		return arrayOf(type, items);
+	}
+
 	public static Object[] array(Iterable<?> items) {
 		return (items instanceof Collection) ? ((Collection<?>) items).toArray() : list(items).toArray();
 	}

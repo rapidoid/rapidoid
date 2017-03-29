@@ -273,7 +273,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static Object postprocessResult(Req req, Object result) throws Exception {
+	public static Object postprocessResult(Req req, Object result) {
 
 		if (result instanceof Req || result instanceof Resp || result instanceof HttpStatus) {
 			return result;

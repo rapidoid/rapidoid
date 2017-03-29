@@ -12,6 +12,7 @@ import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.http.impl.lowlevel.HttpIO;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.lambda.Mapper;
+import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.security.Secure;
@@ -80,8 +81,15 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 		try {
 			result = handleReqAndPostProcess(ctx, isKeepAlive, req, extra);
 
+			result = HttpUtils.postprocessResult(req, result);
+
+			if ((req != null && req.isAsync()) || result == HttpStatus.ASYNC) {
+				return HttpStatus.ASYNC;
+			}
+
 		} catch (Exception e) {
 			HttpIO.INSTANCE.writeResponse(maybeReq, ctx, isKeepAlive, 500, contentType, "Internal server error!".getBytes());
+			Log.error("Error occurred during un-managed request processing", "request", req, "error", e);
 			return HttpStatus.ERROR;
 		}
 
@@ -218,7 +226,7 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 
 		if (txMode != null && txMode != TransactionMode.NONE) {
 
-			final AtomicReference<Object> result = new AtomicReference();
+			final AtomicReference<Object> result = new AtomicReference<>();
 
 			JPA.transaction(new Runnable() {
 				@Override
@@ -301,7 +309,7 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 
 	protected abstract Object handleReq(Channel ctx, boolean isKeepAlive, Req req, Object extra) throws Exception;
 
-	protected Object handleReqAndPostProcess(Channel ctx, boolean isKeepAlive, Req req, Object extra) throws Exception {
+	private Object handleReqAndPostProcess(Channel ctx, boolean isKeepAlive, Req req, Object extra) throws Exception {
 		Object result = handleReq(ctx, isKeepAlive, req, extra);
 
 		if (result instanceof Results) {

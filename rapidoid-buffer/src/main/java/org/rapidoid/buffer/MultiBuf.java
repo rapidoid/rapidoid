@@ -1402,7 +1402,7 @@ public class MultiBuf extends OutputStream implements Buf, Constants {
 	}
 
 	@Override
-	public void write(byte[] src, int off, int len) throws IOException {
+	public void write(byte[] src, int off, int len) {
 		// used as OutputStream
 		append(src, off, len);
 	}
@@ -1421,4 +1421,18 @@ public class MultiBuf extends OutputStream implements Buf, Constants {
 		}
 	}
 
+	@Override
+	public void writeByte(byte byteValue) {
+		append(byteValue);
+	}
+
+	@Override
+	public void writeBytes(byte[] src) {
+		append(src);
+	}
+
+	@Override
+	public void writeBytes(byte[] src, int offset, int length) {
+		append(src, offset, length);
+	}
 }
