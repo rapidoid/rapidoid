@@ -1,5 +1,5 @@
 jdbc:
-  driver: com.mysql.jdbc.Driver
+  driver: com.mysql.cj.jdbc.Driver
   url: jdbc:mysql://mysql:3306?logger=Slf4JLogger
   username: root
   password: root

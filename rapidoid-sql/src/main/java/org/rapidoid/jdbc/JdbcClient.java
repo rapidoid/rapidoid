@@ -78,7 +78,7 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 
 	public static String inferDriverFromUrl(String url) {
 		if (url.startsWith("jdbc:mysql:")) {
-			return "com.mysql.jdbc.Driver";
+			return "com.mysql.cj.jdbc.Driver";
 		} else if (url.startsWith("jdbc:h2:")) {
 			return "org.hibernate.dialect.H2Dialect";
 		} else if (url.startsWith("jdbc:hsqldb:")) {
