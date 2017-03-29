@@ -127,12 +127,23 @@ public class Jobs extends RapidoidInitializer {
 
 	public static void execute(Runnable job) {
 		ContextPreservingJobWrapper jobWrapper = wrap(job);
-		executor().execute(jobWrapper);
+
+		try {
+			executor().execute(jobWrapper);
+		} catch (RejectedExecutionException e) {
+			Log.warn("Job execution was rejected!", "job", job);
+		}
 	}
 
 	public static void executeAndWait(Runnable job) {
 		ContextPreservingJobWrapper jobWrapper = wrap(job);
-		executor().execute(jobWrapper);
+
+		try {
+			executor().execute(jobWrapper);
+		} catch (RejectedExecutionException e) {
+			Log.warn("Job execution was rejected!", "job", job);
+		}
+
 		while (!jobWrapper.isDone()) {
 			U.sleep(10);
 		}
