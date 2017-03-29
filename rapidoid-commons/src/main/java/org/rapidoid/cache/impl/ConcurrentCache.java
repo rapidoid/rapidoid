@@ -67,10 +67,6 @@ public class ConcurrentCache<K, V> extends AbstractMapImpl<K, ConcurrentCacheAto
 	public static <K, V> ConcurrentCache<K, V> create(String name, int capacity, Mapper<K, V> loader, long ttlInMs,
 	                                                  ScheduledThreadPoolExecutor scheduler, boolean statistics, boolean manageable) {
 
-		if (scheduler == null) {
-			scheduler = Caching.scheduler();
-		}
-
 		boolean unbounded = capacity == 0;
 		if (unbounded) capacity = 65536; // initial capacity
 
@@ -102,6 +98,11 @@ public class ConcurrentCache<K, V> extends AbstractMapImpl<K, ConcurrentCacheAto
 
 	private void scheduleCrawl(long ttlInMs, ScheduledThreadPoolExecutor scheduler) {
 		if (ttlInMs > 0) {
+
+			if (scheduler == null) {
+				scheduler = Caching.scheduler();
+			}
+
 			scheduler.scheduleWithFixedDelay(new Runnable() {
 				@Override
 				public void run() {
