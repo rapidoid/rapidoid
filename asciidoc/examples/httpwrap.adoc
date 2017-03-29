@@ -1,0 +1,26 @@
+=== Request wrappers (interceptors)[[app-listing]]
+[source,java]
+.Main.java
+----
+package org.rapidoid.docs.httpwrap;
+
+import org.rapidoid.setup.On;
+
+public class Main {
+
+	public static void main(String[] args) {
+		/* A wrapper executes before the handler */
+
+		On.defaults().wrappers((req, next) -> {
+			return next.invokeAndTransformResult(result -> "Hey: " + result);
+		});
+
+		/* and provides transformation for the result */
+
+		On.get("/size").json((String s) -> s.length());
+		On.get("/upper").json((String s) -> s.toUpperCase());
+	}
+
+}
+----
+

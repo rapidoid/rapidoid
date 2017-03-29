@@ -1,0 +1,58 @@
+=== Role-based security[[app-listing]]
+[source,java]
+.Main.java
+----
+package org.rapidoid.docs.security;
+
+import org.rapidoid.setup.App;
+import org.rapidoid.setup.My;
+import org.rapidoid.setup.On;
+import org.rapidoid.u.U;
+
+public class Main {
+
+	public static void main(String[] args) {
+		App.bootstrap(args).auth();
+
+		On.get("/").html((req, resp) -> "this is public!");
+
+		On.get("/manage").roles("manager").html((req, resp) -> "this is private!");
+
+		/* Dummy login: successful if the username is the same as the password */
+
+		My.loginProvider((req, username, password) -> username.equals(password));
+
+		/* Gives the 'manager' role to every logged-in user */
+
+		My.rolesProvider((req, username) -> U.set("manager"));
+	}
+
+}
+----
+
+[[app-listing]]
+[source,java]
+.MyCtrl.java
+----
+package org.rapidoid.docs.security;
+
+import org.rapidoid.annotation.Controller;
+import org.rapidoid.annotation.GET;
+import org.rapidoid.security.Role;
+import org.rapidoid.security.annotation.Administrator;
+import org.rapidoid.security.annotation.Roles;
+import org.rapidoid.u.U;
+
+@Controller
+public class MyCtrl {
+
+	@GET
+	@Administrator
+	@Roles({"manager", Role.MODERATOR})
+	public Object hi() {
+		return U.map("msg", "hi!");
+	}
+
+}
+----
+

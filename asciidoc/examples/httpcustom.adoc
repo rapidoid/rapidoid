@@ -1,0 +1,20 @@
+=== More control over the HTTP server setup[[app-listing]]
+[source,java]
+.Main.java
+----
+package org.rapidoid.docs.httpcustom;
+
+import org.rapidoid.setup.On;
+
+public class Main {
+
+	public static void main(String[] args) {
+		On.address("127.0.0.1");
+		On.port(9999);
+
+		On.get("/x").json("x"); // continue with normal setup
+	}
+
+}
+----
+

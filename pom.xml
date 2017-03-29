@@ -195,6 +195,36 @@
 				</configuration>
 			</plugin>
 
+			<plugin>
+				<groupId>org.asciidoctor</groupId>
+				<artifactId>asciidoctor-maven-plugin</artifactId>
+				<version>1.5.3</version>
+				<inherited>false</inherited>
+				<executions>
+					<execution>
+						<id>output-html</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>process-asciidoc</goal>
+						</goals>
+						<configuration>
+							<sourceDirectory>asciidoc</sourceDirectory>
+							<headerFooter>true</headerFooter>
+							<imagesDir>asciidoc/images</imagesDir>
+							<sourceHighlighter>coderay</sourceHighlighter>
+							<backend>html5</backend>
+							<sourceDocumentName>index.adoc</sourceDocumentName>
+							<attributes>
+								<toc>left</toc>
+								<linkcss>false</linkcss>
+								<project-version>${project.version}</project-version>
+								<sectnums>true</sectnums>
+							</attributes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 
 		<pluginManagement>

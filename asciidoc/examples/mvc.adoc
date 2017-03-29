@@ -1,0 +1,47 @@
+=== MVC architecture with Rapidoid's built-in template engine[[app-listing]]
+[source,java]
+.Main.java
+----
+package org.rapidoid.docs.mvc;
+
+import org.rapidoid.gui.GUI;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.Resp;
+import org.rapidoid.setup.On;
+import org.rapidoid.u.U;
+
+public class Main {
+
+	public static void main(String[] args) {
+
+		/* The handler for [/msg] returns the model */
+		/* The default view name is [msg] */
+		/* So the corresponding template is [templates/msg.html] */
+
+		On.page("/msg").mvc(() -> {
+			return U.map("count", 12, "oki", GUI.btn("OK"));
+		});
+
+		/* A custom view name can be assigned. */
+		/* In this case the default view name is [abc], */
+		/* but a custom view name [msg] was specified */
+
+		On.get("/abc").view("msg").mvc((Req req, Resp resp) -> {
+			return U.map("count", 100, "oki", "");
+		});
+	}
+
+}
+----
+
+[[app-listing]]
+[source,html]
+.templates/msg.html
+----
+<p>
+    You have <span class="badge">${count}</span> new messages.
+</p>
+
+@{oki}
+----
+

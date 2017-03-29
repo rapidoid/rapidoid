@@ -1,0 +1,37 @@
+=== Hello RESTful services![[app-listing]]
+[source,java]
+.Main.java
+----
+package org.rapidoid.docs.hellorest;
+
+import org.rapidoid.setup.App;
+
+public class Main {
+
+	public static void main(String[] args) {
+		App.bootstrap(args);
+	}
+
+}
+----
+
+[[app-listing]]
+[source,java]
+.NoBullshit.java
+----
+package org.rapidoid.docs.hellorest;
+
+import org.rapidoid.annotation.Controller;
+import org.rapidoid.annotation.GET;
+
+@Controller
+public class NoBullshit {
+
+	@GET
+	public String hello() {
+		return "Hello, world!";
+	}
+
+}
+----
+

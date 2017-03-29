@@ -1,0 +1,64 @@
+=== JPA Scaffolding[[app-listing]]
+[source,java]
+.Book.java
+----
+package org.rapidoid.docs.jpascaffold;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
+public class Book {
+
+	@Id
+	@GeneratedValue
+	public Long id;
+
+	public String title;
+
+	public int year;
+
+}
+----
+
+[[app-listing]]
+[source,java]
+.Main.java
+----
+package org.rapidoid.docs.jpascaffold;
+
+import org.rapidoid.goodies.X;
+import org.rapidoid.gui.GUI;
+import org.rapidoid.jpa.JPA;
+import org.rapidoid.setup.On;
+import org.rapidoid.u.U;
+
+import java.util.List;
+
+public class Main extends GUI {
+
+	public static void main(String[] args) {
+
+		On.page("/").mvc("Welcome!");
+		X.scaffold(Book.class);
+
+		String search = "FROM Book b WHERE b.title LIKE ?1";
+		On.page("/search").mvc((String q) -> {
+			List<Book> records = JPA.jpql(search, "%" + q + "%").all();
+			return U.list(h2("Searching for: ", q), grid(records));
+		});
+	}
+
+}
+----
+
+[[app-listing]]
+[source,yml]
+.config.yml
+----
+gui:
+  brand: 'Cool app'
+  search: true
+----
+

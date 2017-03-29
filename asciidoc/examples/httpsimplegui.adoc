@@ -1,0 +1,35 @@
+=== Instant web application[[app-listing]]
+[source,java]
+.Main.java
+----
+package org.rapidoid.docs.httpsimplegui;
+
+import org.rapidoid.setup.On;
+
+public class Main {
+
+	public static void main(String[] args) {
+		/* On [GET /hi] or [POST /hi] return a "Hello World" web page */
+
+		On.page("/hi").mvc("Hello <b>world</b>!");
+	}
+
+}
+----
+
+[[app-listing]]
+[source,yml]
+.config.yml
+----
+gui:
+  brand: 'Cool app!'
+  title: 'the head title'
+  search: true
+  menu:
+    Home: /
+    Portfolio: /portfolio
+    About:
+      About Us: /about
+      About You: /
+----
+
