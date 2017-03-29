@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 20491
+Content-Length: 20779
 
 <!DOCTYPE html>
 <html lang="en">
@@ -807,6 +807,19 @@ Content-Length: 20491
         <td>
           <i class="fa fa-square-o"></i>
         </td>
+      </tr>
+    </table>
+    <h4>
+      <span class="label bg-metal">benchmark</span>
+    </h4>
+    <table class="table table-striped table-hover">
+      <tr>
+        <th>Key</th>
+        <th>Value</th>
+      </tr>
+      <tr>
+        <td>plan</td>
+        <td>r1:d5:c64</td>
       </tr>
     </table>
     <h4>
