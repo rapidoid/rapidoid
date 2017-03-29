@@ -66,6 +66,7 @@
 		<httpclient.version>4.1</httpclient.version>
 		<httpmime.version>4.5</httpmime.version>
 
+		<hikari.version>2.6.1</hikari.version>
 		<c3p0.version>0.9.5.2</c3p0.version>
 		<hibernate.version>4.3.11.Final</hibernate.version>
 

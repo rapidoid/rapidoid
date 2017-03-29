@@ -34,14 +34,19 @@ public class MscOpts extends RapidoidThing {
 	private static final boolean hasValidation = Cls.exists("javax.validation.Validation");
 	private static final boolean hasJPA = Cls.exists("javax.persistence.Entity");
 	private static final boolean hasHibernate = Cls.exists("org.hibernate.cfg.Configuration");
+
 	private static final boolean hasRapidoidJPA = Cls.exists("org.rapidoid.jpa.JPA");
 	private static final boolean hasRapidoidGUI = Cls.exists("org.rapidoid.gui.GUI");
 	private static final boolean hasRapidoidHTML = Cls.exists("org.rapidoid.html.HTML");
 	private static final boolean hasRapidoidWatch = Cls.exists("org.rapidoid.reload.Reload");
 	private static final boolean hasRapidoidPlatform = Cls.exists("org.rapidoid.standalone.Main");
+
 	private static final boolean hasLogback = Cls.exists("ch.qos.logback.classic.Logger");
 	private static final boolean hasSlf4jImpl = Cls.exists("org.slf4j.impl.StaticLoggerBinder");
 	private static final boolean hasMavenEmbedder = Cls.exists("org.apache.maven.cli.MavenCli");
+
+	private static final boolean hasC3P0 = Cls.exists("com.mchange.v2.c3p0.ComboPooledDataSource");
+	private static final boolean hasHikari = Cls.exists("com.zaxxer.hikari.HikariDataSource");
 
 	private static final boolean isRestOnly = !hasRapidoidHTML();
 
@@ -89,6 +94,14 @@ public class MscOpts extends RapidoidThing {
 
 	public static boolean hasMavenEmbedder() {
 		return hasMavenEmbedder;
+	}
+
+	public static boolean hasC3P0() {
+		return hasC3P0;
+	}
+
+	public static boolean hasHikari() {
+		return hasHikari;
 	}
 
 	public static boolean isRestOnly() {

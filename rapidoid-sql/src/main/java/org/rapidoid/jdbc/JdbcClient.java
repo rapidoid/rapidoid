@@ -13,6 +13,7 @@ import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
+import org.rapidoid.util.MscOpts;
 
 import java.sql.*;
 import java.util.List;
@@ -195,11 +196,19 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 			Log.info("Initialized JDBC API", "!url", url, "!driver", driver, "!username", username, "!password", maskedPassword);
 
 			if (pool == null) {
-				pool = usePool ? new C3P0ConnectionPool(this) : new NoConnectionPool();
+				pool = usePool ? createPool() : new NoConnectionPool();
 			}
 
 			initialized = true;
 		}
+	}
+
+	private ConnectionPool createPool() {
+
+		if (MscOpts.hasC3P0()) return new C3P0ConnectionPool(this);
+		if (MscOpts.hasHikari()) return new HikariConnectionPool(this);
+
+		throw U.rte("Cannot create JDBC connection pool, couldn't find Hikari nor C3P0!");
 	}
 
 	private void validate() {

@@ -76,6 +76,8 @@ c3p0:
   maxStatementsPerConnection: 10
   idleConnectionTestPeriod: 300
 
+hikari: {}
+
 oauth:
   google:
     scope: profile,email
