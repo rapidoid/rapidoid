@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # add the main Rapidoid repository as upstream
 git remote add upstream https://github.com/rapidoid/rapidoid.git
 
