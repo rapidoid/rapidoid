@@ -1,10 +1,13 @@
 package org.rapidoid.jdbc;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import javax.sql.DataSource;
 
 /*
  * #%L
@@ -27,13 +30,20 @@ import java.sql.SQLException;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.1.0")
-public interface ConnectionPool {
+@Since("5.3.4")
+public class HikariFactory extends RapidoidThing {
 
-	Connection getConnection(String jdbcUrl) throws SQLException;
+	public static DataSource createDataSourceFor(JdbcClient jdbc) {
+		HikariConfig config = new HikariConfig();
 
-	Connection getConnection(String jdbcUrl, String username, String password) throws SQLException;
+		config.setJdbcUrl(jdbc.url());
+		config.setUsername(jdbc.username());
+		config.setPassword(jdbc.password());
+		config.setDriverClassName(jdbc.driver());
 
-	void releaseConnection(Connection connection) throws SQLException;
+		Conf.HIKARI.applyTo(config);
+
+		return new HikariDataSource(config);
+	}
 
 }

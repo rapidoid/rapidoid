@@ -20,9 +20,11 @@ package org.rapidoid.jdbc;
  * #L%
  */
 
+import com.zaxxer.hikari.HikariDataSource;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
 import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -36,9 +38,11 @@ public class JDBCPoolHikariTest extends IsolatedIntegrationTest {
 	@Test(timeout = 30000)
 	public void testHikariPool() {
 
+		Conf.HIKARI.set("maximumPoolSize", 234);
+
 		JdbcClient jdbc = JDBC.api();
 		jdbc.h2("hikari-test");
-		jdbc.pool(new HikariConnectionPool(jdbc));
+		jdbc.dataSource(HikariFactory.createDataSourceFor(jdbc));
 
 		jdbc.execute("create table abc (id int, name varchar)");
 		jdbc.execute("insert into abc values (?, ?)", 123, "xyz");
@@ -51,7 +55,9 @@ public class JDBCPoolHikariTest extends IsolatedIntegrationTest {
 			eq(record, expected);
 		});
 
-		isTrue(jdbc.pool() instanceof HikariConnectionPool);
+		HikariDataSource hikari = (HikariDataSource) jdbc.dataSource();
+
+		eq(hikari.getMaximumPoolSize(), 234);
 	}
 
 }

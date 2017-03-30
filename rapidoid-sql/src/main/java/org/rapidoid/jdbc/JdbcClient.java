@@ -16,6 +16,7 @@ import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.MscOpts;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +54,7 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 	private volatile String url;
 
 	private volatile boolean usePool = true;
-	private volatile ConnectionPool pool;
+	private volatile DataSource dataSource;
 
 	private volatile ReadWriteMode mode = ReadWriteMode.READ_WRITE;
 
@@ -114,10 +115,18 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 		return this;
 	}
 
-	public synchronized JdbcClient pool(ConnectionPool pool) {
-		if (U.neq(this.pool, pool)) {
-			this.pool = pool;
-			this.usePool = pool != null;
+	/**
+	 * Use dataSource(...) instead.
+	 */
+	@Deprecated
+	public synchronized JdbcClient pool(DataSource pool) {
+		return dataSource(pool);
+	}
+
+	public synchronized JdbcClient dataSource(DataSource dataSource) {
+		if (U.neq(this.dataSource, dataSource)) {
+			this.dataSource = dataSource;
+			this.usePool = dataSource != null;
 			this.initialized = false;
 		}
 		return this;
@@ -193,21 +202,21 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 			validate();
 			registerJDBCDriver();
 
-			String maskedPassword = U.isEmpty(password) ? "<empty>" : "<specified>";
-			Log.info("Initialized JDBC API", "!url", url, "!driver", driver, "!username", username, "!password", maskedPassword);
-
-			if (pool == null) {
-				pool = usePool ? createPool() : new NoConnectionPool();
+			if (this.dataSource == null) {
+				this.dataSource = this.usePool ? createPool() : null;
 			}
+
+			String maskedPassword = U.isEmpty(password) ? "<empty>" : "<specified>";
+			Log.info("Initialized JDBC API", "!url", url, "!driver", driver, "!username", username, "!password", maskedPassword, "!dataSource", dataSource);
 
 			initialized = true;
 		}
 	}
 
-	private ConnectionPool createPool() {
+	private DataSource createPool() {
 
-		if (MscOpts.hasC3P0()) return new C3P0ConnectionPool(this);
-		if (MscOpts.hasHikari()) return new HikariConnectionPool(this);
+		if (MscOpts.hasC3P0()) return C3P0Factory.createDataSourceFor(this);
+		if (MscOpts.hasHikari()) return HikariFactory.createDataSourceFor(this);
 
 		throw U.rte("Cannot create JDBC connection pool, couldn't find Hikari nor C3P0!");
 	}
@@ -398,33 +407,35 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 
 	private Connection provideConnection() {
 		try {
-			Connection conn;
+			if (dataSource != null) {
 
-			if (username != null) {
-				String pass = U.safe(password);
-				conn = pool.getConnection(url);
+				Connection conn = dataSource.getConnection();
+				U.notNull(conn, "JDBC connection");
+				return conn;
 
-				if (conn == null) {
-					conn = DriverManager.getConnection(url, username, pass);
-				}
 			} else {
-				conn = pool.getConnection(url);
-
-				if (conn == null) {
-					conn = DriverManager.getConnection(url);
-				}
+				U.must(!usePool, "Expecting connection pool, but the data source is null!");
+				return getConnectionFromDriver();
 			}
-
-			return conn;
 
 		} catch (SQLException e) {
 			throw U.rte("Cannot create JDBC connection!", e);
 		}
 	}
 
+	private Connection getConnectionFromDriver() throws SQLException {
+		if (username != null) {
+			String pass = U.safe(password);
+			return DriverManager.getConnection(url, username, pass);
+
+		} else {
+			return DriverManager.getConnection(url);
+		}
+	}
+
 	public void release(Connection connection) {
 		try {
-			pool.releaseConnection(connection);
+			connection.close();
 		} catch (SQLException e) {
 			Log.error("Error while releasing a JDBC connection!", e);
 		}
@@ -446,8 +457,16 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 		return url;
 	}
 
-	public ConnectionPool pool() {
-		return pool;
+	/**
+	 * Use dataSource() instead.
+	 */
+	@Deprecated
+	public DataSource pool() {
+		return dataSource();
+	}
+
+	public DataSource dataSource() {
+		return dataSource;
 	}
 
 	public boolean usePool() {
@@ -472,7 +491,7 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 			", driver='" + driver + '\'' +
 			", url='" + url + '\'' +
 			", usePool=" + usePool +
-			", pool=" + pool +
+			", pool=" + dataSource +
 			", mode=" + mode +
 			'}';
 	}

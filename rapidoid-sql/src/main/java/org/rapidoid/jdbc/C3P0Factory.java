@@ -1,11 +1,14 @@
 package org.rapidoid.jdbc;
 
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
+import org.rapidoid.u.U;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import javax.sql.DataSource;
+import java.beans.PropertyVetoException;
 
 /*
  * #%L
@@ -29,21 +32,24 @@ import java.sql.SQLException;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class NoConnectionPool extends RapidoidThing implements ConnectionPool {
+public class C3P0Factory extends RapidoidThing {
 
-	@Override
-	public Connection getConnection(String jdbcUrl) throws SQLException {
-		return null;
-	}
+	public static DataSource createDataSourceFor(JdbcClient jdbc) {
+		ComboPooledDataSource pool = new ComboPooledDataSource();
 
-	@Override
-	public Connection getConnection(String jdbcUrl, String username, String password) throws SQLException {
-		return null;
-	}
+		pool.setJdbcUrl(jdbc.url());
+		pool.setUser(jdbc.username());
+		pool.setPassword(jdbc.password());
 
-	@Override
-	public void releaseConnection(Connection connection) throws SQLException {
-		connection.close();
+		try {
+			pool.setDriverClass(jdbc.driver());
+		} catch (PropertyVetoException e) {
+			throw U.rte("Cannot load JDBC driver!", e);
+		}
+
+		Conf.C3P0.applyTo(pool);
+
+		return pool;
 	}
 
 }
