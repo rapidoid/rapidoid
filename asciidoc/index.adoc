@@ -5,18 +5,38 @@ This is a draft version of the new documentation for http://www.rapidoid.org[Rap
 
 Things to improve in the docs:
 
-- the important concepts (architecture, design etc.) should be explanated,
+- the important concepts (architecture, design etc.) should be explained in more details,
 - the examples should be organized by categories,
 - information about the HTTP routes and sample requests/responses should be included for each example.
 
-# What is Rapidoid?
+## What is Rapidoid?
 
 Rapidoid is an extremely fast HTTP server and modern Java web framework / application container, with a strong focus on high productivity and high performance.
 
-# Using Rapidoid as web platform (with Docker)
+image::img/rapidoid.png[]
+
+## Rapidoid as Web Platform (Docker)
 
 include::docker.adoc[]
 
-# Using Rapidoid as web framework
+## Rapidoid as Java Web Framework
 
-include::generated/index.adoc[]
+include::quick.adoc[]
+
+include::routing.adoc[]
+
+include::perf.adoc[]
+
+include::notes.adoc[]
+
+include::modules.adoc[]
+
+## The HTTP API
+
+++++
+include::api-docs/httpapi.html[]
+++++
+
+## Examples
+
+include::examples/index.adoc[]

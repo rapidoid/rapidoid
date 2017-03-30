@@ -1,0 +1,4 @@
+### Quick start
+
+  - For a quick start please use the rapidoid-quick module
+  - It includes rapidoid-web, Hibernate, Logback, Hibernate Validator and MySQL Connector
