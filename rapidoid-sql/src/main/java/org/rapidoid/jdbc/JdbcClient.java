@@ -10,6 +10,7 @@ import org.rapidoid.datamodel.impl.ResultsImpl;
 import org.rapidoid.group.AutoManageable;
 import org.rapidoid.group.ManageableBean;
 import org.rapidoid.io.Res;
+import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -313,21 +314,29 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 		return 0;
 	}
 
-	public <T> Results<T> query(Class<T> resultType, String sql, Map<String, ?> namedArgs) {
-		return doQuery(resultType, sql, namedArgs, null);
-	}
-
 	public <T> Results<T> query(Class<T> resultType, String sql, Object... args) {
-		return doQuery(resultType, sql, null, args);
+		return doQuery(resultType, null, sql, null, args);
 	}
 
-	private <T> Results<T> doQuery(Class<T> resultType, String sql, Map<String, ?> namedArgs, Object[] args) {
+	public <T> Results<T> query(Class<T> resultType, String sql, Map<String, ?> namedArgs) {
+		return doQuery(resultType, null, sql, namedArgs, null);
+	}
+
+	public <T> Results<T> query(Mapper<ResultSet, T> resultMapper, String sql, Object... args) {
+		return doQuery(null, resultMapper, sql, null, args);
+	}
+
+	public <T> Results<T> query(Mapper<ResultSet, T> resultMapper, String sql, Map<String, ?> namedArgs) {
+		return doQuery(null, resultMapper, sql, namedArgs, null);
+	}
+
+	private <T> Results<T> doQuery(Class<T> resultType, Mapper<ResultSet, T> resultMapper, String sql, Map<String, ?> namedArgs, Object[] args) {
 		sql = toSql(sql);
-		JdbcData<T> data = new JdbcData<>(this, resultType, sql, namedArgs, args);
+		JdbcData<T> data = new JdbcData<>(this, resultType, resultMapper, sql, namedArgs, args);
 		return new ResultsImpl<>(data);
 	}
 
-	<T> List<T> runQuery(Class<T> resultType, String sql, Map<String, ?> namedArgs, Object[] args, long start, long length) {
+	<T> List<T> runQuery(Class<T> resultType, Mapper<ResultSet, T> resultMapper, String sql, Map<String, ?> namedArgs, Object[] args, long start, long length) {
 		ensureIsInitialized();
 
 		U.must(start >= 0);
@@ -346,13 +355,17 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 			stmt = JDBC.prepare(conn, sql, namedArgs, args);
 			rs = stmt.executeQuery();
 
-			if (resultType.equals(Map.class)) {
-				return U.cast(JDBC.rows(rs));
+			if (resultMapper != null) {
+				return JDBC.rows(resultMapper, rs);
 			} else {
-				return JDBC.rows(resultType, rs);
+				if (resultType.equals(Map.class)) {
+					return U.cast(JDBC.rows(rs));
+				} else {
+					return JDBC.rows(resultType, rs);
+				}
 			}
 
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			throw U.rte(e);
 
 		} finally {
@@ -389,7 +402,7 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 
 			if (username != null) {
 				String pass = U.safe(password);
-				conn = pool.getConnection(url, username, pass);
+				conn = pool.getConnection(url);
 
 				if (conn == null) {
 					conn = DriverManager.getConnection(url, username, pass);

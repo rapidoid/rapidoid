@@ -5,7 +5,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
-import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.StringRewriter;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
@@ -55,7 +54,7 @@ public class JdbcUtil extends RapidoidThing {
 				args = arguments.toArray();
 			}
 
-			PreparedStatement stmt = conn.prepareStatement(sql);
+			PreparedStatement stmt = conn.prepareStatement(sql, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 			bind(stmt, args);
 
 			return stmt;
@@ -111,7 +110,17 @@ public class JdbcUtil extends RapidoidThing {
 		}
 	}
 
-	public static <T> List<T> rows(Class<T> resultType, ResultSet rs) throws SQLException {
+	public static <T> List<T> rows(Mapper<ResultSet, T> resultMapper, ResultSet rs) throws Exception {
+		List<T> rows = U.list();
+
+		while (rs.next()) {
+			rows.add(resultMapper.map(rs));
+		}
+
+		return rows;
+	}
+
+	public static <T> List<T> rows(Class<T> resultType, ResultSet rs) throws Exception {
 		List<T> rows = U.list();
 
 		ResultSetMetaData meta = rs.getMetaData();
@@ -124,7 +133,7 @@ public class JdbcUtil extends RapidoidThing {
 		}
 
 		while (rs.next()) {
-			T row = Cls.newInstance(resultType);
+			T row = resultType.newInstance();
 
 			for (int i = 0; i < columnsN; i++) {
 				if (props[i] != null) {
