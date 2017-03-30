@@ -210,7 +210,7 @@
 						<configuration>
 							<sourceDirectory>asciidoc</sourceDirectory>
 							<headerFooter>true</headerFooter>
-							<imagesDir>asciidoc/images</imagesDir>
+							<imagesDir>img</imagesDir>
 							<sourceHighlighter>coderay</sourceHighlighter>
 							<backend>html5</backend>
 							<sourceDocumentName>index.adoc</sourceDocumentName>

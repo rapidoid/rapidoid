@@ -13,7 +13,7 @@ Things to improve in the docs:
 
 Rapidoid is an extremely fast HTTP server and modern Java web framework / application container, with a strong focus on high productivity and high performance.
 
-image::img/rapidoid.png[]
+image::rapidoid.png[]
 
 ## Rapidoid as Web Platform (Docker)
 
