@@ -26,7 +26,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.collection.Coll;
-import org.rapidoid.commons.Arr;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.data.JSON;
@@ -66,9 +65,7 @@ public class App extends RapidoidInitializer {
 	static volatile ClassLoader loader = App.class.getClassLoader();
 
 	public static AppBootstrap bootstrap(String[] args, String... extraArgs) {
-		args = Arr.concat(extraArgs, args);
-
-		PreApp.args(args);
+		PreApp.args(args, extraArgs);
 
 		scan();
 
@@ -76,9 +73,7 @@ public class App extends RapidoidInitializer {
 	}
 
 	public static AppBootstrap run(String[] args, String... extraArgs) {
-		args = Arr.concat(extraArgs, args);
-
-		PreApp.args(args);
+		PreApp.args(args, extraArgs);
 		// no implicit classpath scanning here
 
 		return boot();

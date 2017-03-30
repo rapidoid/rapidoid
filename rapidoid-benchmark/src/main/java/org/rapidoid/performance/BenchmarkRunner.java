@@ -48,7 +48,7 @@ public class BenchmarkRunner extends RapidoidThing {
 		String desc = mainClass + " " + uri + (passive ? " [PASSIVE]" : "");
 
 		// start the app that will be benchmarked
-		Msc.invokeMain(Cls.get(mainClass), new String[0]);
+		Msc.invokeMain(Cls.get(mainClass), args);
 
 		if (!passive) {
 
