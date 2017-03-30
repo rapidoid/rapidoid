@@ -534,6 +534,8 @@ org.rapidoid.jdbc.JDBC
 org.rapidoid.jdbc.JdbcClient
 org.rapidoid.jdbc.JdbcData
 org.rapidoid.jdbc.JdbcUtil
+org.rapidoid.jdbc.JdbcWorker
+org.rapidoid.jdbc.JdbcWorkers
 org.rapidoid.jdbc.ReadWriteMode
 org.rapidoid.jdbc.SQLModule
 org.rapidoid.job.CallbackExecutorJob

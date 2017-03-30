@@ -3,6 +3,7 @@ package org.rapidoid.jdbc;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Err;
+import org.rapidoid.concurrent.Callback;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
 import org.rapidoid.datamodel.Results;
@@ -11,8 +12,10 @@ import org.rapidoid.group.AutoManageable;
 import org.rapidoid.group.ManageableBean;
 import org.rapidoid.io.Res;
 import org.rapidoid.lambda.Mapper;
+import org.rapidoid.lambda.Operation;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+import org.rapidoid.util.LazyInit;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.MscOpts;
 
@@ -20,6 +23,7 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 /*
  * #%L
@@ -59,6 +63,13 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 	private volatile ReadWriteMode mode = ReadWriteMode.READ_WRITE;
 
 	private final Config config;
+
+	private final LazyInit<JdbcWorkers> workers = new LazyInit<>(new Callable<JdbcWorkers>() {
+		@Override
+		public JdbcWorkers call() throws Exception {
+			return new JdbcWorkers(JdbcClient.this);
+		}
+	});
 
 	public JdbcClient(String name) {
 		super(name);
@@ -494,6 +505,35 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 			", pool=" + dataSource +
 			", mode=" + mode +
 			'}';
+	}
+
+	public void execute(Operation<Connection> operation) {
+		workers.get().execute(operation);
+	}
+
+	public <T> void execute(final Mapper<ResultSet, T> resultMapper, final Callback<List<T>> callback, final String sql, final Object... args) {
+		execute(new Operation<Connection>() {
+
+			@Override
+			public void execute(Connection conn) throws Exception {
+				List<T> results = U.list();
+
+				try (PreparedStatement stmt = JdbcUtil.prepare(conn, sql, null, args)) {
+
+					ResultSet rs = stmt.executeQuery();
+					while (rs.next()) {
+						results.add(resultMapper.map(rs));
+					}
+
+				} catch (Throwable e) {
+					callback.onDone(null, e);
+					return;
+				}
+
+				callback.onDone(results, null);
+			}
+
+		});
 	}
 
 }
