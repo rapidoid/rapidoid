@@ -749,6 +749,7 @@ org.rapidoid.setup.OnRoute
 org.rapidoid.setup.PojoHandlersSetup
 org.rapidoid.setup.PreApp
 org.rapidoid.setup.ReloadUtil
+org.rapidoid.setup.ServerSetup
 org.rapidoid.setup.ServiceActivator
 org.rapidoid.setup.ServiceBootstrap
 org.rapidoid.setup.Setup

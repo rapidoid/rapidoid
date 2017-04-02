@@ -96,12 +96,12 @@ public class Admin extends RapidoidThing {
 		return setup().req(handler);
 	}
 
-	public static synchronized void port(int port) {
-		Conf.ADMIN.set("port", port);
+	public static synchronized ServerSetup port(int port) {
+		return new ServerSetup(Conf.ADMIN).port(port);
 	}
 
-	public static synchronized void address(String address) {
-		Conf.ADMIN.set("address", address);
+	public static synchronized ServerSetup address(String address) {
+		return new ServerSetup(Conf.ADMIN).address(address);
 	}
 
 	public static synchronized OnError error(Class<? extends Throwable> error) {

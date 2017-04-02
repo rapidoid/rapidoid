@@ -1,10 +1,8 @@
-package org.rapidoid.docs.httpcustom;
-
-import org.rapidoid.setup.On;
+package org.rapidoid.setup;
 
 /*
  * #%L
- * rapidoid-integration-tests
+ * rapidoid-http-server
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -22,12 +20,28 @@ import org.rapidoid.setup.On;
  * #L%
  */
 
-public class Main {
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Config;
 
-	public static void main(String[] args) {
-		On.address("127.0.0.1").port(9999);
+@Authors("Nikolche Mihajlovski")
+@Since("5.3.4")
+public class ServerSetup {
 
-		On.get("/x").json("x"); // continue with normal setup
+	private final Config config;
+
+	ServerSetup(Config config) {
+		this.config = config;
+	}
+
+	public ServerSetup port(int port) {
+		config.set("port", port);
+		return this;
+	}
+
+	public ServerSetup address(String address) {
+		config.set("address", address);
+		return this;
 	}
 
 }
