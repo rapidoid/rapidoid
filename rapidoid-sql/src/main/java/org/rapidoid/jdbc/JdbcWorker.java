@@ -24,6 +24,7 @@ import org.rapidoid.activity.AbstractLoopThread;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Operation;
+import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
@@ -74,6 +75,9 @@ public class JdbcWorker extends AbstractLoopThread {
 				}
 
 			} while (Msc.timedOut(since, batchTimeMs));
+
+		} catch (Exception e) {
+			Log.error("JDBC worker operation error!", e);
 
 		} finally {
 			if (conn != null) {

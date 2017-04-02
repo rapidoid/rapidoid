@@ -63,6 +63,7 @@ org.rapidoid.benchmark.common.Fortune
 org.rapidoid.benchmark.common.Helper
 org.rapidoid.benchmark.common.Message
 org.rapidoid.benchmark.highlevel.FortunesHandler
+org.rapidoid.benchmark.highlevel.FortunesMultiHandler
 org.rapidoid.benchmark.highlevel.Main
 org.rapidoid.benchmark.lowlevel.Main
 org.rapidoid.benchmark.lowlevel.PlaintextAndJsonServer

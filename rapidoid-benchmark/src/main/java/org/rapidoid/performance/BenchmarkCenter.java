@@ -24,14 +24,16 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
-import org.rapidoid.env.Env;
+import org.rapidoid.setup.App;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
 public class BenchmarkCenter extends RapidoidThing {
 
 	public static void main(String[] args) {
-		Env.setArgs(args);
+//		args = new String[]{"benchmark.run=/fortunes", "benchmark.plan=t4:r3:d15:c256,512", "profiles=mysql", "hikari.maximumPoolSize=150", "jdbc.workers=16"};
+		App.run(args);
+
 		run();
 	}
 
@@ -52,7 +54,7 @@ public class BenchmarkCenter extends RapidoidThing {
 
 	private static void runBuiltInBenchmarks(BenchmarkForker forker) {
 
-		String run = Conf.BENCHMARK.entry("run").or("/plaintext,/json,/fortunes,http-fast");
+		String run = Conf.BENCHMARK.entry("run").or("/plaintext,/json,/fortunes,/fortunes/multi,http-fast");
 
 		for (String demo : run.split(",")) {
 			demo = demo.trim();

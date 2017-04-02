@@ -28,47 +28,51 @@ import org.rapidoid.jdbc.JdbcClient;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.render.Template;
 import org.rapidoid.render.Templates;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Wait;
 
 import java.sql.ResultSet;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
-public class FortunesHandler implements ReqRespHandler {
+public class FortunesMultiHandler implements ReqRespHandler {
 
 	private static final String SQL = "SELECT id, message FROM fortune";
 
 	private static final Mapper<ResultSet, Fortune> resultMapper = rs -> new Fortune(rs.getInt(1), rs.getString(2));
 
-	private static final Template template = Templates.load("fortunes.html");
+	private final Template template = Templates.load("fortunes.html");
 
 	private final JdbcClient jdbc;
 
-	public FortunesHandler(JdbcClient jdbc) {
+	public FortunesMultiHandler(JdbcClient jdbc) {
 		this.jdbc = jdbc;
 	}
 
 	@Override
 	public Object execute(Req req, Resp resp) throws Exception {
-		req.async();
 
-		jdbc.execute(resultMapper, (List<Fortune> fortunes, Throwable err) -> {
+		int count = U.num(req.param("n", "1000"));
 
-			if (err == null) {
-				fortunes.add(new Fortune(0, "Additional fortune added at request time."));
+		CountDownLatch latch = new CountDownLatch(count);
 
-				Collections.sort(fortunes);
+		for (int i = 0; i < count; i++) {
+			jdbc.execute(resultMapper, (List<Fortune> fortunes, Throwable err) -> {
 
-				resp.result(template.renderToBytes(fortunes));
+				if (err == null) {
+					fortunes.add(new Fortune(0, "Additional fortune added at request time."));
+					Collections.sort(fortunes);
+					template.renderToBytes(fortunes);
+				}
 
-			} else {
-				resp.result(err);
-			}
+			}, SQL);
+		}
 
-			resp.done();
+		Wait.on(latch);
 
-		}, SQL);
-
-		return req;
+		return "OK".getBytes();
 	}
+
 
 }
