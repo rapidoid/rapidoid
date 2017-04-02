@@ -20,13 +20,14 @@ package org.rapidoid.setup;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Config;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.4")
-public class ServerSetup {
+public class ServerSetup extends RapidoidThing {
 
 	private final Config config;
 
