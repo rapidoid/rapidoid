@@ -147,6 +147,13 @@ public class AppBootstrap extends RapidoidThing {
 		}
 	};
 
+	private static final ServiceBootstrap beans = new ServiceBootstrap() {
+		@Override
+		protected void bootstrap() {
+			App.scan();
+		}
+	};
+
 	AppBootstrap services() {
 		services.run();
 		return this;
@@ -222,6 +229,11 @@ public class AppBootstrap extends RapidoidThing {
 		return this;
 	}
 
+	public AppBootstrap beans() {
+		beans.run();
+		return this;
+	}
+
 	static IGoodies getGoodies() {
 		Class<?> goodiesClass;
 
@@ -260,6 +272,7 @@ public class AppBootstrap extends RapidoidThing {
 		auth.reset();
 		oauth.reset();
 		adminCenter.reset();
+		beans.reset();
 	}
 
 }
