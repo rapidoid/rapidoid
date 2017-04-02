@@ -14,17 +14,7 @@
 [PLATFORM] INFO | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
 [PLATFORM] INFO | Replacing configuration shortcut | shortcut = /app->http://localhost:8080,http://localhost:9090 | key = proxy./app | value = http://localhost:8080,http://localhost:9090
 [PLATFORM] INFO | Replacing configuration shortcut | shortcut = /->http://localhost:9090,http://localhost:8080 | key = proxy./ | value = http://localhost:9090,http://localhost:8080
-[PLATFORM] INFO | Replacing configuration shortcut | shortcut = /app->http://localhost:8080,http://localhost:9090 | key = proxy./app | value = http://localhost:8080,http://localhost:9090
-[PLATFORM] INFO | Replacing configuration shortcut | shortcut = /->http://localhost:9090,http://localhost:8080 | key = proxy./ | value = http://localhost:9090,http://localhost:8080
 [PLATFORM] INFO | Setting application root | root = /app | content = []
-[PLATFORM] INFO | Replacing configuration shortcut | shortcut = /app->http://localhost:8080,http://localhost:9090 | key = proxy./app | value = http://localhost:8080,http://localhost:9090
-[PLATFORM] INFO | Replacing configuration shortcut | shortcut = /->http://localhost:9090,http://localhost:8080 | key = proxy./ | value = http://localhost:9090,http://localhost:8080
-[PLATFORM] INFO | Replacing configuration shortcut | shortcut = /app->http://localhost:8080,http://localhost:9090 | key = proxy./app | value = http://localhost:8080,http://localhost:9090
-[PLATFORM] INFO | Replacing configuration shortcut | shortcut = /->http://localhost:9090,http://localhost:8080 | key = proxy./ | value = http://localhost:9090,http://localhost:8080
-[PLATFORM] INFO | Replacing configuration shortcut | shortcut = /app->http://localhost:8080,http://localhost:9090 | key = proxy./app | value = http://localhost:8080,http://localhost:9090
-[PLATFORM] INFO | Replacing configuration shortcut | shortcut = /->http://localhost:9090,http://localhost:8080 | key = proxy./ | value = http://localhost:9090,http://localhost:8080
-[PLATFORM] INFO | Replacing configuration shortcut | shortcut = /app->http://localhost:8080,http://localhost:9090 | key = proxy./app | value = http://localhost:8080,http://localhost:9090
-[PLATFORM] INFO | Replacing configuration shortcut | shortcut = /->http://localhost:9090,http://localhost:8080 | key = proxy./ | value = http://localhost:9090,http://localhost:8080
 [PLATFORM] INFO | Automatically activating mode-specific profile | profile = production
 [PLATFORM] INFO | Initialized environment | mode = PRODUCTION | profiles = [production, platform]
 [PLATFORM] INFO | Setting application JAR | appJar = /app/app.jar | exists = false

@@ -138,6 +138,9 @@ public class Platform extends RapidoidThing {
 			case "benchmark":
 				benchmark();
 				break;
+			default:
+				Log.error("Unknown command: " + cmd);
+				System.exit(1);
 		}
 	}
 
@@ -157,7 +160,7 @@ public class Platform extends RapidoidThing {
 				appRefs.add(appRef);
 
 			} else {
-				if (i == 0 && !arg.contains("=")) {
+				if (i == 0 && looksLikeCommand(arg)) {
 					cmd = args[0];
 
 				} else {
@@ -167,6 +170,10 @@ public class Platform extends RapidoidThing {
 		}
 
 		return cmd;
+	}
+
+	private static boolean looksLikeCommand(String arg) {
+		return arg.matches("[a-z]+");
 	}
 
 	private static void openInBrowser() {

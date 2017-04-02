@@ -45,7 +45,7 @@ public class MscOpts extends RapidoidThing {
 	private static final boolean hasSlf4jImpl = Cls.exists("org.slf4j.impl.StaticLoggerBinder");
 	private static final boolean hasMavenEmbedder = Cls.exists("org.apache.maven.cli.MavenCli");
 
-	private static final boolean hasC3P0 = Cls.exists("com.mchange.v2.c3p0.ComboPooledDataSource");
+	private static final boolean hasC3P0 = Cls.exists("com.mchange.v2.c3p0.PooledDataSource");
 	private static final boolean hasHikari = Cls.exists("com.zaxxer.hikari.HikariDataSource");
 
 	private static final boolean isRestOnly = !hasRapidoidHTML();

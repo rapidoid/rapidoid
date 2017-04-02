@@ -1107,7 +1107,7 @@ public class Msc extends RapidoidThing {
 		return arguments;
 	}
 
-	public static boolean isSpecialArg(String arg) {
+	private static boolean isSpecialArg(String arg) {
 		return arg.matches(SPECIAL_ARG_REGEX);
 	}
 
