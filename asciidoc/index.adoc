@@ -1,3 +1,5 @@
+include::style.adoc[]
+
 = Rapidoid Documentation
 Rapidoid <rapidoid@googlegroups.com>
 
