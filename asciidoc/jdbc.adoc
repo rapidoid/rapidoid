@@ -1,0 +1,19 @@
+### JDBC
+
+#### API
+
+Please take a look at the `JDBC` and `JdbcClient` classes.
+
+#### Connection pools
+
+Rapidoid provides out-of-the-box support the `C3P0` and `Hikari` connection pools.
+
+NOTE: The `Hikari` support is considered early-access, but it performs well.
+
+#### Providing custom DataSource
+
+Please take a look at `JdbcClient#dataSource`.
+
+#### Paging
+
+Support for automatic paging through the results of JDBC queries will be available soon.

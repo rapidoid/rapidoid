@@ -1,0 +1,17 @@
+### OAuth
+
+Rapidoid has built-in support for OAuth.
+
+TODO: add more details here...
+
+#### Configuring
+
+Please see the `oauth` configuration section.
+
+#### Bootstrap
+
+Bootstrapping the OAuth handlers is easy:
+
+```java
+App.bootstrap(args).oauth();
+```

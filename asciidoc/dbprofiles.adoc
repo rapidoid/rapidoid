@@ -1,0 +1,30 @@
+### Configuring the database
+
+Rapidoid features some built-in configuration for HSQL, MySQL and PostgreSQL.
+You can use it by activating the desired application profile.
+
+This built-in configuration also serves as a guide to configuring the database.
+
+#### Using the embedded HSQL database by default (the default profile)
+
+[source,yml]
+.built-in-config-default.yml
+----
+include::../rapidoid-commons/src/main/resources/built-in-config-default.yml[]
+----
+
+#### Using MySQL (the mysql profile)
+
+[source,yml]
+.built-in-config-mysql.yml
+----
+include::../rapidoid-commons/src/main/resources/built-in-config-mysql.yml[]
+----
+
+#### Using PostgreSQL (the postgres profile)
+
+[source,yml]
+.built-in-config-postgres.yml
+----
+include::../rapidoid-commons/src/main/resources/built-in-config-postgres.yml[]
+----

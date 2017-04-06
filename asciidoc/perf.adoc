@@ -1,4 +1,4 @@
-### Performance and Scalability
+### Performance
 
 The network communication of Rapidoid is fully asynchronous (e.g. epoll on Linux).
 Several benchmarks have demonstrated stable high performance with 16K connections.
