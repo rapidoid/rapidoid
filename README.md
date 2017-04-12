@@ -15,12 +15,10 @@ Rapidoid is released under the liberal Apache Public License v2, so it is free t
 
 # Roadmap
 
-* Better documentation
-* Maven plugin for easy deployment (coming soon in 5.3)
-* Built-in object cache (coming soon in 5.3)
-* Off-heap cache storage
+* Better documentation (work in progress)
+* SSL support (coming soon in 5.4)
 * RPC layer (high-level, POJO-based)
-* SSL support
+* Off-heap cache storage
 
 # Contributing
 
