@@ -25,9 +25,14 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.JSON;
+import org.rapidoid.env.Env;
 import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.customize.*;
 import org.rapidoid.render.Templates;
+import org.rapidoid.scan.ClasspathUtil;
+import org.rapidoid.u.U;
+
+import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.7")
@@ -68,7 +73,13 @@ public class Defaults extends RapidoidThing {
 	private static final StaticFilesSecurity staticFilesSecurity = new DefaultStaticFilesSecurity();
 
 	public static String[] staticFilesPath() {
-		return staticFilesPath;
+		List<String> path = U.list(staticFilesPath);
+
+		if (Env.isInitialized() && Env.dev()) {
+			path.addAll(0, ClasspathUtil.getClasspathStaticFolders());
+		}
+
+		return U.arrayOf(path);
 	}
 
 	public static ErrorHandler errorHandler() {
