@@ -257,6 +257,11 @@ public class ClasspathUtil extends RapidoidInitializer {
 					if (static1.exists() && static1.isDirectory()) {
 						folders.add(static1.getAbsolutePath());
 					}
+
+					File static2 = new File(Msc.path(project, "static"));
+					if (static2.exists() && static2.isDirectory()) {
+						folders.add(static2.getAbsolutePath());
+					}
 				}
 			}
 		}
