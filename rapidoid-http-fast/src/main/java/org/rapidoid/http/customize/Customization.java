@@ -41,7 +41,6 @@ public class Customization extends RapidoidThing {
 	private final String name;
 	private final Customization defaults;
 	private final Config config;
-	private final Config serverConfig;
 
 	private final ByType<Throwable, ErrorHandler> errorHandlers = ByType.create();
 
@@ -79,11 +78,10 @@ public class Customization extends RapidoidThing {
 
 	private volatile ResourceLoader templateLoader;
 
-	public Customization(String name, Customization defaults, Config config, Config serverConfig) {
+	public Customization(String name, Customization defaults, Config config) {
 		this.name = name;
 		this.defaults = defaults;
 		this.config = config;
-		this.serverConfig = serverConfig;
 
 		reset();
 	}
@@ -135,10 +133,6 @@ public class Customization extends RapidoidThing {
 
 	public Config config() {
 		return config;
-	}
-
-	public Config serverConfig() {
-		return serverConfig;
 	}
 
 	public String[] staticFilesPath() {

@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.group.AbstractManageable;
+import org.rapidoid.group.ManageableBean;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.log.Log;
@@ -47,6 +48,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
+@ManageableBean(kind = "processes")
 public class ProcessHandle extends AbstractManageable {
 
 	private final static Set<ProcessHandle> ALL = Coll.synchronizedSet();
@@ -398,11 +400,6 @@ public class ProcessHandle extends AbstractManageable {
 	}
 
 	@Override
-	public String getManageableType() {
-		return "Processes";
-	}
-
-	@Override
 	public synchronized List<String> getManageableActions() {
 		List<String> actions = U.list("?Restart");
 
@@ -432,7 +429,7 @@ public class ProcessHandle extends AbstractManageable {
 		while (isAlive()) {
 			U.sleep(1);
 
-			if (U.time() - t > terminationTimeout) {
+			if (Msc.timedOut(t, terminationTimeout)) {
 				destroyForcibly();
 				break;
 			}
@@ -442,11 +439,12 @@ public class ProcessHandle extends AbstractManageable {
 		while (isAlive()) {
 			U.sleep(1);
 
-			if (U.time() - t > terminationTimeout) {
+			if (Msc.timedOut(t, terminationTimeout)) {
 				throw U.rte("Couldn't terminate the process!");
 			}
 		}
 
+		Log.info("Terminated process", "id", id());
 		return this;
 	}
 

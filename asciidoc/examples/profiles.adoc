@@ -1,0 +1,92 @@
+=== Application Profiles[[app-listing]]
+[source,java]
+.FooCtrl.java
+----
+package org.rapidoid.docs.profiles;
+
+import org.rapidoid.annotation.Controller;
+import org.rapidoid.annotation.GET;
+import org.rapidoid.annotation.Profiles;
+
+@Controller
+@Profiles("foo")
+public class FooCtrl {
+
+	@GET
+	public String hi() {
+		return "hi, FOO controller!";
+	}
+
+}
+----
+
+[[app-listing]]
+[source,java]
+.Main.java
+----
+package org.rapidoid.docs.profiles;
+
+import org.rapidoid.config.Conf;
+import org.rapidoid.env.Env;
+import org.rapidoid.gui.GUI;
+import org.rapidoid.setup.App;
+import org.rapidoid.setup.On;
+
+import java.util.Map;
+
+public class Main {
+
+	public static void main(String[] args) {
+		App.bootstrap(args, "profiles=mysql,foo");
+
+		On.get("/profiles").mvc(() -> GUI.display(Env.profiles()));
+
+		Map<String, Object> myConfig = Conf.section("my").toMap();
+		On.get("/my").mvc(() -> GUI.grid(myConfig));
+	}
+
+}
+----
+
+[[app-listing]]
+[source,java]
+.OtherCtrl.java
+----
+package org.rapidoid.docs.profiles;
+
+import org.rapidoid.annotation.Controller;
+import org.rapidoid.annotation.GET;
+import org.rapidoid.annotation.Profiles;
+
+@Controller
+@Profiles("default")
+public class OtherCtrl {
+
+	@GET
+	public String hi() {
+		return "hi, OTHER controller!";
+	}
+
+}
+----
+
+[[app-listing]]
+[source,yml]
+.config-foo.yml
+----
+my:
+  msg: 'hello from Foo!'
+----
+
+[[app-listing]]
+[source,yml]
+.config.yml
+----
+gui:
+  navbar: false
+
+my:
+  msg: 'hello!'
+  desc: 'simple example'
+----
+

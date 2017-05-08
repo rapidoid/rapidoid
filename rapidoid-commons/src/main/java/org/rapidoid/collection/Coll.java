@@ -425,4 +425,15 @@ public class Coll extends RapidoidThing {
 
 		return copy;
 	}
+
+	public static <T> List<T> copyOf(List<T> src) {
+		List<T> copy;
+
+		synchronized (src) {
+			copy = U.list(src);
+		}
+
+		return copy;
+	}
+
 }

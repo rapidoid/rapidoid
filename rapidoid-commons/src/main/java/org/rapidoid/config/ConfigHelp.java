@@ -8,6 +8,7 @@ import org.rapidoid.commons.Str;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
+import java.util.Arrays;
 import java.util.List;
 
 /*
@@ -34,11 +35,15 @@ import java.util.List;
 @Since("5.0.2")
 public class ConfigHelp extends RapidoidThing {
 
-	public static void processHelp(Object[] args) {
-		for (Object arg : args) {
-			if (arg.equals("--help")) {
-				showUsage();
-			}
+	public static boolean isHelpRequested(String[] args) {
+		return Arrays.equals(args, new String[]{"--help"})
+			|| Arrays.equals(args, new String[]{"help"});
+	}
+
+	public static void processHelp(String[] args) {
+		if (isHelpRequested(args)) {
+			showUsage();
+			System.exit(0);
 		}
 	}
 
@@ -75,7 +80,6 @@ public class ConfigHelp extends RapidoidThing {
 		showOpts(ConfigOptions.SERVICES);
 
 		show("\nFor a complete list of options see: http://www.rapidoid.org/the-default-configuration.html");
-		System.exit(0);
 	}
 
 	private static void showOpts(List<ConfigOption> opts) {

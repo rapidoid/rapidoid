@@ -98,4 +98,26 @@ public class MscTest extends TestCommons {
 		UUID uuid2 = Msc.bytesToUUID(Msc.uuidToBytes(uuid));
 		eq(uuid2, uuid);
 	}
+
+	@Test
+	public void testLog2() {
+		eq(Msc.log2(1), 0);
+		eq(Msc.log2(2), 1);
+
+		eq(Msc.log2(3), 2);
+		eq(Msc.log2(4), 2);
+
+		eq(Msc.log2(5), 3);
+		eq(Msc.log2(8), 3);
+
+		eq(Msc.log2(9), 4);
+		eq(Msc.log2(16), 4);
+
+		eq(Msc.log2(1024), 10);
+		eq(Msc.log2(65536), 16);
+		eq(Msc.log2(65536 * 1024), 26);
+
+		eq(Msc.log2(Integer.MAX_VALUE), 31);
+	}
+
 }

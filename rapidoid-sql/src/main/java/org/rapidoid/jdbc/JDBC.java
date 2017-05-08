@@ -4,8 +4,10 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.datamodel.Results;
+import org.rapidoid.lambda.Mapper;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.util.Map;
 import java.util.UUID;
 
@@ -113,6 +115,14 @@ public class JDBC extends JdbcUtil {
 
 	public static <T> Results<T> query(Class<T> resultType, String sql, Map<String, ?> namedArgs) {
 		return api().query(resultType, sql, namedArgs);
+	}
+
+	public static <T> Results<T> query(Mapper<ResultSet, T> resultMapper, String sql, Object... args) {
+		return api().query(resultMapper, sql, args);
+	}
+
+	public static <T> Results<T> query(Mapper<ResultSet, T> resultMapper, String sql, Map<String, ?> namedArgs) {
+		return api().query(resultMapper, sql, namedArgs);
 	}
 
 	public static Results<Map<String, Object>> query(String sql, Object... args) {

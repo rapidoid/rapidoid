@@ -107,7 +107,17 @@ public class UndefinedTag extends RapidoidThing implements Tag {
 	}
 
 	@Override
+	public Tag attr(String attr, int value) {
+		throw Err.notExpected();
+	}
+
+	@Override
 	public Tag data(String dataAttr, String value) {
+		throw Err.notExpected();
+	}
+
+	@Override
+	public Tag data(String dataAttr, int value) {
 		throw Err.notExpected();
 	}
 

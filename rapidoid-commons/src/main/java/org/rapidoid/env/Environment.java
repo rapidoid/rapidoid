@@ -8,6 +8,7 @@ import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.log.Log;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
+import org.rapidoid.util.LazyInit;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.MscOpts;
 
@@ -15,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
 
 /*
  * #%L
@@ -52,6 +54,14 @@ public class Environment extends RapidoidInitializer {
 
 	private final EnvProperties properties = new EnvProperties();
 
+	private final LazyInit<Map<String, Object>> argsAsMap = new LazyInit<>(new Callable<Map<String, Object>>() {
+		@Override
+		public Map<String, Object> call() throws Exception {
+			U.notNull(args, "environment args");
+			return Msc.parseArgs(args);
+		}
+	});
+
 	public Environment() {
 		reset();
 	}
@@ -79,6 +89,7 @@ public class Environment extends RapidoidInitializer {
 	public synchronized void reset() {
 		profiles = null;
 		mode = null;
+		argsAsMap.reset();
 		setArgs(); // no args
 	}
 
@@ -174,6 +185,7 @@ public class Environment extends RapidoidInitializer {
 	public void setArgs(String... args) {
 		this.args = Coll.synchronizedList(args);
 		this.argsView = Collections.unmodifiableList(this.args);
+		this.argsAsMap.reset();
 	}
 
 	public List<String> args() {
@@ -220,8 +232,7 @@ public class Environment extends RapidoidInitializer {
 
 	public Map<String, Object> argsAsMap() {
 		RapidoidEnv.touch();
-		U.notNull(args, "environment args");
-		return Msc.parseArgs(args);
+		return argsAsMap.get();
 	}
 
 }

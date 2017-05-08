@@ -165,6 +165,8 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 	@Override
 	public synchronized InetSocketAddress getAddress() {
+		if (key == null) return null;
+
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 		SocketAddress addr = socketChannel.socket().getRemoteSocketAddress();
 		if (addr instanceof InetSocketAddress) {
@@ -313,7 +315,7 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 		if (seq < handle - 1) {
 			// too early
 
-			Jobs.after(1).microseconds(new Runnable() {
+			Jobs.execute(new Runnable() {
 				@Override
 				public void run() {
 					resume(expectedConnId, handle, asyncLogic);
@@ -389,7 +391,8 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 	@Override
 	public String address() {
-		return getAddress().getAddress().getHostAddress();
+		InetSocketAddress inetSocketAddress = getAddress();
+		return inetSocketAddress != null ? inetSocketAddress.getAddress().getHostAddress() : null;
 	}
 
 	@Override

@@ -32,7 +32,7 @@ import org.rapidoid.http.customize.defaults.Defaults;
 @Since("5.1.0")
 public class My extends RapidoidThing {
 
-	private static final Customization GLOBAL = new Customization("my", null, null, null);
+	private static final Customization GLOBAL = new Customization("my", null, null);
 
 	static {
 		reset();

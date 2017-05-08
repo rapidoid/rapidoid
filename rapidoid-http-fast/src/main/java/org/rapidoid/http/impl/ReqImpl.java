@@ -121,11 +121,11 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	private final MediaType defaultContentType;
 
-	private volatile HttpRoutesImpl routes;
+	private final HttpRoutesImpl routes;
 
 	private final Route route;
 
-	private volatile Customization custom;
+	private final Customization custom;
 
 	private final HTTPCacheKey cacheKey;
 
@@ -140,8 +140,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	public ReqImpl(FastHttp http, Channel channel, boolean isKeepAlive, String verb, String uri, String path,
 	               String query, byte[] body, Map<String, String> params, Map<String, String> headers,
 	               Map<String, String> cookies, Map<String, Object> posted, Map<String, List<Upload>> files,
-	               boolean pendingBodyParsing, MediaType defaultContentType, String zone,
-	               HttpRoutesImpl routes, Route route) {
+	               boolean pendingBodyParsing, MediaType defaultContentType, String zone, Route route) {
 
 		this.http = http;
 		this.channel = channel;
@@ -159,12 +158,12 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		this.pendingBodyParsing = pendingBodyParsing;
 		this.defaultContentType = defaultContentType;
 		this.zone = zone;
-		this.routes = routes;
+		this.routes = http.routes();
 		this.route = route;
 		this.connId = channel.connId();
 		this.handle = channel.handle();
 		this.requestId = channel.requestId();
-		this.custom = routes != null ? routes.custom() : http.custom();
+		this.custom = http.custom();
 		this.cacheKey = createCacheKey();
 	}
 
@@ -627,12 +626,6 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	@Override
 	public HttpRoutes routes() {
 		return routes;
-	}
-
-	public ReqImpl routes(HttpRoutesImpl routes) {
-		this.routes = routes;
-		this.custom = routes != null ? routes.custom() : http.custom();
-		return this;
 	}
 
 	@Override

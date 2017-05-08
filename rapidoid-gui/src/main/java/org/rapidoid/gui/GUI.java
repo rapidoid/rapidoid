@@ -618,7 +618,7 @@ public abstract class GUI extends HTML implements Role {
 
 		} else if (item instanceof byte[]) {
 			byte[] bytes = (byte[]) item;
-			return Str.toHex(bytes);
+			return bytes.length <= 512 ? Str.toWebSafeBinary(bytes) : "(BINARY DATA)";
 
 		} else if (item instanceof Var<?>) {
 			Var<?> var = (Var<?>) item;
@@ -654,16 +654,29 @@ public abstract class GUI extends HTML implements Role {
 		}
 
 		String str = str(item);
-		Tag tag = hardcoded(escape(str));
+
+		Tag tag = strTag(str);
 
 		return (str.contains("{") || str.contains("}")) ? span(tag).is("ng-non-bindable", true) : tag;
+	}
+
+	private static Tag strTag(String str) {
+
+		if (str == null) return N_A;
+		int max = 1000;
+
+		if (str.length() < max) {
+			return hardcoded(escape(str));
+
+		} else {
+			return tooltip(span(hardcoded(escape(str.substring(0, max))), b(" ...")), str);
+		}
 	}
 
 	private static boolean isBean(Object obj) {
 		return Cls.isBean(obj)
 			&& !(obj instanceof Tag)
-			&& !(obj instanceof TagWidget)
-			&& !(obj instanceof MultiWidget);
+			&& !(obj instanceof TagWidget);
 	}
 
 	private static Object display(Iterator<?> it) {
@@ -957,8 +970,22 @@ public abstract class GUI extends HTML implements Role {
 		return breadcrumb;
 	}
 
+	public static Tag breadcrumb(Map<?, String> segments) {
+		Tag breadcrumb = ol().class_("breadcrumb");
+
+		for (Map.Entry<?, String> e : segments.entrySet()) {
+			breadcrumb = breadcrumb.append(li(a(e.getKey()).href(e.getValue())));
+		}
+
+		return breadcrumb;
+	}
+
 	public static Tag autoRefresh(long intervalMs) {
 		return script(U.frmt("Rapidoid.setAutoRefreshInterval(%s);", intervalMs));
+	}
+
+	public static Object details(Object item) {
+		return mid6(GUI.show(item));
 	}
 
 }

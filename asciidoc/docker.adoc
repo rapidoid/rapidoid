@@ -1,0 +1,1 @@
+Please see the documentation of the https://hub.docker.com/_/rapidoid[Official Docker repository for Rapidoid].

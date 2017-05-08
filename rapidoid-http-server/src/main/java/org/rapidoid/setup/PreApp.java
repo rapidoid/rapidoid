@@ -26,6 +26,9 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.config.ConfigHelp;
 import org.rapidoid.env.Env;
+import org.rapidoid.u.U;
+
+import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -34,11 +37,19 @@ public class PreApp extends RapidoidThing {
 	public static void args(String[] args, String... extraArgs) {
 		args = Arr.concat(extraArgs, args);
 
-		ConfigHelp.processHelp(args);
+		List<String> oldArgs = Env.args();
 
-		Env.setArgs(args);
+		if (U.isEmpty(oldArgs)) {
+			ConfigHelp.processHelp(args);
 
-		AppVerification.selfVerify(args);
+			Env.setArgs(args);
+
+			AppVerification.selfVerify(args);
+
+		} else {
+			List<String> newArgs = U.list(args);
+			U.must(newArgs.equals(oldArgs), "Can't change the args! Different args were already assigned!\nOLD: %s\nNEW: %s\n", oldArgs, newArgs);
+		}
 	}
 
 }

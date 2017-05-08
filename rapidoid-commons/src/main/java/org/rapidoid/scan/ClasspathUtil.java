@@ -239,4 +239,34 @@ public class ClasspathUtil extends RapidoidInitializer {
 			Log.info("Setting application JAR", "!appJar", appJar, "exists", new File(appJar).exists());
 		}
 	}
+
+	public static Set<String> getClasspathStaticFolders() {
+		Set<String> folders = U.set();
+
+		for (String cp : ClasspathUtil.getClasspathFolders()) {
+
+			File classes = new File(cp);
+			if (classes.getName().equals("classes")) {
+
+				File target = classes.getParentFile();
+				if (target.getName().equals("target")) {
+
+					String project = target.getParent();
+
+					File static1 = new File(Msc.path(project, "src", "main", "resources", "static"));
+					if (static1.exists() && static1.isDirectory()) {
+						folders.add(static1.getAbsolutePath());
+					}
+
+					File static2 = new File(Msc.path(project, "static"));
+					if (static2.exists() && static2.isDirectory()) {
+						folders.add(static2.getAbsolutePath());
+					}
+				}
+			}
+		}
+
+		return folders;
+	}
+
 }

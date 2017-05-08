@@ -114,18 +114,18 @@ public final class TUUID extends RapidoidThing implements Comparable<TUUID> {
 	}
 
 	public static TUUID fromBytes(byte[] bytes) {
-		U.must(bytes.length == 24, "Expected 24 byted, got: {}", bytes.length);
+		U.must(bytes.length == 24, "Expected 24 bytes, got: %s", bytes.length);
 		ByteBuffer buf = ByteBuffer.wrap(bytes);
 		return new TUUID(buf.getLong(), buf.getLong(), buf.getLong());
 	}
 
 	@Override
 	public String toString() {
-		return Str.toBase64(toBytes(), '-', '_');
+		return Str.toWebSafeBase64(toBytes());
 	}
 
 	public static TUUID fromString(String tuuid) {
 		U.notNull(tuuid, "TUUID");
-		return fromBytes(Str.fromBase64(tuuid, '-', '_'));
+		return fromBytes(Str.fromWebSafeBase64(tuuid));
 	}
 }

@@ -38,6 +38,10 @@ public class InfiniteStream extends AbstractWidget<InfiniteStream> {
 
 	private volatile int cols = 1;
 
+	private volatile int page = 1;
+
+	private volatile String after;
+
 	private volatile String rowClass = "row-separated-mini row-stream";
 
 	@Override
@@ -63,7 +67,9 @@ public class InfiniteStream extends AbstractWidget<InfiniteStream> {
 		Tag stream = div(scroll)
 			.ng("controller", "StreamController")
 			.data("url", url)
-			.ng("init", "cols = " + cols);
+			.data("cols", cols)
+			.data("page", page)
+			.data("after", U.safe(after));
 
 		return stream;
 	}
@@ -73,7 +79,7 @@ public class InfiniteStream extends AbstractWidget<InfiniteStream> {
 
 		scroll = scroll.attr("infinite-scroll-disabled", "stream.busy");
 		scroll = scroll.attr("infinite-scroll", "stream.nextPage()");
-		scroll = scroll.attr("infinite-scroll-distance", "1");
+		scroll = scroll.attr("infinite-scroll-distance", 1);
 
 		return scroll;
 	}
@@ -121,6 +127,24 @@ public class InfiniteStream extends AbstractWidget<InfiniteStream> {
 
 	public InfiniteStream rowClass(String rowClass) {
 		this.rowClass = rowClass;
+		return this;
+	}
+
+	public int page() {
+		return page;
+	}
+
+	public InfiniteStream page(int page) {
+		this.page = page;
+		return this;
+	}
+
+	public String after() {
+		return after;
+	}
+
+	public InfiniteStream after(String after) {
+		this.after = after;
 		return this;
 	}
 }

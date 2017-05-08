@@ -3,6 +3,7 @@ package org.rapidoid.goodies;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Err;
 import org.rapidoid.setup.IGoodies;
 import org.rapidoid.setup.Setup;
 
@@ -67,7 +68,7 @@ public class RapidoidGoodies extends RapidoidThing implements IGoodies {
 
 	@Override
 	public void deploy(Setup setup) {
-		Goodies.deployment(setup);
+		throw Err.notSupported();
 	}
 
 	@Override

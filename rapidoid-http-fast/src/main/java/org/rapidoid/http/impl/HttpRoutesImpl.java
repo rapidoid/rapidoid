@@ -13,6 +13,7 @@ import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Err;
 import org.rapidoid.commons.Str;
 import org.rapidoid.data.BufRange;
+import org.rapidoid.env.Env;
 import org.rapidoid.http.*;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.handler.HttpHandler;
@@ -24,6 +25,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.AnsiColor;
 import org.rapidoid.util.Constants;
+import org.rapidoid.util.Msc;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -51,6 +53,8 @@ import java.util.regex.Pattern;
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
+
+	private static final int ROUTE_SETUP_WAITING_TIME_MS = Env.test() ? 300 : 500;
 
 	private static final Pattern PATTERN_PATTERN = Pattern.compile("[^\\w/-]");
 
@@ -91,16 +95,20 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 
 	private volatile HttpHandler staticResourcesHandler;
 
+	private volatile HttpHandler builtInResourcesHandler;
+
 	private final Set<Route> routes = Coll.synchronizedSet();
 
 	private volatile boolean initialized;
 	private volatile Runnable onInit;
 
+	private volatile boolean stable;
 	private volatile Date lastChangedAt = new Date();
 
 	public HttpRoutesImpl(Customization customization) {
 		this.customization = customization;
-		staticResourcesHandler = new StaticResourcesHandler(customization);
+		this.staticResourcesHandler = new StaticResourcesHandler(customization);
+		this.builtInResourcesHandler = new StaticResourcesHandler(customization);
 	}
 
 	private void register(HttpVerb verb, String path, HttpHandler handler) {
@@ -475,7 +483,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 			TransactionMode txm = opts.transaction();
 			String tx = txm != TransactionMode.NONE ? AnsiColor.bold(txm.name()) : txm.name();
 
-			int space = Math.max(30 - verbs.length() - path.length(), 1);
+			int space = Math.max(45 - verbs.length() - path.length(), 1);
 			Log.info(httpVerbColor(verbs) + AnsiColor.bold(" " + path) + Str.mul(" ", space), "setup", this.customization.name(),
 				"!roles", opts.roles(), "transaction", tx, "mvc", opts.mvc(), "cacheTTL", opts.cacheTTL());
 
@@ -540,6 +548,10 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 
 		initialized = false;
 		onInit = null;
+
+		customization.reset();
+		stable = false;
+		lastChangedAt = null;
 
 		notifyChanged();
 	}
@@ -615,6 +627,10 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 		return staticResourcesHandler;
 	}
 
+	public HttpHandler builtInResourcesHandler() {
+		return builtInResourcesHandler;
+	}
+
 	@Override
 	public Runnable onInit() {
 		return onInit;
@@ -649,4 +665,24 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 	private void notifyChanged() {
 		lastChangedAt = new Date();
 	}
+
+	public boolean ready() {
+		long lastChangedAt = lastChangedAt().getTime();
+		return !isEmpty() && Msc.timedOut(lastChangedAt, ROUTE_SETUP_WAITING_TIME_MS);
+	}
+
+	public void waitToStabilize() {
+		while (!stable) {
+			U.sleep(1);
+			if (ready()) {
+				synchronized (this) {
+					if (!stable) {
+						stable = true;
+						Log.debug("Stabilized HTTP routes");
+					}
+				}
+			}
+		}
+	}
+
 }

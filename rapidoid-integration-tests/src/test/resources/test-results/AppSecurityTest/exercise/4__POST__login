@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+Connection: keep-alive
+Server: Rapidoid
+Date: XXXXX GMT
+Content-Type: application/json
+Set-Cookie: _token=; HttpOnly; path=/
+Content-Length: 28
+
+{"success":false,"token":""}

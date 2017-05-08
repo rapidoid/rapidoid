@@ -20,18 +20,16 @@ package org.rapidoid.web.handler;
  * #L%
  */
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Err;
 import org.rapidoid.datamodel.Results;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.gui.Grid;
-import org.rapidoid.http.Current;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.Resp;
-import org.rapidoid.jdbc.JDBC;
+import org.rapidoid.lambda.Mapper;
+import org.rapidoid.render.Render;
 import org.rapidoid.u.U;
 import org.rapidoid.web.config.bean.PageConfig;
 import org.rapidoid.web.config.bean.PageGuiConfig;
@@ -41,7 +39,7 @@ import java.util.regex.Pattern;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class PageHandler extends RapidoidThing implements ReqRespHandler {
+public class PageHandler extends GenericHandler {
 
 	private final PageConfig page;
 
@@ -52,8 +50,8 @@ public class PageHandler extends RapidoidThing implements ReqRespHandler {
 	@Override
 	public Object execute(Req req, Resp resp) {
 
-		if (page.sql != null) {
-			return grid(sqlItems(page.sql));
+		if (U.notEmpty(page.sql)) {
+			return guiOf(page, sqlItems(page.sql));
 		}
 
 		if (U.notEmpty(page.gui)) {
@@ -78,7 +76,7 @@ public class PageHandler extends RapidoidThing implements ReqRespHandler {
 
 		switch (gui.type) {
 			case grid:
-				item = grid(sqlItems(gui.sql));
+				item = grid(gui, sqlItems(gui.sql));
 				break;
 
 			default:
@@ -96,14 +94,20 @@ public class PageHandler extends RapidoidThing implements ReqRespHandler {
 		return item;
 	}
 
-	private Results sqlItems(String sql) {
-		return JDBC.query(sql, req().params());
+	private Object guiOf(PageConfig gui, Results items) {
+
+		if (gui.single) {
+			Object item = U.single(items.all()); // FIXME use paging
+			return GUI.details(item);
+		}
+
+		return grid(new PageGuiConfig(), items);
 	}
 
-	public Grid grid(Results items) {
+	public Grid grid(final PageGuiConfig gui, Results items) {
 		Req req = req();
 
-		Grid grid = GUI.grid(items.all());
+		Grid grid = GUI.grid(items.all()); // FIXME use paging
 
 		String q = req.param("find", null);
 		if (q != null) grid.highlightRegex(Pattern.quote(q));
@@ -112,14 +116,18 @@ public class PageHandler extends RapidoidThing implements ReqRespHandler {
 		if (highlight != null) grid.highlightRegex(Pattern.quote(highlight));
 
 		String pageSize = req.param("$pageSize", null);
-
 		if (pageSize != null) grid.pageSize(U.num(pageSize));
 
-		return grid;
-	}
+		if (U.notEmpty(gui.uri)) {
+			grid.toUri(new Mapper<Object, String>() {
+				@Override
+				public String map(Object item) throws Exception {
+					return Render.template(gui.uri).model(item);
+				}
+			});
+		}
 
-	private Req req() {
-		return Current.request();
+		return grid;
 	}
 
 }

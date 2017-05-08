@@ -76,6 +76,8 @@ c3p0:
   maxStatementsPerConnection: 10
   idleConnectionTestPeriod: 300
 
+hikari: {}
+
 oauth:
   google:
     scope: profile,email
@@ -117,9 +119,25 @@ http:
     server: true
     contentType: true
 
+reverse-proxy:
+  timeout: 10000
+  retryDelay: 300
+  maxConnections: 100
+  maxConnectionsPerRoute: 100
+  reuseConnections: true
+  setHeaders:
+    X-Forwarded-For: true
+    X-Client-IP: false
+    X-Real-IP: false
+    X-Username: false
+    X-Roles: false
+
 token:
   ttl: 0 # unlimited
 
 log:
   level: info
   fancy: false # auto
+
+benchmark:
+  plan: r1:d5:c64

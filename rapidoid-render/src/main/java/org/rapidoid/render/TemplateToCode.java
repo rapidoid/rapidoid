@@ -40,15 +40,15 @@ public class TemplateToCode extends RapidoidThing {
 
 	public static final String Q = "\"";
 
-	public static String generate(XNode x, Map<String, String> expressions) {
+	public static String generate(XNode x, Map<String, String> expressions, Map<String, String> constants, Class<?> modelType) {
 		String body;
 
 		switch (x.op) {
 			case OP_ROOT:
-				return "{" + join("", x.children, expressions) + "}";
+				return "{" + join("", x.children, expressions, constants, modelType) + "}";
 
 			case OP_TEXT:
-				return U.notEmpty(x.text) ? print(literal(x.text)) : "";
+				return U.notEmpty(x.text) ? print(literal(x.text), constants) : "";
 
 			case OP_PRINT:
 				return val(x.text, true, expressions);
@@ -57,18 +57,18 @@ public class TemplateToCode extends RapidoidThing {
 				return val(x.text, false, expressions);
 
 			case OP_IF_NOT:
-				body = join("", x.children, expressions);
+				body = join("", x.children, expressions, constants, modelType);
 				return U.frmt("if (!$1.cond(%s)) { %s }", literal(x.text), body);
 
 			case OP_IF:
-				body = join("", x.children, expressions);
+				body = join("", x.children, expressions, constants, modelType);
 				return U.frmt("if ($1.cond(%s)) { %s }", literal(x.text), body);
 
 			case OP_INCLUDE:
 				return U.frmt("$1.call(%s);", literal(x.text));
 
 			case OP_FOREACH:
-				body = join("", x.children, expressions);
+				body = join("", x.children, expressions, constants, modelType);
 				String retrId = expr(expressions, x.text);
 
 				return iterList(body, retrId);
@@ -117,7 +117,7 @@ public class TemplateToCode extends RapidoidThing {
 		return U.frmt(code, it, retrId, ind, it, var, it, ind, insideBody);
 	}
 
-	private static String join(String separator, List<XNode> nodes, Map<String, String> expressions) {
+	private static String join(String separator, List<XNode> nodes, Map<String, String> expressions, Map<String, String> constants, Class<?> modelType) {
 		StringBuilder sb = new StringBuilder();
 
 		for (int i = 0; i < nodes.size(); i++) {
@@ -125,7 +125,7 @@ public class TemplateToCode extends RapidoidThing {
 				sb.append(separator);
 			}
 
-			String code = TemplateToCode.generate(nodes.get(i), expressions);
+			String code = TemplateToCode.generate(nodes.get(i), expressions, constants, modelType);
 			sb.append(code);
 		}
 
@@ -146,13 +146,16 @@ public class TemplateToCode extends RapidoidThing {
 		return U.frmt("$1.push(%s, %s); try { %s } finally { $1.pop(%s, %s); }", ind, var, code, ind, var);
 	}
 
-	static String print(String s) {
+	static String print(String s, Map<String, String> constants) {
 		if (s.isEmpty()) {
 			return "";
 		}
 
 		if (Msc.isAscii(s)) {
-			return U.frmt("$1.printAscii(%s);\n", s);
+			String constName = "_C_" + ID_GEN.incrementAndGet();
+			constants.put("byte[] " + constName, s + ".getBytes()");
+
+			return U.frmt("$1.printAscii(%s);\n", constName);
 		} else {
 			return U.frmt("$1.printUTF8(%s);\n", s);
 		}

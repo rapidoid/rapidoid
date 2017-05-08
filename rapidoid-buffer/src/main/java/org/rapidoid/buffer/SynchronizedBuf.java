@@ -346,6 +346,21 @@ public class SynchronizedBuf extends OutputStream implements Buf {
 	}
 
 	@Override
+	public synchronized void writeByte(byte byteValue) {
+		buf.writeByte(byteValue);
+	}
+
+	@Override
+	public synchronized void writeBytes(byte[] src) {
+		buf.writeBytes(src);
+	}
+
+	@Override
+	public synchronized void writeBytes(byte[] src, int offset, int length) {
+		buf.writeBytes(src, offset, length);
+	}
+
+	@Override
 	public synchronized void write(int byteValue) throws IOException {
 		buf.write(byteValue);
 	}

@@ -56,17 +56,19 @@ public class FastHttp extends AbstractHttpProcessor {
 
 	private static final String INTERNAL_SERVER_ERROR = "Internal Server Error!";
 
-	private final HttpRoutesGroup routesGroup;
+	private static final byte[] BUILT_IN_RES_PATH = "/_rapidoid/".getBytes();
+
+	private final HttpRoutesImpl routes;
 
 	private final Map<String, Object> attributes = Coll.synchronizedMap();
 
-	public FastHttp(HttpRoutesImpl... routeGroups) {
-		this(new HttpRoutesGroup(routeGroups), new ConfigImpl());
+	public FastHttp(HttpRoutesImpl routes) {
+		this(routes, new ConfigImpl());
 	}
 
-	public FastHttp(HttpRoutesGroup routesGroup, Config serverConfig) {
+	public FastHttp(HttpRoutesImpl routes, @SuppressWarnings("unused") Config serverConfig) {
 		super(null);
-		this.routesGroup = routesGroup;
+		this.routes = routes;
 	}
 
 	@Override
@@ -92,26 +94,26 @@ public class FastHttp extends AbstractHttpProcessor {
 
 		HttpStatus status = HttpStatus.NOT_FOUND;
 
-		HttpRoutesImpl matchingRoutes = null;
 		Route matchingRoute = null;
-		HandlerMatch match = null;
+		HandlerMatch match;
 
-		for (HttpRoutesImpl r : routesGroup.all()) {
-			match = r.findHandler(buf, isGet, verb, path);
+		if (isGet && shouldServeBuiltInResources(buf, path)) {
+			match = routes.builtInResourcesHandler();
 			if (match != null) {
-				matchingRoutes = r;
 				matchingRoute = match.getRoute();
-				break;
 			}
-		}
 
-		if (match == null && isGet) {
-			for (HttpRoutesImpl r : routesGroup.all()) {
-				match = r.staticResourcesHandler();
+		} else {
+
+			match = routes.findHandler(buf, isGet, verb, path);
+			if (match != null) {
+				matchingRoute = match.getRoute();
+			}
+
+			if (match == null && isGet) {
+				match = routes.staticResourcesHandler();
 				if (match != null) {
-					matchingRoutes = r;
 					matchingRoute = match.getRoute();
-					break;
 				}
 			}
 		}
@@ -122,7 +124,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		ReqImpl req = null;
 
 		if (!noReq) {
-			req = createReq(channel, isGet, isKeepAlive, data, buf, matchingRoutes, matchingRoute, match, handler);
+			req = createReq(channel, isGet, isKeepAlive, data, buf, matchingRoute, match, handler);
 
 			if (serveFromCache(req)) return;
 		}
@@ -150,9 +152,15 @@ public class FastHttp extends AbstractHttpProcessor {
 		}
 	}
 
+	private boolean shouldServeBuiltInResources(Buf buf, BufRange path) {
+		return path.length > BUILT_IN_RES_PATH.length
+			&& buf.get(path.start + 1) == '_' // quick check
+			&& BytesUtil.startsWith(buf.bytes(), path, BUILT_IN_RES_PATH, true);
+	}
+
 	@Override
 	public void waitToInitialize() {
-		routesGroup.waitToInitialize();
+		routes.waitToStabilize();
 	}
 
 	private boolean serveFromCache(ReqImpl req) {
@@ -196,7 +204,7 @@ public class FastHttp extends AbstractHttpProcessor {
 
 	@SuppressWarnings("unchecked")
 	public ReqImpl createReq(Channel channel, boolean isGet, boolean isKeepAlive,
-	                         RapidoidHelper helper, Buf buf, HttpRoutesImpl matchingRoutes,
+	                         RapidoidHelper helper, Buf buf,
 	                         Route matchingRoute, HandlerMatch match, HttpHandler handler) {
 
 		ReqImpl req;
@@ -260,7 +268,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		cookies = Collections.synchronizedMap(cookies);
 
 		req = new ReqImpl(this, channel, isKeepAlive, verb, uri, path, query, body, params, headers, cookies,
-			posted, files, pendingBodyParsing, contentType, zone, matchingRoutes, matchingRoute);
+			posted, files, pendingBodyParsing, contentType, zone, matchingRoute);
 
 		if (!attributes.isEmpty()) {
 			req.attrs().putAll(attributes);
@@ -270,7 +278,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		return req;
 	}
 
-	private HttpStatus handleIfFound(Channel channel, boolean isKeepAlive, HttpHandler handler, ReqImpl req) {
+	private HttpStatus handleIfFound(Channel channel, boolean isKeepAlive, HttpHandler handler, Req req) {
 		try {
 			return handler.handle(channel, isKeepAlive, req, null);
 		} catch (NotFound nf) {
@@ -312,7 +320,7 @@ public class FastHttp extends AbstractHttpProcessor {
 	}
 
 	public Customization custom() {
-		return routesGroup.customization();
+		return routes.custom();
 	}
 
 	private String validateRequest(Buf input, BufRange verb, BufRange uri) {
@@ -328,51 +336,38 @@ public class FastHttp extends AbstractHttpProcessor {
 	}
 
 	private HttpStatus tryGenericHandlers(Channel channel, boolean isKeepAlive, ReqImpl req) {
-		for (HttpRoutesImpl routes : routesGroup.all()) {
 
-			// trying with different routes
-			req.routes(routes);
+		for (HttpHandler handler : routes.genericHandlers()) {
+			HttpStatus status = handleIfFound(channel, isKeepAlive, handler, req);
 
-			for (HttpHandler handler : routes.genericHandlers()) {
-				HttpStatus status = handleIfFound(channel, isKeepAlive, handler, req);
-
-				if (status != HttpStatus.NOT_FOUND) {
-					return status;
-				}
+			if (status != HttpStatus.NOT_FOUND) {
+				return status;
 			}
 		}
-
-		req.routes(null);
 
 		return HttpStatus.NOT_FOUND;
 	}
 
 	public synchronized void resetConfig() {
-		routesGroup.reset();
+		routes.reset();
 	}
 
 	public void notFound(Channel ctx, boolean isKeepAlive, MediaType contentType, HttpHandler fromHandler, Req req) {
 		HttpStatus status = HttpStatus.NOT_FOUND;
 
-		tryRoutes:
-		for (HttpRoutesImpl route : routesGroup.all()) {
-			List<HttpHandler> genericHandlers = route.genericHandlers();
-			int count = genericHandlers.size();
+		List<HttpHandler> genericHandlers = routes.genericHandlers();
+		int count = genericHandlers.size();
 
-			for (int i = 0; i < count; i++) {
-				HttpHandler handler = genericHandlers.get(i);
-				if (handler == fromHandler) {
-					// a generic handler returned "not found" -> go to the next one
-					if (i < count - 1) {
-						// trying with different routes
-						ReqImpl reqi = (ReqImpl) req;
-						reqi.routes(route);
+		for (int i = 0; i < count; i++) {
+			HttpHandler handler = genericHandlers.get(i);
+			if (handler == fromHandler) {
+				// a generic handler returned "not found" -> go to the next one
+				if (i < count - 1) {
 
-						HttpHandler nextHandler = genericHandlers.get(i + 1);
-						status = handleIfFound(ctx, isKeepAlive, nextHandler, reqi);
+					HttpHandler nextHandler = genericHandlers.get(i + 1);
+					status = handleIfFound(ctx, isKeepAlive, nextHandler, req);
 
-						break tryRoutes;
-					}
+					break;
 				}
 			}
 		}
@@ -386,12 +381,12 @@ public class FastHttp extends AbstractHttpProcessor {
 		return attributes;
 	}
 
-	public HttpRoutesGroup routes() {
-		return routesGroup;
+	public HttpRoutesImpl routes() {
+		return routes;
 	}
 
 	public boolean hasRouteOrResource(HttpVerb verb, String uri) {
-		return routesGroup.hasRouteOrResource(verb, uri);
+		return routes.hasRouteOrResource(verb, uri);
 	}
 
 }

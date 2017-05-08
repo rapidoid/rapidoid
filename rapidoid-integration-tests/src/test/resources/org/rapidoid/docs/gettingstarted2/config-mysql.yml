@@ -1,0 +1,13 @@
+jdbc:
+  driver: com.mysql.jdbc.Driver
+  url: jdbc:mysql://localhost:3306/rapidoid
+  username: root
+  password: root
+
+hibernate:
+  dialect: org.hibernate.dialect.MySQL5Dialect
+  connection:
+    driver_class: com.mysql.jdbc.Driver
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:3306/rapidoid

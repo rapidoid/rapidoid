@@ -6,6 +6,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.OnRoute;
+import org.rapidoid.setup.Setup;
 import org.rapidoid.u.U;
 
 import java.util.List;
@@ -59,7 +60,7 @@ public class ReverseProxyMapDSL extends RapidoidThing {
 		return this;
 	}
 
-	public ReverseProxy add() {
+	public ReverseProxy addTo(Setup setup) {
 		Log.info("!Reverse proxy mapping", "!uriPrefix", uriPrefix, "!upstreams", upstreams);
 
 		ReverseProxy proxy = createReverseProxy();
@@ -67,7 +68,7 @@ public class ReverseProxyMapDSL extends RapidoidThing {
 		U.must(uriPrefix.startsWith("/"), "The URI prefix must start with '/'");
 
 		String path = uriPrefix.equals("/") ? "/*" : uriPrefix + "/*";
-		OnRoute route = On.any(path);
+		OnRoute route = setup.any(path);
 
 		if (roles != null) route.roles(roles);
 		if (cacheTTL != null) route.cacheTTL(cacheTTL);
@@ -76,6 +77,10 @@ public class ReverseProxyMapDSL extends RapidoidThing {
 		route.serve(proxy);
 
 		return proxy;
+	}
+
+	public ReverseProxy add() {
+		return addTo(On.setup());
 	}
 
 	private ReverseProxy createReverseProxy() {

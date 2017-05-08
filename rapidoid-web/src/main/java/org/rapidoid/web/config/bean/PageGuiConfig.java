@@ -38,6 +38,8 @@ public class PageGuiConfig extends RapidoidThing {
 
 	public volatile String sql;
 
+	public volatile String uri;
+
 	public PageGuiConfig() {
 	}
 

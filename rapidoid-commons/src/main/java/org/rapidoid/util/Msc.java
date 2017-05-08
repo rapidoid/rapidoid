@@ -9,6 +9,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Profiles;
 import org.rapidoid.annotation.Run;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cache.Caching;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Arr;
@@ -31,6 +32,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.validation.InvalidData;
 import org.rapidoid.wrap.BoolWrap;
+import org.rapidoid.writable.ReusableWritable;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
@@ -124,13 +126,13 @@ public class Msc extends RapidoidThing {
 
 	public static byte[] serialize(Object value) {
 		try {
-			ByteArrayOutputStream output = new ByteArrayOutputStream();
+			ReusableWritable output = new ReusableWritable();
 
 			ObjectOutputStream out = new ObjectOutputStream(output);
 			out.writeObject(value);
 			output.close();
 
-			return output.toByteArray();
+			return output.copy();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -284,15 +286,24 @@ public class Msc extends RapidoidThing {
 		}
 	}
 
-	public static void benchmark(String name, int count, Runnable runnable) {
-		doBenchmark(name, count, runnable, false);
+	public static void benchmark(String name, int count, final Runnable runnable) {
+		doBenchmark(name, count, new BenchmarkOperation() {
+			@Override
+			public void run(int iteration) {
+				runnable.run();
+			}
+		}, false);
 	}
 
-	public static void doBenchmark(String name, int count, Runnable runnable, boolean silent) {
+	public static void benchmark(String name, int count, BenchmarkOperation operation) {
+		doBenchmark(name, count, operation, false);
+	}
+
+	public static void doBenchmark(String name, int count, BenchmarkOperation operation, boolean silent) {
 		long start = U.time();
 
 		for (int i = 0; i < count; i++) {
-			runnable.run();
+			operation.run(i);
 		}
 
 		if (!silent) {
@@ -300,17 +311,8 @@ public class Msc extends RapidoidThing {
 		}
 	}
 
-	public static void benchmark(String name, int count, Operation<Integer> operation) {
-		long start = U.time();
-
-		for (int i = 0; i < count; i++) {
-			Lmbd.call(operation, i);
-		}
-
-		benchmarkComplete(name, count, start);
-	}
-
 	public static void benchmarkComplete(String name, int count, long startTime) {
+
 		long end = U.time();
 		long ms = end - startTime;
 
@@ -320,7 +322,17 @@ public class Msc extends RapidoidThing {
 
 		double avg = ((double) count / (double) ms);
 
-		String avgs = avg > 1 ? Math.round(avg) + "K" : Math.round(avg * 1000) + "";
+		String avgs;
+
+		if (avg > 1) {
+			if (avg < 1000) {
+				avgs = Math.round(avg) + "K";
+			} else {
+				avgs = Math.round(avg / 100) / 10.0 + "M";
+			}
+		} else {
+			avgs = Math.round(avg * 1000) + "";
+		}
 
 		String data = String.format("%s: %s in %s ms (%s/sec)", name, count, ms, avgs);
 
@@ -328,7 +340,7 @@ public class Msc extends RapidoidThing {
 	}
 
 	public static void benchmarkMT(int threadsN, final String name, final int count, final CountDownLatch outsideLatch,
-	                               final Runnable runnable) {
+	                               final BenchmarkOperation operation) {
 
 		U.must(count % threadsN == 0, "The number of thread must be a factor of the total count!");
 		final int countPerThread = count / threadsN;
@@ -347,7 +359,7 @@ public class Msc extends RapidoidThing {
 					Ctxs.attach(ctx != null ? ctx.span() : null);
 
 					try {
-						doBenchmark(name, countPerThread, runnable, true);
+						doBenchmark(name, countPerThread, operation, true);
 						if (outsideLatch == null) {
 							latch.countDown();
 						}
@@ -372,7 +384,16 @@ public class Msc extends RapidoidThing {
 	}
 
 	public static void benchmarkMT(int threadsN, final String name, final int count, final Runnable runnable) {
-		benchmarkMT(threadsN, name, count, null, runnable);
+		benchmarkMT(threadsN, name, count, null, new BenchmarkOperation() {
+			@Override
+			public void run(int iteration) {
+				runnable.run();
+			}
+		});
+	}
+
+	public static void benchmarkMT(int threadsN, final String name, final int count, final BenchmarkOperation operation) {
+		benchmarkMT(threadsN, name, count, null, operation);
 	}
 
 	public static String urlEncode(String value) {
@@ -1024,6 +1045,7 @@ public class Msc extends RapidoidThing {
 		Groups.reset();
 		Jobs.reset();
 		Env.reset();
+		Caching.reset();
 
 		Ctxs.reset();
 		U.must(Ctxs.get() == null);
@@ -1114,7 +1136,7 @@ public class Msc extends RapidoidThing {
 		return arguments;
 	}
 
-	public static boolean isSpecialArg(String arg) {
+	private static boolean isSpecialArg(String arg) {
 		return arg.matches(SPECIAL_ARG_REGEX);
 	}
 
@@ -1181,6 +1203,7 @@ public class Msc extends RapidoidThing {
 	}
 
 	public static UUID bytesToUUID(byte[] bytes) {
+		U.must(bytes.length == 16, "Expected 16 bytes, got: %s", bytes.length);
 		ByteBuffer buf = ByteBuffer.wrap(bytes);
 		return new UUID(buf.getLong(), buf.getLong());
 	}
@@ -1358,13 +1381,15 @@ public class Msc extends RapidoidThing {
 		return Msc.isPlatform() ? "/rapidoid/" : "/_";
 	}
 
-	public static String specialUri(String suffix) {
-		U.must(!suffix.startsWith("/"), "The URI suffix must not start with '/'");
+	public static String specialUri(String... suffixes) {
+		String uri = uri(suffixes);
+		String suffix = Str.triml(uri, '/');
 		return specialUriPrefix() + suffix;
 	}
 
-	public static String semiSpecialUri(String suffix) {
-		U.must(!suffix.startsWith("/"), "The URI suffix must not start with '/'");
+	public static String semiSpecialUri(String... suffixes) {
+		String uri = uri(suffixes);
+		String suffix = Str.triml(uri, '/');
 		return Msc.isPlatform() ? "/rapidoid/" + suffix : "/" + suffix;
 	}
 
@@ -1378,6 +1403,39 @@ public class Msc extends RapidoidThing {
 		} else {
 			return Msc.http() + "://" + url;
 		}
+	}
+
+	public static boolean timedOut(long since, long timeout) {
+		return U.time() - since > timeout;
+	}
+
+	public static int log2(int n) {
+		U.must(n > 0);
+
+		int factor = 32 - Integer.numberOfLeadingZeros(n - 1);
+
+		U.must(n <= Math.pow(2, factor));
+
+		return factor;
+	}
+
+	public static int bitMask(int bits) {
+		return (1 << bits) - 1;
+	}
+
+	public static boolean hasMainApp() {
+		List<String> appContent = IO.find().in("/app").ignoreRegex("(static|\\..*|.*~)").getNames();
+		return !appContent.isEmpty();
+	}
+
+	public static boolean isAppResource(String filename) {
+		String name = new File(filename).getName();
+		return !name.startsWith(".") && !name.endsWith("~") && !name.endsWith(".staged");
+	}
+
+	public static String mainAppJar() {
+		U.must(isPlatform());
+		return "/app/app.jar";
 	}
 
 }

@@ -1,0 +1,28 @@
+on:
+  port: 8888
+  address: 0.0.0.0
+
+admin:
+  port: same
+  address: 0.0.0.0
+
+app:
+  home: /
+  contextPath: /
+
+gui:
+  domain: ''
+  brand: App
+  search: false
+  navbar: true
+  fluid: false
+  cdn: auto # in DEV mode is false, in PRODUCTION is true
+  menu: {}
+
+users:
+  root:
+    roles:
+      - administrator
+      - owner
+    password: root # PLEASE change this
+

@@ -335,6 +335,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	}
 
 	@Override
+	@Deprecated
 	public void args(List<String> args) {
 		mustBeRoot();
 		base.initial.putAll(Msc.parseArgs(args));
@@ -478,7 +479,8 @@ public class ConfigImpl extends RapidoidThing implements Config {
 
 		List<String> loaded = U.list();
 
-		args(Env.args());
+		base.initial.putAll(Env.argsAsMap());
+
 		overrideByEnv();
 
 		if (useBuiltInDefaults()) {

@@ -299,7 +299,7 @@ public class Beany extends RapidoidThing {
 		}
 	}
 
-	public static void bind(Object destBean, Map<String, Object> src) {
+	public static void bind(Object destBean, Map<String, ?> src) {
 		Method bind = Cls.findMethod(destBean.getClass(), "bind", Map.class);
 
 		if (bind != null) {
@@ -309,16 +309,16 @@ public class Beany extends RapidoidThing {
 		}
 	}
 
-	public static void update(Object destBean, Map<String, Object> src) {
+	public static void update(Object destBean, Map<String, ?> src) {
 		update(destBean, src, false, false);
 	}
 
-	public static void update(Object destBean, Map<String, Object> src, boolean ignoreNullValues) {
+	public static void update(Object destBean, Map<String, ?> src, boolean ignoreNullValues) {
 		update(destBean, src, ignoreNullValues, false);
 	}
 
 	@SuppressWarnings("unchecked")
-	public static void update(Object destBean, Map<String, Object> src, boolean ignoreNullValues,
+	public static void update(Object destBean, Map<String, ?> src, boolean ignoreNullValues,
 	                          boolean ignoreReadOnlyProperties) {
 
 		if (destBean instanceof Map) {

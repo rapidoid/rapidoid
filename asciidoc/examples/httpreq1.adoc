@@ -1,0 +1,26 @@
+=== All the request data is in the (Req req) parameter[[app-listing]]
+[source,java]
+.Main.java
+----
+package org.rapidoid.docs.httpreq1;
+
+import org.rapidoid.http.Req;
+import org.rapidoid.setup.On;
+
+public class Main {
+
+	public static void main(String[] args) {
+		/* Retrieving request info from the Req parameter */
+
+		On.get("/showVerb").json((Req req) -> req.verb());
+
+		On.get("/showPath").json((Req req) -> req.path());
+
+		On.get("/showUri").json((Req req) -> req.uri());
+
+		On.get("/showData").json((Req req) -> req.data());
+	}
+
+}
+----
+

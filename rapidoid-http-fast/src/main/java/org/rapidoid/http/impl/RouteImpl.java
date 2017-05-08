@@ -68,6 +68,8 @@ public class RouteImpl extends RapidoidThing implements Route {
 			.name(verb + " " + path)
 			.ttl(options.cacheTTL())
 			.capacity(options.cacheCapacity())
+			.manageable(true)
+			.statistics(true)
 			.build();
 	}
 

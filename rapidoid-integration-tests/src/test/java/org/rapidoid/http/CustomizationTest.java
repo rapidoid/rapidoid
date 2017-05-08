@@ -27,7 +27,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.JSON;
-import org.rapidoid.setup.Admin;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;
@@ -105,13 +104,10 @@ public class CustomizationTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void customErrorHandlerByType() {
-		Admin.error(NullPointerException.class).handler((req1, resp, e) -> "ADMIN NPE");
 		My.error(NullPointerException.class).handler((req1, resp, e) -> "MY NPE");
-
 		My.error(RuntimeException.class).handler((req1, resp, e) -> e instanceof NotFound ? null : "MY RTE");
 
 		On.error(SecurityException.class).handler((req1, resp, e) -> "ON SEC");
-		Admin.error(SecurityException.class).handler((req1, resp, e) -> "ADMIN SEC");
 		My.error(SecurityException.class).handler((req1, resp, e) -> "MY SEC");
 
 		On.get("/err1").json(req -> {

@@ -1,0 +1,8 @@
+HTTP/1.1 422 Unprocessable Entity
+Connection: keep-alive
+Server: Rapidoid
+Date: XXXXX GMT
+Content-Type: application/json
+Content-Length: 102
+
+{"error":"Validation failed: Book.title (may not be null)","code":422,"status":"Unprocessable Entity"}

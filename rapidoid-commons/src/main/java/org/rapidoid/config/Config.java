@@ -82,6 +82,7 @@ public interface Config extends BasicConfig {
 
 	Config setPath(String path);
 
+	@Deprecated
 	void args(List<String> args);
 
 	void applyTo(Object target);

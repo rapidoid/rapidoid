@@ -42,17 +42,36 @@ public class ConfigUtil extends RapidoidThing {
 		@SuppressWarnings("unchecked")
 		@Override
 		public Map<String, Object> parse(byte[] bytes) {
+			if (new String(bytes).trim().isEmpty()) return U.map();
 			return Parse.data(bytes, Map.class);
 		}
 	};
 
 	static synchronized void load(String filename, Config config, List<String> loaded) {
-		byte[] bytes = tryToLoad(filename, loaded);
+		Res res = findConfigResource(filename);
+
+		byte[] bytes = null;
+		String realFilename = filename;
+
+		if (res.exists()) {
+			realFilename = res.getCachedFileName();
+			bytes = res.getBytes();
+			loaded.add(realFilename);
+		}
 
 		if (bytes != null) {
 			if (bytes.length > 0) {
-				Map<String, Object> configData = U.safe(YAML_OR_JSON_PARSER.parse(bytes));
-				Log.debug("Loading configuration file", "filename", filename);
+				Map<String, Object> configData;
+
+				try {
+					Log.debug("Loading configuration file", "filename", filename);
+					configData = U.safe(YAML_OR_JSON_PARSER.parse(bytes));
+
+				} catch (Exception e) {
+					configData = U.map();
+					Log.error("Couldn't parse configuration file!", "filename", realFilename);
+				}
+
 				config.update(configData);
 			}
 
@@ -60,16 +79,6 @@ public class ConfigUtil extends RapidoidThing {
 			Log.trace("Couldn't find configuration file", "filename", filename);
 		}
 
-	}
-
-	private static byte[] tryToLoad(String filename, List<String> loaded) {
-		Res res = findConfigResource(filename);
-
-		if (res.exists()) {
-			loaded.add(res.getCachedFileName());
-		}
-
-		return res.getBytesOrNull();
 	}
 
 	private static Res findConfigResource(String filename) {

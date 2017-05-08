@@ -6,6 +6,8 @@ echo Will need sudo...
 sudo echo Got sudo
 
 docker-tests/cleanup.sh
+
+export HEAVY=true
 mvn clean install
 
 cd docker-tests

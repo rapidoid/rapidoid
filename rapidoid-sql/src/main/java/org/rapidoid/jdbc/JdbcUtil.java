@@ -5,12 +5,12 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
-import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.StringRewriter;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.TUUID;
+import org.rapidoid.util.WebData;
 
 import java.sql.*;
 import java.util.List;
@@ -54,7 +54,7 @@ public class JdbcUtil extends RapidoidThing {
 				args = arguments.toArray();
 			}
 
-			PreparedStatement stmt = conn.prepareStatement(sql);
+			PreparedStatement stmt = conn.prepareStatement(sql, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 			bind(stmt, args);
 
 			return stmt;
@@ -86,6 +86,11 @@ public class JdbcUtil extends RapidoidThing {
 		for (int i = 0; i < args.length; i++) {
 			Object arg = args[i];
 
+			if (arg instanceof WebData) {
+				// unwrap the arg to a real value represented by the web data
+				arg = ((WebData) arg).unwrap();
+			}
+
 			if (arg instanceof byte[]) {
 				byte[] bytes = (byte[]) arg;
 				stmt.setBytes(i + 1, bytes);
@@ -105,7 +110,17 @@ public class JdbcUtil extends RapidoidThing {
 		}
 	}
 
-	public static <T> List<T> rows(Class<T> resultType, ResultSet rs) throws SQLException {
+	public static <T> List<T> rows(Mapper<ResultSet, T> resultMapper, ResultSet rs) throws Exception {
+		List<T> rows = U.list();
+
+		while (rs.next()) {
+			rows.add(resultMapper.map(rs));
+		}
+
+		return rows;
+	}
+
+	public static <T> List<T> rows(Class<T> resultType, ResultSet rs) throws Exception {
 		List<T> rows = U.list();
 
 		ResultSetMetaData meta = rs.getMetaData();
@@ -118,7 +133,7 @@ public class JdbcUtil extends RapidoidThing {
 		}
 
 		while (rs.next()) {
-			T row = Cls.newInstance(resultType);
+			T row = resultType.newInstance();
 
 			for (int i = 0; i < columnsN; i++) {
 				if (props[i] != null) {
@@ -131,6 +146,26 @@ public class JdbcUtil extends RapidoidThing {
 		}
 
 		return rows;
+	}
+
+	private static Object convertResultValue(String type, Object value) {
+		byte[] bytes;
+
+		switch (type) {
+
+			case "TUUID":
+				U.must(value instanceof byte[], "Expecting byte[] value to convert to TUUID!");
+				bytes = (byte[]) value;
+				return TUUID.fromBytes(bytes);
+
+			case "UUID":
+				U.must(value instanceof byte[], "Expecting byte[] value to convert to UUID!");
+				bytes = (byte[]) value;
+				return Msc.bytesToUUID(bytes);
+
+			default:
+				throw U.rte("Unknown type: '%s'", type);
+		}
 	}
 
 	public static List<Map<String, Object>> rows(ResultSet rs) throws SQLException {
@@ -150,8 +185,17 @@ public class JdbcUtil extends RapidoidThing {
 		int columnsNumber = meta.getColumnCount();
 
 		for (int i = 1; i <= columnsNumber; i++) {
+
 			String name = meta.getColumnLabel(i);
 			Object value = rs.getObject(i);
+
+			String[] nameParts = name.split("__");
+
+			if (nameParts.length == 2) {
+				name = nameParts[0];
+				value = convertResultValue(nameParts[1], value);
+			}
+
 			row.put(name, value);
 		}
 

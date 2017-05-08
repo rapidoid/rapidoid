@@ -20,13 +20,12 @@ package org.rapidoid.sql.test;
  * #L%
  */
 
-import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.jdbc.C3P0Factory;
 import org.rapidoid.jdbc.JDBC;
 import org.rapidoid.jdbc.JdbcClient;
-import org.rapidoid.jdbc.C3P0ConnectionPool;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
@@ -45,7 +44,7 @@ public class JDBCTest extends SQLTestCommons {
 		try {
 			JDBC.execute("create table abc (id int)");
 		} catch (Exception e) {
-			eq(e.getCause().getClass(), CommunicationsException.class);
+			eq(e.getCause().getClass().getSimpleName(), "CommunicationsException");
 		}
 
 		isFalse(JDBC.api().usePool());
@@ -59,7 +58,8 @@ public class JDBCTest extends SQLTestCommons {
 
 	@Test
 	public void testWithH2AndC3P0() {
-		new C3P0ConnectionPool(JDBC.h2("test"));
+		JdbcClient jdbc = JDBC.h2("test");
+		jdbc.dataSource(C3P0Factory.createDataSourceFor(jdbc));
 		insertAndCheckData(JDBC.api());
 	}
 
@@ -72,7 +72,8 @@ public class JDBCTest extends SQLTestCommons {
 
 	@Test
 	public void testWithHSQLDBAndC3P0() {
-		new C3P0ConnectionPool(JDBC.hsql("test"));
+		JdbcClient jdbc = JDBC.hsql("test");
+		jdbc.dataSource(C3P0Factory.createDataSourceFor(jdbc));
 		insertAndCheckData(JDBC.api());
 	}
 

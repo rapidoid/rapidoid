@@ -2,6 +2,7 @@ package org.rapidoid.render;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.writable.Writable;
 
 import java.io.OutputStream;
 
@@ -30,6 +31,8 @@ import java.io.OutputStream;
 public interface Template {
 
 	void renderTo(OutputStream output, Object model);
+
+	void renderTo(Writable output, Object model);
 
 	byte[] renderToBytes(Object model);
 

@@ -4,6 +4,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.group.Action;
 import org.rapidoid.group.AutoManageable;
+import org.rapidoid.group.ManageableBean;
 import org.rapidoid.u.U;
 
 import java.util.List;
@@ -30,6 +31,7 @@ import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
+@ManageableBean(kind = "cache")
 public class ManageableCache extends AutoManageable<ManageableCache> {
 
 	private final ConcurrentCache<?, ?> cache;
@@ -42,11 +44,6 @@ public class ManageableCache extends AutoManageable<ManageableCache> {
 	@Override
 	public List<String> getManageableProperties() {
 		return U.list("id", "size", "capacity", "hitRate", "hits", "misses", "bypassed", "errors", "ttl");
-	}
-
-	@Override
-	public String getManageableType() {
-		return "Cache";
 	}
 
 	@Action(name = "!purge")
@@ -75,7 +72,7 @@ public class ManageableCache extends AutoManageable<ManageableCache> {
 	}
 
 	public String hitRate() {
-		long total = hits() + misses() + errors() + bypassed();
+		long total = cache.stats().total();
 		return total != 0 ? Math.round(hits() * 10000.0 / total) / 100.0 + " %" : "";
 	}
 

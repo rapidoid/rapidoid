@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -37,12 +38,14 @@ public class ClasspathHandler extends GUI implements Callable<Object> {
 	public Object call() throws Exception {
 		List<Object> info = U.list();
 
-		info.add(h3("Application JAR:"));
+		if (!Msc.isPlatform()) {
+			info.add(h3("Application JAR:"));
 
-		if (ClasspathUtil.hasAppJar()) {
-			info.add(h4(ClasspathUtil.appJar()));
-		} else {
-			info.add(h4(WARN, " No ", b("app.jar"), " file was configured on the classpath!"));
+			if (ClasspathUtil.hasAppJar()) {
+				info.add(h4(ClasspathUtil.appJar()));
+			} else {
+				info.add(h4(WARN, " No ", b("app.jar"), " file was configured on the classpath!"));
+			}
 		}
 
 		info.add(h3("Classpath folders:"));

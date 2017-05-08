@@ -3,8 +3,8 @@ package org.rapidoid.goodies;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.env.Env;
 import org.rapidoid.commons.RapidoidInfo;
+import org.rapidoid.env.Env;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -39,11 +39,13 @@ public class StatusHandler extends RapidoidThing implements Callable<Object> {
 
 	@Override
 	public Map<String, ?> call() throws Exception {
+		String appJar = U.safe(ClasspathUtil.appJar());
+
 		return U.map(
 			"id", Msc.id(),
 			"root", Env.root(),
-			"jar", ClasspathUtil.appJar(),
-			"jarExists", U.notEmpty(ClasspathUtil.appJar()) && new File(ClasspathUtil.appJar()).exists(),
+			"jar", appJar,
+			"jarExists", new File(appJar).exists(),
 			"version", Msc.maybeMasked(RapidoidInfo.version()),
 			"notes", RapidoidInfo.notes(),
 			"mode", Env.mode(),

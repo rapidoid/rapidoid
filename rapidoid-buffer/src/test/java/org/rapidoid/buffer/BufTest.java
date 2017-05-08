@@ -430,23 +430,4 @@ public class BufTest extends BufferTestCommons {
 		}
 	}
 
-	@Test
-	public void shouldCalcSizeFactor() {
-		eq(BufGroup.calcFactor(2), 1);
-
-		eq(BufGroup.calcFactor(3), 2);
-		eq(BufGroup.calcFactor(4), 2);
-
-		eq(BufGroup.calcFactor(5), 3);
-		eq(BufGroup.calcFactor(8), 3);
-
-		eq(BufGroup.calcFactor(9), 4);
-		eq(BufGroup.calcFactor(16), 4);
-
-		eq(BufGroup.calcFactor(1024), 10);
-		eq(BufGroup.calcFactor(65536), 16);
-		eq(BufGroup.calcFactor(65536 * 1024), 26);
-		eq(BufGroup.calcFactor(Integer.MAX_VALUE), 31);
-	}
-
 }

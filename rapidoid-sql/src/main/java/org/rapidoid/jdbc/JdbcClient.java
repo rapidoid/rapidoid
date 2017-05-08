@@ -3,19 +3,27 @@ package org.rapidoid.jdbc;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Err;
+import org.rapidoid.concurrent.Callback;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
 import org.rapidoid.datamodel.Results;
 import org.rapidoid.datamodel.impl.ResultsImpl;
 import org.rapidoid.group.AutoManageable;
+import org.rapidoid.group.ManageableBean;
 import org.rapidoid.io.Res;
+import org.rapidoid.lambda.Mapper;
+import org.rapidoid.lambda.Operation;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+import org.rapidoid.util.LazyInit;
 import org.rapidoid.util.Msc;
+import org.rapidoid.util.MscOpts;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 /*
  * #%L
@@ -39,6 +47,7 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
+@ManageableBean(kind = "jdbc")
 public class JdbcClient extends AutoManageable<JdbcClient> {
 
 	private volatile boolean initialized;
@@ -49,11 +58,18 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 	private volatile String url;
 
 	private volatile boolean usePool = true;
-	private volatile ConnectionPool pool;
+	private volatile DataSource dataSource;
 
 	private volatile ReadWriteMode mode = ReadWriteMode.READ_WRITE;
 
 	private final Config config;
+
+	private final LazyInit<JdbcWorkers> workers = new LazyInit<>(new Callable<JdbcWorkers>() {
+		@Override
+		public JdbcWorkers call() throws Exception {
+			return new JdbcWorkers(JdbcClient.this);
+		}
+	});
 
 	public JdbcClient(String name) {
 		super(name);
@@ -110,10 +126,18 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 		return this;
 	}
 
-	public synchronized JdbcClient pool(ConnectionPool pool) {
-		if (U.neq(this.pool, pool)) {
-			this.pool = pool;
-			this.usePool = pool != null;
+	/**
+	 * Use dataSource(...) instead.
+	 */
+	@Deprecated
+	public synchronized JdbcClient pool(DataSource pool) {
+		return dataSource(pool);
+	}
+
+	public synchronized JdbcClient dataSource(DataSource dataSource) {
+		if (U.neq(this.dataSource, dataSource)) {
+			this.dataSource = dataSource;
+			this.usePool = dataSource != null;
 			this.initialized = false;
 		}
 		return this;
@@ -189,15 +213,23 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 			validate();
 			registerJDBCDriver();
 
-			String maskedPassword = U.isEmpty(password) ? "<empty>" : "<specified>";
-			Log.info("Initialized JDBC API", "!url", url, "!driver", driver, "!username", username, "!password", maskedPassword);
-
-			if (pool == null) {
-				pool = usePool ? new C3P0ConnectionPool(this) : new NoConnectionPool();
+			if (this.dataSource == null) {
+				this.dataSource = this.usePool ? createPool() : null;
 			}
+
+			String maskedPassword = U.isEmpty(password) ? "<empty>" : "<specified>";
+			Log.info("Initialized JDBC API", "!url", url, "!driver", driver, "!username", username, "!password", maskedPassword, "!dataSource", dataSource);
 
 			initialized = true;
 		}
+	}
+
+	private DataSource createPool() {
+
+		if (MscOpts.hasC3P0()) return C3P0Factory.createDataSourceFor(this);
+		if (MscOpts.hasHikari()) return HikariFactory.createDataSourceFor(this);
+
+		throw U.rte("Cannot create JDBC connection pool, couldn't find Hikari nor C3P0!");
 	}
 
 	private void validate() {
@@ -302,21 +334,29 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 		return 0;
 	}
 
-	public <T> Results<T> query(Class<T> resultType, String sql, Map<String, ?> namedArgs) {
-		return doQuery(resultType, sql, namedArgs, null);
-	}
-
 	public <T> Results<T> query(Class<T> resultType, String sql, Object... args) {
-		return doQuery(resultType, sql, null, args);
+		return doQuery(resultType, null, sql, null, args);
 	}
 
-	private <T> Results<T> doQuery(Class<T> resultType, String sql, Map<String, ?> namedArgs, Object[] args) {
+	public <T> Results<T> query(Class<T> resultType, String sql, Map<String, ?> namedArgs) {
+		return doQuery(resultType, null, sql, namedArgs, null);
+	}
+
+	public <T> Results<T> query(Mapper<ResultSet, T> resultMapper, String sql, Object... args) {
+		return doQuery(null, resultMapper, sql, null, args);
+	}
+
+	public <T> Results<T> query(Mapper<ResultSet, T> resultMapper, String sql, Map<String, ?> namedArgs) {
+		return doQuery(null, resultMapper, sql, namedArgs, null);
+	}
+
+	private <T> Results<T> doQuery(Class<T> resultType, Mapper<ResultSet, T> resultMapper, String sql, Map<String, ?> namedArgs, Object[] args) {
 		sql = toSql(sql);
-		JdbcData<T> data = new JdbcData<>(this, resultType, sql, namedArgs, args);
+		JdbcData<T> data = new JdbcData<>(this, resultType, resultMapper, sql, namedArgs, args);
 		return new ResultsImpl<>(data);
 	}
 
-	<T> List<T> runQuery(Class<T> resultType, String sql, Map<String, ?> namedArgs, Object[] args, long start, long length) {
+	<T> List<T> runQuery(Class<T> resultType, Mapper<ResultSet, T> resultMapper, String sql, Map<String, ?> namedArgs, Object[] args, long start, long length) {
 		ensureIsInitialized();
 
 		U.must(start >= 0);
@@ -335,13 +375,17 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 			stmt = JDBC.prepare(conn, sql, namedArgs, args);
 			rs = stmt.executeQuery();
 
-			if (resultType.equals(Map.class)) {
-				return U.cast(JDBC.rows(rs));
+			if (resultMapper != null) {
+				return JDBC.rows(resultMapper, rs);
 			} else {
-				return JDBC.rows(resultType, rs);
+				if (resultType.equals(Map.class)) {
+					return U.cast(JDBC.rows(rs));
+				} else {
+					return JDBC.rows(resultType, rs);
+				}
 			}
 
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			throw U.rte(e);
 
 		} finally {
@@ -374,33 +418,35 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 
 	private Connection provideConnection() {
 		try {
-			Connection conn;
+			if (dataSource != null) {
 
-			if (username != null) {
-				String pass = U.safe(password);
-				conn = pool.getConnection(url, username, pass);
+				Connection conn = dataSource.getConnection();
+				U.notNull(conn, "JDBC connection");
+				return conn;
 
-				if (conn == null) {
-					conn = DriverManager.getConnection(url, username, pass);
-				}
 			} else {
-				conn = pool.getConnection(url);
-
-				if (conn == null) {
-					conn = DriverManager.getConnection(url);
-				}
+				U.must(!usePool, "Expecting connection pool, but the data source is null!");
+				return getConnectionFromDriver();
 			}
-
-			return conn;
 
 		} catch (SQLException e) {
 			throw U.rte("Cannot create JDBC connection!", e);
 		}
 	}
 
+	private Connection getConnectionFromDriver() throws SQLException {
+		if (username != null) {
+			String pass = U.safe(password);
+			return DriverManager.getConnection(url, username, pass);
+
+		} else {
+			return DriverManager.getConnection(url);
+		}
+	}
+
 	public void release(Connection connection) {
 		try {
-			pool.releaseConnection(connection);
+			connection.close();
 		} catch (SQLException e) {
 			Log.error("Error while releasing a JDBC connection!", e);
 		}
@@ -422,8 +468,16 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 		return url;
 	}
 
-	public ConnectionPool pool() {
-		return pool;
+	/**
+	 * Use dataSource() instead.
+	 */
+	@Deprecated
+	public DataSource pool() {
+		return dataSource();
+	}
+
+	public DataSource dataSource() {
+		return dataSource;
 	}
 
 	public boolean usePool() {
@@ -448,13 +502,38 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 			", driver='" + driver + '\'' +
 			", url='" + url + '\'' +
 			", usePool=" + usePool +
-			", pool=" + pool +
+			", pool=" + dataSource +
 			", mode=" + mode +
 			'}';
 	}
 
-	@Override
-	public String getManageableType() {
-		return "JDBC";
+	public void execute(Operation<Connection> operation) {
+		workers.get().execute(operation);
 	}
+
+	public <T> void execute(final Mapper<ResultSet, T> resultMapper, final Callback<List<T>> callback, final String sql, final Object... args) {
+		execute(new Operation<Connection>() {
+
+			@Override
+			public void execute(Connection conn) throws Exception {
+				List<T> results = U.list();
+
+				try (PreparedStatement stmt = JdbcUtil.prepare(conn, sql, null, args)) {
+
+					ResultSet rs = stmt.executeQuery();
+					while (rs.next()) {
+						results.add(resultMapper.map(rs));
+					}
+
+				} catch (Throwable e) {
+					callback.onDone(null, e);
+					return;
+				}
+
+				callback.onDone(results, null);
+			}
+
+		});
+	}
+
 }

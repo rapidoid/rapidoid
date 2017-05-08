@@ -26,7 +26,9 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.commons.RapidoidInfo;
+import org.rapidoid.config.ConfigHelp;
 import org.rapidoid.deploy.AppDeployer;
+import org.rapidoid.deploy.AppDownloader;
 import org.rapidoid.log.Log;
 import org.rapidoid.performance.BenchmarkCenter;
 import org.rapidoid.setup.App;
@@ -41,14 +43,11 @@ import org.rapidoid.util.MscOpts;
 import java.awt.*;
 import java.io.File;
 import java.net.URI;
-import java.util.Arrays;
 import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
 public class Platform extends RapidoidThing {
-
-	private static AppChangeWatcher appChangeWatcher = new AppChangeWatcher();
 
 	static void start(String[] args, @SuppressWarnings("unused") boolean defaults) {
 
@@ -70,15 +69,10 @@ public class Platform extends RapidoidThing {
 
 		AuthBootstrap.bootstrapAdminCredentials();
 
-		appChangeWatcher.watch("/app", "app");
-
 		openInBrowser();
 	}
 
 	private static void printArgs(String[] args, boolean defaults) {
-		// don't print the args when displaying help
-		if (Arrays.equals(args, new String[]{"--help"})) return;
-
 		if (defaults) {
 			Log.info("No command-line arguments were specified, using the defaults:");
 		} else {
@@ -92,6 +86,7 @@ public class Platform extends RapidoidThing {
 	}
 
 	private static void interceptSpecialCommands(String[] args) {
+		ConfigHelp.processHelp(args);
 
 		String cmd = args[0];
 		String[] cmdArgs = Arr.sub(args, 1, args.length);
@@ -101,12 +96,6 @@ public class Platform extends RapidoidThing {
 				// interpret the "mvn" command
 				int result = MavenUtil.build("/app", "/data/.m2/repository", U.list(cmdArgs));
 				System.exit(result);
-				break;
-
-			case "benchmark":
-				// interpret the "benchmark" command
-				BenchmarkCenter.main(cmdArgs);
-				System.exit(0);
 				break;
 
 			case "password":
@@ -129,9 +118,10 @@ public class Platform extends RapidoidThing {
 		List<String> normalArgs = U.list();
 		List<String> appRefs = U.list();
 
-		separateArgs(args, normalArgs, appRefs);
+		String cmd = separateArgs(args, normalArgs, appRefs);
 
 		PreApp.args(U.arrayOf(String.class, normalArgs));
+
 		App.boot();
 
 		for (String appRef : appRefs) {
@@ -139,17 +129,51 @@ public class Platform extends RapidoidThing {
 			AppDownloader.download(appRef, MscOpts.appsPath());
 			MavenUtil.findAndBuildAndDeploy(MscOpts.appsPath());
 		}
+
+		if (U.notEmpty(cmd)) executeCommand(cmd);
 	}
 
-	private static void separateArgs(String[] args, List<String> normalArgs, List<String> appRefs) {
-		for (String arg : args) {
+	private static void executeCommand(String cmd) {
+		switch (cmd) {
+			case "benchmark":
+				benchmark();
+				break;
+			default:
+				Log.error("Unknown command: " + cmd);
+				System.exit(1);
+		}
+	}
+
+	private static void benchmark() {
+		BenchmarkCenter.run();
+		System.exit(0);
+	}
+
+	private static String separateArgs(String[] args, List<String> normalArgs, List<String> appRefs) {
+		String cmd = null;
+
+		for (int i = 0; i < args.length; i++) {
+			String arg = args[i];
+
 			if (arg.startsWith("@")) {
 				String appRef = arg.substring(1);
 				appRefs.add(appRef);
+
 			} else {
-				normalArgs.add(arg);
+				if (i == 0 && looksLikeCommand(arg)) {
+					cmd = args[0];
+
+				} else {
+					normalArgs.add(arg);
+				}
 			}
 		}
+
+		return cmd;
+	}
+
+	private static boolean looksLikeCommand(String arg) {
+		return arg.matches("[a-z]+");
 	}
 
 	private static void openInBrowser() {

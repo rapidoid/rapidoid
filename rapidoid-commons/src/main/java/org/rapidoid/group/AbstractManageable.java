@@ -86,9 +86,4 @@ public abstract class AbstractManageable extends RapidoidThing implements Manage
 		throw U.rte("Cannot handle action '%s'!", action);
 	}
 
-	@Override
-	public String getManageableType() {
-		return getClass().getSimpleName();
-	}
-
 }

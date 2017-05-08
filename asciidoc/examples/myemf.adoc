@@ -1,0 +1,28 @@
+=== Custom EntityManagerFactory provider[[app-listing]]
+[source,java]
+.Main.java
+----
+package org.rapidoid.docs.myemf;
+
+import org.rapidoid.setup.My;
+
+import javax.persistence.EntityManagerFactory;
+
+public class Main {
+
+	public static void main(String[] args) {
+
+		/* The EntityManagerFactory's should be properly initialized */
+
+		EntityManagerFactory emf1 = null; // FIXME
+		EntityManagerFactory emf2 = null; // FIXME
+
+		My.entityManagerFactoryProvider(req -> {
+			return req.path().startsWith("/db1/") ? emf1 : emf2;
+		});
+
+	}
+
+}
+----
+

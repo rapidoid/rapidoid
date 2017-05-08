@@ -10,7 +10,7 @@
 
 	<groupId>org.rapidoid</groupId>
 	<artifactId>rapidoid</artifactId>
-	<version>5.3.2-SNAPSHOT</version>
+	<version>5.3.5-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Rapidoid</name>
@@ -65,6 +65,7 @@
 		<httpclient.version>4.1</httpclient.version>
 		<httpmime.version>4.5</httpmime.version>
 
+		<hikari.version>2.6.1</hikari.version>
 		<c3p0.version>0.9.5.2</c3p0.version>
 		<hibernate.version>4.3.11.Final</hibernate.version>
 
@@ -72,10 +73,10 @@
 		<validator.version>5.2.4.Final</validator.version>
 		<el.version>2.2.5</el.version>
 
-		<mysql-connector.version>5.1.38</mysql-connector.version>
+		<mysql-connector.version>5.1.41</mysql-connector.version>
 		<h2.version>1.4.187</h2.version>
 		<hsqldb.version>2.3.3</hsqldb.version>
-		<postgresql-version>9.4.1211</postgresql-version>
+		<postgresql.version>9.4.1211</postgresql.version>
 
 		<spring.version>4.2.5.RELEASE</spring.version>
 		<guice.version>4.1.0</guice.version>
@@ -156,8 +157,6 @@
 				<version>2.19.1</version>
 				<configuration>
 					<argLine>-Xms512m -Xmx1024m -Dfile.encoding=${project.build.sourceEncoding}</argLine>
-					<forkCount>1</forkCount>
-					<reuseForks>false</reuseForks>
 				</configuration>
 			</plugin>
 
@@ -195,6 +194,36 @@
 				</configuration>
 			</plugin>
 
+			<plugin>
+				<groupId>org.asciidoctor</groupId>
+				<artifactId>asciidoctor-maven-plugin</artifactId>
+				<version>1.5.3</version>
+				<inherited>false</inherited>
+				<executions>
+					<execution>
+						<id>output-html</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>process-asciidoc</goal>
+						</goals>
+						<configuration>
+							<sourceDirectory>asciidoc</sourceDirectory>
+							<headerFooter>true</headerFooter>
+							<imagesDir>img</imagesDir>
+							<sourceHighlighter>coderay</sourceHighlighter>
+							<backend>html5</backend>
+							<sourceDocumentName>index.adoc</sourceDocumentName>
+							<attributes>
+								<toc>left</toc>
+								<linkcss>false</linkcss>
+								<project-version>${project.version}</project-version>
+								<sectnums>true</sectnums>
+							</attributes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 
 		<pluginManagement>
@@ -224,59 +253,6 @@
 					</executions>
 				</plugin>
 
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
-					only. It has no influence on the Maven build itself. -->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
-											org.codehaus.mojo
-										</groupId>
-										<artifactId>
-											license-maven-plugin
-										</artifactId>
-										<versionRange>
-											[1.6,)
-										</versionRange>
-										<goals>
-											<goal>
-												update-file-header
-											</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
-											org.apache.maven.plugins
-										</groupId>
-										<artifactId>
-											maven-enforcer-plugin
-										</artifactId>
-										<versionRange>
-											[1.0,)
-										</versionRange>
-										<goals>
-											<goal>enforce</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>

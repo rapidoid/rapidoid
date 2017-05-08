@@ -22,6 +22,7 @@ package org.rapidoid.cache;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cache.impl.CacheStats;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -52,9 +53,16 @@ public interface Cache<K, V> {
 	 */
 	void clear();
 
+	int size();
+
 	/**
 	 * Notifies the cache that it's being bypassed due to any reason (useful for stats).
 	 */
 	void bypass();
+
+	/**
+	 * Retrieves the cache statistics.
+	 */
+	CacheStats stats();
 
 }

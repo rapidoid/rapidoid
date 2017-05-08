@@ -276,12 +276,50 @@ public class Str extends RapidoidThing {
 		return toBase64(data).replace('+', plusReplacement).replace('/', slashReplacement);
 	}
 
+	public static String toWebSafeBase64(byte[] data) {
+		return toBase64(data, '-', '_');
+	}
+
+	public static String toWebSafeBinary(byte[] data) {
+		String s = toWebSafeBase64(data);
+		StringBuilder sb = new StringBuilder();
+
+		int k = 7;
+		int i = 0;
+		for (; i < s.length(); i += k) {
+			if (i > 0) sb.append(":");
+			sb.append(s.substring(i, Math.min(i + k, s.length())));
+		}
+
+		return sb.toString();
+	}
+
+	public static boolean isWebSafeBinary(String s) {
+		boolean foundMarks = false;
+		int k = 7;
+
+		for (int i = k; i < s.length(); i += k + 1) {
+			if (s.charAt(i) != ':') return false;
+			foundMarks = true;
+		}
+
+		return foundMarks;
+	}
+
+	public static byte[] fromWebSafeBinary(String binary) {
+		return fromWebSafeBase64(binary.replaceAll(":", ""));
+	}
+
 	public static byte[] fromBase64(String base64) {
 		return DatatypeConverter.parseBase64Binary(base64);
 	}
 
 	public static byte[] fromBase64(String base64, char plusReplacement, char slashReplacement) {
 		return fromBase64(base64.replace(plusReplacement, '+').replace(slashReplacement, '/'));
+	}
+
+	public static byte[] fromWebSafeBase64(String base64) {
+		return fromBase64(base64, '-', '_');
 	}
 
 	public static String wildcardToRegex(String pattern) {

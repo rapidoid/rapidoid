@@ -39,5 +39,4 @@ public interface Manageable {
 
 	Object runManageableAction(String action);
 
-	String getManageableType();
 }

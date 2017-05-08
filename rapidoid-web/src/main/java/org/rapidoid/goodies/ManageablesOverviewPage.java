@@ -54,7 +54,7 @@ public class ManageablesOverviewPage extends GUI implements Callable<Object> {
 			}
 		}
 
-		info.add(autoRefresh(1000));
+		info.add(autoRefresh(2000));
 		return multi(info);
 	}
 
@@ -62,8 +62,8 @@ public class ManageablesOverviewPage extends GUI implements Callable<Object> {
 		columns.add("(Actions)");
 		final String groupName = group.name();
 
-		String type = U.first(items).getManageableType();
-		info.add(breadcrumb(type, groupName));
+		final String kind = group.kind();
+		info.add(breadcrumb(kind, groupName));
 
 		Grid grid = grid(items)
 			.columns(columns)
@@ -71,7 +71,7 @@ public class ManageablesOverviewPage extends GUI implements Callable<Object> {
 			.toUri(new Mapper<Manageable, String>() {
 				@Override
 				public String map(Manageable handle) throws Exception {
-					return Msc.uri("_manageables", handle.getClass().getSimpleName(), Msc.urlEncode(handle.id()));
+					return Msc.specialUri("manageables", kind, Msc.urlEncode(handle.id()));
 				}
 			})
 			.pageSize(20);

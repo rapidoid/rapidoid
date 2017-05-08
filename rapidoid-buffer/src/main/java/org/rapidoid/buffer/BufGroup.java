@@ -6,6 +6,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.pool.Pool;
 import org.rapidoid.pool.Pools;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.nio.ByteBuffer;
 import java.util.concurrent.Callable;
@@ -36,19 +37,18 @@ public class BufGroup extends RapidoidThing {
 
 	private final int factor;
 
-	private final int capacity;
-
 	private final Pool<ByteBuffer> pool;
 
 	private final boolean synchronizedBuffers;
 
 	public BufGroup(final int capacity, boolean synchronizedBuffers) {
 		this.synchronizedBuffers = synchronizedBuffers;
-		this.capacity = capacity;
-		this.factor = calcFactor(capacity);
 
 		U.must(capacity >= 2, "The capacity must >= 2!");
 		U.must((capacity & (capacity - 1)) == 0, "The capacity must be a power of 2!");
+
+		this.factor = Msc.log2(capacity);
+
 		U.must(capacity == Math.pow(2, factor));
 
 		pool = Pools.create("buffers", new Callable<ByteBuffer>() {
@@ -61,10 +61,6 @@ public class BufGroup extends RapidoidThing {
 
 	public BufGroup(int capacity) {
 		this(capacity, true);
-	}
-
-	static int calcFactor(int atomSizeKB) {
-		return 32 - Integer.numberOfLeadingZeros(atomSizeKB - 1);
 	}
 
 	public Buf newBuf(String name) {
