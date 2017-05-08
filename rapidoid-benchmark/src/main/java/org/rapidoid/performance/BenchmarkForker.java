@@ -23,7 +23,10 @@ package org.rapidoid.performance;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
+import org.rapidoid.env.Env;
 import org.rapidoid.io.IO;
+import org.rapidoid.log.Log;
 import org.rapidoid.process.Proc;
 import org.rapidoid.process.ProcessHandle;
 import org.rapidoid.scan.ClasspathUtil;
@@ -31,6 +34,7 @@ import org.rapidoid.u.U;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -40,15 +44,17 @@ public class BenchmarkForker extends RapidoidThing {
 	private final String plan;
 	private final String target;
 
-	public BenchmarkForker(String[] args) {
+	public BenchmarkForker() {
 		try {
 			this.resultsFile = File.createTempFile("benchmark", ".txt").getAbsolutePath();
 		} catch (IOException e) {
 			throw new RuntimeException("Couldn't create temporary file!", e);
 		}
 
-		this.plan = args.length > 0 ? args[0] : "2x3";
-		this.target = args.length > 1 ? args[1] : null;
+		this.plan = Conf.BENCHMARK.entry("plan").str().getOrNull();
+		this.target = Conf.BENCHMARK.entry("target").str().getOrNull();
+
+		Log.info("!Starting benchmark", "!configuration", Conf.BENCHMARK.toMap());
 	}
 
 	public void clear() {
@@ -61,24 +67,33 @@ public class BenchmarkForker extends RapidoidThing {
 		String runner = BenchmarkRunner.class.getCanonicalName();
 		String main = mainClass.getCanonicalName();
 
+		List<String> cmdWithArgs = U.list("java", "-Xms1g", "-Xmx1g", "-Dfile.encoding=UTF-8", "-classpath", classpath, runner);
+
+		cmdWithArgs.add("benchmark.target=" + uri);
+		cmdWithArgs.add("benchmark.main=" + main);
+		cmdWithArgs.add("benchmark.file=" + resultsFile);
+
+		cmdWithArgs.addAll(Env.args());
+
 		ProcessHandle proc = Proc.printingOutput(true)
 			.linePrefix("[BENCHMARK] ")
-			.run("java", "-Dfile.encoding=UTF-8", "-classpath", classpath, runner, main, uri, resultsFile, plan)
+			.run(U.arrayOf(cmdWithArgs))
 			.waitFor();
 
 		return proc;
 	}
 
-	public void printResults() {
+	void printResults() {
 		U.print("");
 		U.print(IO.load(resultsFile));
 	}
 
-	public boolean hasTarget() {
+	boolean hasTarget() {
 		return target != null;
 	}
 
 	public void benchmark() {
-		BenchmarkRunner.benchmark(target, target, resultsFile, plan);
+		BenchmarkRunner.benchmark(target, plan, resultsFile, target);
 	}
+
 }

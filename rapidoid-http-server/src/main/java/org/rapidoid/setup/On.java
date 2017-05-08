@@ -96,12 +96,12 @@ public class On extends RapidoidThing {
 		return setup().req(handler);
 	}
 
-	public static synchronized void port(int port) {
-		Conf.ON.set("port", port);
+	public static synchronized ServerSetup port(int port) {
+		return new ServerSetup(Conf.ON).port(port);
 	}
 
-	public static synchronized void address(String address) {
-		Conf.ON.set("address", address);
+	public static synchronized ServerSetup address(String address) {
+		return new ServerSetup(Conf.ON).address(address);
 	}
 
 	public static synchronized OnError error(Class<? extends Throwable> error) {

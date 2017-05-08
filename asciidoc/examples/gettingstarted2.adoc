@@ -1,0 +1,137 @@
+=== Configuring Rapidoid[[app-listing]]
+[source,java]
+.Book.java
+----
+package org.rapidoid.docs.gettingstarted2;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
+
+@Entity
+public class Book {
+
+	@Id
+	@GeneratedValue
+	public Long id;
+
+	@NotNull
+	public String title;
+
+	public int year;
+
+}
+----
+
+[[app-listing]]
+[source,java]
+.Main.java
+----
+package org.rapidoid.docs.gettingstarted2;
+
+import org.rapidoid.annotation.Valid;
+import org.rapidoid.jpa.JPA;
+import org.rapidoid.setup.App;
+import org.rapidoid.setup.On;
+
+public class Main {
+
+	public static void main(String[] args) {
+		App.bootstrap(args).jpa(); // bootstrap JPA
+
+		On.get("/books").json(() -> JPA.of(Book.class).all()); // get all books
+
+		On.post("/books").json((@Valid Book b) -> JPA.save(b)); // insert new book if valid
+	}
+
+}
+----
+
+[[app-listing]]
+[source,yml]
+.config-default.yml
+----
+jdbc:
+  driver: org.hsqldb.jdbc.JDBCDriver
+  url: jdbc:hsqldb:mem:public
+  username: sa
+  password: ''
+
+hibernate:
+  dialect: org.hibernate.dialect.HSQLDialect
+  connection:
+    driver_class: org.hsqldb.jdbc.JDBCDriver
+    url: jdbc:hsqldb:mem:public
+    username: sa
+    password: ''
+----
+
+[[app-listing]]
+[source,yml]
+.config-dev.yml
+----
+hibernate:
+  format_sql: false
+  show_sql: true
+
+c3p0:
+  debug: true
+
+hibernate:
+  hbm2ddl:
+    auto: update
+----
+
+[[app-listing]]
+[source,yml]
+.config-mysql.yml
+----
+jdbc:
+  driver: com.mysql.jdbc.Driver
+  url: jdbc:mysql://localhost:3306/rapidoid
+  username: root
+  password: root
+
+hibernate:
+  dialect: org.hibernate.dialect.MySQL5Dialect
+  connection:
+    driver_class: com.mysql.jdbc.Driver
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:3306/rapidoid
+----
+
+[[app-listing]]
+[source,yml]
+.config.yml
+----
+on:
+  port: 8888
+  address: 0.0.0.0
+
+admin:
+  port: same
+  address: 0.0.0.0
+
+app:
+  home: /
+  contextPath: /
+
+gui:
+  domain: ''
+  brand: App
+  search: false
+  navbar: true
+  fluid: false
+  cdn: auto # in DEV mode is false, in PRODUCTION is true
+  menu: {}
+
+users:
+  root:
+    roles:
+      - administrator
+      - owner
+    password: root # PLEASE change this
+----
+

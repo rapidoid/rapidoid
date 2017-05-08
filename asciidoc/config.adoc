@@ -1,0 +1,30 @@
+### Configuration
+
+#### The built-in configuration
+
+Rapidoid has built-in default configuration which provides sensible defaults for many components of the framework.
+
+[source,yml]
+.built-in-config.yml
+----
+include::../rapidoid-commons/src/main/resources/built-in-config.yml[]
+----
+
+#### Custom configuration
+
+Custom configuration can be specified through `config.yml` (or `config.yaml`) configuration files.
+
+#### Profiles
+
+Custom, profile-specific configuration can be specified through `config-&lt;profile-name-here&gt;.yml` or `config-&lt;profile-name-here&gt;.yaml` configuration files.
+Examples:
+
+- `config-mysql.yml`
+- `config-dev.yaml`
+
+#### External configuration files
+
+The configuration files will tipically be classpath resources, but they can reside in a custom-configured external folder, as well.
+
+Rapidoid can also be configured through command line args or system/environment properties.
+The custom configuration overrides the built-in default configuration.

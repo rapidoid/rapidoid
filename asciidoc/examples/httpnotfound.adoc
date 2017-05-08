@@ -1,0 +1,22 @@
+=== Returning a "Not Found" result[[app-listing]]
+[source,java]
+.Main.java
+----
+package org.rapidoid.docs.httpnotfound;
+
+import org.rapidoid.http.Req;
+import org.rapidoid.setup.On;
+
+public class Main {
+
+	public static void main(String[] args) {
+		/* Returning a [null] means [NOT FOUND] */
+
+		On.get("/").json((Req req) -> {
+			return req.params().size() == 1 ? req.params() : null;
+		});
+	}
+
+}
+----
+

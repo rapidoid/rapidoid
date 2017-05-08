@@ -59,7 +59,7 @@ public class L1CacheSegment<K, V> extends RapidoidThing {
 		for (int i = 0; i < keys.length; i++) {
 			if (U.eq(keys[i], key)) {
 				ConcurrentCacheAtom<K, V> atom = atoms[i];
-				if (U.eq(atom.key, key)) {
+				if (atom != null && U.eq(atom.key, key)) {
 					return atom;
 				}
 			}
@@ -104,4 +104,11 @@ public class L1CacheSegment<K, V> extends RapidoidThing {
 		}
 	}
 
+	public void clear() {
+		for (int i = 0; i < keys.length; i++) {
+			keys[i] = null;
+			atoms[i] = null;
+		}
+		this.latest = null;
+	}
 }

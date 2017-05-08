@@ -34,12 +34,7 @@ import org.rapidoid.setup.On;
 public class Main {
 
 	public static void main(String[] args) {
-
 		App.run(args);
-
-		Conf.C3P0.set("maxPoolSize", 256);
-		Conf.C3P0.set("maxIdleTimeExcessConnections", 256);
-		Conf.C3P0.set("maxStatementsPerConnection", 3);
 
 		Conf.HTTP.set("maxPipeline", 128);
 		Conf.HTTP.set("timeout", 0);
@@ -47,11 +42,8 @@ public class Main {
 
 		On.port(8080);
 
-		if (Env.hasAnyProfile("mysql", "postgres")) {
-			setupDbHandlers();
-		} else {
-			setupSimpleHandlers();
-		}
+		setupDbHandlers();
+		setupSimpleHandlers();
 	}
 
 	private static void setupSimpleHandlers() {
@@ -63,21 +55,22 @@ public class Main {
 		String dbHost = Conf.ROOT.entry("dbhost").or("localhost");
 		Log.info("Database hostname is: " + dbHost);
 
-		String dbUrl;
+		JdbcClient jdbc = JDBC.api();
 
 		if (Env.hasProfile("mysql")) {
-			dbUrl = "jdbc:mysql://" + dbHost + ":3306/hello_world?" + Helper.MYSQL_CONFIG;
+			jdbc.url("jdbc:mysql://" + dbHost + ":3306/hello_world?" + Helper.MYSQL_CONFIG);
+
+		} else if (Env.hasProfile("postgres")) {
+			jdbc.url("jdbc:postgresql://" + dbHost + ":5432/hello_world?" + Helper.POSTGRES_CONFIG);
+
 		} else {
-			dbUrl = "jdbc:postgresql://" + dbHost + ":5432/hello_world?" + Helper.POSTGRES_CONFIG;
+			jdbc.hsql("public");
+			jdbc.execute("create table fortune (id int, message varchar(100))");
+			jdbc.execute("insert into fortune (id, message) values (10, 'Hello')");
 		}
 
-		JdbcClient mysqlJdbc = JDBC.api("benchmark")
-			.url(dbUrl)
-			.username("benchmarkdbuser")
-			.password("benchmarkdbpass")
-			.pooled();
-
-		On.get("/fortunes").html(new FortunesHandler(mysqlJdbc));
+		On.get("/fortunes").managed(false).html(new FortunesHandler(jdbc));
+		On.get("/fortunes/multi").html(new FortunesMultiHandler(jdbc));
 	}
 
 }

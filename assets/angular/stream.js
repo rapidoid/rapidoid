@@ -2,28 +2,30 @@ Rapidoid.plugin(function(app) {
 
     app.factory('StreamData', [ '$http', function($http) {
 
-        var StreamData = function(dataUrl) {
+        var StreamData = function() {
             this.items = [];
             this.busy = false;
             this.page = 1;
-            this.lastId = '';
-            this.dataUrl = dataUrl;
+            this.after = '';
+            this.url = '';
             this.cols = 1;
             this.reachedEnd = false;
         };
 
         StreamData.prototype.nextPage = function() {
-            if (this.busy || this.reachedEnd)
-                return;
+
+            if (this.busy || this.reachedEnd) return;
             this.busy = true;
 
-            var url = this.dataUrl.replace('{{page}}', '' + (this.page || 1)).replace('{{after}}', '' + (this.lastId || ''));
+            var url = this.url;
+            url = url.replace('{{page}}', '' + (this.page || 1));
+            url = url.replace('{{after}}', '' + (this.after || ''));
 
             $http.get(url).success(function(data) {
                 var items = data;
                 for (var i = 0; i < items.length; i++) {
                     this.items.push(items[i]);
-                    this.lastId = items[i].id;
+                    this.after = items[i].id;
                 }
                 this.page++;
                 this.busy = false;
@@ -44,10 +46,14 @@ Rapidoid.plugin(function(app) {
 
     app.controller('StreamController', [ '$scope', '$http', '$window', '$attrs', 'StreamData',
             function($scope, $http, $window, $attrs, StreamData) {
-                var dataUrl = $attrs.url;
-                $scope.stream = new StreamData(dataUrl);
+                $scope.stream = new StreamData();
+
+                $scope.stream.url = $attrs.url;
+                $scope.stream.cols = $attrs.cols;
+                $scope.stream.page = $attrs.page;
+                $scope.stream.after = $attrs.after;
+
                 $scope.items = $scope.stream.items;
-                $scope.cols = 1;
             } ]);
 
     app.controller('StreamItemController', [ '$scope', '$http', '$window', '$attrs',

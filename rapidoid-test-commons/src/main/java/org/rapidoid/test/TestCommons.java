@@ -32,8 +32,11 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Queue;
 import java.util.Random;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -42,11 +45,11 @@ import java.util.concurrent.CountDownLatch;
  */
 public abstract class TestCommons {
 
-	protected static final boolean ADJUST_TESTS = "true".equalsIgnoreCase(System.getProperty("adjustTests"));
+	private static final boolean ADJUST_TESTS = "true".equalsIgnoreCase(System.getProperty("adjustTests"));
 
 	protected static final Random RND = new Random();
 
-	public static final String TEST_RESULTS_FOLDER = "test-results";
+	private static final String TEST_PROJECTIONS_FOLDER = "test-results";
 
 	private volatile boolean hasError = false;
 
@@ -56,6 +59,8 @@ public abstract class TestCommons {
 
 	private static String OS = System.getProperty("os.name").toLowerCase();
 
+	private static final Queue<Object> valuesToShow = new ConcurrentLinkedQueue<>();
+
 	@BeforeClass
 	public static void beforeTests() {
 		initialized = false;
@@ -64,7 +69,7 @@ public abstract class TestCommons {
 	@Before
 	public final void initTest() {
 		System.out.println("--------------------------------------------------------------------------------");
-		String info = ADJUST_TESTS ? " [ADJUST]" : "";
+		String info = getTestInfo();
 		System.out.println(" @" + ManagementFactory.getRuntimeMXBean().getName() + " TEST " + getClass().getCanonicalName() + info);
 		System.out.println("--------------------------------------------------------------------------------");
 
@@ -73,7 +78,7 @@ public abstract class TestCommons {
 		callIfExists("org.rapidoid.util.Msc", "reset");
 
 		String s = File.separator;
-		String resultsDir = "src" + s + "test" + s + "resources" + s + TEST_RESULTS_FOLDER + s + getTestName();
+		String resultsDir = "src" + s + "test" + s + "resources" + s + TEST_PROJECTIONS_FOLDER + s + getTestName();
 
 		if (!initialized && ADJUST_TESTS) {
 			File testDir = new File(resultsDir);
@@ -84,6 +89,18 @@ public abstract class TestCommons {
 
 			initialized = true;
 		}
+
+		__clear();
+	}
+
+	private String getTestInfo() {
+		String info = ADJUST_TESTS ? " [ADJUST] " : "";
+
+		if (System.getenv("HEAVY") != null || System.getProperty("HEAVY") != null) {
+			info += "[HEAVY]";
+		}
+
+		return info;
 	}
 
 	@After
@@ -542,6 +559,15 @@ public abstract class TestCommons {
 		return getClass().getSimpleName();
 	}
 
+	protected String getTestPackageName() {
+		return getClass().getPackage().getName();
+	}
+
+	protected String getTestNamespace() {
+		Doc doc = getTestAnnotation(Doc.class);
+		return (doc != null) ? getTestPackageName() : getTestName();
+	}
+
 	protected String getTestMethodName() {
 		StackTraceElement[] trace = Thread.currentThread().getStackTrace();
 
@@ -640,7 +666,7 @@ public abstract class TestCommons {
 
 	protected void verifyCase(String info, String actual, String testCaseName) {
 		String s = File.separator;
-		String resname = TEST_RESULTS_FOLDER + s + getTestName() + s + getTestMethodName() + s + testCaseName;
+		String resname = TEST_PROJECTIONS_FOLDER + s + getTestName() + s + getTestMethodName() + s + testCaseName;
 		String filename = "src" + s + "test" + s + "resources" + s + resname;
 
 		if (ADJUST_TESTS) {
@@ -676,6 +702,25 @@ public abstract class TestCommons {
 
 	protected String[] path() {
 		return new String[]{getClass().getPackage().getName()};
+	}
+
+	protected static <T> T __(T value) {
+		valuesToShow.add(value);
+		return value;
+	}
+
+	@SuppressWarnings("unchecked")
+	protected static <K, V> Map<K, V> __(Map<K, V> value) {
+		return (Map<K, V>) __((Object) value);
+	}
+
+	protected static Object __get() {
+		return valuesToShow.poll();
+	}
+
+	private static void __clear() {
+		while (__get() != null) {
+		}
 	}
 
 }

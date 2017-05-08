@@ -27,6 +27,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cache.impl.CacheStats;
 import org.rapidoid.cache.impl.ConcurrentCacheAtomWithStats;
 import org.rapidoid.lambda.Mapper;
+import org.rapidoid.u.U;
 import org.rapidoid.util.LazyInit;
 
 import java.util.concurrent.Callable;
@@ -65,6 +66,8 @@ public class Caching extends RapidoidThing {
 	}
 
 	public static void shutdown() {
-		scheduler().shutdownNow();
+		ScheduledThreadPoolExecutor scheduler = scheduler();
+		scheduler.shutdownNow();
+		while (!scheduler.isTerminated()) U.sleep(1);
 	}
 }

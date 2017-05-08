@@ -40,8 +40,8 @@ public class JDBCPoolC3P0Test extends IsolatedIntegrationTest {
 
 		JDBC.h2("test1");
 
-		C3P0ConnectionPool pool = (C3P0ConnectionPool) JDBC.api().init().pool();
-		ComboPooledDataSource c3p0 = pool.pool();
+		JdbcClient jdbc = JDBC.api().init();
+		ComboPooledDataSource c3p0 = (ComboPooledDataSource) jdbc.dataSource();
 
 		// validate default config
 		eq(c3p0.getMinPoolSize(), 5);
@@ -73,8 +73,7 @@ public class JDBCPoolC3P0Test extends IsolatedIntegrationTest {
 		JdbcClient jdbc = JDBC.api();
 		eq(jdbc.driver(), "org.h2.Driver");
 
-		C3P0ConnectionPool pool = (C3P0ConnectionPool) JDBC.api().init().pool();
-		ComboPooledDataSource c3p0 = pool.pool();
+		ComboPooledDataSource c3p0 = (ComboPooledDataSource) jdbc.init().dataSource();
 
 		eq(c3p0.getMinPoolSize(), 5);
 		eq(c3p0.getMaxPoolSize(), 123);

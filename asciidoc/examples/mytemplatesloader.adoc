@@ -1,0 +1,28 @@
+=== Custom template loader[[app-listing]]
+[source,java]
+.Main.java
+----
+package org.rapidoid.docs.mytemplatesloader;
+
+import org.rapidoid.setup.My;
+import org.rapidoid.setup.On;
+
+public class Main {
+
+	public static void main(String[] args) {
+
+		/* Dummy template loader - constructs templates on-the-fly */
+
+		My.templateLoader(filename -> {
+			String tmpl = "In " + filename + ": x = <b>${x}</b>";
+			return tmpl.getBytes();
+		});
+
+		// The URL parameters will be the MVC model
+
+		On.get("/showx").mvc((req) -> req.params());
+	}
+
+}
+----
+

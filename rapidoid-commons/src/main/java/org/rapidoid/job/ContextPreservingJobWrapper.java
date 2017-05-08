@@ -9,6 +9,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
 import java.util.concurrent.CancellationException;
+import java.util.concurrent.RejectedExecutionException;
 
 /*
  * #%L
@@ -75,6 +76,10 @@ public class ContextPreservingJobWrapper extends RapidoidThing implements Runnab
 
 			} catch (CancellationException e) {
 				Log.warn("Job execution was canceled!");
+				return;
+
+			} catch (RejectedExecutionException e) {
+				Log.warn("Job execution was rejected!");
 				return;
 
 			} catch (Throwable e) {

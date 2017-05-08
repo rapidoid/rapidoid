@@ -46,7 +46,7 @@ public class Tokens extends RapidoidThing {
 		if (U.notEmpty(token)) {
 			byte[] tokenBytes = serializeToken(token);
 			byte[] tokenEncrypted = Crypto.encrypt(tokenBytes);
-			return Str.toBase64(tokenEncrypted, '$', '_');
+			return Str.toWebSafeBase64(tokenEncrypted);
 
 		} else {
 			return "";
@@ -70,7 +70,7 @@ public class Tokens extends RapidoidThing {
 	@SuppressWarnings("unchecked")
 	public static Map<String, Serializable> deserialize(String token) {
 		if (!U.isEmpty(token)) {
-			byte[] decoded = Str.fromBase64(token, '$', '_');
+			byte[] decoded = Str.fromWebSafeBase64(token);
 			byte[] tokenDecrypted = Crypto.decrypt(decoded);
 			return tokenDecrypted != null ? (Map<String, Serializable>) Serialize.deserialize(tokenDecrypted) : null;
 		} else {

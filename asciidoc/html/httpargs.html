@@ -1,0 +1,75 @@
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Desc</th>
+          <th>Default value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>config</td>
+          <td>configuration filename prefix</td>
+          <td>config</td>
+        </tr>
+        <tr>
+          <td>dev</td>
+          <td>run in DEV mode</td>
+          <td>auto-detected</td>
+        </tr>
+        <tr>
+          <td>production</td>
+          <td>run in PRODUCTION mode</td>
+          <td>auto-detected</td>
+        </tr>
+        <tr>
+          <td>test</td>
+          <td>run in TEST mode</td>
+          <td>auto-detected</td>
+        </tr>
+        <tr>
+          <td>secret=&lt;SECRET&gt;</td>
+          <td>configure secret key for cryptography</td>
+          <td>random</td>
+        </tr>
+        <tr>
+          <td>profiles=&lt;P1,P2...&gt;</td>
+          <td>comma-separated list of application profiles (e.g. mysql,prod)</td>
+          <td>the 'default' profile</td>
+        </tr>
+        <tr>
+          <td>on.port=&lt;P&gt;</td>
+          <td>the default App server will listen at port P</td>
+          <td>8888</td>
+        </tr>
+        <tr>
+          <td>on.address=&lt;ADDR&gt;</td>
+          <td>the default App server will listen at address ADDR</td>
+          <td>0.0.0.0</td>
+        </tr>
+        <tr>
+          <td>admin.port=&lt;P&gt;</td>
+          <td>the Admin server will listen at port P</td>
+          <td>same as on.port</td>
+        </tr>
+        <tr>
+          <td>admin.address=&lt;ADDR&gt;</td>
+          <td>the Admin server will listen at address ADDR</td>
+          <td>on.address</td>
+        </tr>
+        <tr>
+          <td>app.services=&lt;S1,S2...&gt;</td>
+          <td>comma-separated list of services to bootstrap on the App server</td>
+          <td>none</td>
+        </tr>
+        <tr>
+          <td>admin.services=&lt;S1,S2...&gt;</td>
+          <td>comma-separated list of services to bootstrap on the Admin server</td>
+          <td>none</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

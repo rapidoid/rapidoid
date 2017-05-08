@@ -50,6 +50,7 @@ public abstract class RapidoidIntegrationTest extends RapidoidTest {
 		isTrue(Env.test());
 
 		before(this);
+		start(this);
 	}
 
 	@After
@@ -70,7 +71,9 @@ public abstract class RapidoidIntegrationTest extends RapidoidTest {
 		}
 
 		Log.debug("All modules are initialized");
+	}
 
+	public static void start(Object test) {
 		runMainClass(test);
 
 		for (RapidoidModule mod : RapidoidModules.getAllAvailable()) {

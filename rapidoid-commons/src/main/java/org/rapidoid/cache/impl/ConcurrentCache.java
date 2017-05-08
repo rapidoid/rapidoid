@@ -67,17 +67,16 @@ public class ConcurrentCache<K, V> extends AbstractMapImpl<K, ConcurrentCacheAto
 	public static <K, V> ConcurrentCache<K, V> create(String name, int capacity, Mapper<K, V> loader, long ttlInMs,
 	                                                  ScheduledThreadPoolExecutor scheduler, boolean statistics, boolean manageable) {
 
-		if (scheduler == null) {
-			scheduler = Caching.scheduler();
-		}
+		boolean unbounded = capacity == 0;
+		if (unbounded) capacity = 65536; // initial capacity
 
-		return new ConcurrentCache<>(name, capacity, loader, ttlInMs, scheduler, statistics, manageable);
+		return new ConcurrentCache<>(name, capacity, loader, ttlInMs, scheduler, statistics, manageable, unbounded);
 	}
 
-	public ConcurrentCache(String name, int capacity, Mapper<K, V> loader, long ttlInMs,
-	                       ScheduledThreadPoolExecutor scheduler, boolean statistics, boolean manageable) {
+	private ConcurrentCache(String name, int capacity, Mapper<K, V> loader, long ttlInMs,
+	                        ScheduledThreadPoolExecutor scheduler, boolean statistics, boolean manageable, boolean unbounded) {
 
-		super(new ConcurrentCacheTable<K, V>(capacity, DESIRED_BUCKET_SIZE));
+		super(new SimpleCacheTable<K, V>(capacity, DESIRED_BUCKET_SIZE, unbounded));
 
 		for (int i = 0; i < l1Cache.length; i++) {
 			l1Cache[i] = new L1CacheSegment<>(L1_SEGMENT_SIZE);
@@ -99,6 +98,11 @@ public class ConcurrentCache<K, V> extends AbstractMapImpl<K, ConcurrentCacheAto
 
 	private void scheduleCrawl(long ttlInMs, ScheduledThreadPoolExecutor scheduler) {
 		if (ttlInMs > 0) {
+
+			if (scheduler == null) {
+				scheduler = Caching.scheduler();
+			}
+
 			scheduler.scheduleWithFixedDelay(new Runnable() {
 				@Override
 				public void run() {
@@ -312,6 +316,15 @@ public class ConcurrentCache<K, V> extends AbstractMapImpl<K, ConcurrentCacheAto
 	@Override
 	public void bypass() {
 		stats.bypassed.incrementAndGet();
+	}
+
+	@Override
+	public synchronized void clear() {
+		super.clear();
+
+		for (L1CacheSegment<K, V> l1 : l1Cache) {
+			l1.clear();
+		}
 	}
 
 }

@@ -59,7 +59,7 @@ public abstract class HttpTestCommons extends TestCommons {
 		System.out.println("--- STARTING SERVER ---");
 
 		JPAUtil.reset();
-		Conf.ROOT.setPath(getTestName());
+		Conf.ROOT.setPath(getTestNamespace());
 		IoC.reset();
 
 		App.resetGlobalState();

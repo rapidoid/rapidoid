@@ -41,4 +41,6 @@ public interface Results<T> extends Iterable<T> {
 
 	long count();
 
+	boolean isSingle();
+
 }

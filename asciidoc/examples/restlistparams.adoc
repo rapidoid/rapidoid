@@ -1,0 +1,39 @@
+=== URL Parameters as List[[app-listing]]
+[source,java]
+.Main.java
+----
+package org.rapidoid.docs.restlistparams;
+
+import org.rapidoid.setup.App;
+
+public class Main {
+
+	public static void main(String[] args) {
+		App.bootstrap(args);
+	}
+
+}
+----
+
+[[app-listing]]
+[source,java]
+.ParamsAsList.java
+----
+package org.rapidoid.docs.restlistparams;
+
+import org.rapidoid.annotation.Controller;
+import org.rapidoid.annotation.POST;
+
+import java.util.List;
+
+@Controller
+public class ParamsAsList {
+
+	@POST
+	public List<String> echo(List<String> params) {
+		return params;
+	}
+
+}
+----
+

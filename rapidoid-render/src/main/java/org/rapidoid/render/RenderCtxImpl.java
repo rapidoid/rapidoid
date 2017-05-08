@@ -8,10 +8,10 @@ import org.rapidoid.commons.Str;
 import org.rapidoid.render.retriever.GenericValueRetriever;
 import org.rapidoid.render.retriever.ValueRetriever;
 import org.rapidoid.u.U;
-import org.rapidoid.util.StreamUtils;
+import org.rapidoid.writable.WritableUtils;
+import org.rapidoid.writable.Writable;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -43,30 +43,37 @@ public class RenderCtxImpl extends RapidoidThing implements RenderCtx {
 
 	private final List<Object> model = U.list();
 
-	private volatile OutputStream out;
+	private volatile Writable out;
 	private volatile String ext;
 	private volatile TemplateFactory factory;
 
+	private volatile boolean busy;
+
 	@Override
 	public void printAscii(String s) throws IOException {
-		StreamUtils.writeAscii(out, s);
+		WritableUtils.writeAscii(out, s);
+	}
+
+	@Override
+	public void printAscii(byte[] bytes) throws IOException {
+		WritableUtils.writeAscii(out, bytes);
 	}
 
 	@Override
 	public void printUTF8(String s) throws IOException {
-		StreamUtils.writeUTF8(out, s);
+		WritableUtils.writeUTF8(out, s);
 	}
 
 	@Override
 	public void printValue(Object value, boolean escape) throws IOException {
 		if (!escape) {
-			printUTF8(U.str(value));
+			printUTF8(str(value));
 			return;
 		}
 
 		if (value instanceof String) {
 			String s = (String) value;
-			StreamUtils.writeUTF8HtmlEscaped(out, s);
+			WritableUtils.writeUTF8HtmlEscaped(out, s);
 			return;
 		}
 
@@ -74,7 +81,7 @@ public class RenderCtxImpl extends RapidoidThing implements RenderCtx {
 
 			if (value instanceof Integer || value instanceof Long || value instanceof Short || value instanceof Byte) {
 				long n = ((Number) value).longValue();
-				StreamUtils.putNumAsText(out, n);
+				WritableUtils.putNumAsText(out, n);
 				return;
 			}
 
@@ -87,7 +94,15 @@ public class RenderCtxImpl extends RapidoidThing implements RenderCtx {
 			return;
 		}
 
-		StreamUtils.writeUTF8HtmlEscaped(out, U.str(value));
+		WritableUtils.writeUTF8HtmlEscaped(out, str(value));
+	}
+
+	private String str(Object value) {
+		if (value instanceof byte[]) {
+			return Str.toWebSafeBinary((byte[]) value);
+		}
+
+		return U.str(value);
 	}
 
 	@Override
@@ -135,7 +150,7 @@ public class RenderCtxImpl extends RapidoidThing implements RenderCtx {
 
 	@Override
 	public void call(String name) {
-		RapidoidTemplate template = (RapidoidTemplate) factory.load(name + ext);
+		RapidoidTemplate template = (RapidoidTemplate) factory.load(name + ext, Object.class);
 		template.renderInContext(this);
 	}
 
@@ -154,7 +169,7 @@ public class RenderCtxImpl extends RapidoidThing implements RenderCtx {
 		return GenericValueRetriever.propOf(name, model);
 	}
 
-	public RenderCtxImpl out(OutputStream out) {
+	public RenderCtxImpl out(Writable out) {
 		this.out = out;
 		return this;
 	}
@@ -191,6 +206,14 @@ public class RenderCtxImpl extends RapidoidThing implements RenderCtx {
 
 	public void reset() {
 		this.model.clear();
+		this.busy = false;
 	}
 
+	public boolean busy() {
+		return busy;
+	}
+
+	public void claim() {
+		this.busy = true;
+	}
 }

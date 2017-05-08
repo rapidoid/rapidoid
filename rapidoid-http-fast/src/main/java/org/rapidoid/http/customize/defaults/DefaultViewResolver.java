@@ -45,7 +45,7 @@ public class DefaultViewResolver extends AbstractViewResolver<TemplateFactory> {
 
 		TemplateFactory templateFactory = getViewFactory(resourceLoader);
 
-		Template template = templateFactory.load(filename);
+		Template template = templateFactory.load(filename, Object.class);
 
 		return template != null ? view(template) : null;
 	}

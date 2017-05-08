@@ -27,9 +27,9 @@ import org.rapidoid.annotation.Since;
 @Since("5.2.0")
 public interface TemplateFactory {
 
-	Template load(String filename);
+	Template load(String filename, Class<?> modelType);
 
-	Template compile(String source);
+	Template compile(String source, Class<?> modelType);
 
 	void reset();
 

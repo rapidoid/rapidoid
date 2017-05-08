@@ -32,6 +32,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.validation.InvalidData;
 import org.rapidoid.wrap.BoolWrap;
+import org.rapidoid.writable.ReusableWritable;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -122,13 +123,13 @@ public class Msc extends RapidoidThing {
 
 	public static byte[] serialize(Object value) {
 		try {
-			ByteArrayOutputStream output = new ByteArrayOutputStream();
+			ReusableWritable output = new ReusableWritable();
 
 			ObjectOutputStream out = new ObjectOutputStream(output);
 			out.writeObject(value);
 			output.close();
 
-			return output.toByteArray();
+			return output.copy();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -1106,7 +1107,7 @@ public class Msc extends RapidoidThing {
 		return arguments;
 	}
 
-	public static boolean isSpecialArg(String arg) {
+	private static boolean isSpecialArg(String arg) {
 		return arg.matches(SPECIAL_ARG_REGEX);
 	}
 
@@ -1173,6 +1174,7 @@ public class Msc extends RapidoidThing {
 	}
 
 	public static UUID bytesToUUID(byte[] bytes) {
+		U.must(bytes.length == 16, "Expected 16 bytes, got: %s", bytes.length);
 		ByteBuffer buf = ByteBuffer.wrap(bytes);
 		return new UUID(buf.getLong(), buf.getLong());
 	}
@@ -1350,13 +1352,15 @@ public class Msc extends RapidoidThing {
 		return Msc.isPlatform() ? "/rapidoid/" : "/_";
 	}
 
-	public static String specialUri(String suffix) {
-		U.must(!suffix.startsWith("/"), "The URI suffix must not start with '/'");
+	public static String specialUri(String... suffixes) {
+		String uri = uri(suffixes);
+		String suffix = Str.triml(uri, '/');
 		return specialUriPrefix() + suffix;
 	}
 
-	public static String semiSpecialUri(String suffix) {
-		U.must(!suffix.startsWith("/"), "The URI suffix must not start with '/'");
+	public static String semiSpecialUri(String... suffixes) {
+		String uri = uri(suffixes);
+		String suffix = Str.triml(uri, '/');
 		return Msc.isPlatform() ? "/rapidoid/" + suffix : "/" + suffix;
 	}
 
@@ -1388,6 +1392,21 @@ public class Msc extends RapidoidThing {
 
 	public static int bitMask(int bits) {
 		return (1 << bits) - 1;
+	}
+
+	public static boolean hasMainApp() {
+		List<String> appContent = IO.find().in("/app").ignoreRegex("(static|\\..*|.*~)").getNames();
+		return !appContent.isEmpty();
+	}
+
+	public static boolean isAppResource(String filename) {
+		String name = new File(filename).getName();
+		return !name.startsWith(".") && !name.endsWith("~") && !name.endsWith(".staged");
+	}
+
+	public static String mainAppJar() {
+		U.must(isPlatform());
+		return "/app/app.jar";
 	}
 
 }

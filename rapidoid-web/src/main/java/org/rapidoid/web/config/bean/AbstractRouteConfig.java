@@ -31,8 +31,6 @@ public abstract class AbstractRouteConfig extends RapidoidThing {
 
 	public volatile String contentType;
 
-	public volatile String sql;
-
 	public volatile String[] roles;
 
 	public volatile Boolean managed;
@@ -42,5 +40,9 @@ public abstract class AbstractRouteConfig extends RapidoidThing {
 	public volatile Long cacheTTL;
 
 	public volatile Integer cacheCapacity;
+
+	public volatile String sql;
+
+	public volatile boolean single;
 
 }

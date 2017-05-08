@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.bytes.Bytes;
 import org.rapidoid.data.BufRange;
 import org.rapidoid.data.BufRanges;
+import org.rapidoid.writable.Writable;
 import org.rapidoid.wrap.IntWrap;
 
 import java.io.ByteArrayOutputStream;
@@ -36,7 +37,7 @@ import java.nio.channels.WritableByteChannel;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public interface Buf {
+public interface Buf extends Writable {
 
 	IncompleteReadException INCOMPLETE_READ = new IncompleteReadException();
 

@@ -273,7 +273,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static Object postprocessResult(Req req, Object result) throws Exception {
+	public static Object postprocessResult(Req req, Object result) {
 
 		if (result instanceof Req || result instanceof Resp || result instanceof HttpStatus) {
 			return result;
@@ -389,6 +389,16 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 
 	public static void validateViewName(String view) {
 		U.must(!view.startsWith("/"), "Invalid view name: '%s'", view);
+	}
+
+	public static Map<String, WebData> webParams(Req req) {
+		Map<String, WebData> webParams = U.map();
+
+		for (Map.Entry<String, String> e : req.params().entrySet()) {
+			webParams.put(e.getKey(), new WebData(e.getValue()));
+		}
+
+		return webParams;
 	}
 
 }

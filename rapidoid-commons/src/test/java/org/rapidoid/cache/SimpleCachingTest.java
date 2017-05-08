@@ -117,11 +117,11 @@ public class SimpleCachingTest extends TestCommons {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testPreloadedCache() {
-		final int capacity = 100000;
+		int count = 100_000;
 
-		final Cache<Integer, Integer> cache = Caching.of(N_TO_N).capacity(capacity).statistics(true).build();
+		final Cache<Integer, Integer> cache = Caching.of(N_TO_N).statistics(true).build();
 
-		loadCacheValues(cache, capacity);
+		loadCacheValues(cache, count);
 
 		CacheStats stats = cache.stats();
 		stats.reset();
@@ -142,14 +142,14 @@ public class SimpleCachingTest extends TestCommons {
 
 		eq(stats.hits.get(), total);
 		eq(stats.total(), total);
-		eq(cache.size(), capacity);
+		eq(cache.size(), count);
 
 		// 1024 hot keys, with L1 cache size == 512 -> expecting 50% L1 hit rate
 		double l1HitRate = stats.l1Hits.get() * 1.0 / stats.l1Misses.get();
 		Log.info("L1 hit rate", "rate", l1HitRate);
 
-		isTrue(0.9 < l1HitRate);
-		isTrue(l1HitRate < 1.1);
+		isTrue(0.8 < l1HitRate);
+		isTrue(l1HitRate < 1.2);
 	}
 
 	private void loadCacheValues(Cache<Integer, ?> cache, int countTo) {

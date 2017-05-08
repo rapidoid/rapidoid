@@ -55,6 +55,7 @@ public class Conf extends RapidoidThing {
 	public static final Config JDBC = section("jdbc");
 	public static final Config HIBERNATE = section("hibernate");
 	public static final Config C3P0 = section("c3p0");
+	public static final Config HIKARI = section("hikari");
 	public static final Config APP = section("app");
 	public static final Config GUI = section("gui");
 	public static final Config HTTP = section("http");
@@ -67,6 +68,7 @@ public class Conf extends RapidoidThing {
 	public static final Config LOG = section("log");
 	public static final Config API = section("api");
 	public static final Config PAGES = section("pages");
+	public static final Config BENCHMARK = section("benchmark");
 
 	static void applyConfig(Config config) {
 		RapidoidEnv.touch();

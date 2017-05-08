@@ -31,7 +31,7 @@ public abstract class AbstractCommonsTest extends TestCommons {
 	public final void resetContext() {
 		Msc.reset();
 
-		Conf.ROOT.setPath(getTestName());
+		Conf.ROOT.setPath(getTestNamespace());
 	}
 
 	protected void verify(String name, Object actual) {

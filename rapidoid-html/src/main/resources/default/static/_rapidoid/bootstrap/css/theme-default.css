@@ -53,12 +53,6 @@ body.rapidoid .navbar-default .navbar-nav>li>a:hover, body.rapidoid .navbar-defa
 	background-color: #272727;
 }
 
-.navbar-default .navbar-nav>.active>a, body.rapidoid .navbar-default .navbar-nav>.active>a:hover,
-	body.rapidoid .navbar-default .navbar-nav>.active>a:focus {
-	color: #ffffff;
-	background-color: #972727;
-}
-
 .navbar-default .navbar-nav>.disabled>a, body.rapidoid .navbar-default .navbar-nav>.disabled>a:hover,
 	body.rapidoid .navbar-default .navbar-nav>.disabled>a:focus {
 	color: #cccccc;

@@ -243,6 +243,9 @@ public class IO extends RapidoidThing {
 	}
 
 	private static void writeToFile(String filename, byte[] content, boolean append, int retries) {
+		U.notNull(filename, "filename");
+		U.notNull(content, "content");
+
 		FileOutputStream out = null;
 		try {
 			out = new FileOutputStream(filename, append);

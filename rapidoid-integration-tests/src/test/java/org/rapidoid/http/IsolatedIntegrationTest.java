@@ -26,6 +26,7 @@ import org.rapidoid.RapidoidModules;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Arr;
+import org.rapidoid.commons.Str;
 import org.rapidoid.config.Conf;
 import org.rapidoid.crypto.Crypto;
 import org.rapidoid.data.JSON;
@@ -49,9 +50,7 @@ import org.rapidoid.util.Msc;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -79,9 +78,9 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 
 		JPAUtil.reset();
 
-		Conf.ROOT.setPath(getTestName());
+		Conf.ROOT.setPath(getTestNamespace());
 
-		System.out.println("--- STARTING SERVER ---");
+		U.print("--- STARTING SERVER ---");
 
 		My.reset();
 
@@ -91,7 +90,9 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 		On.setup().activate();
 		On.setup().reload();
 
-		System.out.println("--- SERVER STARTED ---");
+		App.path(getTestPackageName());
+
+		U.print("--- SERVER STARTED ---");
 
 		verifyNoRoutes();
 
@@ -101,15 +102,17 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 		Env.reset();
 
 		Conf.reset();
-		Conf.ROOT.setPath(getTestName());
+		Conf.ROOT.setPath(getTestNamespace());
 
 		U.must(Msc.isInsideTest());
 		U.must(Env.test());
+
+		RapidoidIntegrationTest.start(this);
 	}
 
 	@After
 	public void closeContext() {
-		System.out.println("--- STOPPING SERVER ---");
+		U.print("--- STOPPING SERVER ---");
 
 		if (Admin.setup().isRunning()) {
 			if (Admin.setup().port() == On.setup().port()) {
@@ -119,7 +122,7 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 			}
 		}
 
-		System.out.println("--- SERVER STOPPED ---");
+		U.print("--- SERVER STOPPED ---");
 
 		RapidoidIntegrationTest.after(this);
 	}
@@ -152,10 +155,6 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 		});
 
 		On.req((Req x) -> x.response().html(U.join(":", x.verb(), x.path(), x.query())));
-	}
-
-	protected String resourceMD5(String filename) throws IOException, URISyntaxException {
-		return Crypto.md5(IO.loadBytes(filename));
 	}
 
 	protected String get(String uri) {
@@ -313,6 +312,12 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 	}
 
 	private String exec(HttpReq req) {
+		String url = req.url();
+
+		if (url.contains("#")) {
+			req.url(Str.cutToFirst(url, "#"));
+		}
+
 		req.raw(true);
 
 		String resp = new String(req.execute().raw());
@@ -323,7 +328,11 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 	}
 
 	protected String maskHttpResponse(String resp) {
-		return resp.replaceAll("(?<=\n)Date: .*? GMT(?=\r?\n)", "Date: XXXXX GMT");
+		resp = resp.replaceAll("(?<=\n)Date: .*? GMT(?=\r?\n)", "Date: XXXXX GMT");
+		resp = resp.replaceAll("(?<=\nSet-Cookie: JSESSIONID=)[^;]+?;", "<THE-SESSION-ID>;");
+		resp = resp.replaceAll("(?<=\nSet-Cookie: _token=)[^;]+?;", "<THE-TOKEN>;");
+		resp = resp.replaceAll("(?<=\"token\":\")[^\"]+?\"", "<THE-TOKEN>\"");
+		return resp;
 	}
 
 	protected String fetch(HttpClient client, String verb, String uri, Map<String, ?> data) {
@@ -343,9 +352,22 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 	}
 
 	private String reqName(int port, String verb, String uri) {
+		String order = null;
+
+		if (uri.contains("#")) {
+			String[] parts = uri.split("#");
+			order = parts[1];
+			uri = parts[0];
+		}
+
 		String req = verb + uri.replace("/", "_").replace("?", "-");
+
 		if (port != DEFAULT_PORT) {
 			req = port + "__" + req;
+		}
+
+		if (order != null) {
+			req = order + "__" + req;
 		}
 
 		return req;

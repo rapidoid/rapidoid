@@ -64,11 +64,11 @@ public class Groups extends RapidoidThing {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T extends Manageable> List<GroupOf<T>> find(String itemType) {
+	public static <T extends Manageable> List<GroupOf<T>> find(String kind) {
 		List<GroupOf<T>> groups = U.list();
 
 		for (GroupOf<?> group : all()) {
-			if (group.itemType().getSimpleName().equals(itemType)) {
+			if (group.kind().equals(kind)) {
 				groups.add((GroupOf<T>) group);
 			}
 		}

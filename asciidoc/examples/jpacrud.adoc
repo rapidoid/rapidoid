@@ -1,0 +1,53 @@
+=== RESTful services with JPA CRUD[[app-listing]]
+[source,java]
+.Book.java
+----
+package org.rapidoid.docs.jpacrud;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
+
+@Entity
+public class Book {
+
+	@Id
+	@GeneratedValue
+	public Long id;
+
+	@NotNull
+	public String title;
+
+	public int year;
+
+}
+----
+
+[[app-listing]]
+[source,java]
+.Main.java
+----
+package org.rapidoid.docs.jpacrud;
+
+import org.rapidoid.jpa.JPA;
+import org.rapidoid.setup.App;
+import org.rapidoid.setup.On;
+
+import javax.validation.Valid;
+
+public class Main {
+
+	public static void main(String[] args) {
+		App.bootstrap(args).jpa(); // bootstrap JPA
+
+		On.get("/books").json(() -> JPA.of(Book.class).all());
+		On.get("/books/{id}").json((Integer id) -> JPA.get(Book.class, id));
+
+		On.post("/books").json((@Valid Book b) -> JPA.save(b));
+		On.put("/books").json((@Valid Book b) -> JPA.update(b));
+	}
+
+}
+----
+

@@ -1,0 +1,111 @@
+= Rapidoid Documentation
+Nikolche Mihajlovski <rapidoid@googlegroups.com>
+
+include::style.adoc[]
+:sectnumlevels: 2
+
+This is a draft version of the new documentation for http://www.rapidoid.org[Rapidoid].
+
+Things to improve in the docs:
+
+- the important concepts (architecture, design etc.) should be explained in more details,
+- the examples should be organized by categories,
+- information about the HTTP routes and sample requests/responses should be included for each example.
+
+## What is Rapidoid?
+
+Rapidoid is an extremely fast HTTP server and modern Java web framework / application container, with a strong focus on high productivity and high performance.
+
+image::rapidoid.png[]
+
+## Rapidoid as Web Platform (Docker)
+
+include::docker.adoc[]
+
+## Rapidoid as Java Web Framework
+
+include::quick.adoc[]
+
+***
+
+include::routing.adoc[]
+
+***
+
+include::perf.adoc[]
+
+***
+
+include::profiles.adoc[]
+
+***
+
+include::static.adoc[]
+
+***
+
+include::rest.adoc[]
+
+***
+
+include::session.adoc[]
+
+***
+
+include::security.adoc[]
+
+***
+
+include::authentication.adoc[]
+
+***
+
+include::config.adoc[]
+
+***
+
+include::jdbc.adoc[]
+
+***
+
+include::jpa.adoc[]
+
+***
+
+include::transactions.adoc[]
+
+***
+
+include::dbprofiles.adoc[]
+
+***
+
+include::templates.adoc[]
+
+***
+
+include::proxy.adoc[]
+
+***
+
+include::custom.adoc[]
+
+***
+
+include::logs.adoc[]
+
+***
+
+include::cli.adoc[]
+
+include::modules.adoc[]
+
+## The HTTP API
+
+++++
+include::api-docs/httpapi.html[]
+++++
+
+## Examples
+
+include::examples/index.adoc[]

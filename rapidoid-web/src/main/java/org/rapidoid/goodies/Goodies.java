@@ -4,9 +4,6 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.goodies.deployment.DeploymentHandler;
-import org.rapidoid.goodies.deployment.JarDeploymentHandler;
-import org.rapidoid.goodies.deployment.JarStagingHandler;
 import org.rapidoid.goodies.discovery.DiscoveryIndexHandler;
 import org.rapidoid.goodies.discovery.DiscoveryRegistrationHandler;
 import org.rapidoid.goodies.discovery.DiscoveryState;
@@ -78,7 +75,6 @@ public class Goodies extends RapidoidThing {
 		manageables(setup);
 		jmx(setup);
 		metrics(setup);
-		deployment(setup);
 		auth(setup);
 		status(setup);
 	}
@@ -105,12 +101,6 @@ public class Goodies extends RapidoidThing {
 		setup.page(uri("beans")).mvc(new BeansHandler());
 		setup.page(uri("config")).mvc(new ConfigHandler());
 		setup.get(uri("classpath")).mvc(new ClasspathHandler());
-	}
-
-	public static void deployment(Setup setup) {
-		setup.page(uri("deployment")).mvc(new DeploymentHandler());
-		setup.post(uri("stage")).json(new JarStagingHandler());
-		setup.post(uri("deploy")).json(new JarDeploymentHandler());
 	}
 
 	public static void metrics(Setup setup) {
@@ -181,7 +171,7 @@ public class Goodies extends RapidoidThing {
 		setup.get(uri("echo")).json(new EchoHandler());
 	}
 
-	private static String uri(String path) {
+	static String uri(String path) {
 		return Msc.specialUri(path);
 	}
 

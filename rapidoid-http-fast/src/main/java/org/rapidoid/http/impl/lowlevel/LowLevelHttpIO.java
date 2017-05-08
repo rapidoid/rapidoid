@@ -1,6 +1,7 @@
 package org.rapidoid.http.impl.lowlevel;
 
 import org.rapidoid.RapidoidThing;
+import org.rapidoid.activity.RapidoidThreadLocals;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
@@ -25,10 +26,10 @@ import org.rapidoid.net.AsyncLogic;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
-import org.rapidoid.util.StreamUtils;
+import org.rapidoid.writable.ReusableWritable;
+import org.rapidoid.writable.WritableUtils;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
@@ -254,12 +255,15 @@ class LowLevelHttpIO extends RapidoidThing {
 	void writeAsJson(final MaybeReq req, final Channel ctx, final int code, final boolean isKeepAlive, final Object value) {
 		startResponse(ctx, code, isKeepAlive, MediaType.JSON);
 
-		ByteArrayOutputStream os = Msc.locals().jsonRenderingStream();
+		RapidoidThreadLocals locals = Msc.locals();
 
-		JSON.stringify(value, os);
-		byte[] arr = os.toByteArray();
+		ReusableWritable out = locals.jsonRenderingStream();
+		JSON.stringify(value, out);
 
-		writeContentLengthAndBody(req, ctx, arr);
+		writeContentLengthHeader(ctx, out.size());
+		closeHeaders(req, ctx.output());
+
+		ctx.write(out.array(), 0, out.size());
 	}
 
 	@SuppressWarnings("unused")
@@ -291,7 +295,7 @@ class LowLevelHttpIO extends RapidoidThing {
 		out.putNumAsText(posConLen, contentLength, false);
 	}
 
-	private void closeHeaders(MaybeReq req, Buf out) {
+	void closeHeaders(MaybeReq req, Buf out) {
 		// finishing the headers
 		out.append(CR_LF);
 
@@ -318,11 +322,7 @@ class LowLevelHttpIO extends RapidoidThing {
 	}
 
 	void writeNum(Channel ctx, int value) {
-		try {
-			StreamUtils.putNumAsText(ctx.output().asOutputStream(), value);
-		} catch (IOException e) {
-			throw U.rte(e);
-		}
+		WritableUtils.putNumAsText(ctx.output(), value);
 	}
 
 	void resume(MaybeReq maybeReq, Channel channel, AsyncLogic logic) {

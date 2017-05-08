@@ -40,12 +40,20 @@ public class Templates extends RapidoidThing {
 
 	private static volatile String[] PATH = DEFAULT_PATH;
 
+	public static Template load(String filename, Class<?> modelType) {
+		return DEFAULT_FACTORY.load(filename, modelType);
+	}
+
 	public static Template load(String filename) {
-		return DEFAULT_FACTORY.load(filename);
+		return load(filename, Object.class);
+	}
+
+	public static Template compile(String source, Class<?> modelType) {
+		return DEFAULT_FACTORY.compile(source, modelType);
 	}
 
 	public static Template compile(String source) {
-		return DEFAULT_FACTORY.compile(source);
+		return compile(source, Object.class);
 	}
 
 	public static void reset() {

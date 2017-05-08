@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.rapidoid</groupId>
 		<artifactId>rapidoid</artifactId>
-		<version>5.3.3-SNAPSHOT</version>
+		<version>5.3.5-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>rapidoid-commons</artifactId>
@@ -50,12 +50,6 @@
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
 			<version>${commons-logging.version}</version>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>com.mchange</groupId>
-			<artifactId>c3p0</artifactId>
-			<version>${c3p0.version}</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>

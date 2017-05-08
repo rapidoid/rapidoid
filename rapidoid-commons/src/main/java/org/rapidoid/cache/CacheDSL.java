@@ -36,7 +36,7 @@ public class CacheDSL<K, V> extends RapidoidThing {
 
 	private volatile Mapper<K, V> loader;
 
-	private volatile int capacity = 1024;
+	private volatile int capacity;
 
 	private volatile long ttl = 0;
 

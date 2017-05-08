@@ -33,6 +33,14 @@ import java.util.List;
 @Since("5.3.0")
 public class GroupOf<E extends Manageable> extends RapidoidThing {
 
+	private static String kindOf(Class<? extends Manageable> cls) {
+		ManageableBean mb = cls.getAnnotation(ManageableBean.class);
+		U.must(mb != null, "The type '%s' must be annotated with @%s", ManageableBean.class.getSimpleName());
+		return mb.kind();
+	}
+
+	private final String kind;
+
 	private final Class<E> itemType;
 
 	private final String name;
@@ -42,9 +50,14 @@ public class GroupOf<E extends Manageable> extends RapidoidThing {
 	private final GroupStats stats = new GroupStats();
 
 	public GroupOf(Class<E> itemType, String name) {
+		this.kind = kindOf(itemType);
 		this.itemType = itemType;
 		this.name = name;
 		Groups.ALL.add(this);
+	}
+
+	public String kind() {
+		return kind;
 	}
 
 	public String name() {

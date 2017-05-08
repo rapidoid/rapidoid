@@ -1025,7 +1025,13 @@ public class Cls extends RapidoidThing {
 	}
 
 	public static boolean exists(String className) {
-		return getClassIfExists(className) != null;
+		try {
+			Class.forName(className, false, Cls.classLoader());
+			return true;
+
+		} catch (ClassNotFoundException e) {
+			return false;
+		}
 	}
 
 	public static Method getLambdaMethod(Serializable lambda) {

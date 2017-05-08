@@ -28,16 +28,8 @@ import org.rapidoid.annotation.Since;
 @Since("5.3.0")
 public class PlatformInDevMode extends RapidoidThing {
 
-	private static final String[] DEV_MODE_ARGS = {
-		"app.services=welcome",
-		"admin.services=center",
-		"users.admin.password=admin",
-		"secret=my-secret",
-		"app.cdn=false",
-	};
-
 	public static void main(String[] args) {
-		Platform.start(DEV_MODE_ARGS, true);
+		Main.main(new String[]{"dev"});
 	}
 
 }

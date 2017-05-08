@@ -1,0 +1,50 @@
+=== RESTful services with Lambda handlers, JPA, Jackson and Bean Validation[[app-listing]]
+[source,java]
+.Book.java
+----
+package org.rapidoid.docs.gettingstarted;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
+
+@Entity
+public class Book {
+
+	@Id
+	@GeneratedValue
+	public Long id;
+
+	@NotNull
+	public String title;
+
+	public int year;
+
+}
+----
+
+[[app-listing]]
+[source,java]
+.Main.java
+----
+package org.rapidoid.docs.gettingstarted;
+
+import org.rapidoid.annotation.Valid;
+import org.rapidoid.jpa.JPA;
+import org.rapidoid.setup.App;
+import org.rapidoid.setup.On;
+
+public class Main {
+
+	public static void main(String[] args) {
+		App.bootstrap(args).jpa(); // bootstrap JPA
+
+		On.get("/books").json(() -> JPA.of(Book.class).all()); // get all books
+
+		On.post("/books").json((@Valid Book b) -> JPA.save(b)); // insert new book if valid
+	}
+
+}
+----
+

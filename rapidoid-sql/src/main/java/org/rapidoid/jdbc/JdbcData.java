@@ -24,7 +24,9 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.datamodel.PageableData;
+import org.rapidoid.lambda.Mapper;
 
+import java.sql.ResultSet;
 import java.util.List;
 import java.util.Map;
 
@@ -34,13 +36,15 @@ public class JdbcData<T> extends RapidoidThing implements PageableData<T> {
 
 	private final JdbcClient jdbc;
 	private final Class<T> resultType;
+	private final Mapper<ResultSet, T> resultMapper;
 	private final String sql;
 	private final Map<String, ?> namedArgs;
 	private final Object[] args;
 
-	public JdbcData(JdbcClient jdbc, Class<T> resultType, String sql, Map<String, ?> namedArgs, Object[] args) {
+	public JdbcData(JdbcClient jdbc, Class<T> resultType, Mapper<ResultSet, T> resultMapper, String sql, Map<String, ?> namedArgs, Object[] args) {
 		this.jdbc = jdbc;
 		this.resultType = resultType;
+		this.resultMapper = resultMapper;
 		this.sql = sql;
 		this.namedArgs = namedArgs;
 		this.args = args;
@@ -48,7 +52,7 @@ public class JdbcData<T> extends RapidoidThing implements PageableData<T> {
 
 	@Override
 	public List<T> getPage(long start, long length) {
-		return jdbc.runQuery(resultType, sql, namedArgs, args, start, length);
+		return jdbc.runQuery(resultType, resultMapper, sql, namedArgs, args, start, length);
 	}
 
 	@Override

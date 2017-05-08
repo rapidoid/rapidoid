@@ -30,6 +30,7 @@ import org.rapidoid.process.Proc;
 import org.rapidoid.process.ProcessHandle;
 import org.rapidoid.u.U;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
@@ -38,7 +39,7 @@ public class WrkSetup extends RapidoidThing {
 
 	private volatile String url = "/";
 
-	private volatile int connections = 128;
+	private volatile int[] connections = {128};
 
 	private volatile int duration = 5;
 
@@ -46,11 +47,15 @@ public class WrkSetup extends RapidoidThing {
 
 	private volatile int rounds = 1;
 
-	private volatile int warmUp = 0;
+	private volatile int warmUp = -1;
 
 	private volatile int pause = 1;
 
-	private volatile boolean showWarmUpDetails = false;
+	private volatile int pipeline = 1;
+
+	private volatile int threads;
+
+	private volatile boolean showWarmUpDetails = true;
 
 	private volatile boolean showDetails = true;
 
@@ -63,11 +68,11 @@ public class WrkSetup extends RapidoidThing {
 		return this;
 	}
 
-	public int connections() {
+	public int[] connections() {
 		return connections;
 	}
 
-	public WrkSetup connections(int connections) {
+	public WrkSetup connections(int[] connections) {
 		this.connections = connections;
 		return this;
 	}
@@ -78,6 +83,15 @@ public class WrkSetup extends RapidoidThing {
 
 	public WrkSetup duration(int duration) {
 		this.duration = duration;
+		return this;
+	}
+
+	public int pipeline() {
+		return pipeline;
+	}
+
+	public WrkSetup pipeline(int pipeline) {
+		this.pipeline = pipeline;
 		return this;
 	}
 
@@ -96,6 +110,15 @@ public class WrkSetup extends RapidoidThing {
 
 	public WrkSetup rounds(int rounds) {
 		this.rounds = rounds;
+		return this;
+	}
+
+	public int threads() {
+		return threads;
+	}
+
+	public WrkSetup threads(int threads) {
+		this.threads = threads;
 		return this;
 	}
 
@@ -145,26 +168,54 @@ public class WrkSetup extends RapidoidThing {
 		if (warmUp > 0) {
 			Log.info("Warming up...", "duration", warmUp);
 
-			ProcessHandle warm = Proc.run("wrk", "-c", connections + "", "-d", warmUp + "", url).waitFor();
+			ProcessHandle warm = runWrk(connections[0]);
 			if (showWarmUpDetails) warm.log(LogLevel.INFO);
 		}
 
 		for (int round = 1; round <= rounds; round++) {
-			U.sleep(pause * 1000);
+			for (int conn : connections) {
 
-			Log.info("Running benchmark...", "round", round, "duration", duration, "connections", connections);
+				U.sleep(pause * 1000); // pause a bit
 
-			ProcessHandle proc = Proc.run("wrk", "-c", connections + "", "-d", duration + "", url).waitFor();
-			if (showDetails) proc.log(LogLevel.INFO);
+				Log.info("Running benchmark...", "round", round, "connections", conn, "duration", duration);
 
-			processResults(results, proc.out(), proc.err());
+				ProcessHandle proc = runWrk(conn);
 
-			Log.info("Benchmark result", "round", round, "errors", results.errors, "throughput", U.last(results.throughputs));
+				if (showDetails) proc.log(LogLevel.INFO);
+
+				processResults(results, proc.out(), proc.err());
+
+				Log.info("!Benchmark result", "round", round, "connections", conn, "errors", results.errors, "!throughput", U.last(results.throughputs));
+				Log.info("");
+			}
 		}
 
 		Log.info("Aggregated benchmark results", "errors", results.errors, "throughputs", results.throughputs, "best", results.bestThroughput());
 
 		return results;
+	}
+
+	private ProcessHandle runWrk(int conn) {
+
+		List<String> args = U.list("wrk",
+			"-t", (threads > 0 ? threads : Runtime.getRuntime().availableProcessors()) + "",
+			"-c", conn + "",
+			"-d", duration + "",
+			"--timeout", timeout + "");
+
+		if (pipeline > 1) {
+			args.add("-s");
+			args.add("/opt/pipeline.lua");
+		}
+
+		args.add(url);
+
+		if (pipeline > 1) {
+			args.add("--");
+			args.add(pipeline + "");
+		}
+
+		return Proc.run(U.arrayOf(args)).waitFor();
 	}
 
 	private void processResults(BenchmarkResults results, List<String> out, List<String> err) {
@@ -188,4 +239,20 @@ public class WrkSetup extends RapidoidThing {
 		results.errors++;
 	}
 
+	@Override
+	public String toString() {
+		return "WrkSetup{" +
+			"url='" + url + '\'' +
+			", connections=" + Arrays.toString(connections) +
+			", duration=" + duration +
+			", timeout=" + timeout +
+			", rounds=" + rounds +
+			", warmUp=" + warmUp +
+			", pause=" + pause +
+			", pipeline=" + pipeline +
+			", threads=" + threads +
+			", showWarmUpDetails=" + showWarmUpDetails +
+			", showDetails=" + showDetails +
+			'}';
+	}
 }

@@ -309,7 +309,7 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 		if (seq < handle - 1) {
 			// too early
 
-			Jobs.after(1).microseconds(new Runnable() {
+			Jobs.execute(new Runnable() {
 				@Override
 				public void run() {
 					resume(expectedConnId, handle, asyncLogic);

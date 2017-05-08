@@ -23,6 +23,7 @@ package org.rapidoid.platform;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.deploy.AppDownloader;
 import org.rapidoid.test.TestCommons;
 
 @Authors("Nikolche Mihajlovski")

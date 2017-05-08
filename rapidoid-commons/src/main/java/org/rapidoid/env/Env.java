@@ -135,7 +135,13 @@ public class Env extends RapidoidThing {
 					File[] files = dir.listFiles();
 
 					if (files != null) {
-						Log.info("Setting application root", "!root", root, "!content", U.list(files));
+						List<File> content = U.list();
+
+						for (File file : files) {
+							if (Msc.isAppResource(file.getName())) content.add(file);
+						}
+
+						Log.info("Setting application root", "!root", root, "!content", content);
 					} else {
 						Log.error("Couldn't access the application root!", "!root", root);
 					}

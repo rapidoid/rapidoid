@@ -34,6 +34,7 @@ import org.rapidoid.http.customize.ViewResolver;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.MscOpts;
+import org.rapidoid.writable.ReusableWritable;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Collection;
@@ -133,7 +134,7 @@ public class ResponseRenderer extends RapidoidThing {
 		PageDecorator pageDecorator = Customization.of(req).pageDecorator();
 		U.must(pageDecorator != null, "A page decorator wasn't configured!");
 
-		ByteArrayOutputStream out = Msc.locals().pageRenderingStream();
+		ReusableWritable out = Msc.locals().pageRenderingStream();
 
 		try {
 			pageDecorator.renderPage(req, content, out);
@@ -142,7 +143,7 @@ public class ResponseRenderer extends RapidoidThing {
 			throw U.rte("Error while rendering page!", e);
 		}
 
-		return out.toByteArray();
+		return out.copy();
 	}
 
 	private static Object wrapGuiContent(Object content) {
