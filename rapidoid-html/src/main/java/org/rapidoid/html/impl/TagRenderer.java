@@ -117,7 +117,7 @@ public class TagRenderer extends RapidoidThing {
 		}
 		for (Object item : items) {
 			if (!inline) {
-				write(out, Constants.CR_LF);
+				write(out, Constants.LF_);
 			}
 			str(item, level + 1, inline, extra, out);
 		}
@@ -126,7 +126,7 @@ public class TagRenderer extends RapidoidThing {
 	protected void join(Object[] items, int level, boolean inline, Object extra, OutputStream out) {
 		for (int i = 0; i < items.length; i++) {
 			if (!inline) {
-				write(out, Constants.CR_LF);
+				write(out, Constants.LF_);
 			}
 			str(items[i], level + 1, inline, extra, out);
 		}
@@ -208,7 +208,7 @@ public class TagRenderer extends RapidoidThing {
 			str(contents, level, inline, extra, out);
 		}
 
-		write(out, Constants.CR_LF);
+		write(out, Constants.LF_);
 		indent(out, level, inline);
 		closeTag(out, name);
 	}
