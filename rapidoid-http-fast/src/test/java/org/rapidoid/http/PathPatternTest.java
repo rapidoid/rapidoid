@@ -37,6 +37,7 @@ public class PathPatternTest extends TestCommons {
 	public void shouldMatchPathPatterns() {
 		Map<String, String> empty = U.map();
 
+
 		match("/abc", "/abc", "/abc", empty);
 
 		match("/.*", "/.*", "/", empty);
@@ -45,12 +46,22 @@ public class PathPatternTest extends TestCommons {
 		noMatch("/.+", "/.+", "/");
 		match("/.+", "/.+", "/abc", empty);
 
-		match("/*", "/.*", "/", empty);
-		match("/*", "/.*", "/xy", empty);
+		String anyUri = "/(?<g1>.*)";
 
-		match("/msgs/*", "/msgs(?:/.*)?", "/msgs/abc", empty);
+		match("/*", anyUri, "/", U.map(PathPattern.ANY, ""));
+		match("/*", anyUri, "/xy", U.map(PathPattern.ANY, "xy"));
+		match("/*", anyUri, "/a/bb/ccc", U.map(PathPattern.ANY, "a/bb/ccc"));
+
+		String anySuffix1 = "(?:/(?<g1>.*))?";
+		String anySuffix2 = "(?:/(?<g2>.*))?";
+
+		match("/msgs/*", "/msgs" + anySuffix1, "/msgs", empty);
+		match("/msgs/*", "/msgs" + anySuffix1, "/msgs/abc", U.map(PathPattern.ANY, "abc"));
+		match("/msgs/*", "/msgs" + anySuffix1, "/msgs/foo/bar", U.map(PathPattern.ANY, "foo/bar"));
 
 		match("/{cat}", "/" + g(1), "/books", U.map("cat", "books"));
+		match("/{cat}/*", "/" + g(1) + anySuffix2, "/books", U.map("cat", "books"));
+		match("/{cat}/*", "/" + g(1) + anySuffix2, "/books/x", U.map("cat", "books", PathPattern.ANY, "x"));
 		match("/{_}/view", "/" + g(1) + "/view", "/movies/view", U.map("_", "movies"));
 
 		match("/abc/{id}", "/abc/" + g(1), "/abc/123", U.map("id", "123"));
