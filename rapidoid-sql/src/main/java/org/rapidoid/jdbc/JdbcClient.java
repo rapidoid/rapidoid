@@ -4,6 +4,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Err;
 import org.rapidoid.concurrent.Callback;
+import org.rapidoid.concurrent.Callbacks;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
 import org.rapidoid.datamodel.Results;
@@ -511,6 +512,25 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 		workers.get().execute(operation);
 	}
 
+	public void execute(final Callback<Void> callback, final Operation<Connection> operation) {
+		execute(new Operation<Connection>() {
+
+			@Override
+			public void execute(Connection conn) {
+
+				try {
+					operation.execute(conn);
+
+				} catch (Throwable e) {
+					Callbacks.done(callback, null, e);
+					return;
+				}
+
+				Callbacks.done(callback, null, null);
+			}
+		});
+	}
+
 	public <T> void execute(final Mapper<ResultSet, T> resultMapper, final Callback<List<T>> callback, final String sql, final Object... args) {
 		execute(new Operation<Connection>() {
 
@@ -526,11 +546,11 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 					}
 
 				} catch (Throwable e) {
-					callback.onDone(null, e);
+					Callbacks.done(callback, null, e);
 					return;
 				}
 
-				callback.onDone(results, null);
+				Callbacks.done(callback, results, null);
 			}
 
 		});
