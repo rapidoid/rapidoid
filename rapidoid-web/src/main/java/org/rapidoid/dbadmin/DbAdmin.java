@@ -1,8 +1,8 @@
-package org.rapidoid.setup;
+package org.rapidoid.dbadmin;
 
 /*
  * #%L
- * rapidoid-http-server
+ * rapidoid-web
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -22,45 +22,20 @@ package org.rapidoid.setup;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.group.GroupOf;
+import org.rapidoid.group.Groups;
+import org.rapidoid.jdbc.JdbcClient;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public interface IGoodies {
+@Since("5.3.5")
+public class DbAdmin {
 
-	void overview(Setup setup);
-
-	void application(Setup setup);
-
-	void lifecycle(Setup setup);
-
-	void processes(Setup setup);
-
-	void dbAdmin(Setup setup);
-
-	void manageables(Setup setup);
-
-	void jmx(Setup setup);
-
-	void metrics(Setup setup);
-
-	void deploy(Setup setup);
-
-	void ping(Setup setup);
-
-	void auth(Setup setup);
-
-	void oauth(Setup setup);
-
-	void adminCenter(Setup setup);
-
-	void entities(Setup setup);
-
-	void welcome(Setup setup);
-
-	void status(Setup setup);
-
-	void discovery(Setup setup);
-
-	void echo(Setup setup);
+	public static void bootstrap() {
+		for (GroupOf<JdbcClient> gr : Groups.find(JdbcClient.class)) {
+			for (JdbcClient jdbc : gr.items()) {
+				new ManageableRdbms(jdbc);
+			}
+		}
+	}
 
 }
