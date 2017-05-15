@@ -38,7 +38,7 @@ public class ProcTest extends TestCommons {
 
 	@Test
 	public void testProcessExecution() {
-		Processes processes = new Processes("test");
+		Processes processes = new Processes();
 
 		for (int i = 0; i < 5; i++) {
 			ProcessHandle proc = Proc.group(processes).run("java", "-version").waitFor();

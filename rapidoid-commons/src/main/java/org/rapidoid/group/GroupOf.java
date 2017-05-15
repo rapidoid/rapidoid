@@ -33,35 +33,22 @@ import java.util.List;
 @Since("5.3.0")
 public class GroupOf<E extends Manageable> extends RapidoidThing {
 
-	private static String kindOf(Class<? extends Manageable> cls) {
-		ManageableBean mb = cls.getAnnotation(ManageableBean.class);
-		U.must(mb != null, "The type '%s' must be annotated with @%s", ManageableBean.class.getSimpleName());
-		return mb.kind();
-	}
-
 	private final String kind;
 
 	private final Class<E> itemType;
-
-	private final String name;
 
 	private final List<E> items = Coll.synchronizedList();
 
 	private final GroupStats stats = new GroupStats();
 
-	public GroupOf(Class<E> itemType, String name) {
-		this.kind = kindOf(itemType);
+	public GroupOf(Class<E> itemType) {
+		this.kind = Manageables.kindOf(itemType);
 		this.itemType = itemType;
-		this.name = name;
 		Groups.ALL.add(this);
 	}
 
 	public String kind() {
 		return kind;
-	}
-
-	public String name() {
-		return name;
 	}
 
 	public Class<E> itemType() {
@@ -165,7 +152,7 @@ public class GroupOf<E extends Manageable> extends RapidoidThing {
 	@Override
 	public String toString() {
 		return "GroupOf{" +
-			"name='" + name + '\'' +
+			"kind='" + kind + '\'' +
 			", size=" + items.size() +
 			", stats=" + stats +
 			'}';
@@ -178,15 +165,14 @@ public class GroupOf<E extends Manageable> extends RapidoidThing {
 
 		GroupOf<?> groupOf = (GroupOf<?>) o;
 
-		if (!itemType.equals(groupOf.itemType)) return false;
-		return name.equals(groupOf.name);
+		if (kind != null ? !kind.equals(groupOf.kind) : groupOf.kind != null) return false;
+		return itemType != null ? itemType.equals(groupOf.itemType) : groupOf.itemType == null;
 	}
 
 	@Override
 	public int hashCode() {
-		int result = itemType.hashCode();
-		result = 31 * result + name.hashCode();
+		int result = kind != null ? kind.hashCode() : 0;
+		result = 31 * result + (itemType != null ? itemType.hashCode() : 0);
 		return result;
 	}
-
 }

@@ -115,7 +115,7 @@ public class Goodies extends RapidoidThing {
 
 	public static void manageables(Setup setup) {
 		setup.page(uri("manageables")).mvc(new ManageablesOverviewPage());
-		setup.page(uri("manageables/{type}/{id}")).mvc(new ManageableDetailsPage());
+		setup.page(uri("manageables/{type}/{id}/*")).mvc(new ManageableDetailsPage());
 	}
 
 	public static void jmx(Setup setup) {

@@ -41,7 +41,7 @@ import java.nio.file.StandardCopyOption;
 @Since("5.3.0")
 public class AppDeployer extends RapidoidThing {
 
-	private static final Processes DEPLOYED = new Processes("deployed");
+	private static final Processes DEPLOYED = Processes.GROUP;
 
 	private static final String CLASSPATH = System.getProperty("java.class.path");
 
