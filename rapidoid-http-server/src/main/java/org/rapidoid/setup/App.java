@@ -30,6 +30,7 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.data.JSON;
 import org.rapidoid.env.Env;
+import org.rapidoid.group.Groups;
 import org.rapidoid.io.Res;
 import org.rapidoid.ioc.Beans;
 import org.rapidoid.ioc.IoC;
@@ -156,6 +157,7 @@ public class App extends RapidoidInitializer {
 		App.path = null;
 		App.boot = null;
 
+		Groups.reset();
 		Conf.reset();
 		Env.reset();
 		Res.reset();
