@@ -15,7 +15,6 @@ import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.JsonResponseRenderer;
 import org.rapidoid.http.impl.MaybeReq;
-import org.rapidoid.http.impl.PathPattern;
 import org.rapidoid.io.Res;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
@@ -98,12 +97,9 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 	}
 
 	public static String resName(Req req) {
-		return req.route() != null ? resNameFromRoutePath(req.route().path()) : resName(req.path());
-	}
-
-	public static String resNameFromRoutePath(String path) {
-		path = Str.replace(path, PathPattern.PATH_PARAM_REGEX, PATH_PARAM_EXTRACTOR);
-		return resName(path);
+		String resName = resName(req.path());
+		U.notNull(resName, "resource name");
+		return resName;
 	}
 
 	public static String resName(String path) {
@@ -112,8 +108,13 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 			return res.isEmpty() ? "index" : Str.trimr(res, ".html");
 
 		} else {
-			return null;
+			throw U.rte("Invalid path!");
 		}
+	}
+
+	public static String viewName(Req req) {
+		//return req.route() != null ? inferViewNameFromRoutePath(req.route().path()) : resName(req.path());
+		return resName(req.path());
 	}
 
 	public static boolean hasExtension(String name) {

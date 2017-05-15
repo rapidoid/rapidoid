@@ -312,7 +312,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 
 	@Override
 	public synchronized String view() {
-		return view != null ? view : HttpUtils.resName(req);
+		return view != null ? view : HttpUtils.viewName(req);
 	}
 
 	@Override
