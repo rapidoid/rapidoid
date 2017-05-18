@@ -20,6 +20,7 @@ package org.rapidoid.dbadmin;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.group.GroupOf;
@@ -28,7 +29,7 @@ import org.rapidoid.jdbc.JdbcClient;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.5")
-public class DbAdmin {
+public class DbAdmin extends RapidoidThing {
 
 	public static void bootstrap() {
 		for (GroupOf<JdbcClient> gr : Groups.find(JdbcClient.class)) {
