@@ -58,14 +58,20 @@ jobs:
     threads: 64
 
 hibernate:
+  dialect: org.hibernate.dialect.HSQLDialect
+  connection:
+    driver_class: ${jdbc.driver}
+    username: ${jdbc.username}
+    password: ${jdbc.password}
+    url: ${jdbc.url}
   c3p0:
-    debug: false
-    initialPoolSize: 5
-    minPoolSize: 5
-    maxPoolSize: 100
-    acquireIncrement: 5
-    maxStatementsPerConnection: 10
-    idleConnectionTestPeriod: 300
+    debug: ${c3p0.debug}
+    initialPoolSize: ${c3p0.initialPoolSize}
+    minPoolSize: ${c3p0.minPoolSize}
+    maxPoolSize: ${c3p0.maxPoolSize}
+    acquireIncrement: ${c3p0.acquireIncrement}
+    maxStatementsPerConnection: ${c3p0.maxStatementsPerConnection}
+    idleConnectionTestPeriod: ${c3p0.idleConnectionTestPeriod}
 
 c3p0:
   debug: false
@@ -118,6 +124,10 @@ http:
     date: true
     server: true
     contentType: true
+
+jdbc:
+  host: localhost
+  options: ''
 
 reverse-proxy:
   timeout: 10000

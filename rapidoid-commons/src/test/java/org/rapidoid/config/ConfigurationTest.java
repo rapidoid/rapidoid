@@ -145,4 +145,24 @@ public class ConfigurationTest extends AbstractCommonsTest {
 		eq(Conf.section("foo").toMap(), U.map("bar", "b", "baz", "z"));
 	}
 
+	@Test
+	public void testMySqlProfile() {
+		Env.setArgs("jdbc.port=3333", "profiles=mysql");
+
+		eq(Env.profiles(), U.set("mysql", "test"));
+
+		verify("jdbc-mysql-profile", Conf.JDBC.toMap());
+		verify("hibernate-mysql-profile", Conf.HIBERNATE.toMap());
+	}
+
+	@Test
+	public void testPostgresProfile() {
+		Env.setArgs("profiles=postgres");
+
+		eq(Env.profiles(), U.set("postgres", "test"));
+
+		verify("jdbc-postgres-profile", Conf.JDBC.toMap());
+		verify("hibernate-postgres-profile", Conf.HIBERNATE.toMap());
+	}
+
 }

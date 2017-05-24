@@ -7,14 +7,17 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Arr;
+import org.rapidoid.commons.Str;
 import org.rapidoid.env.Env;
 import org.rapidoid.env.RapidoidEnv;
+import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 import org.rapidoid.value.Value;
 import org.rapidoid.value.Values;
+import org.rapidoid.wrap.BoolWrap;
 
 import java.io.File;
 import java.util.*;
@@ -494,6 +497,9 @@ public class ConfigImpl extends RapidoidThing implements Config {
 		}
 
 		overrideByEnv();
+
+		substitutePlaceholders();
+
 		Conf.applyConfig(this);
 
 		if (!loaded.isEmpty()) {
@@ -503,6 +509,51 @@ public class ConfigImpl extends RapidoidThing implements Config {
 				Log.warn("Didn't find any configuration files", "path", getPath());
 			}
 		}
+	}
+
+	private void substitutePlaceholders() {
+		Map<String, String> flat = toFlatMap();
+		Set<String> changedKeys = U.set();
+
+		for (int i = 0; i < 1000; i++) {
+			if (!substitutePlaceholders(flat, changedKeys)) {
+				break;
+			}
+		}
+
+		for (String key : changedKeys) {
+			set(key, flat.get(key));
+		}
+	}
+
+	private boolean substitutePlaceholders(final Map<String, String> flat, final Set<String> changedKeys) {
+		final BoolWrap changed = new BoolWrap();
+
+		for (Map.Entry<String, String> e : U.map(flat).entrySet()) {
+			final String key = e.getKey();
+			String val = e.getValue();
+
+			if (val.contains("${")) {
+
+				val = Str.replace(val, "\\$\\{([^\\}]+)\\}", new Mapper<String[], String>() {
+					@Override
+					public String map(String[] src) throws Exception {
+
+						String name = src[1];
+						String value = flat.get(name);
+
+						changed.value = true;
+						changedKeys.add(key);
+
+						return value;
+					}
+				});
+
+				flat.put(key, val);
+			}
+		}
+
+		return changed.value;
 	}
 
 	private void overrideByEnv() {

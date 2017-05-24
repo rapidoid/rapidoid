@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 20011
+Content-Length: 20091
 
 <!DOCTYPE html>
 <html lang="en">
@@ -375,6 +375,39 @@ Content-Length: 20011
         <th>Value</th>
       </tr>
       <tr>
+        <td>dialect</td>
+        <td>org.hibernate.dialect.HSQLDialect</td>
+      </tr>
+      <tr>
+        <td>connection</td>
+        <td>
+          <table class="table table-striped table-hover">
+            <tr>
+              <th>Key</th>
+              <th>Value</th>
+            </tr>
+            <tr>
+              <td>driver_class</td>
+              <td>org.hsqldb.jdbc.JDBCDriver</td>
+            </tr>
+            <tr>
+              <td>username</td>
+              <td>sa</td>
+            </tr>
+            <tr>
+              <td>password</td>
+              <td>
+                <i class="fa fa-question-circle"></i>
+              </td>
+            </tr>
+            <tr>
+              <td>url</td>
+              <td>jdbc:hsqldb:mem:public</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
         <td>c3p0</td>
         <td>
           <table class="table table-striped table-hover">
@@ -384,9 +417,7 @@ Content-Length: 20011
             </tr>
             <tr>
               <td>debug</td>
-              <td>
-                <i class="fa fa-square-o"></i>
-              </td>
+              <td>true</td>
             </tr>
             <tr>
               <td>initialPoolSize</td>
@@ -411,39 +442,6 @@ Content-Length: 20011
             <tr>
               <td>idleConnectionTestPeriod</td>
               <td>300</td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-      <tr>
-        <td>dialect</td>
-        <td>org.hibernate.dialect.HSQLDialect</td>
-      </tr>
-      <tr>
-        <td>connection</td>
-        <td>
-          <table class="table table-striped table-hover">
-            <tr>
-              <th>Key</th>
-              <th>Value</th>
-            </tr>
-            <tr>
-              <td>driver_class</td>
-              <td>org.hsqldb.jdbc.JDBCDriver</td>
-            </tr>
-            <tr>
-              <td>url</td>
-              <td>jdbc:hsqldb:mem:public</td>
-            </tr>
-            <tr>
-              <td>username</td>
-              <td>sa</td>
-            </tr>
-            <tr>
-              <td>password</td>
-              <td>
-                <i class="fa fa-question-circle"></i>
-              </td>
             </tr>
           </table>
         </td>
@@ -706,6 +704,41 @@ Content-Length: 20011
       </tr>
     </table>
     <h4>
+      <span class="label bg-salmon">jdbc</span>
+    </h4>
+    <table class="table table-striped table-hover">
+      <tr>
+        <th>Key</th>
+        <th>Value</th>
+      </tr>
+      <tr>
+        <td>host</td>
+        <td>localhost</td>
+      </tr>
+      <tr>
+        <td>options</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>driver</td>
+        <td>org.hsqldb.jdbc.JDBCDriver</td>
+      </tr>
+      <tr>
+        <td>url</td>
+        <td>jdbc:hsqldb:mem:public</td>
+      </tr>
+      <tr>
+        <td>username</td>
+        <td>sa</td>
+      </tr>
+      <tr>
+        <td>password</td>
+        <td>
+          <i class="fa fa-question-circle"></i>
+        </td>
+      </tr>
+    </table>
+    <h4>
       <span class="label bg-metal">reverse-proxy</span>
     </h4>
     <table class="table table-striped table-hover">
@@ -820,33 +853,6 @@ Content-Length: 20011
       <tr>
         <td>plan</td>
         <td>r1:d5:c64</td>
-      </tr>
-    </table>
-    <h4>
-      <span class="label bg-salmon">jdbc</span>
-    </h4>
-    <table class="table table-striped table-hover">
-      <tr>
-        <th>Key</th>
-        <th>Value</th>
-      </tr>
-      <tr>
-        <td>driver</td>
-        <td>org.hsqldb.jdbc.JDBCDriver</td>
-      </tr>
-      <tr>
-        <td>url</td>
-        <td>jdbc:hsqldb:mem:public</td>
-      </tr>
-      <tr>
-        <td>username</td>
-        <td>sa</td>
-      </tr>
-      <tr>
-        <td>password</td>
-        <td>
-          <i class="fa fa-question-circle"></i>
-        </td>
       </tr>
     </table>
 </div>

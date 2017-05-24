@@ -1,0 +1,9 @@
+{
+  "host" : "localhost",
+  "options" : "",
+  "driver" : "org.postgresql.Driver",
+  "url" : "jdbc:postgres://localhost:5432?",
+  "username" : "postgres",
+  "password" : "postgres",
+  "port" : 5432
+}
