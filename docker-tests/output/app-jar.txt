@@ -39,7 +39,7 @@
 [PLATFORM] INFO | GET,POST /rapidoid/processes                   | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
 [PLATFORM] INFO | GET,POST /rapidoid/processes/{id}              | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
 [PLATFORM] INFO | GET,POST /rapidoid/manageables                 | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/manageables/{type}/{id}     | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/manageables/{type}/{id}/*   | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
 [PLATFORM] INFO | GET,POST /rapidoid/jmx/memory                  | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
 [PLATFORM] INFO | GET,POST /rapidoid/jmx/mempool                 | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
 [PLATFORM] INFO | GET,POST /rapidoid/jmx/classes                 | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0

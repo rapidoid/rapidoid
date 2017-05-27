@@ -33,3 +33,6 @@ INFO | org.rapidoid.env.Environment | Automatically activating mode-specific pro
 INFO | org.rapidoid.env.Environment | Initialized environment | mode = PRODUCTION | profiles = [default, production]
 INFO | org.rapidoid.scan.ClasspathUtil | Setting application JAR | appJar = /app/app.jar | exists = false
 INFO | org.rapidoid.config.ConfigImpl | Loaded configuration | namespace = config | files = [built-in-config.yml, built-in-config-default.yml]
+INFO | org.rapidoid.net.impl.RapidoidServerLoop | Starting server | address = 0.0.0.0 | port = 8080 | I/O workers = 4 | sync = true | accept = non-blocking
+INFO | org.rapidoid.setup.Setup | Server has started | setup = app | home = http://localhost:8080
+INFO | org.rapidoid.setup.Setup | Static resources will be served from the following locations | setup = app | locations = [static, default/static]

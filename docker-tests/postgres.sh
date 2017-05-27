@@ -10,9 +10,10 @@ DB_ID=$(docker run -e POSTGRES_PASSWORD=db-pass -d postgres)
 
 sudo docker run \
     -e UNIFORM_OUTPUT=true \
+    -e JDBC_HOST=db \
     -e JDBC_PASSWORD=db-pass \
     -p 8888:8888 \
-    --link $DB_ID:postgres \
+    --link $DB_ID:db \
     rapidoid/rapidoid:$TAG \
     profiles=postgres \
     '/users <= SELECT usename from pg_shadow' \
