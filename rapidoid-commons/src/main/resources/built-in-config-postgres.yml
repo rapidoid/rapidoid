@@ -1,9 +1,10 @@
 jdbc:
   driver: org.postgresql.Driver
-  url: jdbc:postgres://${jdbc.host}:${jdbc.port}?${jdbc.options}
+  url: jdbc:postgresql://${jdbc.host}:${jdbc.port}/?${jdbc.options}
   username: postgres
   password: postgres
   port: 5432
+  options: loglevel=1
 
 hibernate:
   dialect: org.hibernate.dialect.PostgreSQL9Dialect
