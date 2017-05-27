@@ -2,6 +2,7 @@ package org.rapidoid.jdbc;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Err;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Callbacks;
@@ -218,17 +219,28 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 				this.dataSource = this.usePool ? createPool() : null;
 			}
 
-			String maskedPassword = U.isEmpty(password) ? "<empty>" : "<specified>";
-			Log.info("Initialized JDBC API", "!url", url, "!driver", driver, "!username", username, "!password", maskedPassword, "!dataSource", dataSource);
+			String ds = dataSource != null ? Cls.of(dataSource).getSimpleName() : null;
+			Log.info("Initialized JDBC API", "!url", url, "!driver", driver, "!username", username, "!password", maskedPassword(), "!dataSource", ds);
 
 			initialized = true;
 		}
 	}
 
+	private String maskedPassword() {
+		return U.isEmpty(password) ? "<empty>" : "<specified>";
+	}
+
 	private DataSource createPool() {
 
-		if (MscOpts.hasC3P0()) return C3P0Factory.createDataSourceFor(this);
-		if (MscOpts.hasHikari()) return HikariFactory.createDataSourceFor(this);
+		if (MscOpts.hasC3P0()) {
+			Log.info("Initializing JDBC connection pool with C3P0", "!url", url, "!driver", driver, "!username", username, "!password", maskedPassword());
+			return C3P0Factory.createDataSourceFor(this);
+		}
+
+		if (MscOpts.hasHikari()) {
+			Log.info("Initializing JDBC connection pool with Hikari", "!url", url, "!driver", driver, "!username", username, "!password", maskedPassword());
+			return HikariFactory.createDataSourceFor(this);
+		}
 
 		throw U.rte("Cannot create JDBC connection pool, couldn't find Hikari nor C3P0!");
 	}
