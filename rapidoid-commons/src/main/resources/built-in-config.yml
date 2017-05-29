@@ -72,6 +72,14 @@ hibernate:
     acquireIncrement: ${c3p0.acquireIncrement}
     maxStatementsPerConnection: ${c3p0.maxStatementsPerConnection}
     idleConnectionTestPeriod: ${c3p0.idleConnectionTestPeriod}
+  hikari:
+#    minimumIdle: 20
+#    maximumPoolSize: 100
+#    idleTimeout: 30000
+    dataSource:
+      url: ${jdbc.url}
+    username: ${jdbc.username}
+    password: ${jdbc.password}
 
 c3p0:
   debug: false
