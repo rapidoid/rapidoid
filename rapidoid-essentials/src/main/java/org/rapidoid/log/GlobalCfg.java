@@ -29,10 +29,18 @@ import org.rapidoid.u.U;
  */
 public class GlobalCfg extends RapidoidThing {
 
-	private static final boolean uniformOutput = is("uniform_output");
+	public static final String UNIFORM_OUTPUT = "UNIFORM_OUTPUT";
+	public static final String MANAGED_BY = "MANAGED_BY";
+
+	private static final boolean uniformOutput = is(UNIFORM_OUTPUT);
+	private static final String managedBy = get(MANAGED_BY);
 
 	public static boolean uniformOutput() {
 		return uniformOutput;
+	}
+
+	public static String managedBy() {
+		return managedBy;
 	}
 
 	public static boolean is(String name) {
