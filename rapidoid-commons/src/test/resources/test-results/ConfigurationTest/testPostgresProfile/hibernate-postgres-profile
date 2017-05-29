@@ -4,7 +4,7 @@
     "driver_class" : "org.postgresql.Driver",
     "username" : "postgres",
     "password" : "postgres",
-    "url" : "jdbc:postgres://localhost:5432?"
+    "url" : "jdbc:postgresql://localhost:5432/?loglevel=1"
   },
   "c3p0" : {
     "debug" : "true",
