@@ -126,11 +126,14 @@ public class ClasspathUtil extends RapidoidInitializer {
 			}
 
 			ClassLoader cl = ClassLoader.getSystemClassLoader();
-			URL[] urls = ((URLClassLoader) cl).getURLs();
 
-			for (URL url : urls) {
-				String path = Msc.urlDecode(Str.trimr(url.getPath(), '/'));
-				CLASSPATH.add(new File(path).getAbsolutePath());
+			if (cl instanceof URLClassLoader) {
+				URL[] urls = ((URLClassLoader) cl).getURLs();
+
+				for (URL url : urls) {
+					String path = Msc.urlDecode(Str.trimr(url.getPath(), '/'));
+					CLASSPATH.add(new File(path).getAbsolutePath());
+				}
 			}
 
 			if (U.isEmpty(appJar)) {
