@@ -290,6 +290,7 @@ public class ProcessHandle extends AbstractManageable {
 			builder.directory(params.in());
 		}
 
+		removeRapidoidConfig(builder.environment());
 		Date startingAt = new Date();
 
 		Process process;
@@ -308,6 +309,19 @@ public class ProcessHandle extends AbstractManageable {
 
 		synchronized (CRAWLER) {
 			if (CRAWLER.getState() == Thread.State.NEW) CRAWLER.start();
+		}
+	}
+
+	private void removeRapidoidConfig(Map<String, String> env) {
+		Iterator<Map.Entry<String, String>> it = env.entrySet().iterator();
+		while (it.hasNext()) {
+
+			Map.Entry<String, String> e = it.next();
+			String key = e.getKey().toUpperCase();
+
+			if (key.startsWith("RAPIDOID_") || key.startsWith("RAPIDOID.")) {
+				it.remove();
+			}
 		}
 	}
 
