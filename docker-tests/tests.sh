@@ -5,29 +5,10 @@ IFS=$'\n\t'
 export TAG=$1
 echo "TARGET TAG: $TAG"
 
-echo "Will need sudo!"
-sudo service nginx stop
-
 rm -rf ./output/
 mkdir output
 
-./simple-test.sh help --help
-
-./simple-test-bg.sh verify docker-self-verify
-./simple-test-bg.sh run
-
-./simple-test.sh cmd echo OK
-./simple-test.sh pwd pwd
-./simple-test.sh user whoami
-
-./configuration.sh
-./env-config.sh
-./proxy.sh
-
-./mysql.sh
-./postgres.sh
-
-./app-jar.sh
+./smoke.sh
 
 ./simple-test-bg.sh app-service-overview app.services=overview
 ./simple-test-bg.sh admin-service-overview admin.services=overview
