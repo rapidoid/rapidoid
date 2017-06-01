@@ -117,7 +117,7 @@ public class Setup extends RapidoidInitializer {
 	private volatile boolean activated;
 	private volatile boolean reloaded;
 
-	private final Once bootstrapedComponents = new Once();
+	private final Once bootstrappedBeans = new Once();
 
 	public static Setup create(String name) {
 		IoCContext ioc = IoC.createContext().name(name);
@@ -441,7 +441,7 @@ public class Setup extends RapidoidInitializer {
 			AppInfo.adminPort = 0;
 		}
 
-		bootstrapedComponents.reset();
+		bootstrappedBeans.reset();
 
 		initDefaults();
 	}
@@ -456,7 +456,7 @@ public class Setup extends RapidoidInitializer {
 
 	@SuppressWarnings("unchecked")
 	public Setup scan(String... packages) {
-		if (!bootstrapedComponents.go()) return this;
+		if (!bootstrappedBeans.go()) return this;
 
 		beans(App.findBeans(packages).toArray());
 
@@ -479,7 +479,7 @@ public class Setup extends RapidoidInitializer {
 
 	public void reload() {
 		reloaded = true;
-		bootstrapedComponents.reset();
+		bootstrappedBeans.reset();
 		ioCContext.reset();
 		http().resetConfig();
 		defaults = new RouteOptions();
