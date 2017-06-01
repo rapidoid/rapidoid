@@ -62,7 +62,7 @@ public class DefaultSetup extends RapidoidInitializer {
 	void initDefaults() {
 		admin.defaults().roles(Role.ADMINISTRATOR);
 
-		admin.routes().onInit(new Runnable() {
+		admin.onInit(new Runnable() {
 			@Override
 			public void run() {
 				if (Env.dev()) {

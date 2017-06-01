@@ -117,6 +117,8 @@ public class Setup extends RapidoidInitializer {
 	private volatile boolean activated;
 	private volatile boolean reloaded;
 
+	private volatile Runnable onInit;
+
 	private final Once bootstrappedBeans = new Once();
 
 	public static Setup create(String name) {
@@ -266,6 +268,9 @@ public class Setup extends RapidoidInitializer {
 			return;
 		}
 		activated = true;
+
+		Runnable initializer = onInit;
+		if (initializer != null) initializer.run();
 
 		if (!reloaded) {
 			listen();
@@ -589,5 +594,9 @@ public class Setup extends RapidoidInitializer {
 			", customization=" + customization +
 			", routes=" + routes +
 			'}';
+	}
+
+	public void onInit(Runnable onInit) {
+		this.onInit = onInit;
 	}
 }
