@@ -47,8 +47,8 @@ public class DefaultSetup extends RapidoidInitializer {
 		Customization appCustomization = new Customization("main", My.custom(), Conf.ROOT);
 		Customization adminCustomization = onSameServer ? appCustomization : new Customization("admin", My.custom(), Conf.ROOT);
 
-		HttpRoutesImpl appRoutes = new HttpRoutesImpl(appCustomization);
-		HttpRoutesImpl adminRoutes = onSameServer ? appRoutes : new HttpRoutesImpl(adminCustomization);
+		HttpRoutesImpl appRoutes = new HttpRoutesImpl("main", appCustomization);
+		HttpRoutesImpl adminRoutes = onSameServer ? appRoutes : new HttpRoutesImpl("admin", adminCustomization);
 
 		on = new Setup("main", "main", IoC.defaultContext(), Setup.MAIN_CFG, appCustomization, appRoutes);
 		admin = new Setup("admin", ADMIN_ZONE, IoC.defaultContext(), Setup.ADMIN_CFG, adminCustomization, adminRoutes);

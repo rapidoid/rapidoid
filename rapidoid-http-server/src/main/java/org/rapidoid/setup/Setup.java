@@ -124,7 +124,7 @@ public class Setup extends RapidoidInitializer {
 		Config config = Conf.section(name);
 
 		Customization customization = new Customization(name, My.custom(), config);
-		HttpRoutesImpl routes = new HttpRoutesImpl(customization);
+		HttpRoutesImpl routes = new HttpRoutesImpl(name, customization);
 
 		Setup setup = new Setup(name, "main", ioc, config, customization, routes);
 
@@ -578,5 +578,16 @@ public class Setup extends RapidoidInitializer {
 
 	static void initDefaults() {
 		DEFAULT.get().initDefaults();
+	}
+
+	@Override
+	public String toString() {
+		return "Setup{" +
+			"name='" + name + '\'' +
+			", zone='" + zone + '\'' +
+			", serverConfig=" + serverConfig +
+			", customization=" + customization +
+			", routes=" + routes +
+			'}';
 	}
 }
