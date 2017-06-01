@@ -26,6 +26,7 @@ Main configuration options:
 
 Supported commands:
   dev                       - CLI shortcut for convenient local development setup
+  installer                 - Print installation script for Rapidoid
   password                  - Generate salted password hash
   mvn                       - Run embedded Maven
   help                      - Show help
