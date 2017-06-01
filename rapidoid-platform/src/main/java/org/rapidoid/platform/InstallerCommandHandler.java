@@ -20,6 +20,7 @@ package org.rapidoid.platform;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.io.IO;
@@ -27,7 +28,7 @@ import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.5")
-public class InstallerCommandHandler {
+public class InstallerCommandHandler extends RapidoidThing {
 
 	public static void main(String[] args) {
 		U.must(U.isEmpty(args), "No arguments are expected for the 'installer' command!");

@@ -656,7 +656,7 @@ org.rapidoid.performance.BenchmarkRunner
 org.rapidoid.performance.Perf
 org.rapidoid.performance.WrkSetup
 org.rapidoid.platform.DefaultApp
-org.rapidoid.platform.InstallCommandHandler
+org.rapidoid.platform.InstallerCommandHandler
 org.rapidoid.platform.Main
 org.rapidoid.platform.MavenUtil
 org.rapidoid.platform.PasswordHashTool
