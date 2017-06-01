@@ -18,7 +18,7 @@
 [PLATFORM] INFO | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
 [PLATFORM] INFO | Server has started | setup = main | home = http://localhost:8888
 [PLATFORM] INFO | Static resources will be served from the following locations | setup = main | locations = [static, default/static]
-[PLATFORM] INFO | GET /rapidoid/ping                             | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | GET /rapidoid/ping                             | setup = main | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
 [PLATFORM] INFO | ---------------------------------------------------
 [PLATFORM] INFO | ADMIN CREDENTIALS: username = admin, password = <?>
 [PLATFORM] INFO | ---------------------------------------------------

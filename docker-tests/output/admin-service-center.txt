@@ -22,33 +22,33 @@
 [PLATFORM] INFO | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
 [PLATFORM] INFO | Server has started | setup = admin | home = http://localhost:8888
 [PLATFORM] INFO | Static resources will be served from the following locations | setup = admin | locations = [static, default/static]
-[PLATFORM] INFO | GET,POST /rapidoid                             | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/entities                    | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/routes                      | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/beans                       | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/config                      | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET /rapidoid/classpath                        | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/terminate                   | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/processes                   | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/processes/{id}              | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/manageables                 | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/manageables/{type}/{id}/*   | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/jmx/memory                  | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/jmx/mempool                 | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/jmx/classes                 | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/jmx/os                      | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/jmx/threads                 | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/jmx/compilation             | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/jmx/runtime                 | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/jmx/gc                      | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/metrics                     | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET /rapidoid/graphs/{id:.*}                   | setup = admin | roles = [administrator] | transaction = NONE | mvc = false | cacheTTL = 0
-[PLATFORM] INFO | POST /rapidoid/login                           | setup = admin | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
-[PLATFORM] INFO | GET /rapidoid/logout                           | setup = admin | roles = [logged_in] | transaction = NONE | mvc = false | cacheTTL = 0
-[PLATFORM] INFO | GET /rapidoid/status                           | setup = admin | roles = [administrator] | transaction = NONE | mvc = false | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/deployment                  | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | POST /rapidoid/stage                           | setup = admin | roles = [administrator] | transaction = NONE | mvc = false | cacheTTL = 0
-[PLATFORM] INFO | POST /rapidoid/deploy                          | setup = admin | roles = [administrator] | transaction = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid                             | setup = main | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/entities                    | setup = main | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/routes                      | setup = main | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/beans                       | setup = main | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/config                      | setup = main | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET /rapidoid/classpath                        | setup = main | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/terminate                   | setup = main | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/processes                   | setup = main | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/processes/{id}              | setup = main | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/manageables                 | setup = main | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/manageables/{type}/{id}/*   | setup = main | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/jmx/memory                  | setup = main | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/jmx/mempool                 | setup = main | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/jmx/classes                 | setup = main | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/jmx/os                      | setup = main | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/jmx/threads                 | setup = main | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/jmx/compilation             | setup = main | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/jmx/runtime                 | setup = main | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/jmx/gc                      | setup = main | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/metrics                     | setup = main | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET /rapidoid/graphs/{id:.*}                   | setup = main | roles = [administrator] | transaction = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | POST /rapidoid/login                           | setup = main | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | GET /rapidoid/logout                           | setup = main | roles = [logged_in] | transaction = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | GET /rapidoid/status                           | setup = main | roles = [administrator] | transaction = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/deployment                  | setup = main | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | POST /rapidoid/stage                           | setup = main | roles = [administrator] | transaction = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | POST /rapidoid/deploy                          | setup = main | roles = [administrator] | transaction = NONE | mvc = false | cacheTTL = 0
 [PLATFORM] INFO | ---------------------------------------------------
 [PLATFORM] INFO | ADMIN CREDENTIALS: username = admin, password = <?>
 [PLATFORM] INFO | ---------------------------------------------------
