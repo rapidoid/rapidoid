@@ -18,14 +18,14 @@
 [PLATFORM] INFO | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
 [PLATFORM] INFO | Server has started | setup = admin | home = http://localhost:8888
 [PLATFORM] INFO | Static resources will be served from the following locations | setup = admin | locations = [static, default/static]
-[PLATFORM] INFO | GET,POST /rapidoid/jmx/memory                  | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/jmx/mempool                 | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/jmx/classes                 | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/jmx/os                      | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/jmx/threads                 | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/jmx/compilation             | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/jmx/runtime                 | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/jmx/gc                      | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/jmx/memory                  | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/jmx/mempool                 | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/jmx/classes                 | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/jmx/os                      | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/jmx/threads                 | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/jmx/compilation             | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/jmx/runtime                 | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/jmx/gc                      | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
 [PLATFORM] INFO | ---------------------------------------------------
 [PLATFORM] INFO | ADMIN CREDENTIALS: username = admin, password = <?>
 [PLATFORM] INFO | ---------------------------------------------------

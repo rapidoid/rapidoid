@@ -14,12 +14,13 @@ docker run \
     -e "ROOT=/app/the-root" \
     -e "CONFIG=my-config" \
     -e "ON_PORT=5555" \
+    -e "RAPIDOID_PORT=9999" \
     rapidoid/rapidoid:$TAG \
     app.services=status \
     > output/env-config.txt 2>&1 &
 
-./wait-for.sh 5555
+./wait-for.sh 9999
 
-./http-get.sh env-config-req 5555 /rapidoid/status
+./http-get.sh env-config-req 9999 /rapidoid/status
 
 ./cleanup.sh

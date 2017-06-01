@@ -88,8 +88,6 @@ public class App extends RapidoidInitializer {
 			for (RapidoidModule module : RapidoidModules.getAll()) {
 				module.boot();
 			}
-
-			boot.services();
 		}
 
 		return boot;

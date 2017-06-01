@@ -7,11 +7,13 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Arr;
+import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.commons.Str;
 import org.rapidoid.env.Env;
 import org.rapidoid.env.RapidoidEnv;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.Operation;
+import org.rapidoid.log.GlobalCfg;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -530,7 +532,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 		final BoolWrap changed = new BoolWrap();
 
 		for (Map.Entry<String, String> e : U.map(flat).entrySet()) {
-			final String key = e.getKey();
+			final String cfgKey = e.getKey();
 			String val = e.getValue();
 
 			if (val.contains("${")) {
@@ -540,20 +542,54 @@ public class ConfigImpl extends RapidoidThing implements Config {
 					public String map(String[] src) throws Exception {
 
 						String name = src[1];
-						String value = flat.get(name);
+						Object value = flat.get(name);
+
+						if (value == null) {
+							value = GlobalCfg.get(name);
+						}
+
+						if (value == null) {
+							value = getSpecialValue(name);
+						}
+
+						U.must(value != null, "Cannot find configuration entry '%s' for key '%s'!", name, cfgKey);
 
 						changed.value = true;
-						changedKeys.add(key);
+						changedKeys.add(cfgKey);
 
-						return value;
+						return value.toString();
 					}
 				});
 
-				flat.put(key, val);
+				flat.put(cfgKey, val);
 			}
 		}
 
 		return changed.value;
+	}
+
+	private Object getSpecialValue(String name) {
+
+		switch (name.toLowerCase()) {
+
+			case "system.cpus":
+				return Runtime.getRuntime().availableProcessors();
+
+			case "rapidoid.snapshot":
+				return RapidoidInfo.isSnapshot();
+
+			case "rapidoid.builton":
+				return RapidoidInfo.builtOn();
+
+			case "rapidoid.version":
+				return RapidoidInfo.version();
+
+			case "rapidoid.info":
+				return RapidoidInfo.nameAndInfo();
+
+			default:
+				return null;
+		}
 	}
 
 	private void overrideByEnv() {

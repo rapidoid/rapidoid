@@ -153,6 +153,7 @@ public class ConfigurationTest extends AbstractCommonsTest {
 
 		verify("jdbc-mysql-profile", Conf.JDBC.toMap());
 		verify("hibernate-mysql-profile", Conf.HIBERNATE.toMap());
+		verify("root", Conf.ROOT.toMap());
 	}
 
 	@Test
@@ -163,6 +164,39 @@ public class ConfigurationTest extends AbstractCommonsTest {
 
 		verify("jdbc-postgres-profile", Conf.JDBC.toMap());
 		verify("hibernate-postgres-profile", Conf.HIBERNATE.toMap());
+		verify("root", Conf.ROOT.toMap());
 	}
+
+	@Test
+	public void testPlatformProfile() {
+		Env.setArgs("profiles=platform");
+
+		eq(Env.profiles(), U.set("platform", "test"));
+
+		verify("root", Conf.ROOT.toMap());
+	}
+
+	@Test
+	public void testBuiltInConfig() {
+		verify("root", Conf.ROOT.toMap());
+	}
+
+//	private Map<String, Object> rootCfgMasked() {
+//		Map<String, Object> root = Conf.ROOT.toMap();
+//
+//		Map<String, Object> rapidoid = U.cast(root.get("rapidoid"));
+//		Map<String, Object> system = U.cast(root.get("system"));
+//
+//		maskEntries(rapidoid, U.set("snapshot", "builtOn", "version", "nameAndInfo"));
+//		maskEntries(system, U.set("cpus"));
+//
+//		return root;
+//	}
+//
+//	private void maskEntries(Map<String, Object> rapidoid, Set<String> keysToMask) {
+//		for (Map.Entry<String, Object> e : rapidoid.entrySet()) {
+//			if (keysToMask.contains(e.getKey())) e.setValue("[MASKED]");
+//		}
+//	}
 
 }

@@ -21,8 +21,8 @@
 [PLATFORM] INFO | Setting application JAR | appJar = /app/app.jar | exists = true
 [PLATFORM] INFO | Loaded configuration | namespace = rapidoid | files = [built-in-config.yml, built-in-config-mysql.yml, built-in-config-platform.yml]
 [PLATFORM] INFO | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
-[PLATFORM] INFO | Server has started | setup = app | home = http://localhost:8888
-[PLATFORM] INFO | Static resources will be served from the following locations | setup = app | locations = [static, default/static]
+[PLATFORM] INFO | Server has started | setup = main | home = http://localhost:8888
+[PLATFORM] INFO | Static resources will be served from the following locations | setup = main | locations = [static, default/static]
 [PLATFORM] INFO | GET /users                                     | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
 [PLATFORM] INFO | GET /                                          | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
 [PLATFORM] INFO | -------------------------
@@ -61,78 +61,78 @@
 [PLATFORM] INFO | ---------------------------------------------------
 [PLATFORM] INFO | ADMIN CREDENTIALS: username = admin, password = <?>
 [PLATFORM] INFO | ---------------------------------------------------
-16:52:02.508 [main] INFO  com.example.Main - Starting application
-16:52:02.526 [main] INFO  o.r.config.RapidoidInitializer - Starting Rapidoid v<?>, built on <?> [Uniform output]
-16:52:02.527 [main] INFO  o.r.config.RapidoidInitializer - System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
-16:52:02.554 [main] INFO  org.rapidoid.env.Env - Setting application root | root = /app | content = [/app/app.jar, /app/config.yml]
-16:52:02.711 [main] INFO  org.rapidoid.env.Environment - Configuring active profiles | profiles = [mysql]
-16:52:02.715 [main] INFO  org.rapidoid.env.Environment - No production/dev/test mode was configured, inferring mode | mode = PRODUCTION
-16:52:02.716 [main] INFO  org.rapidoid.env.Environment - Automatically activating mode-specific profile | profile = production
-16:52:02.716 [main] INFO  org.rapidoid.env.Environment - Initialized environment | mode = PRODUCTION | profiles = [mysql, production]
-16:52:02.830 [main] INFO  org.rapidoid.config.ConfigImpl - Loaded configuration | namespace = config | files = [built-in-config.yml, built-in-config-mysql.yml, /app/config.yml]
-16:52:02.831 [main] INFO  org.rapidoid.setup.App - Inferring application root | main = com.example.Main | package = com.example
-16:52:02.835 [main] INFO  org.rapidoid.scan.ClasspathScanner - Scanning classpath | annotated = [@Controller, @Service, @Run, @Named, @Singleton] | packages = [com.example]
-16:52:02.926 [main] INFO  org.rapidoid.scan.ClasspathScanner - Finished classpath scan | time = <?>ms | searched = 3 | found = [MyCtrl]
-16:52:03.009 [server] INFO  o.r.net.impl.RapidoidServerLoop - Starting server | address = 0.0.0.0 | port = 8080 | I/O workers = 4 | sync = true | accept = non-blocking
-16:52:03.218 [main] INFO  org.rapidoid.setup.Setup - Server has started | setup = app | home = http://localhost:8080
-16:52:03.220 [main] INFO  org.rapidoid.setup.Setup - Static resources will be served from the following locations | setup = app | locations = [static, default/static]
-16:52:03.264 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - GET /manage                                    | setup = app | roles = [manager] | transaction = NONE | mvc = false | cacheTTL = 0
-16:52:03.268 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - GET /                                          | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
-16:52:03.278 [main] INFO  org.rapidoid.util.Msc - --------------------------------
-16:52:03.279 [main] INFO  org.rapidoid.util.Msc - Bootstrapping JPA (Hibernate)...
-16:52:03.279 [main] INFO  org.rapidoid.util.Msc - --------------------------------
-16:52:03.279 [main] INFO  org.rapidoid.scan.ClasspathScanner - Scanning classpath | annotated = [@Entity] | packages = [com.example]
-16:52:03.310 [main] INFO  org.rapidoid.scan.ClasspathScanner - Finished classpath scan | time = <?>ms | searched = 3 | found = [Book]
-16:52:03.310 [main] INFO  org.rapidoid.jpa.EMFUtil - Found 1 JPA Entities
-16:52:03.311 [main] INFO  org.rapidoid.util.Msc - ---------------------
-16:52:03.311 [main] INFO  org.rapidoid.util.Msc - Hibernate properties:
-16:52:03.311 [main] INFO  org.rapidoid.util.Msc - ---------------------
-16:52:03.311 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.c3p0.idleConnectionTestPeriod = 300
-16:52:03.311 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.connection.driver_class = com.mysql.jdbc.Driver
-16:52:03.312 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.c3p0.acquireIncrement = 5
-16:52:03.312 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.dialect = org.hibernate.dialect.MySQL5Dialect
-16:52:03.312 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.c3p0.initialPoolSize = 5
-16:52:03.313 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.connection.username = root
-16:52:03.313 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.c3p0.maxPoolSize = 100
-16:52:03.313 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.hbm2ddl.auto = create
-16:52:03.313 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.c3p0.minPoolSize = 5
-16:52:03.314 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.c3p0.debug = false
-16:52:03.314 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.connection.url = jdbc:mysql://mysql:3306/rapidoid
-16:52:03.314 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.connection.password = *****
-16:52:03.314 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.c3p0.maxStatementsPerConnection = 10
-16:52:03.315 [main] INFO  org.rapidoid.util.Msc - -------------------
-16:52:03.315 [main] INFO  org.rapidoid.util.Msc - Starting Hibernate:
-16:52:03.315 [main] INFO  org.rapidoid.util.Msc - -------------------
-16:52:03.336 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [
+15:01:36.002 [main] INFO  com.example.Main - Starting application
+15:01:36.022 [main] INFO  o.r.config.RapidoidInitializer - Starting Rapidoid v<?>, built on <?> [Uniform output]
+15:01:36.022 [main] INFO  o.r.config.RapidoidInitializer - System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
+15:01:36.050 [main] INFO  org.rapidoid.env.Env - Setting application root | root = /app | content = [/app/app.jar, /app/config.yml]
+15:01:36.214 [main] INFO  org.rapidoid.env.Environment - Configuring active profiles | profiles = [mysql]
+15:01:36.219 [main] INFO  org.rapidoid.env.Environment - No production/dev/test mode was configured, inferring mode | mode = PRODUCTION
+15:01:36.219 [main] INFO  org.rapidoid.env.Environment - Automatically activating mode-specific profile | profile = production
+15:01:36.219 [main] INFO  org.rapidoid.env.Environment - Initialized environment | mode = PRODUCTION | profiles = [mysql, production]
+15:01:36.337 [main] INFO  org.rapidoid.config.ConfigImpl - Loaded configuration | namespace = config | files = [built-in-config.yml, built-in-config-mysql.yml, /app/config.yml]
+15:01:36.337 [main] INFO  org.rapidoid.setup.App - Inferring application root | main = com.example.Main | package = com.example
+15:01:36.342 [main] INFO  org.rapidoid.scan.ClasspathScanner - Scanning classpath | annotated = [@Controller, @Service, @Run, @Named, @Singleton] | packages = [com.example]
+15:01:36.446 [main] INFO  org.rapidoid.scan.ClasspathScanner - Finished classpath scan | time = <?>ms | searched = 3 | found = [MyCtrl]
+15:01:36.537 [server] INFO  o.r.net.impl.RapidoidServerLoop - Starting server | address = 0.0.0.0 | port = 8080 | I/O workers = 4 | sync = true | accept = non-blocking
+15:01:36.745 [main] INFO  org.rapidoid.setup.Setup - Server has started | setup = main | home = http://localhost:8080
+15:01:36.745 [main] INFO  org.rapidoid.setup.Setup - Static resources will be served from the following locations | setup = main | locations = [static, default/static]
+15:01:36.791 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - GET /manage                                    | setup = app | roles = [manager] | transaction = NONE | mvc = false | cacheTTL = 0
+15:01:36.796 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - GET /                                          | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
+15:01:36.810 [main] INFO  org.rapidoid.util.Msc - --------------------------------
+15:01:36.810 [main] INFO  org.rapidoid.util.Msc - Bootstrapping JPA (Hibernate)...
+15:01:36.810 [main] INFO  org.rapidoid.util.Msc - --------------------------------
+15:01:36.811 [main] INFO  org.rapidoid.scan.ClasspathScanner - Scanning classpath | annotated = [@Entity] | packages = [com.example]
+15:01:36.841 [main] INFO  org.rapidoid.scan.ClasspathScanner - Finished classpath scan | time = <?>ms | searched = 3 | found = [Book]
+15:01:36.842 [main] INFO  org.rapidoid.jpa.EMFUtil - Found 1 JPA Entities
+15:01:36.842 [main] INFO  org.rapidoid.util.Msc - ---------------------
+15:01:36.842 [main] INFO  org.rapidoid.util.Msc - Hibernate properties:
+15:01:36.843 [main] INFO  org.rapidoid.util.Msc - ---------------------
+15:01:36.843 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.c3p0.idleConnectionTestPeriod = 300
+15:01:36.843 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.connection.driver_class = com.mysql.jdbc.Driver
+15:01:36.843 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.c3p0.acquireIncrement = 5
+15:01:36.843 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.dialect = org.hibernate.dialect.MySQL5Dialect
+15:01:36.844 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.c3p0.initialPoolSize = 5
+15:01:36.844 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.connection.username = root
+15:01:36.844 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.c3p0.maxPoolSize = 100
+15:01:36.844 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.hbm2ddl.auto = create
+15:01:36.844 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.c3p0.minPoolSize = 5
+15:01:36.845 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.c3p0.debug = false
+15:01:36.845 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.connection.url = jdbc:mysql://mysql:3306/rapidoid
+15:01:36.845 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.connection.password = *****
+15:01:36.845 [main] INFO  org.rapidoid.util.Msc - Hibernate property | hibernate.c3p0.maxStatementsPerConnection = 10
+15:01:36.845 [main] INFO  org.rapidoid.util.Msc - -------------------
+15:01:36.846 [main] INFO  org.rapidoid.util.Msc - Starting Hibernate:
+15:01:36.846 [main] INFO  org.rapidoid.util.Msc - -------------------
+15:01:36.929 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [
 	name: null
 	...]
-16:52:03.384 [main] INFO  org.hibernate.Version - HHH000412: Hibernate Core {4.3.11.Final}
-16:52:03.385 [main] INFO  org.hibernate.cfg.Environment - HHH000206: hibernate.properties not found
-16:52:03.386 [main] INFO  org.hibernate.cfg.Environment - HHH000021: Bytecode provider name : javassist
-16:52:03.458 [main] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {4.0.5.Final}
-16:52:03.484 [main] INFO  o.h.c.i.C3P0ConnectionProvider - HHH010002: C3P0 using driver: com.mysql.jdbc.Driver at URL: jdbc:mysql://mysql:3306/rapidoid
-16:52:03.484 [main] INFO  o.h.c.i.C3P0ConnectionProvider - HHH000046: Connection properties: {user=root, password=****}
-16:52:03.485 [main] INFO  o.h.c.i.C3P0ConnectionProvider - HHH000006: Autocommit mode: false
-16:52:03.498 [MLog-Init-Reporter] INFO  com.mchange.v2.log.MLog - MLog clients using slf4j logging.
-16:52:03.572 [main] INFO  com.mchange.v2.c3p0.C3P0Registry - Initializing c3p0-0.9.5.2 [built 08-December-2015 22:06:04 -0800; debug? true; trace: 10]
-16:52:03.618 [main] INFO  c.m.v.c.i.AbstractPoolBackedDataSource - Initializing c3p0 pool... com.mchange.v2.c3p0.PoolBackedDataSource@4e5cdf2a [ connectionPoolDataSource -> com.mchange.v2.c3p0.WrapperConnectionPoolDataSource@f4e0eee7 [ acquireIncrement -> 5, acquireRetryAttempts -> 30, acquireRetryDelay -> 1000, autoCommitOnClose -> false, automaticTestTable -> null, breakAfterAcquireFailure -> false, checkoutTimeout -> 0, connectionCustomizerClassName -> null, connectionTesterClassName -> com.mchange.v2.c3p0.impl.DefaultConnectionTester, contextClassLoaderSource -> caller, debugUnreturnedConnectionStackTraces -> false, factoryClassLocation -> null, forceIgnoreUnresolvedTransactions -> false, forceSynchronousCheckins -> false, identityToken -> 1bqq1hf9onm98hpr20kx1|2141a12, idleConnectionTestPeriod -> 300, initialPoolSize -> 5, maxAdministrativeTaskTime -> 0, maxConnectionAge -> 0, maxIdleTime -> 0, maxIdleTimeExcessConnections -> 0, maxPoolSize -> 100, maxStatements -> 0, maxStatementsPerConnection -> 10, minPoolSize -> 5, nestedDataSource -> com.mchange.v2.c3p0.DriverManagerDataSource@84235cf9 [ description -> null, driverClass -> null, factoryClassLocation -> null, forceUseNamedDriverClass -> false, identityToken -> 1bqq1hf9onm98hpr20kx1|3e2059ae, jdbcUrl -> jdbc:mysql://mysql:3306/rapidoid, properties -> {user=******, password=******} ], preferredTestQuery -> null, privilegeSpawnedThreads -> false, propertyCycle -> 0, statementCacheNumDeferredCloseThreads -> 0, testConnectionOnCheckin -> false, testConnectionOnCheckout -> false, unreturnedConnectionTimeout -> 0, usesTraditionalReflectiveProxies -> false; userOverrides: {} ], dataSourceName -> null, extensions -> {}, factoryClassLocation -> null, identityToken -> 1bqq1hf9onm98hpr20kx1|7c214cc0, numHelperThreads -> 3 ]
-Mon May 29 16:52:25 UTC 2017 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.
-Mon May 29 16:52:25 UTC 2017 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.
-Mon May 29 16:52:25 UTC 2017 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.
-Mon May 29 16:52:26 UTC 2017 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.
-Mon May 29 16:52:26 UTC 2017 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.
-16:52:26.347 [main] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
-16:52:26.446 [main] INFO  o.h.h.i.a.ASTQueryTranslatorFactory - HHH000397: Using ASTQueryTranslatorFactory
-16:52:26.487 [main] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 5.2.4.Final
-16:52:26.741 [main] INFO  o.h.tool.hbm2ddl.SchemaExport - HHH000227: Running hbm2ddl schema export
-16:52:27.474 [main] INFO  o.h.tool.hbm2ddl.SchemaExport - HHH000230: Schema export complete
-16:52:27.555 [main] INFO  org.rapidoid.util.Msc - -------------------------
-16:52:27.555 [main] INFO  org.rapidoid.util.Msc - JPA (Hibernate) is ready.
-16:52:27.556 [main] INFO  org.rapidoid.util.Msc - -------------------------
-16:52:27.563 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - POST /_login                                   | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
-16:52:27.565 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - GET /_logout                                   | setup = app | roles = [logged_in] | transaction = NONE | mvc = false | cacheTTL = 0
-16:52:27.596 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - GET /books                                     | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
-16:52:27.615 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - POST /books                                    | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
-16:52:27.618 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - PUT /books/{id}                                | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
-16:52:27.621 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - DELETE /books/{id}                             | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
-16:52:54.553 [executor24] WARN  o.r.h.impl.lowlevel.LowLevelHttpIO - Access denied for request: GET /manage | client = 172.17.0.1
+15:01:36.984 [main] INFO  org.hibernate.Version - HHH000412: Hibernate Core {4.3.11.Final}
+15:01:36.985 [main] INFO  org.hibernate.cfg.Environment - HHH000206: hibernate.properties not found
+15:01:36.986 [main] INFO  org.hibernate.cfg.Environment - HHH000021: Bytecode provider name : javassist
+15:01:37.171 [main] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {4.0.5.Final}
+15:01:37.209 [main] INFO  o.h.c.i.C3P0ConnectionProvider - HHH010002: C3P0 using driver: com.mysql.jdbc.Driver at URL: jdbc:mysql://mysql:3306/rapidoid
+15:01:37.210 [main] INFO  o.h.c.i.C3P0ConnectionProvider - HHH000046: Connection properties: {user=root, password=****}
+15:01:37.210 [main] INFO  o.h.c.i.C3P0ConnectionProvider - HHH000006: Autocommit mode: false
+15:01:37.226 [MLog-Init-Reporter] INFO  com.mchange.v2.log.MLog - MLog clients using slf4j logging.
+15:01:37.333 [main] INFO  com.mchange.v2.c3p0.C3P0Registry - Initializing c3p0-0.9.5.2 [built 08-December-2015 22:06:04 -0800; debug? true; trace: 10]
+15:01:37.378 [main] INFO  c.m.v.c.i.AbstractPoolBackedDataSource - Initializing c3p0 pool... com.mchange.v2.c3p0.PoolBackedDataSource@1eda00e1 [ connectionPoolDataSource -> com.mchange.v2.c3p0.WrapperConnectionPoolDataSource@45ed3a50 [ acquireIncrement -> 5, acquireRetryAttempts -> 30, acquireRetryDelay -> 1000, autoCommitOnClose -> false, automaticTestTable -> null, breakAfterAcquireFailure -> false, checkoutTimeout -> 0, connectionCustomizerClassName -> null, connectionTesterClassName -> com.mchange.v2.c3p0.impl.DefaultConnectionTester, contextClassLoaderSource -> caller, debugUnreturnedConnectionStackTraces -> false, factoryClassLocation -> null, forceIgnoreUnresolvedTransactions -> false, forceSynchronousCheckins -> false, identityToken -> 1bqq1hf9oqd6wyr157rdo0|2141a12, idleConnectionTestPeriod -> 300, initialPoolSize -> 5, maxAdministrativeTaskTime -> 0, maxConnectionAge -> 0, maxIdleTime -> 0, maxIdleTimeExcessConnections -> 0, maxPoolSize -> 100, maxStatements -> 0, maxStatementsPerConnection -> 10, minPoolSize -> 5, nestedDataSource -> com.mchange.v2.c3p0.DriverManagerDataSource@54a07eb0 [ description -> null, driverClass -> null, factoryClassLocation -> null, forceUseNamedDriverClass -> false, identityToken -> 1bqq1hf9oqd6wyr157rdo0|3e2059ae, jdbcUrl -> jdbc:mysql://mysql:3306/rapidoid, properties -> {user=******, password=******} ], preferredTestQuery -> null, privilegeSpawnedThreads -> false, propertyCycle -> 0, statementCacheNumDeferredCloseThreads -> 0, testConnectionOnCheckin -> false, testConnectionOnCheckout -> false, unreturnedConnectionTimeout -> 0, usesTraditionalReflectiveProxies -> false; userOverrides: {} ], dataSourceName -> null, extensions -> {}, factoryClassLocation -> null, identityToken -> 1bqq1hf9oqd6wyr157rdo0|7c214cc0, numHelperThreads -> 3 ]
+Wed May 31 15:01:56 UTC 2017 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.
+Wed May 31 15:01:56 UTC 2017 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.
+Wed May 31 15:01:56 UTC 2017 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.
+Wed May 31 15:01:57 UTC 2017 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.
+Wed May 31 15:01:57 UTC 2017 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.
+15:01:57.201 [main] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+15:01:57.294 [main] INFO  o.h.h.i.a.ASTQueryTranslatorFactory - HHH000397: Using ASTQueryTranslatorFactory
+15:01:57.334 [main] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 5.2.4.Final
+15:01:57.602 [main] INFO  o.h.tool.hbm2ddl.SchemaExport - HHH000227: Running hbm2ddl schema export
+15:01:57.738 [main] INFO  o.h.tool.hbm2ddl.SchemaExport - HHH000230: Schema export complete
+15:01:57.786 [main] INFO  org.rapidoid.util.Msc - -------------------------
+15:01:57.787 [main] INFO  org.rapidoid.util.Msc - JPA (Hibernate) is ready.
+15:01:57.788 [main] INFO  org.rapidoid.util.Msc - -------------------------
+15:01:57.792 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - POST /_login                                   | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
+15:01:57.794 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - GET /_logout                                   | setup = app | roles = [logged_in] | transaction = NONE | mvc = false | cacheTTL = 0
+15:01:57.809 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - GET /books                                     | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
+15:01:57.830 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - POST /books                                    | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
+15:01:57.834 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - PUT /books/{id}                                | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
+15:01:57.838 [main] INFO  o.rapidoid.http.impl.HttpRoutesImpl - DELETE /books/{id}                             | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
+15:02:22.701 [executor24] WARN  o.r.h.impl.lowlevel.LowLevelHttpIO - Access denied for request: GET /manage | client = 172.17.0.1

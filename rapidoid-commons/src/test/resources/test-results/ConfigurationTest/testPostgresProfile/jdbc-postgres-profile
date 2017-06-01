@@ -1,9 +1,9 @@
 {
   "host" : "localhost",
-  "options" : "loglevel=1",
   "driver" : "org.postgresql.Driver",
-  "url" : "jdbc:postgresql://localhost:5432/?loglevel=1",
   "username" : "postgres",
   "password" : "postgres",
+  "url" : "jdbc:postgresql://localhost:5432/?loglevel=1",
+  "options" : "loglevel=1",
   "port" : 5432
 }

@@ -11,7 +11,10 @@ import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.data.JSON;
 import org.rapidoid.env.Env;
 import org.rapidoid.env.RapidoidEnv;
-import org.rapidoid.http.*;
+import org.rapidoid.http.FastHttp;
+import org.rapidoid.http.HttpRoutes;
+import org.rapidoid.http.ReqHandler;
+import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.ViewResolver;
 import org.rapidoid.http.handler.HttpHandler;
@@ -29,10 +32,7 @@ import org.rapidoid.lambda.NParamLambda;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Server;
 import org.rapidoid.u.U;
-import org.rapidoid.util.AppInfo;
-import org.rapidoid.util.LazyInit;
-import org.rapidoid.util.MscOpts;
-import org.rapidoid.util.Once;
+import org.rapidoid.util.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -65,6 +65,12 @@ import static org.rapidoid.util.Constants.*;
 @Since("5.1.0")
 public class Setup extends RapidoidInitializer {
 
+	static final Config MAIN_CFG = Msc.isPlatform() ? Conf.RAPIDOID : Conf.ON;
+	static final Config ADMIN_CFG = Msc.isPlatform() ? Conf.RAPIDOID_ADMIN : Conf.ADMIN;
+
+	private static final String DEFAULT_ADDRESS = "0.0.0.0";
+	private static final int DEFAULT_PORT = Msc.isPlatform() ? 8888 : 8080;
+
 	private static final LazyInit<DefaultSetup> DEFAULT = new LazyInit<>(new Callable<DefaultSetup>() {
 		@Override
 		public DefaultSetup call() throws Exception {
@@ -94,9 +100,6 @@ public class Setup extends RapidoidInitializer {
 	private final String zone;
 	private final Config serverConfig;
 
-	private final String defaultAddress;
-	private final int defaultPort;
-
 	private final IoCContext ioCContext;
 
 	private final Customization customization;
@@ -123,7 +126,7 @@ public class Setup extends RapidoidInitializer {
 		Customization customization = new Customization(name, My.custom(), config);
 		HttpRoutesImpl routes = new HttpRoutesImpl(customization);
 
-		Setup setup = new Setup(name, "main", "0.0.0.0", 8080, ioc, config, customization, routes);
+		Setup setup = new Setup(name, "main", ioc, config, customization, routes);
 
 		instances.add(setup);
 		return setup;
@@ -134,12 +137,11 @@ public class Setup extends RapidoidInitializer {
 		instances.remove(this);
 	}
 
-	Setup(String name, String zone, String defaultAddress, int defaultPort, IoCContext ioCContext, Config serverConfig, Customization customization, HttpRoutesImpl routes) {
+	Setup(String name, String zone, IoCContext ioCContext,
+	      Config serverConfig, Customization customization, HttpRoutesImpl routes) {
+
 		this.name = name;
 		this.zone = zone;
-
-		this.defaultAddress = defaultAddress;
-		this.defaultPort = defaultPort;
 
 		this.ioCContext = ioCContext;
 		this.serverConfig = serverConfig;
@@ -205,17 +207,17 @@ public class Setup extends RapidoidInitializer {
 			}
 
 			if (server == null) {
-				int onPort;
+				int targetPort;
 
 				if (isAppOrAdminOnSameServer()) {
-					onPort = on().port();
-					server = proc.listen(on().address(), onPort);
+					targetPort = on().port();
+					server = proc.listen(on().address(), targetPort);
 				} else {
-					onPort = port();
-					server = proc.listen(address(), onPort);
+					targetPort = port();
+					server = proc.listen(address(), targetPort);
 				}
 
-				Log.info("!Server has started", "setup", name(), "!home", "http://localhost:" + onPort);
+				Log.info("!Server has started", "setup", name(), "!home", "http://localhost:" + targetPort);
 				Log.info("!Static resources will be served from the following locations", "setup", name(), "!locations", custom().staticFilesPath());
 			}
 		}
@@ -236,7 +238,9 @@ public class Setup extends RapidoidInitializer {
 	}
 
 	static boolean appAndAdminOnSameServer() {
-		return U.eq(Conf.ADMIN.get("port"), "same");
+		String mainPort = MAIN_CFG.entry("port").str().getOrNull();
+		String adminPort = ADMIN_CFG.entry("port").str().getOrNull();
+		return U.eq(mainPort, adminPort);
 	}
 
 	private boolean isAppAndSameAsAdmin() {
@@ -546,39 +550,20 @@ public class Setup extends RapidoidInitializer {
 
 	public int port() {
 		if (port == null) {
-			port = calcPort();
+			port = serverConfig.entry("port").or(DEFAULT_PORT);
 		}
-
-		port = U.or(port, defaultPort);
 
 		U.must(port >= 0, "The port of server setup '%s' is negative!", name());
+
 		return port;
-	}
-
-	private Integer calcPort() {
-		if (port != null) {
-			return port;
-		}
-
-		String portCfg = serverConfig.entry("port").str().getOrNull();
-
-		if (U.notEmpty(portCfg)) {
-			if (portCfg.equalsIgnoreCase("same")) {
-				U.must(!isApp(), "Cannot configure the app port (on.port) with value = 'same'!");
-				return on().port();
-
-			} else {
-				return U.num(portCfg);
-			}
-		}
-
-		return null;
 	}
 
 	public String address() {
 		if (address == null) {
-			address = serverConfig.entry("address").or(defaultAddress);
+			address = serverConfig.entry("address").or(DEFAULT_ADDRESS);
 		}
+
+		U.must(U.notEmpty(address), "The address of server setup '%s' is empty!", name());
 
 		return address;
 	}

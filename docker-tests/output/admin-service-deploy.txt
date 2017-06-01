@@ -18,9 +18,9 @@
 [PLATFORM] INFO | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
 [PLATFORM] INFO | Server has started | setup = admin | home = http://localhost:8888
 [PLATFORM] INFO | Static resources will be served from the following locations | setup = admin | locations = [static, default/static]
-[PLATFORM] INFO | GET,POST /rapidoid/deployment                  | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | POST /rapidoid/stage                           | setup = app | roles = [administrator] | transaction = NONE | mvc = false | cacheTTL = 0
-[PLATFORM] INFO | POST /rapidoid/deploy                          | setup = app | roles = [administrator] | transaction = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | GET,POST /rapidoid/deployment                  | setup = admin | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+[PLATFORM] INFO | POST /rapidoid/stage                           | setup = admin | roles = [administrator] | transaction = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | POST /rapidoid/deploy                          | setup = admin | roles = [administrator] | transaction = NONE | mvc = false | cacheTTL = 0
 [PLATFORM] INFO | ---------------------------------------------------
 [PLATFORM] INFO | ADMIN CREDENTIALS: username = admin, password = <?>
 [PLATFORM] INFO | ---------------------------------------------------
