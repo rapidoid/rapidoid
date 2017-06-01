@@ -103,6 +103,12 @@ public class Platform extends RapidoidThing {
 				PasswordHashTool.generatePasswordHash(cmdArgs);
 				System.exit(0);
 				break;
+
+			case "installer":
+				// interpret the "installer" command
+				InstallerCommandHandler.main(cmdArgs);
+				System.exit(0);
+				break;
 		}
 	}
 

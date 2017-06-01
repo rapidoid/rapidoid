@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+printf "\n[1] Creating 'rapidoid' command\n\n"
+
+printf "Writing to /usr/local/bin/rapidoid:\n\n"
+cat <<EOF | sudo tee /usr/local/bin/rapidoid
+#!/usr/bin/env bash
+exec docker run --rm -it --net=host -v \$(pwd):/app:ro rapidoid "\$@"
+EOF
+
+sudo chmod ugo+x /usr/local/bin/rapidoid
+
+printf "\n[2] Creating default workspace 'rapidoid'\n\n"
+
+WORKSPACE=~/rapidoid
+printf "Creating directory: $WORKSPACE\n\n"
+mkdir -p $WORKSPACE
+
+printf "[3] Creating desktop shortcut\n\n"
+
+printf "Writing to ~/.local/share/applications/rapidoid.desktop:\n\n"
+
+cat <<EOF | sed "s|THE-DEFAULT-LOCATION|$WORKSPACE|" | tee ~/.local/share/applications/rapidoid.desktop
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Name=Rapidoid
+Path=THE-DEFAULT-LOCATION
+Exec=rapidoid
+StartupNotify=true
+Terminal=true
+EOF
+
+printf "\nInstallation complete!\n"
+

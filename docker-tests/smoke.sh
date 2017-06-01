@@ -9,6 +9,8 @@ sudo service nginx stop || true
 ./simple-test-bg.sh verify docker-self-verify
 ./simple-test-bg.sh run
 
+./simple-test-bg.sh installer installer
+
 ./simple-test.sh cmd echo OK
 ./simple-test.sh pwd pwd
 ./simple-test.sh user whoami
