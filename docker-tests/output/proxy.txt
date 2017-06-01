@@ -23,9 +23,9 @@
 [PLATFORM] INFO | Starting server | address = 0.0.0.0 | port = 80 | I/O workers = 4 | sync = true | accept = non-blocking
 [PLATFORM] INFO | Server has started | setup = main | home = http://localhost:80
 [PLATFORM] INFO | Static resources will be served from the following locations | setup = main | locations = [static, default/static]
-[PLATFORM] INFO | ANY /app/*                                     | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | ANY /app/*                                     | setup = main | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
 [PLATFORM] INFO | Reverse proxy mapping | uriPrefix = / | upstreams = [http://localhost:9090, http://localhost:8080]
-[PLATFORM] INFO | ANY /*                                         | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | ANY /*                                         | setup = main | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
 [PLATFORM] INFO | ---------------------------------------------------
 [PLATFORM] INFO | ADMIN CREDENTIALS: username = admin, password = <?>
 [PLATFORM] INFO | ---------------------------------------------------
