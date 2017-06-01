@@ -128,7 +128,7 @@ public class Platform extends RapidoidThing {
 
 		PreApp.args(U.arrayOf(String.class, normalArgs));
 
-		App.boot();
+		App.boot().services();
 
 		for (String appRef : appRefs) {
 			new File(MscOpts.appsPath()).mkdirs();
