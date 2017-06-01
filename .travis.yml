@@ -3,7 +3,7 @@ sudo: false
 script: mvn clean verify -Dtravis-ci=true
 
 jdk:
-  - openjdk8
+  - oraclejdk8
 
 before_install:
   - export MAVEN_OPTS="-Xmx2g $MAVEN_OPTS"
