@@ -56,8 +56,6 @@ public abstract class HttpTestCommons extends TestCommons {
 
 		ClasspathUtil.setRootPackage("some.nonexisting.app");
 
-		System.out.println("--- STARTING SERVER ---");
-
 		JPAUtil.reset();
 		Conf.ROOT.setPath(getTestNamespace());
 		IoC.reset();
@@ -68,15 +66,11 @@ public abstract class HttpTestCommons extends TestCommons {
 		On.setup().activate();
 		On.setup().reload();
 
-		System.out.println("--- SERVER STARTED ---");
-
 		verifyNoRoutes();
 	}
 
 	@After
 	public void closeContext() {
-		System.out.println("--- STOPPING SERVER ---");
-
 		if (Admin.setup().isRunning()) {
 			if (Admin.setup().port() == On.setup().port()) {
 				Admin.setup().reset();
@@ -84,8 +78,6 @@ public abstract class HttpTestCommons extends TestCommons {
 				Admin.setup().shutdown();
 			}
 		}
-
-		System.out.println("--- SERVER STOPPED ---");
 	}
 
 	protected String localhost(String uri) {
