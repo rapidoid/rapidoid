@@ -9,6 +9,13 @@ before_install:
   - export MAVEN_OPTS="-Xmx2g $MAVEN_OPTS"
   - echo "MAVEN_OPTS='-Xmx2g'" > ~/.mavenrc
 
+install: true
+
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer
+
 env:
   global:
     - JAVA_OPTS="-Xmx2g"
