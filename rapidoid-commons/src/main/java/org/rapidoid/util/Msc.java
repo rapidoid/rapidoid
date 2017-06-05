@@ -307,7 +307,7 @@ public class Msc extends RapidoidThing {
 
 		String data = String.format("%s: %s in %s ms (%s/sec)", name, count, ms, avgs);
 
-		U.print(data + " | " + Insights.getCpuMemStats());
+		Log.info(data + " | " + Insights.getCpuMemStats());
 	}
 
 	public static void benchmarkMT(int threadsN, final String name, final int count, final CountDownLatch outsideLatch,

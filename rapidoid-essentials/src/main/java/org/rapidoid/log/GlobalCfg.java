@@ -39,6 +39,10 @@ public class GlobalCfg extends RapidoidThing {
 		return uniformOutput;
 	}
 
+	public static boolean quiet() {
+		return is("QUIET");
+	}
+
 	public static String managedBy() {
 		return managedBy;
 	}

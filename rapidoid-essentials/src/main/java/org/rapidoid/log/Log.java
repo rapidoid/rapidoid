@@ -66,7 +66,7 @@ public class Log extends RapidoidThing {
 	}
 
 	public static synchronized void reset() {
-		setLogLevel(LogLevel.INFO);
+		setLogLevel(GlobalCfg.quiet() ? LogLevel.ERROR : LogLevel.INFO);
 		LogStats.reset();
 	}
 
