@@ -90,7 +90,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	}
 
 	@Override
-	public void invalidate() {
+	public synchronized void invalidate() {
 		clear();
 		base.invalidate();
 	}
@@ -126,7 +126,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	}
 
 	@Override
-	public Object get(String key) {
+	public synchronized Object get(String key) {
 		makeSureIsInitialized();
 
 		Object value;
@@ -153,14 +153,14 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	}
 
 	@Override
-	public boolean has(String key) {
+	public synchronized boolean has(String key) {
 		makeSureIsInitialized();
 
 		return get(key) != null;
 	}
 
 	@Override
-	public boolean is(String key) {
+	public synchronized boolean is(String key) {
 		makeSureIsInitialized();
 
 		Object value = get(key);
@@ -173,14 +173,14 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	}
 
 	@Override
-	public Map<String, Object> toMap() {
+	public synchronized Map<String, Object> toMap() {
 		makeSureIsInitialized();
 
 		return Collections.unmodifiableMap(asMap());
 	}
 
 	@Override
-	public <T> Map<String, T> toMap(Class<T> type) {
+	public synchronized <T> Map<String, T> toMap(Class<T> type) {
 		return Coll.toBeanMap(toMap(), type);
 	}
 
@@ -234,7 +234,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	}
 
 	@Override
-	public void clear() {
+	public synchronized void clear() {
 		if (isRoot) {
 			base.properties.clear();
 		} else {
@@ -249,7 +249,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	}
 
 	@Override
-	public void remove(String key) {
+	public synchronized void remove(String key) {
 		makeSureIsInitialized();
 
 		synchronized (base.properties) {
@@ -258,7 +258,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	}
 
 	@Override
-	public void assign(Map<String, Object> entries) {
+	public synchronized void assign(Map<String, Object> entries) {
 		makeSureIsInitialized();
 
 		synchronized (base.properties) {
@@ -268,7 +268,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	}
 
 	@Override
-	public boolean isEmpty() {
+	public synchronized boolean isEmpty() {
 		makeSureIsInitialized();
 
 		synchronized (base.properties) {
@@ -277,7 +277,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	}
 
 	@Override
-	public void update(Map<String, ?> entries) {
+	public synchronized void update(Map<String, ?> entries) {
 		makeSureIsInitialized();
 
 		update(entries, true);
@@ -285,7 +285,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public void update(Map<String, ?> entries, boolean overridenByEnv) {
+	public synchronized void update(Map<String, ?> entries, boolean overridenByEnv) {
 		makeSureIsInitialized();
 
 		synchronized (base.properties) {
@@ -305,12 +305,12 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	}
 
 	@Override
-	public void set(String key, Object value) {
+	public synchronized void set(String key, Object value) {
 		set(key, value, true);
 	}
 
 	@Override
-	public void set(String key, Object value, boolean overridenByEnv) {
+	public synchronized void set(String key, Object value, boolean overridenByEnv) {
 		makeSureIsInitialized();
 
 		String[] keys = key.split("\\.");
@@ -329,9 +329,8 @@ public class ConfigImpl extends RapidoidThing implements Config {
 		}
 	}
 
-
 	@Override
-	public String toString() {
+	public synchronized String toString() {
 		makeSureIsInitialized();
 
 		synchronized (base.properties) {
@@ -341,7 +340,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 
 	@Override
 	@Deprecated
-	public void args(List<String> args) {
+	public synchronized void args(List<String> args) {
 		mustBeRoot();
 		base.initial.putAll(Msc.parseArgs(args));
 	}
@@ -361,7 +360,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	}
 
 	@Override
-	public Config parent() {
+	public synchronized Config parent() {
 		if (isRoot) return null;
 
 		List<String> parentsKeys = baseKeys.subList(0, baseKeys.size() - 1);
@@ -374,7 +373,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	}
 
 	@Override
-	public Map<String, String> toFlatMap() {
+	public synchronized Map<String, String> toFlatMap() {
 		makeSureIsInitialized();
 
 		Map<String, String> flatMap = U.map();
@@ -403,7 +402,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	}
 
 	@Override
-	public Properties toProperties() {
+	public synchronized Properties toProperties() {
 		makeSureIsInitialized();
 
 		Properties props = new Properties();
@@ -422,7 +421,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	}
 
 	@Override
-	public Config setFilenameBase(String filenameBase) {
+	public synchronized Config setFilenameBase(String filenameBase) {
 		mustBeRoot();
 
 		if (base.setFilenameBase(filenameBase)) {
@@ -438,7 +437,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	}
 
 	@Override
-	public Config setPath(String path) {
+	public synchronized Config setPath(String path) {
 		mustBeRoot();
 
 		if (base.setPath(path)) {
@@ -458,7 +457,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	}
 
 	@Override
-	public void applyTo(Object target) {
+	public synchronized void applyTo(Object target) {
 		makeSureIsInitialized();
 		Beany.update(target, toMap());
 	}
@@ -597,18 +596,18 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	}
 
 	@Override
-	public boolean useBuiltInDefaults() {
+	public synchronized boolean useBuiltInDefaults() {
 		return base.useBuiltInDefaults();
 	}
 
 	@Override
-	public boolean isInitialized() {
+	public synchronized boolean isInitialized() {
 		RapidoidEnv.touch();
 		return base.initialized;
 	}
 
 	@Override
-	public ConfigChanges getChangesSince(Config previousConfig) {
+	public synchronized ConfigChanges getChangesSince(Config previousConfig) {
 
 		Map<String, Object> prevMap;
 		boolean initial = previousConfig == null;
@@ -685,7 +684,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 	}
 
 	@Override
-	public Config defaultOrCustom(String name) {
+	public synchronized Config defaultOrCustom(String name) {
 		U.must(U.notEmpty(name), "The configuration name cannot be empty! Use name 'default' for the default configuration.");
 
 		if (name.equalsIgnoreCase("default")) return this;
