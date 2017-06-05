@@ -62,7 +62,7 @@ public abstract class AbstractLoopThread extends RapidoidThread {
 				return;
 
 			} catch (Throwable e) {
-				Log.error("Exception occured inside the thread loop!", e);
+				Log.error("Exception occurred inside the thread loop!", e);
 			}
 		}
 	}

@@ -107,7 +107,7 @@ public abstract class TestCommons {
 	@After
 	public void checkForErrors() {
 		if (hasError) {
-			Assert.fail("Assertion error(s) occured, probably were caught or were thrown on non-main thread!");
+			Assert.fail("Assertion error(s) occurred, probably were caught or were thrown on non-main thread!");
 
 		} else if (getTestAnnotation(ExpectErrors.class) == null && hasErrorsLogged()) {
 			Assert.fail("Unexpected errors were logged!");
