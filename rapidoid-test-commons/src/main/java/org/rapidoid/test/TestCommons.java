@@ -38,6 +38,7 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author Nikolche Mihajlovski
@@ -453,6 +454,8 @@ public abstract class TestCommons {
 
 	protected void multiThreaded(int threadsN, final int count, final Runnable runnable) {
 
+		final AtomicBoolean failed = new AtomicBoolean();
+
 		eq(count % threadsN, 0);
 		final int countPerThread = count / threadsN;
 
@@ -461,13 +464,17 @@ public abstract class TestCommons {
 		for (int i = 1; i <= threadsN; i++) {
 			new Thread() {
 				public void run() {
-					for (int j = 0; j < countPerThread; j++) {
-						runnable.run();
+					for (int j = 0; j < countPerThread && !failed.get(); j++) {
+						try {
+							runnable.run();
+
+						} catch (Throwable e) {
+							failed.set(true);
+							e.printStackTrace();
+						}
 					}
 					latch.countDown();
 				}
-
-				;
 			}.start();
 		}
 
@@ -476,6 +483,8 @@ public abstract class TestCommons {
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
+
+		isFalse(failed.get());
 	}
 
 	protected Throwable rootCause(Throwable e) {
