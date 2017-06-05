@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-printf "\n[1] Creating 'rapidoid' command\n\n"
+SEP="---"
+
+printf "\n[1] $SEP Creating 'rapidoid' command $SEP\n\n"
 
 printf "Writing to /usr/local/bin/rapidoid:\n\n"
 cat <<EOF | sudo tee /usr/local/bin/rapidoid
@@ -11,27 +13,39 @@ EOF
 
 sudo chmod ugo+x /usr/local/bin/rapidoid
 
-printf "\n[2] Creating default workspace 'rapidoid'\n\n"
+
+printf "\n[2] $SEP Creating default workspace 'rapidoid' $SEP\n\n"
 
 WORKSPACE=~/rapidoid
 printf "Creating directory: $WORKSPACE\n\n"
 mkdir -p $WORKSPACE
 
-printf "[3] Creating desktop shortcut\n\n"
+
+printf "[3] $SEP Setting Rapidoid icon $SEP\n\n"
+
+printf "Downloading the Rapidoid icon:\n\n"
+
+ICON=~/.local/share/icons/rapidoid.png
+wget -nv -O $ICON https://raw.githubusercontent.com/rapidoid/rapidoid/master/dist/rapidoid.png
+
+
+printf "\n[4] $SEP Creating desktop shortcut $SEP\n\n"
 
 printf "Writing to ~/.local/share/applications/rapidoid.desktop:\n\n"
 
-cat <<EOF | sed "s|THE-DEFAULT-LOCATION|$WORKSPACE|" | tee ~/.local/share/applications/rapidoid.desktop
+cat <<EOF | sed "s|THE-WORKSPACE|$WORKSPACE|" | sed "s|THE-ICON|$ICON|" | tee ~/.local/share/applications/rapidoid.desktop
 [Desktop Entry]
 Encoding=UTF-8
 Version=1.0
 Type=Application
 Name=Rapidoid
-Path=THE-DEFAULT-LOCATION
+Path=THE-WORKSPACE
+Icon=THE-ICON
 Exec=rapidoid
 StartupNotify=true
 Terminal=true
 EOF
+
 
 printf "\nInstallation complete!\n"
 
