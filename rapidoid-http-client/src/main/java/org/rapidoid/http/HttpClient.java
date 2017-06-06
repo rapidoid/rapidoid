@@ -57,6 +57,8 @@ public class HttpClient extends RapidoidThing {
 
 	private volatile int maxRedirects = 5;
 
+	private volatile int timeout = 5000;
+
 	private final Map<String, String> cookies = Coll.synchronizedMap();
 
 	private final LazyInit<CloseableHttpAsyncClient> client = new LazyInit<CloseableHttpAsyncClient>(
@@ -177,6 +179,15 @@ public class HttpClient extends RapidoidThing {
 
 	public Map<String, String> cookies() {
 		return this.cookies;
+	}
+
+	public int timeout() {
+		return timeout;
+	}
+
+	public HttpClient timeout(int timeout) {
+		this.timeout = timeout;
+		return this;
 	}
 
 	public HttpReq req() {
