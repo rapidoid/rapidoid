@@ -7,6 +7,7 @@ import org.rapidoid.collection.Coll;
 import org.rapidoid.env.Env;
 import org.rapidoid.env.RapidoidEnv;
 import org.rapidoid.lambda.Mapper;
+import org.rapidoid.log.GlobalCfg;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.scan.ClasspathUtil;
@@ -102,7 +103,7 @@ public class Conf extends RapidoidThing {
 			}
 
 			String logLevel = LOG.entry("level").or("info");
-			Log.setLogLevel(LogLevel.valueOf(logLevel.toUpperCase()));
+			Log.setLogLevel(GlobalCfg.quiet() ? LogLevel.ERROR : LogLevel.valueOf(logLevel.toUpperCase()));
 		}
 	}
 
