@@ -1,0 +1,21 @@
+{
+  "dialect" : "org.hibernate.dialect.PostgreSQL9Dialect",
+  "connection" : {
+    "driver_class" : "org.postgresql.Driver",
+    "username" : "postgres",
+    "password" : "postgres",
+    "url" : "jdbc:postgresql://localhost:5432/?loglevel=1"
+  },
+  "c3p0" : {
+    "debug" : "true",
+    "initialPoolSize" : "5",
+    "minPoolSize" : "5",
+    "maxPoolSize" : "100",
+    "acquireIncrement" : "5",
+    "maxStatementsPerConnection" : "10",
+    "idleConnectionTestPeriod" : "300"
+  },
+  "hbm2ddl" : {
+    "auto" : "update"
+  }
+}

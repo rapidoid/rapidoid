@@ -186,6 +186,10 @@ org.rapidoid.data.TUUIDDeserializer
 org.rapidoid.data.TUUIDSerializer
 org.rapidoid.data.XML
 org.rapidoid.data.YAML
+org.rapidoid.dbadmin.DbAdmin
+org.rapidoid.dbadmin.ManageableDatabase
+org.rapidoid.dbadmin.ManageableRdbms
+org.rapidoid.dbadmin.ManageableTable
 org.rapidoid.deploy.AppChangeWatcher
 org.rapidoid.deploy.AppDeployer
 org.rapidoid.deploy.AppDownloader
@@ -268,6 +272,7 @@ org.rapidoid.group.Groups
 org.rapidoid.group.GroupStats
 org.rapidoid.group.Manageable
 org.rapidoid.group.ManageableBean
+org.rapidoid.group.Manageables
 org.rapidoid.gui.base.AbstractCommand
 org.rapidoid.gui.base.AbstractInput
 org.rapidoid.gui.base.AbstractOption
@@ -653,6 +658,7 @@ org.rapidoid.performance.BenchmarkRunner
 org.rapidoid.performance.Perf
 org.rapidoid.performance.WrkSetup
 org.rapidoid.platform.DefaultApp
+org.rapidoid.platform.InstallerCommandHandler
 org.rapidoid.platform.Main
 org.rapidoid.platform.MavenUtil
 org.rapidoid.platform.PasswordHashTool

@@ -90,7 +90,9 @@ public class BeanProperties extends RapidoidThing implements Iterable<Prop> {
 					}
 				}
 
-				Collections.sort(selected, selector);
+				if (U.isEmpty(include)) {
+					Collections.sort(selected, selector);
+				}
 
 				return from(selected);
 			}

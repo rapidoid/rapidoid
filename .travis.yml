@@ -1,6 +1,6 @@
 language: java
 sudo: false
-script: mvn clean verify
+script: mvn clean verify -Dtravis-ci=true -Dquiet=true
 
 jdk:
   - oraclejdk8
@@ -8,6 +8,13 @@ jdk:
 before_install:
   - export MAVEN_OPTS="-Xmx2g $MAVEN_OPTS"
   - echo "MAVEN_OPTS='-Xmx2g'" > ~/.mavenrc
+
+install: true
+
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer
 
 env:
   global:

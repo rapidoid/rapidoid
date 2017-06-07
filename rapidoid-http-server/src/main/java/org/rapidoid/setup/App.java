@@ -30,6 +30,7 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.data.JSON;
 import org.rapidoid.env.Env;
+import org.rapidoid.group.Groups;
 import org.rapidoid.io.Res;
 import org.rapidoid.ioc.Beans;
 import org.rapidoid.ioc.IoC;
@@ -67,9 +68,7 @@ public class App extends RapidoidInitializer {
 	public static AppBootstrap bootstrap(String[] args, String... extraArgs) {
 		PreApp.args(args, extraArgs);
 
-		scan();
-
-		return boot();
+		return boot().beans().services();
 	}
 
 	public static AppBootstrap run(String[] args, String... extraArgs) {
@@ -87,8 +86,6 @@ public class App extends RapidoidInitializer {
 			for (RapidoidModule module : RapidoidModules.getAll()) {
 				module.boot();
 			}
-
-			boot.services();
 		}
 
 		return boot;
@@ -156,6 +153,7 @@ public class App extends RapidoidInitializer {
 		App.path = null;
 		App.boot = null;
 
+		Groups.reset();
 		Conf.reset();
 		Env.reset();
 		Res.reset();

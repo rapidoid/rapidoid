@@ -80,8 +80,6 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 
 		Conf.ROOT.setPath(getTestNamespace());
 
-		U.print("--- STARTING SERVER ---");
-
 		My.reset();
 
 		App.resetGlobalState();
@@ -91,8 +89,6 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 		On.setup().reload();
 
 		App.path(getTestPackageName());
-
-		U.print("--- SERVER STARTED ---");
 
 		verifyNoRoutes();
 
@@ -112,8 +108,6 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 
 	@After
 	public void closeContext() {
-		U.print("--- STOPPING SERVER ---");
-
 		if (Admin.setup().isRunning()) {
 			if (Admin.setup().port() == On.setup().port()) {
 				Admin.setup().reset();
@@ -121,8 +115,6 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 				Admin.setup().shutdown();
 			}
 		}
-
-		U.print("--- SERVER STOPPED ---");
 
 		RapidoidIntegrationTest.after(this);
 	}

@@ -849,7 +849,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		try {
 			return sessionManager.loadSession(this, sessionId());
 		} catch (Exception e) {
-			throw U.rte("Error occured while loading the session!", e);
+			throw U.rte("Error occurred while loading the session!", e);
 		}
 	}
 
@@ -859,7 +859,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		try {
 			sessionManager.saveSession(this, sessionId(), session);
 		} catch (Exception e) {
-			throw U.rte("Error occured while saving the session!", e);
+			throw U.rte("Error occurred while saving the session!", e);
 		}
 	}
 

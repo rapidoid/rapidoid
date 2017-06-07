@@ -45,7 +45,6 @@ import org.rapidoid.model.Item;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
 import org.rapidoid.render.Render;
-import org.rapidoid.render.Templates;
 import org.rapidoid.security.Role;
 import org.rapidoid.timeseries.TimeSeries;
 import org.rapidoid.u.U;
@@ -849,7 +848,7 @@ public abstract class GUI extends HTML implements Role {
 		Map<String, ?> model = U.map("points", points, "names", U.list(ts.title()), "title", ts.title(),
 			"id", newId(), "class", divClass, "uri", Str.triml(uri, "/"));
 
-		Tag graph = hardcoded(Templates.load("dygraphs.html").render(model));
+		Tag graph = render("dygraphs.html", model);
 
 		return div(graph);
 	}
@@ -956,7 +955,7 @@ public abstract class GUI extends HTML implements Role {
 		return render(templateFile, U.map());
 	}
 
-	public static Tag render(String templateFile, Map<Object, Object> model) {
+	public static Tag render(String templateFile, Object model) {
 		return hardcoded(Render.file(templateFile).model(model));
 	}
 

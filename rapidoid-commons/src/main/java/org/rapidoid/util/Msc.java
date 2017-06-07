@@ -12,9 +12,9 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cache.Caching;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.Coll;
-import org.rapidoid.commons.Arr;
 import org.rapidoid.commons.Str;
 import org.rapidoid.config.Conf;
+import org.rapidoid.config.Config;
 import org.rapidoid.config.ConfigOptions;
 import org.rapidoid.crypto.Crypto;
 import org.rapidoid.ctx.Ctx;
@@ -336,7 +336,7 @@ public class Msc extends RapidoidThing {
 
 		String data = String.format("%s: %s in %s ms (%s/sec)", name, count, ms, avgs);
 
-		U.print(data + " | " + Insights.getCpuMemStats());
+		Log.info(data + " | " + Insights.getCpuMemStats());
 	}
 
 	public static void benchmarkMT(int threadsN, final String name, final int count, final CountDownLatch outsideLatch,
@@ -1069,22 +1069,15 @@ public class Msc extends RapidoidThing {
 		return RapidoidThreadLocals.get();
 	}
 
-	public static boolean bootService(String setup, String service) {
-		String prefix = setup + ".services=";
+	public static boolean bootService(Config config, String service) {
 
-		for (String arg : Env.args()) {
-			if (arg.startsWith(prefix)) {
-				String[] services = Str.triml(arg, prefix).split("\\,");
+		List<String> services = config.entry("services").list();
 
-				for (String srvc : services) {
-					U.must(ConfigOptions.SERVICE_NAMES.contains(srvc), "Unknown service: '%s'!", srvc);
-				}
-
-				return Arr.contains(services, service);
-			}
+		for (String srvc : services) {
+			U.must(ConfigOptions.SERVICE_NAMES.contains(srvc), "Unknown service: '%s'!", srvc);
 		}
 
-		return false;
+		return services.contains(service);
 	}
 
 	public static boolean dockerized() {

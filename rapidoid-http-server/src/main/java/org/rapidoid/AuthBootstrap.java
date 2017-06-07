@@ -32,13 +32,13 @@ import org.rapidoid.util.Msc;
 @Since("5.2.3")
 public class AuthBootstrap extends RapidoidThing {
 
-	private static volatile String generatedAdminPassword;
+	private static volatile String randomAdminPassword;
 
 	public static synchronized void bootstrapAdminCredentials() {
 		Config admin = Conf.USERS.sub("admin");
 
 		if (!admin.has("password") && !admin.has("hash")) {
-			String pass = generatedAdminPassword();
+			String pass = randomAdminPassword();
 			admin.set("password", pass);
 
 			String maybePass = "" + Msc.maybeMasked(pass);
@@ -46,12 +46,12 @@ public class AuthBootstrap extends RapidoidThing {
 		}
 	}
 
-	public static synchronized String generatedAdminPassword() {
-		if (generatedAdminPassword == null) {
-			generatedAdminPassword = Crypto.randomStr(16);
+	private static synchronized String randomAdminPassword() {
+		if (randomAdminPassword == null) {
+			randomAdminPassword = Crypto.randomStr(16);
 		}
 
-		return generatedAdminPassword;
+		return randomAdminPassword;
 	}
 
 }

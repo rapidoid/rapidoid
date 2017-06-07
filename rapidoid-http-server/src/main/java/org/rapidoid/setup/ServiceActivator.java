@@ -54,32 +54,32 @@ public class ServiceActivator extends RapidoidThing {
 	}
 
 	private static void bootstrapServices(Setup setup, String setupName, Config config) {
-		if (boot(setupName, "overview")) goodies().overview(setup);
-		if (boot(setupName, "application")) goodies().application(setup);
-		if (boot(setupName, "lifecycle")) goodies().lifecycle(setup);
-		if (boot(setupName, "processes")) goodies().processes(setup);
-		if (boot(setupName, "manageables")) goodies().manageables(setup);
-		if (boot(setupName, "jmx")) goodies().jmx(setup);
-		if (boot(setupName, "metrics")) goodies().metrics(setup);
-		if (boot(setupName, "deploy")) goodies().deploy(setup);
-		if (boot(setupName, "ping")) goodies().ping(setup);
-		if (boot(setupName, "auth")) goodies().auth(setup);
-		if (boot(setupName, "oauth")) goodies().oauth(setup);
-		if (boot(setupName, "entities")) goodies().entities(setup);
-		if (boot(setupName, "center")) goodies().adminCenter(setup);
-		if (boot(setupName, "welcome")) goodies().welcome(setup);
-		if (boot(setupName, "status")) goodies().status(setup);
-		if (boot(setupName, "discovery")) goodies().discovery(setup);
-		if (boot(setupName, "echo")) goodies().echo(setup);
+		if (boot(setupName, config, "overview")) goodies().overview(setup);
+		if (boot(setupName, config, "application")) goodies().application(setup);
+		if (boot(setupName, config, "lifecycle")) goodies().lifecycle(setup);
+		if (boot(setupName, config, "processes")) goodies().processes(setup);
+		if (boot(setupName, config, "manageables")) goodies().manageables(setup);
+		if (boot(setupName, config, "jmx")) goodies().jmx(setup);
+		if (boot(setupName, config, "metrics")) goodies().metrics(setup);
+		if (boot(setupName, config, "deploy")) goodies().deploy(setup);
+		if (boot(setupName, config, "ping")) goodies().ping(setup);
+		if (boot(setupName, config, "auth")) goodies().auth(setup);
+		if (boot(setupName, config, "oauth")) goodies().oauth(setup);
+		if (boot(setupName, config, "entities")) goodies().entities(setup);
+		if (boot(setupName, config, "center")) goodies().adminCenter(setup);
+		if (boot(setupName, config, "welcome")) goodies().welcome(setup);
+		if (boot(setupName, config, "status")) goodies().status(setup);
+		if (boot(setupName, config, "discovery")) goodies().discovery(setup);
+		if (boot(setupName, config, "echo")) goodies().echo(setup);
 	}
 
-	private static boolean boot(String setupName, String service) {
+	private static boolean boot(String setupName, Config config, String service) {
 
 		if (!documented(service)) throw U.rte("Service not documented: " + service);
 
 		checked.add(service);
 
-		return Msc.bootService(setupName, service);
+		return Msc.bootService(config, service);
 	}
 
 	private static boolean documented(String service) {

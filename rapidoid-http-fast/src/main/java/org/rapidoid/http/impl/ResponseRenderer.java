@@ -50,7 +50,7 @@ public class ResponseRenderer extends RapidoidThing {
 		String content = null;
 
 		if (shouldRenderView(resp)) {
-			boolean mandatory = (((RespImpl) resp).hasCustomView()) && U.notEmpty(resp.view());
+			boolean mandatory = (((RespImpl) resp).hasCustomView());
 
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			boolean rendered = renderView(req, resp, result, mandatory, out);

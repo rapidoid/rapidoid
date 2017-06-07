@@ -12,9 +12,10 @@ sudo docker run \
     -e "UNIFORM_OUTPUT=true" \
     -p 8888:8888 \
     --privileged \
-    --link $DB_ID:mysql \
+    --link $DB_ID:db \
     rapidoid/rapidoid:$TAG \
     profiles=mysql \
+    jdbc.host=db \
     jdbc.password=db-pass \
     '/users <= SELECT distinct(user) FROM mysql.user' \
     > output/mysql.txt 2>&1 &

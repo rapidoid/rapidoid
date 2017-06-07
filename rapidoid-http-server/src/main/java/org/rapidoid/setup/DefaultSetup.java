@@ -42,14 +42,16 @@ public class DefaultSetup extends RapidoidInitializer {
 	final Setup admin;
 
 	DefaultSetup() {
-		Customization appCustomization = new Customization("app", My.custom(), Conf.ROOT);
-		Customization adminCustomization = Setup.appAndAdminOnSameServer() ? appCustomization : new Customization("admin", My.custom(), Conf.ROOT);
+		boolean onSameServer = Setup.appAndAdminOnSameServer();
 
-		HttpRoutesImpl appRoutes = new HttpRoutesImpl(appCustomization);
-		HttpRoutesImpl adminRoutes = Setup.appAndAdminOnSameServer() ? appRoutes : new HttpRoutesImpl(adminCustomization);
+		Customization appCustomization = new Customization("main", My.custom(), Conf.ROOT);
+		Customization adminCustomization = onSameServer ? appCustomization : new Customization("admin", My.custom(), Conf.ROOT);
 
-		on = new Setup("app", "main", "0.0.0.0", 8080, IoC.defaultContext(), Conf.ON, appCustomization, appRoutes);
-		admin = new Setup("admin", ADMIN_ZONE, "0.0.0.0", 8080, IoC.defaultContext(), Conf.ADMIN, adminCustomization, adminRoutes);
+		HttpRoutesImpl appRoutes = new HttpRoutesImpl("main", appCustomization);
+		HttpRoutesImpl adminRoutes = onSameServer ? appRoutes : new HttpRoutesImpl("admin", adminCustomization);
+
+		on = new Setup("main", "main", IoC.defaultContext(), Setup.MAIN_CFG, appCustomization, appRoutes);
+		admin = new Setup("admin", ADMIN_ZONE, IoC.defaultContext(), Setup.ADMIN_CFG, adminCustomization, adminRoutes);
 
 		Setup.instances.add(on);
 		Setup.instances.add(admin);
@@ -60,7 +62,7 @@ public class DefaultSetup extends RapidoidInitializer {
 	void initDefaults() {
 		admin.defaults().roles(Role.ADMINISTRATOR);
 
-		admin.routes().onInit(new Runnable() {
+		admin.onInit(new Runnable() {
 			@Override
 			public void run() {
 				if (Env.dev()) {

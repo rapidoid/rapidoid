@@ -5,7 +5,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.TableTag;
-import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.HttpVerb;
 import org.rapidoid.http.Route;
 import org.rapidoid.http.RouteConfig;
@@ -128,7 +127,7 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 	}
 
 	private static String viewName(Route route, RouteConfig config) {
-		return config.view() != null ? config.view() : HttpUtils.resNameFromRoutePath(route.path());
+		return config.view() != null ? config.view() : route.path().substring(1) + " (AUTO)";
 	}
 
 }

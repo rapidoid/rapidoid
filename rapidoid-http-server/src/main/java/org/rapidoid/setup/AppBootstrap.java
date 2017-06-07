@@ -154,7 +154,7 @@ public class AppBootstrap extends RapidoidThing {
 		}
 	};
 
-	AppBootstrap services() {
+	public AppBootstrap services() {
 		services.run();
 		return this;
 	}

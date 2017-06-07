@@ -39,6 +39,8 @@ import java.util.regex.Pattern;
 @Since("5.1.0")
 public class PathPattern extends RapidoidThing {
 
+	public static final String ANY = "_";
+
 	public static final Pattern PATH_PARAM_REGEX = Pattern.compile("\\{([^\\}]+)\\}");
 
 	private static final Pattern PATH_PARAM_PARTS = Pattern.compile("(\\w+)(?::(.+))?");
@@ -70,36 +72,43 @@ public class PathPattern extends RapidoidThing {
 		String regex = Str.replace(path, PATH_PARAM_REGEX, new Mapper<String[], String>() {
 			@Override
 			public String map(String[] gr) throws Exception {
-				String group = gr[1];
-
-				Matcher m = PATH_PARAM_PARTS.matcher(group);
-				U.must(m.matches(), "Invalid path parameter, expected {var} or {var:regex} syntax!");
-
-				String name = m.group(1);
-				String regex = U.or(m.group(2), DEFAULT_GROUP_REGEX);
-
-				String groupId = "g" + counter.incrementAndGet();
-
-				U.must(!groups.containsKey(name), "Cannot have multiple path parameters with the same name: '%s'", name);
-				groups.put(name, groupId);
-
-				if (!groups.isEmpty()) {
-					U.must(MATCHER_GROUP != null, "Named Regex groups are supported starting from JDK 7!");
-				}
-
-				return "(?<" + groupId + ">" + regex + ")";
+				return toPathParamRegex(groups, counter, gr[1]);
 			}
 		});
 
 		if (regex.equals("/*")) {
-			regex = "/.*";
+			regex = "/" + toPathParamRegex(groups, counter, ANY, ".*");
 
 		} else if (regex.endsWith("/*")) {
-			regex = Str.trimr(regex, "/*") + "(?:/.*)?";
+			regex = Str.trimr(regex, "/*");
+			regex += U.frmt("(?:/%s)?", toPathParamRegex(groups, counter, ANY, ".*"));
 		}
 
 		Pattern pattern = Pattern.compile(regex);
 		return new PathPattern(path, pattern, groups);
+	}
+
+	private static String toPathParamRegex(Map<String, String> groups, AtomicInteger counter, String group) {
+		Matcher m = PATH_PARAM_PARTS.matcher(group);
+		U.must(m.matches(), "Invalid path parameter, expected {var} or {var:regex} syntax!");
+
+		String name = m.group(1);
+		String regex = U.or(m.group(2), DEFAULT_GROUP_REGEX);
+
+		return toPathParamRegex(groups, counter, name, regex);
+	}
+
+	private static String toPathParamRegex(Map<String, String> groups, AtomicInteger counter, String name, String regex) {
+		String groupId = "g" + counter.incrementAndGet();
+
+		U.must(!groups.containsKey(name), "Cannot have multiple path parameters with the same name: '%s'", name);
+		groups.put(name, groupId);
+
+		if (!groups.isEmpty()) {
+			U.must(MATCHER_GROUP != null, "Named Regex groups are supported starting from JDK 7!");
+		}
+
+		return "(?<" + groupId + ">" + regex + ")";
 	}
 
 	@Override
@@ -139,9 +148,11 @@ public class PathPattern extends RapidoidThing {
 				U.notNull(MATCHER_GROUP != null, "Regex matcher");
 
 				String val = Cls.invoke(MATCHER_GROUP, matcher, e.getValue());
-				val = Msc.urlDecodeOrKeepOriginal(val);
 
-				params.put(e.getKey(), val);
+				if (val != null) {
+					val = Msc.urlDecodeOrKeepOriginal(val);
+					params.put(e.getKey(), val);
+				}
 			}
 		}
 

@@ -82,7 +82,7 @@ public class HttpCookiesTest extends HttpTestCommons {
 
 	private void checkNoCookies(boolean keepCookies) {
 		HttpClient client;
-		client = HTTP.client().keepCookies(keepCookies);
+		client = HTTP.client().keepCookies(keepCookies).timeout(10000);
 
 		eq(client.get(localhost("/a")).fetch(), "0");
 		eq(client.get(localhost("/b")).fetch(), "0");

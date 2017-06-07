@@ -44,7 +44,7 @@ public class CallbackExecutorJob<T> extends RapidoidThing implements Runnable {
 		try {
 			callback.onDone(result, error);
 		} catch (Exception e) {
-			throw new RuntimeException("Error occured while executing callback!", e);
+			throw new RuntimeException("Error occurred while executing callback!", e);
 		}
 	}
 

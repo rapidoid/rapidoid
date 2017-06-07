@@ -234,7 +234,7 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 					try {
 						result.set(handleReqAndPostProcess(channel, isKeepAlive, req, extra));
 					} catch (Exception e) {
-						throw U.rte("Error occured inside the transactional web handler!", e);
+						throw U.rte("Error occurred inside the transactional web handler!", e);
 					}
 				}
 			}, txMode == TransactionMode.READ_ONLY);

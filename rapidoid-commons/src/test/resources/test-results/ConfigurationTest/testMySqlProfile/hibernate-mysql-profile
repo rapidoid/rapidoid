@@ -1,0 +1,21 @@
+{
+  "dialect" : "org.hibernate.dialect.MySQL5Dialect",
+  "connection" : {
+    "driver_class" : "com.mysql.jdbc.Driver",
+    "username" : "root",
+    "password" : "root",
+    "url" : "jdbc:mysql://localhost:3333?logger=Slf4JLogger"
+  },
+  "c3p0" : {
+    "debug" : "true",
+    "initialPoolSize" : "5",
+    "minPoolSize" : "5",
+    "maxPoolSize" : "100",
+    "acquireIncrement" : "5",
+    "maxStatementsPerConnection" : "10",
+    "idleConnectionTestPeriod" : "300"
+  },
+  "hbm2ddl" : {
+    "auto" : "update"
+  }
+}

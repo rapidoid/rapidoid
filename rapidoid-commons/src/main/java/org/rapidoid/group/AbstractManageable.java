@@ -29,10 +29,17 @@ import org.rapidoid.beany.Prop;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
 import org.rapidoid.commons.Str;
+import org.rapidoid.concurrent.Callback;
+import org.rapidoid.concurrent.Callbacks;
+import org.rapidoid.concurrent.Promise;
+import org.rapidoid.concurrent.Promises;
+import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeoutException;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -40,10 +47,10 @@ public abstract class AbstractManageable extends RapidoidThing implements Manage
 
 	@Override
 	public Object runManageableAction(String action) {
-		Method method = Cls.findMethod(getClass(), Str.uncapitalized(action));
+		Method method = Cls.findMethod(source().getClass(), Str.uncapitalized(action));
 
 		if (method != null) {
-			return Cls.invoke(method, this);
+			return Cls.invoke(method, source());
 
 		} else {
 			return doManageableAction(action);
@@ -54,7 +61,7 @@ public abstract class AbstractManageable extends RapidoidThing implements Manage
 	public List<String> getManageableActions() {
 		List<String> actions = U.list();
 
-		for (Method method : Cls.getMethodsAnnotated(getClass(), Action.class)) {
+		for (Method method : Cls.getMethodsAnnotated(source().getClass(), Action.class)) {
 			Action action = method.getAnnotation(Action.class);
 			actions.add(!action.name().isEmpty() ? action.name() : method.getName());
 		}
@@ -64,7 +71,7 @@ public abstract class AbstractManageable extends RapidoidThing implements Manage
 
 	@Override
 	public List<String> getManageableProperties() {
-		BeanProperties props = Beany.propertiesOf(this);
+		BeanProperties props = Beany.propertiesOf(source());
 
 		List<String> ps = U.list();
 
@@ -82,8 +89,48 @@ public abstract class AbstractManageable extends RapidoidThing implements Manage
 		return ps;
 	}
 
+	protected Object source() {
+		return this;
+	}
+
+	@Override
+	public Map<String, List<Manageable>> getManageableChildren() {
+		return U.map();
+	}
+
 	protected Object doManageableAction(String action) {
 		throw U.rte("Cannot handle action '%s'!", action);
 	}
 
+	@Override
+	public GroupOf<? extends Manageable> group() {
+		return null;
+	}
+
+	@Override
+	public String kind() {
+		return Manageables.kindOf(source().getClass());
+	}
+
+	protected void doReloadManageable(Callback<Void> callback) {
+		Callbacks.done(callback, null, null);
+	}
+
+	@Override
+	public final void reloadManageable() {
+		final Promise<Void> promise = Promises.create();
+
+		doReloadManageable(promise);
+
+		try {
+			promise.get(5000);
+		} catch (TimeoutException e) {
+			Log.error("Couldn't reload the manageable!", e);
+		}
+	}
+
+	@Override
+	public Object getManageableDisplay() {
+		return null;
+	}
 }

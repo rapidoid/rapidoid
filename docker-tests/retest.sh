@@ -6,4 +6,7 @@ echo Will need sudo...
 sudo echo Got sudo
 
 ./rebuild.sh
-./tests.sh snapshot
+
+export TAG=snapshot
+
+./smoke.sh

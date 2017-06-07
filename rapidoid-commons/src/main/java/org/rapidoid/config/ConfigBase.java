@@ -98,7 +98,7 @@ public class ConfigBase extends RapidoidInitializer {
 		return false;
 	}
 
-	boolean setPath(String path) {
+	synchronized boolean setPath(String path) {
 		RapidoidEnv.touch();
 
 		if (U.neq(this.path, path)) {
@@ -123,7 +123,7 @@ public class ConfigBase extends RapidoidInitializer {
 		initial.put(name, value);
 	}
 
-	void applyInitialConfig(Config config) {
+	synchronized void applyInitialConfig(Config config) {
 		config.update(initial);
 	}
 

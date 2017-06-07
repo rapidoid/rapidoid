@@ -1,0 +1,9 @@
+{
+  "port" : "3333",
+  "host" : "localhost",
+  "driver" : "com.mysql.jdbc.Driver",
+  "username" : "root",
+  "password" : "root",
+  "url" : "jdbc:mysql://localhost:3333?logger=Slf4JLogger",
+  "options" : "logger=Slf4JLogger"
+}

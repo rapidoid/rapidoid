@@ -34,6 +34,8 @@ public class SimpleHashTable<T> extends RapidoidThing {
 
 	public final SimpleBucket<T>[] buckets;
 
+	private final int bucketSize;
+
 	public final int factor;
 
 	private final int hashMask;
@@ -46,23 +48,41 @@ public class SimpleHashTable<T> extends RapidoidThing {
 
 	@SuppressWarnings("unchecked")
 	public SimpleHashTable(int capacity, int bucketSize, boolean unbounded) {
-		U.must(capacity >= 2, "The capacity is too small!");
+
+		U.must(capacity > 0, "The capacity must be a positive number!");
 
 		if (bucketSize <= 0) bucketSize = DEFAULT_BUCKET_SIZE;
 
-		int factor = Msc.log2(Math.max(capacity / bucketSize, 1));
+		int factor = calcSizeFactor(capacity, bucketSize);
+		int width = calcWidth(factor);
 
-		int width = (int) Math.pow(2, factor);
-		int realCapacity = width * bucketSize;
-		U.must(capacity <= realCapacity);
-
+		this.bucketSize = bucketSize;
 		this.buckets = new SimpleList[width];
 		this.factor = factor;
 		this.hashMask = Msc.bitMask(factor);
 
+		U.must(capacity <= capacity(), "capacity=%s, realCapacity=%s, bucketSize=%s", capacity, capacity(), bucketSize);
+
 		for (int i = 0; i < buckets.length; i++) {
 			buckets[i] = createBucket(bucketSize, unbounded);
 		}
+	}
+
+	private static int calcSizeFactor(int capacity, int bucketSize) {
+		int requiredWidth = (int) Math.ceil(capacity * 1.0f / bucketSize);
+		return Msc.log2(requiredWidth);
+	}
+
+	private static int calcWidth(int factor) {
+		return (int) Math.pow(2, factor);
+	}
+
+	public int bucketSize() {
+		return bucketSize;
+	}
+
+	public int capacity() {
+		return buckets.length * bucketSize;
 	}
 
 	protected SimpleBucket<T> createBucket(int bucketSize, boolean unbounded) {

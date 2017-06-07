@@ -3,6 +3,8 @@ package org.rapidoid.value;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
+import java.util.List;
+
 /*
  * #%L
  * rapidoid-commons
@@ -40,6 +42,8 @@ public interface Value<T> {
 	boolean exists();
 
 	Value<String> str();
+
+	List<String> list();
 
 	Value<Long> num();
 
