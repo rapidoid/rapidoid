@@ -3,9 +3,11 @@ package org.rapidoid.net.tls;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
 import javax.net.ssl.*;
+import java.io.File;
 import java.io.FileInputStream;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
@@ -68,26 +70,51 @@ public class TLSUtil extends RapidoidThing {
 	}
 
 	public static SSLContext createContext(String keystore, char[] keystorePassword, char[] keyManagerPassword,
-	                                       String truststore, char[] truststorePassword) {
+	                                       String truststore, char[] truststorePassword, boolean selfSignedTLS) {
+
+		U.must(U.notEmpty(keystore), "The TLS keystore filename isn't configured!");
+
+		boolean keystoreExists = new File(keystore).exists();
+
+		U.must(keystoreExists || selfSignedTLS,
+			"The keystore '%s' doesn't exist and self-signed certificate generation is disabled!", keystore);
 
 		try {
-			KeyStore keyStore = KeyStore.getInstance("JKS");
-			keyStore.load(new FileInputStream(keystore), keystorePassword);
+			if (!keystoreExists && selfSignedTLS) {
+				SelfSignedCertInfo info = new SelfSignedCertInfo();
 
-			KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509");
-			keyManagerFactory.init(keyStore, keyManagerPassword);
+				info.alias("rapidoid");
+				info.password(keystorePassword);
 
+				Log.warn("Keystore doesn't exist, creating a keystore with self-signed certificate",
+					"keystore", keystore, "alias", info.alias());
+
+				SelfSignedCertGen.generate(info, keystore, keystorePassword);
+			}
+
+			Log.info("Initializing TLS context", "keystore", keystore, "truststore", truststore);
+
+			KeyManager[] keyManagers = initKeyManagers(keystore, keystorePassword, keyManagerPassword);
 			TrustManager[] trustManagers = initTrustManagers(truststore, truststorePassword);
 
 			SSLContext context = SSLContext.getInstance("TLS");
-
-			context.init(keyManagerFactory.getKeyManagers(), trustManagers, null);
+			context.init(keyManagers, trustManagers, null);
 
 			return context;
 
 		} catch (Exception e) {
 			throw U.rte(e);
 		}
+	}
+
+	private static KeyManager[] initKeyManagers(String keystore, char[] keystorePassword, char[] keyManagerPassword) throws Exception {
+		KeyStore keyStore = KeyStore.getInstance("JKS");
+		keyStore.load(new FileInputStream(keystore), keystorePassword);
+
+		KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509");
+		keyManagerFactory.init(keyStore, keyManagerPassword);
+
+		return keyManagerFactory.getKeyManagers();
 	}
 
 	private static TrustManager[] initTrustManagers(String trustStoreFilename, char[] trustStorePassword) throws Exception {

@@ -154,6 +154,7 @@ log:
   fancy: false # auto
 
 tls:
+  selfSigned: true
   enabled: false
   keystore: ''
   keystorePassword: ''

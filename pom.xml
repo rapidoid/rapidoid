@@ -129,7 +129,9 @@
 					<encoding>${project.build.sourceEncoding}</encoding>
 					<compilerArgs>
 						<arg>-parameters</arg>
+						<arg>-XDignore.symbol.file</arg>
 					</compilerArgs>
+					<fork>true</fork>
 				</configuration>
 			</plugin>
 

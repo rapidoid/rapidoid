@@ -645,6 +645,8 @@ org.rapidoid.net.ServerBuilder
 org.rapidoid.net.TCP
 org.rapidoid.net.TCPServerInfo
 org.rapidoid.net.tls.RapidoidTLS
+org.rapidoid.net.tls.SelfSignedCertGen
+org.rapidoid.net.tls.SelfSignedCertInfo
 org.rapidoid.net.tls.TLSUtil
 org.rapidoid.net.util.NetUtil
 org.rapidoid.oauth.DefaultOAuthStateCheck

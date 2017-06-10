@@ -3,17 +3,13 @@ package org.rapidoid.net;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Err;
 import org.rapidoid.config.Conf;
-import org.rapidoid.log.Log;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.net.impl.RapidoidServerLoop;
 import org.rapidoid.net.tls.TLSUtil;
-import org.rapidoid.u.U;
 import org.rapidoid.util.MscOpts;
 
 import javax.net.ssl.SSLContext;
-import java.io.File;
 
 /*
  * #%L
@@ -69,6 +65,8 @@ public class ServerBuilder extends RapidoidThing {
 	private volatile String truststore = Conf.TLS.entry("truststore").or("");
 
 	private volatile char[] truststorePassword = Conf.TLS.entry("truststorePassword").or("").toCharArray();
+
+	private volatile boolean selfSignedTLS = Conf.TLS.is("selfSigned");
 
 	private volatile SSLContext tlsContext;
 
@@ -217,15 +215,7 @@ public class ServerBuilder extends RapidoidThing {
 	public synchronized Server build() {
 
 		if (tls && tlsContext == null) {
-			U.must(U.notEmpty(keystore), "TLS is enabled, but keystore isn't configured!");
-
-			if (new File(keystore).exists()) {
-				Log.info("Initializing TLS context", "keystore", keystore, "truststore", truststore);
-				tlsContext = TLSUtil.createContext(keystore, keystorePassword, keyManagerPassword, truststore, truststorePassword);
-			} else {
-				Log.info("Keystore doesn't exist, creating self-signed TLS context", "keystore", keystore, "truststore", truststore);
-				throw Err.notReady();
-			}
+			tlsContext = TLSUtil.createContext(keystore, keystorePassword, keyManagerPassword, truststore, truststorePassword, selfSignedTLS);
 		}
 
 		// don't provide TLS context unless TLS is enabled
