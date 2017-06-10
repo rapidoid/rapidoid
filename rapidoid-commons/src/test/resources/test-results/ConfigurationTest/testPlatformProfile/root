@@ -162,6 +162,15 @@
     "level" : "info",
     "fancy" : false
   },
+  "tls" : {
+    "selfSigned" : true,
+    "enabled" : false,
+    "keystore" : "",
+    "keystorePassword" : "",
+    "keyManagerPassword" : "",
+    "truststore" : "",
+    "truststorePassword" : ""
+  },
   "rapidoid" : {
     "port" : 8888,
     "address" : "0.0.0.0"

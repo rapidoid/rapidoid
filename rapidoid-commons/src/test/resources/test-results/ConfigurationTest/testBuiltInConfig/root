@@ -160,5 +160,14 @@
   "log" : {
     "level" : "info",
     "fancy" : false
+  },
+  "tls" : {
+    "selfSigned" : true,
+    "enabled" : false,
+    "keystore" : "",
+    "keystorePassword" : "",
+    "keyManagerPassword" : "",
+    "truststore" : "",
+    "truststorePassword" : ""
   }
 }
