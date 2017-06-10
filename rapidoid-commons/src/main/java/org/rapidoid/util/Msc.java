@@ -426,18 +426,18 @@ public class Msc extends RapidoidThing {
 
 	public static void endMeasure() {
 		long delta = U.time() - measureStart;
-		D.print(delta + " ms");
+		Log.info("Benchmark", "time", delta + " ms");
 	}
 
 	public static void endMeasure(String info) {
 		long delta = U.time() - measureStart;
-		D.print(info + ": " + delta + " ms");
+		Log.info("Benchmark", "info", info, "time", delta + " ms");
 	}
 
 	public static void endMeasure(long count, String info) {
 		long delta = U.time() - measureStart;
 		long freq = Math.round(1000 * (double) count / delta);
-		D.print(U.frmt("%s %s in %s ms (%s/sec)", count, info, delta, freq));
+		Log.info("Benchmark", "performance", U.frmt("%s %s in %s ms (%s/sec)", count, info, delta, freq));
 	}
 
 	public static Throwable rootCause(Throwable e) {
