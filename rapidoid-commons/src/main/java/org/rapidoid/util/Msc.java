@@ -1127,7 +1127,7 @@ public class Msc extends RapidoidThing {
 	}
 
 	public static <T> T normalOrHeavy(T normal, T heavy) {
-		return System.getenv("HEAVY") != null || System.getProperty("HEAVY") != null ? heavy : normal;
+		return GlobalCfg.is("RAPIDOID_TEST_HEAVY") ? heavy : normal;
 	}
 
 	public static Method getTestMethodIfExists() {

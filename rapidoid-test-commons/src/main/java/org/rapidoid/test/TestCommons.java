@@ -97,7 +97,7 @@ public abstract class TestCommons {
 	private String getTestInfo() {
 		String info = ADJUST_TESTS ? " [ADJUST] " : "";
 
-		if (System.getenv("HEAVY") != null || System.getProperty("HEAVY") != null) {
+		if (System.getenv("RAPIDOID_TEST_HEAVY") != null || System.getProperty("RAPIDOID_TEST_HEAVY") != null) {
 			info += "[HEAVY]";
 		}
 
