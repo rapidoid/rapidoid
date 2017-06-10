@@ -166,12 +166,18 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		try {
 
 			if (conn.hasTLS) {
-				read = socketChannel.read(conn.tls.netIn);
+				if (conn.tls.netIn.hasRemaining()) {
+					read = socketChannel.read(conn.tls.netIn);
+
+				} else {
+					read = 0;
+				}
 			} else {
 				read = conn.input.append(socketChannel);
 			}
 
 		} catch (Exception e) {
+			Log.debug("Connection error", e);
 			read = -1;
 		}
 
@@ -187,10 +193,10 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		} else {
 
 			if (conn.hasTLS) {
-				if (read > 0) conn.log("RECEIVED " + read);
-
-				boolean success = conn.tls.unwrapInput();
-				if (success) wantToWrite(conn);
+				if (read > 0) {
+					boolean success = conn.tls.unwrapInput();
+					if (success) wantToWrite(conn);
+				}
 			}
 		}
 	}

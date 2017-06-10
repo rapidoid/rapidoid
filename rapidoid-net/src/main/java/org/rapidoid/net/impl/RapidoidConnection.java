@@ -14,6 +14,7 @@ import org.rapidoid.net.AsyncLogic;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.abstracts.IRequest;
+import org.rapidoid.net.tls.RapidoidTLS;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Resetable;
@@ -70,7 +71,7 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 	public final Buf output;
 
-	final Buf outgoing;
+	public final Buf outgoing;
 
 	private final ConnState state = new ConnState();
 
@@ -107,6 +108,8 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 	final AtomicLong readSeq = new AtomicLong();
 
 	final AtomicLong writeSeq = new AtomicLong();
+
+	volatile boolean resumeInProgress = false;
 
 	volatile IRequest request;
 
@@ -326,33 +329,49 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 			synchronized (this) {
 
-				if (expectedConnId != connId()) return;
-
-				U.must(seq == writeSeq.get());
-
-				// execute the logic
-				boolean finished = false;
-
-				synchronized (output) {
-					BufUtil.startWriting(output);
-
-					try {
-						finished = asyncLogic.resumeAsync();
-					} catch (Throwable e) {
-						Log.error("Error while resuming an asynchronous operation!", e);
-					}
-
-					BufUtil.doneWriting(output);
+				if (expectedConnId != connId()) {
+					return;
 				}
 
-				if (finished) {
-					processedSeq(handle);
+//				TODO investigate options for stricter flow control:
+//				U.must(!resumeInProgress, "Resume is already in progress!");
+
+				resumeInProgress = true;
+
+				try {
+					doResume(handle, asyncLogic, seq);
+
+				} finally {
+					resumeInProgress = false;
 				}
 			}
 
 		} else {
 			Log.error("Tried to resume a job that already has finished!", "handle", handle, "currentHandle", seq, "job", asyncLogic);
 			throw U.rte("Tried to resume a job that already has finished!");
+		}
+	}
+
+	private void doResume(long handle, AsyncLogic asyncLogic, long seq) {
+		U.must(seq == writeSeq.get());
+
+		// execute the logic
+		boolean finished = false;
+
+		synchronized (output) {
+			BufUtil.startWriting(output);
+
+			try {
+				finished = asyncLogic.resumeAsync();
+			} catch (Throwable e) {
+				Log.error("Error while resuming an asynchronous operation!", e);
+			}
+
+			BufUtil.doneWriting(output);
+		}
+
+		if (finished) {
+			processedSeq(handle);
 		}
 	}
 

@@ -637,7 +637,6 @@ org.rapidoid.net.impl.RapidoidChannel
 org.rapidoid.net.impl.RapidoidConnection
 org.rapidoid.net.impl.RapidoidHelper
 org.rapidoid.net.impl.RapidoidServerLoop
-org.rapidoid.net.impl.RapidoidTLS
 org.rapidoid.net.impl.RapidoidWorker
 org.rapidoid.net.impl.RapidoidWorkerThread
 org.rapidoid.net.Protocol
@@ -645,6 +644,9 @@ org.rapidoid.net.Server
 org.rapidoid.net.ServerBuilder
 org.rapidoid.net.TCP
 org.rapidoid.net.TCPServerInfo
+org.rapidoid.net.tls.RapidoidTLS
+org.rapidoid.net.tls.TLSUtil
+org.rapidoid.net.util.NetUtil
 org.rapidoid.oauth.DefaultOAuthStateCheck
 org.rapidoid.oauth.OAuth
 org.rapidoid.oauth.OAuthLoginHandler
@@ -797,7 +799,6 @@ org.rapidoid.util.SimpleList
 org.rapidoid.util.SimpleMap
 org.rapidoid.util.SimplePersisterProvider
 org.rapidoid.util.SlidingWindowList
-org.rapidoid.util.SSLUtil
 org.rapidoid.util.TokenAuthData
 org.rapidoid.util.Tokens
 org.rapidoid.util.TUUID

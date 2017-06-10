@@ -28,9 +28,9 @@ import org.rapidoid.concurrent.*;
 import org.rapidoid.io.IO;
 import org.rapidoid.io.Upload;
 import org.rapidoid.log.Log;
+import org.rapidoid.net.tls.TLSUtil;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
-import org.rapidoid.util.SSLUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -95,7 +95,7 @@ public class HttpClientUtil extends RapidoidThing {
 			.setRedirectStrategy(client.followRedirects() ? new DefaultRedirectStrategy() : NO_REDIRECTS);
 
 		if (!client.validateSSL()) {
-			builder.setSSLContext(SSLUtil.createTrustingContext());
+			builder.setSSLContext(TLSUtil.createTrustingContext());
 			builder.setSSLHostnameVerifier(new AllowAllHostnameVerifier());
 		}
 

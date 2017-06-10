@@ -58,7 +58,7 @@ public class HttpClient extends RapidoidThing {
 
 	private volatile int maxRedirects = 5;
 
-	private volatile boolean validateSSL = !MscOpts.isTestingHttps();
+	private volatile boolean validateSSL = !MscOpts.isTestingTLS();
 
 	private volatile int timeout = 5000;
 

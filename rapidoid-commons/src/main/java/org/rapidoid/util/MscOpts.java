@@ -4,6 +4,8 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.config.Conf;
+import org.rapidoid.log.GlobalCfg;
 
 /*
  * #%L
@@ -50,7 +52,7 @@ public class MscOpts extends RapidoidThing {
 
 	private static final boolean isRestOnly = !hasRapidoidHTML();
 
-	private static final boolean isTestingHttps = "true".equals(System.getProperty("RAPIDOID_TEST_HTTPS"));
+	private static final boolean isTestingTLS = GlobalCfg.is("RAPIDOID_TEST_TLS") || Conf.TLS.is("enabled");
 
 	public static boolean hasValidation() {
 		return hasValidation;
@@ -112,7 +114,7 @@ public class MscOpts extends RapidoidThing {
 		return appsPath;
 	}
 
-	public static boolean isTestingHttps() {
-		return isTestingHttps;
+	public static boolean isTestingTLS() {
+		return isTestingTLS;
 	}
 }

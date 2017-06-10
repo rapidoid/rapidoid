@@ -275,22 +275,10 @@ public class IO extends RapidoidThing {
 		}
 	}
 
-	public static void close(OutputStream out, boolean quiet) {
+	public static void close(Closeable closeable, boolean quiet) {
 		try {
-			if (out != null) {
-				out.close();
-			}
-		} catch (IOException e) {
-			if (!quiet) {
-				throw U.rte(e);
-			}
-		}
-	}
-
-	public static void close(InputStream in, boolean quiet) {
-		try {
-			if (in != null) {
-				in.close();
+			if (closeable != null) {
+				closeable.close();
 			}
 		} catch (IOException e) {
 			if (!quiet) {

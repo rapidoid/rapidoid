@@ -31,6 +31,7 @@ import org.rapidoid.lambda.F3;
 import org.rapidoid.net.AsyncLogic;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.net.util.NetUtil;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
@@ -80,7 +81,7 @@ public class EchoProtocolTest extends NetTestCommons {
 
 	private void connectAndExercise() {
 
-		Msc.connect("localhost", 8080, new F3<Void, InputStream, BufferedReader, DataOutputStream>() {
+		NetUtil.connect("localhost", 8080, new F3<Void, InputStream, BufferedReader, DataOutputStream>() {
 			@Override
 			public Void execute(InputStream inputStream, BufferedReader in, DataOutputStream out) throws IOException {
 				out.writeBytes("hello\n");
@@ -96,14 +97,16 @@ public class EchoProtocolTest extends NetTestCommons {
 			}
 		});
 
-		for (int i = 0; i < ROUNDS; i++) {
+		for (int i = 1; i <= ROUNDS; i++) {
+			Msc.logSection("ROUND " + i);
+
 			for (final String testCase : testCases) {
 
 				final List<String> expected = U.list(testCase.toUpperCase().split("\r?\n"));
 
 				Msc.startMeasure();
 
-				Msc.connect("localhost", 8080, new F3<Void, InputStream, BufferedReader, DataOutputStream>() {
+				NetUtil.connect("localhost", 8080, new F3<Void, InputStream, BufferedReader, DataOutputStream>() {
 					@Override
 					public Void execute(InputStream inputStream, BufferedReader in, DataOutputStream out) throws IOException {
 						out.writeBytes(testCase);

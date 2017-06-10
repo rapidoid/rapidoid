@@ -1,4 +1,4 @@
-package org.rapidoid.net.impl;
+package org.rapidoid.net.tls;
 
 /*
  * #%L
@@ -20,11 +20,13 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.BufUtil;
 import org.rapidoid.commons.Err;
 import org.rapidoid.log.Log;
+import org.rapidoid.net.impl.RapidoidConnection;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
@@ -33,18 +35,18 @@ import java.nio.ByteBuffer;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.4.0")
-public class RapidoidTLS {
+public class RapidoidTLS extends RapidoidThing {
 
-	private static boolean debugging = true;
+	private static boolean debugging = false;
 
 	private final SSLContext sslContext;
 	private final RapidoidConnection conn;
 
 	private volatile SSLEngine engine;
 
-	public final ByteBuffer appIn;
-	public final ByteBuffer netIn, netOut;
-	final ByteBuffer tmpBuf;
+	private final ByteBuffer appIn;
+	public final ByteBuffer netIn;
+	final ByteBuffer netOut;
 
 	public RapidoidTLS(SSLContext sslContext, RapidoidConnection conn) {
 
@@ -60,7 +62,6 @@ public class RapidoidTLS {
 		appIn = ByteBuffer.allocateDirect(appBufferMax + 64);
 		netIn = ByteBuffer.allocateDirect(netBufferMax);
 		netOut = ByteBuffer.allocateDirect(netBufferMax);
-		tmpBuf = ByteBuffer.allocateDirect(netBufferMax);
 	}
 
 	private SSLEngine createServerEngine() {
@@ -75,18 +76,23 @@ public class RapidoidTLS {
 		switch (status) {
 			case FINISHED:
 				break;
+
 			case NEED_TASK:
 				status = executeTasks();
 				reactToHandshakeStatus(status);
 				break;
+
 			case NEED_UNWRAP:
 				unwrapInput();
 				break;
+
 			case NEED_WRAP:
 				wrapOutput();
 				break;
+
 			case NOT_HANDSHAKING:
 				break;
+
 			default:
 				throw Err.notExpected();
 		}
@@ -137,12 +143,24 @@ public class RapidoidTLS {
 		boolean success = false;
 		boolean shouldUnwrap = true;
 
-		while (!isClosed() && shouldUnwrap && netIn.hasRemaining()) {
+		while (!isClosed() && shouldUnwrap && netIn.position() > 0) {
 			debug("- UNWRAP");
-			netIn.flip();
+
+			netIn.flip(); // prepare for reading
+			netIn.mark(); // backup, to rollback in case of underflow
+
 			SSLEngineResult result = unwrap(netIn, appIn);
-			netIn.compact();
-			debug("UNWRAPED -> appin=" + appIn + " : netIn=" + netIn);
+
+			boolean underflow = result.getStatus().equals(SSLEngineResult.Status.BUFFER_UNDERFLOW);
+
+			if (!underflow) {
+				// prepare for writing
+				netIn.compact();
+			} else {
+				// rollback
+				netIn.reset();
+				netIn.compact();
+			}
 
 			appIn.flip();
 			conn.input.append(appIn);
@@ -164,7 +182,7 @@ public class RapidoidTLS {
 		boolean success = false;
 
 		if (conn.output.hasRemaining()) {
-			debug("$$$ WRAP TO OUTGOING " + conn);
+			debug("- WRAP TO OUTGOING " + conn);
 
 			BufUtil.startWriting(conn.output);
 			BufUtil.startWriting(conn.outgoing);
@@ -179,7 +197,7 @@ public class RapidoidTLS {
 		return success;
 	}
 
-	public synchronized void wrapOutput() {
+	private synchronized void wrapOutput() {
 		if (!isClosed()) {
 			debug("- WRAP");
 			SSLEngineResult result;
@@ -271,7 +289,6 @@ public class RapidoidTLS {
 		this.appIn.clear();
 		this.netIn.clear();
 		this.netOut.clear();
-		this.tmpBuf.clear();
 		this.engine = createServerEngine();
 	}
 

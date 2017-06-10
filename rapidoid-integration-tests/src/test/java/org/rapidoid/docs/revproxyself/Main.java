@@ -23,13 +23,14 @@ package org.rapidoid.docs.revproxyself;
 import org.rapidoid.reverseproxy.Reverse;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
+import org.rapidoid.util.Msc;
 
 public class Main {
 
 	public static void main(String[] args) {
 		App.bootstrap(args);
 
-		String fooUpstream = "http://localhost:8080/foo";
+		String fooUpstream = Msc.http() + "://localhost:8080/foo";
 
 		Reverse.proxy("/bar").to(fooUpstream).add();
 		Reverse.proxy("/").to(fooUpstream).add();

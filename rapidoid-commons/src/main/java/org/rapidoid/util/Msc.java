@@ -26,7 +26,10 @@ import org.rapidoid.insight.Insights;
 import org.rapidoid.io.IO;
 import org.rapidoid.io.Res;
 import org.rapidoid.job.Jobs;
-import org.rapidoid.lambda.*;
+import org.rapidoid.lambda.Dynamic;
+import org.rapidoid.lambda.Lmbd;
+import org.rapidoid.lambda.Mapper;
+import org.rapidoid.lambda.Operation;
 import org.rapidoid.log.GlobalCfg;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
@@ -34,9 +37,6 @@ import org.rapidoid.validation.InvalidData;
 import org.rapidoid.wrap.BoolWrap;
 import org.rapidoid.writable.ReusableWritable;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.io.*;
@@ -46,7 +46,6 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
-import java.net.Socket;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.ByteBuffer;
@@ -166,80 +165,6 @@ public class Msc extends RapidoidThing {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		e.printStackTrace(new PrintStream(output));
 		return output.toString();
-	}
-
-	public static <T> T connect(String address, int port, F3<T, InputStream, BufferedReader, DataOutputStream> protocol) {
-		return connect(address, port, 0, protocol);
-	}
-
-	public static <T> T connect(String address, int port, int timeout, F3<T, InputStream, BufferedReader, DataOutputStream> protocol) {
-		return MscOpts.isTestingHttps()
-			? connectSSL(address, port, timeout, protocol)
-			: connectNoSSL(address, port, timeout, protocol);
-	}
-
-	private static SSLSocket sslSocket(String address, int port, int timeout) throws Exception {
-		SSLContext sc = SSLUtil.createTrustingContext();
-		SSLSocketFactory ssf = sc.getSocketFactory();
-		SSLSocket socket = (SSLSocket) ssf.createSocket(address, port);
-		socket.setSoTimeout(timeout);
-		socket.startHandshake();
-		return socket;
-	}
-
-	private static <T> T connectSSL(String address, int port, int timeout, F3<T, InputStream, BufferedReader, DataOutputStream> protocol) {
-		T resp;
-
-		try (SSLSocket socket = sslSocket(address, port, timeout)) {
-			socket.setSoTimeout(timeout);
-
-			resp = communicate(protocol, socket);
-
-			socket.close();
-
-		} catch (Exception e) {
-			throw U.rte(e);
-		}
-
-		return resp;
-	}
-
-	private static <T> T connectNoSSL(String address, int port, int timeout, F3<T, InputStream, BufferedReader, DataOutputStream> protocol) {
-		T resp;
-
-		try (Socket socket = new Socket(address, port)) {
-			socket.setSoTimeout(timeout);
-
-			resp = communicate(protocol, socket);
-
-			socket.close();
-
-		} catch (Exception e) {
-			throw U.rte(e);
-		}
-
-		return resp;
-	}
-
-	private static <T> T communicate(F3<T, InputStream, BufferedReader, DataOutputStream> protocol, Socket socket) throws Exception {
-
-		DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-		InputStream inputStream = socket.getInputStream();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
-		return protocol.execute(inputStream, reader, out);
-	}
-
-	public static byte[] writeAndRead(String address, int port, final byte[] req, final int timeout) {
-		return Msc.connect(address, port, timeout, new F3<byte[], InputStream, BufferedReader, DataOutputStream>() {
-
-			@Override
-			public byte[] execute(InputStream in, BufferedReader reader, DataOutputStream out) throws Exception {
-				out.write(req);
-				return IO.readWithTimeout(in);
-			}
-
-		});
 	}
 
 	public static short bytesToShort(String s) {
@@ -1387,7 +1312,7 @@ public class Msc extends RapidoidThing {
 	}
 
 	public static String http() {
-		return MscOpts.isTestingHttps() ? "https" : "http";
+		return MscOpts.isTestingTLS() ? "https" : "http";
 	}
 
 	public static String urlWithProtocol(String url) {
@@ -1430,5 +1355,4 @@ public class Msc extends RapidoidThing {
 		U.must(isPlatform());
 		return "/app/app.jar";
 	}
-
 }

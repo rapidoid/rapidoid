@@ -1,9 +1,8 @@
-package org.rapidoid.util;
+package org.rapidoid.net.tls;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Err;
 import org.rapidoid.u.U;
 
 import javax.net.ssl.*;
@@ -16,7 +15,7 @@ import java.security.cert.X509Certificate;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-net
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -36,7 +35,7 @@ import java.security.cert.X509Certificate;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.4.0")
-public class SSLUtil extends RapidoidThing {
+public class TLSUtil extends RapidoidThing {
 
 	public static SSLContext createTrustingContext() {
 		SSLContext sslContext;
@@ -68,34 +67,45 @@ public class SSLUtil extends RapidoidThing {
 		return sslContext;
 	}
 
-	public static SSLContext createContext(String keyStoreFilename, char[] keyStorePassword,
-	                                       String trustStoreFilename, char[] trustStorePassword,
-	                                       char[] keyManagerPassword) {
+	public static SSLContext createContext(String keystore, char[] keystorePassword, char[] keyManagerPassword,
+	                                       String truststore, char[] truststorePassword) {
 
 		try {
 			KeyStore keyStore = KeyStore.getInstance("JKS");
-			KeyStore trustStore = KeyStore.getInstance("JKS");
-
-			keyStore.load(new FileInputStream(keyStoreFilename), keyStorePassword);
-			trustStore.load(new FileInputStream(trustStoreFilename), trustStorePassword);
+			keyStore.load(new FileInputStream(keystore), keystorePassword);
 
 			KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509");
 			keyManagerFactory.init(keyStore, keyManagerPassword);
 
-			TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance("SunX509");
-			trustManagerFactory.init(trustStore);
+			TrustManager[] trustManagers = initTrustManagers(truststore, truststorePassword);
 
 			SSLContext context = SSLContext.getInstance("TLS");
-			context.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), null);
+
+			context.init(keyManagerFactory.getKeyManagers(), trustManagers, null);
 
 			return context;
+
 		} catch (Exception e) {
 			throw U.rte(e);
 		}
 	}
 
-	public static SSLContext createSelfSignedContext() {
-		throw Err.notReady();
+	private static TrustManager[] initTrustManagers(String trustStoreFilename, char[] trustStorePassword) throws Exception {
+		if (U.notEmpty(trustStoreFilename)) {
+
+			U.notNull(trustStorePassword, "trustStorePassword");
+
+			KeyStore trustStore = KeyStore.getInstance("JKS");
+			trustStore.load(new FileInputStream(trustStoreFilename), trustStorePassword);
+
+			TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance("SunX509");
+			trustManagerFactory.init(trustStore);
+
+			return trustManagerFactory.getTrustManagers();
+
+		} else {
+			return null;
+		}
 	}
 
 }

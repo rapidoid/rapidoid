@@ -26,6 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Str;
 import org.rapidoid.docs.echoprotocol.EchoProtocol;
 import org.rapidoid.lambda.F3;
+import org.rapidoid.net.util.NetUtil;
 import org.rapidoid.util.Msc;
 
 import java.io.BufferedReader;
@@ -38,7 +39,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Since("5.4.0")
 public class LongEchoTest extends NetTestCommons {
 
-	private static final int ROUNDS = Msc.normalOrHeavy(100, 100);
+	private static final int ROUNDS = Msc.normalOrHeavy(100, 200);
 
 	private static final String MSG = Str.mul("a", 50000);
 
@@ -57,7 +58,7 @@ public class LongEchoTest extends NetTestCommons {
 	private void connectAndExercise() {
 		final AtomicBoolean completed = new AtomicBoolean();
 
-		Msc.connect("localhost", 8080, new F3<Void, InputStream, BufferedReader, DataOutputStream>() {
+		NetUtil.connect("localhost", 8080, new F3<Void, InputStream, BufferedReader, DataOutputStream>() {
 			@Override
 			public Void execute(InputStream inputStream, BufferedReader in, DataOutputStream out) throws IOException {
 

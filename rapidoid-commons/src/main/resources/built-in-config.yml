@@ -152,3 +152,11 @@ token:
 log:
   level: info
   fancy: false # auto
+
+tls:
+  enabled: false
+  keystore: ''
+  keystorePassword: ''
+  keyManagerPassword: ''
+  truststore: ''
+  truststorePassword: ''
