@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.BufUtil;
 import org.rapidoid.commons.Rnd;
+import org.rapidoid.docs.echoprotocol.EchoProtocol;
 import org.rapidoid.io.IO;
 import org.rapidoid.lambda.F3;
 import org.rapidoid.net.AsyncLogic;
@@ -69,21 +70,7 @@ public class EchoProtocolTest extends NetTestCommons {
 
 	@Test
 	public void echo() {
-		server(new Protocol() {
-
-			@Override
-			public void process(Channel ctx) {
-				if (ctx.isInitial()) return;
-
-				String in = ctx.readln();
-				synchronized (ctx.output()) {
-					BufUtil.startWriting(ctx.output());
-					ctx.write(in.toUpperCase()).write(CR_LF).closeIf(in.equals("bye"));
-					BufUtil.doneWriting(ctx.output());
-				}
-			}
-
-		}, new Runnable() {
+		server(new EchoProtocol(), new Runnable() {
 			@Override
 			public void run() {
 				connectAndExercise();
@@ -128,7 +115,7 @@ public class EchoProtocolTest extends NetTestCommons {
 					}
 				});
 
-				Msc.endMeasure(expected.size() + " messages");
+				Msc.endMeasure(expected.size(), "messages");
 			}
 		}
 	}
