@@ -52,8 +52,6 @@ public class MscOpts extends RapidoidThing {
 
 	private static final boolean isRestOnly = !hasRapidoidHTML();
 
-	private static final boolean isTestingTLS = GlobalCfg.is("RAPIDOID_TEST_TLS") || Conf.TLS.is("enabled");
-
 	public static boolean hasValidation() {
 		return hasValidation;
 	}
@@ -115,6 +113,6 @@ public class MscOpts extends RapidoidThing {
 	}
 
 	public static boolean isTestingTLS() {
-		return isTestingTLS;
+		return GlobalCfg.is("RAPIDOID_TEST_TLS") || Conf.TLS.is("enabled");
 	}
 }
