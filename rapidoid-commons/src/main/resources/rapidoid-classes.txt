@@ -452,6 +452,7 @@ org.rapidoid.http.HttpVerb
 org.rapidoid.http.HttpWrapper
 org.rapidoid.http.impl.AbstractViewResolver
 org.rapidoid.http.impl.CachedResp
+org.rapidoid.http.impl.ChunkedResponse
 org.rapidoid.http.impl.GUIUtil
 org.rapidoid.http.impl.HandlerMatch
 org.rapidoid.http.impl.HandlerMatchWithParams
@@ -571,6 +572,7 @@ org.rapidoid.jpa.JPQL
 org.rapidoid.lambda.Calc
 org.rapidoid.lambda.Customizer
 org.rapidoid.lambda.Dynamic
+org.rapidoid.lambda.Executable
 org.rapidoid.lambda.F2
 org.rapidoid.lambda.F3
 org.rapidoid.lambda.FiveParamLambda

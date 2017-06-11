@@ -92,4 +92,12 @@ public class Lmbd extends RapidoidThing {
 		}
 	}
 
+	public static void execute(Executable executable) {
+		try {
+			executable.execute();
+		} catch (Exception e) {
+			throw U.rte("Error occurred during the execution!", e);
+		}
+	}
+
 }

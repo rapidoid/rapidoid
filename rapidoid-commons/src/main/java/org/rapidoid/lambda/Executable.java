@@ -20,12 +20,13 @@ package org.rapidoid.lambda;
  * #L%
  */
 
-/**
- * @author Nikolche Mihajlovski
- * @since 2.0.0
- */
-public interface Predicate<T> {
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
-	boolean eval(T param) throws Exception;
+@Authors("Nikolche Mihajlovski")
+@Since("5.4.0")
+public interface Executable {
+
+	void execute() throws Exception;
 
 }

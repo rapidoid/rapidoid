@@ -27,7 +27,6 @@ import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 import org.rapidoid.writable.ReusableWritable;
-import org.rapidoid.writable.WritableUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
@@ -307,10 +306,6 @@ class LowLevelHttpIO extends RapidoidThing {
 		}
 	}
 
-	void writeContentLengthUnknown(Channel channel) {
-		channel.write(CONTENT_LENGTH_UNKNOWN);
-	}
-
 	void done(Req req) {
 		ReqImpl reqq = (ReqImpl) req;
 		reqq.doneProcessing();
@@ -319,10 +314,6 @@ class LowLevelHttpIO extends RapidoidThing {
 		channel.send();
 
 		channel.closeIf(!reqq.isKeepAlive());
-	}
-
-	void writeNum(Channel ctx, int value) {
-		WritableUtils.putNumAsText(ctx.output(), value);
 	}
 
 	void resume(MaybeReq maybeReq, Channel channel, AsyncLogic logic) {
@@ -375,6 +366,8 @@ class LowLevelHttpIO extends RapidoidThing {
 			@Override
 			public boolean resumeAsync() {
 
+				boolean complete;
+
 				startResponse(channel, code, isKeepAlive, contentType);
 
 				if (U.notEmpty(headers)) {
@@ -395,10 +388,7 @@ class LowLevelHttpIO extends RapidoidThing {
 				synchronized (channel) {
 					if (body == null) {
 
-						// unknown Content-Length header
-						writeContentLengthUnknown(channel);
 						int posContentLengthValue = output.size() - 1;
-						channel.write(CR_LF);
 
 						// finishing the headers
 						closeHeaders(maybeReq, output);
@@ -408,6 +398,8 @@ class LowLevelHttpIO extends RapidoidThing {
 						if (req != null) {
 							req.responded(posContentLengthValue, posBeforeBody, false);
 						}
+
+						complete = false;
 
 					} else {
 
@@ -433,10 +425,12 @@ class LowLevelHttpIO extends RapidoidThing {
 							req.completed(true);
 							done(req);
 						}
+
+						complete = true;
 					}
 				}
 
-				return true;
+				return complete;
 			}
 		});
 	}

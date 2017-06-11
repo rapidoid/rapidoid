@@ -24,56 +24,113 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.io.IO;
-import org.rapidoid.job.Jobs;
-import org.rapidoid.log.Log;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class AsyncHttpServerTest extends IsolatedIntegrationTest {
 
-	@Test(timeout = 15000)
+	@Test(timeout = 20000)
 	public void testAsyncHttpServer() {
-		Log.debugging();
-
 		On.req(req -> {
 			U.must(!req.isAsync());
 			req.async();
 			U.must(req.isAsync());
 
-			Jobs.after(10).milliseconds(() -> {
-
+			async(() -> {
 				IO.write(req.out(), "O");
 
-				Jobs.after(10).milliseconds(() -> {
+				async(() -> {
 					IO.write(req.out(), "K");
+
+					try {
+						req.out().close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 					req.done();
 				});
-
 			});
 
 			return req;
 		});
 
+		Self.get("/").expect("OK").execute();
 		Self.get("/").expect("OK").benchmark(1, 100, 10000);
 		Self.post("/").expect("OK").benchmark(1, 100, 10000);
 	}
 
-	@Test(timeout = 15000)
+	@Test(timeout = 20000)
+	public void testAsyncHttpServerNested() {
+		On.req(req -> {
+			U.must(!req.isAsync());
+			req.async();
+			U.must(req.isAsync());
+
+			async(() -> {
+				appendTo(req, "O", false, () -> {
+					async(() -> {
+						appendTo(req, "K", true, null);
+						// req.done() is in "appendTo"
+					});
+				});
+			});
+
+			return req;
+		});
+
+		Self.get("/").expect("OK").execute();
+		Self.get("/").expect("OK").benchmark(1, 100, 10000);
+		Self.post("/").expect("OK").benchmark(1, 100, 10000);
+	}
+
+
+	@Test(timeout = 20000)
 	public void testAsyncHttpServer2() {
-		On.req(req -> Jobs.after(10).milliseconds(() -> {
+		On.req(req -> async(() -> {
+			Resp resp = req.response();
 
-			IO.write(req.out(), "A");
+			resp.chunk("A".getBytes());
 
-			Jobs.after(10).milliseconds(() -> {
-				IO.write(req.out(), "SYNC");
+			async(() -> {
+				resp.chunk("SYNC".getBytes());
+				IO.close(resp.out(), false);
 				req.done();
 			});
 		}));
 
+		Self.get("/").expect("ASYNC").execute();
 		Self.get("/").expect("ASYNC").benchmark(1, 100, 10000);
 		Self.post("/").expect("ASYNC").benchmark(1, 100, 10000);
+	}
+
+	private void appendTo(Req req, String data, boolean complete, Runnable then) {
+		req.response().resume(() -> {
+			OutputStream out = req.out();
+
+			IO.write(out, data);
+
+			try {
+				out.flush();
+			} catch (IOException e) {
+				throw U.rte(e);
+			}
+
+			if (then != null) {
+				then.run();
+			}
+
+			if (complete) {
+				IO.close(out, false);
+				req.done();
+			}
+
+			return complete;
+		});
 	}
 
 }

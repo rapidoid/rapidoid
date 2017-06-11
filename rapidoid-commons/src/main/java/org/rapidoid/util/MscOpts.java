@@ -4,7 +4,6 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.config.Conf;
 import org.rapidoid.log.GlobalCfg;
 
 /*
@@ -113,6 +112,6 @@ public class MscOpts extends RapidoidThing {
 	}
 
 	public static boolean isTestingTLS() {
-		return GlobalCfg.is("RAPIDOID_TEST_TLS") || Conf.TLS.is("enabled");
+		return GlobalCfg.is("RAPIDOID_TEST_TLS");
 	}
 }

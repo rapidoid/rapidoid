@@ -33,9 +33,12 @@ import org.rapidoid.data.JSON;
 import org.rapidoid.env.Env;
 import org.rapidoid.fluent.Do;
 import org.rapidoid.io.IO;
+import org.rapidoid.job.Jobs;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.jpa.JPAUtil;
+import org.rapidoid.lambda.Executable;
 import org.rapidoid.lambda.F3;
+import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.util.NetUtil;
 import org.rapidoid.reverseproxy.Reverse;
@@ -56,6 +59,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.concurrent.ScheduledFuture;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.5")
@@ -399,4 +403,9 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 	protected <T> T connect(F3<T, InputStream, BufferedReader, DataOutputStream> protocol) {
 		return NetUtil.connect("localhost", 8080, 1000, protocol);
 	}
+
+	protected ScheduledFuture<Void> async(Executable executable) {
+		return Jobs.after(5).milliseconds(() -> Lmbd.execute(executable));
+	}
+
 }

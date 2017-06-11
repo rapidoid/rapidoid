@@ -4,7 +4,6 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
-import org.rapidoid.buffer.BufUtil;
 import org.rapidoid.cache.Cache;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.ChangeTrackingMap;
@@ -446,7 +445,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		return response;
 	}
 
-	public void doRendering(int code, byte[] responseBody) {
+	void doRendering(int code, byte[] responseBody) {
 		if (!isRendering()) {
 			synchronized (this) {
 				if (!isRendering()) {
@@ -496,21 +495,6 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		posBeforeBody = channel.output().size();
 	}
 
-	private void writeResponseLength() {
-		Buf out = channel.output();
-
-		long posAfter = out.size();
-		long contentLength = posAfter - posBeforeBody;
-
-		if (!stopped && out.size() > 0) {
-			BufUtil.startWriting(out);
-			out.putNumAsText((int) posContentLengthValue, contentLength, false);
-			BufUtil.doneWriting(out);
-		}
-
-		completed = true;
-	}
-
 	public boolean isRendering() {
 		return rendering;
 	}
@@ -526,6 +510,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 			onDone();
 			done = true;
 		}
+
 		return this;
 	}
 
@@ -541,8 +526,12 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		}
 
 		if (!completed) {
-			writeResponseLength();
+			// FIXME is this still required?
 			completed = true;
+		}
+
+		if (response != null) {
+			response.finish();
 		}
 
 		if (willBeDone) {
@@ -865,17 +854,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	@Override
 	public OutputStream out() {
-		if (response != null) {
-			return response.out(); // performs extra checks
-		} else {
-			return startOutputStream(200);
-		}
-	}
-
-	public OutputStream startOutputStream(int respCode) {
-		doRendering(respCode, null);
-		BufUtil.startWriting(channel().output());
-		return channel().outputStream();
+		return response().out();
 	}
 
 	@Override
