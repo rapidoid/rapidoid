@@ -31,7 +31,7 @@ import java.io.OutputStream;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.4.0")
-public class HttpChunkedEncodingTest extends IsolatedIntegrationTest {
+public class HttpChunkedStreamTest extends IsolatedIntegrationTest {
 
 	@Test(timeout = 20000)
 	public void testChunkedEncoding() {
