@@ -23,7 +23,6 @@ package org.rapidoid.http;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.log.Log;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
@@ -35,8 +34,6 @@ public class HttpChunkedStreamTest extends IsolatedIntegrationTest {
 
 	@Test(timeout = 20000)
 	public void testChunkedEncoding() {
-		Log.debugging();
-
 		On.req(req -> {
 			OutputStream out = req.out();
 
@@ -60,8 +57,6 @@ public class HttpChunkedStreamTest extends IsolatedIntegrationTest {
 
 	@Test(timeout = 20000)
 	public void testChunkedEncodingAsync() {
-		Log.debugging();
-
 		On.req(req -> {
 			U.must(!req.isAsync());
 			req.async();

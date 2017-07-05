@@ -23,7 +23,6 @@ package org.rapidoid.aop;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.log.Log;
 import org.rapidoid.test.AbstractCommonsTest;
 
 @Authors("Nikolche Mihajlovski")
@@ -33,8 +32,6 @@ public class AOPTest extends AbstractCommonsTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testAOP() {
-		Log.debugging();
-
 		// FIXME reuse in future when AOP is ready
 
 //		AOP.reset();
