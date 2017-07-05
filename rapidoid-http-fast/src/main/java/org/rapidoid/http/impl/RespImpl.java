@@ -559,6 +559,8 @@ public class RespImpl extends RapidoidThing implements Resp {
 				out.append(data, offset, length);
 				out.append("\r\n");
 
+				req.channel().send();
+
 				return false;
 			}
 		});
