@@ -46,7 +46,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public abstract class TestCommons {
 
-	private static final boolean ADJUST_TESTS = "true".equalsIgnoreCase(System.getProperty("adjustTests"));
+	private static final boolean ADJUST_TESTS = "true".equalsIgnoreCase(System.getProperty("ADJUST_TESTS"))
+		|| "true".equalsIgnoreCase(System.getenv("ADJUST_TESTS"));
 
 	protected static final Random RND = new Random();
 
