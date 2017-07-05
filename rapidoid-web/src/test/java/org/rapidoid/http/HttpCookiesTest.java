@@ -50,7 +50,7 @@ public class HttpCookiesTest extends HttpTestCommons {
 	}
 
 	private void checkCookies() {
-		HttpClient client = HTTP.client().keepCookies(true);
+		HttpClient client = HTTP.client().keepCookies(true).timeout(10000);
 
 		eq(client.get(localhost("/a")).parse(), U.map());
 		eq(client.get(localhost("/b")).parse(), U.map("/a", "0"));
