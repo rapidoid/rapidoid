@@ -103,8 +103,14 @@ public class Conf extends RapidoidThing {
 				Log.options().fancy(true);
 			}
 
-			String logLevel = LOG.entry("level").or("info");
-			Log.setLogLevel(GlobalCfg.quiet() ? LogLevel.ERROR : LogLevel.valueOf(logLevel.toUpperCase()));
+			LogLevel logLevel = LOG.entry("level").to(LogLevel.class).getOrNull();
+			if (logLevel != null && !Env.test()) {
+				Log.setLogLevel(logLevel);
+			}
+
+			if (GlobalCfg.quiet()) {
+				Log.setLogLevel(LogLevel.ERROR); // overwrite the configured log level in quiet mode
+			}
 		}
 	}
 
