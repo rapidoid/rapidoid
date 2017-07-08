@@ -27,7 +27,6 @@
       "Overview" : "/_",
       "Routes" : "/_routes",
       "Configuration" : "/_config",
-      "Deployment" : "/_deployment",
       "Processes" : "/_processes",
       "Metrics" : "/_metrics",
       "Manageables" : "/_manageables",
