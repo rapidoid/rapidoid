@@ -39,7 +39,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Since("5.4.0")
 public class LongEchoTest extends NetTestCommons {
 
-	private static final int ROUNDS = Msc.normalOrHeavy(100, 200);
+	private static final int ROUNDS = Msc.normalOrHeavy(1, 200);
 
 	private static final String MSG = Str.mul("a", 50000);
 
