@@ -51,7 +51,7 @@ public class ResultsImpl<T> extends RapidoidThing implements Results<T> {
 
 	@Override
 	public final List<T> all() {
-		return retrievePage(0, Long.MAX_VALUE);
+		return retrievePage(0, -1);
 	}
 
 	@Override
@@ -85,10 +85,8 @@ public class ResultsImpl<T> extends RapidoidThing implements Results<T> {
 		if (count < 0) {
 			// it is unknown, so count manually
 			count = 0;
-			Iterator<T> it = iterator();
 
-			while (it.hasNext()) {
-				it.next();
+			for (T item : this) {
 				count++;
 			}
 		}

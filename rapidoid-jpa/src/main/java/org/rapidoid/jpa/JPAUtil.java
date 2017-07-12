@@ -181,11 +181,11 @@ public class JPAUtil extends RapidoidThing {
 	public static <T> List<T> getPage(Query q, long skip, long limit) {
 
 		U.must(skip < Integer.MAX_VALUE && skip >= 0);
-		U.must(limit >= 0);
+		U.must(limit >= -1); // -1 means no limit
 		limit = Math.min(limit, Integer.MAX_VALUE);
 
 		q.setFirstResult((int) skip);
-		q.setMaxResults((int) limit);
+		q.setMaxResults(limit >= 0 ? (int) limit : Integer.MAX_VALUE);
 
 		return q.getResultList();
 	}

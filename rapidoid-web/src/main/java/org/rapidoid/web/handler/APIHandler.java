@@ -42,7 +42,7 @@ public class APIHandler extends GenericHandler {
 	public Object execute(Req req, Resp resp) {
 
 		if (HttpUtils.isGetReq(req)) {
-			return sqlItems(api.sql).all(); // FIXME support paging
+			return sqlItems(api.sql);
 
 		} else {
 			int changes = executeSql(api.sql);

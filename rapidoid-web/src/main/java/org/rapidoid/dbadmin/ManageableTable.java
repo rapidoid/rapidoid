@@ -66,7 +66,7 @@ public class ManageableTable extends AbstractManageable {
 
 		Results<Map<String, Object>> results = jdbc.query(U.frmt("select * from %s.%s", db, name));
 
-		Grid grid = GUI.grid(results.all()).pageSize(100);
+		Grid grid = GUI.grid(results).pageSize(100);
 
 		return grid;
 	}
