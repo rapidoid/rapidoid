@@ -55,8 +55,8 @@ public class ResultsImpl<T> extends RapidoidThing implements Results<T> {
 	}
 
 	@Override
-	public final List<T> page(long start, long length) {
-		return retrievePage(start, length);
+	public final List<T> page(long skip, long limit) {
+		return retrievePage(skip, limit);
 	}
 
 	@Override
@@ -74,8 +74,8 @@ public class ResultsImpl<T> extends RapidoidThing implements Results<T> {
 		return U.single(retrievePage(count() - 1, 1));
 	}
 
-	private List<T> retrievePage(long start, long length) {
-		return data().getPage(start, length);
+	private List<T> retrievePage(long skip, long limit) {
+		return data().getPage(skip, limit);
 	}
 
 	@Override

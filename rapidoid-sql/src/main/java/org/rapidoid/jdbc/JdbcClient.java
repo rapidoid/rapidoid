@@ -369,13 +369,16 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 		return new ResultsImpl<>(data);
 	}
 
-	<T> List<T> runQuery(Class<T> resultType, Mapper<ResultSet, T> resultMapper, String sql, Map<String, ?> namedArgs, Object[] args, long start, long length) {
+	<T> List<T> runQuery(Class<T> resultType, Mapper<ResultSet, T> resultMapper,
+	                     String sql, Map<String, ?> namedArgs, Object[] args,
+	                     long skip, long limit) {
+
 		ensureIsInitialized();
 
-		U.must(start >= 0);
-		U.must(length >= 0);
+		U.must(skip >= 0);
+		U.must(limit >= 0);
 
-		if (start > 0 || length < Long.MAX_VALUE) {
+		if (skip > 0 || limit < Long.MAX_VALUE) {
 			// FIXME paging
 			throw Err.notReady();
 		}

@@ -51,8 +51,8 @@ public class JdbcData<T> extends RapidoidThing implements PageableData<T> {
 	}
 
 	@Override
-	public List<T> getPage(long start, long length) {
-		return jdbc.runQuery(resultType, resultMapper, sql, namedArgs, args, start, length);
+	public List<T> getPage(long skip, long limit) {
+		return jdbc.runQuery(resultType, resultMapper, sql, namedArgs, args, skip, limit);
 	}
 
 	@Override

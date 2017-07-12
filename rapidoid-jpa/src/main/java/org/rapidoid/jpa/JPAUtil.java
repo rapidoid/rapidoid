@@ -178,14 +178,14 @@ public class JPAUtil extends RapidoidThing {
 		return emf;
 	}
 
-	public static <T> List<T> getPage(Query q, long start, long length) {
+	public static <T> List<T> getPage(Query q, long skip, long limit) {
 
-		U.must(start < Integer.MAX_VALUE && start >= 0);
-		U.must(length >= 0);
-		length = Math.min(length, Integer.MAX_VALUE);
+		U.must(skip < Integer.MAX_VALUE && skip >= 0);
+		U.must(limit >= 0);
+		limit = Math.min(limit, Integer.MAX_VALUE);
 
-		q.setFirstResult((int) start);
-		q.setMaxResults((int) length);
+		q.setFirstResult((int) skip);
+		q.setMaxResults((int) limit);
 
 		return q.getResultList();
 	}

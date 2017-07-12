@@ -96,8 +96,8 @@ public class JPQL extends ResultsImpl implements PageableData {
 	}
 
 	@Override
-	public List getPage(long start, long length) {
-		return JPAUtil.getPage(query(), start, length);
+	public List getPage(long skip, long limit) {
+		return JPAUtil.getPage(query(), skip, limit);
 	}
 
 	@Override

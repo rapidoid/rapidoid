@@ -42,9 +42,9 @@ public class JPACriteriaQueryEntities<T> extends RapidoidThing implements Pageab
 	}
 
 	@Override
-	public List<T> getPage(long start, long length) {
+	public List<T> getPage(long skip, long limit) {
 		TypedQuery<T> query = JPA.em().createQuery(this.criteria);
-		return JPAUtil.getPage(query, start, length);
+		return JPAUtil.getPage(query, skip, limit);
 	}
 
 	@Override
