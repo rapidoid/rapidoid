@@ -28,6 +28,7 @@ import org.rapidoid.env.Env;
 import org.rapidoid.env.EnvMode;
 import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.u.U;
+import org.rapidoid.util.MscOpts;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -147,6 +148,8 @@ public class ConfigurationTest extends AbstractCommonsTest {
 
 	@Test
 	public void testMySqlProfile() {
+		if (MscOpts.isTLSEnabled()) return;
+
 		Env.setArgs("jdbc.port=3333", "profiles=mysql");
 
 		eq(Env.profiles(), U.set("mysql", "test"));
@@ -158,6 +161,8 @@ public class ConfigurationTest extends AbstractCommonsTest {
 
 	@Test
 	public void testPostgresProfile() {
+		if (MscOpts.isTLSEnabled()) return;
+
 		Env.setArgs("profiles=postgres");
 
 		eq(Env.profiles(), U.set("postgres", "test"));
@@ -169,6 +174,8 @@ public class ConfigurationTest extends AbstractCommonsTest {
 
 	@Test
 	public void testPlatformProfile() {
+		if (MscOpts.isTLSEnabled()) return;
+
 		Env.setArgs("profiles=platform");
 
 		eq(Env.profiles(), U.set("platform", "test"));
@@ -178,6 +185,8 @@ public class ConfigurationTest extends AbstractCommonsTest {
 
 	@Test
 	public void testBuiltInConfig() {
+		if (MscOpts.isTLSEnabled()) return;
+
 		verify("root", Conf.ROOT.toMap());
 	}
 

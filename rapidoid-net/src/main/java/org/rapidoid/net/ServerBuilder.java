@@ -53,8 +53,8 @@ public class ServerBuilder extends RapidoidThing {
 
 	private volatile Class<? extends org.rapidoid.net.impl.RapidoidHelper> helperClass = RapidoidHelper.class;
 
-	// auto-activate if testing TLS
-	private volatile boolean tls = Conf.TLS.is("enabled") || MscOpts.isTestingTLS();
+	// auto-activate if TLS is enabled
+	private volatile boolean tls = MscOpts.isTLSEnabled();
 
 	private volatile String keystore = Conf.TLS.entry("keystore").or("");
 

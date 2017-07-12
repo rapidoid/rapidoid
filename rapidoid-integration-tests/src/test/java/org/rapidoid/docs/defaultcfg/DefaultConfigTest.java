@@ -23,6 +23,7 @@ package org.rapidoid.docs.defaultcfg;
 import org.rapidoid.annotation.IntegrationTest;
 import org.rapidoid.docs.DocTest;
 import org.rapidoid.test.Doc;
+import org.rapidoid.util.MscOpts;
 
 @IntegrationTest(main = Main.class)
 @Doc(title = "The default configuration")
@@ -30,6 +31,7 @@ public class DefaultConfigTest extends DocTest {
 
 	@Override
 	protected void exercise() {
+		if (MscOpts.isTLSEnabled()) return;
 		GET("/");
 	}
 

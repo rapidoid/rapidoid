@@ -1312,7 +1312,7 @@ public class Msc extends RapidoidThing {
 	}
 
 	public static String http() {
-		return MscOpts.isTestingTLS() ? "https" : "http";
+		return MscOpts.isTLSEnabled() ? "https" : "http";
 	}
 
 	public static String urlWithProtocol(String url) {

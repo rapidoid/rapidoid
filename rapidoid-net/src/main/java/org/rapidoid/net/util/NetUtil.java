@@ -47,7 +47,7 @@ public class NetUtil extends RapidoidThing {
 	}
 
 	public static <T> T connect(String address, int port, int timeout, F3<T, InputStream, BufferedReader, DataOutputStream> protocol) {
-		return MscOpts.isTestingTLS()
+		return MscOpts.isTLSEnabled()
 			? connectSSL(address, port, timeout, protocol)
 			: connectNoSSL(address, port, timeout, protocol);
 	}
