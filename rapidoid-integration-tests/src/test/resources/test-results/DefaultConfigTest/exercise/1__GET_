@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 20790
+Content-Length: 20686
 
 <!DOCTYPE html>
 <html lang="en">
@@ -135,7 +135,7 @@ Content-Length: 20790
       </tr>
     </table>
     <h4>
-      <span class="label bg-metal">gui</span>
+      <span class="label bg-pink">gui</span>
     </h4>
     <table class="table table-striped table-hover">
       <tr>
@@ -166,7 +166,7 @@ Content-Length: 20790
       </tr>
     </table>
     <h4>
-      <span class="label bg-metal">admin-zone</span>
+      <span class="label bg-teal">admin-zone</span>
     </h4>
     <table class="table table-striped table-hover">
       <tr>
@@ -212,10 +212,6 @@ Content-Length: 20790
             <tr>
               <td>Configuration</td>
               <td>/_config</td>
-            </tr>
-            <tr>
-              <td>Deployment</td>
-              <td>/_deployment</td>
             </tr>
             <tr>
               <td>Processes</td>
@@ -646,7 +642,7 @@ Content-Length: 20790
       </tr>
     </table>
     <h4>
-      <span class="label bg-metal">net</span>
+      <span class="label bg-salmon">net</span>
     </h4>
     <table class="table table-striped table-hover">
       <tr>
@@ -739,7 +735,7 @@ Content-Length: 20790
       </tr>
     </table>
     <h4>
-      <span class="label bg-metal">reverse-proxy</span>
+      <span class="label bg-sky">reverse-proxy</span>
     </h4>
     <table class="table table-striped table-hover">
       <tr>
@@ -811,7 +807,7 @@ Content-Length: 20790
       </tr>
     </table>
     <h4>
-      <span class="label bg-purple">token</span>
+      <span class="label label-danger">token</span>
     </h4>
     <table class="table table-striped table-hover">
       <tr>
@@ -824,7 +820,7 @@ Content-Length: 20790
       </tr>
     </table>
     <h4>
-      <span class="label bg-metal">log</span>
+      <span class="label bg-purple">log</span>
     </h4>
     <table class="table table-striped table-hover">
       <tr>
@@ -843,7 +839,7 @@ Content-Length: 20790
       </tr>
     </table>
     <h4>
-      <span class="label bg-metal">tls</span>
+      <span class="label bg-sandy">tls</span>
     </h4>
     <table class="table table-striped table-hover">
       <tr>
