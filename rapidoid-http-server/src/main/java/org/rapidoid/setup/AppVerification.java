@@ -40,9 +40,7 @@ public class AppVerification extends RapidoidThing {
 			verifyNotInitialized();
 		}
 
-		if (!Msc.isInsideTest()) {
-			verifyNotInitialized();
-		}
+		verifyNotInitialized();
 	}
 
 	private static void verifyNotInitialized() {

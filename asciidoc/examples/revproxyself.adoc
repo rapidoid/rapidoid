@@ -13,7 +13,7 @@ public class Main {
 	public static void main(String[] args) {
 		App.bootstrap(args);
 
-		String fooUpstream = "http://localhost:8080/foo";
+		String fooUpstream = "localhost:8080/foo";
 
 		Reverse.proxy("/bar").to(fooUpstream).add();
 		Reverse.proxy("/").to(fooUpstream).add();
