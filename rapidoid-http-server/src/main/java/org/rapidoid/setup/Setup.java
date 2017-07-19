@@ -582,7 +582,11 @@ public class Setup extends RapidoidInitializer {
 	}
 
 	static void initDefaults() {
-		DEFAULT.get().initDefaults();
+		DefaultSetup defaultSetup = DEFAULT.getValue();
+
+		if (defaultSetup != null) {
+			defaultSetup.initDefaults();
+		}
 	}
 
 	@Override
