@@ -26,6 +26,7 @@ import org.rapidoid.fluent.Do;
 import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.io.FileSearchResult;
 import org.rapidoid.io.IO;
+import org.rapidoid.log.GlobalCfg;
 import org.rapidoid.test.Doc;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -97,6 +98,12 @@ public abstract class DocTest extends IsolatedIntegrationTest {
 
 		IO.save(Msc.path(asciidoc, filename), sb.toString());
 
+		if (GlobalCfg.is("DOCS")) {
+			appendToIndex(asciidoc, filename);
+		}
+	}
+
+	private void appendToIndex(String asciidoc, String filename) {
 		String toIndex = U.frmt("include::%s[]\n\n", filename);
 
 		String index = Msc.path(asciidoc, "index.adoc");
