@@ -307,11 +307,11 @@ public class Cls extends RapidoidThing {
 			m.setAccessible(true);
 			return (T) m.invoke(null, args);
 		} catch (IllegalAccessException e) {
-			throw U.rte("Cannot statically invoke method '%s' with args: %s", e, m.getName(), Arrays.toString(args));
+			throw U.rte("Cannot statically invoke method '%s' with args: %s", e, m.getName(), U.str(args));
 		} catch (IllegalArgumentException e) {
-			throw U.rte("Cannot statically invoke method '%s' with args: %s", e, m.getName(), Arrays.toString(args));
+			throw U.rte("Cannot statically invoke method '%s' with args: %s", e, m.getName(), U.str(args));
 		} catch (InvocationTargetException e) {
-			throw U.rte("Cannot statically invoke method '%s' with args: %s", e, m.getName(), Arrays.toString(args));
+			throw U.rte("Cannot statically invoke method '%s' with args: %s", e, m.getName(), U.str(args));
 		}
 	}
 
@@ -321,7 +321,7 @@ public class Cls extends RapidoidThing {
 			m.setAccessible(true);
 			return (T) m.invoke(target, args);
 		} catch (Exception e) {
-			throw U.rte("Cannot invoke method '%s' with args: %s", e, m.getName(), Arrays.toString(args));
+			throw U.rte("Cannot invoke method '%s' with args: %s", e, m.getName(), U.str(args));
 		}
 	}
 
@@ -331,7 +331,7 @@ public class Cls extends RapidoidThing {
 			constructor.setAccessible(true);
 			return (T) constructor.newInstance(args);
 		} catch (Exception e) {
-			throw U.rte("Cannot invoke method '%s' with args: %s", e, constructor.getName(), Arrays.toString(args));
+			throw U.rte("Cannot invoke method '%s' with args: %s", e, constructor.getName(), U.str(args));
 		}
 	}
 
@@ -365,7 +365,7 @@ public class Cls extends RapidoidThing {
 			return (Constructor<T>) clazz.getConstructor(paramTypes);
 		} catch (Exception e) {
 			throw U.rte("Cannot find the constructor for %s with param types: %s", e, clazz,
-				Arrays.toString(paramTypes));
+				U.str(paramTypes));
 		}
 	}
 
