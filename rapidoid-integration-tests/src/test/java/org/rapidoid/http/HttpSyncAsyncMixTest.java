@@ -25,12 +25,13 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.setup.On;
+import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
 public class HttpSyncAsyncMixTest extends IsolatedIntegrationTest {
 
-	private static final int ROUNDS = 1000;
+	private static final int ROUNDS = Msc.normalOrHeavy(100, 1000);
 
 	@Test
 	public void testSyncAsyncMix() {

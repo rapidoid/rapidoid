@@ -35,7 +35,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Since("5.3.0")
 public class HttpPipeliningTest extends IsolatedIntegrationTest {
 
-	private static final int ROUNDS = Msc.normalOrHeavy(10, 100);
+	private static final int ROUNDS = Msc.normalOrHeavy(1, 100);
 
 	private static final int REQ_COUNT = 100;
 

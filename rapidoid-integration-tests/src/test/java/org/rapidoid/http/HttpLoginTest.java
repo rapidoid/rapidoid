@@ -60,7 +60,7 @@ public class HttpLoginTest extends IsolatedIntegrationTest {
 		});
 
 		ready = true;
-		multiThreaded(150, Msc.normalOrHeavy(600, 15000), this::randomUserLogin);
+		multiThreaded(Msc.normalOrHeavy(50, 150), Msc.normalOrHeavy(100, 15000), this::randomUserLogin);
 	}
 
 	private void randomUserLogin() {

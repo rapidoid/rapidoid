@@ -25,10 +25,13 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.4.0")
 public class HttpChunkedResponseTest extends IsolatedIntegrationTest {
+
+	private static final int REQUESTS = Msc.normalOrHeavy(1000, 10000);
 
 	@Test(timeout = 20000)
 	public void testChunkedEncoding() {
@@ -44,8 +47,8 @@ public class HttpChunkedResponseTest extends IsolatedIntegrationTest {
 		getReq("/");
 
 		Self.get("/").expect("abcd").execute();
-		Self.get("/").expect("abcd").benchmark(1, 100, 10000);
-		Self.post("/").expect("abcd").benchmark(1, 100, 10000);
+		Self.get("/").expect("abcd").benchmark(1, 100, REQUESTS);
+		Self.post("/").expect("abcd").benchmark(1, 100, REQUESTS);
 	}
 
 	@Test(timeout = 20000)
@@ -74,8 +77,8 @@ public class HttpChunkedResponseTest extends IsolatedIntegrationTest {
 		getReq("/");
 
 		Self.get("/").expect("abcd").execute();
-		Self.get("/").expect("abcd").benchmark(1, 100, 10000);
-		Self.post("/").expect("abcd").benchmark(1, 100, 10000);
+		Self.get("/").expect("abcd").benchmark(1, 100, REQUESTS);
+		Self.post("/").expect("abcd").benchmark(1, 100, REQUESTS);
 	}
 
 }

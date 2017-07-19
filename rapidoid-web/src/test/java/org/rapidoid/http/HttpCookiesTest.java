@@ -25,10 +25,14 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.5")
 public class HttpCookiesTest extends HttpTestCommons {
+
+	private static final int THREADS = Msc.normalOrHeavy(10, 100);
+	private static final int ROUNDS = Msc.normalOrHeavy(100, 1000);
 
 	@Test
 	public void testHttpCookies() {
@@ -41,7 +45,7 @@ public class HttpCookiesTest extends HttpTestCommons {
 			}
 		});
 
-		multiThreaded(100, 1000, new Runnable() {
+		multiThreaded(THREADS, ROUNDS, new Runnable() {
 			@Override
 			public void run() {
 				checkCookies();
@@ -71,7 +75,7 @@ public class HttpCookiesTest extends HttpTestCommons {
 			}
 		});
 
-		multiThreaded(100, 1000, new Runnable() {
+		multiThreaded(THREADS, ROUNDS, new Runnable() {
 			@Override
 			public void run() {
 				checkNoCookies(true);

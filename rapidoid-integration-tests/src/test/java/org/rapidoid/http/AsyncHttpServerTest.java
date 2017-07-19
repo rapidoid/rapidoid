@@ -26,6 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.io.IO;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -33,6 +34,8 @@ import java.io.OutputStream;
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class AsyncHttpServerTest extends IsolatedIntegrationTest {
+
+	private static final int REQUESTS = Msc.normalOrHeavy(1000, 10000);
 
 	@Test(timeout = 20000)
 	public void testAsyncHttpServer() {
@@ -60,8 +63,8 @@ public class AsyncHttpServerTest extends IsolatedIntegrationTest {
 		});
 
 		Self.get("/").expect("OK").execute();
-		Self.get("/").expect("OK").benchmark(1, 100, 10000);
-		Self.post("/").expect("OK").benchmark(1, 100, 10000);
+		Self.get("/").expect("OK").benchmark(1, 100, REQUESTS);
+		Self.post("/").expect("OK").benchmark(1, 100, REQUESTS);
 	}
 
 	@Test(timeout = 20000)
@@ -84,8 +87,8 @@ public class AsyncHttpServerTest extends IsolatedIntegrationTest {
 		});
 
 		Self.get("/").expect("OK").execute();
-		Self.get("/").expect("OK").benchmark(1, 100, 10000);
-		Self.post("/").expect("OK").benchmark(1, 100, 10000);
+		Self.get("/").expect("OK").benchmark(1, 100, REQUESTS);
+		Self.post("/").expect("OK").benchmark(1, 100, REQUESTS);
 	}
 
 
@@ -104,8 +107,8 @@ public class AsyncHttpServerTest extends IsolatedIntegrationTest {
 		}));
 
 		Self.get("/").expect("ASYNC").execute();
-		Self.get("/").expect("ASYNC").benchmark(1, 100, 10000);
-		Self.post("/").expect("ASYNC").benchmark(1, 100, 10000);
+		Self.get("/").expect("ASYNC").benchmark(1, 100, REQUESTS);
+		Self.post("/").expect("ASYNC").benchmark(1, 100, REQUESTS);
 	}
 
 	private void appendTo(Req req, String data, boolean complete, Runnable then) {
