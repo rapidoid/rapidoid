@@ -34,6 +34,8 @@ import org.rapidoid.util.MscOpts;
 @Since("5.1.0")
 public class ConfigurationTest extends AbstractCommonsTest {
 
+	private static boolean TLS_ENABLED = MscOpts.isTLSEnabled();
+
 	@Before
 	public void reset() {
 		Env.reset();
@@ -148,7 +150,7 @@ public class ConfigurationTest extends AbstractCommonsTest {
 
 	@Test
 	public void testMySqlProfile() {
-		if (MscOpts.isTLSEnabled()) return;
+		if (TLS_ENABLED) return;
 
 		Env.setArgs("jdbc.port=3333", "profiles=mysql");
 
@@ -161,7 +163,7 @@ public class ConfigurationTest extends AbstractCommonsTest {
 
 	@Test
 	public void testPostgresProfile() {
-		if (MscOpts.isTLSEnabled()) return;
+		if (TLS_ENABLED) return;
 
 		Env.setArgs("profiles=postgres");
 
@@ -174,7 +176,7 @@ public class ConfigurationTest extends AbstractCommonsTest {
 
 	@Test
 	public void testPlatformProfile() {
-		if (MscOpts.isTLSEnabled()) return;
+		if (TLS_ENABLED) return;
 
 		Env.setArgs("profiles=platform");
 
@@ -185,7 +187,7 @@ public class ConfigurationTest extends AbstractCommonsTest {
 
 	@Test
 	public void testBuiltInConfig() {
-		if (MscOpts.isTLSEnabled()) return;
+		if (TLS_ENABLED) return;
 
 		verify("root", Conf.ROOT.toMap());
 	}
