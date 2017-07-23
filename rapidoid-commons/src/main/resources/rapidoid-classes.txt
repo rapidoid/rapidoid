@@ -399,7 +399,6 @@ org.rapidoid.http.handler.AbstractDecoratingHttpHandler
 org.rapidoid.http.handler.AbstractHttpHandler
 org.rapidoid.http.handler.HandlerInvocation
 org.rapidoid.http.handler.HttpHandler
-org.rapidoid.http.handler.HttpHandlers
 org.rapidoid.http.handler.lambda.FiveParamLambdaHandler
 org.rapidoid.http.handler.lambda.FourParamLambdaHandler
 org.rapidoid.http.handler.lambda.NParamLambdaHandler
@@ -754,6 +753,7 @@ org.rapidoid.setup.AppRestartProcessor
 org.rapidoid.setup.AppVerification
 org.rapidoid.setup.CustomizableSetupAwarePersisterProvider
 org.rapidoid.setup.DefaultSetup
+org.rapidoid.setup.HttpHandlers
 org.rapidoid.setup.IGoodies
 org.rapidoid.setup.My
 org.rapidoid.setup.On

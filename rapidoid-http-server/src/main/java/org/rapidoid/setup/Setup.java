@@ -104,7 +104,6 @@ public class Setup extends RapidoidInitializer {
 
 	private final Customization customization;
 	private final HttpRoutesImpl routes;
-	private volatile FastHttp http;
 	private volatile RouteOptions defaults = new RouteOptions();
 
 	private volatile Integer port;
@@ -116,10 +115,18 @@ public class Setup extends RapidoidInitializer {
 	private volatile Server server;
 	private volatile boolean activated;
 	private volatile boolean reloaded;
+	private volatile boolean autoActivating = true;
 
 	private volatile Runnable onInit;
 
 	private final Once bootstrappedBeans = new Once();
+
+	private final LazyInit<FastHttp> lazyHttp = new LazyInit<>(new Callable<FastHttp>() {
+		@Override
+		public FastHttp call() throws Exception {
+			return initHttp();
+		}
+	});
 
 	public static Setup create(String name) {
 		IoCContext ioc = IoC.createContext().name(name);
@@ -160,30 +167,24 @@ public class Setup extends RapidoidInitializer {
 		return DEFAULT.get().admin;
 	}
 
+	private FastHttp initHttp() {
+		if (isAdminAndSameAsApp() && on().lazyHttp.isInitialized()) {
+			return on().http();
+
+		} else if (isAppAndSameAsAdmin() && admin().lazyHttp.isInitialized()) {
+			return admin().http();
+		}
+
+		if (isAppOrAdminOnSameServer()) {
+			U.must(on().routes == admin().routes);
+			return new FastHttp(on().routes, on().serverConfig);
+		} else {
+			return new FastHttp(routes, serverConfig);
+		}
+	}
+
 	public FastHttp http() {
-		if (http != null) {
-			return http;
-		}
-
-		synchronized (this) {
-			if (isAdminAndSameAsApp() && on().http != null) {
-				return on().http;
-
-			} else if (isAppAndSameAsAdmin() && admin().http != null) {
-				return admin().http;
-			}
-
-			if (http == null) {
-				if (isAppOrAdminOnSameServer()) {
-					U.must(on().routes == admin().routes);
-					http = new FastHttp(on().routes, on().serverConfig);
-				} else {
-					http = new FastHttp(routes, serverConfig);
-				}
-			}
-		}
-
-		return http;
+		return lazyHttp.get();
 	}
 
 	private synchronized Server listen() {
@@ -261,6 +262,10 @@ public class Setup extends RapidoidInitializer {
 		return this == on();
 	}
 
+	void autoActivate() {
+		if (autoActivating) activate();
+	}
+
 	public synchronized void activate() {
 		RapidoidEnv.touch();
 
@@ -288,75 +293,64 @@ public class Setup extends RapidoidInitializer {
 	}
 
 	public OnRoute route(String verb, String path) {
-		activate();
-		return new OnRoute(http(), defaults, routes, verb.toUpperCase(), path);
+		return new OnRoute(this, verb.toUpperCase(), path);
 	}
 
 	public OnRoute any(String path) {
-		activate();
-		return new OnRoute(http(), defaults, routes, ANY, path);
+		return new OnRoute(this, ANY, path);
 	}
 
 	public OnRoute get(String path) {
-		activate();
-		return new OnRoute(http(), defaults, routes, GET, path);
+		return new OnRoute(this, GET, path);
 	}
 
 	public OnRoute post(String path) {
-		activate();
-		return new OnRoute(http(), defaults, routes, POST, path);
+		return new OnRoute(this, POST, path);
 	}
 
 	public OnRoute put(String path) {
-		activate();
-		return new OnRoute(http(), defaults, routes, PUT, path);
+		return new OnRoute(this, PUT, path);
 	}
 
 	public OnRoute delete(String path) {
-		activate();
-		return new OnRoute(http(), defaults, routes, DELETE, path);
+		return new OnRoute(this, DELETE, path);
 	}
 
 	public OnRoute patch(String path) {
-		activate();
-		return new OnRoute(http(), defaults, routes, PATCH, path);
+		return new OnRoute(this, PATCH, path);
 	}
 
 	public OnRoute options(String path) {
-		activate();
-		return new OnRoute(http(), defaults, routes, OPTIONS, path);
+		return new OnRoute(this, OPTIONS, path);
 	}
 
 	public OnRoute head(String path) {
-		activate();
-		return new OnRoute(http(), defaults, routes, HEAD, path);
+		return new OnRoute(this, HEAD, path);
 	}
 
 	public OnRoute trace(String path) {
-		activate();
-		return new OnRoute(http(), defaults, routes, TRACE, path);
+		return new OnRoute(this, TRACE, path);
 	}
 
 	public OnRoute page(String path) {
-		activate();
-		return new OnRoute(http(), defaults, routes, GET_OR_POST, path);
+		return new OnRoute(this, GET_OR_POST, path);
 	}
 
 	public Setup req(ReqHandler handler) {
-		activate();
 		routes.addGenericHandler(new DelegatingParamsAwareReqHandler(http(), routes, opts(), handler));
+		autoActivate();
 		return this;
 	}
 
 	public Setup req(ReqRespHandler handler) {
-		activate();
 		routes.addGenericHandler(new DelegatingParamsAwareReqRespHandler(http(), routes, opts(), handler));
+		autoActivate();
 		return this;
 	}
 
 	public Setup req(HttpHandler handler) {
-		activate();
 		routes.addGenericHandler(handler);
+		autoActivate();
 		return this;
 	}
 
@@ -426,12 +420,13 @@ public class Setup extends RapidoidInitializer {
 		listening = false;
 		reloaded = false;
 		port = null;
-		http = null;
+		lazyHttp.reset();
 		address = null;
 		processor = null;
 		activated = false;
 		ioCContext.reset();
 		server = null;
+		autoActivating = true;
 
 		defaults = new RouteOptions();
 		defaults().zone(zone);
@@ -602,5 +597,14 @@ public class Setup extends RapidoidInitializer {
 
 	public void onInit(Runnable onInit) {
 		this.onInit = onInit;
+	}
+
+	public boolean autoActivating() {
+		return autoActivating;
+	}
+
+	public Setup autoActivating(boolean autoActivating) {
+		this.autoActivating = autoActivating;
+		return this;
 	}
 }
