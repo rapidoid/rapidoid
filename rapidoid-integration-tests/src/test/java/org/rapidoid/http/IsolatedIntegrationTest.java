@@ -39,6 +39,7 @@ import org.rapidoid.jpa.JPAUtil;
 import org.rapidoid.lambda.Executable;
 import org.rapidoid.lambda.F3;
 import org.rapidoid.lambda.Lmbd;
+import org.rapidoid.log.GlobalCfg;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.util.NetUtil;
 import org.rapidoid.reverseproxy.Reverse;
@@ -401,7 +402,8 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 	}
 
 	protected <T> T connect(F3<T, InputStream, BufferedReader, DataOutputStream> protocol) {
-		return NetUtil.connect("localhost", 8080, 1000, protocol);
+		int timeout = GlobalCfg.is("TRAVIS-CI") ? 5000 : 1000;
+		return NetUtil.connect("localhost", 8080, timeout, protocol);
 	}
 
 	protected ScheduledFuture<Void> async(Executable executable) {
