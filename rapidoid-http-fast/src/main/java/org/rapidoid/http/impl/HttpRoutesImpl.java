@@ -57,7 +57,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 
 	private static final AtomicLong ID_GEN = new AtomicLong();
 
-	private static final int ROUTE_SETUP_WAITING_TIME_MS = Env.test() ? 300 : 500;
+	private static final int ROUTE_SETUP_WAITING_TIME_MS = Env.test() ? 0 : 500;
 
 	private static final Pattern PATTERN_PATTERN = Pattern.compile("[^\\w/-]");
 
