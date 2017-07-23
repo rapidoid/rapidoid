@@ -9,7 +9,6 @@ printf "\n - Testing ENV-CONFIG (tag=$TAG)\n\n"
 docker run \
     --net host \
     -v $(pwd)/app2:/app \
-    -u nobody \
     -e "UNIFORM_OUTPUT=true" \
     -e "ROOT=/app/the-root" \
     -e "CONFIG=my-config" \

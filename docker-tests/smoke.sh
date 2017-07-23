@@ -18,6 +18,7 @@ sudo service nginx stop || true
 ./configuration.sh
 ./env-config.sh
 ./proxy.sh
+./nobody.sh
 
 ./mysql.sh
 ./postgres.sh

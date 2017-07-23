@@ -4,18 +4,18 @@ IFS=$'\n\t'
 
 ./cleanup.sh
 
-printf "\n - Testing CONFIGURATION (tag=$TAG)\n\n"
+printf "\n - Testing NOBODY (tag=$TAG)\n\n"
 
 docker run \
+    -u nobody \
     --net host \
-    -v $(pwd)/app1:/app \
     -e "UNIFORM_OUTPUT=true" \
     rapidoid/rapidoid:$TAG \
     app.services=status \
-    > output/configuration.txt 2>&1 &
+    > output/nobody.txt 2>&1 &
 
-./wait-for.sh 4444
+./wait-for.sh 8888
 
-./http-get.sh configuration-req 4444 /rapidoid/status
+./http-get.sh nobody-req 8888 /rapidoid/status
 
 ./cleanup.sh

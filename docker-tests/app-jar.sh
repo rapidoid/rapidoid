@@ -22,7 +22,6 @@ sudo docker run \
     -e profiles=mysql \
     -p 8888:8888 \
     -p 8080:8080 \
-    -u nobody \
     -v $(pwd)/app3:/app \
     --link $DB_ID:mysql \
     rapidoid/rapidoid:$TAG \
