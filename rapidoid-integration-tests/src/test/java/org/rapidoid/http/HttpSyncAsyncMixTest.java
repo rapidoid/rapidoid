@@ -31,7 +31,7 @@ import org.rapidoid.util.Msc;
 @Since("5.3.0")
 public class HttpSyncAsyncMixTest extends IsolatedIntegrationTest {
 
-	private static final int ROUNDS = Msc.normalOrHeavy(100, 1000);
+	private static final int ROUNDS = Msc.normalOrHeavy(10, 1000);
 
 	@Test
 	public void testSyncAsyncMix() {

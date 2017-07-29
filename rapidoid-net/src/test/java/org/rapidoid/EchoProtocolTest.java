@@ -48,7 +48,7 @@ public class EchoProtocolTest extends NetTestCommons {
 
 	private static final int ROUNDS = Msc.normalOrHeavy(1, 100);
 
-	private static final int MAX_MSG_COUNT = Msc.normalOrHeavy(100, 1000);
+	private static final int MAX_MSG_COUNT = Msc.normalOrHeavy(10, 1000);
 
 	private static final List<String> testCases = U.list(
 		"abc\nxy\nbye\n",

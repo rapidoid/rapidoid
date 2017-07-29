@@ -31,7 +31,7 @@ import org.rapidoid.util.Msc;
 @Since("5.4.0")
 public class HttpChunkedResponseTest extends IsolatedIntegrationTest {
 
-	private static final int REQUESTS = Msc.normalOrHeavy(1000, 10000);
+	private static final int REQUESTS = Msc.normalOrHeavy(100, 10000);
 
 	@Test(timeout = 20000)
 	public void testChunkedEncoding() {

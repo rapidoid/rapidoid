@@ -31,8 +31,8 @@ import org.rapidoid.util.Msc;
 @Since("5.2.5")
 public class HttpCookiesTest extends HttpTestCommons {
 
-	private static final int THREADS = Msc.normalOrHeavy(10, 100);
-	private static final int ROUNDS = Msc.normalOrHeavy(100, 1000);
+	private static final int THREADS = Msc.normalOrHeavy(5, 100);
+	private static final int ROUNDS = Msc.normalOrHeavy(10, 1000);
 
 	@Test
 	public void testHttpCookies() {
