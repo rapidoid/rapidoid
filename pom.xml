@@ -46,6 +46,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<test.jvm.argLine>-server -verbose:gc</test.jvm.argLine>
+		<jdk9.modules></jdk9.modules>
 
 		<timestamp>${maven.build.timestamp}</timestamp>
 		<maven.build.timestamp.format>yyyy-MM-dd HH:mm z</maven.build.timestamp.format>
@@ -158,7 +159,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.19.1</version>
 				<configuration>
-					<argLine>-Xms512m -Xmx1024m -Dfile.encoding=${project.build.sourceEncoding}</argLine>
+					<argLine>${jdk9.modules} -Xms512m -Xmx1024m -Dfile.encoding=${project.build.sourceEncoding}</argLine>
 				</configuration>
 			</plugin>
 
@@ -255,6 +256,17 @@
 
 	<profiles>
 		<profile>
+			<id>jdk9</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<jdk9.modules>--add-modules java.xml.bind,java.xml.ws.annotation</jdk9.modules>
+				<javassist.version>3.22.0-CR2</javassist.version>
+			</properties>
+		</profile>
+
+		<profile>
 			<id>release</id>
 			<build>
 				<plugins>
@@ -319,5 +331,15 @@
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.javassist</groupId>
+				<artifactId>javassist</artifactId>
+				<version>${javassist.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 </project>
