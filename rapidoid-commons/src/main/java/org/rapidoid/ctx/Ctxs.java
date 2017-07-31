@@ -91,7 +91,8 @@ public class Ctxs extends RapidoidThing {
 			if (ctx != null) {
 				ctx.close();
 			} else {
-				throw new RuntimeException("There is no opened context!");
+				// don't throw error here, the context might be "double-closed" on shutdown
+				Log.warn("The context was already closed!");
 			}
 		} finally {
 			CTXS.remove();
