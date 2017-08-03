@@ -51,6 +51,8 @@ import java.util.concurrent.Callable;
 @ManageableBean(kind = "jdbc")
 public class JdbcClient extends AutoManageable<JdbcClient> {
 
+	private static final String DEFAULT_POOL_PROVIDER = "hikari";
+
 	private volatile boolean initialized;
 
 	private volatile String username;
@@ -60,7 +62,7 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 
 	private volatile boolean usePool = true;
 	private volatile DataSource dataSource;
-	private volatile String poolProvider = "hikari";
+	private volatile String poolProvider = DEFAULT_POOL_PROVIDER;
 
 	private volatile ReadWriteMode mode = ReadWriteMode.READ_WRITE;
 
@@ -86,7 +88,7 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 		username(config.entry("username").str().getOrNull());
 		password(config.entry("password").str().getOrNull());
 		driver(config.entry("driver").str().getOrNull());
-		poolProvider(config.entry("poolProvider").str().getOrNull());
+		poolProvider(config.entry("poolProvider").or(DEFAULT_POOL_PROVIDER));
 
 		if (U.isEmpty(driver) && U.notEmpty(url)) {
 			driver(inferDriverFromUrl(url));
