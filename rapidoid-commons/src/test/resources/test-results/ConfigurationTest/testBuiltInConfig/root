@@ -66,25 +66,13 @@
     "username" : "sa",
     "password" : "",
     "url" : "jdbc:hsqldb:mem:public",
-    "options" : ""
+    "options" : "",
+    "poolProvider" : "hikari"
   },
   "hibernate" : {
     "dialect" : "org.hibernate.dialect.HSQLDialect",
-    "connection" : {
-      "driver_class" : "org.hsqldb.jdbc.JDBCDriver",
-      "username" : "sa",
-      "password" : "",
-      "url" : "jdbc:hsqldb:mem:public"
-    },
-    "c3p0" : {
-      "debug" : "true",
-      "initialPoolSize" : "5",
-      "minPoolSize" : "5",
-      "maxPoolSize" : "100",
-      "acquireIncrement" : "5",
-      "maxStatementsPerConnection" : "10",
-      "idleConnectionTestPeriod" : "300"
-    },
+    "format_sql" : false,
+    "show_sql" : true,
     "hbm2ddl" : {
       "auto" : "update"
     }

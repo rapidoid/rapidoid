@@ -67,25 +67,13 @@
     "username" : "UNKNOWN",
     "password" : "UNKNOWN",
     "url" : "UNKNOWN",
-    "options" : ""
+    "options" : "",
+    "poolProvider" : "hikari"
   },
   "hibernate" : {
     "dialect" : "UNKNOWN",
-    "connection" : {
-      "driver_class" : "UNKNOWN",
-      "username" : "UNKNOWN",
-      "password" : "UNKNOWN",
-      "url" : "UNKNOWN"
-    },
-    "c3p0" : {
-      "debug" : "true",
-      "initialPoolSize" : "5",
-      "minPoolSize" : "5",
-      "maxPoolSize" : "100",
-      "acquireIncrement" : "5",
-      "maxStatementsPerConnection" : "10",
-      "idleConnectionTestPeriod" : "300"
-    },
+    "format_sql" : false,
+    "show_sql" : true,
     "hbm2ddl" : {
       "auto" : "update"
     }
