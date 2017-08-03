@@ -1,1 +1,1 @@
-mvn release:perform -Darguments="-DskipTests" -Psrc-and-doc
+mvn release:perform -Darguments="-DskipTests" -Prelease

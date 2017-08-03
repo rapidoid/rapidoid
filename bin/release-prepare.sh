@@ -1,1 +1,1 @@
-mvn release:clean release:prepare -Psrc-and-doc
+mvn release:clean release:prepare

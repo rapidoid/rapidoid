@@ -1,1 +1,1 @@
-mvn release:perform -Psrc-and-doc
+mvn release:perform -Prelease
