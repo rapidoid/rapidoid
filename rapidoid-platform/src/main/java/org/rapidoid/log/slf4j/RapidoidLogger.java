@@ -53,7 +53,7 @@ public class RapidoidLogger extends RapidoidThing implements Logger {
 	}
 
 	private static String frmt(String format, Object arg) {
-		return format.replaceFirst("\\{\\}", U.str(arg));
+		return format.replaceFirst("\\{\\}", "" + U.str(arg));
 	}
 
 	private static String frmt(String format, Object arg1, Object arg2) {
