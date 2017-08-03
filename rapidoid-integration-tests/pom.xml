@@ -56,6 +56,12 @@
 			<version>${hsqldb.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.mchange</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>${c3p0.version}</version>
+			<optional>true</optional>
+		</dependency>
 
 		<!-- INTEGRATIONS -->
 
