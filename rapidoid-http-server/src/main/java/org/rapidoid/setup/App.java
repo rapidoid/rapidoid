@@ -199,7 +199,7 @@ public class App extends RapidoidInitializer {
 		Log.info("!Successfully restarted the application!");
 	}
 
-	public static void resetGlobalState() {
+	public static synchronized void resetGlobalState() {
 		mainClassName = null;
 		appPkgName = null;
 		restarted = false;
@@ -213,7 +213,7 @@ public class App extends RapidoidInitializer {
 		invoked.clear();
 	}
 
-	public static void notifyChanges() {
+	static synchronized void notifyChanges() {
 		if (!dirty) {
 			dirty = true;
 			Log.info("Detected class or resource changes");
@@ -234,7 +234,7 @@ public class App extends RapidoidInitializer {
 		return false;
 	}
 
-	public static List<Class<?>> findBeans(String... packages) {
+	static synchronized List<Class<?>> findBeans(String... packages) {
 		if (U.isEmpty(packages)) {
 			packages = path();
 		}
@@ -242,7 +242,7 @@ public class App extends RapidoidInitializer {
 		return Scan.annotated(IoC.ANNOTATIONS).in(packages).loadAll();
 	}
 
-	public static boolean scan(String... packages) {
+	public static synchronized boolean scan(String... packages) {
 
 		String appPath = Conf.APP.entry("path").str().getOrNull();
 		if (U.notEmpty(appPath)) {
@@ -267,7 +267,7 @@ public class App extends RapidoidInitializer {
 		Msc.filterAndInvokeMainClasses(beans, invoked);
 	}
 
-	public static boolean isRestarted() {
+	static boolean isRestarted() {
 		return restarted;
 	}
 
@@ -279,11 +279,11 @@ public class App extends RapidoidInitializer {
 		App.managed = managed;
 	}
 
-	public static void register(Beans beans) {
+	public static synchronized void register(Beans beans) {
 		Setup.on().register(beans);
 	}
 
-	public static void shutdown() {
+	public static synchronized void shutdown() {
 		Setup.shutdownAll();
 	}
 

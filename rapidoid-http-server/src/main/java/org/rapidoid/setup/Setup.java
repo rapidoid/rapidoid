@@ -187,7 +187,7 @@ public class Setup extends RapidoidInitializer {
 		return lazyHttp.get();
 	}
 
-	private synchronized Server listen() {
+	private synchronized void listen() {
 
 		if (!listening && !reloaded) {
 
@@ -224,8 +224,6 @@ public class Setup extends RapidoidInitializer {
 				Log.info("!Static resources will be served from the following locations", "setup", name(), "!locations", custom().staticFilesPath());
 			}
 		}
-
-		return server;
 	}
 
 	private boolean isAppOrAdminOnSameServer() {

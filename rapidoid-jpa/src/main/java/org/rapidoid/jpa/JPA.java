@@ -65,7 +65,7 @@ public class JPA extends RapidoidThing {
 
 		} else {
 			EntityManagerFactory emf = JPAUtil.emf();
-			U.notNull(emf, "JPA.emf");
+			U.must(emf != null, "JPA hasn't been initialized! (JPA.emf is null)");
 			EntityManager em = emf.createEntityManager();
 			return new JPATool(em, false);
 		}
