@@ -48,7 +48,7 @@ public class ProcessesHandler extends GUI implements Callable<Object> {
 		"$.duration() / 1000",
 		"startedAt",
 		"finishedAt",
-		"$.group().name()",
+		"$.group().kind()",
 		"(actions)"
 	};
 

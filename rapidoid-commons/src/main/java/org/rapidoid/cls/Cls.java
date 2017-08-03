@@ -331,7 +331,7 @@ public class Cls extends RapidoidThing {
 			constructor.setAccessible(true);
 			return (T) constructor.newInstance(args);
 		} catch (Exception e) {
-			throw U.rte("Cannot invoke method '%s' with args: %s", e, constructor.getName(), U.str(args));
+			throw U.rte("Cannot invoke constructor '%s' with args: %s", e, constructor.getName(), U.str(args));
 		}
 	}
 
