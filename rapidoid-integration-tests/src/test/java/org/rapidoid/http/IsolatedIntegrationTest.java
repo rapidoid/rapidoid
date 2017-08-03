@@ -393,6 +393,10 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 		isTrue(On.routes().all().isEmpty());
 	}
 
+	protected void verifyJson(String name, Object actual) {
+		verifyCase(name, JSON.prettify(actual), name);
+	}
+
 	protected void tx(Runnable action) {
 		JPA.transaction(action);
 	}

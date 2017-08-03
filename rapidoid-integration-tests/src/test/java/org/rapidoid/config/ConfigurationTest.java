@@ -26,13 +26,13 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.env.Env;
 import org.rapidoid.env.EnvMode;
-import org.rapidoid.test.AbstractCommonsTest;
+import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.u.U;
 import org.rapidoid.util.MscOpts;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class ConfigurationTest extends AbstractCommonsTest {
+public class ConfigurationTest extends IsolatedIntegrationTest {
 
 	private static boolean TLS_ENABLED = MscOpts.isTLSEnabled();
 
@@ -156,9 +156,9 @@ public class ConfigurationTest extends AbstractCommonsTest {
 
 		eq(Env.profiles(), U.set("mysql", "test"));
 
-		verify("jdbc-mysql-profile", Conf.JDBC.toMap());
-		verify("hibernate-mysql-profile", Conf.HIBERNATE.toMap());
-		verify("root", Conf.ROOT.toMap());
+		verifyJson("jdbc-mysql-profile", Conf.JDBC.toMap());
+		verifyJson("hibernate-mysql-profile", Conf.HIBERNATE.toMap());
+		verifyJson("root", Conf.ROOT.toMap());
 	}
 
 	@Test
@@ -169,9 +169,9 @@ public class ConfigurationTest extends AbstractCommonsTest {
 
 		eq(Env.profiles(), U.set("postgres", "test"));
 
-		verify("jdbc-postgres-profile", Conf.JDBC.toMap());
-		verify("hibernate-postgres-profile", Conf.HIBERNATE.toMap());
-		verify("root", Conf.ROOT.toMap());
+		verifyJson("jdbc-postgres-profile", Conf.JDBC.toMap());
+		verifyJson("hibernate-postgres-profile", Conf.HIBERNATE.toMap());
+		verifyJson("root", Conf.ROOT.toMap());
 	}
 
 	@Test
@@ -182,14 +182,14 @@ public class ConfigurationTest extends AbstractCommonsTest {
 
 		eq(Env.profiles(), U.set("platform", "test"));
 
-		verify("root", Conf.ROOT.toMap());
+		verifyJson("root", Conf.ROOT.toMap());
 	}
 
 	@Test
 	public void testBuiltInConfig() {
 		if (TLS_ENABLED) return;
 
-		verify("root", Conf.ROOT.toMap());
+		verifyJson("root", Conf.ROOT.toMap());
 	}
 
 //	private Map<String, Object> rootCfgMasked() {

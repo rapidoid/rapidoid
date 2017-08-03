@@ -1,8 +1,8 @@
-package org.rapidoid.test;
+package org.rapidoid.ioc;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-inject
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -20,17 +20,42 @@ package org.rapidoid.test;
  * #L%
  */
 
-import org.junit.Before;
-import org.rapidoid.config.Conf;
-import org.rapidoid.util.Msc;
+import org.junit.Test;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.IsolatedIntegrationTest;
 
-public abstract class AbstractCommonsTest extends TestCommons {
+import javax.inject.Inject;
 
-	@Before
-	public final void resetContext() {
-		Msc.reset();
+@Authors("Nikolche Mihajlovski")
+@Since("5.3.0")
+public class InjectAutowireTest extends IsolatedIntegrationTest {
 
-		Conf.ROOT.setPath(getTestNamespace());
+	static class B {
+		@Inject
+		private MyCallable x;
+	}
+
+	@Inject
+	private MyCallable myCallable;
+
+	@Inject
+	B b1;
+
+	@Wired
+	B b2;
+
+	@Test
+	public void shouldInject() {
+		notNull(myCallable);
+		notNull(b1);
+		notNull(b2);
+
+		notNull(b1.x);
+		notNull(b2.x);
+
+		isTrue(myCallable == b2.x);
+		isTrue(b1.x == b2.x);
 	}
 
 }

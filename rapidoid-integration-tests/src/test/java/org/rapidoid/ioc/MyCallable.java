@@ -1,4 +1,4 @@
-package org.rapidoid.ioc.basic;
+package org.rapidoid.ioc;
 
 /*
  * #%L
@@ -20,43 +20,21 @@ package org.rapidoid.ioc.basic;
  * #L%
  */
 
-import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ioc.Wired;
-import org.rapidoid.test.RapidoidIntegrationTest;
 
-import javax.inject.Inject;
+import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.3.0")
-public class TestAutowireTest extends RapidoidIntegrationTest {
-
-	static class B {
-		@Inject
-		private MyCallable x;
-	}
-
-	@Inject
-	private MyCallable myCallable;
-
-	@Inject
-	B b1;
+@Since("2.0.0")
+public class MyCallable implements Callable<String> {
 
 	@Wired
-	B b2;
+	Foo foo;
 
-	@Test
-	public void shouldInject() {
-		notNull(myCallable);
-		notNull(b1);
-		notNull(b2);
-
-		notNull(b1.x);
-		notNull(b2.x);
-
-		isTrue(myCallable == b2.x);
-		isTrue(b1.x == b2.x);
+	@Override
+	public String call() throws Exception {
+		return "abc";
 	}
 
 }

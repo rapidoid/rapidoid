@@ -1,4 +1,4 @@
-package org.rapidoid.ioc.basic;
+package org.rapidoid.ioc;
 
 /*
  * #%L
@@ -20,58 +20,16 @@ package org.rapidoid.ioc.basic;
  * #L%
  */
 
-import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ioc.Manage;
-import org.rapidoid.ioc.Wired;
-import org.rapidoid.test.RapidoidIntegrationTest;
 
-import javax.inject.Inject;
 import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.3.0")
-@Manage(MyCallable.class)
-public class AutowireDependenciesTest extends RapidoidIntegrationTest {
-
-	static class B {
-		@Inject
-		private Foo foo;
-	}
-
-	@Inject
-	private Foo foo;
-
-	@Inject
-	Callable<?> callable;
-
-	@Inject
-	Callable<?> callable2;
-
-	@Inject
-	B b1;
+@Since("2.0.0")
+public class Foo {
 
 	@Wired
-	B b2;
-
-	@Test
-	public void shouldInjectManagedDependencies() {
-		notNull(foo);
-		notNull(b1);
-		notNull(b2);
-
-		notNull(b1.foo);
-		notNull(b2.foo);
-
-		notNull(b1.foo.callable);
-		notNull(b2.foo.callable);
-
-		isTrue(foo == b2.foo);
-		isTrue(b1.foo == b2.foo);
-
-		isTrue(foo.callable == callable);
-		isTrue(callable == callable2);
-	}
+	Callable<String> callable;
 
 }
