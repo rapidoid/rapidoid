@@ -1,0 +1,24 @@
+ ____             _     _       _     _
+|  _ \ __ _ _ __ (_) __| | ___ (_) __| |
+| |_) / _` | '_ \| |/ _` |/ _ \| |/ _` |
+|  _ < (_| | |_) | | (_| | (_) | | (_| |
+|_| \_\__,_| .__/|_|\__,_|\___/|_|\__,_|
+           |_|
+
+[PLATFORM] INFO | Command-line arguments:
+[PLATFORM] INFO |   app.services=status
+[PLATFORM] INFO | 
+[PLATFORM] INFO | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
+[PLATFORM] INFO | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
+[PLATFORM] INFO | Setting application root | root = /app | content = []
+[PLATFORM] INFO | Automatically activating mode-specific profile | profile = production
+[PLATFORM] INFO | Initialized environment | mode = PRODUCTION | profiles = [production, platform]
+[PLATFORM] INFO | Setting application JAR | appJar = /app/app.jar | exists = false
+[PLATFORM] INFO | Loaded configuration | namespace = rapidoid | files = [built-in-config.yml, built-in-config-platform.yml]
+[PLATFORM] INFO | GET /rapidoid/status                           | setup = main | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
+[PLATFORM] INFO | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
+[PLATFORM] INFO | Server has started | setup = main | home = http://localhost:8888
+[PLATFORM] INFO | Static resources will be served from the following locations | setup = main | locations = [static, default/static]
+[PLATFORM] INFO | ---------------------------------------------------
+[PLATFORM] INFO | ADMIN CREDENTIALS: username = admin, password = <?>
+[PLATFORM] INFO | ---------------------------------------------------

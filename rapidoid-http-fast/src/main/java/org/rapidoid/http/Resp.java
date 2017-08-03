@@ -274,4 +274,9 @@ public interface Resp {
 	 */
 	void resume(AsyncLogic asyncLogic);
 
+	/**
+	 * Writes a chunk of (streaming) data to the HTTP response.
+	 */
+	Resp chunk(byte[] data);
+
 }

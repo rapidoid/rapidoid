@@ -3,7 +3,6 @@ package org.rapidoid.jdbc;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.commons.Err;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Callbacks;
 import org.rapidoid.config.Conf;
@@ -300,11 +299,8 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 
 		Log.debug("SQL", "sql", sql, "args", args);
 
-		Connection conn = provideConnection();
-		PreparedStatement stmt = null;
-
-		try {
-			stmt = JDBC.prepare(conn, sql, namedArgs, args);
+		try (Connection conn = provideConnection();
+		     PreparedStatement stmt = JDBC.prepare(conn, sql, namedArgs, args)) {
 
 			String q = sql.trim().toUpperCase();
 
@@ -320,10 +316,6 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 
 		} catch (SQLException e) {
 			throw U.rte(e);
-
-		} finally {
-			close(stmt);
-			close(conn);
 		}
 	}
 
@@ -369,27 +361,31 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 		return new ResultsImpl<>(data);
 	}
 
-	<T> List<T> runQuery(Class<T> resultType, Mapper<ResultSet, T> resultMapper, String sql, Map<String, ?> namedArgs, Object[] args, long start, long length) {
+	<T> List<T> runQuery(Class<T> resultType, Mapper<ResultSet, T> resultMapper,
+	                     String sql, Map<String, ?> namedArgs, Object[] args,
+	                     long skip, long limit) {
+
 		ensureIsInitialized();
 
-		U.must(start >= 0);
-		U.must(length >= 0);
-
-		if (start > 0 || length < Long.MAX_VALUE) {
-			// FIXME paging
-			throw Err.notReady();
+		if (limit == -1) {
+			// unlimited
+			limit = Integer.MAX_VALUE;
 		}
 
-		Connection conn = provideConnection();
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
+		U.must(skip >= 0);
+		U.must(limit >= 0);
 
-		try {
-			stmt = JDBC.prepare(conn, sql, namedArgs, args);
-			rs = stmt.executeQuery();
+		// replace the paging parameters
+		sql = sql.replace("$skip", skip + "");
+		sql = sql.replace("$limit", limit + "");
+
+		try (Connection conn = provideConnection();
+		     PreparedStatement stmt = JDBC.prepare(conn, sql, namedArgs, args);
+		     ResultSet rs = stmt.executeQuery()) {
 
 			if (resultMapper != null) {
 				return JDBC.rows(resultMapper, rs);
+
 			} else {
 				if (resultType.equals(Map.class)) {
 					return U.cast(JDBC.rows(rs));
@@ -400,11 +396,6 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 
 		} catch (Exception e) {
 			throw U.rte(e);
-
-		} finally {
-			close(rs);
-			close(stmt);
-			close(conn);
 		}
 	}
 

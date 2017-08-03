@@ -4,10 +4,12 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Arr;
+import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.group.AbstractManageable;
 import org.rapidoid.group.ManageableBean;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Operation;
+import org.rapidoid.log.GlobalCfg;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.u.U;
@@ -290,6 +292,10 @@ public class ProcessHandle extends AbstractManageable {
 			builder.directory(params.in());
 		}
 
+		removeRapidoidConfig(builder.environment());
+
+		addExtraEnvInfo(builder.environment());
+
 		Date startingAt = new Date();
 
 		Process process;
@@ -308,6 +314,23 @@ public class ProcessHandle extends AbstractManageable {
 
 		synchronized (CRAWLER) {
 			if (CRAWLER.getState() == Thread.State.NEW) CRAWLER.start();
+		}
+	}
+
+	private void addExtraEnvInfo(Map<String, String> env) {
+		env.put(GlobalCfg.MANAGED_BY, RapidoidInfo.nameAndInfo());
+	}
+
+	private void removeRapidoidConfig(Map<String, String> env) {
+		Iterator<Map.Entry<String, String>> it = env.entrySet().iterator();
+		while (it.hasNext()) {
+
+			Map.Entry<String, String> e = it.next();
+			String key = e.getKey().toUpperCase();
+
+			if (key.startsWith("RAPIDOID_") || key.startsWith("RAPIDOID.")) {
+				it.remove();
+			}
 		}
 	}
 

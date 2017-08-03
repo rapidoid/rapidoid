@@ -44,12 +44,12 @@ public class HttpCachingTest extends IsolatedIntegrationTest {
 
 		// with caching
 		AtomicInteger y = new AtomicInteger();
-		On.get("/y").cacheTTL(2000).plain(() -> y.incrementAndGet());
+		On.get("/y").cacheTTL(1000).plain(() -> y.incrementAndGet());
 
 		exerciseCaching();
 	}
 
-	public void exerciseCaching() {
+	private void exerciseCaching() {
 		int next = 1;
 		for (int n = 1; n <= 3; n++) {
 
@@ -58,7 +58,7 @@ public class HttpCachingTest extends IsolatedIntegrationTest {
 				Self.get("/y").expect("" + n);
 			}
 
-			U.sleep(2100);
+			U.sleep(1100);
 		}
 	}
 
@@ -84,7 +84,7 @@ public class HttpCachingTest extends IsolatedIntegrationTest {
 		}
 
 		@GET
-		@Cached(ttl = 2000)
+		@Cached(ttl = 1000)
 		public Object y() {
 			return y.incrementAndGet();
 		}

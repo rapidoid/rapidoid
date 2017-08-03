@@ -26,6 +26,8 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Err;
 import org.rapidoid.commons.Rnd;
 import org.rapidoid.ctx.Contextual;
+import org.rapidoid.log.Log;
+import org.rapidoid.log.LogLevel;
 import org.rapidoid.security.Role;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
@@ -37,10 +39,12 @@ import java.util.List;
 @Since("5.1.0")
 public class HttpLoginTest extends IsolatedIntegrationTest {
 
-	volatile boolean ready = false;
+	private volatile boolean ready = false;
 
 	@Test
 	public void testLogin() {
+		Log.setLogLevel(LogLevel.ERROR);
+
 		On.get("/user").json(() -> U.list(Contextual.username(), Contextual.roles()));
 
 		On.get("/profile").roles(Role.LOGGED_IN).json(Contextual::username);
@@ -56,7 +60,7 @@ public class HttpLoginTest extends IsolatedIntegrationTest {
 		});
 
 		ready = true;
-		multiThreaded(150, Msc.normalOrHeavy(1500, 15000), this::randomUserLogin);
+		multiThreaded(Msc.normalOrHeavy(5, 150), Msc.normalOrHeavy(10, 15000), this::randomUserLogin);
 	}
 
 	private void randomUserLogin() {

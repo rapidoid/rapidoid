@@ -75,6 +75,7 @@ org.rapidoid.buffer.BufScanner
 org.rapidoid.buffer.BufUtil
 org.rapidoid.buffer.IncompleteReadException
 org.rapidoid.buffer.MultiBuf
+org.rapidoid.buffer.SSLDestination
 org.rapidoid.buffer.SynchronizedBuf
 org.rapidoid.bufstruct.BufMap
 org.rapidoid.bufstruct.BufMapImpl
@@ -398,7 +399,6 @@ org.rapidoid.http.handler.AbstractDecoratingHttpHandler
 org.rapidoid.http.handler.AbstractHttpHandler
 org.rapidoid.http.handler.HandlerInvocation
 org.rapidoid.http.handler.HttpHandler
-org.rapidoid.http.handler.HttpHandlers
 org.rapidoid.http.handler.lambda.FiveParamLambdaHandler
 org.rapidoid.http.handler.lambda.FourParamLambdaHandler
 org.rapidoid.http.handler.lambda.NParamLambdaHandler
@@ -451,6 +451,7 @@ org.rapidoid.http.HttpVerb
 org.rapidoid.http.HttpWrapper
 org.rapidoid.http.impl.AbstractViewResolver
 org.rapidoid.http.impl.CachedResp
+org.rapidoid.http.impl.ChunkedResponse
 org.rapidoid.http.impl.GUIUtil
 org.rapidoid.http.impl.HandlerMatch
 org.rapidoid.http.impl.HandlerMatchWithParams
@@ -570,6 +571,7 @@ org.rapidoid.jpa.JPQL
 org.rapidoid.lambda.Calc
 org.rapidoid.lambda.Customizer
 org.rapidoid.lambda.Dynamic
+org.rapidoid.lambda.Executable
 org.rapidoid.lambda.F2
 org.rapidoid.lambda.F3
 org.rapidoid.lambda.FiveParamLambda
@@ -643,6 +645,11 @@ org.rapidoid.net.Server
 org.rapidoid.net.ServerBuilder
 org.rapidoid.net.TCP
 org.rapidoid.net.TCPServerInfo
+org.rapidoid.net.tls.RapidoidTLS
+org.rapidoid.net.tls.SelfSignedCertGen
+org.rapidoid.net.tls.SelfSignedCertInfo
+org.rapidoid.net.tls.TLSUtil
+org.rapidoid.net.util.NetUtil
 org.rapidoid.oauth.DefaultOAuthStateCheck
 org.rapidoid.oauth.OAuth
 org.rapidoid.oauth.OAuthLoginHandler
@@ -656,6 +663,7 @@ org.rapidoid.performance.BenchmarkRunner
 org.rapidoid.performance.Perf
 org.rapidoid.performance.WrkSetup
 org.rapidoid.platform.DefaultApp
+org.rapidoid.platform.InstallerCommandHandler
 org.rapidoid.platform.Main
 org.rapidoid.platform.MavenUtil
 org.rapidoid.platform.PasswordHashTool
@@ -745,6 +753,7 @@ org.rapidoid.setup.AppRestartProcessor
 org.rapidoid.setup.AppVerification
 org.rapidoid.setup.CustomizableSetupAwarePersisterProvider
 org.rapidoid.setup.DefaultSetup
+org.rapidoid.setup.HttpHandlers
 org.rapidoid.setup.IGoodies
 org.rapidoid.setup.My
 org.rapidoid.setup.On

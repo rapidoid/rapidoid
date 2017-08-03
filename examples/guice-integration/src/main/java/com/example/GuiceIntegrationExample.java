@@ -7,7 +7,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 
-public class Main {
+public class GuiceIntegrationExample {
 
 	public static void main(String[] args) {
 		Log.info("Starting application");

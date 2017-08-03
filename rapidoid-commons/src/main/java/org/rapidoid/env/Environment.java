@@ -10,7 +10,6 @@ import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
 import org.rapidoid.util.LazyInit;
 import org.rapidoid.util.Msc;
-import org.rapidoid.util.MscOpts;
 
 import java.util.Collections;
 import java.util.List;
@@ -139,10 +138,6 @@ public class Environment extends RapidoidInitializer {
 		RapidoidEnv.touch();
 
 		if (!silent()) Log.info("Initialized environment", "!mode", mode, "!profiles", profiles);
-
-		if (mode != EnvMode.TEST) {
-			U.must(!MscOpts.isTestingHttps(), "The HTTPS testing can only be activated in TEST mode!");
-		}
 	}
 
 	private static boolean silent() {

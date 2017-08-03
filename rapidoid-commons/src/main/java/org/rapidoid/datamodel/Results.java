@@ -31,7 +31,7 @@ public interface Results<T> extends Iterable<T> {
 
 	List<T> all();
 
-	List<T> page(long start, long length);
+	List<T> page(long skip, long limit);
 
 	T single();
 

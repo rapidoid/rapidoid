@@ -97,7 +97,7 @@ public class PageHandler extends GenericHandler {
 	private Object guiOf(PageConfig gui, Results items) {
 
 		if (gui.single) {
-			Object item = U.single(items.all()); // FIXME use paging
+			Object item = U.single(items);
 			return GUI.details(item);
 		}
 
@@ -107,7 +107,7 @@ public class PageHandler extends GenericHandler {
 	public Grid grid(final PageGuiConfig gui, Results items) {
 		Req req = req();
 
-		Grid grid = GUI.grid(items.all()); // FIXME use paging
+		Grid grid = GUI.grid(items);
 
 		String q = req.param("find", null);
 		if (q != null) grid.highlightRegex(Pattern.quote(q));

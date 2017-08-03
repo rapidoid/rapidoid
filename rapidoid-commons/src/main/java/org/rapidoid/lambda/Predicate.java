@@ -26,22 +26,6 @@ package org.rapidoid.lambda;
  */
 public interface Predicate<T> {
 
-	@SuppressWarnings("rawtypes")
-	public static final Predicate<?> ALWAYS_TRUE = new Predicate() {
-		@Override
-		public boolean eval(Object param) throws Exception {
-			return true;
-		}
-	};
-
-	@SuppressWarnings("rawtypes")
-	public static final Predicate<?> ALWAYS_FALSE = new Predicate() {
-		@Override
-		public boolean eval(Object param) throws Exception {
-			return false;
-		}
-	};
-
 	boolean eval(T param) throws Exception;
 
 }

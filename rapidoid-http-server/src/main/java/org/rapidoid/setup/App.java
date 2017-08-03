@@ -68,9 +68,7 @@ public class App extends RapidoidInitializer {
 	public static AppBootstrap bootstrap(String[] args, String... extraArgs) {
 		PreApp.args(args, extraArgs);
 
-		scan();
-
-		return boot();
+		return boot().beans().services();
 	}
 
 	public static AppBootstrap run(String[] args, String... extraArgs) {
@@ -88,8 +86,6 @@ public class App extends RapidoidInitializer {
 			for (RapidoidModule module : RapidoidModules.getAll()) {
 				module.boot();
 			}
-
-			boot.services();
 		}
 
 		return boot;

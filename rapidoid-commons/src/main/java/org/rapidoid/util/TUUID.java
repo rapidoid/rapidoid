@@ -4,6 +4,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Str;
+import org.rapidoid.crypto.Crypto;
 import org.rapidoid.u.U;
 
 import java.nio.ByteBuffer;
@@ -50,6 +51,16 @@ public final class TUUID extends RapidoidThing implements Comparable<TUUID> {
 		this.time = time;
 		this.uuidHigh = uuidHigh;
 		this.uuidLow = uuidLow;
+	}
+
+	public TUUID(long time, String id) {
+		this.time = time;
+
+		byte[] hash = Crypto.md5Bytes(id.getBytes());
+		ByteBuffer buf = ByteBuffer.wrap(hash);
+
+		this.uuidHigh = buf.getLong();
+		this.uuidLow = buf.getLong();
 	}
 
 	public long time() {

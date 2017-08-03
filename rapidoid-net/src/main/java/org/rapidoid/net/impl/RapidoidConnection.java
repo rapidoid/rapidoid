@@ -14,6 +14,7 @@ import org.rapidoid.net.AsyncLogic;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.abstracts.IRequest;
+import org.rapidoid.net.tls.RapidoidTLS;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Resetable;
@@ -60,11 +61,17 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 	private static final AtomicLong SERIAL_N = new AtomicLong();
 
-	public final RapidoidWorker worker;
+	final boolean hasTLS;
+
+	final RapidoidTLS tls;
+
+	final RapidoidWorker worker;
 
 	public final Buf input;
 
 	public final Buf output;
+
+	public final Buf outgoing;
 
 	private final ConnState state = new ConnState();
 
@@ -74,9 +81,9 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 	private volatile boolean closeAfterWrite = false;
 
-	public volatile boolean closed = true;
+	volatile boolean closed = true;
 
-	public volatile boolean closing = false;
+	volatile boolean closing = false;
 
 	volatile int completedInputPos;
 
@@ -102,14 +109,21 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 	final AtomicLong writeSeq = new AtomicLong();
 
+	volatile boolean resumeInProgress = false;
+
 	volatile IRequest request;
 
 	private volatile long expiresAt;
 
 	public RapidoidConnection(RapidoidWorker worker, BufGroup bufs) {
 		this.worker = worker;
+
+		this.hasTLS = worker.sslContext() != null;
+		this.tls = hasTLS ? new RapidoidTLS(worker.sslContext(), this) : null;
+
 		this.input = bufs.newBuf("input#" + serialN);
 		this.output = bufs.newBuf("output#" + serialN);
+		this.outgoing = hasTLS ? bufs.newBuf("outgoing#" + serialN) : this.output;
 
 		reset();
 	}
@@ -128,6 +142,7 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 		closing = false;
 		input.clear();
 		output.clear();
+		outgoing.clear();
 		closeAfterWrite = false;
 		waitingToWrite = false;
 		completedInputPos = 0;
@@ -142,6 +157,8 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 		writeSeq.set(0);
 		expiresAt = 0;
 		state.reset();
+
+		if (tls != null) tls.reset();
 	}
 
 	@Override
@@ -256,8 +273,14 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 	}
 
 	private synchronized void askToSend() {
-		synchronized (output) {
-			if (!waitingToWrite && output.size() > 0) {
+		synchronized (outgoing) {
+			if (hasTLS) {
+				synchronized (output) {
+					tls.wrapToOutgoing();
+				}
+			}
+
+			if (!waitingToWrite && outgoing.size() > 0) {
 				waitingToWrite = true;
 				worker.wantToWrite(this);
 			}
@@ -306,33 +329,49 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 			synchronized (this) {
 
-				if (expectedConnId != connId()) return;
-
-				U.must(seq == writeSeq.get());
-
-				// execute the logic
-				boolean finished = false;
-
-				synchronized (output) {
-					BufUtil.startWriting(output);
-
-					try {
-						finished = asyncLogic.resumeAsync();
-					} catch (Throwable e) {
-						Log.error("Error while resuming an asynchronous operation!", e);
-					}
-
-					BufUtil.doneWriting(output);
+				if (expectedConnId != connId()) {
+					return;
 				}
 
-				if (finished) {
-					processedSeq(handle);
+//				TODO investigate options for stricter flow control:
+//				U.must(!resumeInProgress, "Resume is already in progress!");
+
+				resumeInProgress = true;
+
+				try {
+					doResume(handle, asyncLogic, seq);
+
+				} finally {
+					resumeInProgress = false;
 				}
 			}
 
 		} else {
 			Log.error("Tried to resume a job that already has finished!", "handle", handle, "currentHandle", seq, "job", asyncLogic);
 			throw U.rte("Tried to resume a job that already has finished!");
+		}
+	}
+
+	private void doResume(long handle, AsyncLogic asyncLogic, long seq) {
+		U.must(seq == writeSeq.get());
+
+		// execute the logic
+		boolean finished = false;
+
+		synchronized (output) {
+			BufUtil.startWriting(output);
+
+			try {
+				finished = asyncLogic.resumeAsync();
+			} catch (Throwable e) {
+				Log.error("Error while resuming an asynchronous operation!", e);
+			}
+
+			BufUtil.doneWriting(output);
+		}
+
+		if (finished) {
+			processedSeq(handle);
 		}
 	}
 
@@ -501,7 +540,7 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 	}
 
 	public boolean finishedWriting() {
-		return output.size() == 0;
+		return outgoing.size() == 0;
 	}
 
 }

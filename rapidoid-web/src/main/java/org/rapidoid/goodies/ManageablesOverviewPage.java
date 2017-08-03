@@ -7,8 +7,6 @@ import org.rapidoid.group.Groups;
 import org.rapidoid.group.Manageable;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.gui.Grid;
-import org.rapidoid.http.Current;
-import org.rapidoid.http.Req;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -43,13 +41,15 @@ public class ManageablesOverviewPage extends GUI implements Callable<Object> {
 
 	private volatile Collection<? extends GroupOf<?>> groups;
 
+	private volatile Class<? extends Manageable> groupType;
+
 	private volatile String baseUri;
 
 	@Override
 	public Object call() throws Exception {
 
 		List<Object> info = U.list();
-		Collection<? extends GroupOf<?>> targetGroups = groups != null ? groups : Groups.all();
+		Collection<? extends GroupOf<?>> targetGroups = retrieveTargetGroups();
 
 		for (GroupOf<?> group : targetGroups) {
 			List<? extends Manageable> items = group.items();
@@ -63,6 +63,18 @@ public class ManageablesOverviewPage extends GUI implements Callable<Object> {
 
 		info.add(autoRefresh(2000));
 		return multi(info);
+	}
+
+	private Collection<? extends GroupOf<?>> retrieveTargetGroups() {
+		if (groups != null) {
+			return groups;
+		} else {
+			if (groupType != null) {
+				return Groups.find(groupType);
+			} else {
+				return Groups.all();
+			}
+		}
 	}
 
 	public static void addInfo(String baseUri, List<Object> info, List<String> nav, List<? extends Manageable> items) {
@@ -89,10 +101,8 @@ public class ManageablesOverviewPage extends GUI implements Callable<Object> {
 				@Override
 				public String map(Manageable item) throws Exception {
 
-					Req req = Current.request();
-
 					final List<String> uri = U.list(nav);
-					uri.add(0, baseUri);
+					uri.add(0, U.safe(baseUri));
 					uri.add(item.id());
 
 					return Msc.uri(U.arrayOf(uri));
@@ -118,6 +128,15 @@ public class ManageablesOverviewPage extends GUI implements Callable<Object> {
 
 	public ManageablesOverviewPage baseUri(String baseUri) {
 		this.baseUri = baseUri;
+		return this;
+	}
+
+	public Class<? extends Manageable> groupType() {
+		return groupType;
+	}
+
+	public ManageablesOverviewPage groupType(Class<? extends Manageable> groupType) {
+		this.groupType = groupType;
 		return this;
 	}
 }

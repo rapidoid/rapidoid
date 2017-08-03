@@ -34,9 +34,12 @@ public class DbAdmin extends RapidoidThing {
 	public static void bootstrap() {
 		for (GroupOf<JdbcClient> gr : Groups.find(JdbcClient.class)) {
 			for (JdbcClient jdbc : gr.items()) {
-				new ManageableRdbms(jdbc);
+				register(jdbc);
 			}
 		}
 	}
 
+	public static void register(JdbcClient jdbc) {
+		new ManageableRdbms(jdbc);
+	}
 }

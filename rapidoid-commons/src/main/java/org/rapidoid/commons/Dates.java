@@ -9,6 +9,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 /*
@@ -52,7 +53,7 @@ public class Dates extends RapidoidThing {
 		if (time > updateCurrDateAfter) {
 
 			// RFC 1123 date-time format, e.g. Sun, 07 Sep 2014 00:17:29 GMT
-			DateFormat dateFormat = frmt("EEE, dd MMM yyyy HH:mm:ss z");
+			DateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.ROOT);
 			dateFormat.setTimeZone(GMT);
 
 			Date date = new Date();

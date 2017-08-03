@@ -7,6 +7,7 @@ import org.rapidoid.collection.Coll;
 import org.rapidoid.env.Env;
 import org.rapidoid.env.RapidoidEnv;
 import org.rapidoid.lambda.Mapper;
+import org.rapidoid.log.GlobalCfg;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.scan.ClasspathUtil;
@@ -49,6 +50,9 @@ public class Conf extends RapidoidThing {
 		}
 	});
 
+	public static final Config SYSTEM = section("system");
+	public static final Config RAPIDOID = section("rapidoid");
+	public static final Config RAPIDOID_ADMIN = section("rapidoid-admin");
 	public static final Config USERS = section("users");
 	public static final Config JOBS = section("jobs");
 	public static final Config OAUTH = section("oauth");
@@ -61,6 +65,7 @@ public class Conf extends RapidoidThing {
 	public static final Config HTTP = section("http");
 	public static final Config REVERSE_PROXY = section("reverse-proxy");
 	public static final Config NET = section("net");
+	public static final Config TLS = section("tls");
 	public static final Config ON = section("on");
 	public static final Config ADMIN = section("admin");
 	public static final Config TOKEN = section("token");
@@ -98,8 +103,14 @@ public class Conf extends RapidoidThing {
 				Log.options().fancy(true);
 			}
 
-			String logLevel = LOG.entry("level").or("info");
-			Log.setLogLevel(LogLevel.valueOf(logLevel.toUpperCase()));
+			LogLevel logLevel = LOG.entry("level").to(LogLevel.class).getOrNull();
+			if (logLevel != null && !Env.test()) {
+				Log.setLogLevel(logLevel);
+			}
+
+			if (GlobalCfg.quiet()) {
+				Log.setLogLevel(LogLevel.ERROR); // overwrite the configured log level in quiet mode
+			}
 		}
 	}
 

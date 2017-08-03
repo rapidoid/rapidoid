@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.rapidoid</groupId>
 		<artifactId>rapidoid</artifactId>
-		<version>5.3.5-SNAPSHOT</version>
+		<version>5.4.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>rapidoid-integration-tests</artifactId>
@@ -13,6 +13,7 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<tests.exclude>org.rapidoid.docs.**</tests.exclude>
 	</properties>
 
 	<dependencies>
@@ -24,16 +25,16 @@
 			<artifactId>rapidoid-quick</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>ch.qos.logback</groupId>
+					<artifactId>logback-classic</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-platform</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>app</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
@@ -73,13 +74,22 @@
 
 	</dependencies>
 
+	<profiles>
+		<profile>
+			<id>docs</id>
+			<properties>
+				<tests.exclude/>
+			</properties>
+		</profile>
+	</profiles>
+
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-deploy-plugin</artifactId>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
 				<configuration>
-					<skip>true</skip>
+					<skipNexusStagingDeployMojo>true</skipNexusStagingDeployMojo>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -88,6 +98,9 @@
 				<configuration>
 					<forkCount>1</forkCount>
 					<reuseForks>false</reuseForks>
+					<excludes>
+						<exclude>${tests.exclude}</exclude>
+					</excludes>
 				</configuration>
 			</plugin>
 		</plugins>

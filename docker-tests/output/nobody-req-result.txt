@@ -1,0 +1,8 @@
+HTTP/1.1 200 OK
+Connection: keep-alive
+Server: Rapidoid
+Date: Sat, 10 Sep 2016 01:02:03 GMT
+Content-Type: application/json
+Content-Length: 198
+
+{"id":"1@nikuco","root":"/app","jar":"/app/app.jar","jarExists":false,"version":"<?>","notes":["Dockerized","Uniform output"],"mode":"PRODUCTION","profiles":["production","platform"],"uptime":"<?>"}

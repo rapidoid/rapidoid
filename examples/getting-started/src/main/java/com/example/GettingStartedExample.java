@@ -9,7 +9,7 @@ import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
-public class Main {
+public class GettingStartedExample {
 
 	public static void main(String[] args) {
 		Log.info("Starting application");

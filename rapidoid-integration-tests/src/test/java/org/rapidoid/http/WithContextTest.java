@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit;
 @Since("5.1.0")
 public class WithContextTest extends IsolatedIntegrationTest {
 
-	public static final int JOB_COUNT = 1000;
+	private static final int JOB_COUNT = 1000;
 
 	@Test
 	public void testNestedContext() {
@@ -63,6 +63,7 @@ public class WithContextTest extends IsolatedIntegrationTest {
 		eq(ctxInfo(), "null:[]:false");
 
 		Wait.on(latch, 10, TimeUnit.SECONDS);
+
 		eq(latch.getCount(), 0);
 
 		eq(ctxInfo(), "null:[]:false");

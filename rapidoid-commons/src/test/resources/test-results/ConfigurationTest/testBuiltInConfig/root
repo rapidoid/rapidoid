@@ -1,0 +1,172 @@
+{
+  "on" : {
+    "port" : 8080,
+    "address" : "127.0.0.1"
+  },
+  "admin" : {
+    "port" : "8080",
+    "address" : "127.0.0.1"
+  },
+  "app" : {
+    "contextPath" : "",
+    "home" : "/"
+  },
+  "gui" : {
+    "search" : false,
+    "navbar" : true,
+    "fluid" : false,
+    "cdn" : "auto"
+  },
+  "admin-zone" : {
+    "home" : "/_",
+    "brand" : "<i class=\"fa fa-dashboard\"></i> Admin Center",
+    "search" : false,
+    "fluid" : true,
+    "menu" : {
+      "Overview" : "/_",
+      "Routes" : "/_routes",
+      "Configuration" : "/_config",
+      "Processes" : "/_processes",
+      "Metrics" : "/_metrics",
+      "Manageables" : "/_manageables",
+      "Application" : {
+        "Beans" : "/_beans",
+        "Entities" : "/_entities"
+      },
+      "System" : {
+        "Terminate / Restart" : "/_terminate",
+        "Classpath" : "/_classpath",
+        "Memory pool" : "/_jmx/mempool",
+        "JVM Threads" : "/_jmx/threads",
+        "Operating system" : "/_jmx/os",
+        "Garbage collection" : "/_jmx/gc",
+        "Memory" : "/_jmx/memory",
+        "Runtime" : "/_jmx/runtime",
+        "Classes" : "/_jmx/classes",
+        "Compilation" : "/_jmx/compilation"
+      }
+    }
+  },
+  "users" : {
+    "admin" : {
+      "roles" : "administrator"
+    }
+  },
+  "jobs" : {
+    "executor" : {
+      "threads" : 256
+    },
+    "scheduler" : {
+      "threads" : 64
+    }
+  },
+  "jdbc" : {
+    "host" : "localhost",
+    "driver" : "org.hsqldb.jdbc.JDBCDriver",
+    "username" : "sa",
+    "password" : "",
+    "url" : "jdbc:hsqldb:mem:public",
+    "options" : ""
+  },
+  "hibernate" : {
+    "dialect" : "org.hibernate.dialect.HSQLDialect",
+    "connection" : {
+      "driver_class" : "org.hsqldb.jdbc.JDBCDriver",
+      "username" : "sa",
+      "password" : "",
+      "url" : "jdbc:hsqldb:mem:public"
+    },
+    "c3p0" : {
+      "debug" : "true",
+      "initialPoolSize" : "5",
+      "minPoolSize" : "5",
+      "maxPoolSize" : "100",
+      "acquireIncrement" : "5",
+      "maxStatementsPerConnection" : "10",
+      "idleConnectionTestPeriod" : "300"
+    },
+    "hbm2ddl" : {
+      "auto" : "update"
+    }
+  },
+  "c3p0" : {
+    "debug" : true,
+    "initialPoolSize" : 5,
+    "minPoolSize" : 5,
+    "maxPoolSize" : 100,
+    "acquireIncrement" : 5,
+    "maxStatementsPerConnection" : 10,
+    "idleConnectionTestPeriod" : 300
+  },
+  "oauth" : {
+    "google" : {
+      "scope" : "profile,email",
+      "clientId" : "YOUR_GOOGLE_CLIENT_ID_HERE",
+      "clientSecret" : "YOUR_GOOGLE_CLIENT_SECRET_HERE"
+    },
+    "github" : {
+      "scope" : "user:email",
+      "clientId" : "YOUR_GITHUB_CLIENT_ID_HERE",
+      "clientSecret" : "YOUR_GITHUB_CLIENT_SECRET_HERE"
+    },
+    "facebook" : {
+      "scope" : "public_profile,email",
+      "clientId" : "YOUR_FACEBOOK_CLIENT_ID_HERE",
+      "clientSecret" : "YOUR_FACEBOOK_CLIENT_SECRET_HERE"
+    },
+    "linkedin" : {
+      "scope" : "r_basicprofile,r_emailaddress",
+      "clientId" : "YOUR_LINKEDIN_CLIENT_ID_HERE",
+      "clientSecret" : "YOUR_LINKEDIN_CLIENT_SECRET_HERE"
+    }
+  },
+  "net" : {
+    "address" : "0.0.0.0",
+    "port" : 8080,
+    "bufSizeKB" : 256,
+    "noDelay" : false,
+    "syncBufs" : true
+  },
+  "http" : {
+    "timeout" : 30000,
+    "timeoutResolution" : 5000,
+    "maxPipeline" : 1000000,
+    "serverName" : "Rapidoid",
+    "mandatoryHeaders" : {
+      "connection" : true,
+      "date" : true,
+      "server" : true,
+      "contentType" : true
+    }
+  },
+  "reverse-proxy" : {
+    "timeout" : 10000,
+    "retryDelay" : 300,
+    "maxConnections" : 100,
+    "maxConnectionsPerRoute" : 100,
+    "reuseConnections" : true,
+    "setHeaders" : {
+      "X-Forwarded-For" : true,
+      "X-Client-IP" : false,
+      "X-Real-IP" : false,
+      "X-Username" : false,
+      "X-Roles" : false
+    }
+  },
+  "token" : {
+    "ttl" : 0
+  },
+  "log" : {
+    "level" : "info",
+    "fancy" : false
+  },
+  "tls" : {
+    "selfSigned" : true,
+    "enabled" : false,
+    "keystore" : "",
+    "keystorePassword" : "",
+    "keyManagerPassword" : "",
+    "truststore" : "",
+    "truststorePassword" : ""
+  }
+}

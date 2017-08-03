@@ -3,8 +3,8 @@ on:
   address: 0.0.0.0
 
 admin:
-  port: same
-  address: 0.0.0.0
+  port: ${on.port}
+  address: ${on.address}
 
 app:
   contextPath: ''
@@ -28,7 +28,6 @@ admin-zone:
     Overview: /_
     Routes: /_routes
     Configuration: /_config
-    Deployment: /_deployment
     Processes: /_processes
     Metrics: /_metrics
     Manageables: /_manageables
@@ -57,8 +56,16 @@ jobs:
   scheduler:
     threads: 64
 
+jdbc:
+  host: localhost
+  driver: UNKNOWN
+  username: UNKNOWN
+  password: UNKNOWN
+  url: UNKNOWN
+  options: ''
+
 hibernate:
-  dialect: org.hibernate.dialect.HSQLDialect
+  dialect: UNKNOWN
   connection:
     driver_class: ${jdbc.driver}
     username: ${jdbc.username}
@@ -116,7 +123,7 @@ oauth:
 net:
   address: 0.0.0.0
   port: 8080
-# workers: ${cpus}
+#  workers: ${system.cpus}
   bufSizeKB: 256
   noDelay: false
   syncBufs: true
@@ -132,10 +139,6 @@ http:
     date: true
     server: true
     contentType: true
-
-jdbc:
-  host: localhost
-  options: ''
 
 reverse-proxy:
   timeout: 10000
@@ -157,5 +160,11 @@ log:
   level: info
   fancy: false # auto
 
-benchmark:
-  plan: r1:d5:c64
+tls:
+  selfSigned: true
+  enabled: false
+  keystore: ''
+  keystorePassword: ''
+  keyManagerPassword: ''
+  truststore: ''
+  truststorePassword: ''

@@ -1,4 +1,4 @@
-package org.rapidoid.http.handler;
+package org.rapidoid.setup;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
@@ -6,6 +6,10 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Err;
 import org.rapidoid.http.*;
+import org.rapidoid.http.handler.HttpHandler;
+import org.rapidoid.http.handler.MethodReqHandler;
+import org.rapidoid.http.handler.PredefinedResponseHandler;
+import org.rapidoid.http.handler.StaticHttpHandler;
 import org.rapidoid.http.handler.lambda.*;
 import org.rapidoid.http.handler.optimized.CallableHttpHandler;
 import org.rapidoid.http.handler.optimized.DelegatingParamsAwareReqHandler;
@@ -39,9 +43,11 @@ import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class HttpHandlers extends RapidoidThing {
+class HttpHandlers extends RapidoidThing {
 
-	public static HttpHandler from(FastHttp http, HttpRoutes routes, NParamLambda handler, RouteOptions options) {
+	private static HttpHandler from(Setup setup, NParamLambda handler, RouteOptions options) {
+		FastHttp http = setup.http();
+		HttpRoutes routes = setup.routes();
 
 		if (handler instanceof ReqHandler) {
 			return new DelegatingParamsAwareReqHandler(http, routes, options, (ReqHandler) handler);
@@ -96,25 +102,36 @@ public class HttpHandlers extends RapidoidThing {
 		}
 	}
 
-	public static void registerStatic(FastHttp http, HttpRoutes routes, String verb, String path, RouteOptions options, byte[] response) {
-		routes.on(verb, path, new StaticHttpHandler(options, response));
+	static void registerStatic(Setup setup, String verb, String path, RouteOptions options, byte[] response) {
+		setup.routes().on(verb, path, new StaticHttpHandler(options, response));
+		setup.autoActivate();
 	}
 
-	public static void registerPredefined(FastHttp http, HttpRoutes routes, String verb, String path, RouteOptions options, Object response) {
+	static void registerPredefined(Setup setup, String verb, String path, RouteOptions options, Object response) {
+		FastHttp http = setup.http();
+		HttpRoutes routes = setup.routes();
 		routes.on(verb, path, new PredefinedResponseHandler(http, routes, options, response));
+		setup.autoActivate();
 	}
 
-	public static void register(FastHttp http, HttpRoutes routes, String verb, String path, RouteOptions options, Callable<?> handler) {
+	static void register(Setup setup, String verb, String path, RouteOptions options, Callable<?> handler) {
+		FastHttp http = setup.http();
+		HttpRoutes routes = setup.routes();
 		routes.on(verb, path, new CallableHttpHandler(http, routes, options, handler));
+		setup.autoActivate();
 	}
 
-	public static void register(FastHttp http, HttpRoutes routes, String verb, String path, RouteOptions options, NParamLambda lambda) {
-		HttpHandler handler = HttpHandlers.from(http, routes, lambda, options);
-		routes.on(verb, path, handler);
+	static void register(Setup setup, String verb, String path, RouteOptions options, NParamLambda lambda) {
+		HttpHandler handler = HttpHandlers.from(setup, lambda, options);
+		setup.routes().on(verb, path, handler);
+		setup.autoActivate();
 	}
 
-	public static void register(FastHttp http, HttpRoutes routes, String verb, String path, RouteOptions options, Method method, Object instance) {
+	static void register(Setup setup, String verb, String path, RouteOptions options, Method method, Object instance) {
+		FastHttp http = setup.http();
+		HttpRoutes routes = setup.routes();
 		routes.on(verb, path, new MethodReqHandler(http, routes, options, method, instance));
+		setup.autoActivate();
 	}
 
 }

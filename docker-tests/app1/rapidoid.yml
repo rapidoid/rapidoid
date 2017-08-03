@@ -1,4 +1,4 @@
-id: my-app
+id: my-platform
 
-on:
+rapidoid:
   port: 4444

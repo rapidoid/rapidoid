@@ -27,6 +27,7 @@ import org.rapidoid.commons.Rnd;
 import org.rapidoid.io.IO;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.setup.On;
+import org.rapidoid.util.Msc;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -36,7 +37,7 @@ import java.util.concurrent.TimeUnit;
 @Since("2.0.0")
 public class HttpServerHeadersTest extends HttpTestCommons {
 
-	private static final int N = 100;
+	private static final int N = Msc.normalOrHeavy(1, 100);
 
 	@Test
 	public void shouldHandleVariousHttpRequests() throws IOException, URISyntaxException {

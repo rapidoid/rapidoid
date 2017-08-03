@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.rapidoid</groupId>
 		<artifactId>rapidoid</artifactId>
-		<version>5.3.5-SNAPSHOT</version>
+		<version>5.4.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>rapidoid-http-client</artifactId>
@@ -14,7 +14,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-commons</artifactId>
+			<artifactId>rapidoid-net</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

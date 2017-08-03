@@ -18,11 +18,10 @@ DB_ID=$(docker run -d -e MYSQL_ROOT_PASSWORD=db-pass -e MYSQL_DATABASE=rapidoid 
 
 sudo docker run \
     -e uniform_output=true \
-    -e HIBERNATE_CONNECTION_PASSWORD=db-pass \
+    -e JDBC_PASSWORD=db-pass \
     -e profiles=mysql \
     -p 8888:8888 \
     -p 8080:8080 \
-    -u nobody \
     -v $(pwd)/app3:/app \
     --link $DB_ID:mysql \
     rapidoid/rapidoid:$TAG \
