@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.rapidoid</groupId>
 		<artifactId>rapidoid</artifactId>
-		<version>5.4.0-SNAPSHOT</version>
+		<version>5.4.0</version>
 	</parent>
 
 	<artifactId>rapidoid-integration-tests</artifactId>
@@ -84,7 +84,7 @@
 		<profile>
 			<id>docs</id>
 			<properties>
-				<tests.exclude/>
+				<tests.exclude />
 			</properties>
 		</profile>
 	</profiles>
