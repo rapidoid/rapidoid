@@ -11,7 +11,7 @@ import org.rapidoid.test.RapidoidIntegrationTest;
 /**
  * This test will execute the main class specified in the annotation.
  */
-@IntegrationTest(main = Main.class)
+@IntegrationTest(main = YamlSqlExample.class)
 public class WebTest extends RapidoidIntegrationTest {
 
 	@Test

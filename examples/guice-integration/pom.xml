@@ -68,7 +68,7 @@
 									</descriptorRefs>
 									<archive>
 										<manifest>
-											<mainClass>com.example.Main</mainClass>
+											<mainClass>com.example.GuiceIntegrationExample</mainClass>
 										</manifest>
 									</archive>
 								</configuration>
