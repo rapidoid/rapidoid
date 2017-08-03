@@ -22,6 +22,7 @@ package org.rapidoid.web.handler;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.datamodel.Results;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
@@ -42,7 +43,8 @@ public class APIHandler extends GenericHandler {
 	public Object execute(Req req, Resp resp) {
 
 		if (HttpUtils.isGetReq(req)) {
-			return sqlItems(api.sql);
+			Results items = sqlItems(api.sql);
+			return api.single ? U.single(items) : items;
 
 		} else {
 			int changes = executeSql(api.sql);
