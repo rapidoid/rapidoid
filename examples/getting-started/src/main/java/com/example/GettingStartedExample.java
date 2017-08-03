@@ -14,7 +14,7 @@ public class GettingStartedExample {
 	public static void main(String[] args) {
 		Log.info("Starting application");
 
-		App.bootstrap(args).jpa().auth(); // bootstrap controllers, JPA and Auth
+		App.init(args).beans().jpa().auth(); // bootstrap beans (controllers, services etc.), JPA and Auth
 
 		On.get("/books").json(() -> JPA.of(Book.class).all()); // get all books
 
@@ -32,6 +32,8 @@ public class GettingStartedExample {
 
 		// Gives the 'manager' role to every logged-in user except 'admin'
 		My.rolesProvider((req, username) -> U.eq(username, "admin") ? Auth.getRolesFor(username) : U.set("manager"));
+
+		App.ready(); // now everything is ready, so start the application
 	}
 
 }

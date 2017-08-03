@@ -9,9 +9,18 @@ public class InjectionTest extends AbstractIntegrationTest {
 	@Inject
 	private MyCtrl myCtrl;
 
+	@Inject
+	private MyService myService;
+
 	@Test
 	public void testDependencyInjection() {
-		notNull(myCtrl); // just showing that dependency injection works
+		// the components should be injected
+		notNull(myCtrl);
+		notNull(myService);
+
+		// the initial list of books should be empty
+		isTrue(myService.getInitialBooks().isEmpty());
+		isTrue(myCtrl.initialBooks().isEmpty());
 	}
 
 }
