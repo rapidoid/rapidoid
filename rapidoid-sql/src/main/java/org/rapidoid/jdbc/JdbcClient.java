@@ -60,6 +60,7 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 
 	private volatile boolean usePool = true;
 	private volatile DataSource dataSource;
+	private volatile String poolProvider = "hikari";
 
 	private volatile ReadWriteMode mode = ReadWriteMode.READ_WRITE;
 
@@ -85,17 +86,20 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 		username(config.entry("username").str().getOrNull());
 		password(config.entry("password").str().getOrNull());
 		driver(config.entry("driver").str().getOrNull());
+		poolProvider(config.entry("poolProvider").str().getOrNull());
 
 		if (U.isEmpty(driver) && U.notEmpty(url)) {
 			driver(inferDriverFromUrl(url));
 		}
 	}
 
-	public static String inferDriverFromUrl(String url) {
+	private static String inferDriverFromUrl(String url) {
 		if (url.startsWith("jdbc:mysql:")) {
 			return "com.mysql.jdbc.Driver";
+
 		} else if (url.startsWith("jdbc:h2:")) {
 			return "org.hibernate.dialect.H2Dialect";
+
 		} else if (url.startsWith("jdbc:hsqldb:")) {
 			return "org.hsqldb.jdbc.JDBCDriver";
 		}
@@ -168,6 +172,14 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 		return this;
 	}
 
+	public JdbcClient poolProvider(String poolProvider) {
+		if (U.neq(this.poolProvider, poolProvider)) {
+			this.poolProvider = poolProvider;
+			this.initialized = false;
+		}
+		return this;
+	}
+
 	/**
 	 * Use <code>usePool(true)</code> instead.
 	 */
@@ -230,18 +242,22 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 	}
 
 	private DataSource createPool() {
+		String provider = U.safe(poolProvider);
 
-		if (MscOpts.hasC3P0()) {
-			Log.info("Initializing JDBC connection pool with C3P0", "!url", url, "!driver", driver, "!username", username, "!password", maskedPassword());
-			return C3P0Factory.createDataSourceFor(this);
+		switch (provider) {
+			case "hikari":
+				U.must(MscOpts.hasHikari(), "Couldn't find Hikari!");
+				Log.info("Initializing JDBC connection pool with Hikari", "!url", url, "!driver", driver, "!username", username, "!password", maskedPassword());
+				return HikariFactory.createDataSourceFor(this);
+
+			case "c3p0":
+				U.must(MscOpts.hasC3P0(), "Couldn't find C3P0!");
+				Log.info("Initializing JDBC connection pool with C3P0", "!url", url, "!driver", driver, "!username", username, "!password", maskedPassword());
+				return C3P0Factory.createDataSourceFor(this);
+
+			default:
+				throw U.rte("Unknown pool provider: '%s'!", provider);
 		}
-
-		if (MscOpts.hasHikari()) {
-			Log.info("Initializing JDBC connection pool with Hikari", "!url", url, "!driver", driver, "!username", username, "!password", maskedPassword());
-			return HikariFactory.createDataSourceFor(this);
-		}
-
-		throw U.rte("Cannot create JDBC connection pool, couldn't find Hikari nor C3P0!");
 	}
 
 	private void validate() {
@@ -480,6 +496,10 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 		return dataSource();
 	}
 
+	public String poolProvider() {
+		return poolProvider;
+	}
+
 	public DataSource dataSource() {
 		return dataSource;
 	}
@@ -507,6 +527,7 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 			", url='" + url + '\'' +
 			", usePool=" + usePool +
 			", pool=" + dataSource +
+			", poolProvider=" + poolProvider +
 			", mode=" + mode +
 			'}';
 	}

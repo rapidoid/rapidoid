@@ -40,7 +40,7 @@ public class JDBCPoolC3P0Test extends IsolatedIntegrationTest {
 
 		JDBC.h2("test1");
 
-		JdbcClient jdbc = JDBC.api().init();
+		JdbcClient jdbc = JDBC.api().poolProvider("c3p0").init();
 		ComboPooledDataSource c3p0 = (ComboPooledDataSource) jdbc.dataSource();
 
 		// validate default config
@@ -65,6 +65,7 @@ public class JDBCPoolC3P0Test extends IsolatedIntegrationTest {
 	@Test(timeout = 30000)
 	public void testJDBCWithTextConfig() {
 
+		Conf.JDBC.set("poolProvider", "c3p0");
 		Conf.JDBC.set("driver", "org.h2.Driver");
 		Conf.JDBC.set("url", "jdbc:h2:mem:mydb");
 		Conf.JDBC.set("username", "sa");

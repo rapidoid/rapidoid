@@ -63,6 +63,7 @@ jdbc:
   password: UNKNOWN
   url: UNKNOWN
   options: ''
+  poolProvider: hikari
 
 hibernate:
   dialect: UNKNOWN

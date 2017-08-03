@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 19256
+Content-Length: 19333
 
 <!DOCTYPE html>
 <html lang="en">
@@ -395,6 +395,10 @@ Content-Length: 19256
       <tr>
         <td>options</td>
         <td></td>
+      </tr>
+      <tr>
+        <td>poolProvider</td>
+        <td>hikari</td>
       </tr>
     </table>
     <h4>
