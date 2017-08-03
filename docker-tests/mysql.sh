@@ -6,13 +6,15 @@ IFS=$'\n\t'
 
 printf "\n - Testing MYSQL (tag=$TAG)\n\n"
 
-DB_ID=$(docker run -d -e MYSQL_ROOT_PASSWORD=db-pass mysql)
+docker run -d --name mysql -e MYSQL_ROOT_PASSWORD=db-pass mysql
+
+sleep 60 # give MySQL some time to initialize
 
 sudo docker run \
     -e "UNIFORM_OUTPUT=true" \
     -p 8888:8888 \
     --privileged \
-    --link $DB_ID:db \
+    --link mysql:db \
     rapidoid/rapidoid:$TAG \
     profiles=mysql \
     jdbc.host=db \
@@ -21,8 +23,6 @@ sudo docker run \
     > output/mysql.txt 2>&1 &
 
 ./wait-for.sh 8888
-
-sleep 60 # give MySQL some time to initialize
 
 ./http-get.sh mysql-users 8888 /users
 

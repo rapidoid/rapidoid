@@ -14,7 +14,9 @@ chmod o+r app3/app.jar
 
 printf "\n - Testing APP-JAR (tag=$TAG)\n\n"
 
-DB_ID=$(docker run -d -e MYSQL_ROOT_PASSWORD=db-pass -e MYSQL_DATABASE=rapidoid mysql)
+docker run -d --name mysql -e MYSQL_ROOT_PASSWORD=db-pass -e MYSQL_DATABASE=rapidoid mysql
+
+sleep 60 # give MySQL some time to initialize
 
 sudo docker run \
     -e uniform_output=true \
@@ -23,15 +25,13 @@ sudo docker run \
     -p 8888:8888 \
     -p 8080:8080 \
     -v $(pwd)/app3:/app \
-    --link $DB_ID:mysql \
+    --link mysql:mysql \
     rapidoid/rapidoid:$TAG \
     app.services=welcome \
     admin.services=center \
     app.path=com.example \
     '/users <= SELECT user FROM mysql.user' \
     > output/app-jar.txt 2>&1 &
-
-sleep 60 # give MySQL some time to initialize
 
 ./wait-for.sh 8080
 
