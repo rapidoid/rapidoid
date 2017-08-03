@@ -59,23 +59,60 @@ public class App extends RapidoidInitializer {
 	private static volatile boolean restarted;
 	private static volatile boolean managed;
 
+	private static volatile AppStatus status = AppStatus.NOT_STARTED;
+
 	private static volatile AppBootstrap boot;
 
 	private static final Set<Class<?>> invoked = Coll.synchronizedSet();
 
 	static volatile ClassLoader loader = App.class.getClassLoader();
 
-	public static AppBootstrap bootstrap(String[] args, String... extraArgs) {
+	/**
+	 * Initializes the app in atomic way.
+	 * Won't serve requests until App.ready() is called.
+	 */
+	public static synchronized AppBootstrap init(String[] args, String... extraArgs) {
 		PreApp.args(args, extraArgs);
 
-		return boot().beans().services();
+		status = AppStatus.INITIALIZING;
+
+		// no implicit classpath scanning here
+		return boot();
 	}
 
-	public static AppBootstrap run(String[] args, String... extraArgs) {
+	/**
+	 * Initializes the app in non-atomic way.
+	 * Then starts serving requests immediately when routes are configured.
+	 */
+	public static synchronized AppBootstrap run(String[] args, String... extraArgs) {
 		PreApp.args(args, extraArgs);
+
 		// no implicit classpath scanning here
+		boot();
+
+		// finish initialization and start the application
+		onAppReady();
 
 		return boot();
+	}
+
+	/**
+	 * Initializes the app in non-atomic way.
+	 * Then scans the classpath for beans.
+	 * Then starts serving requests immediately when routes are configured.
+	 */
+	public static synchronized AppBootstrap bootstrap(String[] args, String... extraArgs) {
+		PreApp.args(args, extraArgs);
+
+		boot()
+			.beans() // scan classpath for beans
+			.services(); // activate the services
+
+		// finish initialization and start the application
+		onAppReady();
+
+		return boot();
+
 	}
 
 	public synchronized static AppBootstrap boot() {
@@ -91,7 +128,7 @@ public class App extends RapidoidInitializer {
 		return boot;
 	}
 
-	public static void profiles(String... profiles) {
+	public static synchronized void profiles(String... profiles) {
 		Env.setProfiles(profiles);
 		Conf.reset();
 	}
@@ -200,6 +237,7 @@ public class App extends RapidoidInitializer {
 	}
 
 	public static synchronized void resetGlobalState() {
+		status = AppStatus.NOT_STARTED;
 		mainClassName = null;
 		appPkgName = null;
 		restarted = false;
@@ -284,7 +322,30 @@ public class App extends RapidoidInitializer {
 	}
 
 	public static synchronized void shutdown() {
+		status = AppStatus.STOPPING;
+
 		Setup.shutdownAll();
+
+		status = AppStatus.STOPPED;
 	}
 
+	/**
+	 * Completes the initialization and starts the application.
+	 */
+	public static synchronized void ready() {
+		U.must(status == AppStatus.INITIALIZING, "App.init() must be called before App.ready()!");
+
+		onAppReady();
+	}
+
+	private static void onAppReady() {
+		status = AppStatus.RUNNING;
+		IoC.ready();
+		Setup.ready();
+		Log.info("!The application has started!");
+	}
+
+	public static AppStatus status() {
+		return status;
+	}
 }

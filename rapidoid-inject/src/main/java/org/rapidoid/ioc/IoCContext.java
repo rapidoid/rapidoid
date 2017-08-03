@@ -39,6 +39,8 @@ public interface IoCContext {
 
 	void reset();
 
+	void ready();
+
 	void manage(Object... classesOrInstances);
 
 	<T> T singleton(Class<T> type);

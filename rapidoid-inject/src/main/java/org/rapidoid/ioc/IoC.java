@@ -76,4 +76,8 @@ public class IoC extends RapidoidThing {
 	public static void reset() {
 		defaultContext().reset();
 	}
+
+	public static void ready() {
+		defaultContext().ready();
+	}
 }

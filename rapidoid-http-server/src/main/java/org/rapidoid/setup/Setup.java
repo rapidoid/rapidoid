@@ -115,7 +115,7 @@ public class Setup extends RapidoidInitializer {
 	private volatile Server server;
 	private volatile boolean activated;
 	private volatile boolean reloaded;
-	private volatile boolean autoActivating = true;
+	private volatile boolean autoActivating = !isAppSetupAtomic();
 
 	private volatile Runnable onInit;
 
@@ -424,7 +424,7 @@ public class Setup extends RapidoidInitializer {
 		activated = false;
 		ioCContext.reset();
 		server = null;
-		autoActivating = true;
+		autoActivating = !isAppSetupAtomic();
 
 		defaults = new RouteOptions();
 		defaults().zone(zone);
@@ -605,4 +605,15 @@ public class Setup extends RapidoidInitializer {
 		this.autoActivating = autoActivating;
 		return this;
 	}
+
+	public static void ready() {
+		for (Setup setup : instances) {
+			setup.activate();
+		}
+	}
+
+	private static boolean isAppSetupAtomic() {
+		return App.status() == AppStatus.INITIALIZING;
+	}
+
 }
