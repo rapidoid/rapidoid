@@ -66,27 +66,6 @@ jdbc:
 
 hibernate:
   dialect: UNKNOWN
-  connection:
-    driver_class: ${jdbc.driver}
-    username: ${jdbc.username}
-    password: ${jdbc.password}
-    url: ${jdbc.url}
-  c3p0:
-    debug: ${c3p0.debug}
-    initialPoolSize: ${c3p0.initialPoolSize}
-    minPoolSize: ${c3p0.minPoolSize}
-    maxPoolSize: ${c3p0.maxPoolSize}
-    acquireIncrement: ${c3p0.acquireIncrement}
-    maxStatementsPerConnection: ${c3p0.maxStatementsPerConnection}
-    idleConnectionTestPeriod: ${c3p0.idleConnectionTestPeriod}
-  hikari:
-#    minimumIdle: 20
-#    maximumPoolSize: 100
-#    idleTimeout: 30000
-    dataSource:
-      url: ${jdbc.url}
-    username: ${jdbc.username}
-    password: ${jdbc.password}
 
 c3p0:
   debug: false

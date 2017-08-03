@@ -7,6 +7,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.datamodel.Results;
+import org.rapidoid.jdbc.JDBC;
 import org.rapidoid.u.U;
 
 import javax.persistence.EntityManager;
@@ -15,6 +16,7 @@ import javax.persistence.Parameter;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.metamodel.EntityType;
+import javax.sql.DataSource;
 import java.util.List;
 import java.util.Map;
 
@@ -186,8 +188,18 @@ public class JPA extends RapidoidThing {
 		}
 	}
 
+	public static DataSource bootstrapDatasource() {
+		DataSource dataSource = JDBC.bootstrapDatasource();
+		U.notNull(dataSource, "JPA data source");
+		return dataSource;
+	}
+
 	public static void bootstrap(String[] path, Class<?>... providedEntities) {
-		JPAUtil.bootstrap(path, providedEntities);
+		JPAUtil.bootstrap(path, bootstrapDatasource(), providedEntities);
+	}
+
+	public static void bootstrap(String[] path, DataSource dataSource, Class<?>... providedEntities) {
+		JPAUtil.bootstrap(path, dataSource, providedEntities);
 	}
 
 	public static void transaction(Runnable action) {

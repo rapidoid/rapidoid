@@ -559,4 +559,11 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 		});
 	}
 
+	public DataSource bootstrapDatasource() {
+		init();
+		DataSource dataSource = dataSource();
+		U.notNull(dataSource, "data source");
+		return dataSource;
+	}
+
 }

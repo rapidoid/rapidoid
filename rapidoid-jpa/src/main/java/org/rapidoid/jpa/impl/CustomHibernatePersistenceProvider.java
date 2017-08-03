@@ -6,10 +6,10 @@ import org.hibernate.jpa.boot.spi.EntityManagerFactoryBuilder;
 import org.hibernate.jpa.boot.spi.PersistenceUnitDescriptor;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
 
 import javax.persistence.spi.PersistenceUnitInfo;
+import javax.sql.DataSource;
 import java.util.List;
 import java.util.Map;
 
@@ -37,19 +37,32 @@ import java.util.Map;
 @Since("5.1.0")
 public class CustomHibernatePersistenceProvider extends HibernatePersistenceProvider {
 
+	private final DataSource dataSource;
+
 	private final List<String> names = U.list();
+
+	public CustomHibernatePersistenceProvider(DataSource dataSource) {
+		this.dataSource = dataSource;
+	}
 
 	@Override
 	protected EntityManagerFactoryBuilder getEntityManagerFactoryBuilder(PersistenceUnitDescriptor persistenceUnitDescriptor, Map integration, ClassLoader cl) {
-		CustomDescriptor descriptor = new CustomDescriptor(persistenceUnitDescriptor, names);
-		return super.getEntityManagerFactoryBuilder(descriptor, integration, ClasspathUtil.getDefaultClassLoader());
+		return emfBuilder(persistenceUnitDescriptor, integration, cl);
 	}
 
+	@Override
 	protected EntityManagerFactoryBuilder getEntityManagerFactoryBuilderOrNull(String persistenceUnitName, Map properties, ClassLoader providedClassLoader) {
-		PersistenceUnitInfo info = new RapidoidPersistenceUnitInfo();
+
+		PersistenceUnitInfo info = new RapidoidPersistenceUnitInfo(persistenceUnitName, dataSource, providedClassLoader);
 		PersistenceUnitInfoDescriptor persistenceUnit = new PersistenceUnitInfoDescriptor(info);
 		final Map integration = wrap(properties);
-		return getEntityManagerFactoryBuilder(persistenceUnit, integration, providedClassLoader);
+
+		return emfBuilder(persistenceUnit, integration, providedClassLoader);
+	}
+
+	private EntityManagerFactoryBuilder emfBuilder(PersistenceUnitDescriptor persistenceUnitDescriptor, Map integration, ClassLoader cl) {
+		CustomDescriptor descriptor = new CustomDescriptor(persistenceUnitDescriptor, names);
+		return super.getEntityManagerFactoryBuilder(descriptor, integration, cl);
 	}
 
 	public List<String> names() {
