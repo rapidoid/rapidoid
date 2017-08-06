@@ -35,10 +35,17 @@ import java.util.Map;
 @Since("5.4.0")
 public class JDBCPagingTest extends SQLTestCommons {
 
-	private static final String PAGING_SQL = "SELECT * FROM movie WHERE id < ? OFFSET $skip LIMIT $limit";
+	@Test
+	public void testExplicitPaging() {
+		testPagingWithSql("SELECT * FROM movie WHERE id < ? OFFSET $skip LIMIT $limit");
+	}
 
 	@Test
-	public void testPaging() {
+	public void testImplicitPaging() {
+		testPagingWithSql("SELECT * FROM movie WHERE id < ?");
+	}
+
+	private void testPagingWithSql(String sql) {
 		JdbcClient client = JDBC.api("a").hsql("test");
 
 		client.tryToExecute("DROP TABLE movie");
@@ -48,32 +55,32 @@ public class JDBCPagingTest extends SQLTestCommons {
 			client.execute("INSERT INTO movie VALUES (?, ?)", id, "movie" + id);
 		}
 
-		List<Movie> movies = client.query(Movie.class, PAGING_SQL, 1000).all();
+		List<Movie> movies = client.query(Movie.class, sql, 1000).all();
 
 		eq(movies.size(), 100);
 
 		for (int i = 1; i <= 10; i++) {
-			checkRecord(client, i);
+			checkRecord(sql, client, i);
 		}
 
-		checkPageSize(client, 0, 1, 1);
-		checkPageSize(client, 0, 2, 2);
-		checkPageSize(client, 0, 100, 100);
+		checkPageSize(sql, client, 0, 1, 1);
+		checkPageSize(sql, client, 0, 2, 2);
+		checkPageSize(sql, client, 0, 100, 100);
 
-		checkPageSize(client, 1, 2, 2);
-		checkPageSize(client, 1, 10, 10);
+		checkPageSize(sql, client, 1, 2, 2);
+		checkPageSize(sql, client, 1, 10, 10);
 
-		checkPageSize(client, 99, 1000, 1);
-		checkPageSize(client, 100, 1000, 0);
-		checkPageSize(client, 1000, 100000, 0);
+		checkPageSize(sql, client, 99, 1000, 1);
+		checkPageSize(sql, client, 100, 1000, 0);
+		checkPageSize(sql, client, 1000, 100000, 0);
 	}
 
-	private void checkPageSize(JdbcClient client, int skip, int limit, int pageSize) {
-		eq(pageSize, client.query(PAGING_SQL, Integer.MAX_VALUE).page(skip, limit).size());
+	private void checkPageSize(String sql, JdbcClient client, int skip, int limit, int pageSize) {
+		eq(pageSize, client.query(sql, Integer.MAX_VALUE).page(skip, limit).size());
 	}
 
-	private void checkRecord(JdbcClient client, int n) {
-		List<Map<String, Object>> page = client.query(PAGING_SQL, 15).page(n - 1, 2);
+	private void checkRecord(String sql, JdbcClient client, int n) {
+		List<Map<String, Object>> page = client.query(sql, 15).page(n - 1, 2);
 
 		eq(2, page.size());
 

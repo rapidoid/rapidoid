@@ -1355,4 +1355,12 @@ public class Msc extends RapidoidThing {
 		U.must(isPlatform());
 		return "/app/app.jar";
 	}
+
+	public static int toInt(long value) {
+		if ((int) value != value) {
+			throw new ArithmeticException("integer overflow");
+		}
+		return (int) value;
+	}
+
 }

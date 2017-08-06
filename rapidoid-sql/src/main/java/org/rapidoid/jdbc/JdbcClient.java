@@ -3,6 +3,7 @@ package org.rapidoid.jdbc;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.collection.Coll;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Callbacks;
 import org.rapidoid.config.Conf;
@@ -373,7 +374,9 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 		return doQuery(null, resultMapper, sql, namedArgs, null);
 	}
 
-	private <T> Results<T> doQuery(Class<T> resultType, Mapper<ResultSet, T> resultMapper, String sql, Map<String, ?> namedArgs, Object[] args) {
+	private <T> Results<T> doQuery(Class<T> resultType, Mapper<ResultSet, T> resultMapper,
+	                               String sql, Map<String, ?> namedArgs, Object[] args) {
+
 		sql = toSql(sql);
 		JdbcData<T> data = new JdbcData<>(this, resultType, resultMapper, sql, namedArgs, args);
 		return new ResultsImpl<>(data);
@@ -381,9 +384,11 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 
 	<T> List<T> runQuery(Class<T> resultType, Mapper<ResultSet, T> resultMapper,
 	                     String sql, Map<String, ?> namedArgs, Object[] args,
-	                     long skip, long limit) {
+	                     long skip, int limit) {
 
 		ensureIsInitialized();
+
+		boolean needsPaging = skip > 0 || (limit >= 0 && limit < Integer.MAX_VALUE);
 
 		if (limit == -1) {
 			// unlimited
@@ -393,9 +398,31 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 		U.must(skip >= 0);
 		U.must(limit >= 0);
 
-		// replace the paging parameters
-		sql = sql.replace("$skip", skip + "");
-		sql = sql.replace("$limit", limit + "");
+		boolean pagingInSql = sql.contains("$skip") || sql.contains("$limit");
+
+		if (pagingInSql) {
+			sql = replacePagingParams(sql, skip, limit);
+		}
+
+		List<T> results = fetchData(resultType, resultMapper, sql, namedArgs, args);
+
+		if (needsPaging && !pagingInSql) {
+			results = Coll.range(results, Msc.toInt(skip), Msc.toInt(skip + limit));
+		}
+
+		U.must(results.size() <= limit, "Paging error: too many results!");
+
+		return results;
+	}
+
+	private String replacePagingParams(String sql, long skip, int limit) {
+		return sql
+			.replace("$skip", skip + "")
+			.replace("$limit", limit + "");
+	}
+
+	private <T> List<T> fetchData(Class<T> resultType, Mapper<ResultSet, T> resultMapper,
+	                              String sql, Map<String, ?> namedArgs, Object[] args) {
 
 		try (Connection conn = provideConnection();
 		     PreparedStatement stmt = JDBC.prepare(conn, sql, namedArgs, args);
