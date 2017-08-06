@@ -16,8 +16,7 @@ public class WebTest extends RapidoidIntegrationTest {
 
 	@Test
 	public void testHelloWorld() {
-		// initialize the database
-		JDBC.execute("init.sql");
+		// insert some books
 
 		insertBook(10, "Java");
 		insertBook(20, "Scala");
