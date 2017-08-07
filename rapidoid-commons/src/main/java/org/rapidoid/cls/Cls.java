@@ -335,6 +335,17 @@ public class Cls extends RapidoidThing {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <T> T invokeRethrowing(Method method, Object target, Object... args) throws Throwable {
+		try {
+			return (T) method.invoke(target, args);
+
+		} catch (InvocationTargetException e) {
+			Throwable cause = e.getCause();
+			throw cause != null ? cause : e;
+		}
+	}
+
 	public static Class<?>[] getImplementedInterfaces(Class<?> clazz) {
 		try {
 			List<Class<?>> interfaces = new LinkedList<Class<?>>();

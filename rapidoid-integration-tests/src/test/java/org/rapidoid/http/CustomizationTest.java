@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.JSON;
@@ -104,10 +105,22 @@ public class CustomizationTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void customErrorHandlerByType() {
+
+		App.beans(new Object() {
+			@GET
+			public void err5() {
+				throw new SecurityException("INTENTIONAL - Access denied!");
+			}
+		});
+
 		My.error(NullPointerException.class).handler((req1, resp, e) -> "MY NPE");
 		My.error(RuntimeException.class).handler((req1, resp, e) -> e instanceof NotFound ? null : "MY RTE");
 
-		On.error(SecurityException.class).handler((req1, resp, e) -> "ON SEC");
+		On.error(SecurityException.class).handler((req1, resp, e) -> {
+			resp.code(403);
+			return U.map("error", "Access denied!");
+		});
+
 		My.error(SecurityException.class).handler((req1, resp, e) -> "MY SEC");
 
 		On.get("/err1").json(req -> {
@@ -130,6 +143,7 @@ public class CustomizationTest extends IsolatedIntegrationTest {
 		onlyPost("/err2");
 		onlyGet("/err3");
 		onlyGet("/err4");
+		onlyGet("/err5");
 	}
 
 }

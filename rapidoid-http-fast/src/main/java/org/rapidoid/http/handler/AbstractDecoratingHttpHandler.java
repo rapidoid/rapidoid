@@ -87,7 +87,7 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 				return HttpStatus.ASYNC;
 			}
 
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			HttpIO.INSTANCE.writeResponse(maybeReq, ctx, isKeepAlive, 500, contentType, "Internal server error!".getBytes());
 			Log.error("Error occurred during un-managed request processing", "request", req, "error", e);
 			return HttpStatus.ERROR;
@@ -222,7 +222,7 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 		};
 	}
 
-	private Object handleReqMaybeInTx(final Channel channel, final boolean isKeepAlive, final Req req, final Object extra, TransactionMode txMode) throws Exception {
+	private Object handleReqMaybeInTx(final Channel channel, final boolean isKeepAlive, final Req req, final Object extra, TransactionMode txMode) throws Throwable {
 
 		if (txMode != null && txMode != TransactionMode.NONE) {
 
@@ -233,7 +233,7 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 				public void run() {
 					try {
 						result.set(handleReqAndPostProcess(channel, isKeepAlive, req, extra));
-					} catch (Exception e) {
+					} catch (Throwable e) {
 						throw U.rte("Error occurred inside the transactional web handler!", e);
 					}
 				}
@@ -307,9 +307,9 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 		return req;
 	}
 
-	protected abstract Object handleReq(Channel ctx, boolean isKeepAlive, Req req, Object extra) throws Exception;
+	protected abstract Object handleReq(Channel ctx, boolean isKeepAlive, Req req, Object extra) throws Throwable;
 
-	private Object handleReqAndPostProcess(Channel ctx, boolean isKeepAlive, Req req, Object extra) throws Exception {
+	private Object handleReqAndPostProcess(Channel ctx, boolean isKeepAlive, Req req, Object extra) throws Throwable {
 		Object result = handleReq(ctx, isKeepAlive, req, extra);
 
 		if (result instanceof Results) {
