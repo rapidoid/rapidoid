@@ -26,7 +26,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.io.IO;
 import org.rapidoid.lambda.Operation;
-import org.rapidoid.log.GlobalCfg;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -42,7 +41,7 @@ public class MultiWatchTest extends TestCommons {
 	public void shouldSupportMultipleWatchCalls() throws IOException {
 		String dir = createTempDir("watch-service-test");
 
-		if (!GlobalCfg.is("TRAVIS-CI")) {
+		if (!TestCommons.RAPIDOID_CI) {
 			for (int i = 0; i < 10; i++) {
 				exerciseMultiWatch(dir);
 			}
