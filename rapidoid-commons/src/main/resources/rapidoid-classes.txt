@@ -750,6 +750,7 @@ org.rapidoid.setup.App
 org.rapidoid.setup.AppBootstrap
 org.rapidoid.setup.AppRestartListener
 org.rapidoid.setup.AppRestartProcessor
+org.rapidoid.setup.AppStatus
 org.rapidoid.setup.AppVerification
 org.rapidoid.setup.CustomizableSetupAwarePersisterProvider
 org.rapidoid.setup.DefaultSetup
