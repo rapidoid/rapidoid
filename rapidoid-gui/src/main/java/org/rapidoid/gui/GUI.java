@@ -926,7 +926,7 @@ public abstract class GUI extends HTML implements Role {
 			sb.append(Msc.urlEncode(e.getValue()));
 		}
 
-		return sb.toString();
+		return uri(sb.toString());
 	}
 
 	public static Tag copy(Object... content) {
