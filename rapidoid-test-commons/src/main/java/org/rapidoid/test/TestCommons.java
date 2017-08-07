@@ -27,6 +27,7 @@ import org.mockito.stubbing.OngoingStubbing;
 import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -46,7 +47,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public abstract class TestCommons {
 
-	private static final boolean ADJUST_TESTS = "true".equalsIgnoreCase(System.getProperty("ADJUST_TESTS"))
+	private static final boolean ADJUST_TESTS = inDebugMode()
+		|| "true".equalsIgnoreCase(System.getProperty("ADJUST_TESTS"))
 		|| "true".equalsIgnoreCase(System.getenv("ADJUST_TESTS"));
 
 	protected static final Random RND = new Random();
@@ -731,6 +733,16 @@ public abstract class TestCommons {
 	private static void __clear() {
 		while (__get() != null) {
 		}
+	}
+
+	protected static boolean inDebugMode() {
+		RuntimeMXBean runtimeMX = ManagementFactory.getRuntimeMXBean();
+
+		for (String arg : runtimeMX.getInputArguments()) {
+			if (arg.contains("jdwp")) return true;
+		}
+
+		return false;
 	}
 
 }
