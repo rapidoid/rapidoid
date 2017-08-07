@@ -1,1 +1,1 @@
-SELECT * FROM books
+SELECT * FROM books OFFSET $skip LIMIT $limit
