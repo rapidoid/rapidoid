@@ -440,6 +440,7 @@ public class Setup extends RapidoidInitializer {
 		}
 
 		bootstrappedBeans.reset();
+		instances.clear();
 
 		initDefaults();
 	}
