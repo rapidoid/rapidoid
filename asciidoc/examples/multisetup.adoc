@@ -7,11 +7,13 @@ package org.rapidoid.docs.multisetup;
 import org.rapidoid.docs.multisetup.barsetup.BarSetupCtrl;
 import org.rapidoid.docs.multisetup.foosetup.FooSetupCtrl;
 import org.rapidoid.http.HTTP;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.Setup;
 
 public class Main {
 
 	public static void main(String[] args) {
+		App.run(args);
 
 		Setup setup1 = Setup.create("foo").port(2222);
 		Setup setup2 = Setup.create("bar").port(3333);
