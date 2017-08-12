@@ -440,7 +440,6 @@ public class Setup extends RapidoidInitializer {
 		}
 
 		bootstrappedBeans.reset();
-		instances.clear();
 
 		initDefaults();
 	}
@@ -491,7 +490,7 @@ public class Setup extends RapidoidInitializer {
 		}
 	}
 
-	public static List<Setup> instances() {
+	static List<Setup> instances() {
 		return Collections.unmodifiableList(instances);
 	}
 

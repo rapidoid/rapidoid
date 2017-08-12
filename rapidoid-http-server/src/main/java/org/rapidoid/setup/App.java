@@ -202,9 +202,7 @@ public class App extends RapidoidInitializer {
 		ClasspathScanner.reset();
 		invoked.clear();
 
-		for (Setup setup : Setup.instances()) {
-			setup.reload();
-		}
+		SetupUtil.reloadAll();
 
 		Conf.reset(); // reset the config again
 		Setup.initDefaults(); // this changes the config

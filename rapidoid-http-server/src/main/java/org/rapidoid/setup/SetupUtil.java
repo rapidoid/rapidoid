@@ -1,4 +1,8 @@
-package org.rapidoid.http;
+package org.rapidoid.setup;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
 
 /*
  * #%L
@@ -20,27 +24,26 @@ package org.rapidoid.http;
  * #L%
  */
 
-import org.rapidoid.AbstractRapidoidModule;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.RapidoidModuleDesc;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.jpa.JPAUtil;
-import org.rapidoid.setup.*;
-
 @Authors("Nikolche Mihajlovski")
-@Since("5.3.0")
-@RapidoidModuleDesc(name = "HTTP", order = 700)
-public class HttpModule extends AbstractRapidoidModule {
+@Since("5.4.2")
+public class SetupUtil {
 
-	@Override
-	public void cleanUp() {
-		JPAUtil.reset(); // FIXME JPA module
-
-		My.reset();
-		App.resetGlobalState();
-		On.changes().ignore();
-
-		SetupUtil.cleanUp();
+	static void reloadAll() {
+		synchronized (Setup.class) {
+			for (Setup setup : Setup.instances()) {
+				setup.reload();
+			}
+		}
 	}
 
+	public static void cleanUp() {
+		synchronized (Setup.class) {
+			for (Setup setup : Setup.instances()) {
+				setup.routes().reset();
+				U.must(setup.routes().all().isEmpty());
+			}
+
+			Setup.instances.clear();
+		}
+	}
 }
