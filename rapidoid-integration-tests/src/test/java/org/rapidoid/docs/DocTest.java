@@ -159,24 +159,48 @@ public abstract class DocTest extends IsolatedIntegrationTest {
 		getReq(uri + order());
 	}
 
+	protected void GET(int port, String uri) {
+		getReq(port, uri + order());
+	}
+
 	protected void POST(String uri) {
 		postJson(uri + order(), U.map());
+	}
+
+	protected void POST(int port, String uri) {
+		postJson(port, uri + order(), U.map());
 	}
 
 	protected void POST(String uri, Map<String, ?> data) {
 		postJson(uri + order(), data);
 	}
 
+	protected void POST(int port, String uri, Map<String, ?> data) {
+		postJson(port, uri + order(), data);
+	}
+
 	protected void PUT(String uri) {
 		putData(uri + order(), U.map());
+	}
+
+	protected void PUT(int port, String uri) {
+		putData(port, uri + order(), U.map());
 	}
 
 	protected void PUT(String uri, Map<String, ?> data) {
 		putData(uri + order(), data);
 	}
 
+	protected void PUT(int port, String uri, Map<String, ?> data) {
+		putData(port, uri + order(), data);
+	}
+
 	protected void DELETE(String uri) {
 		deleteReq(uri + order());
+	}
+
+	protected void DELETE(int port, String uri) {
+		deleteReq(port, uri + order());
 	}
 
 }

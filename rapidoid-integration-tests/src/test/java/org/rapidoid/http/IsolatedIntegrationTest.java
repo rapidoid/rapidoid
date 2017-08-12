@@ -224,16 +224,24 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 		testReq(DEFAULT_PORT, "GET", uri, null, null);
 	}
 
+	protected void getReq(int port, String uri) {
+		testReq(port, "GET", uri, null, null);
+	}
+
 	protected void postData(String uri, Map<String, ?> data) {
 		testReq(DEFAULT_PORT, "POST", uri, data, null);
+	}
+
+	protected void postData(int port, String uri, Map<String, ?> data) {
+		testReq(port, "POST", uri, data, null);
 	}
 
 	protected void postJson(String uri, Map<String, ?> data) {
 		testReq(DEFAULT_PORT, "POST", uri, null, JSON.stringify(data));
 	}
 
-	protected void postData(int port, String uri, Map<String, ?> data) {
-		testReq(port, "POST", uri, data, null);
+	protected void postJson(int port, String uri, Map<String, ?> data) {
+		testReq(port, "POST", uri, null, JSON.stringify(data));
 	}
 
 	protected void putData(String uri, Map<String, ?> data) {
@@ -259,6 +267,10 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 
 	protected void deleteReq(String uri) {
 		testReq(DEFAULT_PORT, "DELETE", uri, null, null);
+	}
+
+	protected void deleteReq(int port, String uri) {
+		testReq(port, "DELETE", uri, null, null);
 	}
 
 	protected void notFoundExcept(String uri, String... exceptVerbs) {
