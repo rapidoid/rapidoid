@@ -1,4 +1,4 @@
-=== Multiple servers[[app-listing]]
+=== Bootstrapping multiple servers[[app-listing]]
 [source,java]
 .Main.java
 ----

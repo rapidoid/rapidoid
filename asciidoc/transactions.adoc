@@ -1,4 +1,4 @@
-### Transactions
+## Transactions
 
 Rapidoid also provides JPA transaction management, which is activated when a route is marked as transactional using `.transaction(...)` or `@Transactional` handler method.
 

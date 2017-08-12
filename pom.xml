@@ -213,6 +213,7 @@
 								<linkcss>false</linkcss>
 								<project-version>${project.version}</project-version>
 								<sectnums>true</sectnums>
+								<sectnumlevels>2</sectnumlevels>
 							</attributes>
 						</configuration>
 					</execution>

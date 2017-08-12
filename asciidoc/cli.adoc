@@ -1,4 +1,4 @@
-### Basic command-line arguments
+## Basic command-line arguments
 
 ++++
 include::html/args.html[]

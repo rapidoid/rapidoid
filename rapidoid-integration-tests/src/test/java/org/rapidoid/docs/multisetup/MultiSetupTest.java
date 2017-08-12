@@ -25,7 +25,7 @@ import org.rapidoid.docs.DocTest;
 import org.rapidoid.test.Doc;
 
 @IntegrationTest(main = Main.class)
-@Doc(title = "Multiple servers")
+@Doc(title = "Bootstrapping multiple servers")
 public class MultiSetupTest extends DocTest {
 
 	@Override

@@ -1,4 +1,4 @@
-### Performance
+## Performance
 
 The network communication of Rapidoid is fully asynchronous (e.g. epoll on Linux).
 Several benchmarks have demonstrated stable high performance with 16K connections.
@@ -9,7 +9,7 @@ E.g. on a 8-core machine there would be 8 I/O threads.
 The number of _job executor threads_ can vary (e.g. 32, 128, 512, 1024 or more).
 
 
-#### Managed vs unmanaged request handlers
+### Managed vs unmanaged request handlers
 
 The request processing can be done in a _managed_ and _unmanaged_ way:
 
@@ -26,6 +26,6 @@ The request processing can be done in a _managed_ and _unmanaged_ way:
 NOTE: The handlers that are executed in _unmanaged_ way should execute quickly and in non-blocking way.
 
 
-#### Asynchronous handlers
+### Asynchronous handlers
 
 For asynchronous handlers, which continue to execute some logic outside the handler job, `Req#async()` and `Req#done()` should be used.

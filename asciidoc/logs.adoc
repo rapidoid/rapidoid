@@ -1,7 +1,7 @@
-### Logging
+## Logging
 
 Please see the `Log` class.
 
-#### Configuring
+### Configuring
 
 Please see the `log` configuration section.

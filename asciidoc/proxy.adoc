@@ -1,4 +1,4 @@
-### Reverse proxy and load balancer
+## Reverse proxy and load balancer
 
 Starting from v5.2, Rapidoid can be also used as a HTTP reverse proxy and load balancer.
 A basic round-robin load balancer is included and configured as a default one.
@@ -11,6 +11,6 @@ The command-line argument syntax is: `/path -> upstream1,upstream2...`. Examples
   - `/ -> https://localhost:8080`
   - `/foo -> https://upstream1:8080, http://upstream2:8080`
 
-#### Configuring
+### Configuring
 
 Please see the `reverse-proxy` configuration section.

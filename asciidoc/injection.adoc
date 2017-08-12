@@ -1,6 +1,6 @@
-### Dependency injection
+## Dependency injection
 
-#### Annotations
+### Annotations
 
 Annotating a class with any of these annotations will mark the class as "managed" by Rapidoid for dependency injection:
 
@@ -11,11 +11,11 @@ Annotating a class with any of these annotations will mark the class as "managed
 
 The `@Controller` and `@Service` annotations serve for more specific description of the nature of the managed component (whether it is a web controller or business logic service).
 
-#### Singleton scope only
+### Singleton scope only
 
 Rapidoid only supports the singleton scope.
 
-#### Auto-run main entry points
+### Auto-run main entry points
 
 The `org.rapidoid.annotation.Run` annotation marks a class with a `main` method that needs to be executed when bootstrapping an application:
 

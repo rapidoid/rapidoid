@@ -1,14 +1,14 @@
-### Security
+## Security
 
 Role-based security checks for the web handlers are supported out-of-the-box.
 
-#### Access denied
+### Access denied
 
 Accessing a protected page without the required roles will automatically display a nice login page.
 
 Accessing a protected RESTful service without the required roles will return error in JSON format.
 
-#### Configuring required roles
+### Configuring required roles
 
 Required roles can be configured per route. Example:
 

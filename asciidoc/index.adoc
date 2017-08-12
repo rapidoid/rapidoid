@@ -2,9 +2,10 @@
 Nikolche Mihajlovski <rapidoid@googlegroups.com>
 
 include::style.adoc[]
-:sectnumlevels: 2
 
-This is a draft version of the new documentation for http://www.rapidoid.org[Rapidoid].
+This is a draft version of the new documentation for http://www.rapidoid.org[Rapidoid] (v5.4).
+
+For older versions of Rapidoid, please see http://www.rapidoid.org/docs-5.3.html[v5.3] and http://www.rapidoid.org/documentation.html[the old docs].
 
 Things to improve in the docs:
 
@@ -18,89 +19,11 @@ Rapidoid is an extremely fast HTTP server and modern Java web framework / applic
 
 image::rapidoid.png[]
 
-## Rapidoid as Web Platform (Docker)
+## Web Framework or Dockerized Web Platform?
 
 include::docker.adoc[]
 
-## Rapidoid as Java Web Framework
-
-include::quick.adoc[]
-
-***
-
-include::routing.adoc[]
-
-***
-
-include::perf.adoc[]
-
-***
-
-include::profiles.adoc[]
-
-***
-
-include::static.adoc[]
-
-***
-
-include::rest.adoc[]
-
-***
-
-include::session.adoc[]
-
-***
-
-include::injection.adoc[]
-
-***
-
-include::security.adoc[]
-
-***
-
-include::authentication.adoc[]
-
-***
-
-include::config.adoc[]
-
-***
-
-include::jdbc.adoc[]
-
-***
-
-include::jpa.adoc[]
-
-***
-
-include::transactions.adoc[]
-
-***
-
-include::dbprofiles.adoc[]
-
-***
-
-include::templates.adoc[]
-
-***
-
-include::proxy.adoc[]
-
-***
-
-include::custom.adoc[]
-
-***
-
-include::logs.adoc[]
-
-***
-
-include::cli.adoc[]
+include::topics.adoc[]
 
 include::modules.adoc[]
 

@@ -1,11 +1,11 @@
-### Serving static files
+## Serving static files
 
 It's very easy to serve static files with Rapidoid.
 Just add them as resources inside the `static` folder on the classpath in your Java project.
 
 TIP: Most of the Java projects use Maven, so the static files should usually be placed in `src/main/resources/static`.
 
-#### Built-in static resources
+### Built-in static resources
 
 Rapidoid includes some built-in static resources in a `default/static` folder on the classpath.
 
@@ -13,7 +13,7 @@ Thus, both `default/static` and `static` are default locations for serving stati
 
 The `static` location has precedense over the `default/static` location.
 
-#### Automatically serving the static resources
+### Automatically serving the static resources
 
 Once a HTTP server is started, it will serve all the resources that exist in the `static` and `default/static` locations on the classpath.
 They will be publicly available.
