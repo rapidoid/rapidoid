@@ -17,7 +17,7 @@ public class Main {
 
 [[app-listing]]
 [source,java]
-.NoBullshit.java
+.MyCtrl.java
 ----
 package org.rapidoid.docs.hellorest;
 
@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Controller;
 import org.rapidoid.annotation.GET;
 
 @Controller
-public class NoBullshit {
+public class MyCtrl {
 
 	@GET
 	public String hello() {

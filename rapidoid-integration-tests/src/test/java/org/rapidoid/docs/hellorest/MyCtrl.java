@@ -24,7 +24,7 @@ import org.rapidoid.annotation.GET;
  */
 
 @Controller
-public class NoBullshit {
+public class MyCtrl {
 
 	@GET
 	public String hello() {
