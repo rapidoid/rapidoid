@@ -22,6 +22,7 @@ package org.rapidoid.docs;
 
 import org.junit.Test;
 import org.rapidoid.commons.Str;
+import org.rapidoid.docs.blank.BlankTest;
 import org.rapidoid.fluent.Do;
 import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.io.FileSearchResult;
@@ -50,10 +51,12 @@ public abstract class DocTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void docs() throws Exception {
+		if (this instanceof BlankTest) {
+			return; // not a real test
+		}
+
 		order.set(0);
-
 		exercise();
-
 		generateDocs();
 	}
 
