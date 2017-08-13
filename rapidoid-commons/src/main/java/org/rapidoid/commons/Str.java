@@ -5,12 +5,14 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Mapper;
+import org.rapidoid.lambda.Operation;
 import org.rapidoid.u.U;
 
 import javax.xml.bind.DatatypeConverter;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -88,6 +90,21 @@ public class Str extends RapidoidThing {
 
 	public static String mask(String target, Pattern regex) {
 		return Str.replace(target, regex, MASK_REPLACER);
+	}
+
+	public static int find(String target, String regex, final Operation<String[]> action) {
+		final AtomicInteger counter = new AtomicInteger();
+
+		replace(target, Pattern.compile(regex), new Mapper<String[], String>() {
+			@Override
+			public String map(String[] found) throws Exception {
+				counter.incrementAndGet();
+				Lmbd.call(action, found);
+				return "";
+			}
+		});
+
+		return counter.get();
 	}
 
 	public static String replace(String target, String regex, Mapper<String[], String> replacer) {
