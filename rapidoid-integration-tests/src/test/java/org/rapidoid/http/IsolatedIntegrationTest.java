@@ -417,7 +417,7 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 	}
 
 	protected <T> T connect(F3<T, InputStream, BufferedReader, DataOutputStream> protocol) {
-		int timeout = RAPIDOID_CI ? 5000 : 1000;
+		int timeout = RAPIDOID_CI ? 30000 : 10000;
 		return NetUtil.connect("localhost", 8080, timeout, protocol);
 	}
 

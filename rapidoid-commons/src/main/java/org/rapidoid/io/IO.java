@@ -4,6 +4,8 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Str;
+import org.rapidoid.lambda.Lmbd;
+import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
 
 import java.io.*;
@@ -103,7 +105,10 @@ public class IO extends RapidoidThing {
 	}
 
 	public static byte[] readWithTimeout(InputStream input) {
+		return readWithTimeoutUntil(input, null);
+	}
 
+	public static byte[] readWithTimeoutUntil(InputStream input, Mapper<byte[], Boolean> finish) {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		byte[] buffer = new byte[16 * 1024];
 
@@ -112,6 +117,10 @@ public class IO extends RapidoidThing {
 
 			while ((readN = input.read(buffer)) != -1) {
 				output.write(buffer, 0, readN);
+
+				byte[] bytes = output.toByteArray();
+
+				if (finish != null && Lmbd.eval(finish, bytes)) break;
 			}
 
 		} catch (SocketTimeoutException e) {
