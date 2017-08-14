@@ -2,7 +2,7 @@ package org.rapidoid.ioc;
 
 /*
  * #%L
- * rapidoid-inject
+ * rapidoid-integration-tests
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%

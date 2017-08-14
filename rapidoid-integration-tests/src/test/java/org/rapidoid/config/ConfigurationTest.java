@@ -2,7 +2,7 @@ package org.rapidoid.config;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-integration-tests
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
