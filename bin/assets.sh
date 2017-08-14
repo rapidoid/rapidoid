@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-DISTRO=rapidoid-html/src/main/resources/default/static/_rapidoid
+DISTRO=dist
 DISTRO_JS=$DISTRO/rapidoid.min.js
 DISTRO_CSS=$DISTRO/rapidoid.min.css
 
