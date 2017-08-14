@@ -452,6 +452,7 @@ org.rapidoid.http.HttpWrapper
 org.rapidoid.http.impl.AbstractViewResolver
 org.rapidoid.http.impl.CachedResp
 org.rapidoid.http.impl.ChunkedResponse
+org.rapidoid.http.impl.ErrorHandlerResolver
 org.rapidoid.http.impl.GUIUtil
 org.rapidoid.http.impl.HandlerMatch
 org.rapidoid.http.impl.HandlerMatchWithParams
