@@ -21,8 +21,8 @@ pages:
     gui:
       all_books:
         pageSize: 3
-        caption: List of books:
-        header: The header
+        caption: 'List of books:'
+        header: Books
         footer: The footer
         sql: sql/books.sql
 
