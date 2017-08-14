@@ -195,7 +195,7 @@ class LowLevelHttpIO extends RapidoidThing {
 		}
 
 		if (error instanceof SecurityException) {
-			Log.warn("Access denied for request: " + req, "client", req.clientIpAddress());
+			Log.debug("Access denied for request: " + req, "client", req.clientIpAddress());
 			return;
 		}
 
