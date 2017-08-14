@@ -68,24 +68,22 @@ public class DefaultErrorHandler extends RapidoidThing implements ErrorHandler {
 	}
 
 	protected Object handleError(Req req, Resp resp, Throwable error, Customization custom) {
-		Throwable err = error;
-
 		// if the handler throws error -> process it
 		for (int i = 0; ; i++) {
 
 			resp.result(null);
 
-			ErrorHandler handler = custom.findErrorHandlerByType(error.getClass());
+			ErrorHandler handler = custom.findErrorHandlerByType(error);
 
 			try {
 
 				Object result = null;
 
 				if (handler != null) {
-					result = handler.handleError(req, resp, err);
+					result = handler.handleError(req, resp, error);
 				}
 
-				return result != null ? result : defaultErrorHandling(req, err);
+				return result != null ? result : defaultErrorHandling(req, error);
 
 			} catch (Exception e) {
 
@@ -93,7 +91,7 @@ public class DefaultErrorHandler extends RapidoidThing implements ErrorHandler {
 					return U.rte("Too many times an error was re-thrown by the error handler(s)!");
 				}
 
-				err = e;
+				error = e;
 			}
 		}
 	}

@@ -10,6 +10,7 @@ import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.customize.defaults.DefaultTemplateLoader;
+import org.rapidoid.http.impl.ErrorHandlerResolver;
 import org.rapidoid.setup.My;
 import org.rapidoid.u.U;
 import org.rapidoid.util.ByType;
@@ -43,6 +44,8 @@ public class Customization extends RapidoidThing {
 	private final Config config;
 
 	private final ByType<Throwable, ErrorHandler> errorHandlers = ByType.create();
+
+	private final ErrorHandlerResolver errorHandlerResolver = new ErrorHandlerResolver();
 
 	private volatile String[] staticFilesPath;
 
@@ -281,16 +284,8 @@ public class Customization extends RapidoidThing {
 		return errorHandlers;
 	}
 
-	public ErrorHandler findErrorHandlerByType(Class<? extends Throwable> errorType) {
-		ErrorHandler handler;
-		Customization custom = this;
-
-		do {
-			handler = custom.errorHandlers().findByType(errorType);
-			custom = custom.defaults();
-		} while (handler == null && custom != null);
-
-		return handler;
+	public ErrorHandler findErrorHandlerByType(Throwable error) {
+		return errorHandlerResolver.findErrorHandlerByType(this, error);
 	}
 
 	public StaticFilesSecurity staticFilesSecurity() {

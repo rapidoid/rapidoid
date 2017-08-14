@@ -1,0 +1,8 @@
+HTTP/1.1 400 Bad Request
+Connection: keep-alive
+Server: Rapidoid
+Date: XXXXX GMT
+Content-Type: application/json
+Content-Length: 25
+
+{"error":"Invalid data!"}
