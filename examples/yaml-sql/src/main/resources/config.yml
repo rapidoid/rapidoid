@@ -5,6 +5,7 @@ gui:
   fluid: false
   menu:
     Home: /
+    Overview: /overview
     API (right):
       Books: /books
     Help:
@@ -15,4 +16,14 @@ api:
 
 pages:
   /: sql/books.sql
+
+  /overview:
+    gui:
+      all_books:
+        pageSize: 3
+        caption: List of books:
+        header: The header
+        footer: The footer
+        sql: sql/books.sql
+
   /about: ''

@@ -27,13 +27,27 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class PageConfig extends AbstractRouteConfig {
+public class PageConfig extends AbstractRouteConfig implements GuiConfig {
+
+	public volatile PageGuiType type = PageGuiType.grid;
 
 	public volatile Boolean mvc;
 
 	public volatile String view;
 
 	public volatile String zone;
+
+	public volatile String caption;
+
+	public volatile String header;
+
+	public volatile String footer;
+
+	public volatile String sql;
+
+	public volatile String uri;
+
+	public volatile int pageSize;
 
 	public volatile Map<String, PageGuiConfig> gui;
 
@@ -44,4 +58,43 @@ public class PageConfig extends AbstractRouteConfig {
 		this.sql = shortcut;
 	}
 
+	@Override
+	public PageGuiType type() {
+		return type;
+	}
+
+	@Override
+	public String caption() {
+		return caption;
+	}
+
+	@Override
+	public String header() {
+		return header;
+	}
+
+	@Override
+	public String footer() {
+		return footer;
+	}
+
+	@Override
+	public String sql() {
+		return sql;
+	}
+
+	@Override
+	public String uri() {
+		return uri;
+	}
+
+	@Override
+	public boolean single() {
+		return single;
+	}
+
+	@Override
+	public int pageSize() {
+		return pageSize;
+	}
 }

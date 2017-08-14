@@ -31,6 +31,7 @@ import org.rapidoid.http.Resp;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.render.Render;
 import org.rapidoid.u.U;
+import org.rapidoid.web.config.bean.GuiConfig;
 import org.rapidoid.web.config.bean.PageConfig;
 import org.rapidoid.web.config.bean.PageGuiConfig;
 
@@ -51,7 +52,7 @@ public class PageHandler extends GenericHandler {
 	public Object execute(Req req, Resp resp) {
 
 		if (U.notEmpty(page.sql)) {
-			return guiOf(page, sqlItems(page.sql));
+			return gui(page);
 		}
 
 		if (U.notEmpty(page.gui)) {
@@ -65,46 +66,73 @@ public class PageHandler extends GenericHandler {
 		Map<Object, Object> model = U.map();
 
 		for (Map.Entry<String, PageGuiConfig> e : gui.entrySet()) {
-			model.put(e.getKey(), gui(e.getValue()));
+
+			PageGuiConfig cfg = e.getValue();
+			Object data = fetchData(cfg);
+			Object widget = createWidget(cfg, data);
+
+			// put data in model (e.g. ${books_data})
+			model.put(e.getKey() + "_data", data);
+
+			// put widget in model (e.g. @{books})
+			model.put(e.getKey(), widget);
 		}
 
 		return model;
 	}
 
-	private Object gui(PageGuiConfig gui) {
-		Object item;
+	private Object fetchData(GuiConfig gui) {
+		if (gui.single()) {
+			return sqlItems(gui.sql()).single();
+		} else {
+			return sqlItems(gui.sql());
+		}
+	}
 
-		switch (gui.type) {
-			case grid:
-				item = grid(gui, sqlItems(gui.sql));
-				break;
+	private Object gui(GuiConfig gui) {
+		Object data = fetchData(gui);
+		return createWidget(gui, data);
+	}
 
-			default:
-				throw Err.notReady();
+	private Object createWidget(GuiConfig gui, Object data) {
+		Object item = createWidgetByType(gui, data);
+		item = wrapWidget(gui, item);
+		return item;
+	}
+
+	private Object wrapWidget(GuiConfig gui, Object item) {
+
+		if (U.notEmpty(gui.caption())) {
+			item = GUI.multi(GUI.titleBox(gui.caption()), item);
 		}
 
-		if (U.notEmpty(gui.caption)) {
-			item = GUI.multi(GUI.titleBox(gui.caption), item);
-		}
-
-		if (U.notEmpty(gui.header) || U.notEmpty(gui.footer)) {
-			item = GUI.panel(item).header(gui.header).footer(gui.footer);
+		if (U.notEmpty(gui.header()) || U.notEmpty(gui.footer())) {
+			item = GUI.panel(item).header(gui.header()).footer(gui.footer());
 		}
 
 		return item;
 	}
 
-	private Object guiOf(PageConfig gui, Results items) {
+	private Object createWidgetByType(GuiConfig gui, Object data) {
+		switch (gui.type()) {
 
-		if (gui.single) {
-			Object item = U.single(items);
-			return GUI.details(item);
+			case grid:
+
+				if (gui.single()) {
+					return GUI.details(data);
+
+				} else {
+					Grid grid = grid(gui, (Results) data);
+					if (gui.pageSize() > 0) grid.pageSize(gui.pageSize());
+					return grid;
+				}
+
+			default:
+				throw Err.notReady();
 		}
-
-		return grid(new PageGuiConfig(), items);
 	}
 
-	public Grid grid(final PageGuiConfig gui, Results items) {
+	public Grid grid(final GuiConfig gui, Results items) {
 		Req req = req();
 
 		Grid grid = GUI.grid(items);
@@ -118,11 +146,11 @@ public class PageHandler extends GenericHandler {
 		String pageSize = req.param("$pageSize", null);
 		if (pageSize != null) grid.pageSize(U.num(pageSize));
 
-		if (U.notEmpty(gui.uri)) {
+		if (U.notEmpty(gui.uri())) {
 			grid.toUri(new Mapper<Object, String>() {
 				@Override
 				public String map(Object item) throws Exception {
-					return Render.template(gui.uri).model(item);
+					return Render.template(gui.uri()).model(item);
 				}
 			});
 		}
