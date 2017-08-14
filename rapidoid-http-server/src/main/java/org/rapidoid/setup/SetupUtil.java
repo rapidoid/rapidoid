@@ -1,5 +1,6 @@
 package org.rapidoid.setup;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
@@ -26,7 +27,7 @@ import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.4.2")
-public class SetupUtil {
+public class SetupUtil extends RapidoidThing {
 
 	static void reloadAll() {
 		synchronized (Setup.class) {
