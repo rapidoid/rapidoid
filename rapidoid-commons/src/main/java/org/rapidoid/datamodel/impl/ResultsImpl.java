@@ -79,6 +79,11 @@ public class ResultsImpl<T> extends RapidoidThing implements Results<T> {
 	}
 
 	@Override
+	public boolean isLoaded() {
+		return data().getCount() >= 0;
+	}
+
+	@Override
 	public long count() {
 		long count = data().getCount();
 

@@ -43,4 +43,6 @@ public interface Results<T> extends Iterable<T> {
 
 	boolean isSingle();
 
+	boolean isLoaded();
+
 }
