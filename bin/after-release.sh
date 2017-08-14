@@ -23,14 +23,17 @@ initialize() {
     )
 }
 
+wait_enter() {
+    printf "\nPress ENTER to continue...\n\n"
+    read
+}
+
 confirm() {
     echo
     echo "OLD version: $OLD_VER"
     echo "NEW version: $NEW_VER"
     echo "SNAPSHOT version: $SNAPSHOT_VER"
-
-    printf "\nPress ENTER to continue...\n\n"
-    read
+    wait_enter
 }
 
 process_examples() {
@@ -55,6 +58,19 @@ process_docs() {
     git_commit "$git_dirty" "Bumped version"
 }
 
+process_docker() {
+    local git_dirty=`git status --porcelain`
+
+    sed -ri 's/^(ENV RAPIDOID_VERSION) .*/\1 '"${NEW_VER}"'/' Dockerfile
+    git add Dockerfile
+
+    git_commit "$git_dirty" "Rapidoid v${NEW_VER}"
+
+    echo "Will push..."
+    wait_enter
+    git push
+}
+
 git_commit() {
     local dirty=$1
     local msg=$2
@@ -66,16 +82,27 @@ git_commit() {
       git commit -m "$msg"
       printf "\n - Latest commit:\n\n"
       git log -n 1
+      echo
+      git diff HEAD~1 HEAD
     fi
 }
 
 do_processing() {
     printf "\n--- PROCESSING EXAMPLES...\n\n"
     process_examples || true
+    wait_enter
 
     printf "\n--- PROCESSING rapidoid.github.io...\n\n"
     cd ../rapidoid.github.io
     process_docs || true
+    wait_enter
+
+    printf "\n--- PROCESSING docker-rapidoid...\n\n"
+    cd ../docker-rapidoid
+    process_docker || true
+    wait_enter
+
+    echo DONE
 }
 
 initialize && confirm && do_processing
