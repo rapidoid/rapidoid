@@ -1,4 +1,6 @@
-=== Client-side Token as a session[[app-listing]]
+### Client-side Token as a session
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

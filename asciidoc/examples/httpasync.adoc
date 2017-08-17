@@ -1,4 +1,6 @@
-=== Asynchronous request processing[[app-listing]]
+### Asynchronous request processing
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

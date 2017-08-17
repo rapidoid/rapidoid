@@ -1,4 +1,6 @@
-=== RESTful services with JPA CRUD[[app-listing]]
+### RESTful services with JPA CRUD
+
+[[app-listing]]
 [source,java]
 .Book.java
 ----

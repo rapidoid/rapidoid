@@ -1,4 +1,6 @@
-=== More control over the HTTP server setup[[app-listing]]
+### More control over the HTTP server setup
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

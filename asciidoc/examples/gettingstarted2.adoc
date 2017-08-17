@@ -1,4 +1,6 @@
-=== Configuring Rapidoid[[app-listing]]
+### Configuring Rapidoid
+
+[[app-listing]]
 [source,java]
 .Book.java
 ----

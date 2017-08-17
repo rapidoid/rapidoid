@@ -1,4 +1,6 @@
-=== Request wrappers (interceptors)[[app-listing]]
+### Request wrappers (interceptors)
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

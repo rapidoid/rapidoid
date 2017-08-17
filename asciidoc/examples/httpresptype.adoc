@@ -1,4 +1,6 @@
-=== Manipulating the response content type[[app-listing]]
+### Manipulating the response content type
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

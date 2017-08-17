@@ -1,4 +1,6 @@
-=== Raw HTML pages[[app-listing]]
+### Raw HTML pages
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

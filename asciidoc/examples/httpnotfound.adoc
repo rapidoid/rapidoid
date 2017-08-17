@@ -1,4 +1,6 @@
-=== Returning a "Not Found" result[[app-listing]]
+### Returning a "Not Found" result
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

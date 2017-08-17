@@ -1,4 +1,6 @@
-=== RESTful service one-liner[[app-listing]]
+### RESTful service one-liner
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

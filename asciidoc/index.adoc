@@ -1,9 +1,9 @@
-= Rapidoid Documentation
+# Rapidoid Documentation
 Nikolche Mihajlovski <rapidoid@googlegroups.com>
 
 include::style.adoc[]
 
-This is a draft version of the new documentation for http://www.rapidoid.org[Rapidoid] (v5.4).
+This is the new documentation for http://www.rapidoid.org[Rapidoid] (v5.4).
 
 For older versions of Rapidoid, please see http://www.rapidoid.org/docs-5.3.html[v5.3] and http://www.rapidoid.org/documentation.html[the old docs].
 

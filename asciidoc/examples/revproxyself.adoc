@@ -1,4 +1,6 @@
-=== Reverse proxy matching by URI prefix[[app-listing]]
+### Reverse proxy matching by URI prefix
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

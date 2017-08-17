@@ -1,4 +1,6 @@
-=== Highlighting Text by Regular Expression Match[[app-listing]]
+### Highlighting Text by Regular Expression Match
+
+[[app-listing]]
 [source,java]
 .Highlighting.java
 ----

@@ -1,4 +1,6 @@
-=== Exception handlers[[app-listing]]
+### Exception handlers
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

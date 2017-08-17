@@ -1,4 +1,6 @@
-=== Stopping the server[[app-listing]]
+### Stopping the server
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

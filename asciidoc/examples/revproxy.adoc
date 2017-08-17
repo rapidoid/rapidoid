@@ -1,4 +1,6 @@
-=== Programmatic setup of reverse proxy and load balancer[[app-listing]]
+### Programmatic setup of reverse proxy and load balancer
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

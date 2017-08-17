@@ -1,4 +1,6 @@
-=== JPA Scaffolding[[app-listing]]
+### JPA Scaffolding
+
+[[app-listing]]
 [source,java]
 .Book.java
 ----

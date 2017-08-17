@@ -1,4 +1,6 @@
-=== Custom EntityManagerFactory provider[[app-listing]]
+### Custom EntityManagerFactory provider
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

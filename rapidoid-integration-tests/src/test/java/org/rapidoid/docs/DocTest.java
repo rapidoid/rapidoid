@@ -84,7 +84,7 @@ public abstract class DocTest extends IsolatedIntegrationTest {
 	private void generateAsciiDoc(Doc doc, String id, String asciidoc, Map<String, String> files) {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("=== " + doc.title());
+		sb.append(U.frmt("### %s\n\n", doc.title()));
 
 		files.forEach((name, content) -> {
 			String ext = Str.cutFromLast(name, ".");

@@ -1,4 +1,6 @@
-=== Hello RESTful services![[app-listing]]
+### Hello RESTful services!
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

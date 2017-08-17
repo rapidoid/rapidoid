@@ -1,4 +1,6 @@
-=== Serving static files from the default locations[[app-listing]]
+### Serving static files from the default locations
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

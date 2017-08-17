@@ -1,4 +1,6 @@
-=== Configuring HTTPS (TLS)[[app-listing]]
+### Configuring HTTPS (TLS)
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----
