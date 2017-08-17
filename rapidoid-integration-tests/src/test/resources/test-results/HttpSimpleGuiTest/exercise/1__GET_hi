@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 2165
+Content-Length: 3048
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +13,7 @@ Content-Length: 2165
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Rapidoid</title>
+<title>the head title</title>
 
 
 
@@ -59,19 +59,49 @@ Content-Length: 2165
             <button data-target="#collapsable" class="navbar-toggle collapsed" data-toggle="collapse" type="button">
                 <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">Rapidoid</a>
+            <a class="navbar-brand" href="/">Cool app!</a>
         </div>
 
 <div id="collapsable" class="collapse navbar-collapse">
 
 
 
+    <ul class="nav navbar-nav navbar-left">
+<li class="">
+    <a href="/" >Home</a>
+</li>
+
+    </ul>
+    <ul class="nav navbar-nav navbar-left">
+<li class="">
+    <a href="/portfolio" >Portfolio</a>
+</li>
+
+    </ul>
+    <ul class="nav navbar-nav navbar-left">
+<li class="dropdown">
+    <a href="#"  class="dropdown-toggle" data-toggle="dropdown">About<span class="caret"></span></a>
+    <ul role="menu" class="dropdown-menu">
+        <li><a href="/about">About Us</a></li>
+        <li><a href="/">About You</a></li>
+    </ul>
+</li>
+
+    </ul>
 
 
 
     
 
-    
+    <form action="/search" class="navbar-form navbar-right" method="GET">
+    <div class="form-group">
+        <input id="navbar-q" _h="_find" placeholder="Search" name="find" class="form-control" type="text">
+    </div>
+    <button class="btn btn-default" type="submit">
+        <span class="fa fa-search"></span>
+    </button>
+</form>
+
 
 </div>
 

@@ -580,7 +580,8 @@ public abstract class TestCommons {
 
 	protected String getTestNamespace() {
 		Doc doc = getTestAnnotation(Doc.class);
-		return (doc != null) ? getTestPackageName() : getTestName();
+		String namespace = (doc != null) ? getTestPackageName() : getTestName();
+		return namespace.replace('.', '/');
 	}
 
 	protected String getTestMethodName() {
