@@ -15,7 +15,7 @@ cp blank.adoc "${PKG}.adoc"
 
 sed -Ei "s/(blank|Blank)/$PKG/g" "${PKG}.adoc"
 
-printf '\n***\n\ninclude::'${PKG}'.adoc[]\n' >> topics.adoc
+printf '\ninclude::'${PKG}'.adoc[]\n' >> topics.adoc
 
 cd ..
 
