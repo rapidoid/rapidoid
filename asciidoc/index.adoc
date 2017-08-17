@@ -25,6 +25,8 @@ include::docker.adoc[]
 
 include::topics.adoc[]
 
+include::last-topics.adoc[]
+
 include::modules.adoc[]
 
 ## The HTTP API
