@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
 DISTRO=dist
 DISTRO_JS=$DISTRO/rapidoid.min.js
 DISTRO_CSS=$DISTRO/rapidoid.min.css

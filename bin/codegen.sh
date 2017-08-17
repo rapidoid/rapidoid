@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
 echo Copying On into Admin
 
 cp rapidoid-http-server/src/main/java/org/rapidoid/setup/On.java rapidoid-http-server/src/main/java/org/rapidoid/setup/Admin.java
