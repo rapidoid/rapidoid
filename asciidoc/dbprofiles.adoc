@@ -5,7 +5,9 @@ You can use it by activating the desired application profile.
 
 This built-in configuration also serves as a guide to configuring the database.
 
-### Using the embedded HSQL database by default (the default profile)
+### Embedded HSQL
+
+Using the embedded HSQL database by default (the default profile):
 
 [source,yml]
 .built-in-config-default.yml
@@ -13,7 +15,9 @@ This built-in configuration also serves as a guide to configuring the database.
 include::../rapidoid-commons/src/main/resources/built-in-config-default.yml[]
 ----
 
-### Using MySQL (the mysql profile)
+### MySQL
+
+Using MySQL with the `mysql` profile:
 
 [source,yml]
 .built-in-config-mysql.yml
@@ -21,7 +25,9 @@ include::../rapidoid-commons/src/main/resources/built-in-config-default.yml[]
 include::../rapidoid-commons/src/main/resources/built-in-config-mysql.yml[]
 ----
 
-### Using PostgreSQL (the postgres profile)
+### PostgreSQL
+
+Using PostgreSQL with the `postgres` profile:
 
 [source,yml]
 .built-in-config-postgres.yml
