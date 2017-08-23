@@ -398,6 +398,7 @@ org.rapidoid.http.FastHttpProtocol
 org.rapidoid.http.handler.AbstractDecoratingHttpHandler
 org.rapidoid.http.handler.AbstractHttpHandler
 org.rapidoid.http.handler.HandlerInvocation
+org.rapidoid.http.handler.HandlerResultProcessor
 org.rapidoid.http.handler.HttpHandler
 org.rapidoid.http.handler.lambda.FiveParamLambdaHandler
 org.rapidoid.http.handler.lambda.FourParamLambdaHandler
