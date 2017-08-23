@@ -594,6 +594,12 @@ public class Cls extends RapidoidThing {
 			case BOOLEAN_OBJ:
 				if (value instanceof Boolean) {
 					return (T) value;
+
+				} else if (value instanceof Number) {
+					Number num = (Number) value;
+					Object asBool = num.longValue() != 0L;
+					return (T) asBool;
+
 				} else {
 					throw U.rte("Cannot convert the value '%s' to boolean!", value);
 				}
