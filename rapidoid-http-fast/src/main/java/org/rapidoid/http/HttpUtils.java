@@ -24,7 +24,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.Serializable;
 import java.util.Map;
-import java.util.concurrent.Future;
 import java.util.regex.Pattern;
 
 /*
@@ -237,6 +236,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 	}
 
 	public static void resultToResponse(Req req, Object result) {
+
 		if (result instanceof Req) {
 			if (req != result) {
 				req.response().result("Unknown request instance was received as result!");
@@ -247,7 +247,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 				req.response().result("Unknown response instance was received as result!");
 			}
 
-		} else {
+		} else if (!(result instanceof HttpStatus)) {
 			req.response().result(result);
 		}
 	}
@@ -271,23 +271,6 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 	public static BasicConfig zone(Req req) {
 		Customization custom = Customization.of(req);
 		return zone(custom, req.zone());
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Object postprocessResult(Req req, Object result) {
-
-		if (result instanceof Req || result instanceof Resp || result instanceof HttpStatus) {
-			return result;
-
-		} else if (result == null) {
-			return null; // not found
-
-		} else if ((result instanceof Future<?>) || (result instanceof org.rapidoid.concurrent.Future<?>)) {
-			return req.async();
-
-		} else {
-			return result;
-		}
 	}
 
 	public static void setResponseTokenCookie(Resp resp, String token) {

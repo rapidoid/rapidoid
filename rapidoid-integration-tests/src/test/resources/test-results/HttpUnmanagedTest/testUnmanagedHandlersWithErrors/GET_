@@ -1,0 +1,8 @@
+HTTP/1.1 500 Internal Server Error
+Connection: keep-alive
+Server: Rapidoid
+Date: XXXXX GMT
+Content-Type: text/plain; charset=utf-8
+Content-Length: 22
+
+Internal server error!

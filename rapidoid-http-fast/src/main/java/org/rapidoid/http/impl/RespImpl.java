@@ -514,11 +514,11 @@ public class RespImpl extends RapidoidThing implements Resp {
 			HttpUtils.postProcessResponse(this); // the response might have been changed, so post-process again
 			return bytes;
 
-		} else if (result() != null) {
-			return serializeResponseContent();
-
 		} else if (body() != null) {
 			return Msc.toBytes(body());
+
+		} else if (result() != null) {
+			return serializeResponseContent();
 
 		} else {
 			throw U.rte("There's nothing to render!");

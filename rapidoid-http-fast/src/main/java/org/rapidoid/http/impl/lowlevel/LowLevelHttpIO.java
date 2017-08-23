@@ -16,6 +16,7 @@ import org.rapidoid.data.BufRange;
 import org.rapidoid.data.JSON;
 import org.rapidoid.http.*;
 import org.rapidoid.http.customize.Customization;
+import org.rapidoid.http.handler.HandlerResultProcessor;
 import org.rapidoid.http.impl.MaybeReq;
 import org.rapidoid.http.impl.ReqImpl;
 import org.rapidoid.job.Jobs;
@@ -118,9 +119,25 @@ class LowLevelHttpIO extends RapidoidThing {
 		}
 	}
 
-	void startResponse(Channel ctx, int code, boolean isKeepAlive, MediaType contentType) {
-		ctx.write(code == 200 ? HTTP_200_OK : HttpResponseCodes.get(code));
-		addDefaultHeaders(ctx, isKeepAlive, contentType);
+	void startResponse(Resp resp, Channel channel, int code, boolean isKeepAlive, MediaType contentType) {
+		channel.write(code == 200 ? HTTP_200_OK : HttpResponseCodes.get(code));
+
+		addDefaultHeaders(channel, isKeepAlive, contentType);
+
+		if (resp != null) {
+			if (U.notEmpty(resp.headers())) {
+				for (Map.Entry<String, String> e : resp.headers().entrySet()) {
+					addCustomHeader(channel, e.getKey().getBytes(), e.getValue().getBytes());
+				}
+			}
+
+			if (U.notEmpty(resp.cookies())) {
+				for (Map.Entry<String, String> e : resp.cookies().entrySet()) {
+					String cookie = e.getKey() + "=" + e.getValue();
+					addCustomHeader(channel, HttpHeaders.SET_COOKIE.getBytes(), cookie.getBytes());
+				}
+			}
+		}
 	}
 
 	private void addDefaultHeaders(Channel ctx, boolean isKeepAlive, MediaType contentType) {
@@ -157,8 +174,10 @@ class LowLevelHttpIO extends RapidoidThing {
 		ctx.write(CR_LF);
 	}
 
-	void writeResponse(final MaybeReq req, final Channel ctx, final boolean isKeepAlive, final int code, final MediaType contentTypeHeader, final byte[] content) {
-		startResponse(ctx, code, isKeepAlive, contentTypeHeader);
+	void writeResponse(final MaybeReq req, final Channel ctx, final boolean isKeepAlive,
+	                   final int code, final MediaType contentType, final byte[] content) {
+
+		startResponse(respOrNull(req), ctx, code, isKeepAlive, contentType);
 		writeContentLengthAndBody(req, ctx, content);
 	}
 
@@ -173,7 +192,8 @@ class LowLevelHttpIO extends RapidoidThing {
 			Resp resp = req.response().code(500).result(null);
 			Object result = Customization.of(req).errorHandler().handleError(req, resp, error);
 
-			result = HttpUtils.postprocessResult(req, result);
+			result = HandlerResultProcessor.INSTANCE.postProcessResult(req, result);
+
 			HttpUtils.resultToResponse(req, result);
 
 		} catch (Exception e) {
@@ -251,13 +271,55 @@ class LowLevelHttpIO extends RapidoidThing {
 		}
 	}
 
-	void writeAsJson(final MaybeReq req, final Channel ctx, final int code, final boolean isKeepAlive, final Object value) {
-		startResponse(ctx, code, isKeepAlive, MediaType.JSON);
+	private Resp respOrNull(MaybeReq maybeReq) {
+		ReqImpl req = (ReqImpl) maybeReq.getReqOrNull();
+
+		if (req != null && req.hasResponseAttached()) {
+			return req.response();
+		} else {
+			return null;
+		}
+	}
+
+	void writeHttpResp(final MaybeReq req, final Channel ctx, final boolean isKeepAlive,
+	                   int code, final MediaType contentType, final Object value) {
+
+		Object result = value;
+
+		Resp resp = respOrNull(req);
+
+		if (resp != null) {
+
+			if (resp.body() != null) {
+				byte[] bytes = Msc.toBytes(resp.body());
+				writeResponse(req, ctx, isKeepAlive, code, contentType, bytes);
+				return;
+
+			} else if (resp.result() != null) {
+				result = resp.result();
+			}
+		}
+
+		if (contentType == MediaType.JSON) {
+			writeJsonResponse(req, resp, ctx, isKeepAlive, code, contentType, result);
+
+		} else {
+			byte[] bytes = Msc.toBytes(result);
+			writeResponse(req, ctx, isKeepAlive, code, contentType, bytes);
+		}
+	}
+
+	private void writeJsonResponse(MaybeReq req, Resp resp, Channel ctx, boolean isKeepAlive,
+	                               int code, MediaType contentType, Object result) {
+
+		startResponse(resp, ctx, code, isKeepAlive, contentType);
 
 		RapidoidThreadLocals locals = Msc.locals();
-
 		ReusableWritable out = locals.jsonRenderingStream();
-		JSON.stringify(value, out);
+
+		// FIXME headers
+
+		JSON.stringify(result, out);
 
 		writeContentLengthHeader(ctx, out.size());
 		closeHeaders(req, ctx.output());
@@ -267,7 +329,7 @@ class LowLevelHttpIO extends RapidoidThing {
 
 	@SuppressWarnings("unused")
 	private void writeOnBufferAsJson(MaybeReq req, Channel ctx, int code, boolean isKeepAlive, Object value) {
-		startResponse(ctx, code, isKeepAlive, MediaType.JSON);
+		startResponse(respOrNull(req), ctx, code, isKeepAlive, MediaType.JSON);
 
 		Buf output = ctx.output();
 
@@ -368,7 +430,7 @@ class LowLevelHttpIO extends RapidoidThing {
 
 				boolean complete;
 
-				startResponse(channel, code, isKeepAlive, contentType);
+				startResponse(null, channel, code, isKeepAlive, contentType);
 
 				if (U.notEmpty(headers)) {
 					for (Map.Entry<String, String> e : headers.entrySet()) {

@@ -949,4 +949,8 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 			&& !hasToken();
 	}
 
+	public boolean hasResponseAttached() {
+		return response != null;
+	}
+
 }
