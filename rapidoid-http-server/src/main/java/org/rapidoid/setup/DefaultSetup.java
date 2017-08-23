@@ -36,6 +36,7 @@ import org.rapidoid.util.Msc;
 @Since("5.3.2")
 public class DefaultSetup extends RapidoidInitializer {
 
+	private static final String MAIN_ZONE = Msc.isPlatform() ? "platform" : "main";
 	private static final String ADMIN_ZONE = Msc.isPlatform() ? "platform" : "admin";
 
 	final Setup on;
@@ -50,7 +51,7 @@ public class DefaultSetup extends RapidoidInitializer {
 		HttpRoutesImpl appRoutes = new HttpRoutesImpl("main", appCustomization);
 		HttpRoutesImpl adminRoutes = onSameServer ? appRoutes : new HttpRoutesImpl("admin", adminCustomization);
 
-		on = new Setup("main", "main", IoC.defaultContext(), Setup.MAIN_CFG, appCustomization, appRoutes);
+		on = new Setup("main", MAIN_ZONE, IoC.defaultContext(), Setup.MAIN_CFG, appCustomization, appRoutes);
 		admin = new Setup("admin", ADMIN_ZONE, IoC.defaultContext(), Setup.ADMIN_CFG, adminCustomization, adminRoutes);
 
 		Setup.instances.add(on);
