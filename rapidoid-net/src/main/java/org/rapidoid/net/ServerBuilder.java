@@ -128,16 +128,18 @@ public class ServerBuilder extends RapidoidThing {
 		return bufSizeKB;
 	}
 
-	public void bufSizeKB(int bufSizeKB) {
+	public ServerBuilder bufSizeKB(int bufSizeKB) {
 		this.bufSizeKB = bufSizeKB;
+		return this;
 	}
 
 	public boolean noDelay() {
 		return noDelay;
 	}
 
-	public void noDelay(boolean noDelay) {
+	public ServerBuilder noDelay(boolean noDelay) {
 		this.noDelay = noDelay;
+		return this;
 	}
 
 	public boolean syncBufs() {
