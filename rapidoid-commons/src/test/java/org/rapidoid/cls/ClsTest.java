@@ -9,7 +9,10 @@ import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 
 import java.lang.reflect.Method;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -65,6 +68,24 @@ public class ClsTest extends AbstractCommonsTest {
 		isTrue(Cls.isRapidoidClass(TestCommons.class));
 
 		isFalse(Cls.isRapidoidClass(ClsTest.class));
+	}
+
+	@Test
+	public void testKind() {
+		eq(Cls.kindOf(String.class), TypeKind.STRING);
+
+		eq(Cls.kindOf(double.class), TypeKind.DOUBLE);
+		eq(Cls.kindOf(Double.class), TypeKind.DOUBLE_OBJ);
+
+		eq(Cls.kindOf(byte[].class), TypeKind.BYTE_ARR);
+
+		eq(Cls.kindOf(HashSet.class), TypeKind.SET);
+		eq(Cls.kindOf(HashMap.class), TypeKind.MAP);
+		eq(Cls.kindOf(ArrayList.class), TypeKind.LIST);
+
+		eq(Cls.kindOf(Date.class), TypeKind.DATE);
+		eq(Cls.kindOf(Time.class), TypeKind.DATE);
+		eq(Cls.kindOf(Timestamp.class), TypeKind.DATE);
 	}
 
 	@Test

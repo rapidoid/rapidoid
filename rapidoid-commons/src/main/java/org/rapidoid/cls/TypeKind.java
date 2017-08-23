@@ -129,6 +129,9 @@ public enum TypeKind implements TypeConstants {
 		} else if (Map.class.isAssignableFrom(type)) {
 			return MAP;
 
+		} else if (Date.class.isAssignableFrom(type)) {
+			return DATE;
+
 		} else {
 			TypeKind kind = KINDS.get(type);
 
