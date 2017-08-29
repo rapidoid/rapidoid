@@ -47,6 +47,8 @@ public class ServerBuilder extends RapidoidThing {
 
 	private volatile boolean syncBufs = Conf.NET.entry("syncBufs").or(true);
 
+	private volatile boolean blockingAccept = Conf.NET.entry("blockingAccept").or(false);
+
 	private volatile org.rapidoid.net.Protocol protocol = null;
 
 	private volatile Class<? extends org.rapidoid.net.impl.DefaultExchange<?>> exchangeClass = null;
@@ -151,6 +153,13 @@ public class ServerBuilder extends RapidoidThing {
 		return this;
 	}
 
+	public boolean blockingAccept() { return blockingAccept; }
+
+	public ServerBuilder blockingAccept(boolean blockingAccept) {
+		this.blockingAccept = blockingAccept;
+		return this;
+	}
+
 	public boolean tls() {
 		return tls;
 	}
@@ -224,7 +233,7 @@ public class ServerBuilder extends RapidoidThing {
 		SSLContext tlsCtx = tls ? tlsContext : null;
 
 		return new RapidoidServerLoop(protocol, exchangeClass, helperClass, address, port,
-			workers, bufSizeKB, noDelay, syncBufs, tlsCtx);
+			workers, bufSizeKB, noDelay, syncBufs, blockingAccept, tlsCtx);
 	}
 
 }

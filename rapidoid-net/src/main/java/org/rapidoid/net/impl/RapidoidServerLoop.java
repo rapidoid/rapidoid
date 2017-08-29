@@ -77,7 +77,8 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 
 	public RapidoidServerLoop(Protocol protocol, Class<? extends DefaultExchange<?>> exchangeClass,
 	                          Class<? extends RapidoidHelper> helperClass, String address, int port,
-	                          int workers, int bufSizeKB, boolean noDelay, boolean syncBufs, SSLContext sslContext) {
+	                          int workers, int bufSizeKB, boolean noDelay, boolean syncBufs, boolean blockingAccept,
+							  SSLContext sslContext) {
 		super("server");
 
 		this.protocol = protocol;
@@ -88,6 +89,7 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 		this.bufSizeKB = bufSizeKB;
 		this.noDelay = noDelay;
 		this.syncBufs = syncBufs;
+		this.blockingAccept = blockingAccept;
 		this.helperClass = U.or(helperClass, RapidoidHelper.class);
 		this.sslContext = sslContext;
 
