@@ -153,7 +153,9 @@ public class ServerBuilder extends RapidoidThing {
 		return this;
 	}
 
-	public boolean blockingAccept() { return blockingAccept; }
+	public boolean blockingAccept() {
+		return blockingAccept;
+	}
 
 	public ServerBuilder blockingAccept(boolean blockingAccept) {
 		this.blockingAccept = blockingAccept;

@@ -4,7 +4,6 @@ import org.rapidoid.activity.RapidoidThread;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Rnd;
-import org.rapidoid.config.ConfigUtil;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.Server;
@@ -53,9 +52,9 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 
 	private final int port;
 
-	private int workers = ConfigUtil.cpus();
+	private final int workers;
 
-	private boolean blockingAccept = false;
+	private final boolean blockingAccept;
 
 	protected final Protocol protocol;
 
@@ -77,8 +76,8 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 
 	public RapidoidServerLoop(Protocol protocol, Class<? extends DefaultExchange<?>> exchangeClass,
 	                          Class<? extends RapidoidHelper> helperClass, String address, int port,
-	                          int workers, int bufSizeKB, boolean noDelay, boolean syncBufs, boolean blockingAccept,
-							  SSLContext sslContext) {
+	                          int workers, int bufSizeKB, boolean noDelay, boolean syncBufs,
+	                          boolean blockingAccept, SSLContext sslContext) {
 		super("server");
 
 		this.protocol = protocol;
