@@ -15,10 +15,10 @@
 [PLATFORM] INFO | Initialized environment | mode = PRODUCTION | profiles = [production, platform]
 [PLATFORM] INFO | Setting application JAR | appJar = /app/app.jar | exists = false
 [PLATFORM] INFO | Loaded configuration | namespace = rapidoid | files = [built-in-config.yml, built-in-config-platform.yml, /app/rapidoid.yml]
+[PLATFORM] INFO | GET /rapidoid/status                           | setup = main | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
 [PLATFORM] INFO | Starting server | address = 0.0.0.0 | port = 4444 | I/O workers = 4 | sync = true | accept = non-blocking
 [PLATFORM] INFO | Server has started | setup = main | home = http://localhost:4444
 [PLATFORM] INFO | Static resources will be served from the following locations | setup = main | locations = [static, default/static]
-[PLATFORM] INFO | GET /rapidoid/status                           | setup = main | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
 [PLATFORM] INFO | Deploying pre-existing application | id = app
 [PLATFORM] INFO | Starting process | command = [java, -cp, /opt/rapidoid.jar, org.rapidoid.platform.DefaultApp, root=/app]
 [PLATFORM] INFO | ---------------------------------------------------
@@ -32,6 +32,7 @@ INFO | org.rapidoid.env.Environment | No production/dev/test mode was configured
 INFO | org.rapidoid.env.Environment | Automatically activating mode-specific profile | profile = production
 INFO | org.rapidoid.env.Environment | Initialized environment | mode = PRODUCTION | profiles = [default, production]
 INFO | org.rapidoid.config.ConfigImpl | Loaded configuration | namespace = config | files = [built-in-config.yml, built-in-config-default.yml]
+INFO | org.rapidoid.setup.App | The application has started!
 INFO | org.rapidoid.net.impl.RapidoidServerLoop | Starting server | address = 0.0.0.0 | port = 8080 | I/O workers = 4 | sync = true | accept = non-blocking
 INFO | org.rapidoid.setup.Setup | Server has started | setup = main | home = http://localhost:8080
 INFO | org.rapidoid.setup.Setup | Static resources will be served from the following locations | setup = main | locations = [static, default/static]

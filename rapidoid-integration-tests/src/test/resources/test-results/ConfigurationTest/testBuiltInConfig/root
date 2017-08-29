@@ -113,7 +113,8 @@
     "port" : 8080,
     "bufSizeKB" : 256,
     "noDelay" : false,
-    "syncBufs" : true
+    "syncBufs" : true,
+    "blockingAccept" : false
   },
   "http" : {
     "timeout" : 30000,
