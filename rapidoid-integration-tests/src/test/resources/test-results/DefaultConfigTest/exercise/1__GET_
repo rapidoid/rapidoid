@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 19333
+Content-Length: 19456
 
 <!DOCTYPE html>
 <html lang="en">
@@ -619,6 +619,12 @@ Content-Length: 19333
         <td>syncBufs</td>
         <td>
           <i class="fa fa-check-square-o"></i>
+        </td>
+      </tr>
+      <tr>
+        <td>blockingAccept</td>
+        <td>
+          <i class="fa fa-square-o"></i>
         </td>
       </tr>
     </table>
