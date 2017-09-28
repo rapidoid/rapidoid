@@ -37,3 +37,5 @@ include::proxy.adoc[]
 include::https.adoc[]
 
 include::httpchunked.adoc[]
+
+include::httpcustomauth.adoc[]

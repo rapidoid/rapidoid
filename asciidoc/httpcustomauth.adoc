@@ -1,0 +1,3 @@
+## Custom authentication setup
+
+include::examples/httpcustomauth.adoc[]
