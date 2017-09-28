@@ -30,3 +30,5 @@ WARNING: The built-in `GET /_logout` handler will be changed to `POST /_logout` 
 
 The `Admin.*` API is a mirror of the `On` API, but for the Admin setup.
 The `administrator` role is configured by default for all routes of this API.
+
+include::examples/httpcustomauth.adoc[]
