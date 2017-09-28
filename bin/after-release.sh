@@ -71,6 +71,10 @@ process_docker() {
     git push
 }
 
+process_official_images() {
+    echo TODO!
+}
+
 git_commit() {
     local dirty=$1
     local msg=$2
@@ -100,6 +104,12 @@ do_processing() {
     printf "\n--- PROCESSING docker-rapidoid...\n\n"
     cd ../docker-rapidoid
     process_docker || true
+    wait_enter
+
+    printf "\n--- PROCESSING docker-official-images...\n\n"
+    cd ../docker-official-images/
+    git pull --rebase upstream master
+    process_official_images
     wait_enter
 
     echo DONE
