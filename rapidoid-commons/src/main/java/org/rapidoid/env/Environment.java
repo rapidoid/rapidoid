@@ -101,7 +101,7 @@ public class Environment extends RapidoidInitializer {
 			profilesView = Collections.unmodifiableSet(profiles);
 		}
 
-		boolean production = Msc.isPlatform() || Env.hasInitial("mode", "production") || profiles.contains("production");
+		boolean production = Env.hasInitial("mode", "production") || profiles.contains("production");
 		boolean test = Env.hasInitial("mode", "test") || profiles.contains("test");
 		boolean dev = Env.hasInitial("mode", "dev") || profiles.contains("dev");
 

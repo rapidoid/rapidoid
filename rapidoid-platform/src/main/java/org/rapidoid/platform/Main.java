@@ -39,6 +39,7 @@ public class Main extends RapidoidThing {
 	};
 
 	private static final String[] DEV_CMD_ARGS = {
+		"mode=dev",
 		"app.services=center",
 		"users.admin.password=admin",
 		"secret=NOT-A-REAL-SECRET"
