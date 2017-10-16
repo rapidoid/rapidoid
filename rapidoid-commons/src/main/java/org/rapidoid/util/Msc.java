@@ -83,6 +83,8 @@ import java.util.zip.ZipInputStream;
 @Since("2.0.0")
 public class Msc extends RapidoidThing {
 
+	public static final String APP_JAR = "/app/app.jar";
+
 	private static final String SPECIAL_ARG_REGEX = "\\s*(.*?)\\s*(->|<-|:=|<=|=>|==)\\s*(.*?)\\s*";
 
 	public static final String OS_NAME = System.getProperty("os.name");
@@ -1054,7 +1056,7 @@ public class Msc extends RapidoidThing {
 		return arguments;
 	}
 
-	private static boolean isSpecialArg(String arg) {
+	public static boolean isSpecialArg(String arg) {
 		return arg.matches(SPECIAL_ARG_REGEX);
 	}
 
@@ -1353,7 +1355,7 @@ public class Msc extends RapidoidThing {
 
 	public static String mainAppJar() {
 		U.must(isPlatform());
-		return "/app/app.jar";
+		return APP_JAR;
 	}
 
 	public static int toInt(long value) {

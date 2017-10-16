@@ -27,6 +27,7 @@ sudo docker run \
     -v $(pwd)/app3:/app \
     --link mysql:mysql \
     rapidoid/rapidoid:$TAG \
+    platform \
     app.services=welcome \
     admin.services=center \
     app.path=com.example \

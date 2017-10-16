@@ -32,6 +32,7 @@ public class DefaultApp extends RapidoidThing {
 
 	public static void main(String[] args) {
 		App.run(args);
+		App.boot().services();
 		On.setup().activate();
 	}
 

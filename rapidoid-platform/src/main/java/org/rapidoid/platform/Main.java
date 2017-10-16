@@ -23,67 +23,88 @@ package org.rapidoid.platform;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Arr;
+import org.rapidoid.commons.RapidoidInfo;
+import org.rapidoid.config.ConfigHelp;
+import org.rapidoid.io.IO;
+import org.rapidoid.log.Log;
+import org.rapidoid.performance.BenchmarkCenter;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
-
-import java.util.Collections;
-import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class Main extends RapidoidThing {
 
-	private static final String[] DEFAULT_ARGS = {
-		"admin.services=center"
-	};
-
-	private static final String[] DEV_CMD_ARGS = {
-		"mode=dev",
-		"app.services=center",
-		"users.admin.password=admin",
-		"secret=NOT-A-REAL-SECRET"
-	};
-
 	public static void main(String[] args) {
-
-		boolean noArgs = U.isEmpty(args);
-		List<String> opts = U.list();
-
-		if (noArgs) {
-			defaultSetup(opts);
-
-		} else if (args[0].equals("dev")) {
-			devSetup(args, opts);
+		// just print basic info if no args were specified
+		if (U.isEmpty(args)) {
+			printWelcome();
 
 		} else {
-			Collections.addAll(opts, args);
-		}
+			ConfigHelp.processHelp(args);
 
-		run(opts, noArgs);
-	}
-
-	private static void defaultSetup(List<String> opts) {
-		Collections.addAll(opts, DEFAULT_ARGS);
-		optionalAppSetup(opts);
-	}
-
-	private static void devSetup(String[] args, List<String> opts) {
-		Collections.addAll(opts, DEV_CMD_ARGS);
-		optionalAppSetup(opts);
-		Collections.addAll(opts, Arr.sub(args, 1, args.length));
-	}
-
-	private static void optionalAppSetup(List<String> opts) {
-		if (Msc.hasMainApp()) {
-			opts.add("/ -> localhost:8080");
-		} else {
-			opts.add("app.services=welcome");
+			runMain(args);
 		}
 	}
 
-	private static void run(List<String> opts, boolean defaults) {
-		Platform.start(U.arrayOf(String.class, opts), defaults);
+	private static void runMain(String[] cliArgs) {
+		CmdArgs args = CmdArgs.from(U.list(cliArgs));
+
+		if (args.command == null) {
+			Platform.start(args);
+
+		} else {
+			interpretCommand(args);
+		}
+	}
+
+	private static void interpretCommand(CmdArgs args) {
+		switch (args.command) {
+			case "mvn":
+				// run Maven
+				int result = MavenUtil.build("/app", "/data/.m2/repository", args.args);
+				System.exit(result);
+				break;
+
+			case "password":
+				// generate new password
+				PasswordHashTool.generatePasswordHash(args);
+				System.exit(0);
+				break;
+
+			case "installer":
+				// interpret the "installer" command
+				U.must(U.isEmpty(args.args), "No arguments are expected for the 'installer' command!");
+				U.print(IO.load("install.sh"));
+				System.exit(0);
+				break;
+
+			case "benchmark":
+				// benchmark - only available in "dev" builds
+				BenchmarkCenter.run();
+				System.exit(0);
+				break;
+
+			case "platform":
+				// start the platform
+				Platform.start(args);
+				break;
+
+			default:
+				fail("Unknown command: " + args.command);
+		}
+	}
+
+	static void fail(String msg) {
+		Log.error(msg);
+		System.exit(1);
+	}
+
+	private static void printWelcome() {
+		U.print(RapidoidInfo.nameAndInfo() + "\n");
+
+		U.print(IO.load("welcome.txt"));
+
+		System.exit(0);
 	}
 
 }

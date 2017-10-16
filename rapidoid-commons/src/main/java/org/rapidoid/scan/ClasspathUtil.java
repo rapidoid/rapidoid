@@ -239,7 +239,11 @@ public class ClasspathUtil extends RapidoidInitializer {
 	public static void appJar(String appJar) {
 		if (U.neq(ClasspathUtil.appJar, appJar)) {
 			ClasspathUtil.appJar = appJar;
-			Log.info("Setting application JAR", "!appJar", appJar, "exists", new File(appJar).exists());
+			boolean exists = new File(appJar).exists();
+
+			if (exists) {
+				Log.info("Found application JAR", "!file", appJar);
+			}
 		}
 	}
 

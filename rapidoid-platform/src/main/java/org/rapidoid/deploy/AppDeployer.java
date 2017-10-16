@@ -49,7 +49,7 @@ public class AppDeployer extends RapidoidThing {
 
 	private static void runIfExists(String appId, String appJar) {
 		if (Msc.hasMainApp()) {
-			Log.info("Deploying pre-existing application", "id", appId);
+			Log.info("Deploying application", "id", appId);
 
 			runAppJar(appId);
 		}

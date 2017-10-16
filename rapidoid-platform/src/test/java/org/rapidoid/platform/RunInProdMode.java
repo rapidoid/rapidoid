@@ -25,11 +25,13 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.3.0")
-public class PlatformInDevMode extends RapidoidThing {
+@Since("5.4.5")
+public class RunInProdMode extends RapidoidThing {
+
+	private static final String[] ARGS = {"mode=production", "root=/app"};
 
 	public static void main(String[] args) {
-		Main.main(new String[]{"dev"});
+		Main.main(ARGS);
 	}
 
 }

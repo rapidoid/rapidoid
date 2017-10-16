@@ -43,3 +43,5 @@ IFS=$'\n\t'
 
 ./simple-test-bg.sh app-service-welcome app.services=welcome
 ./simple-test-bg.sh admin-service-welcome admin.services=welcome
+
+./cleanup.sh

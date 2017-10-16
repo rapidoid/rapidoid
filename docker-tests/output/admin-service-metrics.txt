@@ -5,21 +5,16 @@
 |_| \_\__,_| .__/|_|\__,_|\___/|_|\__,_|
            |_|
 
-[PLATFORM] INFO | Command-line arguments:
-[PLATFORM] INFO |   admin.services=metrics
-[PLATFORM] INFO | 
-[PLATFORM] INFO | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
-[PLATFORM] INFO | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
-[PLATFORM] INFO | Setting application root | root = /app | content = []
-[PLATFORM] INFO | Automatically activating mode-specific profile | profile = production
-[PLATFORM] INFO | Initialized environment | mode = PRODUCTION | profiles = [production, platform]
-[PLATFORM] INFO | Setting application JAR | appJar = /app/app.jar | exists = false
-[PLATFORM] INFO | Loaded configuration | namespace = rapidoid | files = [built-in-config.yml, built-in-config-platform.yml]
-[PLATFORM] INFO | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
-[PLATFORM] INFO | Server has started | setup = admin | home = http://localhost:8888
-[PLATFORM] INFO | Static resources will be served from the following locations | setup = admin | locations = [static, default/static]
-[PLATFORM] INFO | GET,POST /rapidoid/metrics                     | setup = main | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET /rapidoid/graphs/{id:.*}                   | setup = main | roles = [administrator] | transaction = NONE | mvc = false | cacheTTL = 0
-[PLATFORM] INFO | ---------------------------------------------------
-[PLATFORM] INFO | ADMIN CREDENTIALS: username = admin, password = <?>
-[PLATFORM] INFO | ---------------------------------------------------
+INFO | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
+INFO | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
+INFO | Setting application root | root = /app | items = 0
+INFO | No production/dev/test mode was configured, inferring mode | mode = PRODUCTION
+INFO | Automatically activating mode-specific profile | profile = production
+INFO | Initialized environment | mode = PRODUCTION | profiles = [production, platform]
+INFO | Setting application JAR | appJar = /app/app.jar | exists = false
+INFO | Loaded configuration | namespace = rapidoid | files = [built-in-config.yml, built-in-config-platform.yml]
+INFO | GET,POST /rapidoid/metrics                     | setup = main | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+INFO | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
+INFO | Server has started | setup = admin | home = http://localhost:8888
+INFO | Static resources will be served from the following locations | setup = admin | locations = [static, default/static]
+INFO | GET /rapidoid/graphs/{id:.*}                   | setup = main | roles = [administrator] | transaction = NONE | mvc = false | cacheTTL = 0
