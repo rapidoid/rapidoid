@@ -667,7 +667,6 @@ org.rapidoid.performance.WrkSetup
 org.rapidoid.platform.CmdArgs
 org.rapidoid.platform.DefaultApp
 org.rapidoid.platform.Main
-org.rapidoid.platform.MavenUtil
 org.rapidoid.platform.PasswordHashTool
 org.rapidoid.platform.Platform
 org.rapidoid.plugin.app.AbstractRapidoidMojo

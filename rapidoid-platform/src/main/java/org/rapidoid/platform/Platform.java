@@ -82,7 +82,6 @@ public class Platform extends RapidoidThing {
 		for (String appRef : cmdArgs.refs) {
 			new File(MscOpts.appsPath()).mkdirs();
 			AppDownloader.download(appRef, MscOpts.appsPath());
-			MavenUtil.findAndBuildAndDeploy(MscOpts.appsPath());
 		}
 	}
 

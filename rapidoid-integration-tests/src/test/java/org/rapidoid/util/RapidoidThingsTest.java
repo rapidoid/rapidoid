@@ -23,7 +23,6 @@ package org.rapidoid.util;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import org.apache.commons.logging.LogFactory;
-import org.apache.maven.plugin.AbstractMojo;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.junit.Test;
 import org.rapidoid.RapidoidThing;
@@ -58,7 +57,6 @@ public class RapidoidThingsTest {
 					|| HibernatePersistenceProvider.class.isAssignableFrom(clazz)
 					|| OutputStream.class.isAssignableFrom(clazz)
 					|| Map.class.isAssignableFrom(clazz)
-					|| AbstractMojo.class.isAssignableFrom(clazz)
 					|| JsonSerializer.class.isAssignableFrom(clazz)
 					|| JsonDeserializer.class.isAssignableFrom(clazz)
 					|| LogFactory.class.isAssignableFrom(clazz)

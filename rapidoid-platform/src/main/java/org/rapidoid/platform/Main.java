@@ -59,11 +59,6 @@ public class Main extends RapidoidThing {
 
 	private static void interpretCommand(CmdArgs args) {
 		switch (args.command) {
-			case "mvn":
-				// run Maven
-				int result = MavenUtil.build("/app", "/data/.m2/repository", args.args);
-				System.exit(result);
-				break;
 
 			case "password":
 				// generate new password
