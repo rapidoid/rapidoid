@@ -72,7 +72,33 @@ process_docker() {
 }
 
 process_official_images() {
-    echo TODO!
+    local git_dirty=`git status --porcelain`
+
+    printf "Rebasing on upstream...\n\n"
+    git pull --rebase upstream master
+
+    readonly OLD_VER_MID=${OLD_VER:0:3}
+    readonly NEW_VER_MID=${NEW_VER:0:3}
+
+    printf "\nMinor releases: '$OLD_VER_MID' and '$NEW_VER_MID'\n\n"
+
+    echo
+    read -p "Enter COMMIT ID: " commit_id
+    echo
+
+    sed -i "s/${OLD_VER}/${NEW_VER}/g" library/rapidoid
+    sed -i "s/${OLD_VER_MID}/${NEW_VER_MID}/g" library/rapidoid
+    sed -ri "s/GitCommit:\s\w+/GitCommit: ${commit_id}/g" library/rapidoid
+
+    git diff
+    printf "\nWill commit and push...\n\n"
+    wait_enter
+
+    git add library/rapidoid
+    git_commit "$git_dirty" "Rapidoid v${NEW_VER}"
+    git push
+
+    echo === VISIT https://github.com/rapidoid/docker-official-images ===
 }
 
 git_commit() {
@@ -108,7 +134,6 @@ do_processing() {
 
     printf "\n--- PROCESSING docker-official-images...\n\n"
     cd ../docker-official-images/
-    git pull --rebase upstream master
     process_official_images
     wait_enter
 
