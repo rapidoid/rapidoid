@@ -23,14 +23,17 @@ package org.rapidoid.platform;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
 import org.rapidoid.deploy.AppDeployer;
 import org.rapidoid.deploy.AppDownloader;
+import org.rapidoid.env.Env;
 import org.rapidoid.log.Log;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.PreApp;
 import org.rapidoid.setup.Setup;
 import org.rapidoid.u.U;
+import org.rapidoid.util.AnsiColor;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.MscOpts;
 
@@ -47,10 +50,20 @@ public class Platform extends RapidoidThing {
 
 		startPlatformAndProcessOptions(options);
 
+		printAdminCenterURL();
+
 		AppDeployer.bootstrap();
 
 		if (!Setup.isAnyRunning()) {
 			On.setup().activate();
+		}
+	}
+
+	private static void printAdminCenterURL() {
+		if (Env.dev()) {
+			long port = Conf.RAPIDOID.entry("port").num().get();
+			String url = "http://localhost:" + port + "/rapidoid";
+			Msc.logSection(AnsiColor.lightBlue("Rapidoid Admin Center: ") + url);
 		}
 	}
 
