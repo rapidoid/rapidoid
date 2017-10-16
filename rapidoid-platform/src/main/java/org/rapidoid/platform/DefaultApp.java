@@ -23,14 +23,28 @@ package org.rapidoid.platform;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.log.Log;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
 public class DefaultApp extends RapidoidThing {
 
 	public static void main(String[] args) {
+		try {
+			run(args);
+
+		} catch (Exception e) {
+			String err = U.or(Msc.errorMsg(e), "Failed to run the application!");
+			Log.error(err);
+		}
+	}
+
+	public static void run(String[] args) {
+		Log.options().prefix("[APP] ");
 		App.run(args);
 		App.boot().services();
 		On.setup().activate();
