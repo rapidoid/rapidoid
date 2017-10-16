@@ -446,6 +446,9 @@ public class ProcessHandle extends AbstractManageable {
 	}
 
 	public synchronized ProcessHandle terminate() {
+		// keep reference to the handle, used by the crawler internally
+		ALL.remove(this);
+
 		destroy();
 
 		long t = U.time();
@@ -468,6 +471,7 @@ public class ProcessHandle extends AbstractManageable {
 		}
 
 		Log.info("Terminated process", "id", id());
+
 		return this;
 	}
 
