@@ -3,6 +3,7 @@ package org.rapidoid.deploy;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.env.Env;
 import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
 import org.rapidoid.process.Proc;
@@ -59,7 +60,14 @@ public class AppDeployer extends RapidoidThing {
 		String appJar = Msc.mainAppJar();
 
 		String[] appJarCmd = {"java", "-jar", appJar, "root=/app"};
-		String[] defaultAppCmd = {"java", "-cp", CLASSPATH, "org.rapidoid.platform.DefaultApp", "root=/app"};
+
+		String[] defaultAppCmd = {
+			"java",
+			"-cp", CLASSPATH,
+			"org.rapidoid.platform.DefaultApp",
+			"root=/app",
+			"mode=" + Env.mode().name().toLowerCase()
+		};
 
 		String[] cmd = new File(appJar).exists() ? appJarCmd : defaultAppCmd;
 
