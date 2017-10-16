@@ -1350,7 +1350,11 @@ public class Msc extends RapidoidThing {
 
 	public static boolean isAppResource(String filename) {
 		String name = new File(filename).getName();
-		return !name.startsWith(".") && !name.endsWith("~") && !name.endsWith(".staged");
+		return !name.startsWith(".")
+			&& !filename.contains("/.")
+			&& !name.endsWith("~")
+			&& !filename.contains("/~")
+			&& !name.endsWith(".staged");
 	}
 
 	public static String mainAppJar() {
