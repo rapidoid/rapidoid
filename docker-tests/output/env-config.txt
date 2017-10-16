@@ -19,19 +19,18 @@ INFO | Server has started | setup = main | home = http://localhost:9999
 INFO | Static resources will be served from the following locations | setup = main | locations = [static, default/static]
 INFO | GET,POST /rapidoid                             | setup = main | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
 INFO | Deploying application | id = app
-INFO | Starting process | command = [java, -cp, /opt/rapidoid.jar, org.rapidoid.platform.DefaultApp, root=/app]
-INFO | org.rapidoid.config.RapidoidInitializer | Starting Rapidoid v<?>, built on <?> [Uniform output]
-INFO | org.rapidoid.config.RapidoidInitializer | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
-INFO | org.rapidoid.env.Env | Setting application root | root = /app | items = 2
-INFO | org.rapidoid.config.ConfigBase | Changing configuration filename base | from = config | to = my-config
-INFO | org.rapidoid.env.Environment | No profiles were specified, activating 'default' profile
-INFO | org.rapidoid.env.Environment | No production/dev/test mode was configured, inferring mode | mode = PRODUCTION
-INFO | org.rapidoid.env.Environment | Automatically activating mode-specific profile | profile = production
-INFO | org.rapidoid.env.Environment | Initialized environment | mode = PRODUCTION | profiles = [default, production]
-INFO | org.rapidoid.config.ConfigImpl | Loaded configuration | namespace = my-config | files = [built-in-config.yml, built-in-config-default.yml, /app/my-config.yaml]
-INFO | org.rapidoid.setup.App | The application has started!
-INFO | org.rapidoid.http.impl.HttpRoutesImpl | GET /_status                                   | setup = main | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
-INFO | org.rapidoid.net.impl.RapidoidServerLoop | Starting server | address = 0.0.0.0 | port = 5555 | I/O workers = 4 | sync = true | accept = non-blocking
-INFO | org.rapidoid.setup.Setup | Server has started | setup = main | home = http://localhost:5555
-INFO | org.rapidoid.setup.Setup | Static resources will be served from the following locations | setup = main | locations = [static, default/static]
-INFO | org.rapidoid.http.impl.HttpRoutesImpl | GET,POST /_                                    | setup = main | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
+INFO | Starting process | command = [java, -cp, /opt/rapidoid.jar, org.rapidoid.platform.DefaultApp, root=/app, mode=production]
+[APP] INFO | org.rapidoid.config.RapidoidInitializer | Starting Rapidoid v<?>, built on <?> [Uniform output]
+[APP] INFO | org.rapidoid.config.RapidoidInitializer | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
+[APP] INFO | org.rapidoid.env.Env | Setting application root | root = /app | items = 2
+[APP] INFO | org.rapidoid.config.ConfigBase | Changing configuration filename base | from = config | to = my-config
+[APP] INFO | org.rapidoid.env.Environment | No profiles were specified, activating 'default' profile
+[APP] INFO | org.rapidoid.env.Environment | Automatically activating mode-specific profile | profile = production
+[APP] INFO | org.rapidoid.env.Environment | Initialized environment | mode = PRODUCTION | profiles = [default, production]
+[APP] INFO | org.rapidoid.config.ConfigImpl | Loaded configuration | namespace = my-config | files = [built-in-config.yml, built-in-config-default.yml, /app/my-config.yaml]
+[APP] INFO | org.rapidoid.setup.App | The application has started!
+[APP] INFO | org.rapidoid.http.impl.HttpRoutesImpl | GET /_status                                   | setup = main | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
+[APP] INFO | org.rapidoid.net.impl.RapidoidServerLoop | Starting server | address = 0.0.0.0 | port = 5555 | I/O workers = 4 | sync = true | accept = non-blocking
+[APP] INFO | org.rapidoid.setup.Setup | Server has started | setup = main | home = http://localhost:5555
+[APP] INFO | org.rapidoid.setup.Setup | Static resources will be served from the following locations | setup = main | locations = [static, default/static]
+[APP] INFO | org.rapidoid.http.impl.HttpRoutesImpl | GET,POST /_                                    | setup = main | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
