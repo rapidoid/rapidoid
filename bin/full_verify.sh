@@ -12,3 +12,6 @@ mvn clean install
 
 cd docker-tests
 ./retest.sh
+
+cd ../examples
+mvn clean install
