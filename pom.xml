@@ -108,7 +108,6 @@
 		<module>rapidoid-benchmark</module>
 		<module>rapidoid-integration-tests</module>
 		<module>rapidoid-platform</module>
-		<module>examples</module>
 		<module>app-maven-plugin</module>
 	</modules>
 
