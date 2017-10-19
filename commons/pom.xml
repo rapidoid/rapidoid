@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -8,16 +10,13 @@
 		<version>5.4.6-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>examples</artifactId>
+	<artifactId>commons</artifactId>
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>getting-started</module>
-		<module>guice-integration</module>
-		<module>hello-world</module>
-		<module>rest-api</module>
-		<module>yaml-sql</module>
-		<!--...-->
+		<module>rapidoid-essentials</module>
+		<module>rapidoid-commons</module>
+		<module>rapidoid-test-commons</module>
 	</modules>
 
 </project>
