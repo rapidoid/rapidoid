@@ -12,7 +12,7 @@ Using the embedded HSQL database by default (the default profile):
 [source,yml]
 .built-in-config-default.yml
 ----
-include::../rapidoid-commons/src/main/resources/built-in-config-default.yml[]
+include::../commons/rapidoid-commons/src/main/resources/built-in-config-default.yml[]
 ----
 
 ### MySQL
@@ -22,7 +22,7 @@ Using MySQL with the `mysql` profile:
 [source,yml]
 .built-in-config-mysql.yml
 ----
-include::../rapidoid-commons/src/main/resources/built-in-config-mysql.yml[]
+include::../commons/rapidoid-commons/src/main/resources/built-in-config-mysql.yml[]
 ----
 
 ### PostgreSQL
@@ -32,5 +32,5 @@ Using PostgreSQL with the `postgres` profile:
 [source,yml]
 .built-in-config-postgres.yml
 ----
-include::../rapidoid-commons/src/main/resources/built-in-config-postgres.yml[]
+include::../commons/rapidoid-commons/src/main/resources/built-in-config-postgres.yml[]
 ----
