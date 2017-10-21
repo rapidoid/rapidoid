@@ -22,10 +22,12 @@ package org.rapidoid.docs;
 
 import org.junit.Test;
 import org.rapidoid.commons.Str;
+import org.rapidoid.docs.blank.BlankTest;
 import org.rapidoid.fluent.Do;
 import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.io.FileSearchResult;
 import org.rapidoid.io.IO;
+import org.rapidoid.log.GlobalCfg;
 import org.rapidoid.test.Doc;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -49,10 +51,12 @@ public abstract class DocTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void docs() throws Exception {
+		if (this instanceof BlankTest) {
+			return; // not a real test
+		}
+
 		order.set(0);
-
 		exercise();
-
 		generateDocs();
 	}
 
@@ -80,7 +84,7 @@ public abstract class DocTest extends IsolatedIntegrationTest {
 	private void generateAsciiDoc(Doc doc, String id, String asciidoc, Map<String, String> files) {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("=== " + doc.title());
+		sb.append(U.frmt("### %s\n\n", doc.title()));
 
 		files.forEach((name, content) -> {
 			String ext = Str.cutFromLast(name, ".");
@@ -97,6 +101,12 @@ public abstract class DocTest extends IsolatedIntegrationTest {
 
 		IO.save(Msc.path(asciidoc, filename), sb.toString());
 
+		if (GlobalCfg.is("DOCS")) {
+			appendToIndex(asciidoc, filename);
+		}
+	}
+
+	private void appendToIndex(String asciidoc, String filename) {
 		String toIndex = U.frmt("include::%s[]\n\n", filename);
 
 		String index = Msc.path(asciidoc, "index.adoc");
@@ -149,24 +159,48 @@ public abstract class DocTest extends IsolatedIntegrationTest {
 		getReq(uri + order());
 	}
 
+	protected void GET(int port, String uri) {
+		getReq(port, uri + order());
+	}
+
 	protected void POST(String uri) {
 		postJson(uri + order(), U.map());
+	}
+
+	protected void POST(int port, String uri) {
+		postJson(port, uri + order(), U.map());
 	}
 
 	protected void POST(String uri, Map<String, ?> data) {
 		postJson(uri + order(), data);
 	}
 
+	protected void POST(int port, String uri, Map<String, ?> data) {
+		postJson(port, uri + order(), data);
+	}
+
 	protected void PUT(String uri) {
 		putData(uri + order(), U.map());
+	}
+
+	protected void PUT(int port, String uri) {
+		putData(port, uri + order(), U.map());
 	}
 
 	protected void PUT(String uri, Map<String, ?> data) {
 		putData(uri + order(), data);
 	}
 
+	protected void PUT(int port, String uri, Map<String, ?> data) {
+		putData(port, uri + order(), data);
+	}
+
 	protected void DELETE(String uri) {
 		deleteReq(uri + order());
+	}
+
+	protected void DELETE(int port, String uri) {
+		deleteReq(port, uri + order());
 	}
 
 }

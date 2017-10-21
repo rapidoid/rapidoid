@@ -73,8 +73,8 @@ public class HttpIO extends RapidoidThing {
 		impl.writeContentLengthHeader(ctx, len);
 	}
 
-	public void writeAsJson(MaybeReq req, Channel ctx, int code, boolean isKeepAlive, Object value) {
-		impl.writeAsJson(req, ctx, code, isKeepAlive, value);
+	public void writeHttpResp(MaybeReq req, Channel ctx, boolean isKeepAlive, int code, MediaType contentType, Object value) {
+		impl.writeHttpResp(req, ctx, isKeepAlive, code, contentType, value);
 	}
 
 	public void done(Req req) {

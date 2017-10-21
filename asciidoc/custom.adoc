@@ -1,9 +1,9 @@
-### Customization
+## Customization
 
 Many components of Rapidoid can be customized / replaced.
 Please see the `My` and `Customization` classes.
 
-#### Customizable components
+### Customizable components
 
 Here is a list of the customization fields in the `Customization` class:
 

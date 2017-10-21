@@ -1,4 +1,6 @@
-=== Edit bean properties[[app-listing]]
+### Edit bean properties
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

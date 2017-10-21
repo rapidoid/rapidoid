@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk
+FROM openjdk:8-jre-slim
 MAINTAINER Nikolche Mihajlovski
 
 ENV RAPIDOID_JAR /opt/rapidoid.jar

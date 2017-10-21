@@ -1,4 +1,6 @@
-=== High-level annotation-based POJO controllers[[app-listing]]
+### High-level annotation-based POJO controllers
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

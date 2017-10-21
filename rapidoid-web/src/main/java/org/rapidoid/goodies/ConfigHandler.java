@@ -67,44 +67,50 @@ public class ConfigHandler extends GUI implements Callable<Object> {
 	}
 
 	private String styleOf(String key) {
-		if (U.eq(key, "app")) {
-			return "label-primary";
 
-		} else if (U.eq(key, "on")) {
-			return "label-success";
+		switch (key) {
+			case "app":
+				return "label-primary";
 
-		} else if (U.eq(key, "admin")) {
-			return "label-danger";
+			case "on":
+				return "label-success";
 
-		} else if (U.eq(key, "users")) {
-			return "bg-sandy";
+			case "admin":
+			case "token":
+				return "label-danger";
 
-		} else if (U.eq(key, "jpa")) {
-			return "bg-purple";
+			case "users":
+			case "tls":
+				return "bg-sandy";
 
-		} else if (U.eq(key, "hibernate")) {
-			return "bg-sky";
+			case "jpa":
+			case "log":
+				return "bg-purple";
 
-		} else if (U.eq(key, "c3p0")) {
-			return "bg-teal";
+			case "hibernate":
+			case "reverse-proxy":
+				return "bg-sky";
 
-		} else if (U.eq(key, "jdbc")) {
-			return "bg-salmon";
+			case "c3p0":
+				return "bg-teal";
 
-		} else if (U.eq(key, "token")) {
-			return "bg-purple";
+			case "jdbc":
+			case "net":
+				return "bg-salmon";
 
-		} else if (U.eq(key, "http")) {
-			return "bg-teal";
+			case "http":
+			case "admin-zone":
+				return "bg-teal";
 
-		} else if (U.eq(key, "jobs")) {
-			return "bg-steel";
+			case "jobs":
+				return "bg-steel";
 
-		} else if (U.eq(key, "oauth")) {
-			return "bg-pink";
+			case "oauth":
+			case "gui":
+				return "bg-pink";
 
-		} else {
-			return "bg-metal";
+			default:
+				return "bg-metal";
 		}
 	}
 

@@ -1,4 +1,6 @@
-=== Building HTML pages with Java[[app-listing]]
+### Building HTML pages with Java
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

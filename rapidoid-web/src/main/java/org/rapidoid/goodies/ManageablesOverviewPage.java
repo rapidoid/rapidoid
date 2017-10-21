@@ -11,6 +11,7 @@ import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -38,45 +39,104 @@ import java.util.concurrent.Callable;
 @Since("5.3.0")
 public class ManageablesOverviewPage extends GUI implements Callable<Object> {
 
+	private volatile Collection<? extends GroupOf<?>> groups;
+
+	private volatile Class<? extends Manageable> groupType;
+
+	private volatile String baseUri;
+
 	@Override
 	public Object call() throws Exception {
-		List<Object> info = U.list();
 
-		for (GroupOf<?> group : Groups.all()) {
+		List<Object> info = U.list();
+		Collection<? extends GroupOf<?>> targetGroups = retrieveTargetGroups();
+
+		for (GroupOf<?> group : targetGroups) {
 			List<? extends Manageable> items = group.items();
 
-			if (U.notEmpty(items)) {
-				List<String> columns = U.first(items).getManageableProperties();
+			List<String> nav = U.list(group.kind());
 
-				if (U.notEmpty(columns)) {
-					addInfo(info, group, items, columns);
-				}
-			}
+			info.add(h2(group.kind()));
+
+			addInfo(baseUri, info, nav, items);
 		}
 
 		info.add(autoRefresh(2000));
 		return multi(info);
 	}
 
-	private void addInfo(List<Object> info, final GroupOf<?> group, List<? extends Manageable> items, List<String> columns) {
-		columns.add("(Actions)");
-		final String groupName = group.name();
+	private Collection<? extends GroupOf<?>> retrieveTargetGroups() {
+		if (groups != null) {
+			return groups;
+		} else {
+			if (groupType != null) {
+				return Groups.find(groupType);
+			} else {
+				return Groups.all();
+			}
+		}
+	}
 
-		final String kind = group.kind();
-		info.add(breadcrumb(kind, groupName));
+	public static void addInfo(String baseUri, List<Object> info, List<String> nav, List<? extends Manageable> items) {
+		if (U.notEmpty(items)) {
+			List<String> columns = U.list(U.first(items).getManageableProperties());
+
+			if (U.notEmpty(columns)) {
+				addInfo(baseUri, info, nav, items, columns);
+			}
+		}
+	}
+
+	protected static void addInfo(final String baseUri, List<Object> info, final List<String> nav, List<? extends Manageable> items, List<String> columns) {
+		columns.add("(Actions)");
+
+		for (Manageable item : items) {
+			item.reloadManageable();
+		}
 
 		Grid grid = grid(items)
 			.columns(columns)
 			.headers(columns)
 			.toUri(new Mapper<Manageable, String>() {
 				@Override
-				public String map(Manageable handle) throws Exception {
-					return Msc.specialUri("manageables", kind, Msc.urlEncode(handle.id()));
+				public String map(Manageable item) throws Exception {
+
+					final List<String> uri = U.list(nav);
+					uri.add(0, U.safe(baseUri));
+					uri.add(item.id());
+
+					return Msc.uri(U.arrayOf(uri));
 				}
 			})
-			.pageSize(20);
+			.pageSize(100);
 
 		info.add(grid);
 	}
 
+	public Collection<? extends GroupOf<?>> groups() {
+		return groups;
+	}
+
+	public ManageablesOverviewPage groups(Collection<? extends GroupOf<?>> groups) {
+		this.groups = groups;
+		return this;
+	}
+
+	public String baseUri() {
+		return baseUri;
+	}
+
+	public ManageablesOverviewPage baseUri(String baseUri) {
+		this.baseUri = baseUri;
+		return this;
+	}
+
+	public Class<? extends Manageable> groupType() {
+		return groupType;
+	}
+
+	public ManageablesOverviewPage groupType(Class<? extends Manageable> groupType) {
+		this.groupType = groupType;
+		return this;
+	}
 }

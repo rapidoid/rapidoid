@@ -1,0 +1,10 @@
+Usage:
+  docker run [docker args] rapidoid command [arg1 arg2 ...]
+
+Example commands:
+  docker run -it --rm rapidoid help
+  docker run -it --rm rapidoid dev
+
+Running your application in DEV mode:
+  cd /your-app
+  docker run -it --rm -p 8888:8888 -v $(pwd):/app rapidoid dev

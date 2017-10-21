@@ -66,9 +66,11 @@ public class ChangeTrackingMap<K, V> extends AbstractMapDecorator<K, V> {
 
 	@Override
 	public void clear() {
-		if (!decorated.isEmpty()) {
-			decorated.clear();
-			dirtyFlag.set(true);
+		synchronized (decorated) {
+			if (!decorated.isEmpty()) {
+				decorated.clear();
+				dirtyFlag.set(true);
+			}
 		}
 	}
 

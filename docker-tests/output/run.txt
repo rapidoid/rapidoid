@@ -1,56 +1,13 @@
- ____             _     _       _     _
-|  _ \ __ _ _ __ (_) __| | ___ (_) __| |
-| |_) / _` | '_ \| |/ _` |/ _ \| |/ _` |
-|  _ < (_| | |_) | | (_| | (_) | | (_| |
-|_| \_\__,_| .__/|_|\__,_|\___/|_|\__,_|
-           |_|
+Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
 
-[PLATFORM] INFO | No command-line arguments were specified, using the defaults:
-[PLATFORM] INFO |   admin.services=center
-[PLATFORM] INFO |   app.services=welcome
-[PLATFORM] INFO | 
-[PLATFORM] INFO | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
-[PLATFORM] INFO | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
-[PLATFORM] INFO | Setting application root | root = /app | content = []
-[PLATFORM] INFO | Automatically activating mode-specific profile | profile = production
-[PLATFORM] INFO | Initialized environment | mode = PRODUCTION | profiles = [production, platform]
-[PLATFORM] INFO | Setting application JAR | appJar = /app/app.jar | exists = false
-[PLATFORM] INFO | Loaded configuration | namespace = rapidoid | files = [built-in-config.yml, built-in-config-platform.yml]
-[PLATFORM] INFO | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
-[PLATFORM] INFO | Server has started | setup = app | home = http://localhost:8888
-[PLATFORM] INFO | Static resources will be served from the following locations | setup = app | locations = [static, default/static]
-[PLATFORM] INFO | GET /                                          | setup = app | roles = [] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | -------------------------
-[PLATFORM] INFO | Registering Admin Center:
-[PLATFORM] INFO | -------------------------
-[PLATFORM] INFO | Bootstraping metrics
-[PLATFORM] INFO | GET,POST /rapidoid                             | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/entities                    | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/routes                      | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/beans                       | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/config                      | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET /rapidoid/classpath                        | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/terminate                   | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/processes                   | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/processes/{id}              | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/manageables                 | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/manageables/{type}/{id}     | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/jmx/memory                  | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/jmx/mempool                 | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/jmx/classes                 | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/jmx/os                      | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/jmx/threads                 | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/jmx/compilation             | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/jmx/runtime                 | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/jmx/gc                      | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/metrics                     | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | GET /rapidoid/graphs/{id:.*}                   | setup = app | roles = [administrator] | transaction = NONE | mvc = false | cacheTTL = 0
-[PLATFORM] INFO | POST /rapidoid/login                           | setup = app | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
-[PLATFORM] INFO | GET /rapidoid/logout                           | setup = app | roles = [logged_in] | transaction = NONE | mvc = false | cacheTTL = 0
-[PLATFORM] INFO | GET /rapidoid/status                           | setup = app | roles = [administrator] | transaction = NONE | mvc = false | cacheTTL = 0
-[PLATFORM] INFO | GET,POST /rapidoid/deployment                  | setup = app | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
-[PLATFORM] INFO | POST /rapidoid/stage                           | setup = app | roles = [administrator] | transaction = NONE | mvc = false | cacheTTL = 0
-[PLATFORM] INFO | POST /rapidoid/deploy                          | setup = app | roles = [administrator] | transaction = NONE | mvc = false | cacheTTL = 0
-[PLATFORM] INFO | ---------------------------------------------------
-[PLATFORM] INFO | ADMIN CREDENTIALS: username = admin, password = <?>
-[PLATFORM] INFO | ---------------------------------------------------
+Usage:
+  docker run [docker args] rapidoid command [arg1 arg2 ...]
+
+Example commands:
+  docker run -it --rm rapidoid help
+  docker run -it --rm rapidoid dev
+
+Running your application in DEV mode:
+  cd /your-app
+  docker run -it --rm -p 8888:8888 -v $(pwd):/app rapidoid dev
+

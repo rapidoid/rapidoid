@@ -3,6 +3,7 @@ package org.rapidoid.http.impl;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.buffer.Buf;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.config.BasicConfig;
@@ -16,6 +17,7 @@ import org.rapidoid.http.Resp;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.LoginProvider;
 import org.rapidoid.http.customize.RolesProvider;
+import org.rapidoid.io.IO;
 import org.rapidoid.net.AsyncLogic;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -25,6 +27,7 @@ import org.rapidoid.web.Screen;
 import org.rapidoid.web.ScreenBean;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
@@ -85,6 +88,8 @@ public class RespImpl extends RapidoidThing implements Resp {
 	private volatile boolean mvc = false;
 
 	private volatile Screen screen;
+
+	private volatile ChunkedResponse chunked;
 
 	public RespImpl(ReqImpl req) {
 		this.req = req;
@@ -312,7 +317,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 
 	@Override
 	public synchronized String view() {
-		return view != null ? view : HttpUtils.resName(req);
+		return view != null ? view : HttpUtils.viewName(req);
 	}
 
 	@Override
@@ -320,7 +325,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 		return view("");
 	}
 
-	public boolean hasCustomView() {
+	boolean hasCustomView() {
 		return view != null;
 	}
 
@@ -457,11 +462,31 @@ public class RespImpl extends RapidoidThing implements Resp {
 
 	@Override
 	public OutputStream out() {
+		if (chunked == null) {
+			synchronized (this) {
+				if (chunked == null) {
+					checkStreamingPreconditions();
+
+					// the chunked response object, which buffers the response data
+					chunked = new ChunkedResponse(this);
+
+					// set the header early, so it can be overwritten by the app, if necessary
+					header("Transfer-Encoding", "chunked");
+				}
+			}
+		}
+
+		return chunked;
+	}
+
+	private void checkStreamingPreconditions() {
 		U.must(result() == null, "The response result has already been set, so cannot write the response through OutputStream, too!");
 		U.must(body() == null, "The response body has already been set, so cannot write the response through OutputStream, too!");
 		U.must(raw() == null, "The raw response has already been set, so cannot write the response through OutputStream, too!");
+	}
 
-		return req.startOutputStream(code());
+	void startChunkedOutputStream() {
+		req.doRendering(code(), null);
 	}
 
 	@Override
@@ -483,17 +508,17 @@ public class RespImpl extends RapidoidThing implements Resp {
 			'}';
 	}
 
-	public byte[] renderToBytes() {
+	byte[] renderToBytes() {
 		if (mvc()) {
 			byte[] bytes = ResponseRenderer.renderMvc(req, this);
 			HttpUtils.postProcessResponse(this); // the response might have been changed, so post-process again
 			return bytes;
 
-		} else if (result() != null) {
-			return serializeResponseContent();
-
 		} else if (body() != null) {
 			return Msc.toBytes(body());
+
+		} else if (result() != null) {
+			return serializeResponseContent();
 
 		} else {
 			throw U.rte("There's nothing to render!");
@@ -504,4 +529,57 @@ public class RespImpl extends RapidoidThing implements Resp {
 		return HttpUtils.responseToBytes(req, result(), contentType(), Customization.of(req).jsonResponseRenderer());
 	}
 
+	@Override
+	public Resp chunk(byte[] data) {
+		OutputStream chnk = out();
+
+		synchronized (chnk) {
+			try {
+				chnk.flush();
+			} catch (IOException e) {
+				throw U.rte(e);
+			}
+
+			chunk(data, 0, data.length);
+		}
+
+		return this;
+	}
+
+	public void chunk(final byte[] data, final int offset, final int length) {
+		U.notNull(data, "data");
+
+		resume(new AsyncLogic() {
+			@Override
+			public boolean resumeAsync() {
+				Buf out = req.channel().output();
+
+				out.append(Integer.toHexString(length));
+				out.append("\r\n");
+				out.append(data, offset, length);
+				out.append("\r\n");
+
+				req.channel().send();
+
+				return false;
+			}
+		});
+	}
+
+	void terminatingChunk() {
+		resume(new AsyncLogic() {
+			@Override
+			public boolean resumeAsync() {
+				Buf out = req.channel().output();
+				out.append("0\r\n\r\n");
+				return true;
+			}
+		});
+	}
+
+	void finish() {
+		if (chunked != null && !chunked.isClosed()) {
+			IO.close(chunked, false);
+		}
+	}
 }

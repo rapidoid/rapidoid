@@ -1,4 +1,6 @@
-=== Automatic JSON Serialization of Data Structures[[app-listing]]
+### Automatic JSON Serialization of Data Structures
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

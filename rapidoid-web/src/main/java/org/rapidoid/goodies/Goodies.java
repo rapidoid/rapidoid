@@ -4,6 +4,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.dbadmin.ManageableRdbms;
 import org.rapidoid.goodies.discovery.DiscoveryIndexHandler;
 import org.rapidoid.goodies.discovery.DiscoveryRegistrationHandler;
 import org.rapidoid.goodies.discovery.DiscoveryState;
@@ -114,8 +115,32 @@ public class Goodies extends RapidoidThing {
 	}
 
 	public static void manageables(Setup setup) {
-		setup.page(uri("manageables")).mvc(new ManageablesOverviewPage());
-		setup.page(uri("manageables/{type}/{id}")).mvc(new ManageableDetailsPage());
+		String baseUri = uri("manageables");
+
+		ManageablesOverviewPage overview = new ManageablesOverviewPage()
+			.baseUri(baseUri);
+
+		setup.page(baseUri).mvc(overview);
+
+		ManageableDetailsPage details = new ManageableDetailsPage()
+			.baseUri(baseUri);
+
+		setup.page(uri("manageables/{type}/{id}/*")).mvc(details);
+	}
+
+	public static void dbAdmin(Setup setup) {
+		String baseUri = uri("db");
+
+		ManageablesOverviewPage overview = new ManageablesOverviewPage()
+			.groupType(ManageableRdbms.class)
+			.baseUri(baseUri);
+
+		setup.page(baseUri).mvc(overview);
+
+		ManageableDetailsPage details = new ManageableDetailsPage()
+			.baseUri(baseUri);
+
+		setup.page(baseUri + "/{type}/{id}/*").mvc(details);
 	}
 
 	public static void jmx(Setup setup) {

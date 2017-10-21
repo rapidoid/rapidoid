@@ -1,9 +1,9 @@
-### RESTful services
+## RESTful services
 
 include::todo.adoc[]
 
 Please see the examples.
 
-#### Minimal dependency
+### Minimal dependency
 
 The minimal dependency that is required to develop RESTful services is the `rapidoid-http-server` module.

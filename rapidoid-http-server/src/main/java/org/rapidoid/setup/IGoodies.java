@@ -35,6 +35,8 @@ public interface IGoodies {
 
 	void processes(Setup setup);
 
+	void dbAdmin(Setup setup);
+
 	void manageables(Setup setup);
 
 	void jmx(Setup setup);

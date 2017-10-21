@@ -2,8 +2,10 @@ package org.rapidoid.jdbc;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Err;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.collection.Coll;
 import org.rapidoid.concurrent.Callback;
+import org.rapidoid.concurrent.Callbacks;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
 import org.rapidoid.datamodel.Results;
@@ -50,6 +52,8 @@ import java.util.concurrent.Callable;
 @ManageableBean(kind = "jdbc")
 public class JdbcClient extends AutoManageable<JdbcClient> {
 
+	private static final String DEFAULT_POOL_PROVIDER = "hikari";
+
 	private volatile boolean initialized;
 
 	private volatile String username;
@@ -59,6 +63,7 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 
 	private volatile boolean usePool = true;
 	private volatile DataSource dataSource;
+	private volatile String poolProvider = DEFAULT_POOL_PROVIDER;
 
 	private volatile ReadWriteMode mode = ReadWriteMode.READ_WRITE;
 
@@ -84,17 +89,20 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 		username(config.entry("username").str().getOrNull());
 		password(config.entry("password").str().getOrNull());
 		driver(config.entry("driver").str().getOrNull());
+		poolProvider(config.entry("poolProvider").or(DEFAULT_POOL_PROVIDER));
 
 		if (U.isEmpty(driver) && U.notEmpty(url)) {
 			driver(inferDriverFromUrl(url));
 		}
 	}
 
-	public static String inferDriverFromUrl(String url) {
+	private static String inferDriverFromUrl(String url) {
 		if (url.startsWith("jdbc:mysql:")) {
 			return "com.mysql.jdbc.Driver";
+
 		} else if (url.startsWith("jdbc:h2:")) {
 			return "org.hibernate.dialect.H2Dialect";
+
 		} else if (url.startsWith("jdbc:hsqldb:")) {
 			return "org.hsqldb.jdbc.JDBCDriver";
 		}
@@ -167,6 +175,14 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 		return this;
 	}
 
+	public JdbcClient poolProvider(String poolProvider) {
+		if (U.neq(this.poolProvider, poolProvider)) {
+			this.poolProvider = poolProvider;
+			this.initialized = false;
+		}
+		return this;
+	}
+
 	/**
 	 * Use <code>usePool(true)</code> instead.
 	 */
@@ -217,19 +233,34 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 				this.dataSource = this.usePool ? createPool() : null;
 			}
 
-			String maskedPassword = U.isEmpty(password) ? "<empty>" : "<specified>";
-			Log.info("Initialized JDBC API", "!url", url, "!driver", driver, "!username", username, "!password", maskedPassword, "!dataSource", dataSource);
+			String ds = dataSource != null ? Cls.of(dataSource).getSimpleName() : null;
+			Log.info("Initialized JDBC API", "!url", url, "!driver", driver, "!username", username, "!password", maskedPassword(), "!dataSource", ds);
 
 			initialized = true;
 		}
 	}
 
+	private String maskedPassword() {
+		return U.isEmpty(password) ? "<empty>" : "<specified>";
+	}
+
 	private DataSource createPool() {
+		String provider = U.safe(poolProvider);
 
-		if (MscOpts.hasC3P0()) return C3P0Factory.createDataSourceFor(this);
-		if (MscOpts.hasHikari()) return HikariFactory.createDataSourceFor(this);
+		switch (provider) {
+			case "hikari":
+				U.must(MscOpts.hasHikari(), "Couldn't find Hikari!");
+				Log.info("Initializing JDBC connection pool with Hikari", "!url", url, "!driver", driver, "!username", username, "!password", maskedPassword());
+				return HikariFactory.createDataSourceFor(this);
 
-		throw U.rte("Cannot create JDBC connection pool, couldn't find Hikari nor C3P0!");
+			case "c3p0":
+				U.must(MscOpts.hasC3P0(), "Couldn't find C3P0!");
+				Log.info("Initializing JDBC connection pool with C3P0", "!url", url, "!driver", driver, "!username", username, "!password", maskedPassword());
+				return C3P0Factory.createDataSourceFor(this);
+
+			default:
+				throw U.rte("Unknown pool provider: '%s'!", provider);
+		}
 	}
 
 	private void validate() {
@@ -287,11 +318,8 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 
 		Log.debug("SQL", "sql", sql, "args", args);
 
-		Connection conn = provideConnection();
-		PreparedStatement stmt = null;
-
-		try {
-			stmt = JDBC.prepare(conn, sql, namedArgs, args);
+		try (Connection conn = provideConnection();
+		     PreparedStatement stmt = JDBC.prepare(conn, sql, namedArgs, args)) {
 
 			String q = sql.trim().toUpperCase();
 
@@ -307,10 +335,6 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 
 		} catch (SQLException e) {
 			throw U.rte(e);
-
-		} finally {
-			close(stmt);
-			close(conn);
 		}
 	}
 
@@ -350,33 +374,63 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 		return doQuery(null, resultMapper, sql, namedArgs, null);
 	}
 
-	private <T> Results<T> doQuery(Class<T> resultType, Mapper<ResultSet, T> resultMapper, String sql, Map<String, ?> namedArgs, Object[] args) {
+	private <T> Results<T> doQuery(Class<T> resultType, Mapper<ResultSet, T> resultMapper,
+	                               String sql, Map<String, ?> namedArgs, Object[] args) {
+
 		sql = toSql(sql);
 		JdbcData<T> data = new JdbcData<>(this, resultType, resultMapper, sql, namedArgs, args);
 		return new ResultsImpl<>(data);
 	}
 
-	<T> List<T> runQuery(Class<T> resultType, Mapper<ResultSet, T> resultMapper, String sql, Map<String, ?> namedArgs, Object[] args, long start, long length) {
+	<T> List<T> runQuery(Class<T> resultType, Mapper<ResultSet, T> resultMapper,
+	                     String sql, Map<String, ?> namedArgs, Object[] args,
+	                     long skip, int limit) {
+
 		ensureIsInitialized();
 
-		U.must(start >= 0);
-		U.must(length >= 0);
+		boolean needsPaging = skip > 0 || (limit >= 0 && limit < Integer.MAX_VALUE);
 
-		if (start > 0 || length < Long.MAX_VALUE) {
-			// FIXME paging
-			throw Err.notReady();
+		if (limit == -1) {
+			// unlimited
+			limit = Integer.MAX_VALUE;
 		}
 
-		Connection conn = provideConnection();
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
+		U.must(skip >= 0);
+		U.must(limit >= 0);
 
-		try {
-			stmt = JDBC.prepare(conn, sql, namedArgs, args);
-			rs = stmt.executeQuery();
+		boolean pagingInSql = sql.contains("$skip") || sql.contains("$limit");
+
+		if (pagingInSql) {
+			sql = replacePagingParams(sql, skip, limit);
+		}
+
+		List<T> results = fetchData(resultType, resultMapper, sql, namedArgs, args);
+
+		if (needsPaging && !pagingInSql) {
+			results = Coll.range(results, Msc.toInt(skip), Msc.toInt(skip + limit));
+		}
+
+		U.must(results.size() <= limit, "Paging error: too many results!");
+
+		return results;
+	}
+
+	private String replacePagingParams(String sql, long skip, int limit) {
+		return sql
+			.replace("$skip", skip + "")
+			.replace("$limit", limit + "");
+	}
+
+	private <T> List<T> fetchData(Class<T> resultType, Mapper<ResultSet, T> resultMapper,
+	                              String sql, Map<String, ?> namedArgs, Object[] args) {
+
+		try (Connection conn = provideConnection();
+		     PreparedStatement stmt = JDBC.prepare(conn, sql, namedArgs, args);
+		     ResultSet rs = stmt.executeQuery()) {
 
 			if (resultMapper != null) {
 				return JDBC.rows(resultMapper, rs);
+
 			} else {
 				if (resultType.equals(Map.class)) {
 					return U.cast(JDBC.rows(rs));
@@ -387,11 +441,6 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 
 		} catch (Exception e) {
 			throw U.rte(e);
-
-		} finally {
-			close(rs);
-			close(stmt);
-			close(conn);
 		}
 	}
 
@@ -476,6 +525,10 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 		return dataSource();
 	}
 
+	public String poolProvider() {
+		return poolProvider;
+	}
+
 	public DataSource dataSource() {
 		return dataSource;
 	}
@@ -503,12 +556,32 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 			", url='" + url + '\'' +
 			", usePool=" + usePool +
 			", pool=" + dataSource +
+			", poolProvider=" + poolProvider +
 			", mode=" + mode +
 			'}';
 	}
 
 	public void execute(Operation<Connection> operation) {
 		workers.get().execute(operation);
+	}
+
+	public void execute(final Callback<Void> callback, final Operation<Connection> operation) {
+		execute(new Operation<Connection>() {
+
+			@Override
+			public void execute(Connection conn) {
+
+				try {
+					operation.execute(conn);
+
+				} catch (Throwable e) {
+					Callbacks.done(callback, null, e);
+					return;
+				}
+
+				Callbacks.done(callback, null, null);
+			}
+		});
 	}
 
 	public <T> void execute(final Mapper<ResultSet, T> resultMapper, final Callback<List<T>> callback, final String sql, final Object... args) {
@@ -526,14 +599,21 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 					}
 
 				} catch (Throwable e) {
-					callback.onDone(null, e);
+					Callbacks.done(callback, null, e);
 					return;
 				}
 
-				callback.onDone(results, null);
+				Callbacks.done(callback, results, null);
 			}
 
 		});
+	}
+
+	public DataSource bootstrapDatasource() {
+		init();
+		DataSource dataSource = dataSource();
+		U.notNull(dataSource, "data source");
+		return dataSource;
 	}
 
 }

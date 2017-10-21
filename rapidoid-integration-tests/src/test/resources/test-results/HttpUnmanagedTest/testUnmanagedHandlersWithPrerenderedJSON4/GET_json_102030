@@ -1,0 +1,10 @@
+HTTP/1.1 200 OK
+Connection: keep-alive
+Server: Rapidoid
+Date: XXXXX GMT
+Content-Type: application/json
+hdr1: val1
+Set-Cookie: cook1=the-cookie; path=/
+Content-Length: 14
+
+{"pos":102030}

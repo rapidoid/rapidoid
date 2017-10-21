@@ -1,0 +1,8 @@
+{
+  "dialect" : "org.hibernate.dialect.PostgreSQL9Dialect",
+  "format_sql" : false,
+  "show_sql" : true,
+  "hbm2ddl" : {
+    "auto" : "update"
+  }
+}

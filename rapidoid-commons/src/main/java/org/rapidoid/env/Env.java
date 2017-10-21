@@ -141,7 +141,7 @@ public class Env extends RapidoidThing {
 							if (Msc.isAppResource(file.getName())) content.add(file);
 						}
 
-						Log.info("Setting application root", "!root", root, "!content", content);
+						Log.info("Setting application root", "!root", root, "items", content.size());
 					} else {
 						Log.error("Couldn't access the application root!", "!root", root);
 					}

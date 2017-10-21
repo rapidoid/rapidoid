@@ -2,6 +2,8 @@
 set -euo pipefail
 IFS=$'\n'
 
+TAG=${TAG:-snapshot}
+
 NAME=$1
 shift
 

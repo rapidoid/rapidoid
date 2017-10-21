@@ -307,11 +307,11 @@ public class Cls extends RapidoidThing {
 			m.setAccessible(true);
 			return (T) m.invoke(null, args);
 		} catch (IllegalAccessException e) {
-			throw U.rte("Cannot statically invoke method '%s' with args: %s", e, m.getName(), Arrays.toString(args));
+			throw U.rte("Cannot statically invoke method '%s' with args: %s", e, m.getName(), U.str(args));
 		} catch (IllegalArgumentException e) {
-			throw U.rte("Cannot statically invoke method '%s' with args: %s", e, m.getName(), Arrays.toString(args));
+			throw U.rte("Cannot statically invoke method '%s' with args: %s", e, m.getName(), U.str(args));
 		} catch (InvocationTargetException e) {
-			throw U.rte("Cannot statically invoke method '%s' with args: %s", e, m.getName(), Arrays.toString(args));
+			throw U.rte("Cannot statically invoke method '%s' with args: %s", e, m.getName(), U.str(args));
 		}
 	}
 
@@ -321,7 +321,7 @@ public class Cls extends RapidoidThing {
 			m.setAccessible(true);
 			return (T) m.invoke(target, args);
 		} catch (Exception e) {
-			throw U.rte("Cannot invoke method '%s' with args: %s", e, m.getName(), Arrays.toString(args));
+			throw U.rte("Cannot invoke method '%s' with args: %s", e, m.getName(), U.str(args));
 		}
 	}
 
@@ -331,7 +331,18 @@ public class Cls extends RapidoidThing {
 			constructor.setAccessible(true);
 			return (T) constructor.newInstance(args);
 		} catch (Exception e) {
-			throw U.rte("Cannot invoke method '%s' with args: %s", e, constructor.getName(), Arrays.toString(args));
+			throw U.rte("Cannot invoke constructor '%s' with args: %s", e, constructor.getName(), U.str(args));
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T invokeRethrowing(Method method, Object target, Object... args) throws Throwable {
+		try {
+			return (T) method.invoke(target, args);
+
+		} catch (InvocationTargetException e) {
+			Throwable cause = e.getCause();
+			throw cause != null ? cause : e;
 		}
 	}
 
@@ -365,7 +376,7 @@ public class Cls extends RapidoidThing {
 			return (Constructor<T>) clazz.getConstructor(paramTypes);
 		} catch (Exception e) {
 			throw U.rte("Cannot find the constructor for %s with param types: %s", e, clazz,
-				Arrays.toString(paramTypes));
+				U.str(paramTypes));
 		}
 	}
 
@@ -583,6 +594,12 @@ public class Cls extends RapidoidThing {
 			case BOOLEAN_OBJ:
 				if (value instanceof Boolean) {
 					return (T) value;
+
+				} else if (value instanceof Number) {
+					Number num = (Number) value;
+					Object asBool = num.longValue() != 0L;
+					return (T) asBool;
+
 				} else {
 					throw U.rte("Cannot convert the value '%s' to boolean!", value);
 				}

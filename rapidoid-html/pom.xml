@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.rapidoid</groupId>
 		<artifactId>rapidoid</artifactId>
-		<version>5.3.5-SNAPSHOT</version>
+		<version>5.4.6-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>rapidoid-html</artifactId>
@@ -24,5 +24,23 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+
+			<resource>
+				<directory>../dist</directory>
+				<targetPath>default/static/_rapidoid</targetPath>
+				<filtering>false</filtering>
+				<includes>
+					<include>**/*.js</include>
+					<include>**/*.css</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
 
 </project>

@@ -1,4 +1,6 @@
-=== Role-based security[[app-listing]]
+### Role-based security
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

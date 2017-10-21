@@ -152,7 +152,7 @@ public class Dir extends RapidoidInitializer implements FilesystemChangeListener
 		try {
 			Files.walkFileTree(root, visitor);
 		} catch (IOException e) {
-			Log.error("Error occured while traversing the directory tree: " + root);
+			Log.error("Error occurred while traversing the directory tree: " + root);
 		}
 	}
 

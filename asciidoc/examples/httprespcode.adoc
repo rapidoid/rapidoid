@@ -1,4 +1,6 @@
-=== Manipulating the response code[[app-listing]]
+### Manipulating the response code
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

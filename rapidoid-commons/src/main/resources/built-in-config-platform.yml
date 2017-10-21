@@ -1,8 +1,13 @@
-on:
+rapidoid:
   port: 8888
+  address: 0.0.0.0
 
-admin:
-  port: same
+rapidoid-admin:
+  port: ${rapidoid.port}
+  address: ${rapidoid.address}
+
+benchmark:
+  plan: r1:d5:c64
 
 platform-zone:
   home: /rapidoid

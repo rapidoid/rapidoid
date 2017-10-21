@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
 mvn clean
 
 for f in `grep -lrw --include=*.java -e "public interface" rapidoid-http rapidoid-http-api rapidoid-app rapidoid-sql`; do

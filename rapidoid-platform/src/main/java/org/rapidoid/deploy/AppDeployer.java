@@ -3,6 +3,7 @@ package org.rapidoid.deploy;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.env.Env;
 import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
 import org.rapidoid.process.Proc;
@@ -41,7 +42,7 @@ import java.nio.file.StandardCopyOption;
 @Since("5.3.0")
 public class AppDeployer extends RapidoidThing {
 
-	private static final Processes DEPLOYED = new Processes("deployed");
+	private static final Processes DEPLOYED = Processes.GROUP;
 
 	private static final String CLASSPATH = System.getProperty("java.class.path");
 
@@ -49,7 +50,7 @@ public class AppDeployer extends RapidoidThing {
 
 	private static void runIfExists(String appId, String appJar) {
 		if (Msc.hasMainApp()) {
-			Log.info("Deploying pre-existing application", "id", appId);
+			Log.info("Deploying application", "id", appId);
 
 			runAppJar(appId);
 		}
@@ -59,7 +60,14 @@ public class AppDeployer extends RapidoidThing {
 		String appJar = Msc.mainAppJar();
 
 		String[] appJarCmd = {"java", "-jar", appJar, "root=/app"};
-		String[] defaultAppCmd = {"java", "-cp", CLASSPATH, "org.rapidoid.platform.DefaultApp", "root=/app"};
+
+		String[] defaultAppCmd = {
+			"java",
+			"-cp", CLASSPATH,
+			"org.rapidoid.platform.DefaultApp",
+			"root=/app",
+			"mode=" + Env.mode().name().toLowerCase()
+		};
 
 		String[] cmd = new File(appJar).exists() ? appJarCmd : defaultAppCmd;
 

@@ -20,6 +20,7 @@ import org.rapidoid.pool.Pools;
 import org.rapidoid.u.U;
 import org.rapidoid.util.SimpleList;
 
+import javax.net.ssl.SSLContext;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.InetSocketAddress;
@@ -98,6 +99,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 	private volatile long messagesProcessed;
 
+	private final SSLContext sslContext;
+
 	RapidoidWorker next;
 
 	private final StatsMeasure dataIn;
@@ -116,7 +119,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 	}
 
 	public RapidoidWorker(String name, final Protocol protocol, final RapidoidHelper helper,
-	                      int bufSizeKB, boolean noDelay, boolean syncBufs) {
+	                      int bufSizeKB, boolean noDelay, boolean syncBufs, SSLContext sslContext) {
 
 		super(name);
 
@@ -127,6 +130,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 		this.serverProtocol = protocol;
 		this.helper = helper;
+		this.sslContext = sslContext;
 
 		this.maxPipelineSize = Conf.HTTP.entry("maxPipeline").or(10);
 
@@ -224,22 +228,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 		RapidoidConnection conn = (RapidoidConnection) key.attachment();
 
-		if (conn.input.size() < bufSizeLimit) {
-			long read;
-			try {
-				read = conn.input.append(socketChannel);
-			} catch (Exception e) {
-				read = -1;
-			}
-
-			if (read == -1) {
-				// the connection was closed
-				Log.debug("The connection was closed!");
-				conn.closing = true;
-			}
-
-			dataIn.value(read);
-		}
+		readInto(socketChannel, conn);
 
 		process(conn);
 
@@ -249,6 +238,47 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 			} else {
 				close(key);
 			}
+		}
+	}
+
+	private void readInto(SocketChannel socketChannel, RapidoidConnection conn) {
+		int read;
+		try {
+
+			if (conn.hasTLS) {
+				// FIXME is this needed? (from ext) if (conn.input.size() < bufSizeLimit) {
+				if (conn.tls.netIn.hasRemaining()) {
+					read = socketChannel.read(conn.tls.netIn);
+
+				} else {
+					read = 0;
+				}
+			} else {
+				read = conn.input.append(socketChannel);
+			}
+
+		} catch (Exception e) {
+			Log.debug("Connection error", e);
+			read = -1;
+		}
+
+		if (read == -1) {
+			// the connection was closed
+			Log.debug("The connection was closed!");
+			conn.closing = true;
+			if (conn.hasTLS) {
+				conn.tls.closeInbound();
+			}
+
+		} else {
+
+			if (conn.hasTLS) {
+				if (read > 0) {
+					boolean success = conn.tls.unwrapInput();
+					if (success) wantToWrite(conn);
+				}
+			}
+			dataIn.value(read);
 		}
 	}
 
@@ -460,7 +490,14 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 		try {
 			synchronized (conn) {
-				synchronized (conn.output) {
+				synchronized (conn.outgoing) {
+
+					if (conn.hasTLS) {
+						synchronized (conn.output) {
+							conn.tls.wrapToOutgoing();
+						}
+					}
+
 					writeOp(key, conn, socketChannel);
 				}
 			}
@@ -475,11 +512,16 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 	private void writeOp(SelectionKey key, RapidoidConnection conn, SocketChannel socketChannel) throws IOException {
 
-		synchronized (conn.output) {
-			BufUtil.startWriting(conn.output);
-			int wrote = conn.output.writeTo(socketChannel);
-			conn.output.deleteBefore(wrote);
-			BufUtil.doneWriting(conn.output);
+		synchronized (conn.outgoing) {
+			if (conn.outgoing.hasRemaining()) {
+				conn.log("WRITING");
+//					conn.log(conn.outgoing.asText());
+				BufUtil.startWriting(conn.outgoing);
+				int wrote = conn.outgoing.writeTo(socketChannel);
+				conn.outgoing.deleteBefore(wrote);
+				BufUtil.doneWriting(conn.outgoing);
+				conn.log("DONE WRITING");
+			}
 		}
 
 		boolean finishedWriting, closeAfterWrite;
@@ -504,6 +546,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 	public void wantToWrite(RapidoidConnection conn) {
 		U.must(conn.mode != SelectionKey.OP_READ);
+
+		touch(conn);
 
 		if (onSameThread()) {
 			conn.key.interestOps(SelectionKey.OP_WRITE);
@@ -671,6 +715,9 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		return this;
 	}
 
+	public SSLContext sslContext() {
+		return sslContext;
+	}
 	public void restart(RapidoidConnection conn) {
 		restarting.add(conn);
 	}

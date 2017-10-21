@@ -15,6 +15,9 @@ import org.rapidoid.util.D;
 import org.rapidoid.util.Msc;
 import org.rapidoid.wrap.IntWrap;
 
+import javax.net.ssl.SSLEngine;
+import javax.net.ssl.SSLEngineResult;
+import javax.net.ssl.SSLException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -48,6 +51,13 @@ public class MultiBuf extends OutputStream implements Buf, Constants {
 
 	private final byte[] HELPER = new byte[20];
 
+	private final ThreadLocal<ByteBuffer> tmpBufs = new ThreadLocal<ByteBuffer>() {
+		@Override
+		protected ByteBuffer initialValue() {
+			return ByteBuffer.allocateDirect(20 * 1024);
+		}
+	};
+
 	private final BufRange HELPER_RANGE = new BufRange();
 
 	private static final int TO_BYTES = 1;
@@ -55,6 +65,8 @@ public class MultiBuf extends OutputStream implements Buf, Constants {
 	private static final int TO_CHANNEL = 2;
 
 	private static final int TO_BUFFER = 3;
+
+	private static final int TO_SSL_DEST = 4;
 
 	private static final int NOT_RELEVANT = Integer.MIN_VALUE;
 
@@ -399,7 +411,7 @@ public class MultiBuf extends OutputStream implements Buf, Constants {
 
 		int wrote;
 		try {
-			wrote = writeTo(TO_BYTES, offset, length, bytes, null, null, destOffset);
+			wrote = writeTo(TO_BYTES, offset, length, bytes, null, null, null, destOffset);
 		} catch (IOException e) {
 			throw U.rte(e);
 		}
@@ -417,7 +429,7 @@ public class MultiBuf extends OutputStream implements Buf, Constants {
 	public int writeTo(WritableByteChannel channel, int srcOffset, int length) throws IOException {
 		assert invariant(false);
 
-		int wrote = writeTo(TO_CHANNEL, srcOffset, length, null, channel, null, NOT_RELEVANT);
+		int wrote = writeTo(TO_CHANNEL, srcOffset, length, null, channel, null, null, NOT_RELEVANT);
 		assert U.must(wrote <= _size(), "Incorrect write to channel!");
 
 		assert invariant(false);
@@ -434,7 +446,7 @@ public class MultiBuf extends OutputStream implements Buf, Constants {
 		assert invariant(false);
 
 		try {
-			int wrote = writeTo(TO_BUFFER, srcOffset, length, null, null, buffer, NOT_RELEVANT);
+			int wrote = writeTo(TO_BUFFER, srcOffset, length, null, null, buffer, null, NOT_RELEVANT);
 			assert wrote == length;
 			assert invariant(false);
 			return wrote;
@@ -445,7 +457,7 @@ public class MultiBuf extends OutputStream implements Buf, Constants {
 	}
 
 	private int writeTo(int mode, int offset, int length, byte[] bytes, WritableByteChannel channel, ByteBuffer buffer,
-	                    int destOffset) throws IOException {
+	                    SSLDestination sslDest, int destOffset) throws IOException {
 
 		if (_size() == 0) {
 			assert length == 0;
@@ -464,19 +476,19 @@ public class MultiBuf extends OutputStream implements Buf, Constants {
 		assert fromInd <= toInd;
 
 		if (fromInd == toInd) {
-			return writePart(bufs[fromInd], fromAddr, toAddr + 1, mode, bytes, channel, buffer, destOffset, -1);
+			return writePart(bufs[fromInd], fromAddr, toAddr + 1, mode, bytes, channel, buffer, sslDest, destOffset, -1);
 		} else {
-			return multiWriteTo(mode, fromInd, toInd, fromAddr, toAddr, bytes, channel, buffer, destOffset);
+			return multiWriteTo(mode, fromInd, toInd, fromAddr, toAddr, bytes, channel, buffer, sslDest, destOffset);
 		}
 	}
 
 	private int multiWriteTo(int mode, int fromIndex, int toIndex, int fromAddr, int toAddr, byte[] bytes,
-	                         WritableByteChannel channel, ByteBuffer buffer, int destOffset) throws IOException {
+	                         WritableByteChannel channel, ByteBuffer buffer, SSLDestination sslDest, int destOffset) throws IOException {
 
 		ByteBuffer first = bufs[fromIndex];
 		int len = singleCap - fromAddr;
 
-		int wrote = writePart(first, fromAddr, singleCap, mode, bytes, channel, buffer, destOffset, len);
+		int wrote = writePart(first, fromAddr, singleCap, mode, bytes, channel, buffer, sslDest, destOffset, len);
 		if (wrote < len) {
 			return wrote;
 		}
@@ -485,7 +497,7 @@ public class MultiBuf extends OutputStream implements Buf, Constants {
 
 		for (int i = fromIndex + 1; i < toIndex; i++) {
 
-			wrote = writePart(bufs[i], 0, singleCap, mode, bytes, channel, buffer, destOffset + wroteTotal, singleCap);
+			wrote = writePart(bufs[i], 0, singleCap, mode, bytes, channel, buffer, sslDest, destOffset + wroteTotal, singleCap);
 
 			wroteTotal += wrote;
 
@@ -495,13 +507,13 @@ public class MultiBuf extends OutputStream implements Buf, Constants {
 		}
 
 		ByteBuffer last = bufs[toIndex];
-		wroteTotal += writePart(last, 0, toAddr + 1, mode, bytes, channel, buffer, destOffset + wroteTotal, toAddr + 1);
+		wroteTotal += writePart(last, 0, toAddr + 1, mode, bytes, channel, buffer, sslDest, destOffset + wroteTotal, toAddr + 1);
 
 		return wroteTotal;
 	}
 
 	private int writePart(ByteBuffer src, int pos, int limit, int mode, byte[] bytes, WritableByteChannel channel,
-	                      ByteBuffer buffer, int destOffset, int len) throws IOException {
+	                      ByteBuffer buffer, SSLDestination sslDest, int destOffset, int len) throws IOException {
 
 		// backup buf positions
 		int posBackup = src.position();
@@ -538,7 +550,31 @@ public class MultiBuf extends OutputStream implements Buf, Constants {
 
 			case TO_BUFFER:
 				count = src.remaining();
-				buffer.put(src);
+				buffer.put(src); // FIXME does the buffer have enough space?
+				break;
+
+			case TO_SSL_DEST:
+
+				count = 0;
+				ByteBuffer tmpBuf = tmpBufs.get();
+
+				while (src.hasRemaining()) {
+
+					SSLEngineResult result;
+					tmpBuf.clear();
+
+					try {
+						result = sslDest.engine.wrap(src, tmpBuf);
+					} catch (SSLException e) {
+						throw U.rte(e);
+					}
+
+					tmpBuf.flip();
+					sslDest.dest.append(tmpBuf);
+
+					count += result.bytesConsumed();
+				}
+
 				break;
 
 			default:
@@ -1419,6 +1455,29 @@ public class MultiBuf extends OutputStream implements Buf, Constants {
 		} catch (IOException e) {
 			throw U.rte(e);
 		}
+	}
+
+	@Override
+	public int sslWrap(SSLEngine engine, Buf dest) {
+		assert invariant(false);
+
+		SSLDestination sslDest = new SSLDestination(engine, dest);
+
+		int consumed;
+		try {
+			consumed = writeTo(TO_SSL_DEST, 0, _size(), null, null, null, sslDest, NOT_RELEVANT);
+
+		} catch (IOException e) {
+			throw U.rte(e);
+		}
+
+		assert U.must(consumed <= _size(), "Incorrect write to channel!");
+
+		deleteBefore(consumed);
+
+		assert invariant(false);
+
+		return consumed;
 	}
 
 	@Override

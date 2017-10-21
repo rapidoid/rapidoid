@@ -78,8 +78,6 @@ include::raw.adoc[]
 
 include::restjson.adoc[]
 
-include::restlistparams.adoc[]
-
 include::restnamedparams.adoc[]
 
 include::restparams.adoc[]

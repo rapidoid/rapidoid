@@ -1,4 +1,4 @@
-### Rapidoid's template engine
+## Rapidoid's template engine
 
 Starting from v5.1, Rapidoid has its own template engine. Basically, it is very similar to Mustache, with the following differences:
 

@@ -28,6 +28,7 @@ import org.rapidoid.util.Constants;
 import org.rapidoid.util.Msc;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Pattern;
 
 /*
@@ -54,7 +55,9 @@ import java.util.regex.Pattern;
 @Since("5.1.0")
 public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 
-	private static final int ROUTE_SETUP_WAITING_TIME_MS = Env.test() ? 300 : 500;
+	private static final AtomicLong ID_GEN = new AtomicLong();
+
+	private static final int ROUTE_SETUP_WAITING_TIME_MS = Env.test() ? 0 : 500;
 
 	private static final Pattern PATTERN_PATTERN = Pattern.compile("[^\\w/-]");
 
@@ -86,6 +89,8 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 	final Map<PathPattern, HttpHandler> patternTraceHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
 	final Map<PathPattern, HttpHandler> patternAnyHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
 
+	private final long id;
+	private final String setupName;
 	private final Customization customization;
 
 	private volatile byte[] path1, path2, path3;
@@ -105,7 +110,9 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 	private volatile boolean stable;
 	private volatile Date lastChangedAt = new Date();
 
-	public HttpRoutesImpl(Customization customization) {
+	public HttpRoutesImpl(String setupName, Customization customization) {
+		this.id = ID_GEN.incrementAndGet();
+		this.setupName = setupName;
 		this.customization = customization;
 		this.staticResourcesHandler = new StaticResourcesHandler(customization);
 		this.builtInResourcesHandler = new StaticResourcesHandler(customization);
@@ -317,7 +324,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 
 	@Override
 	public synchronized void addGenericHandler(HttpHandler handler) {
-		Log.info("Registering generic handler", "!setup", this.customization.name());
+		Log.info("Registering generic handler", "!setup", setupName);
 		genericHandlers.add(handler);
 		notifyChanged();
 	}
@@ -484,11 +491,11 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 			String tx = txm != TransactionMode.NONE ? AnsiColor.bold(txm.name()) : txm.name();
 
 			int space = Math.max(45 - verbs.length() - path.length(), 1);
-			Log.info(httpVerbColor(verbs) + AnsiColor.bold(" " + path) + Str.mul(" ", space), "setup", this.customization.name(),
+			Log.info(httpVerbColor(verbs) + AnsiColor.bold(" " + path) + Str.mul(" ", space), "setup", setupName,
 				"!roles", opts.roles(), "transaction", tx, "mvc", opts.mvc(), "cacheTTL", opts.cacheTTL());
 
 		} else {
-			Log.info("Deregistering handler", "setup", this.customization.name(), "!verbs", verbs, "!path", path);
+			Log.info("Deregistering handler", "setup", setupName, "!verbs", verbs, "!path", path);
 		}
 
 		for (String vrb : verbs.split(",")) {
@@ -685,4 +692,11 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "HttpRoutesImpl{" +
+			"id=" + id +
+			", setup='" + setupName + '\'' +
+			'}';
+	}
 }

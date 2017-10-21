@@ -1,4 +1,6 @@
-=== Instant web application[[app-listing]]
+### Instant web application
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

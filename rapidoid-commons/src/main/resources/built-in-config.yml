@@ -3,8 +3,8 @@ on:
   address: 0.0.0.0
 
 admin:
-  port: same
-  address: 0.0.0.0
+  port: ${on.port}
+  address: ${on.address}
 
 app:
   contextPath: ''
@@ -28,7 +28,6 @@ admin-zone:
     Overview: /_
     Routes: /_routes
     Configuration: /_config
-    Deployment: /_deployment
     Processes: /_processes
     Metrics: /_metrics
     Manageables: /_manageables
@@ -57,15 +56,17 @@ jobs:
   scheduler:
     threads: 64
 
+jdbc:
+  host: localhost
+  driver: UNKNOWN
+  username: UNKNOWN
+  password: UNKNOWN
+  url: UNKNOWN
+  options: ''
+  poolProvider: hikari
+
 hibernate:
-  c3p0:
-    debug: false
-    initialPoolSize: 5
-    minPoolSize: 5
-    maxPoolSize: 100
-    acquireIncrement: 5
-    maxStatementsPerConnection: 10
-    idleConnectionTestPeriod: 300
+  dialect: UNKNOWN
 
 c3p0:
   debug: false
@@ -102,10 +103,11 @@ oauth:
 net:
   address: 0.0.0.0
   port: 8080
-# workers: ${cpus}
+#  workers: ${system.cpus}
   bufSizeKB: 256
   noDelay: false
   syncBufs: true
+  blockingAccept: false
 
 http:
   timeout: 30000
@@ -139,5 +141,11 @@ log:
   level: info
   fancy: false # auto
 
-benchmark:
-  plan: r1:d5:c64
+tls:
+  selfSigned: true
+  enabled: false
+  keystore: ''
+  keystorePassword: ''
+  keyManagerPassword: ''
+  truststore: ''
+  truststorePassword: ''

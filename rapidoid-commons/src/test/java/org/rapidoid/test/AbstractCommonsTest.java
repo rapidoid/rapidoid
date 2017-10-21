@@ -22,7 +22,6 @@ package org.rapidoid.test;
 
 import org.junit.Before;
 import org.rapidoid.config.Conf;
-import org.rapidoid.data.JSON;
 import org.rapidoid.util.Msc;
 
 public abstract class AbstractCommonsTest extends TestCommons {
@@ -32,10 +31,6 @@ public abstract class AbstractCommonsTest extends TestCommons {
 		Msc.reset();
 
 		Conf.ROOT.setPath(getTestNamespace());
-	}
-
-	protected void verify(String name, Object actual) {
-		super.verifyCase(name, JSON.prettify(actual), name);
 	}
 
 }

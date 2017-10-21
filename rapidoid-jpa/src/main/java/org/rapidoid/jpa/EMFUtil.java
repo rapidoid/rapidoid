@@ -35,7 +35,7 @@ import java.util.Properties;
 @Since("5.1.0")
 public class EMFUtil extends RapidoidThing {
 
-	public static synchronized List<String> createEMF(String path[], Class<?>... entities) {
+	public static synchronized List<String> getEntityTypes(String path[], Class<?>... entities) {
 
 		List<String> entityTypes = Scan.annotated(Entity.class).in(path).getAll();
 

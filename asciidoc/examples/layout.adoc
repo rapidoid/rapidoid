@@ -1,4 +1,6 @@
-=== Bootstrap-based GUI layout[[app-listing]]
+### Bootstrap-based GUI layout
+
+[[app-listing]]
 [source,java]
 .BootstrapLayout.java
 ----

@@ -41,8 +41,10 @@ public class MultiWatchTest extends TestCommons {
 	public void shouldSupportMultipleWatchCalls() throws IOException {
 		String dir = createTempDir("watch-service-test");
 
-		for (int i = 0; i < 10; i++) {
-			exerciseMultiWatch(dir);
+		if (!TestCommons.RAPIDOID_CI) {
+			for (int i = 0; i < 10; i++) {
+				exerciseMultiWatch(dir);
+			}
 		}
 	}
 

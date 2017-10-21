@@ -70,7 +70,7 @@ public class Lmbd extends RapidoidThing {
 		try {
 			return callable.call();
 		} catch (Exception e) {
-			throw U.rte("Error occured during the call!", e);
+			throw U.rte("Error occurred during the call!", e);
 		}
 	}
 
@@ -88,7 +88,15 @@ public class Lmbd extends RapidoidThing {
 		try {
 			operation.execute(arg);
 		} catch (Exception e) {
-			throw U.rte("Error occured during the call!", e);
+			throw U.rte("Error occurred during the call!", e);
+		}
+	}
+
+	public static void execute(Executable executable) {
+		try {
+			executable.execute();
+		} catch (Exception e) {
+			throw U.rte("Error occurred during the execution!", e);
 		}
 	}
 

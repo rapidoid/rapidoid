@@ -25,10 +25,14 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.5")
 public class HttpCookiesTest extends HttpTestCommons {
+
+	private static final int THREADS = Msc.normalOrHeavy(5, 100);
+	private static final int ROUNDS = Msc.normalOrHeavy(10, 1000);
 
 	@Test
 	public void testHttpCookies() {
@@ -41,7 +45,7 @@ public class HttpCookiesTest extends HttpTestCommons {
 			}
 		});
 
-		multiThreaded(100, 1000, new Runnable() {
+		multiThreaded(THREADS, ROUNDS, new Runnable() {
 			@Override
 			public void run() {
 				checkCookies();
@@ -50,7 +54,7 @@ public class HttpCookiesTest extends HttpTestCommons {
 	}
 
 	private void checkCookies() {
-		HttpClient client = HTTP.client().keepCookies(true);
+		HttpClient client = HTTP.client().keepCookies(true).timeout(10000);
 
 		eq(client.get(localhost("/a")).parse(), U.map());
 		eq(client.get(localhost("/b")).parse(), U.map("/a", "0"));
@@ -71,7 +75,7 @@ public class HttpCookiesTest extends HttpTestCommons {
 			}
 		});
 
-		multiThreaded(100, 1000, new Runnable() {
+		multiThreaded(THREADS, ROUNDS, new Runnable() {
 			@Override
 			public void run() {
 				checkNoCookies(true);
@@ -82,7 +86,7 @@ public class HttpCookiesTest extends HttpTestCommons {
 
 	private void checkNoCookies(boolean keepCookies) {
 		HttpClient client;
-		client = HTTP.client().keepCookies(keepCookies);
+		client = HTTP.client().keepCookies(keepCookies).timeout(10000);
 
 		eq(client.get(localhost("/a")).fetch(), "0");
 		eq(client.get(localhost("/b")).fetch(), "0");

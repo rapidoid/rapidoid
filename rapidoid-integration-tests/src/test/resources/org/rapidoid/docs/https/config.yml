@@ -1,0 +1,6 @@
+tls:
+  enabled: false
+  selfSigned: true # shouldn't be used in production
+  keystore: '/ssl/test-keystore'
+  keystorePassword: 'my-password'
+  keyManagerPassword: 'my-password'

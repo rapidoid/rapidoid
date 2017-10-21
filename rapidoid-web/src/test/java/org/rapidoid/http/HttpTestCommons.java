@@ -30,6 +30,7 @@ import org.rapidoid.crypto.Crypto;
 import org.rapidoid.io.IO;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.jpa.JPAUtil;
+import org.rapidoid.net.util.NetUtil;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.setup.Admin;
 import org.rapidoid.setup.App;
@@ -56,8 +57,6 @@ public abstract class HttpTestCommons extends TestCommons {
 
 		ClasspathUtil.setRootPackage("some.nonexisting.app");
 
-		System.out.println("--- STARTING SERVER ---");
-
 		JPAUtil.reset();
 		Conf.ROOT.setPath(getTestNamespace());
 		IoC.reset();
@@ -68,15 +67,11 @@ public abstract class HttpTestCommons extends TestCommons {
 		On.setup().activate();
 		On.setup().reload();
 
-		System.out.println("--- SERVER STARTED ---");
-
 		verifyNoRoutes();
 	}
 
 	@After
 	public void closeContext() {
-		System.out.println("--- STOPPING SERVER ---");
-
 		if (Admin.setup().isRunning()) {
 			if (Admin.setup().port() == On.setup().port()) {
 				Admin.setup().reset();
@@ -84,8 +79,6 @@ public abstract class HttpTestCommons extends TestCommons {
 				Admin.setup().shutdown();
 			}
 		}
-
-		System.out.println("--- SERVER STOPPED ---");
 	}
 
 	protected String localhost(String uri) {
@@ -247,7 +240,7 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	protected void raw(byte[] req) {
-		String resp = new String(Msc.writeAndRead("localhost", 8080, req, 1000));
+		String resp = new String(NetUtil.writeAndRead("localhost", 8080, req, 1000));
 		resp = resp.replaceFirst("Date: .*? GMT", "Date: XXXXX GMT");
 
 		resp = new String(req) + "--------------------------------------------------------\n" + resp + "<END>";

@@ -7,6 +7,8 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Err;
 import org.rapidoid.u.U;
 
+import java.util.List;
+
 /*
  * #%L
  * rapidoid-commons
@@ -99,8 +101,15 @@ public abstract class AbstractValue<T> extends RapidoidThing implements Value<T>
 	}
 
 	@Override
+	public List<String> list() {
+		String s = str().getOrNull();
+		return s != null ? U.list(s.split(",")) : U.<String>list();
+	}
+
+	@Override
 	public String desc() {
 		return null;
 	}
+
 
 }

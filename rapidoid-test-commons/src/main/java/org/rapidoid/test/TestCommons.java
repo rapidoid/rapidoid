@@ -27,6 +27,7 @@ import org.mockito.stubbing.OngoingStubbing;
 import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -38,6 +39,7 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author Nikolche Mihajlovski
@@ -45,7 +47,12 @@ import java.util.concurrent.CountDownLatch;
  */
 public abstract class TestCommons {
 
-	private static final boolean ADJUST_TESTS = "true".equalsIgnoreCase(System.getProperty("adjustTests"));
+	protected static final boolean RAPIDOID_CI = "true".equalsIgnoreCase(System.getenv("RAPIDOID_CI"));
+
+	// don't adjust tests during continuous integration
+	private static final boolean ADJUST_TESTS = !RAPIDOID_CI && (inDebugMode()
+		|| "true".equalsIgnoreCase(System.getProperty("ADJUST_TESTS"))
+		|| "true".equalsIgnoreCase(System.getenv("ADJUST_TESTS")));
 
 	protected static final Random RND = new Random();
 
@@ -96,7 +103,7 @@ public abstract class TestCommons {
 	private String getTestInfo() {
 		String info = ADJUST_TESTS ? " [ADJUST] " : "";
 
-		if (System.getenv("HEAVY") != null || System.getProperty("HEAVY") != null) {
+		if (System.getenv("RAPIDOID_TEST_HEAVY") != null || System.getProperty("RAPIDOID_TEST_HEAVY") != null) {
 			info += "[HEAVY]";
 		}
 
@@ -106,7 +113,7 @@ public abstract class TestCommons {
 	@After
 	public void checkForErrors() {
 		if (hasError) {
-			Assert.fail("Assertion error(s) occured, probably were caught or were thrown on non-main thread!");
+			Assert.fail("Assertion error(s) occurred, probably were caught or were thrown on non-main thread!");
 
 		} else if (getTestAnnotation(ExpectErrors.class) == null && hasErrorsLogged()) {
 			Assert.fail("Unexpected errors were logged!");
@@ -453,6 +460,8 @@ public abstract class TestCommons {
 
 	protected void multiThreaded(int threadsN, final int count, final Runnable runnable) {
 
+		final AtomicBoolean failed = new AtomicBoolean();
+
 		eq(count % threadsN, 0);
 		final int countPerThread = count / threadsN;
 
@@ -461,13 +470,17 @@ public abstract class TestCommons {
 		for (int i = 1; i <= threadsN; i++) {
 			new Thread() {
 				public void run() {
-					for (int j = 0; j < countPerThread; j++) {
-						runnable.run();
+					for (int j = 0; j < countPerThread && !failed.get(); j++) {
+						try {
+							runnable.run();
+
+						} catch (Throwable e) {
+							failed.set(true);
+							e.printStackTrace();
+						}
 					}
 					latch.countDown();
 				}
-
-				;
 			}.start();
 		}
 
@@ -476,6 +489,8 @@ public abstract class TestCommons {
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
+
+		isFalse(failed.get());
 	}
 
 	protected Throwable rootCause(Throwable e) {
@@ -565,7 +580,8 @@ public abstract class TestCommons {
 
 	protected String getTestNamespace() {
 		Doc doc = getTestAnnotation(Doc.class);
-		return (doc != null) ? getTestPackageName() : getTestName();
+		String namespace = (doc != null) ? getTestPackageName() : getTestName();
+		return namespace.replace('.', '/');
 	}
 
 	protected String getTestMethodName() {
@@ -721,6 +737,16 @@ public abstract class TestCommons {
 	private static void __clear() {
 		while (__get() != null) {
 		}
+	}
+
+	protected static boolean inDebugMode() {
+		RuntimeMXBean runtimeMX = ManagementFactory.getRuntimeMXBean();
+
+		for (String arg : runtimeMX.getInputArguments()) {
+			if (arg.contains("jdwp")) return true;
+		}
+
+		return false;
 	}
 
 }

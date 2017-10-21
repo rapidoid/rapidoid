@@ -1,4 +1,6 @@
-=== HTTP handlers and routing[[app-listing]]
+### HTTP handlers and routing
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

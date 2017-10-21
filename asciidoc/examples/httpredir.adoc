@@ -1,4 +1,6 @@
-=== HTTP redirect[[app-listing]]
+### HTTP redirect
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

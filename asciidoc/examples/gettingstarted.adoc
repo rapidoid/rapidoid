@@ -1,4 +1,6 @@
-=== RESTful services with Lambda handlers, JPA, Jackson and Bean Validation[[app-listing]]
+### RESTful services with Lambda handlers, JPA, Jackson and Bean Validation
+
+[[app-listing]]
 [source,java]
 .Book.java
 ----

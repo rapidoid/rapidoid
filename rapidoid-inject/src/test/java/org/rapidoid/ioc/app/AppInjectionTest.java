@@ -33,6 +33,8 @@ public class AppInjectionTest extends AbstractInjectTest {
 	@Test
 	public void shouldInjectAndCallPostConstruct() {
 		IoC.manage(App.class, PersonServiceImpl.class);
+		IoC.ready();
+
 		isTrue(App.READY);
 
 		App app = IoC.singleton(App.class);

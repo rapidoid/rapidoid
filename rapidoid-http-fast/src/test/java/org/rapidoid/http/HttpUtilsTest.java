@@ -50,9 +50,9 @@ public class HttpUtilsTest extends TestCommons {
 		eq(HttpUtils.resName("/aa/bb.html"), "aa/bb");
 		eq(HttpUtils.resName("/aa/bb-c_d11.txt"), "aa/bb-c_d11.txt");
 
-		eq(HttpUtils.resNameFromRoutePath("/books/{x}"), "books/x");
-		eq(HttpUtils.resNameFromRoutePath("/books/{id:\\d+}"), "books/id");
-		eq(HttpUtils.resNameFromRoutePath("/books/{a:.*}-{b}/view"), "books/a-b/view");
+//		eq(HttpUtils.inferViewNameFromRoutePath("/books/{x}"), "books/x");
+//		eq(HttpUtils.inferViewNameFromRoutePath("/books/{id:\\d+}"), "books/id");
+//		eq(HttpUtils.inferViewNameFromRoutePath("/books/{a:.*}-{b}/view"), "books/a-b/view");
 	}
 
 	@Test
@@ -63,15 +63,22 @@ public class HttpUtilsTest extends TestCommons {
 		eq(HttpUtils.resName("/foo/咖啡/bar.html"), "foo/咖啡/bar");
 		eq(HttpUtils.resName("/編程/编程.html"), "編程/编程");
 
-		eq(HttpUtils.resNameFromRoutePath("/Николче/{x}"), "Николче/x");
-		eq(HttpUtils.resNameFromRoutePath("/Dlf3фок/{id:\\d+}"), "Dlf3фок/id");
-		eq(HttpUtils.resNameFromRoutePath("/咖啡/{a:.*}-{b}/foo"), "咖啡/a-b/foo");
+//		eq(HttpUtils.inferViewNameFromRoutePath("/Николче/{x}"), "Николче/x");
+//		eq(HttpUtils.inferViewNameFromRoutePath("/Dlf3фок/{id:\\d+}"), "Dlf3фок/id");
+//		eq(HttpUtils.inferViewNameFromRoutePath("/咖啡/{a:.*}-{b}/foo"), "咖啡/a-b/foo");
 	}
 
 	@Test
 	public void testInvalidResources() {
 		for (String resName : invalidResNames) {
-			eq(HttpUtils.resName(resName), null);
+
+			try {
+				HttpUtils.resName(resName);
+			} catch (Exception e) {
+				continue;
+			}
+
+			fail("Expected error!");
 		}
 	}
 

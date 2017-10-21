@@ -1,4 +1,6 @@
-=== Automatic Construction and Serialization of JavaBeans[[app-listing]]
+### Automatic Construction and Serialization of JavaBeans
+
+[[app-listing]]
 [source,java]
 .Book.java
 ----

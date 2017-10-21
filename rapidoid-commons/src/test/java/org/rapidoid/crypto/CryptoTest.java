@@ -26,6 +26,9 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Str;
 import org.rapidoid.env.Env;
 import org.rapidoid.test.AbstractCommonsTest;
+import org.rapidoid.u.U;
+
+import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.0.0")
@@ -48,7 +51,13 @@ public class CryptoTest extends AbstractCommonsTest {
 	public void testSpecifiedSecret() {
 		Env.setArgs("secret=mysecret");
 		String key = Str.toHex(Crypto.getSecretKey().encryptionKey);
-		isTrue(key.equals("DCE88CB5E440BC26D371D64E55DBB67832BBB44C2887BEE9C1DF17F88BC1764B") || key.equals("3CDB902856D13CC88139DD290822DA99E85242F16E575E73ED7953208B88B045"));
+
+		String key1 = "DCE88CB5E440BC26D371D64E55DBB67832BBB44C2887BEE9C1DF17F88BC1764B";
+		String key2 = "3CDB902856D13CC88139DD290822DA99E85242F16E575E73ED7953208B88B045";
+
+		Set<String> keys = U.set(key1, key2, key1.substring(0, key1.length() / 2), key2.substring(0, key2.length() / 2));
+
+		isTrue(keys.contains(key));
 	}
 
 	@Test

@@ -35,14 +35,12 @@ import org.rapidoid.util.Msc;
 public class AppVerification extends RapidoidThing {
 
 	static void selfVerify(String[] args) {
-		if (Arr.contains(args, "docker-self-verify")) {
+		if (Arr.contains(args, "docker-self-verify=true")) {
 			dockerSelfVerify();
 			verifyNotInitialized();
 		}
 
-		if (!Msc.isInsideTest()) {
-			verifyNotInitialized();
-		}
+		verifyNotInitialized();
 	}
 
 	private static void verifyNotInitialized() {

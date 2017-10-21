@@ -66,7 +66,7 @@ public class Log extends RapidoidThing {
 	}
 
 	public static synchronized void reset() {
-		setLogLevel(LogLevel.INFO);
+		setLogLevel(GlobalCfg.quiet() ? LogLevel.ERROR : LogLevel.INFO);
 		LogStats.reset();
 	}
 
@@ -230,7 +230,8 @@ public class Log extends RapidoidThing {
 	                        String key3, Object value3, String key4, Object value4, String key5, Object value5,
 	                        String key6, Object value6, String key7, Object value7, int paramsN) {
 
-		if (U.compare(level, LEVEL_ERROR) >= 0) LogStats.hasErrors(true);
+		boolean isError = U.compare(level, LEVEL_ERROR) >= 0;
+		if (isError) LogStats.hasErrors(true);
 
 		boolean visible = isEnabled(level);
 
@@ -320,9 +321,13 @@ public class Log extends RapidoidThing {
 			formatLogMsg(sb, msg, key1, value1, key2, value2, key3, value3, key4, value4,
 				key5, value5, key6, value6, key7, value7, paramsN);
 
-			synchronized (System.out) {
-				System.out.println(sb.toString());
+			String logMsg = sb.toString();
+			PrintStream stream = isError ? System.err : System.out;
+
+			synchronized (stream) {
+				stream.println(logMsg);
 			}
+
 			return;
 		}
 

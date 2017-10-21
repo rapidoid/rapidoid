@@ -33,10 +33,14 @@ import org.rapidoid.data.JSON;
 import org.rapidoid.env.Env;
 import org.rapidoid.fluent.Do;
 import org.rapidoid.io.IO;
+import org.rapidoid.job.Jobs;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.jpa.JPAUtil;
+import org.rapidoid.lambda.Executable;
 import org.rapidoid.lambda.F3;
+import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.log.Log;
+import org.rapidoid.net.util.NetUtil;
 import org.rapidoid.reverseproxy.Reverse;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.setup.Admin;
@@ -55,6 +59,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.concurrent.ScheduledFuture;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.5")
@@ -80,8 +85,6 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 
 		Conf.ROOT.setPath(getTestNamespace());
 
-		U.print("--- STARTING SERVER ---");
-
 		My.reset();
 
 		App.resetGlobalState();
@@ -91,8 +94,6 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 		On.setup().reload();
 
 		App.path(getTestPackageName());
-
-		U.print("--- SERVER STARTED ---");
 
 		verifyNoRoutes();
 
@@ -112,8 +113,6 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 
 	@After
 	public void closeContext() {
-		U.print("--- STOPPING SERVER ---");
-
 		if (Admin.setup().isRunning()) {
 			if (Admin.setup().port() == On.setup().port()) {
 				Admin.setup().reset();
@@ -121,8 +120,6 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 				Admin.setup().shutdown();
 			}
 		}
-
-		U.print("--- SERVER STOPPED ---");
 
 		RapidoidIntegrationTest.after(this);
 	}
@@ -227,16 +224,24 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 		testReq(DEFAULT_PORT, "GET", uri, null, null);
 	}
 
+	protected void getReq(int port, String uri) {
+		testReq(port, "GET", uri, null, null);
+	}
+
 	protected void postData(String uri, Map<String, ?> data) {
 		testReq(DEFAULT_PORT, "POST", uri, data, null);
+	}
+
+	protected void postData(int port, String uri, Map<String, ?> data) {
+		testReq(port, "POST", uri, data, null);
 	}
 
 	protected void postJson(String uri, Map<String, ?> data) {
 		testReq(DEFAULT_PORT, "POST", uri, null, JSON.stringify(data));
 	}
 
-	protected void postData(int port, String uri, Map<String, ?> data) {
-		testReq(port, "POST", uri, data, null);
+	protected void postJson(int port, String uri, Map<String, ?> data) {
+		testReq(port, "POST", uri, null, JSON.stringify(data));
 	}
 
 	protected void putData(String uri, Map<String, ?> data) {
@@ -262,6 +267,10 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 
 	protected void deleteReq(String uri) {
 		testReq(DEFAULT_PORT, "DELETE", uri, null, null);
+	}
+
+	protected void deleteReq(int port, String uri) {
+		testReq(port, "DELETE", uri, null, null);
 	}
 
 	protected void notFoundExcept(String uri, String... exceptVerbs) {
@@ -395,6 +404,10 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 		isTrue(On.routes().all().isEmpty());
 	}
 
+	protected void verifyJson(String name, Object actual) {
+		verifyCase(name, JSON.prettify(actual), name);
+	}
+
 	protected void tx(Runnable action) {
 		JPA.transaction(action);
 	}
@@ -404,6 +417,12 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 	}
 
 	protected <T> T connect(F3<T, InputStream, BufferedReader, DataOutputStream> protocol) {
-		return Msc.connect("localhost", 8080, 1000, protocol);
+		int timeout = RAPIDOID_CI ? 30000 : 10000;
+		return NetUtil.connect("localhost", 8080, timeout, protocol);
 	}
+
+	protected ScheduledFuture<Void> async(Executable executable) {
+		return Jobs.after(5).milliseconds(() -> Lmbd.execute(executable));
+	}
+
 }

@@ -37,12 +37,8 @@ import java.util.Arrays;
 @Since("5.3.0")
 public class PasswordHashTool extends RapidoidThing {
 
-	public static void main(String[] args) {
-		generatePasswordHash(args);
-	}
-
-	public static void generatePasswordHash(String[] args) {
-		U.must(U.isEmpty(args), "Expecting no arguments!");
+	static void generatePasswordHash(CmdArgs args) {
+		U.must(U.isEmpty(args.args), "Expecting no arguments!");
 
 		char[] password = readPassword();
 

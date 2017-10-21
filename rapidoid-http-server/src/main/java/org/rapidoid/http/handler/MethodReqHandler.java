@@ -2,6 +2,7 @@ package org.rapidoid.http.handler;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.HttpRoutes;
 import org.rapidoid.http.Req;
@@ -45,10 +46,10 @@ public class MethodReqHandler extends NParamMethodHandler {
 	}
 
 	@Override
-	protected Object handleReq(Channel channel, boolean isKeepAlive, Req req, Object extra) throws Exception {
+	protected Object handleReq(Channel channel, boolean isKeepAlive, Req req, Object extra) throws Throwable {
 		Object[] args = args(req);
 
-		Object result = method.invoke(instance, args);
+		Object result = Cls.invokeRethrowing(method, instance, args);
 
 		if (method.getReturnType() == void.class) {
 			U.must(result == null);

@@ -26,7 +26,7 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-public class PageGuiConfig extends RapidoidThing {
+public class PageGuiConfig extends RapidoidThing implements GuiConfig {
 
 	public volatile PageGuiType type = PageGuiType.grid;
 
@@ -40,6 +40,10 @@ public class PageGuiConfig extends RapidoidThing {
 
 	public volatile String uri;
 
+	public volatile boolean single;
+
+	public volatile int pageSize;
+
 	public PageGuiConfig() {
 	}
 
@@ -47,4 +51,43 @@ public class PageGuiConfig extends RapidoidThing {
 		this.sql = shortcut;
 	}
 
+	@Override
+	public PageGuiType type() {
+		return type;
+	}
+
+	@Override
+	public String caption() {
+		return caption;
+	}
+
+	@Override
+	public String header() {
+		return header;
+	}
+
+	@Override
+	public String footer() {
+		return footer;
+	}
+
+	@Override
+	public String sql() {
+		return sql;
+	}
+
+	@Override
+	public String uri() {
+		return uri;
+	}
+
+	@Override
+	public boolean single() {
+		return single;
+	}
+
+	@Override
+	public int pageSize() {
+		return pageSize;
+	}
 }

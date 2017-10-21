@@ -1,14 +1,14 @@
-### OAuth
+## OAuth
 
 Rapidoid has built-in support for OAuth.
 
 TODO: add more details here...
 
-#### Configuring
+### Configuring
 
 Please see the `oauth` configuration section.
 
-#### Bootstrap
+### Bootstrap
 
 Bootstrapping the OAuth handlers is easy:
 

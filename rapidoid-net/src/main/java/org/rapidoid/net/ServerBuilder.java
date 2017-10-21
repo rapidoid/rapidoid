@@ -6,6 +6,10 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.net.impl.RapidoidServerLoop;
+import org.rapidoid.net.tls.TLSUtil;
+import org.rapidoid.util.MscOpts;
+
+import javax.net.ssl.SSLContext;
 
 /*
  * #%L
@@ -43,11 +47,30 @@ public class ServerBuilder extends RapidoidThing {
 
 	private volatile boolean syncBufs = Conf.NET.entry("syncBufs").or(true);
 
+	private volatile boolean blockingAccept = Conf.NET.entry("blockingAccept").or(false);
+
 	private volatile org.rapidoid.net.Protocol protocol = null;
 
 	private volatile Class<? extends org.rapidoid.net.impl.DefaultExchange<?>> exchangeClass = null;
 
 	private volatile Class<? extends org.rapidoid.net.impl.RapidoidHelper> helperClass = RapidoidHelper.class;
+
+	// auto-activate if TLS is enabled
+	private volatile boolean tls = MscOpts.isTLSEnabled();
+
+	private volatile String keystore = Conf.TLS.entry("keystore").or("");
+
+	private volatile char[] keystorePassword = Conf.TLS.entry("keystorePassword").or("").toCharArray();
+
+	private volatile char[] keyManagerPassword = Conf.TLS.entry("keyManagerPassword").or("").toCharArray();
+
+	private volatile String truststore = Conf.TLS.entry("truststore").or("");
+
+	private volatile char[] truststorePassword = Conf.TLS.entry("truststorePassword").or("").toCharArray();
+
+	private volatile boolean selfSignedTLS = Conf.TLS.is("selfSigned");
+
+	private volatile SSLContext tlsContext;
 
 	public ServerBuilder address(String address) {
 		this.address = address;
@@ -107,16 +130,18 @@ public class ServerBuilder extends RapidoidThing {
 		return bufSizeKB;
 	}
 
-	public void bufSizeKB(int bufSizeKB) {
+	public ServerBuilder bufSizeKB(int bufSizeKB) {
 		this.bufSizeKB = bufSizeKB;
+		return this;
 	}
 
 	public boolean noDelay() {
 		return noDelay;
 	}
 
-	public void noDelay(boolean noDelay) {
+	public ServerBuilder noDelay(boolean noDelay) {
 		this.noDelay = noDelay;
+		return this;
 	}
 
 	public boolean syncBufs() {
@@ -128,8 +153,89 @@ public class ServerBuilder extends RapidoidThing {
 		return this;
 	}
 
-	public Server build() {
-		return new RapidoidServerLoop(protocol, exchangeClass, helperClass, address, port, workers, bufSizeKB, noDelay, syncBufs);
+	public boolean blockingAccept() {
+		return blockingAccept;
+	}
+
+	public ServerBuilder blockingAccept(boolean blockingAccept) {
+		this.blockingAccept = blockingAccept;
+		return this;
+	}
+
+	public boolean tls() {
+		return tls;
+	}
+
+	public ServerBuilder tls(boolean tls) {
+		this.tls = tls;
+		return this;
+	}
+
+	public String keystore() {
+		return keystore;
+	}
+
+	public ServerBuilder keystore(String keystore) {
+		this.keystore = keystore;
+		return this;
+	}
+
+	public char[] keystorePassword() {
+		return keystorePassword;
+	}
+
+	public ServerBuilder keystorePassword(char[] keystorePassword) {
+		this.keystorePassword = keystorePassword;
+		return this;
+	}
+
+	public char[] keyManagerPassword() {
+		return keyManagerPassword;
+	}
+
+	public ServerBuilder keyManagerPassword(char[] keyManagerPassword) {
+		this.keyManagerPassword = keyManagerPassword;
+		return this;
+	}
+
+	public String truststore() {
+		return truststore;
+	}
+
+	public ServerBuilder truststore(String truststore) {
+		this.truststore = truststore;
+		return this;
+	}
+
+	public char[] truststorePassword() {
+		return truststorePassword;
+	}
+
+	public ServerBuilder truststorePassword(char[] truststorePassword) {
+		this.truststorePassword = truststorePassword;
+		return this;
+	}
+
+	public SSLContext tlsContext() {
+		return tlsContext;
+	}
+
+	public ServerBuilder tlsContext(SSLContext tlsContext) {
+		this.tlsContext = tlsContext;
+		return this;
+	}
+
+	public synchronized Server build() {
+
+		if (tls && tlsContext == null) {
+			tlsContext = TLSUtil.createContext(keystore, keystorePassword, keyManagerPassword, truststore, truststorePassword, selfSignedTLS);
+		}
+
+		// don't provide TLS context unless TLS is enabled
+		SSLContext tlsCtx = tls ? tlsContext : null;
+
+		return new RapidoidServerLoop(protocol, exchangeClass, helperClass, address, port,
+			workers, bufSizeKB, noDelay, syncBufs, blockingAccept, tlsCtx);
 	}
 
 }

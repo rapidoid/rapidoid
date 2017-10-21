@@ -28,6 +28,8 @@ import org.rapidoid.net.impl.DefaultExchange;
 import org.rapidoid.net.impl.RapidoidClientLoop;
 import org.rapidoid.net.impl.RapidoidHelper;
 
+import javax.net.ssl.SSLContext;
+
 @Authors("Nikolche Mihajlovski")
 @Since("NET_EXTRAS")
 public class TCPClientBuilder extends RapidoidThing {
@@ -154,7 +156,12 @@ public class TCPClientBuilder extends RapidoidThing {
 	}
 
 	public TCPClient build() {
-		return new RapidoidClientLoop(protocol, exchangeClass, helperClass, host, port, workers, bufSizeKB, noDelay, syncBufs, reconnecting, connections);
+
+		// FIXME TLS support (see ServerBuilder)
+		SSLContext tlsCtx = null;
+
+		return new RapidoidClientLoop(protocol, exchangeClass, helperClass, host, port, workers,
+			bufSizeKB, noDelay, syncBufs, reconnecting, connections, tlsCtx);
 	}
 
 }

@@ -2,10 +2,8 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-echo Building the getting-started example
+echo Building the examples...
 
-cd examples/getting-started
+cd examples
 
-mvn clean install -Pfull
-
-cp target/app-full.jar ../../docker-tests/app3/app.jar
+mvn clean install

@@ -1,4 +1,4 @@
-### Quick start
+## Quick start
 
 For a quick start please use the `rapidoid-quick` module. It consists of `rapidoid-web` + batteries included:
 

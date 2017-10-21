@@ -1,4 +1,6 @@
-=== Custom template loader[[app-listing]]
+### Custom template loader
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

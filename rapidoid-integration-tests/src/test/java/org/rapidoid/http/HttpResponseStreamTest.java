@@ -35,6 +35,8 @@ public class HttpResponseStreamTest extends IsolatedIntegrationTest {
 	public void testOutputStream() {
 		On.req(req -> {
 			IO.write(req.response().out(), req.data().toString());
+			req.response().out().close(); // FIXME remove this, auto-close on Req done
+//			req.done(); // FIXME fails (job already finished)
 			return req;
 		});
 

@@ -36,7 +36,7 @@ public class ProcessParams extends RapidoidThing {
 
 	private volatile String[] command;
 
-	private volatile Processes group = Processes.DEFAULT;
+	private volatile Processes group = Processes.GROUP;
 
 	private volatile boolean printingOutput;
 

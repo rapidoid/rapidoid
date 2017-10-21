@@ -6,6 +6,7 @@ import org.rapidoid.collection.Coll;
 import org.rapidoid.datamodel.Results;
 import org.rapidoid.lambda.Mapper;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.Map;
@@ -139,6 +140,10 @@ public class JDBC extends JdbcUtil {
 
 	public static void release(Connection connection) {
 		api().release(connection);
+	}
+
+	public static DataSource bootstrapDatasource() {
+		return api().bootstrapDatasource();
 	}
 
 }

@@ -17,6 +17,7 @@ import org.rapidoid.scan.Scan;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.MscOpts;
+import org.rapidoid.util.Once;
 
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Constructor;
@@ -67,6 +68,8 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 			}
 		});
 
+	private final Once activate = new Once();
+
 	@Override
 	public IoCContext name(String name) {
 		this.name = name;
@@ -89,6 +92,7 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 		state.reset();
 		metadata.clear();
 		beanProvider = null;
+		activate.reset();
 	}
 
 	private ClassMetadata meta(Class<?> type) {
@@ -413,21 +417,16 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 		return wired != null && wired.optional();
 	}
 
-	private <T> void invokePostConstruct(T target) {
-		List<Method> methods = Cls.getMethodsAnnotated(target.getClass(), PostConstruct.class);
-
-		for (Method method : methods) {
-			Cls.invoke(method, target);
-		}
-	}
-
 	private <T> T register(T target, Map<String, Object> properties) {
 		U.must(Cls.isAppBean(target), "Not a bean: %s", target);
 
 		if (!isManaged(target)) {
 			add(target);
 			autowire(target, properties, null, null);
-			invokePostConstruct(target);
+
+			if (activate.isDone()) {
+				invokePostConstruct(target);
+			}
 		}
 
 		return target;
@@ -585,6 +584,27 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 	@Override
 	public String toString() {
 		return Deep.copyOf(state.instances, Msc.TRANSFORM_TO_SIMPLE_CLASS_NAME).toString();
+	}
+
+	@Override
+	public void ready() {
+		if (activate.go()) {
+			onReady();
+		}
+	}
+
+	private void onReady() {
+		for (Object bean : getManagedInstances()) {
+			invokePostConstruct(bean);
+		}
+	}
+
+	private <T> void invokePostConstruct(T target) {
+		List<Method> methods = Cls.getMethodsAnnotated(target.getClass(), PostConstruct.class);
+
+		for (Method method : methods) {
+			Cls.invoke(method, target);
+		}
 	}
 
 	void wrapper(IoCContextWrapper wrapper) {

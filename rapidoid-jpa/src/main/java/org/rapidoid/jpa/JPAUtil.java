@@ -18,6 +18,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.metamodel.EntityType;
+import javax.sql.DataSource;
 import java.net.ConnectException;
 import java.util.List;
 import java.util.Properties;
@@ -75,13 +76,13 @@ public class JPAUtil extends RapidoidThing {
 		return Ctxs.required().persister();
 	}
 
-	public static void bootstrap(String[] path, Class<?>... providedEntities) {
+	public static void bootstrap(String[] path, DataSource dataSource, Class<?>... providedEntities) {
 		if (MscOpts.hasHibernate()) {
 
 			if (emf() == null) {
-				bootstrapJPA(path, providedEntities);
+				bootstrapJPA(path, dataSource, providedEntities);
 			} else {
-				Log.warn("A custom EMF was already assigned, won't bootstrap JPA!");
+				Log.info("JPA has already been bootstrapped");
 			}
 
 		} else {
@@ -89,10 +90,10 @@ public class JPAUtil extends RapidoidThing {
 		}
 	}
 
-	private static void bootstrapJPA(String[] path, Class<?>[] providedEntities) {
+	private static void bootstrapJPA(String[] path, DataSource dataSource, Class<?>[] providedEntities) {
 		Msc.logSection("Bootstrapping JPA (Hibernate)...");
 
-		List<String> entityTypes = EMFUtil.createEMF(path, providedEntities);
+		List<String> entityTypes = EMFUtil.getEntityTypes(path, providedEntities);
 
 		if (entityTypes.isEmpty()) {
 			Log.info("Didn't find JPA entities, canceling JPA/Hibernate setup!");
@@ -105,7 +106,7 @@ public class JPAUtil extends RapidoidThing {
 
 		Msc.logSection("Starting Hibernate:");
 
-		CustomHibernatePersistenceProvider provider = new CustomHibernatePersistenceProvider();
+		CustomHibernatePersistenceProvider provider = new CustomHibernatePersistenceProvider(dataSource);
 		provider.names().addAll(entityTypes);
 
 		EntityManagerFactory emf = createEMF(props, provider);
@@ -178,14 +179,14 @@ public class JPAUtil extends RapidoidThing {
 		return emf;
 	}
 
-	public static <T> List<T> getPage(Query q, long start, long length) {
+	public static <T> List<T> getPage(Query q, long skip, long limit) {
 
-		U.must(start < Integer.MAX_VALUE && start >= 0);
-		U.must(length >= 0);
-		length = Math.min(length, Integer.MAX_VALUE);
+		U.must(skip < Integer.MAX_VALUE && skip >= 0);
+		U.must(limit >= -1); // -1 means no limit
+		limit = Math.min(limit, Integer.MAX_VALUE);
 
-		q.setFirstResult((int) start);
-		q.setMaxResults((int) length);
+		q.setFirstResult((int) skip);
+		q.setMaxResults(limit >= 0 ? (int) limit : Integer.MAX_VALUE);
 
 		return q.getResultList();
 	}

@@ -71,11 +71,7 @@ public class PojoHandlersSetup extends RapidoidThing {
 
 	private void process(boolean register) {
 		for (Object bean : beans) {
-			try {
-				processBean(register, bean);
-			} catch (Exception e) {
-				Log.error("Couldn't process bean: " + bean, e);
-			}
+			processBean(register, bean);
 		}
 	}
 

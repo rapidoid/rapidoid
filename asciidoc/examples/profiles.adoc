@@ -1,4 +1,6 @@
-=== Application Profiles[[app-listing]]
+### Application Profiles
+
+[[app-listing]]
 [source,java]
 .FooCtrl.java
 ----

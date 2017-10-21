@@ -1,4 +1,6 @@
-=== Dependency injection of singletons[[app-listing]]
+### Dependency injection of singletons
+
+[[app-listing]]
 [source,java]
 .Bar.java
 ----

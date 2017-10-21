@@ -43,7 +43,7 @@ public class MockReqInfo extends AbstractReqInfo {
 
 	private String zone = "main";
 
-	private String contextPath = "/";
+	private String contextPath = "";
 
 	private Map<String, Object> data = U.map();
 

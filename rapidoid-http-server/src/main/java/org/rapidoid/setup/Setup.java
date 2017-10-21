@@ -11,7 +11,10 @@ import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.data.JSON;
 import org.rapidoid.env.Env;
 import org.rapidoid.env.RapidoidEnv;
-import org.rapidoid.http.*;
+import org.rapidoid.http.FastHttp;
+import org.rapidoid.http.HttpRoutes;
+import org.rapidoid.http.ReqHandler;
+import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.ViewResolver;
 import org.rapidoid.http.handler.HttpHandler;
@@ -29,10 +32,7 @@ import org.rapidoid.lambda.NParamLambda;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Server;
 import org.rapidoid.u.U;
-import org.rapidoid.util.AppInfo;
-import org.rapidoid.util.LazyInit;
-import org.rapidoid.util.MscOpts;
-import org.rapidoid.util.Once;
+import org.rapidoid.util.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -65,6 +65,12 @@ import static org.rapidoid.util.Constants.*;
 @Since("5.1.0")
 public class Setup extends RapidoidInitializer {
 
+	static final Config MAIN_CFG = Msc.isPlatform() ? Conf.RAPIDOID : Conf.ON;
+	static final Config ADMIN_CFG = Msc.isPlatform() ? Conf.RAPIDOID_ADMIN : Conf.ADMIN;
+
+	private static final String DEFAULT_ADDRESS = "0.0.0.0";
+	private static final int DEFAULT_PORT = Msc.isPlatform() ? 8888 : 8080;
+
 	private static final LazyInit<DefaultSetup> DEFAULT = new LazyInit<>(new Callable<DefaultSetup>() {
 		@Override
 		public DefaultSetup call() throws Exception {
@@ -94,14 +100,10 @@ public class Setup extends RapidoidInitializer {
 	private final String zone;
 	private final Config serverConfig;
 
-	private final String defaultAddress;
-	private final int defaultPort;
-
 	private final IoCContext ioCContext;
 
 	private final Customization customization;
 	private final HttpRoutesImpl routes;
-	private volatile FastHttp http;
 	private volatile RouteOptions defaults = new RouteOptions();
 
 	private volatile Integer port;
@@ -113,17 +115,27 @@ public class Setup extends RapidoidInitializer {
 	private volatile Server server;
 	private volatile boolean activated;
 	private volatile boolean reloaded;
+	private volatile boolean autoActivating = !isAppSetupAtomic();
 
-	private final Once bootstrapedComponents = new Once();
+	private volatile Runnable onInit;
+
+	private final Once bootstrappedBeans = new Once();
+
+	private final LazyInit<FastHttp> lazyHttp = new LazyInit<>(new Callable<FastHttp>() {
+		@Override
+		public FastHttp call() throws Exception {
+			return initHttp();
+		}
+	});
 
 	public static Setup create(String name) {
 		IoCContext ioc = IoC.createContext().name(name);
 		Config config = Conf.section(name);
 
 		Customization customization = new Customization(name, My.custom(), config);
-		HttpRoutesImpl routes = new HttpRoutesImpl(customization);
+		HttpRoutesImpl routes = new HttpRoutesImpl(name, customization);
 
-		Setup setup = new Setup(name, "main", "0.0.0.0", 8080, ioc, config, customization, routes);
+		Setup setup = new Setup(name, "main", ioc, config, customization, routes);
 
 		instances.add(setup);
 		return setup;
@@ -134,12 +146,11 @@ public class Setup extends RapidoidInitializer {
 		instances.remove(this);
 	}
 
-	Setup(String name, String zone, String defaultAddress, int defaultPort, IoCContext ioCContext, Config serverConfig, Customization customization, HttpRoutesImpl routes) {
+	Setup(String name, String zone, IoCContext ioCContext,
+	      Config serverConfig, Customization customization, HttpRoutesImpl routes) {
+
 		this.name = name;
 		this.zone = zone;
-
-		this.defaultAddress = defaultAddress;
-		this.defaultPort = defaultPort;
 
 		this.ioCContext = ioCContext;
 		this.serverConfig = serverConfig;
@@ -156,33 +167,27 @@ public class Setup extends RapidoidInitializer {
 		return DEFAULT.get().admin;
 	}
 
-	public FastHttp http() {
-		if (http != null) {
-			return http;
+	private FastHttp initHttp() {
+		if (isAdminAndSameAsApp() && on().lazyHttp.isInitialized()) {
+			return on().http();
+
+		} else if (isAppAndSameAsAdmin() && admin().lazyHttp.isInitialized()) {
+			return admin().http();
 		}
 
-		synchronized (this) {
-			if (isAdminAndSameAsApp() && on().http != null) {
-				return on().http;
-
-			} else if (isAppAndSameAsAdmin() && admin().http != null) {
-				return admin().http;
-			}
-
-			if (http == null) {
-				if (isAppOrAdminOnSameServer()) {
-					U.must(on().routes == admin().routes);
-					http = new FastHttp(on().routes, on().serverConfig);
-				} else {
-					http = new FastHttp(routes, serverConfig);
-				}
-			}
+		if (isAppOrAdminOnSameServer()) {
+			U.must(on().routes == admin().routes);
+			return new FastHttp(on().routes, on().serverConfig);
+		} else {
+			return new FastHttp(routes, serverConfig);
 		}
-
-		return http;
 	}
 
-	private synchronized Server listen() {
+	public FastHttp http() {
+		return lazyHttp.get();
+	}
+
+	private synchronized void listen() {
 
 		if (!listening && !reloaded) {
 
@@ -205,22 +210,20 @@ public class Setup extends RapidoidInitializer {
 			}
 
 			if (server == null) {
-				int onPort;
+				int targetPort;
 
 				if (isAppOrAdminOnSameServer()) {
-					onPort = on().port();
-					server = proc.listen(on().address(), onPort);
+					targetPort = on().port();
+					server = proc.listen(on().address(), targetPort);
 				} else {
-					onPort = port();
-					server = proc.listen(address(), onPort);
+					targetPort = port();
+					server = proc.listen(address(), targetPort);
 				}
 
-				Log.info("!Server has started", "setup", name(), "!home", "http://localhost:" + onPort);
+				Log.info("!Server has started", "setup", name(), "!home", "http://localhost:" + targetPort);
 				Log.info("!Static resources will be served from the following locations", "setup", name(), "!locations", custom().staticFilesPath());
 			}
 		}
-
-		return server;
 	}
 
 	private boolean isAppOrAdminOnSameServer() {
@@ -236,7 +239,9 @@ public class Setup extends RapidoidInitializer {
 	}
 
 	static boolean appAndAdminOnSameServer() {
-		return U.eq(Conf.ADMIN.get("port"), "same");
+		String mainPort = MAIN_CFG.entry("port").str().getOrNull();
+		String adminPort = ADMIN_CFG.entry("port").str().getOrNull();
+		return U.eq(mainPort, adminPort);
 	}
 
 	private boolean isAppAndSameAsAdmin() {
@@ -255,6 +260,10 @@ public class Setup extends RapidoidInitializer {
 		return this == on();
 	}
 
+	void autoActivate() {
+		if (autoActivating) activate();
+	}
+
 	public synchronized void activate() {
 		RapidoidEnv.touch();
 
@@ -262,6 +271,9 @@ public class Setup extends RapidoidInitializer {
 			return;
 		}
 		activated = true;
+
+		Runnable initializer = onInit;
+		if (initializer != null) initializer.run();
 
 		if (!reloaded) {
 			listen();
@@ -279,75 +291,64 @@ public class Setup extends RapidoidInitializer {
 	}
 
 	public OnRoute route(String verb, String path) {
-		activate();
-		return new OnRoute(http(), defaults, routes, verb.toUpperCase(), path);
+		return new OnRoute(this, verb.toUpperCase(), path);
 	}
 
 	public OnRoute any(String path) {
-		activate();
-		return new OnRoute(http(), defaults, routes, ANY, path);
+		return new OnRoute(this, ANY, path);
 	}
 
 	public OnRoute get(String path) {
-		activate();
-		return new OnRoute(http(), defaults, routes, GET, path);
+		return new OnRoute(this, GET, path);
 	}
 
 	public OnRoute post(String path) {
-		activate();
-		return new OnRoute(http(), defaults, routes, POST, path);
+		return new OnRoute(this, POST, path);
 	}
 
 	public OnRoute put(String path) {
-		activate();
-		return new OnRoute(http(), defaults, routes, PUT, path);
+		return new OnRoute(this, PUT, path);
 	}
 
 	public OnRoute delete(String path) {
-		activate();
-		return new OnRoute(http(), defaults, routes, DELETE, path);
+		return new OnRoute(this, DELETE, path);
 	}
 
 	public OnRoute patch(String path) {
-		activate();
-		return new OnRoute(http(), defaults, routes, PATCH, path);
+		return new OnRoute(this, PATCH, path);
 	}
 
 	public OnRoute options(String path) {
-		activate();
-		return new OnRoute(http(), defaults, routes, OPTIONS, path);
+		return new OnRoute(this, OPTIONS, path);
 	}
 
 	public OnRoute head(String path) {
-		activate();
-		return new OnRoute(http(), defaults, routes, HEAD, path);
+		return new OnRoute(this, HEAD, path);
 	}
 
 	public OnRoute trace(String path) {
-		activate();
-		return new OnRoute(http(), defaults, routes, TRACE, path);
+		return new OnRoute(this, TRACE, path);
 	}
 
 	public OnRoute page(String path) {
-		activate();
-		return new OnRoute(http(), defaults, routes, GET_OR_POST, path);
+		return new OnRoute(this, GET_OR_POST, path);
 	}
 
 	public Setup req(ReqHandler handler) {
-		activate();
 		routes.addGenericHandler(new DelegatingParamsAwareReqHandler(http(), routes, opts(), handler));
+		autoActivate();
 		return this;
 	}
 
 	public Setup req(ReqRespHandler handler) {
-		activate();
 		routes.addGenericHandler(new DelegatingParamsAwareReqRespHandler(http(), routes, opts(), handler));
+		autoActivate();
 		return this;
 	}
 
 	public Setup req(HttpHandler handler) {
-		activate();
 		routes.addGenericHandler(handler);
+		autoActivate();
 		return this;
 	}
 
@@ -417,12 +418,13 @@ public class Setup extends RapidoidInitializer {
 		listening = false;
 		reloaded = false;
 		port = null;
-		http = null;
+		lazyHttp.reset();
 		address = null;
 		processor = null;
 		activated = false;
 		ioCContext.reset();
 		server = null;
+		autoActivating = !isAppSetupAtomic();
 
 		defaults = new RouteOptions();
 		defaults().zone(zone);
@@ -437,7 +439,7 @@ public class Setup extends RapidoidInitializer {
 			AppInfo.adminPort = 0;
 		}
 
-		bootstrapedComponents.reset();
+		bootstrappedBeans.reset();
 
 		initDefaults();
 	}
@@ -452,7 +454,7 @@ public class Setup extends RapidoidInitializer {
 
 	@SuppressWarnings("unchecked")
 	public Setup scan(String... packages) {
-		if (!bootstrapedComponents.go()) return this;
+		if (!bootstrappedBeans.go()) return this;
 
 		beans(App.findBeans(packages).toArray());
 
@@ -475,7 +477,7 @@ public class Setup extends RapidoidInitializer {
 
 	public void reload() {
 		reloaded = true;
-		bootstrapedComponents.reset();
+		bootstrappedBeans.reset();
 		ioCContext.reset();
 		http().resetConfig();
 		defaults = new RouteOptions();
@@ -488,7 +490,7 @@ public class Setup extends RapidoidInitializer {
 		}
 	}
 
-	public static List<Setup> instances() {
+	static List<Setup> instances() {
 		return Collections.unmodifiableList(instances);
 	}
 
@@ -546,39 +548,20 @@ public class Setup extends RapidoidInitializer {
 
 	public int port() {
 		if (port == null) {
-			port = calcPort();
+			port = serverConfig.entry("port").or(DEFAULT_PORT);
 		}
-
-		port = U.or(port, defaultPort);
 
 		U.must(port >= 0, "The port of server setup '%s' is negative!", name());
+
 		return port;
-	}
-
-	private Integer calcPort() {
-		if (port != null) {
-			return port;
-		}
-
-		String portCfg = serverConfig.entry("port").str().getOrNull();
-
-		if (U.notEmpty(portCfg)) {
-			if (portCfg.equalsIgnoreCase("same")) {
-				U.must(!isApp(), "Cannot configure the app port (on.port) with value = 'same'!");
-				return on().port();
-
-			} else {
-				return U.num(portCfg);
-			}
-		}
-
-		return null;
 	}
 
 	public String address() {
 		if (address == null) {
-			address = serverConfig.entry("address").or(defaultAddress);
+			address = serverConfig.entry("address").or(DEFAULT_ADDRESS);
 		}
+
+		U.must(U.notEmpty(address), "The address of server setup '%s' is empty!", name());
 
 		return address;
 	}
@@ -592,6 +575,45 @@ public class Setup extends RapidoidInitializer {
 	}
 
 	static void initDefaults() {
-		DEFAULT.get().initDefaults();
+		DefaultSetup defaultSetup = DEFAULT.getValue();
+
+		if (defaultSetup != null) {
+			defaultSetup.initDefaults();
+		}
 	}
+
+	@Override
+	public String toString() {
+		return "Setup{" +
+			"name='" + name + '\'' +
+			", zone='" + zone + '\'' +
+			", serverConfig=" + serverConfig +
+			", customization=" + customization +
+			", routes=" + routes +
+			'}';
+	}
+
+	public void onInit(Runnable onInit) {
+		this.onInit = onInit;
+	}
+
+	public boolean autoActivating() {
+		return autoActivating;
+	}
+
+	public Setup autoActivating(boolean autoActivating) {
+		this.autoActivating = autoActivating;
+		return this;
+	}
+
+	public static void ready() {
+		for (Setup setup : instances) {
+			setup.activate();
+		}
+	}
+
+	private static boolean isAppSetupAtomic() {
+		return App.status() == AppStatus.INITIALIZING;
+	}
+
 }

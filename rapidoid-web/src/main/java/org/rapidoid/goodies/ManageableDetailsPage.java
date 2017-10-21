@@ -2,16 +2,16 @@ package org.rapidoid.goodies;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.group.GroupOf;
-import org.rapidoid.group.Groups;
+import org.rapidoid.commons.Str;
 import org.rapidoid.group.Manageable;
+import org.rapidoid.group.Manageables;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.Resp;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -39,40 +39,102 @@ import java.util.Map;
 @Since("5.3.0")
 public class ManageableDetailsPage extends GUI implements ReqRespHandler {
 
+	private volatile String mngType;
+	private volatile String mngId;
+	private volatile String mngSub;
+
+	private volatile String baseUri;
+
 	@Override
 	public Object execute(Req req, Resp resp) {
 
-		String type = req.data("type");
-		String id = req.data("id");
+		String type = mngType != null ? mngType : req.<String>data("type");
+		String id = mngId != null ? mngId : req.<String>data("id");
+		String sub = mngSub != null ? mngSub : req.<String>data("_", null);
 
-		Manageable target = Groups.findMember(type, id);
-		U.must(target != null, "Cannot find the manageable!");
+		List<String> nav = U.list(type, id);
+		if (U.notEmpty(sub)) Collections.addAll(nav, sub.split("/"));
 
+		Manageable target = Manageables.find(type, id, sub);
+
+		Object customDisplay = target.getManageableDisplay();
+
+		return customDisplay != null ? customDisplay : genericDisplay(target, nav);
+	}
+
+	private Object genericDisplay(Manageable target, List<String> nav) {
 		List<String> columns = target.getManageableProperties();
 
 		if (U.notEmpty(columns)) {
-			return multi(info(target, columns));
+			return multi(info(target, columns, nav));
 
 		} else {
 			return N_A;
 		}
 	}
 
-	public Object info(Manageable target, List<String> columns) {
+	private Object info(Manageable target, List<String> columns, List<String> nav) {
 		List<Object> info = U.list();
 
-		GroupOf<? extends Manageable> group = target.group();
+		String kind = target.kind();
+		String back = this.baseUri;
 
-		String kind = group.kind();
-		String back = Msc.specialUri("manageables");
-
-		Map<String, String> breadcrumb = U.map(kind, back, group.name(), back, target.id(), "#");
-		info.add(breadcrumb(breadcrumb));
+		Map<String, String> breadcrumb = U.map(kind, back, target.id(), "#"); // FIXME
+		info.add(breadcrumb(breadcrumb)); // .uriPrefix
 
 		info.add(show(target, U.arrayOf(String.class, columns)));
 
-		info.add(autoRefresh(2000));
+		Map<String, List<Manageable>> children = target.getManageableChildren();
+
+		for (Map.Entry<String, List<Manageable>> e : children.entrySet()) {
+
+			String section = e.getKey();
+			info.add(h3(Str.phrase(section) + ":"));
+
+			List<String> snav = U.list(nav);
+			snav.add(section);
+
+			ManageablesOverviewPage.addInfo(baseUri, info, snav, e.getValue());
+		}
+
+		info.add(autoRefresh(5000));
+
 		return info;
 	}
 
+	public String mngType() {
+		return mngType;
+	}
+
+	public ManageableDetailsPage mngType(String mngType) {
+		this.mngType = mngType;
+		return this;
+	}
+
+	public String mngId() {
+		return mngId;
+	}
+
+	public ManageableDetailsPage mngId(String mngId) {
+		this.mngId = mngId;
+		return this;
+	}
+
+	public String mngSub() {
+		return mngSub;
+	}
+
+	public ManageableDetailsPage mngSub(String mngSub) {
+		this.mngSub = mngSub;
+		return this;
+	}
+
+	public String baseUri() {
+		return baseUri;
+	}
+
+	public ManageableDetailsPage baseUri(String baseUri) {
+		this.baseUri = baseUri;
+		return this;
+	}
 }

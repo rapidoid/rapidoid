@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.rapidoid</groupId>
 		<artifactId>rapidoid</artifactId>
-		<version>5.3.5-SNAPSHOT</version>
+		<version>5.4.6-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>rapidoid-jpa</artifactId>
@@ -15,6 +15,11 @@
 		<dependency>
 			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-commons</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-sql</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

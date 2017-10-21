@@ -1,4 +1,6 @@
-=== Generic handlers match any request[[app-listing]]
+### Generic handlers match any request
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

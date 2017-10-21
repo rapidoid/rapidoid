@@ -9,7 +9,6 @@ printf "\n - Testing CONFIGURATION (tag=$TAG)\n\n"
 docker run \
     --net host \
     -v $(pwd)/app1:/app \
-    -u nobody \
     -e "UNIFORM_OUTPUT=true" \
     rapidoid/rapidoid:$TAG \
     app.services=status \

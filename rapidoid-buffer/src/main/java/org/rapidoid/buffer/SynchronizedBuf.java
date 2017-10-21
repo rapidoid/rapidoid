@@ -7,6 +7,7 @@ import org.rapidoid.data.BufRange;
 import org.rapidoid.data.BufRanges;
 import org.rapidoid.wrap.IntWrap;
 
+import javax.net.ssl.SSLEngine;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -377,6 +378,11 @@ public class SynchronizedBuf extends OutputStream implements Buf {
 	@Override
 	public Buf unwrap() {
 		return buf;
+	}
+
+	@Override
+	public synchronized int sslWrap(SSLEngine engine, Buf dest) {
+		return buf.sslWrap(engine, dest);
 	}
 
 	@Override

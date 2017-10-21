@@ -1,4 +1,6 @@
-=== Rendering a HTTP response[[app-listing]]
+### Rendering a HTTP response
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

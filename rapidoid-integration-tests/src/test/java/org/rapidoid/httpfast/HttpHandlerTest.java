@@ -39,7 +39,7 @@ public class HttpHandlerTest extends IsolatedIntegrationTest {
 	@Test
 	public void testFastHttpHandler() {
 		Customization customization = new Customization("example", My.custom(), new ConfigImpl());
-		HttpRoutesImpl routes = new HttpRoutesImpl(customization);
+		HttpRoutesImpl routes = new HttpRoutesImpl("example", customization);
 		FastHttp http = new FastHttp(routes);
 
 		routes.on("get", "/abc", (req, resp) -> resp.json(req.data()));

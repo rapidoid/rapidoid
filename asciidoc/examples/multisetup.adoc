@@ -1,0 +1,73 @@
+### Bootstrapping multiple servers
+
+[[app-listing]]
+[source,java]
+.Main.java
+----
+package org.rapidoid.docs.multisetup;
+
+import org.rapidoid.docs.multisetup.barsetup.BarSetupCtrl;
+import org.rapidoid.docs.multisetup.foosetup.FooSetupCtrl;
+import org.rapidoid.http.HTTP;
+import org.rapidoid.setup.App;
+import org.rapidoid.setup.Setup;
+
+public class Main {
+
+	public static void main(String[] args) {
+		App.run(args);
+
+		Setup setup1 = Setup.create("foo").port(2222);
+		Setup setup2 = Setup.create("bar").port(3333);
+
+		setup1.scan(FooSetupCtrl.class.getPackage().getName());
+		setup2.scan(BarSetupCtrl.class.getPackage().getName());
+
+		// demo
+		HTTP.get("localhost:2222/foo").print();
+		HTTP.get("localhost:3333/bar").print();
+	}
+
+}
+----
+
+[[app-listing]]
+[source,java]
+.barsetup/BarSetupCtrl.java
+----
+package org.rapidoid.docs.multisetup.barsetup;
+
+import org.rapidoid.annotation.Controller;
+import org.rapidoid.annotation.GET;
+
+@Controller
+public class BarSetupCtrl {
+
+	@GET
+	public String bar() {
+		return "Hello, bar!";
+	}
+
+}
+----
+
+[[app-listing]]
+[source,java]
+.foosetup/FooSetupCtrl.java
+----
+package org.rapidoid.docs.multisetup.foosetup;
+
+import org.rapidoid.annotation.Controller;
+import org.rapidoid.annotation.GET;
+
+@Controller
+public class FooSetupCtrl {
+
+	@GET
+	public String foo() {
+		return "Hello, foo!";
+	}
+
+}
+----
+

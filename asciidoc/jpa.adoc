@@ -1,12 +1,12 @@
-### JPA
+## JPA
 
 Rapidoid provides generic JPA support. For a quick start it also includes Hibernate in the `rapidoid-quick` module.
 
-#### API
+### API
 
 Please take a look at the `JPA` class.
 
-#### Bootstrap
+### Bootstrap
 
 Rapidoid can bootstrap Hibernate 4 (Hibernate 5 will eventually be supported):
 
@@ -15,3 +15,9 @@ App.bootstrap(args).jpa();
 ```
 
 This will scan the application package on the classpath, find the annotated JPA entities and register them with Hibernate.
+
+### Connection pools
+
+Rapidoid provides out-of-the-box support the `C3P0` and `Hikari` connection pools.
+
+NOTE: `Hikari` is now the default integrated connection pool for JDBC and JPA.

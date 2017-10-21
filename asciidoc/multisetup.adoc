@@ -1,0 +1,3 @@
+## Multiple servers setup
+
+include::examples/multisetup.adoc[]

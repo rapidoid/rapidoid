@@ -1,0 +1,8 @@
+{
+  "dialect" : "org.hibernate.dialect.MySQL5Dialect",
+  "format_sql" : false,
+  "show_sql" : true,
+  "hbm2ddl" : {
+    "auto" : "update"
+  }
+}

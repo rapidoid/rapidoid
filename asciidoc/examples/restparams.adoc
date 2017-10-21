@@ -1,4 +1,6 @@
-=== URL pattern matching[[app-listing]]
+### URL pattern matching
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

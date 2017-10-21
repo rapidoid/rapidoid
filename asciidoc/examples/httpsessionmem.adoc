@@ -1,4 +1,6 @@
-=== Server-side session (a.k.a. Session)[[app-listing]]
+### Server-side session (a.k.a. Session)
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

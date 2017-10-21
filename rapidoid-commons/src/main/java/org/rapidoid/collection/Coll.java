@@ -365,7 +365,7 @@ public class Coll extends RapidoidThing {
 
 	@SuppressWarnings("unchecked")
 	public static <T> List<T> range(Iterable<T> items, int from, int to) {
-		U.must(from <= to, "'from' must be <= 'to'!");
+		U.must(from <= to, "'from' (%s) must be <= 'to' (%s)!", from, to);
 
 		if (from == to) {
 			return Collections.emptyList();
@@ -377,7 +377,10 @@ public class Coll extends RapidoidThing {
 		}
 
 		List<?> list = (items instanceof List<?>) ? (List<?>) items : U.list(items);
+
+		from = Math.min(from, list.size());
 		to = Math.min(to, list.size());
+
 		return U.cast(list.subList(from, to));
 	}
 

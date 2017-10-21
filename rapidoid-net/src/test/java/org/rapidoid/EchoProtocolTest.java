@@ -25,11 +25,13 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.BufUtil;
 import org.rapidoid.commons.Rnd;
+import org.rapidoid.docs.echoprotocol.EchoProtocol;
 import org.rapidoid.io.IO;
 import org.rapidoid.lambda.F3;
 import org.rapidoid.net.AsyncLogic;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.net.util.NetUtil;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
@@ -44,9 +46,9 @@ import java.util.concurrent.TimeUnit;
 @Since("2.0.0")
 public class EchoProtocolTest extends NetTestCommons {
 
-	private static final int ROUNDS = Msc.normalOrHeavy(10, 100);
+	private static final int ROUNDS = Msc.normalOrHeavy(1, 100);
 
-	private static final int MAX_MSG_COUNT = 1000;
+	private static final int MAX_MSG_COUNT = Msc.normalOrHeavy(10, 1000);
 
 	private static final List<String> testCases = U.list(
 		"abc\nxy\nbye\n",
@@ -69,21 +71,7 @@ public class EchoProtocolTest extends NetTestCommons {
 
 	@Test
 	public void echo() {
-		server(new Protocol() {
-
-			@Override
-			public void process(Channel ctx) {
-				if (ctx.isInitial()) return;
-
-				String in = ctx.readln();
-				synchronized (ctx.output()) {
-					BufUtil.startWriting(ctx.output());
-					ctx.write(in.toUpperCase()).write(CR_LF).closeIf(in.equals("bye"));
-					BufUtil.doneWriting(ctx.output());
-				}
-			}
-
-		}, new Runnable() {
+		server(new EchoProtocol(), new Runnable() {
 			@Override
 			public void run() {
 				connectAndExercise();
@@ -93,7 +81,7 @@ public class EchoProtocolTest extends NetTestCommons {
 
 	private void connectAndExercise() {
 
-		Msc.connect("localhost", 8080, new F3<Void, InputStream, BufferedReader, DataOutputStream>() {
+		NetUtil.connect("localhost", 8080, new F3<Void, InputStream, BufferedReader, DataOutputStream>() {
 			@Override
 			public Void execute(InputStream inputStream, BufferedReader in, DataOutputStream out) throws IOException {
 				out.writeBytes("hello\n");
@@ -109,14 +97,16 @@ public class EchoProtocolTest extends NetTestCommons {
 			}
 		});
 
-		for (int i = 0; i < ROUNDS; i++) {
+		for (int i = 1; i <= ROUNDS; i++) {
+			Msc.logSection("ROUND " + i);
+
 			for (final String testCase : testCases) {
 
 				final List<String> expected = U.list(testCase.toUpperCase().split("\r?\n"));
 
 				Msc.startMeasure();
 
-				Msc.connect("localhost", 8080, new F3<Void, InputStream, BufferedReader, DataOutputStream>() {
+				NetUtil.connect("localhost", 8080, new F3<Void, InputStream, BufferedReader, DataOutputStream>() {
 					@Override
 					public Void execute(InputStream inputStream, BufferedReader in, DataOutputStream out) throws IOException {
 						out.writeBytes(testCase);
@@ -128,7 +118,7 @@ public class EchoProtocolTest extends NetTestCommons {
 					}
 				});
 
-				Msc.endMeasure(expected.size() + " messages");
+				Msc.endMeasure(expected.size(), "messages");
 			}
 		}
 	}

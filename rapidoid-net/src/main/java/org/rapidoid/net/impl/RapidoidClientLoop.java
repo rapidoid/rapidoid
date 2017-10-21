@@ -30,6 +30,7 @@ import org.rapidoid.net.TCPClientInfo;
 import org.rapidoid.net.abstracts.ChannelHolder;
 import org.rapidoid.u.U;
 
+import javax.net.ssl.SSLContext;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.ServerSocketChannel;
@@ -73,9 +74,12 @@ public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements 
 	// round-robin workers for new connections
 	private int currentWorkerInd = 0;
 
+	private final SSLContext sslContext;
+
 	public RapidoidClientLoop(Protocol protocol, Class<? extends DefaultExchange<?>> exchangeClass,
 	                          Class<? extends RapidoidHelper> helperClass, String host, int port,
-	                          int workers, int bufSizeKB, boolean noDelay, boolean syncBufs, boolean autoreconnecting, int connections) {
+	                          int workers, int bufSizeKB, boolean noDelay, boolean syncBufs,
+	                          boolean autoreconnecting, int connections, SSLContext sslContext) {
 		super("client");
 
 		this.protocol = protocol;
@@ -89,6 +93,7 @@ public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements 
 		this.helperClass = U.or(helperClass, RapidoidHelper.class);
 		this.autoreconnecting = autoreconnecting;
 		this.connections = connections;
+		this.sslContext = sslContext;
 	}
 
 	@Override
@@ -110,7 +115,7 @@ public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements 
 		for (int i = 0; i < ioWorkers.length; i++) {
 			RapidoidHelper helper = Cls.newInstance(helperClass, exchangeClass);
 			String workerName = "client" + (i + 1);
-			ioWorkers[i] = new RapidoidWorker(workerName, protocol, helper, bufSizeKB, noDelay, syncBufs);
+			ioWorkers[i] = new RapidoidWorker(workerName, protocol, helper, bufSizeKB, noDelay, syncBufs, sslContext);
 
 			new Thread(ioWorkers[i], workerName).start();
 		}

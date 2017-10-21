@@ -12,9 +12,9 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cache.Caching;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.Coll;
-import org.rapidoid.commons.Arr;
 import org.rapidoid.commons.Str;
 import org.rapidoid.config.Conf;
+import org.rapidoid.config.Config;
 import org.rapidoid.config.ConfigOptions;
 import org.rapidoid.crypto.Crypto;
 import org.rapidoid.ctx.Ctx;
@@ -26,7 +26,10 @@ import org.rapidoid.insight.Insights;
 import org.rapidoid.io.IO;
 import org.rapidoid.io.Res;
 import org.rapidoid.job.Jobs;
-import org.rapidoid.lambda.*;
+import org.rapidoid.lambda.Dynamic;
+import org.rapidoid.lambda.Lmbd;
+import org.rapidoid.lambda.Mapper;
+import org.rapidoid.lambda.Operation;
 import org.rapidoid.log.GlobalCfg;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
@@ -43,7 +46,6 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
-import java.net.Socket;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.ByteBuffer;
@@ -80,6 +82,8 @@ import java.util.zip.ZipInputStream;
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class Msc extends RapidoidThing {
+
+	public static final String APP_JAR = "/app/app.jar";
 
 	private static final String SPECIAL_ARG_REGEX = "\\s*(.*?)\\s*(->|<-|:=|<=|=>|==)\\s*(.*?)\\s*";
 
@@ -163,54 +167,6 @@ public class Msc extends RapidoidThing {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		e.printStackTrace(new PrintStream(output));
 		return output.toString();
-	}
-
-	public static <T> T connect(String address, int port, F3<T, InputStream, BufferedReader, DataOutputStream> protocol) {
-		return connect(address, port, 0, protocol);
-	}
-
-	public static <T> T connect(String address, int port, int timeout, F3<T, InputStream, BufferedReader, DataOutputStream> protocol) {
-		T resp;
-		Socket socket = null;
-
-		try {
-			socket = new Socket(address, port);
-			socket.setSoTimeout(timeout);
-
-			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-			InputStream inputStream = socket.getInputStream();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
-			resp = protocol.execute(inputStream, reader, out);
-
-			socket.close();
-
-		} catch (Exception e) {
-			throw U.rte(e);
-
-		} finally {
-			if (socket != null) {
-				try {
-					socket.close();
-				} catch (IOException e) {
-					throw U.rte(e);
-				}
-			}
-		}
-
-		return resp;
-	}
-
-	public static byte[] writeAndRead(String address, int port, final byte[] req, final int timeout) {
-		return Msc.connect(address, port, timeout, new F3<byte[], InputStream, BufferedReader, DataOutputStream>() {
-
-			@Override
-			public byte[] execute(InputStream in, BufferedReader reader, DataOutputStream out) throws Exception {
-				out.write(req);
-				return IO.readWithTimeout(in);
-			}
-
-		});
 	}
 
 	public static short bytesToShort(String s) {
@@ -307,7 +263,7 @@ public class Msc extends RapidoidThing {
 
 		String data = String.format("%s: %s in %s ms (%s/sec)", name, count, ms, avgs);
 
-		U.print(data + " | " + Insights.getCpuMemStats());
+		Log.info(data + " | " + Insights.getCpuMemStats());
 	}
 
 	public static void benchmarkMT(int threadsN, final String name, final int count, final CountDownLatch outsideLatch,
@@ -397,18 +353,18 @@ public class Msc extends RapidoidThing {
 
 	public static void endMeasure() {
 		long delta = U.time() - measureStart;
-		D.print(delta + " ms");
+		Log.info("Benchmark", "time", delta + " ms");
 	}
 
 	public static void endMeasure(String info) {
 		long delta = U.time() - measureStart;
-		D.print(info + ": " + delta + " ms");
+		Log.info("Benchmark", "info", info, "time", delta + " ms");
 	}
 
 	public static void endMeasure(long count, String info) {
 		long delta = U.time() - measureStart;
 		long freq = Math.round(1000 * (double) count / delta);
-		D.print(U.frmt("%s %s in %s ms (%s/sec)", count, info, delta, freq));
+		Log.info("Benchmark", "performance", U.frmt("%s %s in %s ms (%s/sec)", count, info, delta, freq));
 	}
 
 	public static Throwable rootCause(Throwable e) {
@@ -1040,22 +996,15 @@ public class Msc extends RapidoidThing {
 		return RapidoidThreadLocals.get();
 	}
 
-	public static boolean bootService(String setup, String service) {
-		String prefix = setup + ".services=";
+	public static boolean bootService(Config config, String service) {
 
-		for (String arg : Env.args()) {
-			if (arg.startsWith(prefix)) {
-				String[] services = Str.triml(arg, prefix).split("\\,");
+		List<String> services = config.entry("services").list();
 
-				for (String srvc : services) {
-					U.must(ConfigOptions.SERVICE_NAMES.contains(srvc), "Unknown service: '%s'!", srvc);
-				}
-
-				return Arr.contains(services, service);
-			}
+		for (String srvc : services) {
+			U.must(ConfigOptions.SERVICE_NAMES.contains(srvc), "Unknown service: '%s'!", srvc);
 		}
 
-		return false;
+		return services.contains(service);
 	}
 
 	public static boolean dockerized() {
@@ -1107,7 +1056,7 @@ public class Msc extends RapidoidThing {
 		return arguments;
 	}
 
-	private static boolean isSpecialArg(String arg) {
+	public static boolean isSpecialArg(String arg) {
 		return arg.matches(SPECIAL_ARG_REGEX);
 	}
 
@@ -1180,7 +1129,7 @@ public class Msc extends RapidoidThing {
 	}
 
 	public static <T> T normalOrHeavy(T normal, T heavy) {
-		return System.getenv("HEAVY") != null || System.getProperty("HEAVY") != null ? heavy : normal;
+		return GlobalCfg.is("RAPIDOID_TEST_HEAVY") ? heavy : normal;
 	}
 
 	public static Method getTestMethodIfExists() {
@@ -1365,7 +1314,7 @@ public class Msc extends RapidoidThing {
 	}
 
 	public static String http() {
-		return MscOpts.isTestingHttps() ? "https" : "http";
+		return MscOpts.isTLSEnabled() ? "https" : "http";
 	}
 
 	public static String urlWithProtocol(String url) {
@@ -1401,12 +1350,23 @@ public class Msc extends RapidoidThing {
 
 	public static boolean isAppResource(String filename) {
 		String name = new File(filename).getName();
-		return !name.startsWith(".") && !name.endsWith("~") && !name.endsWith(".staged");
+		return !name.startsWith(".")
+			&& !filename.contains("/.")
+			&& !name.endsWith("~")
+			&& !filename.contains("/~")
+			&& !name.endsWith(".staged");
 	}
 
 	public static String mainAppJar() {
 		U.must(isPlatform());
-		return "/app/app.jar";
+		return APP_JAR;
+	}
+
+	public static int toInt(long value) {
+		if ((int) value != value) {
+			throw new ArithmeticException("integer overflow");
+		}
+		return (int) value;
 	}
 
 }

@@ -27,9 +27,14 @@ public class EchoProtocol implements Protocol {
 
 	@Override
 	public void process(Channel ctx) {
+		if (ctx.isInitial()) return;
+
 		String line = ctx.readln().toUpperCase();
-		ctx.write(line).write(CR_LF);
-		ctx.closeIf(line.equals("BYE"));
+
+		synchronized (ctx.output()) {
+			ctx.write(line).write(CR_LF);
+			ctx.closeIf(line.equals("BYE"));
+		}
 	}
 
 }

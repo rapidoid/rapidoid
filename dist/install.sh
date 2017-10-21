@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SEP="---"
+
+printf "\n[1] $SEP Creating 'rapidoid' command $SEP\n\n"
+
+printf "Writing to /usr/local/bin/rapidoid:\n\n"
+cat <<EOF | sudo tee /usr/local/bin/rapidoid
+#!/usr/bin/env bash
+exec docker run --rm -it --net=host -v \$(pwd):/app:ro rapidoid "\$@"
+EOF
+
+sudo chmod ugo+x /usr/local/bin/rapidoid
+
+
+printf "\n[2] $SEP Creating default workspace 'rapidoid' $SEP\n\n"
+
+WORKSPACE=~/rapidoid
+printf "Creating directory: $WORKSPACE\n\n"
+mkdir -p $WORKSPACE
+
+
+printf "[3] $SEP Setting Rapidoid icon $SEP\n\n"
+
+printf "Downloading the Rapidoid icon:\n\n"
+
+ICON=~/.local/share/icons/rapidoid.png
+wget -nv -O $ICON https://raw.githubusercontent.com/rapidoid/rapidoid/master/dist/rapidoid.png
+
+
+printf "\n[4] $SEP Creating desktop shortcut $SEP\n\n"
+
+printf "Writing to ~/.local/share/applications/rapidoid.desktop:\n\n"
+
+cat <<EOF | sed "s|THE-WORKSPACE|$WORKSPACE|" | sed "s|THE-ICON|$ICON|" | tee ~/.local/share/applications/rapidoid.desktop
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Name=Rapidoid
+Path=THE-WORKSPACE
+Icon=THE-ICON
+Exec=rapidoid
+StartupNotify=true
+Terminal=true
+EOF
+
+
+printf "\nInstallation complete!\n"

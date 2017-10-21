@@ -1,4 +1,6 @@
-=== MVC architecture with Rapidoid's built-in template engine[[app-listing]]
+### MVC architecture with Rapidoid's built-in template engine
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

@@ -12,7 +12,7 @@ docker run \
     rapidoid/rapidoid:$TAG \
     '/app->http://localhost:8080,http://localhost:9090' \
     '/->http://localhost:9090,http://localhost:8080' \
-    on.port=80 \
+    rapidoid.port=80 \
     > output/proxy.txt 2>&1 &
 
 sleep 3
@@ -22,7 +22,7 @@ docker run -d \
     -e "UNIFORM_OUTPUT=true" \
     rapidoid/rapidoid:$TAG \
     id=app1 \
-    on.port=8080 \
+    rapidoid.port=8080 \
     app.services=status
 
 docker run -d \
@@ -30,7 +30,7 @@ docker run -d \
     -e "UNIFORM_OUTPUT=true" \
     rapidoid/rapidoid:$TAG \
     id=app2 \
-    on.port=9090 \
+    rapidoid.port=9090 \
     app.services=status
 
 ./wait-for.sh 8080

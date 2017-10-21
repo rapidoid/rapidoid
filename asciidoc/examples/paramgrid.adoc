@@ -1,4 +1,6 @@
-=== Create key-value data grid from a Map[[app-listing]]
+### Create key-value data grid from a Map
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

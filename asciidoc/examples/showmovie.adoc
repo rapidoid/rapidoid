@@ -1,4 +1,6 @@
-=== Display bean properties[[app-listing]]
+### Display bean properties
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

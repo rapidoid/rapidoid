@@ -111,4 +111,7 @@ public final class LazyInit<T> extends RapidoidThing {
 		return initializedValue;
 	}
 
+	public boolean isInitialized() {
+		return initializedValue != null;
+	}
 }

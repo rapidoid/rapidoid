@@ -59,14 +59,17 @@ public class HttpReq extends RapidoidThing {
 
 	private volatile boolean raw = false;
 
-	private volatile int socketTimeout = 5000;
+	private volatile int socketTimeout;
 
-	private volatile int connectTimeout = 5000;
+	private volatile int connectTimeout;
 
-	private volatile int connectionRequestTimeout = 5000;
+	private volatile int connectionRequestTimeout;
 
 	public HttpReq(HttpClient client) {
 		this.client = client;
+		this.socketTimeout = client.timeout();
+		this.connectTimeout = client.timeout();
+		this.connectionRequestTimeout = client.timeout();
 	}
 
 	public HttpReq verb(HttpVerb verb) {

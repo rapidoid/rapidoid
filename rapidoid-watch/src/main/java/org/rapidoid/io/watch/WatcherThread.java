@@ -49,7 +49,7 @@ public class WatcherThread extends AbstractLoopThread {
 
 	private final WatchService watchService;
 
-	private final Map<WatchKey, Path> keys = U.map();
+	private final Map<WatchKey, Path> keys = Coll.synchronizedMap();
 
 	private final FilesystemChangeListener onChange;
 
@@ -105,8 +105,9 @@ public class WatcherThread extends AbstractLoopThread {
 			U.notNull(key, "watch key");
 
 			keys.put(key, dir);
+
 		} catch (IOException e) {
-			Log.error("Couldn't register to watch for changes on: " + dir, e);
+			Log.warn("Couldn't register to watch for changes", "dir", dir);
 		}
 	}
 
@@ -207,9 +208,13 @@ public class WatcherThread extends AbstractLoopThread {
 	}
 
 	public void cancel() {
+		Set<WatchKey> keysToCancel;
+		synchronized (keys) {
+			keysToCancel = U.set(keys.keySet());
+		}
+
 		interrupt();
 
-		Set<WatchKey> keysToCancel = U.set(keys.keySet());
 		keys.clear();
 
 		for (WatchKey key : keysToCancel) {

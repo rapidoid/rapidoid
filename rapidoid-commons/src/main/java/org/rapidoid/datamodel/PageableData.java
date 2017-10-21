@@ -29,7 +29,7 @@ import java.util.List;
 @Since("5.3.0")
 public interface PageableData<T> {
 
-	List<T> getPage(long start, long length);
+	List<T> getPage(long skip, long limit);
 
 	long getCount();
 

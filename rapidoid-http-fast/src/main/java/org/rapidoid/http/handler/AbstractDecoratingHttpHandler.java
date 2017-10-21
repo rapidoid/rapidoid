@@ -4,10 +4,10 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.ctx.With;
-import org.rapidoid.datamodel.Results;
 import org.rapidoid.http.*;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.impl.MaybeReq;
+import org.rapidoid.http.impl.ReqImpl;
 import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.http.impl.lowlevel.HttpIO;
 import org.rapidoid.jpa.JPA;
@@ -17,7 +17,6 @@ import org.rapidoid.log.LogLevel;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.security.Secure;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
 import org.rapidoid.util.TokenAuthData;
 
 import java.util.Collections;
@@ -78,26 +77,39 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 		Object result;
 		MaybeReq maybeReq = HttpUtils.maybe(req);
 
-		try {
-			result = handleReqAndPostProcess(ctx, isKeepAlive, req, extra);
+		ReqImpl reqq = (ReqImpl) req;
 
-			result = HttpUtils.postprocessResult(req, result);
+		// handle & post-process
+		result = handleReqAndPostProcess(ctx, isKeepAlive, req, extra);
 
-			if ((req != null && req.isAsync()) || result == HttpStatus.ASYNC) {
-				return HttpStatus.ASYNC;
-			}
-
-		} catch (Exception e) {
-			HttpIO.INSTANCE.writeResponse(maybeReq, ctx, isKeepAlive, 500, contentType, "Internal server error!".getBytes());
-			Log.error("Error occurred during un-managed request processing", "request", req, "error", e);
-			return HttpStatus.ERROR;
+		// the response properties might be overwritten
+		int code = -1;
+		MediaType ctype = contentType;
+		if (req != null && reqq.hasResponseAttached()) {
+			Resp resp = req.response();
+			ctype = resp.contentType();
+			code = resp.code();
 		}
 
-		if (contentType == MediaType.JSON) {
-			HttpIO.INSTANCE.writeAsJson(maybeReq, ctx, 200, isKeepAlive, result);
-		} else {
-			HttpIO.INSTANCE.write200(maybeReq, ctx, isKeepAlive, contentType, Msc.toBytes(result));
+		if (result == HttpStatus.NOT_FOUND) {
+			http.notFound(ctx, isKeepAlive, ctype, this, req);
+			return HttpStatus.NOT_FOUND;
 		}
+
+		if (result == HttpStatus.ASYNC) {
+			return HttpStatus.ASYNC;
+		}
+
+		if (result instanceof Throwable) {
+			Throwable err = (Throwable) result;
+			HttpIO.INSTANCE.writeHttpResp(maybeReq, ctx, isKeepAlive, 500, MediaType.PLAIN_TEXT_UTF_8, "Internal server error!".getBytes());
+
+			Log.error("Error occurred during unmanaged request processing", "request", req, "error", err);
+			return HttpStatus.DONE;
+		}
+
+		int respCode = code > 0 ? code : 200; // default code is 200
+		HttpIO.INSTANCE.writeHttpResp(maybeReq, ctx, isKeepAlive, respCode, ctype, result);
 
 		return HttpStatus.DONE;
 	}
@@ -206,12 +218,10 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 				try {
 
 					if (!U.isEmpty(wrappers)) {
-						result = wrap(channel, isKeepAlive, req, 0, extra, wrappers);
+						result = wrap(channel, isKeepAlive, req, 0, extra, wrappers, txMode);
 					} else {
 						result = handleReqMaybeInTx(channel, isKeepAlive, req, extra, txMode);
 					}
-
-					result = HttpUtils.postprocessResult(req, result);
 
 				} catch (Throwable e) {
 					result = e;
@@ -222,22 +232,32 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 		};
 	}
 
-	private Object handleReqMaybeInTx(final Channel channel, final boolean isKeepAlive, final Req req, final Object extra, TransactionMode txMode) throws Exception {
+	private Object handleReqMaybeInTx(final Channel channel, final boolean isKeepAlive, final Req req,
+	                                  final Object extra, TransactionMode txMode) throws Throwable {
 
 		if (txMode != null && txMode != TransactionMode.NONE) {
 
 			final AtomicReference<Object> result = new AtomicReference<>();
 
-			JPA.transaction(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						result.set(handleReqAndPostProcess(channel, isKeepAlive, req, extra));
-					} catch (Exception e) {
-						throw U.rte("Error occured inside the transactional web handler!", e);
+			try {
+				JPA.transaction(new Runnable() {
+					@Override
+					public void run() {
+						Object res = handleReqAndPostProcess(channel, isKeepAlive, req, extra);
+
+						if (res instanceof Throwable) {
+							// throw to rollback
+							Throwable err = (Throwable) res;
+							throw U.rte("Error occurred inside the transactional web handler!", err);
+						}
+
+						result.set(res);
 					}
-				}
-			}, txMode == TransactionMode.READ_ONLY);
+				}, txMode == TransactionMode.READ_ONLY);
+
+			} catch (Throwable e) {
+				result.set(e);
+			}
 
 			return result.get();
 
@@ -262,7 +282,7 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 	}
 
 	private Object wrap(final Channel channel, final boolean isKeepAlive, final Req req, final int index,
-	                    final Object extra, final HttpWrapper[] wrappers) throws Exception {
+	                    final Object extra, final HttpWrapper[] wrappers, final TransactionMode txMode) throws Exception {
 
 		HttpWrapper wrapper = wrappers[index];
 
@@ -280,9 +300,9 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 
 					Object val;
 					if (next < wrappers.length) {
-						val = wrap(channel, isKeepAlive, req, next, extra, wrappers);
+						val = wrap(channel, isKeepAlive, req, next, extra, wrappers, txMode);
 					} else {
-						val = handleReqAndPostProcess(channel, isKeepAlive, req, extra);
+						val = handleReqMaybeInTx(channel, isKeepAlive, req, extra, txMode);
 					}
 
 					return transformation != null ? transformation.map(val) : val;
@@ -307,37 +327,52 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 		return req;
 	}
 
-	protected abstract Object handleReq(Channel ctx, boolean isKeepAlive, Req req, Object extra) throws Exception;
+	protected abstract Object handleReq(Channel ctx, boolean isKeepAlive, Req req, Object extra) throws Throwable;
 
-	private Object handleReqAndPostProcess(Channel ctx, boolean isKeepAlive, Req req, Object extra) throws Exception {
-		Object result = handleReq(ctx, isKeepAlive, req, extra);
+	private Object handleReqAndPostProcess(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
+		Object result;
 
-		if (result instanceof Results) {
-			result = ((Results) result).all();
+		try {
+			result = handleReq(ctx, isKeepAlive, req, extra);
+
+		} catch (Throwable e) {
+			result = e;
 		}
 
-		return result;
+		return HandlerResultProcessor.INSTANCE.postProcessResult(req, result);
 	}
 
 	public void complete(Channel ctx, boolean isKeepAlive, MediaType contentType, Req req, Object result) {
 
-		if (result == null || result instanceof NotFound) {
-			http.notFound(ctx, isKeepAlive, contentType, this, req);
-			return; // not found
-		}
-
-		if (result instanceof HttpStatus) {
-			complete(ctx, isKeepAlive, contentType, req, U.rte("HttpStatus result is not supported!"));
-			return;
-		}
+		U.must(result != null, "The post-processed result cannot be null!");
+		U.must(!(result instanceof Req), "The post-processed result cannot be a Req instance!");
+		U.must(!(result instanceof Resp), "The post-processed result cannot be a Resp instance!");
 
 		if (result instanceof Throwable) {
 			handleError(req, (Throwable) result);
 			return;
-
-		} else {
-			HttpUtils.resultToResponse(req, result);
 		}
+
+		if (result == HttpStatus.NOT_FOUND) {
+			http.notFound(ctx, isKeepAlive, contentType, this, req);
+			return;
+		}
+
+		if (result == HttpStatus.ERROR) {
+			complete(ctx, isKeepAlive, contentType, req, U.rte("Handler error!"));
+			return;
+		}
+
+		if (result == HttpStatus.ASYNC) {
+			return;
+		}
+
+		processNormalResult(req, result);
+	}
+
+	private void processNormalResult(Req req, Object result) {
+
+		HttpUtils.resultToResponse(req, result);
 
 		// the Req object will do the rendering
 		if (!req.isAsync()) {

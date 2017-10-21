@@ -24,6 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
 import java.util.List;
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -31,12 +32,20 @@ public interface Manageable {
 
 	String id();
 
+	String kind();
+
 	GroupOf<? extends Manageable> group();
+
+	void reloadManageable();
 
 	List<String> getManageableActions();
 
 	List<String> getManageableProperties();
 
+	Map<String, List<Manageable>> getManageableChildren();
+
 	Object runManageableAction(String action);
+
+	Object getManageableDisplay();
 
 }

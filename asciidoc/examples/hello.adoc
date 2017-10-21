@@ -1,4 +1,6 @@
-=== Hello, web pages![[app-listing]]
+### Hello, web pages!
+
+[[app-listing]]
 [source,java]
 .Hello.java
 ----

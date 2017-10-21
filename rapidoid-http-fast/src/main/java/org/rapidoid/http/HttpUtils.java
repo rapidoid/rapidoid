@@ -15,7 +15,6 @@ import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.JsonResponseRenderer;
 import org.rapidoid.http.impl.MaybeReq;
-import org.rapidoid.http.impl.PathPattern;
 import org.rapidoid.io.Res;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
@@ -25,7 +24,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.Serializable;
 import java.util.Map;
-import java.util.concurrent.Future;
 import java.util.regex.Pattern;
 
 /*
@@ -98,12 +96,9 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 	}
 
 	public static String resName(Req req) {
-		return req.route() != null ? resNameFromRoutePath(req.route().path()) : resName(req.path());
-	}
-
-	public static String resNameFromRoutePath(String path) {
-		path = Str.replace(path, PathPattern.PATH_PARAM_REGEX, PATH_PARAM_EXTRACTOR);
-		return resName(path);
+		String resName = resName(req.path());
+		U.notNull(resName, "resource name");
+		return resName;
 	}
 
 	public static String resName(String path) {
@@ -112,8 +107,13 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 			return res.isEmpty() ? "index" : Str.trimr(res, ".html");
 
 		} else {
-			return null;
+			throw U.rte("Invalid path!");
 		}
+	}
+
+	public static String viewName(Req req) {
+		//return req.route() != null ? inferViewNameFromRoutePath(req.route().path()) : resName(req.path());
+		return resName(req.path());
 	}
 
 	public static boolean hasExtension(String name) {
@@ -236,6 +236,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 	}
 
 	public static void resultToResponse(Req req, Object result) {
+
 		if (result instanceof Req) {
 			if (req != result) {
 				req.response().result("Unknown request instance was received as result!");
@@ -246,7 +247,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 				req.response().result("Unknown response instance was received as result!");
 			}
 
-		} else {
+		} else if (!(result instanceof HttpStatus)) {
 			req.response().result(result);
 		}
 	}
@@ -270,23 +271,6 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 	public static BasicConfig zone(Req req) {
 		Customization custom = Customization.of(req);
 		return zone(custom, req.zone());
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Object postprocessResult(Req req, Object result) {
-
-		if (result instanceof Req || result instanceof Resp || result instanceof HttpStatus) {
-			return result;
-
-		} else if (result == null) {
-			return null; // not found
-
-		} else if ((result instanceof Future<?>) || (result instanceof org.rapidoid.concurrent.Future<?>)) {
-			return req.async();
-
-		} else {
-			return result;
-		}
 	}
 
 	public static void setResponseTokenCookie(Resp resp, String token) {

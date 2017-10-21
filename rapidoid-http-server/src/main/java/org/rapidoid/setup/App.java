@@ -30,6 +30,7 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.data.JSON;
 import org.rapidoid.env.Env;
+import org.rapidoid.group.Groups;
 import org.rapidoid.io.Res;
 import org.rapidoid.ioc.Beans;
 import org.rapidoid.ioc.IoC;
@@ -58,25 +59,60 @@ public class App extends RapidoidInitializer {
 	private static volatile boolean restarted;
 	private static volatile boolean managed;
 
+	private static volatile AppStatus status = AppStatus.NOT_STARTED;
+
 	private static volatile AppBootstrap boot;
 
 	private static final Set<Class<?>> invoked = Coll.synchronizedSet();
 
 	static volatile ClassLoader loader = App.class.getClassLoader();
 
-	public static AppBootstrap bootstrap(String[] args, String... extraArgs) {
+	/**
+	 * Initializes the app in atomic way.
+	 * Won't serve requests until App.ready() is called.
+	 */
+	public static synchronized AppBootstrap init(String[] args, String... extraArgs) {
 		PreApp.args(args, extraArgs);
 
-		scan();
+		status = AppStatus.INITIALIZING;
+
+		// no implicit classpath scanning here
+		return boot();
+	}
+
+	/**
+	 * Initializes the app in non-atomic way.
+	 * Then starts serving requests immediately when routes are configured.
+	 */
+	public static synchronized AppBootstrap run(String[] args, String... extraArgs) {
+		PreApp.args(args, extraArgs);
+
+		// no implicit classpath scanning here
+		boot();
+
+		// finish initialization and start the application
+		onAppReady();
 
 		return boot();
 	}
 
-	public static AppBootstrap run(String[] args, String... extraArgs) {
+	/**
+	 * Initializes the app in non-atomic way.
+	 * Then scans the classpath for beans.
+	 * Then starts serving requests immediately when routes are configured.
+	 */
+	public static synchronized AppBootstrap bootstrap(String[] args, String... extraArgs) {
 		PreApp.args(args, extraArgs);
-		// no implicit classpath scanning here
+
+		boot()
+			.beans() // scan classpath for beans
+			.services(); // activate the services
+
+		// finish initialization and start the application
+		onAppReady();
 
 		return boot();
+
 	}
 
 	public synchronized static AppBootstrap boot() {
@@ -87,14 +123,12 @@ public class App extends RapidoidInitializer {
 			for (RapidoidModule module : RapidoidModules.getAll()) {
 				module.boot();
 			}
-
-			boot.services();
 		}
 
 		return boot;
 	}
 
-	public static void profiles(String... profiles) {
+	public static synchronized void profiles(String... profiles) {
 		Env.setProfiles(profiles);
 		Conf.reset();
 	}
@@ -156,6 +190,7 @@ public class App extends RapidoidInitializer {
 		App.path = null;
 		App.boot = null;
 
+		Groups.reset();
 		Conf.reset();
 		Env.reset();
 		Res.reset();
@@ -167,9 +202,7 @@ public class App extends RapidoidInitializer {
 		ClasspathScanner.reset();
 		invoked.clear();
 
-		for (Setup setup : Setup.instances()) {
-			setup.reload();
-		}
+		SetupUtil.reloadAll();
 
 		Conf.reset(); // reset the config again
 		Setup.initDefaults(); // this changes the config
@@ -201,7 +234,8 @@ public class App extends RapidoidInitializer {
 		Log.info("!Successfully restarted the application!");
 	}
 
-	public static void resetGlobalState() {
+	public static synchronized void resetGlobalState() {
+		status = AppStatus.NOT_STARTED;
 		mainClassName = null;
 		appPkgName = null;
 		restarted = false;
@@ -215,7 +249,7 @@ public class App extends RapidoidInitializer {
 		invoked.clear();
 	}
 
-	public static void notifyChanges() {
+	static synchronized void notifyChanges() {
 		if (!dirty) {
 			dirty = true;
 			Log.info("Detected class or resource changes");
@@ -236,7 +270,7 @@ public class App extends RapidoidInitializer {
 		return false;
 	}
 
-	public static List<Class<?>> findBeans(String... packages) {
+	static synchronized List<Class<?>> findBeans(String... packages) {
 		if (U.isEmpty(packages)) {
 			packages = path();
 		}
@@ -244,7 +278,7 @@ public class App extends RapidoidInitializer {
 		return Scan.annotated(IoC.ANNOTATIONS).in(packages).loadAll();
 	}
 
-	public static boolean scan(String... packages) {
+	public static synchronized boolean scan(String... packages) {
 
 		String appPath = Conf.APP.entry("path").str().getOrNull();
 		if (U.notEmpty(appPath)) {
@@ -269,7 +303,7 @@ public class App extends RapidoidInitializer {
 		Msc.filterAndInvokeMainClasses(beans, invoked);
 	}
 
-	public static boolean isRestarted() {
+	static boolean isRestarted() {
 		return restarted;
 	}
 
@@ -281,12 +315,35 @@ public class App extends RapidoidInitializer {
 		App.managed = managed;
 	}
 
-	public static void register(Beans beans) {
+	public static synchronized void register(Beans beans) {
 		Setup.on().register(beans);
 	}
 
-	public static void shutdown() {
+	public static synchronized void shutdown() {
+		status = AppStatus.STOPPING;
+
 		Setup.shutdownAll();
+
+		status = AppStatus.STOPPED;
 	}
 
+	/**
+	 * Completes the initialization and starts the application.
+	 */
+	public static synchronized void ready() {
+		U.must(status == AppStatus.INITIALIZING, "App.init() must be called before App.ready()!");
+
+		onAppReady();
+	}
+
+	private static void onAppReady() {
+		status = AppStatus.RUNNING;
+		IoC.ready();
+		Setup.ready();
+		Log.info("!The application has started!");
+	}
+
+	public static AppStatus status() {
+		return status;
+	}
 }

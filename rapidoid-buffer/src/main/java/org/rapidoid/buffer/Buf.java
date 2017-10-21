@@ -8,6 +8,7 @@ import org.rapidoid.data.BufRanges;
 import org.rapidoid.writable.Writable;
 import org.rapidoid.wrap.IntWrap;
 
+import javax.net.ssl.SSLEngine;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -51,7 +52,7 @@ public interface Buf extends Writable {
 
 	int size();
 
-	void append(ByteBuffer wrap);
+	void append(ByteBuffer src);
 
 	int append(ReadableByteChannel channel) throws IOException;
 
@@ -170,5 +171,7 @@ public interface Buf extends Writable {
 	void write(byte[] src, int offset, int length) throws IOException;
 
 	Buf unwrap();
+
+	int sslWrap(SSLEngine engine, Buf dest);
 
 }

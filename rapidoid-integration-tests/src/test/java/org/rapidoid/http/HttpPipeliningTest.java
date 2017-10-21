@@ -23,6 +23,7 @@ package org.rapidoid.http;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Str;
 import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
 import org.rapidoid.setup.On;
@@ -35,7 +36,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Since("5.3.0")
 public class HttpPipeliningTest extends IsolatedIntegrationTest {
 
-	private static final int ROUNDS = Msc.normalOrHeavy(10, 100);
+	private static final int ROUNDS = Msc.normalOrHeavy(1, 100);
 
 	private static final int REQ_COUNT = 100;
 
@@ -53,7 +54,7 @@ public class HttpPipeliningTest extends IsolatedIntegrationTest {
 		testReqResp(req, REQ_COUNT);
 	}
 
-	protected void testReqResp(String req, int multiply) {
+	private void testReqResp(String req, int multiply) {
 		Msc.startMeasure();
 
 		for (int i = 0; i < ROUNDS; i++) {
@@ -66,7 +67,7 @@ public class HttpPipeliningTest extends IsolatedIntegrationTest {
 					out.writeBytes(String.format(req, n));
 				}
 
-				String resp = new String(IO.readWithTimeout(in));
+				String resp = new String(IO.readWithTimeoutUntil(in, this::isComplete));
 
 				eq(COUNTER.get(), REQ_COUNT);
 				verify(maskHttpResponse(resp));
@@ -76,6 +77,15 @@ public class HttpPipeliningTest extends IsolatedIntegrationTest {
 		}
 
 		Msc.endMeasure(ROUNDS, "rounds");
+	}
+
+	private boolean isComplete(byte[] bytes) {
+		String resp = new String(bytes);
+
+		int count = Str.find(resp, "HTTP/1.1 200 OK", found -> {
+		});
+
+		return count == REQ_COUNT;
 	}
 
 }

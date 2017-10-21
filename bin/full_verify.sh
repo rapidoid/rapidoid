@@ -7,7 +7,7 @@ sudo echo Got sudo
 
 docker-tests/cleanup.sh
 
-export HEAVY=true
+export RAPIDOID_TEST_HEAVY=true
 mvn clean install
 
 cd docker-tests

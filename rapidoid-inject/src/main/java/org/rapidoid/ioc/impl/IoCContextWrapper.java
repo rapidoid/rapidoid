@@ -235,8 +235,19 @@ public class IoCContextWrapper extends RapidoidThing implements IoCContext {
 	}
 
 	@Override
+	public synchronized void ready() {
+		IoCState backup = context.backup();
+
+		try {
+			context.ready();
+		} catch (RuntimeException e) {
+			context.rollback(backup);
+			throw e;
+		}
+	}
+
+	@Override
 	public String toString() {
 		return context.toString();
 	}
-
 }

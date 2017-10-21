@@ -26,8 +26,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.Setup;
-import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -35,22 +33,24 @@ public class HTTPProxyTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testProxy() {
-		String http = Msc.http();
-		App.run(new String[0], U.frmt("/->%s://localhost:5555,%s://localhost:6666", http, http));
+		App.run(new String[0], "/->localhost:5555,localhost:6666");
 
 		Setup x = Setup.create("x").port(5555);
-		x.get("/who").html("X");
-
 		Setup y = Setup.create("y").port(6666);
-		y.get("/who").html("Y");
 
-		eq(Self.get("/who").fetch(), "X");
-		eq(Self.get("/who").fetch(), "Y");
-		eq(Self.get("/who").fetch(), "X");
-		eq(Self.get("/who").fetch(), "Y");
+		try {
+			x.get("/who").html("X");
+			y.get("/who").html("Y");
 
-		x.shutdown();
-		y.shutdown();
+			eq(Self.get("/who").fetch(), "X");
+			eq(Self.get("/who").fetch(), "Y");
+			eq(Self.get("/who").fetch(), "X");
+			eq(Self.get("/who").fetch(), "Y");
+
+		} finally {
+			x.shutdown();
+			y.shutdown();
+		}
 	}
 
 	@Test
@@ -59,18 +59,21 @@ public class HTTPProxyTest extends IsolatedIntegrationTest {
 		App.boot();
 
 		Setup a = Setup.create("a").port(5555);
-		a.get("/who").html("A");
-
 		Setup b = Setup.create("b").port(6666);
-		b.get("/who").html("B");
 
-		eq(Self.get("/who").fetch(), "A");
-		eq(Self.get("/who").fetch(), "B");
-		eq(Self.get("/who").fetch(), "A");
-		eq(Self.get("/who").fetch(), "B");
+		try {
+			a.get("/who").html("A");
+			b.get("/who").html("B");
 
-		a.shutdown();
-		b.shutdown();
+			eq(Self.get("/who").fetch(), "A");
+			eq(Self.get("/who").fetch(), "B");
+			eq(Self.get("/who").fetch(), "A");
+			eq(Self.get("/who").fetch(), "B");
+
+		} finally {
+			a.shutdown();
+			b.shutdown();
+		}
 	}
 
 }

@@ -4,13 +4,13 @@ import org.rapidoid.activity.RapidoidThread;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Rnd;
-import org.rapidoid.config.ConfigUtil;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.Server;
 import org.rapidoid.net.TCPServerInfo;
 import org.rapidoid.u.U;
 
+import javax.net.ssl.SSLContext;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -52,9 +52,9 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 
 	private final int port;
 
-	private int workers = ConfigUtil.cpus();
+	private final int workers;
 
-	private boolean blockingAccept = false;
+	private final boolean blockingAccept;
 
 	protected final Protocol protocol;
 
@@ -72,9 +72,12 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 
 	private final boolean syncBufs;
 
+	private final SSLContext sslContext;
+
 	public RapidoidServerLoop(Protocol protocol, Class<? extends DefaultExchange<?>> exchangeClass,
 	                          Class<? extends RapidoidHelper> helperClass, String address, int port,
-	                          int workers, int bufSizeKB, boolean noDelay, boolean syncBufs) {
+	                          int workers, int bufSizeKB, boolean noDelay, boolean syncBufs,
+	                          boolean blockingAccept, SSLContext sslContext) {
 		super("server");
 
 		this.protocol = protocol;
@@ -85,7 +88,9 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 		this.bufSizeKB = bufSizeKB;
 		this.noDelay = noDelay;
 		this.syncBufs = syncBufs;
+		this.blockingAccept = blockingAccept;
 		this.helperClass = U.or(helperClass, RapidoidHelper.class);
+		this.sslContext = sslContext;
 
 		try {
 			this.selector = Selector.open();
@@ -154,7 +159,8 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 		for (int i = 0; i < ioWorkers.length; i++) {
 
 			RapidoidWorkerThread workerThread = new RapidoidWorkerThread(i, protocol, exchangeClass,
-				helperClass, bufSizeKB, noDelay, syncBufs);
+				helperClass, bufSizeKB, noDelay, syncBufs, sslContext);
+
 			workerThread.start();
 
 			ioWorkers[i] = workerThread.getWorker();

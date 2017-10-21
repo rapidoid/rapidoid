@@ -28,10 +28,10 @@ import org.rapidoid.group.GroupOf;
 @Since("5.3.0")
 public class Processes extends GroupOf<ProcessHandle> {
 
-	public static final Processes DEFAULT = new Processes("default");
+	public static final Processes GROUP = new Processes();
 
-	public Processes(String name) {
-		super(ProcessHandle.class, name);
+	public Processes() {
+		super(ProcessHandle.class);
 	}
 
 }

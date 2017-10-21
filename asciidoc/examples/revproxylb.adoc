@@ -1,4 +1,6 @@
-=== Custom load balancer[[app-listing]]
+### Custom load balancer
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

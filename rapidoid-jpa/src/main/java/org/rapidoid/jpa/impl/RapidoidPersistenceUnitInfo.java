@@ -38,9 +38,19 @@ import java.util.Properties;
 @Since("5.1.0")
 public class RapidoidPersistenceUnitInfo extends RapidoidThing implements PersistenceUnitInfo {
 
+	private final String persistenceUnitName;
+	private final DataSource dataSource;
+	private final ClassLoader classLoader;
+
+	public RapidoidPersistenceUnitInfo(String persistenceUnitName, DataSource dataSource, ClassLoader classLoader) {
+		this.persistenceUnitName = persistenceUnitName;
+		this.dataSource = dataSource;
+		this.classLoader = classLoader;
+	}
+
 	@Override
 	public String getPersistenceUnitName() {
-		return null;
+		return persistenceUnitName;
 	}
 
 	@Override
@@ -50,7 +60,7 @@ public class RapidoidPersistenceUnitInfo extends RapidoidThing implements Persis
 
 	@Override
 	public PersistenceUnitTransactionType getTransactionType() {
-		return null;
+		return PersistenceUnitTransactionType.RESOURCE_LOCAL;
 	}
 
 	@Override
@@ -60,7 +70,7 @@ public class RapidoidPersistenceUnitInfo extends RapidoidThing implements Persis
 
 	@Override
 	public DataSource getNonJtaDataSource() {
-		return null;
+		return dataSource;
 	}
 
 	@Override
@@ -110,7 +120,7 @@ public class RapidoidPersistenceUnitInfo extends RapidoidThing implements Persis
 
 	@Override
 	public ClassLoader getClassLoader() {
-		return null;
+		return classLoader;
 	}
 
 	@Override

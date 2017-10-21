@@ -1,4 +1,6 @@
-=== Server Configuration[[app-listing]]
+### Server Configuration
+
+[[app-listing]]
 [source,java]
 .Main.java
 ----

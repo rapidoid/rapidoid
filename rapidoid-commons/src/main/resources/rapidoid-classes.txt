@@ -75,6 +75,7 @@ org.rapidoid.buffer.BufScanner
 org.rapidoid.buffer.BufUtil
 org.rapidoid.buffer.IncompleteReadException
 org.rapidoid.buffer.MultiBuf
+org.rapidoid.buffer.SSLDestination
 org.rapidoid.buffer.SynchronizedBuf
 org.rapidoid.bufstruct.BufMap
 org.rapidoid.bufstruct.BufMapImpl
@@ -185,6 +186,10 @@ org.rapidoid.data.TUUIDDeserializer
 org.rapidoid.data.TUUIDSerializer
 org.rapidoid.data.XML
 org.rapidoid.data.YAML
+org.rapidoid.dbadmin.DbAdmin
+org.rapidoid.dbadmin.ManageableDatabase
+org.rapidoid.dbadmin.ManageableRdbms
+org.rapidoid.dbadmin.ManageableTable
 org.rapidoid.deploy.AppChangeWatcher
 org.rapidoid.deploy.AppDeployer
 org.rapidoid.deploy.AppDownloader
@@ -267,6 +272,7 @@ org.rapidoid.group.Groups
 org.rapidoid.group.GroupStats
 org.rapidoid.group.Manageable
 org.rapidoid.group.ManageableBean
+org.rapidoid.group.Manageables
 org.rapidoid.gui.base.AbstractCommand
 org.rapidoid.gui.base.AbstractInput
 org.rapidoid.gui.base.AbstractOption
@@ -397,8 +403,8 @@ org.rapidoid.http.FastHttpProtocol
 org.rapidoid.http.handler.AbstractDecoratingHttpHandler
 org.rapidoid.http.handler.AbstractHttpHandler
 org.rapidoid.http.handler.HandlerInvocation
+org.rapidoid.http.handler.HandlerResultProcessor
 org.rapidoid.http.handler.HttpHandler
-org.rapidoid.http.handler.HttpHandlers
 org.rapidoid.http.handler.lambda.FiveParamLambdaHandler
 org.rapidoid.http.handler.lambda.FourParamLambdaHandler
 org.rapidoid.http.handler.lambda.NParamLambdaHandler
@@ -451,6 +457,8 @@ org.rapidoid.http.HttpVerb
 org.rapidoid.http.HttpWrapper
 org.rapidoid.http.impl.AbstractViewResolver
 org.rapidoid.http.impl.CachedResp
+org.rapidoid.http.impl.ChunkedResponse
+org.rapidoid.http.impl.ErrorHandlerResolver
 org.rapidoid.http.impl.GUIUtil
 org.rapidoid.http.impl.HandlerMatch
 org.rapidoid.http.impl.HandlerMatchWithParams
@@ -570,6 +578,7 @@ org.rapidoid.jpa.JPQL
 org.rapidoid.lambda.Calc
 org.rapidoid.lambda.Customizer
 org.rapidoid.lambda.Dynamic
+org.rapidoid.lambda.Executable
 org.rapidoid.lambda.F2
 org.rapidoid.lambda.F3
 org.rapidoid.lambda.FiveParamLambda
@@ -652,6 +661,11 @@ org.rapidoid.net.TCPClient
 org.rapidoid.net.TCPClientBuilder
 org.rapidoid.net.TCPClientInfo
 org.rapidoid.net.TCPServerInfo
+org.rapidoid.net.tls.RapidoidTLS
+org.rapidoid.net.tls.SelfSignedCertGen
+org.rapidoid.net.tls.SelfSignedCertInfo
+org.rapidoid.net.tls.TLSUtil
+org.rapidoid.net.util.NetUtil
 org.rapidoid.oauth.DefaultOAuthStateCheck
 org.rapidoid.oauth.OAuth
 org.rapidoid.oauth.OAuthLoginHandler
@@ -664,12 +678,11 @@ org.rapidoid.performance.BenchmarkResults
 org.rapidoid.performance.BenchmarkRunner
 org.rapidoid.performance.Perf
 org.rapidoid.performance.WrkSetup
+org.rapidoid.platform.CmdArgs
 org.rapidoid.platform.DefaultApp
 org.rapidoid.platform.Main
-org.rapidoid.platform.MavenUtil
 org.rapidoid.platform.PasswordHashTool
 org.rapidoid.platform.Platform
-org.rapidoid.platform.PlatformInDevMode
 org.rapidoid.plugin.app.AbstractRapidoidMojo
 org.rapidoid.plugin.app.AppBuildMojo
 org.rapidoid.plugin.app.AppDeployMojo
@@ -751,9 +764,11 @@ org.rapidoid.setup.App
 org.rapidoid.setup.AppBootstrap
 org.rapidoid.setup.AppRestartListener
 org.rapidoid.setup.AppRestartProcessor
+org.rapidoid.setup.AppStatus
 org.rapidoid.setup.AppVerification
 org.rapidoid.setup.CustomizableSetupAwarePersisterProvider
 org.rapidoid.setup.DefaultSetup
+org.rapidoid.setup.HttpHandlers
 org.rapidoid.setup.IGoodies
 org.rapidoid.setup.My
 org.rapidoid.setup.On
@@ -767,6 +782,7 @@ org.rapidoid.setup.ServerSetup
 org.rapidoid.setup.ServiceActivator
 org.rapidoid.setup.ServiceBootstrap
 org.rapidoid.setup.Setup
+org.rapidoid.setup.SetupUtil
 org.rapidoid.setup.WatchForChanges
 org.rapidoid.test.Doc
 org.rapidoid.test.ExpectErrors
@@ -830,6 +846,7 @@ org.rapidoid.var.Var
 org.rapidoid.var.Vars
 org.rapidoid.web.config.bean.AbstractRouteConfig
 org.rapidoid.web.config.bean.APIConfig
+org.rapidoid.web.config.bean.GuiConfig
 org.rapidoid.web.config.bean.PageConfig
 org.rapidoid.web.config.bean.PageGuiConfig
 org.rapidoid.web.config.bean.PageGuiType
