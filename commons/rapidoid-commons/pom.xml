@@ -3,7 +3,7 @@
 
 	<parent>
 		<groupId>org.rapidoid</groupId>
-		<artifactId>rapidoid</artifactId>
+		<artifactId>commons</artifactId>
 		<version>5.4.6-SNAPSHOT</version>
 	</parent>
 

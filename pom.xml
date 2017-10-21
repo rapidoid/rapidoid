@@ -87,15 +87,12 @@
 	</properties>
 
 	<modules>
-		<module>rapidoid-essentials</module>
-		<module>rapidoid-commons</module>
-		<module>rapidoid-test-commons</module>
+		<module>commons</module>
+		<module>networking</module>
 		<module>rapidoid-sql</module>
-		<module>rapidoid-buffer</module>
 		<module>rapidoid-jpa</module>
 		<module>rapidoid-inject</module>
 		<module>rapidoid-render</module>
-		<module>rapidoid-net</module>
 		<module>rapidoid-http-fast</module>
 		<module>rapidoid-http-client</module>
 		<module>rapidoid-http-server</module>
