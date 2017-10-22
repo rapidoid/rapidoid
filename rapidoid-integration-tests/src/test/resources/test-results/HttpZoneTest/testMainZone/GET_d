@@ -1,0 +1,8 @@
+HTTP/1.1 200 OK
+Connection: keep-alive
+Server: Rapidoid
+Date: XXXXX GMT
+Content-Type: application/json
+Content-Length: 655
+
+{"brand":"<i class=\"fa fa-dashboard\"></i> Admin Center","cdn":"auto","contextPath":"","fluid":true,"home":"/_","menu":{"Overview":"/_","Routes":"/_routes","Configuration":"/_config","Processes":"/_processes","Metrics":"/_metrics","Manageables":"/_manageables","Application":{"Beans":"/_beans","Entities":"/_entities"},"System":{"Terminate / Restart":"/_terminate","Classpath":"/_classpath","Memory pool":"/_jmx/mempool","JVM Threads":"/_jmx/threads","Operating system":"/_jmx/os","Garbage collection":"/_jmx/gc","Memory":"/_jmx/memory","Runtime":"/_jmx/runtime","Classes":"/_jmx/classes","Compilation":"/_jmx/compilation"}},"navbar":true,"search":false}

@@ -32,9 +32,9 @@ import org.rapidoid.setup.Setup;
 public class PlatformGoodies extends Goodies {
 
 	public static void deployment(Setup setup) {
-		setup.page(uri("deployment")).mvc(new DeploymentHandler());
-		setup.post(uri("stage")).json(new JarStagingHandler());
-		setup.post(uri("deploy")).json(new JarDeploymentHandler());
+		setup.page(uri("deployment")).zone(Goodies.CENTER).mvc(new DeploymentHandler());
+		setup.post(uri("stage")).zone(Goodies.CENTER).json(new JarStagingHandler());
+		setup.post(uri("deploy")).zone(Goodies.CENTER).json(new JarDeploymentHandler());
 	}
 
 	public static void platformAdminCenter(Setup setup) {

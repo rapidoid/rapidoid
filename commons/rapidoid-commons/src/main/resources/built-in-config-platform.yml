@@ -9,7 +9,7 @@ rapidoid-admin:
 benchmark:
   plan: r1:d5:c64
 
-platform-zone:
+center-zone:
   home: /rapidoid
   brand: '<i class="fa fa-shield"></i> Rapidoid'
   search: false

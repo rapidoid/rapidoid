@@ -1166,6 +1166,14 @@ public class Msc extends RapidoidThing {
 		return platform;
 	}
 
+	public static boolean isMultiAppPlatform() {
+		return isPlatform() && !isSingleApp();
+	}
+
+	public static boolean isSingleApp() {
+		return new File("/app").exists();
+	}
+
 	public static boolean isMavenBuild() {
 		return mavenBuild;
 	}
