@@ -1362,7 +1362,8 @@ public class Msc extends RapidoidThing {
 			&& !filename.contains("/.")
 			&& !name.endsWith("~")
 			&& !filename.contains("/~")
-			&& !name.endsWith(".staged");
+			&& !name.endsWith(".staged")
+			&& !name.contains("___jb_"); // Jetbrains temporary files
 	}
 
 	public static String mainAppJar() {
