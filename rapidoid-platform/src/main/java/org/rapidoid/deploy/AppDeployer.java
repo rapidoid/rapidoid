@@ -65,7 +65,7 @@ public class AppDeployer extends RapidoidThing {
 			"java",
 			"-cp", CLASSPATH,
 			"org.rapidoid.platform.DefaultApp",
-			"root=/app",
+			"root=" + Env.root(),
 			"mode=" + Env.mode().name().toLowerCase()
 		};
 
