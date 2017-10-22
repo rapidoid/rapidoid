@@ -59,7 +59,7 @@ public class ConfigHandler extends GUI implements Callable<Object> {
 		}
 
 		if (!root.isEmpty()) {
-			grids.add(0, h4(span("<root>").class_("label " + styleOf("root"))));
+			grids.add(0, h4(span("<root>").class_("label " + styleOf("<root>"))));
 			grids.add(1, grid(root));
 		}
 
@@ -69,6 +69,9 @@ public class ConfigHandler extends GUI implements Callable<Object> {
 	private String styleOf(String key) {
 
 		switch (key) {
+			case "<root>":
+				return "bg-gray";
+
 			case "app":
 				return "label-primary";
 
