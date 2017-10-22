@@ -46,7 +46,7 @@ public class AppDeployer extends RapidoidThing {
 
 	private static final String CLASSPATH = System.getProperty("java.class.path");
 
-	private static final AppChangeWatcher APP_CHANGE_WATCHER = new AppChangeWatcher("/app", "app");
+	private static final AppChangeWatcher APP_CHANGE_WATCHER = new AppChangeWatcher(Env.root(), "app");
 
 	private static void runIfExists(String appId, String appJar) {
 		if (Msc.hasMainApp()) {

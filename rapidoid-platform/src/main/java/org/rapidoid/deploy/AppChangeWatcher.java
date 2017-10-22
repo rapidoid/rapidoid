@@ -42,6 +42,7 @@ public class AppChangeWatcher extends RapidoidThing implements Operation<String>
 	}
 
 	public void watch() {
+		Log.info("Watching app root for changes...", "root", root);
 		Watch.dir(root, Watch.simpleListener(this));
 	}
 
