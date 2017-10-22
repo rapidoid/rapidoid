@@ -451,6 +451,11 @@ ul.pagination {
 }
 
 /***** Background colors */
+
+.bg-gray {
+    background-color: #555;
+}
+
 .bg-sky {
     background-color: #3498db;
 }
