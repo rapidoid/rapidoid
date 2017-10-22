@@ -84,7 +84,7 @@ public class Env extends RapidoidThing {
 		String config = initial("config");
 		String root = initial("root");
 
-		if (Msc.dockerized()) {
+		if (Msc.isPlatform()) {
 			if (U.isEmpty(root)) root = "/app";
 		}
 
@@ -158,6 +158,7 @@ public class Env extends RapidoidThing {
 	}
 
 	public static String root() {
+		U.must(U.notEmpty(root), "The root hasn't been initialized yet!");
 		return root;
 	}
 }
