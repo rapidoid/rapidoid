@@ -29,6 +29,7 @@ import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
 import org.rapidoid.performance.BenchmarkCenter;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -36,7 +37,7 @@ public class Main extends RapidoidThing {
 
 	public static void main(String[] args) {
 		// just print basic info if no args were specified
-		if (U.isEmpty(args)) {
+		if (U.isEmpty(args) && !Msc.isSingleApp()) {
 			printWelcome();
 
 		} else {

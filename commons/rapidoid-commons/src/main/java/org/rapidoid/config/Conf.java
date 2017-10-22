@@ -40,7 +40,8 @@ import java.util.Map;
 @Since("2.0.0")
 public class Conf extends RapidoidThing {
 
-	private static final String CONFIG_NAME = Msc.isPlatform() ? "rapidoid" : "config";
+	private static final String CONFIG_NAME = Msc.isMultiAppPlatform() ? "rapidoid" : "config";
+
 	public static final Config ROOT = new ConfigImpl(CONFIG_NAME, true);
 
 	private static final Map<String, Config> SECTIONS = Coll.autoExpandingMap(new Mapper<String, Config>() {

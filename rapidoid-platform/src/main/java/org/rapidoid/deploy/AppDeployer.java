@@ -130,6 +130,7 @@ public class AppDeployer extends RapidoidThing {
 
 	public static void bootstrap() {
 		String appJar = Msc.mainAppJar();
+
 		if (U.notEmpty(appJar)) {
 			runIfExists("app", appJar);
 		}
