@@ -1170,6 +1170,10 @@ public class Msc extends RapidoidThing {
 		return isPlatform() && !isSingleApp();
 	}
 
+	public static boolean hasChildProcesses() {
+		return isPlatform() && (!isSingleApp() || Env.dev());
+	}
+
 	public static boolean isSingleApp() {
 		return new File("/app").exists();
 	}
