@@ -38,6 +38,7 @@ import org.rapidoid.util.Msc;
 import org.rapidoid.util.MscOpts;
 
 import java.io.File;
+import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -52,11 +53,20 @@ public class Platform extends RapidoidThing {
 
 		printAdminCenterURL();
 
-		AppDeployer.bootstrap();
+		if (Msc.isSingleApp() && !Env.dev()) {
+			runSingleApp(options);
+		} else {
+			AppDeployer.bootstrap();
+		}
 
 		if (!Setup.isAnyRunning()) {
 			On.setup().activate();
 		}
+	}
+
+	private static void runSingleApp(CmdArgs options) {
+		Log.info("Running in single-app mode");
+		App.run(U.arrayOf(String.class, options.options));
 	}
 
 	private static void printAdminCenterURL() {
@@ -79,7 +89,14 @@ public class Platform extends RapidoidThing {
 
 		App.boot().services();
 
-		for (String appRef : cmdArgs.refs) {
+		if (U.notEmpty(cmdArgs.refs)) {
+			U.must(!Msc.isSingleApp(), "Cannot run external applications in single-app mode!");
+			processExternalApps(cmdArgs.refs);
+		}
+	}
+
+	private static void processExternalApps(List<String> refs) {
+		for (String appRef : refs) {
 			new File(MscOpts.appsPath()).mkdirs();
 			AppDownloader.download(appRef, MscOpts.appsPath());
 		}
