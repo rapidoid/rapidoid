@@ -38,10 +38,12 @@ public class HttpZoneTest extends IsolatedIntegrationTest {
 		On.get("/a").json(zoneHandler);
 		On.get("/b").zone("admin").json(zoneHandler);
 		On.get("/c").zone("other").json(zoneHandler);
+		On.get("/d").zone("center").json(zoneHandler);
 
 		onlyGet("/a");
 		onlyGet("/b");
 		onlyGet("/c");
+		onlyGet("/d");
 	}
 
 }
