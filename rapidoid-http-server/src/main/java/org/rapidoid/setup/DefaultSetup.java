@@ -1,6 +1,5 @@
 package org.rapidoid.setup;
 
-import org.rapidoid.AuthBootstrap;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
@@ -67,7 +66,7 @@ public class DefaultSetup extends RapidoidInitializer {
 			@Override
 			public void run() {
 				if (Env.dev()) {
-					AuthBootstrap.bootstrapAdminCredentials();
+//					AuthBootstrap.bootstrapAdminCredentials();
 				}
 			}
 		});
