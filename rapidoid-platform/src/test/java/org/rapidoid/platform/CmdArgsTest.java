@@ -23,14 +23,13 @@ package org.rapidoid.platform;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 
 import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.4.5")
-public class CmdArgsTest extends TestCommons {
+public class CmdArgsTest extends PlatformTestCommons {
 
 	@Test
 	public void testEmptyArgs() {

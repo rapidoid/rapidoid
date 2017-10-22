@@ -24,17 +24,13 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
-import java.io.File;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.4.6")
 public class RunInSingleAppMode extends RapidoidThing {
 
-	private static final String APP_PATH = new File("rapidoid-platform/src/test/app1").getAbsolutePath();
-
 	private static final String[] ARGS = {
 		"dev",
-		"root=" + APP_PATH,
+		"root=" + PlatformTestCommons.appPath("app1"),
 	};
 
 	public static void main(String[] args) {
