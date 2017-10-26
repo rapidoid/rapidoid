@@ -202,6 +202,7 @@ org.rapidoid.env.Environment
 org.rapidoid.env.EnvMode
 org.rapidoid.env.EnvProperties
 org.rapidoid.env.RapidoidEnv
+org.rapidoid.env.RootContext
 org.rapidoid.event.Event
 org.rapidoid.event.EventListener
 org.rapidoid.event.Events
@@ -670,6 +671,7 @@ org.rapidoid.platform.DefaultApp
 org.rapidoid.platform.Main
 org.rapidoid.platform.PasswordHashTool
 org.rapidoid.platform.Platform
+org.rapidoid.platform.PlatformCommands
 org.rapidoid.plugin.app.AbstractRapidoidMojo
 org.rapidoid.plugin.app.AppBuildMojo
 org.rapidoid.plugin.app.AppDeployMojo
@@ -751,8 +753,8 @@ org.rapidoid.setup.App
 org.rapidoid.setup.AppBootstrap
 org.rapidoid.setup.AppRestartListener
 org.rapidoid.setup.AppRestartProcessor
+org.rapidoid.setup.AppStarter
 org.rapidoid.setup.AppStatus
-org.rapidoid.setup.AppVerification
 org.rapidoid.setup.CustomizableSetupAwarePersisterProvider
 org.rapidoid.setup.DefaultSetup
 org.rapidoid.setup.HttpHandlers
@@ -763,7 +765,6 @@ org.rapidoid.setup.OnChanges
 org.rapidoid.setup.OnError
 org.rapidoid.setup.OnRoute
 org.rapidoid.setup.PojoHandlersSetup
-org.rapidoid.setup.PreApp
 org.rapidoid.setup.ReloadUtil
 org.rapidoid.setup.ServerSetup
 org.rapidoid.setup.ServiceActivator
