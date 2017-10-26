@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.rapidoid</groupId>
 		<artifactId>networking</artifactId>
-		<version>5.4.6-SNAPSHOT</version>
+		<version>5.4.6</version>
 	</parent>
 
 	<artifactId>rapidoid-buffer</artifactId>
