@@ -57,7 +57,6 @@ public class App extends RapidoidInitializer {
 	private static volatile String appPkgName;
 	private static volatile boolean dirty;
 	private static volatile boolean restarted;
-	private static volatile boolean managed;
 
 	private static volatile AppStatus status = AppStatus.NOT_STARTED;
 
@@ -239,7 +238,6 @@ public class App extends RapidoidInitializer {
 		mainClassName = null;
 		appPkgName = null;
 		restarted = false;
-		managed = false;
 		dirty = false;
 		path = null;
 		loader = App.class.getClassLoader();
@@ -299,20 +297,11 @@ public class App extends RapidoidInitializer {
 	}
 
 	static void filterAndInvokeMainClasses(Object[] beans) {
-		managed(true);
 		Msc.filterAndInvokeMainClasses(beans, invoked);
 	}
 
 	static boolean isRestarted() {
 		return restarted;
-	}
-
-	public static boolean managed() {
-		return managed;
-	}
-
-	public static void managed(boolean managed) {
-		App.managed = managed;
 	}
 
 	public static synchronized void register(Beans beans) {
