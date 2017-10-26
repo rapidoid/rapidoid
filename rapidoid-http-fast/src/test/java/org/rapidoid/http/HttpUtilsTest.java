@@ -50,6 +50,10 @@ public class HttpUtilsTest extends TestCommons {
 		eq(HttpUtils.resName("/aa/bb.html"), "aa/bb");
 		eq(HttpUtils.resName("/aa/bb-c_d11.txt"), "aa/bb-c_d11.txt");
 
+		eq(HttpUtils.resName("/a b"), "a b");
+		eq(HttpUtils.resName("/c  d"), "c  d");
+		eq(HttpUtils.resName("/   "), "   ");
+
 //		eq(HttpUtils.inferViewNameFromRoutePath("/books/{x}"), "books/x");
 //		eq(HttpUtils.inferViewNameFromRoutePath("/books/{id:\\d+}"), "books/id");
 //		eq(HttpUtils.inferViewNameFromRoutePath("/books/{a:.*}-{b}/view"), "books/a-b/view");
