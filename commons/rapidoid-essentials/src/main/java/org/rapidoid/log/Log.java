@@ -328,58 +328,58 @@ public class Log extends RapidoidThing {
 				stream.println(logMsg);
 			}
 
-			return;
-		}
+		} else {
 
-		switch (level) {
-			case TRACE:
-				if (logger.isTraceEnabled()) {
-					StringBuilder sb = new StringBuilder();
-					formatLogMsg(sb, msg, key1, value1, key2, value2, key3, value3, key4, value4,
-						key5, value5, key6, value6, key7, value7, paramsN);
-					logger.trace(sb.toString());
-				}
-				break;
+			switch (level) {
+				case TRACE:
+					if (logger.isTraceEnabled()) {
+						StringBuilder sb = new StringBuilder();
+						formatLogMsg(sb, msg, key1, value1, key2, value2, key3, value3, key4, value4,
+							key5, value5, key6, value6, key7, value7, paramsN);
+						logger.trace(sb.toString());
+					}
+					break;
 
-			case DEBUG:
-				if (logger.isDebugEnabled()) {
-					StringBuilder sb = new StringBuilder();
-					formatLogMsg(sb, msg, key1, value1, key2, value2, key3, value3, key4, value4,
-						key5, value5, key6, value6, key7, value7, paramsN);
-					logger.debug(sb.toString());
-				}
-				break;
+				case DEBUG:
+					if (logger.isDebugEnabled()) {
+						StringBuilder sb = new StringBuilder();
+						formatLogMsg(sb, msg, key1, value1, key2, value2, key3, value3, key4, value4,
+							key5, value5, key6, value6, key7, value7, paramsN);
+						logger.debug(sb.toString());
+					}
+					break;
 
-			case INFO:
-				if (logger.isInfoEnabled()) {
-					StringBuilder sb = new StringBuilder();
-					formatLogMsg(sb, msg, key1, value1, key2, value2, key3, value3, key4, value4,
-						key5, value5, key6, value6, key7, value7, paramsN);
-					logger.info(sb.toString());
-				}
-				break;
+				case INFO:
+					if (logger.isInfoEnabled()) {
+						StringBuilder sb = new StringBuilder();
+						formatLogMsg(sb, msg, key1, value1, key2, value2, key3, value3, key4, value4,
+							key5, value5, key6, value6, key7, value7, paramsN);
+						logger.info(sb.toString());
+					}
+					break;
 
-			case WARN:
-				if (logger.isWarnEnabled()) {
-					StringBuilder sb = new StringBuilder();
-					formatLogMsg(sb, msg, key1, value1, key2, value2, key3, value3, key4, value4,
-						key5, value5, key6, value6, key7, value7, paramsN);
-					logger.warn(sb.toString());
-				}
-				break;
+				case WARN:
+					if (logger.isWarnEnabled()) {
+						StringBuilder sb = new StringBuilder();
+						formatLogMsg(sb, msg, key1, value1, key2, value2, key3, value3, key4, value4,
+							key5, value5, key6, value6, key7, value7, paramsN);
+						logger.warn(sb.toString());
+					}
+					break;
 
-			case ERROR:
-			case FATAL:
-				if (logger.isErrorEnabled()) {
-					StringBuilder sb = new StringBuilder();
-					formatLogMsg(sb, msg, key1, value1, key2, value2, key3, value3, key4, value4,
-						key5, value5, key6, value6, key7, value7, paramsN);
-					logger.error(sb.toString());
-				}
-				break;
+				case ERROR:
+				case FATAL:
+					if (logger.isErrorEnabled()) {
+						StringBuilder sb = new StringBuilder();
+						formatLogMsg(sb, msg, key1, value1, key2, value2, key3, value3, key4, value4,
+							key5, value5, key6, value6, key7, value7, paramsN);
+						logger.error(sb.toString());
+					}
+					break;
 
-			default:
-				throw new IllegalStateException();
+				default:
+					throw new IllegalStateException();
+			}
 		}
 	}
 
@@ -401,7 +401,8 @@ public class Log extends RapidoidThing {
 	}
 
 	private static Callable<Logger> createLoggerFactory() {
-		if (!hasClass("org.rapidoid.log.slf4j.RapidoidLoggerFactory")
+		if (!GlobalCfg.uniformOutput()
+			&& !hasClass("org.rapidoid.log.slf4j.RapidoidLoggerFactory")
 			&& hasClass("org.slf4j.LoggerFactory")
 			&& hasClass("org.slf4j.impl.StaticLoggerBinder")) {
 
