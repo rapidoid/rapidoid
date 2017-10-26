@@ -18,6 +18,7 @@ COPY entrypoint.sh /opt/
 COPY rapidoid.jar $RAPIDOID_JAR
 
 RUN set -xe \
+    && mkdir /platform \
     && mkdir -p "$RAPIDOID_TMP"
 
 ENTRYPOINT ["/opt/entrypoint.sh"]

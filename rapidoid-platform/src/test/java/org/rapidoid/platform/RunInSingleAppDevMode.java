@@ -1,8 +1,8 @@
-package org.rapidoid.setup;
+package org.rapidoid.platform;
 
 /*
  * #%L
- * rapidoid-http-server
+ * rapidoid-platform
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -23,33 +23,20 @@ package org.rapidoid.setup;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Arr;
-import org.rapidoid.config.ConfigHelp;
-import org.rapidoid.env.Env;
-import org.rapidoid.u.U;
-
-import java.util.List;
+import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.3.0")
-public class PreApp extends RapidoidThing {
+@Since("5.4.6")
+public class RunInSingleAppDevMode extends RapidoidThing {
 
-	public static void args(String[] args, String... extraArgs) {
-		args = Arr.concat(extraArgs, args);
+	private static final String[] ARGS = {
+		"dev",
+		"root=" + PlatformTestCommons.appPath("app1"),
+	};
 
-		List<String> oldArgs = Env.args();
-
-		if (U.isEmpty(oldArgs)) {
-			ConfigHelp.processHelp(args);
-
-			Env.setArgs(args);
-
-			AppVerification.selfVerify(args);
-
-		} else {
-			List<String> newArgs = U.list(args);
-			U.must(newArgs.equals(oldArgs), "Can't change the args! Different args were already assigned!\nOLD: %s\nNEW: %s\n", oldArgs, newArgs);
-		}
+	public static void main(String[] args) {
+		Msc.dockerized(true);
+		Main.main(ARGS);
 	}
 
 }

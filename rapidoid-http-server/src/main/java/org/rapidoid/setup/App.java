@@ -72,7 +72,7 @@ public class App extends RapidoidInitializer {
 	 * Won't serve requests until App.ready() is called.
 	 */
 	public static synchronized AppBootstrap init(String[] args, String... extraArgs) {
-		PreApp.args(args, extraArgs);
+		AppStarter.startUp(args, extraArgs);
 
 		status = AppStatus.INITIALIZING;
 
@@ -85,7 +85,7 @@ public class App extends RapidoidInitializer {
 	 * Then starts serving requests immediately when routes are configured.
 	 */
 	public static synchronized AppBootstrap run(String[] args, String... extraArgs) {
-		PreApp.args(args, extraArgs);
+		AppStarter.startUp(args, extraArgs);
 
 		// no implicit classpath scanning here
 		boot();
@@ -102,7 +102,7 @@ public class App extends RapidoidInitializer {
 	 * Then starts serving requests immediately when routes are configured.
 	 */
 	public static synchronized AppBootstrap bootstrap(String[] args, String... extraArgs) {
-		PreApp.args(args, extraArgs);
+		AppStarter.startUp(args, extraArgs);
 
 		boot()
 			.beans() // scan classpath for beans
@@ -148,7 +148,7 @@ public class App extends RapidoidInitializer {
 	}
 
 	static void inferCallers() {
-		if (!restarted && appPkgName == null && mainClassName == null) {
+		if (!Msc.isPlatform() && !restarted && appPkgName == null && mainClassName == null) {
 
 			appPkgName = Msc.getCallingPackage();
 
@@ -159,7 +159,7 @@ public class App extends RapidoidInitializer {
 			}
 
 			if (mainClassName != null || appPkgName != null) {
-				Log.info("Inferring application root", "!main", mainClassName, "!package", appPkgName);
+				Log.info("Inferred application root", "!main", mainClassName, "!package", appPkgName);
 			}
 		}
 	}
@@ -340,7 +340,7 @@ public class App extends RapidoidInitializer {
 		status = AppStatus.RUNNING;
 		IoC.ready();
 		Setup.ready();
-		Log.info("!The application has started!");
+		Log.info("!Ready.");
 	}
 
 	public static AppStatus status() {

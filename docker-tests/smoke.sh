@@ -9,7 +9,7 @@ sudo service nginx stop || true
 
 ./simple-test.sh help --help
 
-./simple-test-bg.sh verify docker-self-verify=true
+./simple-test-bg.sh verify verify
 ./simple-test-bg.sh run
 
 ./simple-test-bg.sh installer installer
@@ -25,6 +25,8 @@ sudo service nginx stop || true
 ./env-config.sh
 ./proxy.sh
 ./nobody.sh
+
+./single-app.sh
 
 ./mysql.sh
 ./postgres.sh

@@ -3,6 +3,6 @@ Connection: keep-alive
 Server: Rapidoid
 Date: Sat, 10 Sep 2016 01:02:03 GMT
 Content-Type: application/json
-Content-Length: 201
+Content-Length: 171
 
-{"id":"my-platform","root":"/app","jar":"/app/app.jar","jarExists":false,"version":"<?>","notes":["Dockerized","Uniform output"],"mode":"PRODUCTION","profiles":["production","platform"],"uptime":"<?>"}
+{"id":"my-platform","root":"/app","jar":"","version":"<?>","notes":["Dockerized","Uniform output"],"mode":"PRODUCTION","profiles":["production","platform"],"uptime":"<?>"}

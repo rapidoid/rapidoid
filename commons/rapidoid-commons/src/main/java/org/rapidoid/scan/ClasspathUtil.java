@@ -144,15 +144,13 @@ public class ClasspathUtil extends RapidoidInitializer {
 		return CLASSPATH;
 	}
 
-	private static boolean inferAppJarFromClasspath() {
+	private static void inferAppJarFromClasspath() {
 		for (String cp : CLASSPATH) {
 			if (cp.endsWith("/app.jar") || cp.endsWith("\\app.jar")) {
 				appJar = cp;
-				return true;
+				return;
 			}
 		}
-
-		return false;
 	}
 
 	public static synchronized Set<String> getClasspathFolders() {

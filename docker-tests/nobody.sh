@@ -12,6 +12,7 @@ docker run \
     -e "UNIFORM_OUTPUT=true" \
     rapidoid/rapidoid:$TAG \
     app.services=status \
+    id=nobody \
     > output/nobody.txt 2>&1 &
 
 ./wait-for.sh 8888

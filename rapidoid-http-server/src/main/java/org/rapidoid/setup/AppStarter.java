@@ -25,35 +25,28 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.config.Conf;
+import org.rapidoid.config.ConfigHelp;
 import org.rapidoid.env.Env;
-import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.2.3")
-public class AppVerification extends RapidoidThing {
+@Since("5.4.6")
+class AppStarter extends RapidoidThing {
 
-	static void selfVerify(String[] args) {
-		if (Arr.contains(args, "docker-self-verify=true")) {
-			dockerSelfVerify();
-			verifyNotInitialized();
-		}
+	private static boolean started = false;
 
-		verifyNotInitialized();
-	}
+	static synchronized void startUp(String[] args, String... extraArgs) {
 
-	private static void verifyNotInitialized() {
-		if (!App.managed()) {
-			U.must(!Conf.isInitialized(), "The configuration shouldn't be initialized yet!");
-		}
-	}
+		U.must(!started, "The application was already started!");
+		started = true;
 
-	private static void dockerSelfVerify() {
-		U.must(Msc.dockerized(), "Docker environment couldn't be detected!");
-		U.must("/app".equals(Env.root()), "The default root path for Docker environment must be '/app'!");
+		args = Arr.concat(extraArgs, args);
 
-		Log.info("Docker environment was verified!");
+		ConfigHelp.processHelp(args);
+
+		Env.setArgs(args);
+
+		U.must(!Conf.isInitialized(), "The configuration shouldn't be initialized yet!");
 	}
 
 }

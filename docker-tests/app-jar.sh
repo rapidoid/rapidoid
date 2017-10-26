@@ -18,11 +18,10 @@ docker run -d --name mysql -e MYSQL_ROOT_PASSWORD=db-pass -e MYSQL_DATABASE=rapi
 
 sleep 60 # give MySQL some time to initialize
 
-sudo docker run \
+docker run \
     -e uniform_output=true \
     -e JDBC_PASSWORD=db-pass \
     -e profiles=mysql \
-    -p 8888:8888 \
     -p 8080:8080 \
     -v $(pwd)/app3:/app \
     --link mysql:mysql \

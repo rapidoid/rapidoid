@@ -36,6 +36,9 @@ import org.rapidoid.util.Msc;
 public class Main extends RapidoidThing {
 
 	public static void main(String[] args) {
+		// configure platform mode
+		initPlatform();
+
 		// just print basic info if no args were specified
 		if (U.isEmpty(args) && !Msc.isSingleApp()) {
 			printWelcome();
@@ -45,6 +48,14 @@ public class Main extends RapidoidThing {
 
 			runMain(args);
 		}
+	}
+
+	private static void initPlatform() {
+		Msc.setPlatform(true);
+
+		Log.options().fancy(!Msc.dockerized());
+		Log.options().inferCaller(false);
+		Log.options().showThread(false);
 	}
 
 	private static void runMain(String[] cliArgs) {

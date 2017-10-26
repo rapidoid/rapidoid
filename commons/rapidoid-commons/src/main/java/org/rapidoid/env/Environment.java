@@ -128,7 +128,7 @@ public class Environment extends RapidoidInitializer {
 		}
 
 		String modeProfile = mode.name().toLowerCase();
-		if (!silent()) Log.info("Automatically activating mode-specific profile", "!profile", modeProfile);
+		if (!silent()) Log.debug("Automatically activating mode-specific profile", "!profile", modeProfile);
 		profiles.add(modeProfile);
 
 		if (Msc.isPlatform()) {
@@ -137,7 +137,10 @@ public class Environment extends RapidoidInitializer {
 
 		RapidoidEnv.touch();
 
-		if (!silent()) Log.info("Initialized environment", "!mode", mode, "!profiles", profiles);
+		if (!silent()) {
+			String platform = Msc.isPlatform() ? (Msc.isMultiProcess() ? "multi-process" : "single-process") : "no";
+			Log.info("Initialized environment", "!mode", mode, "!profiles", profiles, "!platform", platform);
+		}
 	}
 
 	private static boolean silent() {
@@ -149,8 +152,6 @@ public class Environment extends RapidoidInitializer {
 			return EnvMode.TEST;
 
 		} else {
-			if (Msc.dockerized()) return EnvMode.PRODUCTION;
-
 			return ClasspathUtil.getClasspathFolders().isEmpty() ? EnvMode.PRODUCTION : EnvMode.DEV;
 		}
 	}

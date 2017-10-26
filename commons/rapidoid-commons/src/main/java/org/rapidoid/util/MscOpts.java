@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
+import org.rapidoid.u.U;
 
 /*
  * #%L
@@ -30,6 +31,10 @@ import org.rapidoid.config.Conf;
 @Since("5.3.0")
 public class MscOpts extends RapidoidThing {
 
+	private static final boolean hasDockerEnv = U.eq(System.getenv("RAPIDOID_JAR"), "/opt/rapidoid.jar")
+		&& U.eq(System.getenv("RAPIDOID_TMP"), "/tmp/rapidoid")
+		&& U.notEmpty(System.getenv("RAPIDOID_VERSION"));
+
 	private static final String appsPath = "/data/apps";
 
 	private static final boolean hasValidation = Cls.exists("javax.validation.Validation");
@@ -50,6 +55,10 @@ public class MscOpts extends RapidoidThing {
 	private static final boolean hasHikari = Cls.exists("com.zaxxer.hikari.HikariDataSource");
 
 	private static final boolean isRestOnly = !hasRapidoidHTML();
+
+	public static boolean hasDockerEnv() {
+		return hasDockerEnv;
+	}
 
 	public static boolean hasValidation() {
 		return hasValidation;
