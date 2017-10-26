@@ -20,6 +20,7 @@ package org.rapidoid.platform;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.config.Conf;
 import org.rapidoid.env.Env;
 import org.rapidoid.io.IO;
@@ -28,7 +29,7 @@ import org.rapidoid.performance.BenchmarkCenter;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
-class PlatformCommands {
+class PlatformCommands extends RapidoidThing {
 
 	static void interpretCommand(CmdArgs args) {
 		switch (args.command) {
