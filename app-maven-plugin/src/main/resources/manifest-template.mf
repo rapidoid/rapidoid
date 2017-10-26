@@ -8,3 +8,4 @@ Implementation-Vendor-Id: $groupId
 Implementation-Vendor: $organization
 Implementation-URL: $url
 Main-Class: $main
+Class-Path: /opt/*.jar
