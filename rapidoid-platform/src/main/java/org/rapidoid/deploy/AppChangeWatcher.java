@@ -26,7 +26,10 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.io.watch.Watch;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
+
+import java.io.File;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -42,8 +45,10 @@ public class AppChangeWatcher extends RapidoidThing implements Operation<String>
 	}
 
 	public void watch() {
-		Log.info("Watching app root for changes...", "root", root);
-		Watch.dir(root, Watch.simpleListener(this));
+		if (U.notEmpty(root) && new File(root).exists()) {
+			Log.info("Watching app root for changes...", "root", root);
+			Watch.dir(root, Watch.simpleListener(this));
+		}
 	}
 
 	@Override
