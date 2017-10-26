@@ -23,6 +23,6 @@ sudo docker run \
 
 ./wait-for.sh 8888
 
-./http-get.sh postgres 8888 /users
+./http-get.sh postgres-users 8888 /users
 
 ./cleanup.sh

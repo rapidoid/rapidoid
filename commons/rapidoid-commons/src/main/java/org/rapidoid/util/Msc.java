@@ -93,19 +93,14 @@ public class Msc extends RapidoidThing {
 
 	private static volatile long measureStart;
 
-	private static boolean platform;
+	private static volatile boolean platform;
 
-	private static boolean mavenBuild;
+	private static volatile boolean mavenBuild;
+
+	private static volatile boolean dockerized = MscOpts.hasDockerEnv();
 
 	public static final ScheduledThreadPoolExecutor EXECUTOR = new ScheduledThreadPoolExecutor(8,
 		new RapidoidThreadFactory("utils", true));
-
-	public static final Mapper<Object, Object> TRANSFORM_TO_STRING = new Mapper<Object, Object>() {
-		@Override
-		public Object map(Object src) throws Exception {
-			return src != null ? src.toString() : null;
-		}
-	};
 
 	public static final Mapper<Object, Object> TRANSFORM_TO_SIMPLE_CLASS_NAME = new Mapper<Object, Object>() {
 		@Override
@@ -1008,13 +1003,14 @@ public class Msc extends RapidoidThing {
 	}
 
 	public static boolean dockerized() {
-		return U.eq(System.getenv("RAPIDOID_JAR"), "/opt/rapidoid.jar")
-			&& U.eq(System.getenv("RAPIDOID_TMP"), "/tmp/rapidoid")
-			&& U.notEmpty(System.getenv("RAPIDOID_VERSION"))
-			&& hasAppFolder();
+		return dockerized;
 	}
 
-	private static boolean hasAppFolder() {
+	public static void dockerized(boolean dockerized) {
+		Msc.dockerized = dockerized;
+	}
+
+	public static boolean hasAppFolder() {
 		File app = new File("/app");
 		return app.exists() && app.isDirectory();
 	}
@@ -1170,12 +1166,12 @@ public class Msc extends RapidoidThing {
 		return isPlatform() && !isSingleApp();
 	}
 
-	public static boolean hasChildProcesses() {
+	public static boolean isMultiProcess() {
 		return isPlatform() && (!isSingleApp() || Env.dev());
 	}
 
 	public static boolean isSingleApp() {
-		return new File("/app").exists();
+		return hasAppFolder();
 	}
 
 	public static boolean isMavenBuild() {

@@ -28,7 +28,7 @@ import org.rapidoid.annotation.Since;
 @Since("5.4.5")
 public class RunInProdMode extends RapidoidThing {
 
-	private static final String[] ARGS = {"mode=production", "root=/app"};
+	private static final String[] ARGS = {"mode=production"};
 
 	public static void main(String[] args) {
 		Main.main(ARGS);

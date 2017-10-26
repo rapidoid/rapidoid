@@ -1,0 +1,9 @@
+id: single-app1
+
+gui:
+  brand: App1
+  menu:
+    Home: /
+
+pages:
+  /: ''

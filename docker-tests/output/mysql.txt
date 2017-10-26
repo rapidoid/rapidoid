@@ -8,16 +8,16 @@
 INFO | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
 INFO | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
 INFO | Replacing configuration shortcut | shortcut = /users <= SELECT distinct(user) FROM mysql.user | key = api./users | value = SELECT distinct(user) FROM mysql.user
-INFO | Setting application root | root = /app | items = 0
+INFO | Setting platform root | root = /platform | items = 0
 INFO | Configuring active profiles | profiles = [mysql]
 INFO | No production/dev/test mode was configured, inferring mode | mode = PRODUCTION
-INFO | Automatically activating mode-specific profile | profile = production
-INFO | Initialized environment | mode = PRODUCTION | profiles = [mysql, production, platform]
+INFO | Initialized environment | mode = PRODUCTION | profiles = [mysql, production, platform] | platform = multi-process
 INFO | Loaded configuration | namespace = rapidoid | files = [built-in-config.yml, built-in-config-mysql.yml, built-in-config-platform.yml]
 INFO | GET /users                                     | setup = main | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
 INFO | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
 INFO | Server has started | setup = main | home = http://localhost:8888
 INFO | Static resources will be served from the following locations | setup = main | locations = [static, default/static]
+INFO | Ready.
 INFO | Initializing JDBC connection pool with Hikari | url = jdbc:mysql://db:3306?logger=Slf4JLogger | driver = com.mysql.jdbc.Driver | username = root | password = *****
 INFO | com.zaxxer.hikari.HikariDataSource | HikariPool-1 - Starting...
 WARN | MySQL | Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.

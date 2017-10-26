@@ -12,9 +12,11 @@ import org.rapidoid.u.U;
 public class GettingStartedExample {
 
 	public static void main(String[] args) {
+		App.init(args);
+
 		Log.info("Starting application");
 
-		App.init(args).beans().jpa().auth(); // bootstrap beans (controllers, services etc.), JPA and Auth
+		App.boot().beans().jpa().auth(); // bootstrap beans (controllers, services etc.), JPA and Auth
 
 		On.get("/books").json(() -> JPA.of(Book.class).all()); // get all books
 

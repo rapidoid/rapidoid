@@ -45,8 +45,7 @@ public class DefaultApp extends RapidoidThing {
 
 	public static void run(String[] args) {
 		Log.options().prefix("[APP] ");
-		App.run(args);
-		App.boot().services();
+		App.run(args).services();
 		On.setup().activate();
 	}
 

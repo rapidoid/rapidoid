@@ -1,5 +1,5 @@
 jdbc:
-  url: 'jdbc:mysql://mysql:3306/rapidoid'
+  url: 'jdbc:mysql://mysql:3306/rapidoid?useSSL=false'
 
 hibernate:
   hbm2ddl:

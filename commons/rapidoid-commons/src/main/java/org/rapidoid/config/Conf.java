@@ -40,7 +40,7 @@ import java.util.Map;
 @Since("2.0.0")
 public class Conf extends RapidoidThing {
 
-	private static final String CONFIG_NAME = Msc.hasChildProcesses() ? "rapidoid" : "config";
+	private static final String CONFIG_NAME = Msc.isMultiProcess() ? "rapidoid" : "config";
 
 	public static final Config ROOT = new ConfigImpl(CONFIG_NAME, true);
 
@@ -86,32 +86,34 @@ public class Conf extends RapidoidThing {
 		}
 
 		if (config == ROOT) {
-			String root = Env.root();
+			activateRootConfig();
+		}
+	}
 
-			if (Msc.dockerized()) {
-				U.must(U.notEmpty(root), "The root must be configured in a Dockerized environment!");
+	private static void activateRootConfig() {
+		String root = Env.root();
 
-				if (!APP.has("jar")) APP.set("jar", Msc.path(root, "app.jar"));
-			}
+		if (U.notEmpty(root) && !APP.has("jar")) {
+			APP.set("jar", Msc.path(root, "app.jar"));
+		}
 
-			String appJar = APP.entry("jar").str().getOrNull();
-			if (U.notEmpty(appJar)) {
-				ClasspathUtil.appJar(appJar);
-			}
+		String appJar = APP.entry("jar").str().getOrNull();
+		if (U.notEmpty(appJar)) {
+			ClasspathUtil.appJar(appJar);
+		}
 
-			boolean fancy = LOG.entry("fancy").bool().or(Msc.hasConsole());
-			if (fancy) {
-				Log.options().fancy(true);
-			}
+		boolean fancy = LOG.entry("fancy").bool().or(Msc.hasConsole());
+		if (fancy) {
+			Log.options().fancy(true);
+		}
 
-			LogLevel logLevel = LOG.entry("level").to(LogLevel.class).getOrNull();
-			if (logLevel != null && !Env.test()) {
-				Log.setLogLevel(logLevel);
-			}
+		LogLevel logLevel = LOG.entry("level").to(LogLevel.class).getOrNull();
+		if (logLevel != null && !Env.test()) {
+			Log.setLogLevel(logLevel);
+		}
 
-			if (GlobalCfg.quiet()) {
-				Log.setLogLevel(LogLevel.ERROR); // overwrite the configured log level in quiet mode
-			}
+		if (GlobalCfg.quiet()) {
+			Log.setLogLevel(LogLevel.ERROR); // overwrite the configured log level in quiet mode
 		}
 	}
 

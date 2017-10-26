@@ -1,0 +1,108 @@
+HTTP/1.1 200 OK
+Connection: keep-alive
+Server: Rapidoid
+Date: Sat, 10 Sep 2016 01:02:03 GMT
+Content-Type: text/html; charset=utf-8
+Content-Length: 2341
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Rapidoid</title>
+
+
+
+<link href="/_rapidoid/bootstrap/css/bootstrap-3.3.6.min.css" rel="stylesheet">
+<link href="/_rapidoid/font-awesome/css/font-awesome-4.5.0.min.css" rel="stylesheet">
+<link href="/_rapidoid/rapidoid.min.css" rel="stylesheet">
+
+<link href="/application.css" rel="stylesheet">
+
+<link href="/img/favicon.png" rel="shortcut icon">
+<link href="/_rapidoid/bootstrap/css/theme-default.css" type="text/css" rel="stylesheet" />
+
+
+
+<script>
+    window.Rapidoid = window.Rapidoid || {};
+    window.Rapidoid.contextPath = '';
+    window.Rapidoid.loginUri = '/rapidoid/login';
+    window.Rapidoid.logoutUri = '/rapidoid/logout';
+    window.Rapidoid.profileUri = '/rapidoid/profile';
+    window.Rapidoid.graphsUri = '/rapidoid/graphs';
+</script>
+</head>
+
+<body class="rapidoid rapidoid-main">
+
+<script src="/_rapidoid/jquery-2.2.3.min.js"></script>
+<script src="/_rapidoid/bootstrap/js/bootstrap-3.3.6.min.js"></script>
+<script src="/_rapidoid/angular-1.5.8.min.js"></script>
+<script src="/_rapidoid/rapidoid.min.js"></script>
+
+<script src="/application.js"></script>
+
+<div ng-controller="Main" ng-app="app">
+
+
+<!-- Angular bindings start -->
+<div ng-if="!ajaxBodyContent">
+<nav role="navigation" class="navbar navbar-default">
+    <div class="container">
+
+        <div class="navbar-header">
+            <button data-target="#collapsable" class="navbar-toggle collapsed" data-toggle="collapse" type="button">
+                <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">App1</a>
+        </div>
+
+<div id="collapsable" class="collapse navbar-collapse">
+
+
+
+    <ul class="nav navbar-nav navbar-left">
+<li class=" active">
+    <a href="/" >Home</a>
+</li>
+
+    </ul>
+
+
+
+    
+
+    
+
+</div>
+
+
+    </div>
+</nav>
+
+<div class="container">
+
+<span class="nothing"><i class="fa fa-ban"></i> N/A</span>
+</div>
+
+
+</div>
+<div compile="ajaxBodyContent" ng-if="ajaxBodyContent"></div>
+<!-- Angular bindings end -->
+
+<script>Rapidoid.init();</script>
+
+
+
+
+</div>
+</body>
+
+
+</html>
+
