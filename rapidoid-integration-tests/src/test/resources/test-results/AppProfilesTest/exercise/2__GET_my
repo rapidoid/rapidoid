@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 1777
+Content-Length: 1786
 
 <!DOCTYPE html>
 <html lang="en">
@@ -62,7 +62,7 @@ Content-Length: 1777
   </tr>
   <tr>
     <td>msg</td>
-    <td>hello!</td>
+    <td>hello from Foo!</td>
   </tr>
   <tr>
     <td>desc</td>

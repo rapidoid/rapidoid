@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.util.List;
 import java.util.Map;
@@ -124,7 +125,12 @@ public class Env extends RapidoidThing {
 	}
 
 	public static String root() {
-		U.must(Env.rootCtx != null, "The root context was not initialized!");
-		return rootCtx.root();
+		if (Env.rootCtx != null) {
+			return rootCtx.root();
+
+		} else {
+			U.must(!Msc.isPlatform(), "The root context must be initialized for the platform!");
+			return null;
+		}
 	}
 }

@@ -21,6 +21,8 @@ package org.rapidoid.platform;
  */
 
 import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.env.Env;
 import org.rapidoid.io.IO;
@@ -29,6 +31,8 @@ import org.rapidoid.performance.BenchmarkCenter;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
+@Authors("Nikolche Mihajlovski")
+@Since("5.4.6")
 class PlatformCommands extends RapidoidThing {
 
 	static void interpretCommand(CmdArgs args) {

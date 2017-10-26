@@ -243,6 +243,7 @@ public class App extends RapidoidInitializer {
 		loader = App.class.getClassLoader();
 		boot = null;
 		Setup.initDefaults();
+		AppStarter.reset();
 		AppBootstrap.reset();
 		invoked.clear();
 	}
