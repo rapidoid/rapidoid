@@ -27,7 +27,6 @@ import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.config.ConfigHelp;
 import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
-import org.rapidoid.performance.BenchmarkCenter;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
@@ -65,45 +64,8 @@ public class Main extends RapidoidThing {
 			Platform.start(args);
 
 		} else {
-			interpretCommand(args);
+			PlatformCommands.interpretCommand(args);
 		}
-	}
-
-	private static void interpretCommand(CmdArgs args) {
-		switch (args.command) {
-
-			case "password":
-				// generate new password
-				PasswordHashTool.generatePasswordHash(args);
-				System.exit(0);
-				break;
-
-			case "installer":
-				// interpret the "installer" command
-				U.must(U.isEmpty(args.args), "No arguments are expected for the 'installer' command!");
-				U.print(IO.load("install.sh"));
-				System.exit(0);
-				break;
-
-			case "benchmark":
-				// benchmark - only available in "dev" builds
-				BenchmarkCenter.run();
-				System.exit(0);
-				break;
-
-			case "platform":
-				// start the platform
-				Platform.start(args);
-				break;
-
-			default:
-				fail("Unknown command: " + args.command);
-		}
-	}
-
-	static void fail(String msg) {
-		Log.error(msg);
-		System.exit(1);
 	}
 
 	private static void printWelcome() {

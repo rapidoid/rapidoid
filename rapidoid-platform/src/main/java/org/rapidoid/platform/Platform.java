@@ -27,10 +27,8 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.deploy.AppDeployer;
 import org.rapidoid.deploy.AppDownloader;
 import org.rapidoid.env.Env;
-import org.rapidoid.log.Log;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
-import org.rapidoid.setup.PreApp;
 import org.rapidoid.setup.Setup;
 import org.rapidoid.u.U;
 import org.rapidoid.util.AnsiColor;
@@ -44,29 +42,37 @@ import java.util.List;
 @Since("5.3.0")
 public class Platform extends RapidoidThing {
 
-	static void start(CmdArgs options) {
+	static void start(CmdArgs cmdArgs) {
 		Msc.printRapidoidBanner();
 
-		initializePlatform();
+		// start application
+		App.init(U.arrayOf(String.class, cmdArgs.args));
 
-		startPlatformAndProcessOptions(options);
+		// [The application has started!]
 
-		printAdminCenterURL();
+		// bootstrap services
+		App.boot().services();
 
-		if (Msc.isSingleApp() && !Env.dev()) {
-			runSingleApp(options);
+		if (Msc.isMultiProcess()) {
+			// multi-process mode
+
+			printAdminCenterURL();
+			processExternalApps(cmdArgs.refs);
+
+			if (Msc.isSingleApp()) {
+				AppDeployer.bootstrap();
+			}
+
 		} else {
-			AppDeployer.bootstrap();
+			// single-process mode
+			// the app was already bootstrapped on App.run(...)
 		}
+
+		App.ready();
 
 		if (!Setup.isAnyRunning()) {
 			On.setup().activate();
 		}
-	}
-
-	private static void runSingleApp(CmdArgs options) {
-		Log.info("Running in single-app mode");
-		App.run(U.arrayOf(String.class, options.options));
 	}
 
 	private static void printAdminCenterURL() {
@@ -74,24 +80,6 @@ public class Platform extends RapidoidThing {
 			long port = Conf.RAPIDOID.entry("port").num().get();
 			String url = "http://localhost:" + port + "/rapidoid";
 			Msc.logSection(AnsiColor.lightBlue("Rapidoid Admin Center: ") + url);
-		}
-	}
-
-	private static void initializePlatform() {
-		Msc.setPlatform(true);
-
-		Log.options().inferCaller(false);
-		Log.options().showThread(false);
-	}
-
-	private static void startPlatformAndProcessOptions(CmdArgs cmdArgs) {
-		PreApp.args(U.arrayOf(String.class, cmdArgs.args));
-
-		App.boot().services();
-
-		if (U.notEmpty(cmdArgs.refs)) {
-			U.must(!Msc.isSingleApp(), "Cannot run external applications in single-app mode!");
-			processExternalApps(cmdArgs.refs);
 		}
 	}
 
