@@ -222,6 +222,61 @@ public class OnRoute extends RapidoidThing {
 		HttpHandlers.register(setup, verb, path, jsonOpts(), handler);
 	}
 
+       
+        /* XML */
+
+	public void xml(String response) {
+		HttpHandlers.registerPredefined(setup, verb, path, xmlOpts(), response);
+	}
+
+	public void xml(byte[] response) {
+		HttpHandlers.registerPredefined(setup, verb, path, xmlOpts(), response);
+	}
+
+	public <T> void xml(Callable<T> handler) {
+		HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
+	}
+
+	public void xml(Method method, Object instance) {
+		HttpHandlers.register(setup, verb, path, xmlOpts(), method, instance);
+	}
+
+	public void xml(ReqHandler handler) {
+		HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
+	}
+
+	public void xml(ReqRespHandler handler) {
+		HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
+	}
+
+	public void xml(OneParamLambda<?, ?> handler) {
+		HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
+	}
+
+	public void xml(TwoParamLambda<?, ?, ?> handler) {
+		HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
+	}
+
+	public void xml(ThreeParamLambda<?, ?, ?, ?> handler) {
+		HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
+	}
+
+	public void xml(FourParamLambda<?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
+	}
+
+	public void xml(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
+	}
+
+	public void xml(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
+	}
+
+	public void xml(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
+	}
+        
 	/* PLAIN */
 
 	public void plain(String response) {
@@ -344,6 +399,10 @@ public class OnRoute extends RapidoidThing {
 		return opts(MediaType.JSON);
 	}
 
+        private RouteOptions xmlOpts() {
+		return opts(MediaType.XML_UTF_8);
+	}
+	
 	private RouteOptions plainOpts() {
 		return opts(MediaType.PLAIN_TEXT_UTF_8);
 	}

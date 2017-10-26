@@ -1,6 +1,7 @@
 package org.rapidoid.http.customize;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -58,6 +59,10 @@ public class Customization extends RapidoidThing {
 	private volatile JsonResponseRenderer jsonResponseRenderer;
 
 	private volatile JsonRequestBodyParser jsonRequestBodyParser;
+	
+	private volatile XmlResponseRenderer xmlResponseRenderer;
+	
+	private volatile XmlRequestBodyParser xmlRequestBodyParser;
 
 	private volatile BeanParameterFactory beanParameterFactory;
 
@@ -68,6 +73,8 @@ public class Customization extends RapidoidThing {
 	private volatile BeanValidator validator;
 
 	private volatile ObjectMapper jackson;
+	
+	private volatile XmlMapper jacksonXml;
 
 	private volatile EntityManagerProvider entityManagerProvider;
 
@@ -95,11 +102,13 @@ public class Customization extends RapidoidThing {
 		viewResolver = null;
 		pageDecorator = null;
 		jsonResponseRenderer = null;
+		xmlResponseRenderer = null;
 		beanParameterFactory = null;
 		loginProvider = null;
 		rolesProvider = null;
 		validator = null;
 		jackson = null;
+		jacksonXml = null;
 		entityManagerProvider = null;
 		entityManagerFactoryProvider = null;
 		sessionManager = null;
@@ -198,6 +207,15 @@ public class Customization extends RapidoidThing {
 		this.jsonResponseRenderer = jsonResponseRenderer;
 		return this;
 	}
+	
+	public XmlResponseRenderer xmlResponseRenderer(){
+		return xmlResponseRenderer != null || defaults == null ? xmlResponseRenderer : defaults.xmlResponseRenderer();
+	}
+	
+	public Customization xmlResponseRenderer(XmlResponseRenderer xmlResponseRenderer){
+		this.xmlResponseRenderer = xmlResponseRenderer;
+		return this;
+	}
 
 	public BeanParameterFactory beanParameterFactory() {
 		return beanParameterFactory != null || defaults == null ? beanParameterFactory : defaults.beanParameterFactory();
@@ -243,7 +261,15 @@ public class Customization extends RapidoidThing {
 		this.jackson = jackson;
 		return this;
 	}
-
+	
+	public XmlMapper jacksonXml(){
+		return jacksonXml != null || defaults == null ?  jacksonXml : defaults.jacksonXml();
+	}
+	
+	public Customization jacksonXml(XmlMapper jacksonXml) {
+		this.jacksonXml = jacksonXml;
+		return this;
+	}
 	public EntityManagerProvider entityManagerProvider() {
 		return entityManagerProvider != null || defaults == null ? entityManagerProvider : defaults.entityManagerProvider();
 	}
@@ -268,6 +294,15 @@ public class Customization extends RapidoidThing {
 
 	public Customization jsonRequestBodyParser(JsonRequestBodyParser jsonRequestBodyParser) {
 		this.jsonRequestBodyParser = jsonRequestBodyParser;
+		return this;
+	}
+	
+	public XmlRequestBodyParser xmlRequestBodyParser() {
+		return xmlRequestBodyParser != null || defaults == null  ? xmlRequestBodyParser : defaults.xmlRequestBodyParser();
+	}
+	
+	public Customization xmlRequestBodyParser(XmlRequestBodyParser xmlRequestBodyParser) {
+		this.xmlRequestBodyParser = xmlRequestBodyParser;
 		return this;
 	}
 

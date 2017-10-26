@@ -1,10 +1,14 @@
-package org.rapidoid.http.customize;
+package org.rapidoid.http.customize.defaults;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Req;
 
 import java.io.OutputStream;
+import org.rapidoid.data.XML;
+import org.rapidoid.http.customize.Customization;
+import org.rapidoid.http.customize.XmlResponseRenderer;
 
 /*
  * #%L
@@ -26,9 +30,13 @@ import java.io.OutputStream;
  * #L%
  */
 
-@Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public interface JsonResponseRenderer extends MediaResponseRenderer{
+@Authors("Dan Cytermann")
+@Since("5.5.0")
+public class DefaultXmlResponseRenderer extends RapidoidThing implements XmlResponseRenderer {
 
+	@Override
+	public void render(Req req, Object value, OutputStream out) throws Exception {
+		Customization.of(req).jacksonXml().writeValue(out, value);
+	}
 
 }

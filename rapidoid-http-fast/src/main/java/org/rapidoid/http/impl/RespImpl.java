@@ -34,6 +34,7 @@ import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
+import org.rapidoid.http.customize.MediaResponseRenderer;
 
 /*
  * #%L
@@ -526,7 +527,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 	}
 
 	private byte[] serializeResponseContent() {
-		return HttpUtils.responseToBytes(req, result(), contentType(), Customization.of(req).jsonResponseRenderer());
+		return HttpUtils.responseToBytes(req, result(), contentType(), mediaResponseRenderer());
 	}
 
 	@Override
@@ -581,5 +582,18 @@ public class RespImpl extends RapidoidThing implements Resp {
 		if (chunked != null && !chunked.isClosed()) {
 			IO.close(chunked, false);
 		}
+	}
+
+	private MediaResponseRenderer mediaResponseRenderer() {
+		if(contentType.equals(MediaType.JSON)){
+			return Customization.of(req).jsonResponseRenderer();
+		}
+		else{
+			if(contentType.equals(MediaType.XML_UTF_8)){
+				return Customization.of(req).xmlResponseRenderer();
+			}
+		}
+		//default to json
+		return Customization.of(req).jsonResponseRenderer();
 	}
 }
