@@ -7,13 +7,12 @@
 
 INFO | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
 INFO | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
-INFO | Setting application root | root = /app | items = 0
+INFO | Setting platform root | root = /platform | items = 0
 INFO | No production/dev/test mode was configured, inferring mode | mode = PRODUCTION
-INFO | Automatically activating mode-specific profile | profile = production
-INFO | Initialized environment | mode = PRODUCTION | profiles = [production, platform]
-INFO | Setting application JAR | appJar = /app/app.jar | exists = false
+INFO | Initialized environment | mode = PRODUCTION | profiles = [production, platform] | platform = multi-process
 INFO | Loaded configuration | namespace = rapidoid | files = [built-in-config.yml, built-in-config-platform.yml]
 INFO | GET /rapidoid/ping                             | setup = main | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
 INFO | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
 INFO | Server has started | setup = main | home = http://localhost:8888
 INFO | Static resources will be served from the following locations | setup = main | locations = [static, default/static]
+INFO | Ready.
