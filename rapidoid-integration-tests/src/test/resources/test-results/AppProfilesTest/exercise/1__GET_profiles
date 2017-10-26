@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 1718
+Content-Length: 1788
 
 <!DOCTYPE html>
 <html lang="en">
@@ -56,7 +56,8 @@ Content-Length: 1718
 <div class="container">
 
 <div>
-  <div class="value-line"><i class="fa fa-circle-o"></i>&nbsp;default</div>
+  <div class="value-line"><i class="fa fa-circle-o"></i>&nbsp;mysql</div>
+  <div class="value-line"><i class="fa fa-circle-o"></i>&nbsp;foo</div>
   <div class="value-line"><i class="fa fa-circle-o"></i>&nbsp;test</div>
 </div>
 </div>

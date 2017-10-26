@@ -35,6 +35,10 @@ class AppStarter extends RapidoidThing {
 
 	private static boolean started = false;
 
+	static synchronized void reset() {
+		started = false;
+	}
+
 	static synchronized void startUp(String[] args, String... extraArgs) {
 
 		U.must(!started, "The application was already started!");

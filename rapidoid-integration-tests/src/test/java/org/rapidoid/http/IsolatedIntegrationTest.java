@@ -98,7 +98,6 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 		verifyNoRoutes();
 
 		U.must(Msc.isInsideTest());
-		U.must(Env.test());
 
 		Env.reset();
 
@@ -106,7 +105,6 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 		Conf.ROOT.setPath(getTestNamespace());
 
 		U.must(Msc.isInsideTest());
-		U.must(Env.test());
 
 		RapidoidIntegrationTest.start(this);
 	}

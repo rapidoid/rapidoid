@@ -1,1 +1,1 @@
-{id=rpd123, root=null, jar=/a/b.jar, jarExists=false, notes=[], mode=PRODUCTION, profiles=[mysql, production]}
+{id=rpd123, root=null, jar=, notes=[], mode=PRODUCTION, profiles=[mysql, production]}

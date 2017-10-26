@@ -3,6 +3,6 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: application/json
-Content-Length: 23
+Content-Length: 21
 
-"hi, OTHER controller!"
+"hi, FOO controller!"
