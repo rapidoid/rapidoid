@@ -29,7 +29,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.IntegrationTest;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Metadata;
-import org.rapidoid.env.Env;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.Msc;
 
@@ -47,7 +46,6 @@ public abstract class RapidoidIntegrationTest extends RapidoidTest {
 		clearErrors();
 
 		isTrue(Msc.isInsideTest());
-		isTrue(Env.test());
 
 		before(this);
 		start(this);
