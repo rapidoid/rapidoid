@@ -44,8 +44,7 @@ public class StatusHandler extends RapidoidThing implements Callable<Object> {
 		return U.map(
 			"id", Msc.id(),
 			"root", Env.root(),
-			"jar", appJar,
-			"jarExists", new File(appJar).exists(),
+			"jar", new File(appJar).exists() ? appJar : "",
 			"version", Msc.maybeMasked(RapidoidInfo.version()),
 			"notes", RapidoidInfo.notes(),
 			"mode", Env.mode(),
