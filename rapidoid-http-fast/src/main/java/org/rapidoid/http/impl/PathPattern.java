@@ -184,4 +184,7 @@ public class PathPattern extends RapidoidThing implements Comparable<PathPattern
 		return prefix;
 	}
 
+	public static boolean isPattern(String path) {
+		return path.contains("*") || path.contains("{");
+	}
 }
