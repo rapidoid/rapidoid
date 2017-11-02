@@ -37,7 +37,7 @@ import java.util.regex.Pattern;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class PathPattern extends RapidoidThing {
+public class PathPattern extends RapidoidThing implements Comparable<PathPattern> {
 
 	public static final String ANY = "_";
 
@@ -163,4 +163,17 @@ public class PathPattern extends RapidoidThing {
 	public String toString() {
 		return "PathPattern{" + "path='" + path + '\'' + ", pattern=" + pattern + ", groups=" + groups + '}';
 	}
+
+	@Override
+	public int compareTo(PathPattern that) {
+		int lengthDiff = -(this.prefix().length() - that.prefix().length());
+		return lengthDiff != 0 ? lengthDiff : this.path.compareTo(that.path);
+	}
+
+	public String prefix() {
+		String prefix = Str.cutToFirst(path, "*");
+		U.must(prefix != null, "Couldn't find asterisk in the path pattern!");
+		return prefix;
+	}
+
 }

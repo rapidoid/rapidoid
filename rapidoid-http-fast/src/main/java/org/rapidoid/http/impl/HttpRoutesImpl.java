@@ -69,25 +69,25 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 	private static final byte[] _HEAD = Constants.HEAD.getBytes();
 	private static final byte[] _TRACE = Constants.TRACE.getBytes();
 
-	final BufMap<HttpHandler> getHandlers = new BufMapImpl<HttpHandler>();
-	final BufMap<HttpHandler> postHandlers = new BufMapImpl<HttpHandler>();
-	final BufMap<HttpHandler> putHandlers = new BufMapImpl<HttpHandler>();
-	final BufMap<HttpHandler> deleteHandlers = new BufMapImpl<HttpHandler>();
-	final BufMap<HttpHandler> patchHandlers = new BufMapImpl<HttpHandler>();
-	final BufMap<HttpHandler> optionsHandlers = new BufMapImpl<HttpHandler>();
-	final BufMap<HttpHandler> headHandlers = new BufMapImpl<HttpHandler>();
-	final BufMap<HttpHandler> traceHandlers = new BufMapImpl<HttpHandler>();
-	final BufMap<HttpHandler> anyHandlers = new BufMapImpl<HttpHandler>();
+	final BufMap<HttpHandler> getHandlers = new BufMapImpl<>();
+	final BufMap<HttpHandler> postHandlers = new BufMapImpl<>();
+	final BufMap<HttpHandler> putHandlers = new BufMapImpl<>();
+	final BufMap<HttpHandler> deleteHandlers = new BufMapImpl<>();
+	final BufMap<HttpHandler> patchHandlers = new BufMapImpl<>();
+	final BufMap<HttpHandler> optionsHandlers = new BufMapImpl<>();
+	final BufMap<HttpHandler> headHandlers = new BufMapImpl<>();
+	final BufMap<HttpHandler> traceHandlers = new BufMapImpl<>();
+	final BufMap<HttpHandler> anyHandlers = new BufMapImpl<>();
 
-	final Map<PathPattern, HttpHandler> patternGetHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
-	final Map<PathPattern, HttpHandler> patternPostHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
-	final Map<PathPattern, HttpHandler> patternPutHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
-	final Map<PathPattern, HttpHandler> patternDeleteHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
-	final Map<PathPattern, HttpHandler> patternPatchHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
-	final Map<PathPattern, HttpHandler> patternOptionsHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
-	final Map<PathPattern, HttpHandler> patternHeadHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
-	final Map<PathPattern, HttpHandler> patternTraceHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
-	final Map<PathPattern, HttpHandler> patternAnyHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
+	final Map<PathPattern, HttpHandler> patternGetHandlers = new TreeMap<>();
+	final Map<PathPattern, HttpHandler> patternPostHandlers = new TreeMap<>();
+	final Map<PathPattern, HttpHandler> patternPutHandlers = new TreeMap<>();
+	final Map<PathPattern, HttpHandler> patternDeleteHandlers = new TreeMap<>();
+	final Map<PathPattern, HttpHandler> patternPatchHandlers = new TreeMap<>();
+	final Map<PathPattern, HttpHandler> patternOptionsHandlers = new TreeMap<>();
+	final Map<PathPattern, HttpHandler> patternHeadHandlers = new TreeMap<>();
+	final Map<PathPattern, HttpHandler> patternTraceHandlers = new TreeMap<>();
+	final Map<PathPattern, HttpHandler> patternAnyHandlers = new TreeMap<>();
 
 	private final long id;
 	private final String setupName;
