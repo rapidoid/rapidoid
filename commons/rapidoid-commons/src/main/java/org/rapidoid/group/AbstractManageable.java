@@ -59,11 +59,37 @@ public abstract class AbstractManageable extends RapidoidThing implements Manage
 
 	@Override
 	public List<String> getManageableActions() {
+		Object source = source();
 		List<String> actions = U.list();
 
-		for (Method method : Cls.getMethodsAnnotated(source().getClass(), Action.class)) {
+		List<Method> actionMethods = Cls.getMethodsAnnotated(source.getClass(), Action.class);
+
+		for (Method method : actionMethods) {
 			Action action = method.getAnnotation(Action.class);
 			actions.add(!action.name().isEmpty() ? action.name() : method.getName());
+		}
+
+		for (Method method : Cls.getMethodsAnnotated(source.getClass(), ActionCondition.class)) {
+			ActionCondition condition = method.getAnnotation(ActionCondition.class);
+
+			U.must(method.getReturnType() == boolean.class, "The method return type must be boolean: " + method);
+
+			boolean cond = Cls.invoke(method, source);
+
+			if (!cond) {
+				String name;
+
+				if (!condition.name().isEmpty()) {
+					name = condition.name();
+
+				} else {
+					name = method.getName();
+					U.must(name.startsWith("can"), "The action condition method must start with 'can', to infer the action name!");
+					name = Str.uncapitalized(Str.triml(name, "can"));
+				}
+
+				actions.remove(name);
+			}
 		}
 
 		return actions;
