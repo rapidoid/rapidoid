@@ -23,47 +23,21 @@ package org.rapidoid.http;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.job.Jobs;
 import org.rapidoid.setup.On;
-import org.rapidoid.setup.Setup;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.2.3")
-public class ReverseProxyTest extends IsolatedIntegrationTest {
+@Since("5.4.7")
+public class HttpMultiAsteriskTest extends IsolatedIntegrationTest {
 
 	@Test
-	public void testRoutingPerPath() {
+	public void multiAsterisk() {
+		On.get("/x/*").plain("X");
+		On.get("/*").plain("root");
+		On.get("/y/*").plain("Y");
 
-		On.get("/foo").json("FOO");
-		On.get("/foo/hi").json("FOO HI");
-		On.get("/foo/hello").json("FOO HELLO");
-
-		On.get("/bar/hi").json("BAR HI");
-
-		proxy("/", localhost("/foo"));
-		proxy("/bar", localhost("/foo"));
-
-		getReq("/bar");
-		getReq("/bar/hello/");
-		getReq("/bar/hi");
-
-		getReq("/");
-		getReq("/hello/");
-		getReq("/hi");
-	}
-
-	@Test
-	public void shouldRetryOnConnectionErrors() {
-		proxy("/", "localhost:9999");
-
-		Setup app = Setup.create("app").port(9999);
-
-		Jobs.after(2).seconds(() -> app.req(req -> "From app: " + req.uri()));
-
-		getReq("/hey");
-		getReq("/there");
-
-		app.shutdown();
+		Self.get("/x").expect("X");
+		Self.get("/").expect("root");
+		Self.get("/y").expect("Y");
 	}
 
 }

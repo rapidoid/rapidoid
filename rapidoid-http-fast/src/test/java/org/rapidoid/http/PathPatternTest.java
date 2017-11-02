@@ -120,4 +120,14 @@ public class PathPatternTest extends TestCommons {
 		isNull(params);
 	}
 
+	@Test
+	public void testPrefix() {
+		eq(PathPattern.from("/*").prefix(), "/");
+		eq(PathPattern.from("/x*").prefix(), "/x");
+		eq(PathPattern.from("/foo/*/bar").prefix(), "/foo/");
+		eq(PathPattern.from("/foo/*/bar*/*").prefix(), "/foo/");
+		eq(PathPattern.from("/foo/bar*/*").prefix(), "/foo/bar");
+		eq(PathPattern.from("/foo/bar/*").prefix(), "/foo/bar/");
+	}
+
 }
