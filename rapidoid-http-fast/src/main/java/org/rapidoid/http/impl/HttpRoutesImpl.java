@@ -29,7 +29,6 @@ import org.rapidoid.util.Msc;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.regex.Pattern;
 
 /*
  * #%L
@@ -58,8 +57,6 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 	private static final AtomicLong ID_GEN = new AtomicLong();
 
 	private static final int ROUTE_SETUP_WAITING_TIME_MS = Env.test() ? 0 : 500;
-
-	private static final Pattern PATTERN_PATTERN = Pattern.compile("[^\\w/-]");
 
 	private static final byte[] _POST = Constants.POST.getBytes();
 	private static final byte[] _PUT = Constants.PUT.getBytes();
@@ -119,7 +116,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 	}
 
 	private void register(HttpVerb verb, String path, HttpHandler handler) {
-		boolean isPattern = isPattern(path);
+		boolean isPattern = PathPattern.isPattern(path);
 		PathPattern pathPattern = isPattern ? PathPattern.from(path) : null;
 
 		RouteImpl route = new RouteImpl(verb, path, handler, handler.options());
@@ -221,7 +218,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 	}
 
 	private void deregister(HttpVerb verb, String path) {
-		boolean isPattern = isPattern(path);
+		boolean isPattern = PathPattern.isPattern(path);
 		PathPattern pathPattern = isPattern ? PathPattern.from(path) : null;
 
 		routes.remove(RouteImpl.matching(verb, path));
@@ -316,10 +313,6 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 		}
 
 		notifyChanged();
-	}
-
-	private boolean isPattern(String path) {
-		return PATTERN_PATTERN.matcher(path).find();
 	}
 
 	@Override
