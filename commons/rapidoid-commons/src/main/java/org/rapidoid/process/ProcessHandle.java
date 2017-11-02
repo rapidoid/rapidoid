@@ -458,6 +458,8 @@ public class ProcessHandle extends AbstractManageable {
 		// keep reference to the handle, used by the crawler internally
 		ALL.remove(this);
 
+		if (!isAlive()) return this;
+
 		destroy();
 
 		long t = U.time();
