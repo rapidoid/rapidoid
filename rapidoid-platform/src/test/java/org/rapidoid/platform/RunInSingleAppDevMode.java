@@ -36,6 +36,7 @@ public class RunInSingleAppDevMode extends RapidoidThing {
 
 	public static void main(String[] args) {
 		Msc.dockerized(true);
+		Msc.singleApp(true);
 		Main.main(ARGS);
 	}
 
