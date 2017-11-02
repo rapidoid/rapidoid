@@ -96,6 +96,8 @@ public class Msc extends RapidoidThing {
 
 	private static volatile boolean dockerized = MscOpts.hasDockerEnv();
 
+	private static volatile boolean singleApp = hasAppFolder();
+
 	public static final ScheduledThreadPoolExecutor EXECUTOR = new ScheduledThreadPoolExecutor(8,
 		new RapidoidThreadFactory("utils", true));
 
@@ -1168,7 +1170,11 @@ public class Msc extends RapidoidThing {
 	}
 
 	public static boolean isSingleApp() {
-		return hasAppFolder();
+		return singleApp;
+	}
+
+	public static void singleApp(boolean singleApp) {
+		Msc.singleApp = singleApp;
 	}
 
 	public static boolean isMavenBuild() {
