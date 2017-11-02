@@ -22,6 +22,7 @@ package org.rapidoid.gui;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.group.GroupOf;
 import org.rapidoid.group.Manageable;
 import org.rapidoid.u.U;
 
@@ -44,7 +45,8 @@ public class GUIActions extends GUI {
 
 	private static Btn action(final Manageable manageable, final String action) {
 		String cls = manageable.getClass().getSimpleName();
-		String kind = U.notNull(manageable.group().kind(), "manageable kind");
+		GroupOf<? extends Manageable> group = U.notNull(manageable.group(), "manageable group");
+		String kind = U.notNull(group.kind(), "manageable kind");
 		String id = U.notNull(manageable.id(), "manageable id");
 
 		Btn btn = cmd(action, cls, kind, id).smallest();
