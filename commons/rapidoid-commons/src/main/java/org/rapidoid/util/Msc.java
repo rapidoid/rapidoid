@@ -1378,4 +1378,17 @@ public class Msc extends RapidoidThing {
 		return (int) value;
 	}
 
+	public static void sortByOrder(List<Method> methods) {
+		Collections.sort(methods, new Comparator<Method>() {
+			@Override
+			public int compare(Method a, Method b) {
+				return orderOf(a) - orderOf(b);
+			}
+
+			private int orderOf(Method m) {
+				Order order = m.getAnnotation(Order.class);
+				return order != null ? order.value() : 0;
+			}
+		});
+	}
 }
