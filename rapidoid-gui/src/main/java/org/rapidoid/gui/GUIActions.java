@@ -23,6 +23,7 @@ package org.rapidoid.gui;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.group.Manageable;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -42,7 +43,11 @@ public class GUIActions extends GUI {
 	}
 
 	private static Btn action(final Manageable manageable, final String action) {
-		Btn btn = cmd(action, manageable.getClass().getSimpleName(), manageable.group().kind(), manageable.id()).smallest();
+		String cls = manageable.getClass().getSimpleName();
+		String kind = U.notNull(manageable.group().kind(), "manageable kind");
+		String id = U.notNull(manageable.id(), "manageable id");
+
+		Btn btn = cmd(action, cls, kind, id).smallest();
 
 		final String cmd = btn.command();
 		btn.onClick(new Runnable() {

@@ -24,6 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.lambda.Mapper;
+import org.rapidoid.u.U;
 
 import java.util.Map;
 import java.util.UUID;
@@ -46,7 +47,7 @@ public abstract class AutoManageable<T extends AutoManageable> extends AbstractM
 	}
 
 	public AutoManageable(String id) {
-		this.id = id;
+		this.id = U.notNull(id, "id");
 
 		group().add(me());
 	}
