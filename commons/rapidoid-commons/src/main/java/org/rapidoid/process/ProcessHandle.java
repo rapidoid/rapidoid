@@ -294,7 +294,7 @@ public class ProcessHandle extends AbstractManageable {
 
 		removeRapidoidConfig(builder.environment());
 
-		builder.environment().putAll(params.env());
+		builder.environment().putAll(U.safe(params.env()));
 
 		addExtraEnvInfo(builder.environment());
 
