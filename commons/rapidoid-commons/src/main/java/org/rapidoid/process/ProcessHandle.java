@@ -407,6 +407,13 @@ public class ProcessHandle extends AbstractManageable {
 		return until.getTime() - this.startedAt.getTime();
 	}
 
+	public synchronized String uptime() {
+		long millis = duration();
+		if (millis == 0) return null;
+
+		return (duration() / 1000) + "s";
+	}
+
 	synchronized void onTerminated() {
 		finishedAt = new Date();
 	}
