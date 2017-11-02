@@ -616,4 +616,7 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 		return dataSource;
 	}
 
+	public boolean isInitialized() {
+		return initialized;
+	}
 }

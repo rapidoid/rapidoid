@@ -50,18 +50,20 @@ public class SQLModule extends AbstractRapidoidModule {
 		JDBC.reset();
 	}
 
-	public static void cleanInMemDatabases() {
-		JdbcClient jdbc = JDBC.api().usePool(false);
+	private static void cleanInMemDatabases() {
+		JdbcClient jdbc = JDBC.api();
 
-		if (HSQLDB_DRIVER.equals(jdbc.driver())) {
-			Log.info("Dropping all objects in the HSQLDB database");
-			jdbc.execute(HSQLDB_TRUNCATE);
-			jdbc.execute(HSQLDB_DROP_ALL);
-		}
+		if (jdbc.isInitialized()) {
+			if (HSQLDB_DRIVER.equals(jdbc.driver())) {
+				Log.info("Dropping all objects in the HSQLDB database");
+				jdbc.execute(HSQLDB_TRUNCATE);
+				jdbc.execute(HSQLDB_DROP_ALL);
+			}
 
-		if (H2_DRIVER.equals(jdbc.driver())) {
-			Log.info("Dropping all objects in the H2 database");
-			jdbc.execute(H2_DROP_ALL);
+			if (H2_DRIVER.equals(jdbc.driver())) {
+				Log.info("Dropping all objects in the H2 database");
+				jdbc.execute(H2_DROP_ALL);
+			}
 		}
 	}
 }
