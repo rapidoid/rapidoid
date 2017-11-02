@@ -80,8 +80,6 @@ import java.util.zip.ZipInputStream;
 @Since("2.0.0")
 public class Msc extends RapidoidThing {
 
-	public static final String APP_JAR = "/app/app.jar";
-
 	private static final String SPECIAL_ARG_REGEX = "\\s*(.*?)\\s*(->|<-|:=|<=|=>|==)\\s*(.*?)\\s*";
 
 	public static final String OS_NAME = System.getProperty("os.name");
@@ -1360,11 +1358,6 @@ public class Msc extends RapidoidThing {
 		return (1 << bits) - 1;
 	}
 
-	public static boolean hasMainApp() {
-		List<String> appContent = IO.find().in("/app").ignoreRegex("(static|\\..*|.*~)").getNames();
-		return !appContent.isEmpty();
-	}
-
 	public static boolean isAppResource(String filename) {
 		String name = new File(filename).getName();
 		return !name.startsWith(".")
@@ -1373,11 +1366,6 @@ public class Msc extends RapidoidThing {
 			&& !filename.contains("/~")
 			&& !name.endsWith(".staged")
 			&& !name.contains("___jb_"); // Jetbrains temporary files
-	}
-
-	public static String mainAppJar() {
-		U.must(isPlatform());
-		return APP_JAR;
 	}
 
 	public static int toInt(long value) {

@@ -76,6 +76,7 @@ public class AppDownloader extends RapidoidThing {
 		} else {
 			url = appRef;
 		}
+
 		return url;
 	}
 

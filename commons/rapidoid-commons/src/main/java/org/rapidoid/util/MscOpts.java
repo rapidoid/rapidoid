@@ -35,7 +35,7 @@ public class MscOpts extends RapidoidThing {
 		&& U.eq(System.getenv("RAPIDOID_TMP"), "/tmp/rapidoid")
 		&& U.notEmpty(System.getenv("RAPIDOID_VERSION"));
 
-	private static final String appsPath = "/data/apps";
+	private static volatile String appsPath = "/apps";
 
 	private static final boolean hasValidation = Cls.exists("javax.validation.Validation");
 	private static final boolean hasJPA = Cls.exists("javax.persistence.Entity");
@@ -118,6 +118,10 @@ public class MscOpts extends RapidoidThing {
 
 	public static String appsPath() {
 		return appsPath;
+	}
+
+	public static void appsPath(String appsPath) {
+		MscOpts.appsPath = appsPath;
 	}
 
 	public static boolean isTLSEnabled() {

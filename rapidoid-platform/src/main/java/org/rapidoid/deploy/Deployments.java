@@ -1,6 +1,6 @@
-package org.rapidoid.platform;
+package org.rapidoid.deploy;
 
-/*
+/*-
  * #%L
  * rapidoid-platform
  * %%
@@ -20,36 +20,16 @@ package org.rapidoid.platform;
  * #L%
  */
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.deploy.AppDeployment;
-import org.rapidoid.deploy.Apps;
+import org.rapidoid.group.GroupOf;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.3.0")
-public class RunInDevMode extends RapidoidThing {
+@Since("5.4.7")
+public class Deployments extends GroupOf<ManageableApp> {
 
-	private static final String[] ARGS = {"dev"};
-
-	public static void main(String[] args) {
-		Main.main(ARGS);
-
-//		makeApp("foo");
-
-		Apps.reload();
-	}
-
-	private static void makeApp(String name) {
-		AppDeployment app = AppDeployment.create(name);
-
-		String config = "" +
-			"pages:\n" +
-			"  /: ''\n\n" +
-			"gui:\n" +
-			"  brand: " + name + "\n";
-
-		app.stage("config.yml", config.getBytes());
+	public Deployments() {
+		super(ManageableApp.class);
 	}
 
 }

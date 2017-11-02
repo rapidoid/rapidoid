@@ -24,7 +24,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
-import org.rapidoid.deploy.AppDeployer;
+import org.rapidoid.deploy.SingleApp;
 import org.rapidoid.deploy.AppDownloader;
 import org.rapidoid.env.Env;
 import org.rapidoid.setup.App;
@@ -60,7 +60,7 @@ public class Platform extends RapidoidThing {
 			processExternalApps(cmdArgs.refs);
 
 			if (Msc.isSingleApp()) {
-				AppDeployer.bootstrap();
+				SingleApp.deploy();
 			}
 
 		} else {

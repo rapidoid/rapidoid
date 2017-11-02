@@ -22,9 +22,9 @@ package org.rapidoid.goodies;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.deploy.DeploymentHandler;
-import org.rapidoid.deploy.JarDeploymentHandler;
-import org.rapidoid.deploy.JarStagingHandler;
+import org.rapidoid.deploy.handler.DeployHandler;
+import org.rapidoid.deploy.handler.AppDeploymentHandler;
+import org.rapidoid.deploy.handler.AppStagingHandler;
 import org.rapidoid.setup.Setup;
 
 @Authors("Nikolche Mihajlovski")
@@ -32,9 +32,9 @@ import org.rapidoid.setup.Setup;
 public class PlatformGoodies extends Goodies {
 
 	public static void deployment(Setup setup) {
-		setup.page(uri("deployment")).zone(Goodies.CENTER).mvc(new DeploymentHandler());
-		setup.post(uri("stage")).zone(Goodies.CENTER).json(new JarStagingHandler());
-		setup.post(uri("deploy")).zone(Goodies.CENTER).json(new JarDeploymentHandler());
+		setup.page(uri("deployment")).zone(Goodies.CENTER).mvc(new DeployHandler());
+		setup.post(uri("stage")).zone(Goodies.CENTER).json(new AppStagingHandler());
+		setup.post(uri("deploy")).zone(Goodies.CENTER).json(new AppDeploymentHandler());
 	}
 
 	public static void platformAdminCenter(Setup setup) {

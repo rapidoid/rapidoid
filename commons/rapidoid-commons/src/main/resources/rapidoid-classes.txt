@@ -192,11 +192,15 @@ org.rapidoid.dbadmin.ManageableDatabase
 org.rapidoid.dbadmin.ManageableRdbms
 org.rapidoid.dbadmin.ManageableTable
 org.rapidoid.deploy.AppChangeWatcher
-org.rapidoid.deploy.AppDeployer
+org.rapidoid.deploy.AppDeployment
 org.rapidoid.deploy.AppDownloader
-org.rapidoid.deploy.DeploymentHandler
-org.rapidoid.deploy.JarDeploymentHandler
-org.rapidoid.deploy.JarStagingHandler
+org.rapidoid.deploy.Apps
+org.rapidoid.deploy.Deployments
+org.rapidoid.deploy.handler.AppDeploymentHandler
+org.rapidoid.deploy.handler.AppStagingHandler
+org.rapidoid.deploy.handler.DeployHandler
+org.rapidoid.deploy.ManageableApp
+org.rapidoid.deploy.SingleApp
 org.rapidoid.env.Env
 org.rapidoid.env.Environment
 org.rapidoid.env.EnvMode
@@ -268,6 +272,7 @@ org.rapidoid.goodies.WelcomeHandler
 org.rapidoid.goodies.X
 org.rapidoid.group.AbstractManageable
 org.rapidoid.group.Action
+org.rapidoid.group.ActionCondition
 org.rapidoid.group.AutoManageable
 org.rapidoid.group.GroupOf
 org.rapidoid.group.Groups
