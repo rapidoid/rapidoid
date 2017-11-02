@@ -1094,9 +1094,15 @@ public class Msc extends RapidoidThing {
 		return !Msc.isInsideTest() && Env.dev();
 	}
 
-	public static String fileSizeReadable(String filename) {
-		long sizeKB = Math.round(new File(filename).length() / 1024.0);
+	public static String fileSizeReadable(long size) {
+		if (size < 1024) return size + " B";
+
+		long sizeKB = Math.round(size / 1024.0);
 		return sizeKB + " KB";
+	}
+
+	public static String fileSizeReadable(String filename) {
+		return fileSizeReadable(new File(filename).length());
 	}
 
 	public static void watchForChanges(String path, Operation<String> changeListener) {

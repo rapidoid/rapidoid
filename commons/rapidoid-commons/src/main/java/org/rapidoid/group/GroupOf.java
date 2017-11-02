@@ -115,6 +115,10 @@ public class GroupOf<E extends Manageable> extends RapidoidThing {
 		return null;
 	}
 
+	public boolean exists(String id) {
+		return find(id) != null;
+	}
+
 	public E remove(int index) {
 		return items.remove(index);
 	}
