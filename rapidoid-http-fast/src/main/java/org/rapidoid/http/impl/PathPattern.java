@@ -171,8 +171,16 @@ public class PathPattern extends RapidoidThing implements Comparable<PathPattern
 	}
 
 	public String prefix() {
-		String prefix = Str.cutToFirst(path, "*");
-		U.must(prefix != null, "Couldn't find asterisk in the path pattern!");
+		String simplifiedPattern = Str.replace(path, PATH_PARAM_REGEX, new Mapper<String[], String>() {
+			@Override
+			public String map(String[] gr) throws Exception {
+				return "*";
+			}
+		});
+
+		String prefix = Str.cutToFirst(simplifiedPattern, "*");
+
+		U.must(prefix != null, "Couldn't find pattern segments in the path pattern: %s", path);
 		return prefix;
 	}
 
