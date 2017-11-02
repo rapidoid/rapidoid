@@ -1,13 +1,11 @@
 package org.rapidoid.deploy;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.GUI;
-import org.rapidoid.http.NiceResponse;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.ReqHandler;
-import org.rapidoid.io.Upload;
-import org.rapidoid.util.Msc;
+import org.rapidoid.env.Env;
+import org.rapidoid.log.Log;
+import org.rapidoid.util.LazyInit;
 
 /*
  * #%L
@@ -30,21 +28,30 @@ import org.rapidoid.util.Msc;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class JarStagingHandler extends GUI implements ReqHandler {
+@Since("5.4.7")
+public class SingleApp extends RapidoidThing {
 
+	private static final LazyInit<AppDeployment> APP = new LazyInit<>(SingleApp::create);
 
-	@Override
-	public Object execute(Req req) throws Exception {
-		Upload jar = req.file("file");
+	private static AppDeployment create() {
+		AppDeployment app = AppDeployment.create("app", Env.root(), 8080);
+		Apps.deployments().add(new ManageableApp(app));
+		return app;
+	}
 
-		try {
-			AppDeployer.stageJar(Msc.mainAppJar(), jar.content());
-		} catch (Exception e) {
-			return NiceResponse.err(req, e);
+	public static AppDeployment get() {
+		return APP.get();
+	}
+
+	public static void deploy() {
+		AppDeployment app = get();
+
+		if (!app.isEmpty()) {
+			Log.info("Deploying the main application");
+			app.start();
 		}
 
-		return NiceResponse.ok(req, "Successfully staged the application.");
+		app.watch();
 	}
 
 }

@@ -1,11 +1,16 @@
-package org.rapidoid.deploy;
+package org.rapidoid.deploy.handler;
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.deploy.AppDeployment;
+import org.rapidoid.deploy.Apps;
+import org.rapidoid.deploy.SingleApp;
+import org.rapidoid.gui.GUI;
 import org.rapidoid.http.NiceResponse;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
+import org.rapidoid.io.Upload;
+import org.rapidoid.log.Log;
 import org.rapidoid.util.Msc;
 
 /*
@@ -30,18 +35,31 @@ import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class JarDeploymentHandler extends RapidoidThing implements ReqHandler {
+public class AppStagingHandler extends GUI implements ReqHandler {
 
 	@Override
-	public Object execute(Req req) {
-
+	public Object execute(Req req) throws Exception {
 		try {
-			AppDeployer.deploy(Msc.mainAppJar() + ".staged", Msc.mainAppJar());
+			Upload upload = req.file("file");
+
+			AppDeployment app;
+			if (Msc.isSingleApp()) {
+				app = SingleApp.get();
+			} else {
+				app = AppDeployment.fromFilename(upload.filename());
+			}
+
+			app.stage(upload.filename(), upload.content());
+
 		} catch (Exception e) {
+			Log.error("Staging failed!", e);
 			return NiceResponse.err(req, e);
+
+		} finally {
+			Apps.reload();
 		}
 
-		return NiceResponse.ok(req, "Successfully deployed the application");
+		return NiceResponse.ok(req, "Successfully staged the application");
 	}
 
 }

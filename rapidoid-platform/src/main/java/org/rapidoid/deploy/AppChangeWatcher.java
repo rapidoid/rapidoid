@@ -29,25 +29,28 @@ import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
-import java.io.File;
+import java.util.Objects;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
 public class AppChangeWatcher extends RapidoidThing implements Operation<String> {
 
-	private final String root;
-	private final String appId;
-	private volatile boolean active = true;
+	private volatile boolean active = false;
 
-	public AppChangeWatcher(String root, String appId) {
-		this.root = root;
-		this.appId = appId;
+	private volatile AppDeployment app;
+
+	public void register(AppDeployment app) {
+		this.app = Objects.requireNonNull(app);
 	}
 
 	public void watch() {
-		if (U.notEmpty(root) && new File(root).exists()) {
-			Log.info("Watching app root for changes...", "root", root);
-			Watch.dir(root, Watch.simpleListener(this));
+		U.must(app != null, "The app hasn't been registered!");
+
+		active(true);
+
+		if (app.exists()) {
+			Log.info("Watching app root for changes...", "root", app.path());
+			Watch.dir(app.path(), Watch.simpleListener(this));
 		}
 	}
 
@@ -67,7 +70,8 @@ public class AppChangeWatcher extends RapidoidThing implements Operation<String>
 		if (active) {
 			Log.info("Detected file system changes of the application", "filename", filename);
 
-			AppDeployer.notifyAppChanged(root, appId, filename);
+			app.onAppChanged(filename);
 		}
 	}
+
 }
