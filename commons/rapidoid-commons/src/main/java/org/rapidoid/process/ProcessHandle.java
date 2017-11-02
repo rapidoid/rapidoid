@@ -294,6 +294,8 @@ public class ProcessHandle extends AbstractManageable {
 
 		removeRapidoidConfig(builder.environment());
 
+		builder.environment().putAll(params.env());
+
 		addExtraEnvInfo(builder.environment());
 
 		Date startingAt = new Date();

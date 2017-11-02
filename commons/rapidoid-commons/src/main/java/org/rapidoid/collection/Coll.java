@@ -439,4 +439,8 @@ public class Coll extends RapidoidThing {
 		return copy;
 	}
 
+	public static <K, V> Map<K, V> syncCopy(Map<K, V> env) {
+		return Collections.synchronizedMap(U.map(env));
+	}
+
 }

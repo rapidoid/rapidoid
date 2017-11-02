@@ -23,8 +23,10 @@ package org.rapidoid.process;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.collection.Coll;
 
 import java.io.File;
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -45,6 +47,8 @@ public class ProcessParams extends RapidoidThing {
 	private volatile int maxLogLines = 10000;
 
 	private volatile int terminationTimeout = 5000;
+
+	private volatile Map<String, String> env;
 
 	public File in() {
 		return in;
@@ -123,6 +127,15 @@ public class ProcessParams extends RapidoidThing {
 
 	public ProcessParams terminationTimeout(int terminationTimeout) {
 		this.terminationTimeout = terminationTimeout;
+		return this;
+	}
+
+	public Map<String, String> env() {
+		return env;
+	}
+
+	public ProcessParams env(Map<String, String> env) {
+		this.env = Coll.syncCopy(env);
 		return this;
 	}
 }
