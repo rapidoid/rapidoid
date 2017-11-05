@@ -125,7 +125,7 @@ public class Env extends RapidoidThing {
 		return env.properties();
 	}
 
-	public static Map<String, Object> argsAsMap() {
+	public static Map<String, String> argsAsMap() {
 		return env.argsAsMap();
 	}
 

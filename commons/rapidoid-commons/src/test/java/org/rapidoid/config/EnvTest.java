@@ -51,8 +51,9 @@ public class EnvTest extends TestCommons {
 
 	@Test
 	public void testArgs() {
-		Env.setArgs("mode=production", "foo=bar", "111");
-		eq(Env.args(), U.list("mode=production", "foo=bar", "111"));
+		Env.setArgs("mode=production", "foo=bar", "x=111");
+		eq(Env.args(), U.list("mode=production", "foo=bar", "x=111"));
+		eq(Env.argsAsMap(), U.map("mode", "production", "foo", "bar", "x", "111"));
 	}
 
 	@Test

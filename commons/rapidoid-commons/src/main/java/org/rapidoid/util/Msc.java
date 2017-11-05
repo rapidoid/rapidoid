@@ -1025,21 +1025,16 @@ public class Msc extends RapidoidThing {
 		return System.console() != null;
 	}
 
-	public static Map<String, Object> parseArgs(List<String> args) {
-		Map<String, Object> arguments = U.map();
+	public static Map<String, String> parseArgs(List<String> args) {
+		Map<String, String> arguments = U.map();
 
 		for (String arg : U.safe(args)) {
 			if (!isSpecialArg(arg)) {
 
 				String[] parts = arg.split("=", 2);
-				String name = parts[0];
+				U.must(parts.length == 2, "The argument '%s' doesn't have a key=value format!", arg);
 
-				if (parts.length > 1) {
-					String value = parts[1];
-					arguments.put(name, value);
-				} else {
-					arguments.put(name, true);
-				}
+				arguments.put(parts[0], parts[1]);
 
 			} else {
 				processSpecialArg(arguments, arg);
@@ -1053,7 +1048,7 @@ public class Msc extends RapidoidThing {
 		return arg.matches(SPECIAL_ARG_REGEX);
 	}
 
-	private static void processSpecialArg(Map<String, Object> arguments, String arg) {
+	private static void processSpecialArg(Map<String, String> arguments, String arg) {
 		Matcher m = Pattern.compile(SPECIAL_ARG_REGEX).matcher(arg);
 		U.must(m.matches(), "Invalid argument");
 
