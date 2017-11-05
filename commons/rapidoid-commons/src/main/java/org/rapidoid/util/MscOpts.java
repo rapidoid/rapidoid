@@ -49,7 +49,6 @@ public class MscOpts extends RapidoidThing {
 
 	private static final boolean hasLogback = Cls.exists("ch.qos.logback.classic.Logger");
 	private static final boolean hasSlf4jImpl = Cls.exists("org.slf4j.impl.StaticLoggerBinder");
-	private static final boolean hasMavenEmbedder = Cls.exists("org.apache.maven.cli.MavenCli");
 
 	private static final boolean hasC3P0 = Cls.exists("com.mchange.v2.c3p0.PooledDataSource");
 	private static final boolean hasHikari = Cls.exists("com.zaxxer.hikari.HikariDataSource");
@@ -98,10 +97,6 @@ public class MscOpts extends RapidoidThing {
 
 	public static boolean hasSlf4jImpl() {
 		return hasSlf4jImpl;
-	}
-
-	public static boolean hasMavenEmbedder() {
-		return hasMavenEmbedder;
 	}
 
 	public static boolean hasC3P0() {

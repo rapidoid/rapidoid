@@ -677,10 +677,11 @@ org.rapidoid.platform.Main
 org.rapidoid.platform.PasswordHashTool
 org.rapidoid.platform.Platform
 org.rapidoid.platform.PlatformCommands
+org.rapidoid.platform.PlatformModule
+org.rapidoid.platform.PlatformOpts
 org.rapidoid.plugin.app.AbstractRapidoidMojo
 org.rapidoid.plugin.app.AppBuildMojo
 org.rapidoid.plugin.app.AppDeployMojo
-org.rapidoid.plugin.app.EmbeddedMavenCli
 org.rapidoid.pool.ArrayPool
 org.rapidoid.pool.Pool
 org.rapidoid.pool.Pools
