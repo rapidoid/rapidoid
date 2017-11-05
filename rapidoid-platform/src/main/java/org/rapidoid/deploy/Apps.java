@@ -24,10 +24,9 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.io.IO;
+import org.rapidoid.platform.PlatformOpts;
 import org.rapidoid.process.Processes;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
-import org.rapidoid.util.MscOpts;
 
 import java.util.Set;
 
@@ -46,9 +45,9 @@ public class Apps extends RapidoidThing {
 	}
 
 	public static Set<String> names() {
-		return Msc.isSingleApp()
+		return PlatformOpts.isSingleApp()
 			? U.set("app")
-			: U.set(IO.find("*").folders().in(MscOpts.appsPath()).getRelativeNames());
+			: U.set(IO.find("*").folders().in(PlatformOpts.appsPath()).getRelativeNames());
 	}
 
 	public static void reload() {

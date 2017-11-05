@@ -28,12 +28,12 @@ import org.rapidoid.commons.Str;
 import org.rapidoid.env.Env;
 import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
+import org.rapidoid.platform.PlatformOpts;
 import org.rapidoid.process.Proc;
 import org.rapidoid.process.ProcessHandle;
 import org.rapidoid.reverseproxy.Reverse;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
-import org.rapidoid.util.MscOpts;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,7 +71,7 @@ public class AppDeployment extends RapidoidThing {
 	}
 
 	public static AppDeployment create(String name) {
-		String path = Msc.path(MscOpts.appsPath(), name);
+		String path = Msc.path(PlatformOpts.appsPath(), name);
 		return create(name, path, PORTS.incrementAndGet());
 	}
 
@@ -166,7 +166,7 @@ public class AppDeployment extends RapidoidThing {
 
 		String[] appJarCmd = {"java", "-jar", jar};
 
-		String[] defaultAppCmd = {"java", "-cp", CLASSPATH, "org.rapidoid.platform.DefaultApp"};
+		String[] defaultAppCmd = {"java", "-cp", CLASSPATH, "org.rapidoid.platform.EmbeddedApp"};
 
 		boolean hasJar = new File(jar).exists();
 		String[] cmd = hasJar ? appJarCmd : defaultAppCmd;

@@ -25,18 +25,23 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.util.Msc;
 
+import static org.rapidoid.platform.PlatformTestCommons.appPath;
+
 @Authors("Nikolche Mihajlovski")
 @Since("5.4.6")
 public class RunInSingleAppDevMode extends RapidoidThing {
 
 	private static final String[] ARGS = {
 		"dev",
-		"root=" + PlatformTestCommons.appPath("app1"),
+		"app.services=ping",
+		"admin.services=status",
 	};
 
 	public static void main(String[] args) {
 		Msc.dockerized(true);
-		Msc.singleApp(true);
+
+		PlatformOpts.singleAppPath(appPath("app1"));
+
 		Main.main(ARGS);
 	}
 

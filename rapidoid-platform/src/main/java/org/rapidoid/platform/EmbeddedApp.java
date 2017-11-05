@@ -23,26 +23,30 @@ package org.rapidoid.platform;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.log.Log;
+import org.rapidoid.setup.App;
+import org.rapidoid.setup.On;
+import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
-import static org.rapidoid.platform.PlatformTestCommons.appPath;
-
 @Authors("Nikolche Mihajlovski")
-@Since("5.4.6")
-public class RunInSingleAppProdMode extends RapidoidThing {
-
-	private static final String[] ARGS = {
-		"mode=production",
-		"app.services=ping",
-		"admin.services=status",
-	};
+@Since("5.4.7")
+public class EmbeddedApp extends RapidoidThing {
 
 	public static void main(String[] args) {
-		Msc.dockerized(true);
+		try {
+			run(args);
 
-		PlatformOpts.singleAppPath(appPath("app1"));
+		} catch (Exception e) {
+			String err = U.or(Msc.errorMsg(e), "Failed to run the application!");
+			Log.error(err);
+		}
+	}
 
-		Main.main(ARGS);
+	public static void run(String[] args) {
+		Log.options().prefix("[APP] ");
+		App.run(args).services();
+		On.setup().activate();
 	}
 
 }
