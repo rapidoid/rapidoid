@@ -92,8 +92,14 @@ public class Env extends RapidoidThing {
 	}
 
 	static String initial(String key) {
-		Map<String, Object> envAndArgs = Env.argsAsMap();
-		return (String) U.or(envAndArgs.get(key), Env.properties().get(key));
+		Map<String, String> args = Env.argsAsMap();
+
+		return (String) U.or(
+			args.get(key),
+			args.get(key.toLowerCase()),
+			args.get(key.toUpperCase()),
+			Env.properties().get(key)
+		);
 	}
 
 	static boolean hasInitial(String key, Object value) {
