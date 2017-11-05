@@ -32,6 +32,8 @@ import org.rapidoid.util.MscOpts;
 
 import java.util.Set;
 
+import static org.rapidoid.test.TestCommons.createTempDir;
+
 @Authors("Nikolche Mihajlovski")
 @Since("5.4.7")
 public class AppDeploymentTest extends PlatformTestCommons {
