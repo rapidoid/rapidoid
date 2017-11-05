@@ -28,7 +28,6 @@ import org.rapidoid.deploy.Apps;
 import org.rapidoid.io.IO;
 import org.rapidoid.io.Upload;
 import org.rapidoid.u.U;
-import org.rapidoid.util.MscOpts;
 
 import java.util.Set;
 
@@ -41,7 +40,7 @@ public class AppDeploymentTest extends PlatformTestCommons {
 	@Test
 	public void testAppDeployment() {
 		String appsDir = createTempDir("apps");
-		MscOpts.appsPath(appsDir);
+		PlatformOpts.appsPath(appsDir);
 
 		// 0 APPS
 
@@ -116,7 +115,7 @@ public class AppDeploymentTest extends PlatformTestCommons {
 	}
 
 	private Set<String> ls() {
-		return U.set(IO.find().recursive().in(MscOpts.appsPath()).getRelativeNames());
+		return U.set(IO.find().recursive().in(PlatformOpts.appsPath()).getRelativeNames());
 	}
 
 }

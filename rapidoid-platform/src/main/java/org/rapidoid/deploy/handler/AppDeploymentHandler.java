@@ -9,8 +9,8 @@ import org.rapidoid.http.NiceResponse;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
 import org.rapidoid.log.Log;
+import org.rapidoid.platform.PlatformOpts;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
 
 /*
  * #%L
@@ -41,7 +41,7 @@ public class AppDeploymentHandler extends RapidoidThing implements ReqHandler {
 		try {
 
 			String appName;
-			if (Msc.isSingleApp()) {
+			if (PlatformOpts.isSingleApp()) {
 				appName = "app";
 				U.must(req.param("app", null) == null, "The 'app' parameter is not needed for single-app deployments!");
 

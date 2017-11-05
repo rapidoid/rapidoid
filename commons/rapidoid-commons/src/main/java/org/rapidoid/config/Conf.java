@@ -40,7 +40,7 @@ import java.util.Map;
 @Since("2.0.0")
 public class Conf extends RapidoidThing {
 
-	private static final String CONFIG_NAME = Msc.isMultiProcess() ? "rapidoid" : "config";
+	private static final String CONFIG_NAME = "config";
 
 	public static final Config ROOT = new ConfigImpl(CONFIG_NAME, true);
 

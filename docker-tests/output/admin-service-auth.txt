@@ -7,10 +7,11 @@
 
 INFO | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
 INFO | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
-INFO | Setting platform root | root = /platform | items = 0
+INFO | Setting root path | root = /platform | items = 0
 INFO | No production/dev/test mode was configured, inferring mode | mode = PRODUCTION
-INFO | Initialized environment | mode = PRODUCTION | profiles = [production, platform] | platform = multi-process
-INFO | Loaded configuration | namespace = rapidoid | files = [built-in-config.yml, built-in-config-platform.yml]
+INFO | Initialized environment | mode = PRODUCTION | profiles = [production, platform]
+INFO | Loaded configuration | namespace = config | files = [built-in-config.yml, built-in-config-platform.yml]
+INFO | The platform has started | mode = multi-process
 INFO | POST /rapidoid/login                           | setup = main | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
 INFO | GET /rapidoid/logout                           | setup = main | roles = [logged_in] | transaction = NONE | mvc = false | cacheTTL = 0
 INFO | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking

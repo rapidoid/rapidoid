@@ -672,7 +672,7 @@ org.rapidoid.performance.BenchmarkRunner
 org.rapidoid.performance.Perf
 org.rapidoid.performance.WrkSetup
 org.rapidoid.platform.CmdArgs
-org.rapidoid.platform.DefaultApp
+org.rapidoid.platform.EmbeddedApp
 org.rapidoid.platform.Main
 org.rapidoid.platform.PasswordHashTool
 org.rapidoid.platform.Platform

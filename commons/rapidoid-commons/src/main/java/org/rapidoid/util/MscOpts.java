@@ -35,8 +35,6 @@ public class MscOpts extends RapidoidThing {
 		&& U.eq(System.getenv("RAPIDOID_TMP"), "/tmp/rapidoid")
 		&& U.notEmpty(System.getenv("RAPIDOID_VERSION"));
 
-	private static volatile String appsPath = "/apps";
-
 	private static final boolean hasValidation = Cls.exists("javax.validation.Validation");
 	private static final boolean hasJPA = Cls.exists("javax.persistence.Entity");
 	private static final boolean hasHibernate = Cls.exists("org.hibernate.cfg.Configuration");
@@ -109,14 +107,6 @@ public class MscOpts extends RapidoidThing {
 
 	public static boolean isRestOnly() {
 		return isRestOnly;
-	}
-
-	public static String appsPath() {
-		return appsPath;
-	}
-
-	public static void appsPath(String appsPath) {
-		MscOpts.appsPath = appsPath;
 	}
 
 	public static boolean isTLSEnabled() {

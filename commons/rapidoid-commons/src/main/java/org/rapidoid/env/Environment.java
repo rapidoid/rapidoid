@@ -138,8 +138,7 @@ public class Environment extends RapidoidInitializer {
 		RapidoidEnv.touch();
 
 		if (!silent()) {
-			String platform = Msc.isPlatform() ? (Msc.isMultiProcess() ? "multi-process" : "single-process") : "no";
-			Log.info("Initialized environment", "!mode", mode, "!profiles", profiles, "!platform", platform);
+			Log.info("Initialized environment", "!mode", mode, "!profiles", profiles);
 		}
 	}
 

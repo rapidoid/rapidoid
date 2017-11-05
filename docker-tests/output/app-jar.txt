@@ -1,10 +1,10 @@
 INFO | org.rapidoid.config.RapidoidInitializer | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
 INFO | org.rapidoid.config.RapidoidInitializer | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
 INFO | org.rapidoid.util.Msc | Replacing configuration shortcut | shortcut = /users <= SELECT user FROM mysql.user | key = api./users | value = SELECT user FROM mysql.user
-INFO | org.rapidoid.env.RootContext | Setting application root | root = /app | items = 2
+INFO | org.rapidoid.env.RootContext | Setting root path | root = /app | items = 2
 INFO | org.rapidoid.env.Environment | Configuring active profiles | profiles = [mysql]
 INFO | org.rapidoid.env.Environment | No production/dev/test mode was configured, inferring mode | mode = PRODUCTION
-INFO | org.rapidoid.env.Environment | Initialized environment | mode = PRODUCTION | profiles = [mysql, production] | platform = no
+INFO | org.rapidoid.env.Environment | Initialized environment | mode = PRODUCTION | profiles = [mysql, production]
 INFO | org.rapidoid.config.ConfigImpl | Loaded configuration | namespace = config | files = [built-in-config.yml, built-in-config-mysql.yml, /app/config.yml]
 INFO | org.rapidoid.http.impl.HttpRoutesImpl | GET /users                                     | setup = main | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
 INFO | com.example.GettingStartedExample | Starting application

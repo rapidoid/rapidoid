@@ -8,12 +8,13 @@
 INFO | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
 INFO | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
 INFO | Replacing configuration shortcut | shortcut = /users <= SELECT usename from pg_shadow | key = api./users | value = SELECT usename from pg_shadow
-INFO | Setting platform root | root = /platform | items = 0
+INFO | Setting root path | root = /platform | items = 0
 INFO | Configuring active profiles | profiles = [postgres]
 INFO | No production/dev/test mode was configured, inferring mode | mode = PRODUCTION
-INFO | Initialized environment | mode = PRODUCTION | profiles = [postgres, production, platform] | platform = multi-process
-INFO | Loaded configuration | namespace = rapidoid | files = [built-in-config.yml, built-in-config-postgres.yml, built-in-config-platform.yml]
+INFO | Initialized environment | mode = PRODUCTION | profiles = [postgres, production, platform]
+INFO | Loaded configuration | namespace = config | files = [built-in-config.yml, built-in-config-postgres.yml, built-in-config-platform.yml]
 INFO | GET /users                                     | setup = main | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
+INFO | The platform has started | mode = multi-process
 INFO | Starting server | address = 0.0.0.0 | port = 8888 | I/O workers = 4 | sync = true | accept = non-blocking
 INFO | Server has started | setup = main | home = http://localhost:8888
 INFO | Static resources will be served from the following locations | setup = main | locations = [static, default/static]

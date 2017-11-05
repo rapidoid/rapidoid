@@ -7,11 +7,12 @@
 
 INFO | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
 INFO | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
-INFO | Setting application root | root = /app/the-root | items = 1
-INFO | No production/dev/test mode was configured, inferring mode | mode = PRODUCTION
-INFO | Initialized environment | mode = PRODUCTION | profiles = [production, platform] | platform = single-process
+INFO | Setting root path | root = /app/the-root | items = 1
 INFO | Changing configuration filename base | from = config | to = my-config
+INFO | No production/dev/test mode was configured, inferring mode | mode = PRODUCTION
+INFO | Initialized environment | mode = PRODUCTION | profiles = [production, platform]
 INFO | Loaded configuration | namespace = my-config | files = [built-in-config.yml, built-in-config-platform.yml, /app/the-root/my-config.yaml]
+INFO | The platform has started | mode = single-process
 INFO | GET /rapidoid/status                           | setup = main | roles = [] | transaction = NONE | mvc = false | cacheTTL = 0
 INFO | GET,POST /rapidoid                             | setup = main | roles = [administrator] | transaction = NONE | mvc = true | cacheTTL = 0
 INFO | Starting server | address = 0.0.0.0 | port = 4444 | I/O workers = 4 | sync = true | accept = non-blocking

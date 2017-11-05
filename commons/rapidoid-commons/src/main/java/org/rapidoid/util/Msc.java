@@ -94,8 +94,6 @@ public class Msc extends RapidoidThing {
 
 	private static volatile boolean dockerized = MscOpts.hasDockerEnv();
 
-	private static volatile boolean singleApp = hasAppFolder();
-
 	public static final ScheduledThreadPoolExecutor EXECUTOR = new ScheduledThreadPoolExecutor(8,
 		new RapidoidThreadFactory("utils", true));
 
@@ -1007,11 +1005,6 @@ public class Msc extends RapidoidThing {
 		Msc.dockerized = dockerized;
 	}
 
-	public static boolean hasAppFolder() {
-		File app = new File("/app");
-		return app.exists() && app.isDirectory();
-	}
-
 	public static Object maybeMasked(Object value) {
 		return GlobalCfg.uniformOutput() ? "<?>" : value;
 	}
@@ -1158,22 +1151,6 @@ public class Msc extends RapidoidThing {
 
 	public static boolean isPlatform() {
 		return platform;
-	}
-
-	public static boolean isMultiAppPlatform() {
-		return isPlatform() && !isSingleApp();
-	}
-
-	public static boolean isMultiProcess() {
-		return isPlatform() && (!isSingleApp() || Env.dev());
-	}
-
-	public static boolean isSingleApp() {
-		return singleApp;
-	}
-
-	public static void singleApp(boolean singleApp) {
-		Msc.singleApp = singleApp;
 	}
 
 	public static boolean isMavenBuild() {

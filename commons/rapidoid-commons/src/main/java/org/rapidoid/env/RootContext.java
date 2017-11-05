@@ -8,7 +8,6 @@ import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
 import java.io.File;
-import java.util.List;
 
 /*
  * #%L
@@ -34,9 +33,6 @@ import java.util.List;
 @Since("5.4.6")
 public class RootContext extends RapidoidThing {
 
-	private static final String APP_ROOT = "/app";
-	private static final String PLATFORM_ROOT = "/platform";
-
 	private final String root;
 
 	private RootContext(String root) {
@@ -48,48 +44,42 @@ public class RootContext extends RapidoidThing {
 	}
 
 	public static RootContext from(String root) {
-		String rootDir = null;
-		String rootDesc = Msc.isSingleApp() ? "application root" : "platform root";
-
-		if (U.isEmpty(root)) {
-			if (Msc.hasAppFolder()) {
-				root = APP_ROOT;
-			} else if (Msc.isPlatform()) {
-				root = PLATFORM_ROOT;
-			}
-		}
-
 		if (root != null) {
 			File dir = new File(root);
 
 			if (dir.exists()) {
-				if (dir.isDirectory()) {
-					File[] files = dir.listFiles();
-
-					if (files != null) {
-						List<File> content = U.list();
-
-						for (File file : files) {
-							if (Msc.isAppResource(file.getName())) content.add(file);
-						}
-
-						Log.info("Setting " + rootDesc, "!root", root, "items", content.size());
-						rootDir = root;
-
-					} else {
-						Log.error(U.frmt("Couldn't access the %s!", rootDesc), "!root", root);
-					}
-
-				} else {
-					Log.error(U.frmt("The configured %s must be a folder!", rootDesc), "!root", root);
-				}
+				int count = getAppResourcesCount(dir);
+				Log.info("Setting root path", "!root", root, "items", count);
 
 			} else {
-				Log.error(U.frmt("The configured %s folder doesn't exist!", rootDesc), "!root", root);
+				Log.warn("Setting non-existing root path", "!root", root);
 			}
 		}
 
-		return new RootContext(rootDir);
+		return new RootContext(root);
+	}
+
+	private static int getAppResourcesCount(File dir) {
+		int count = 0;
+
+		if (dir.isDirectory()) {
+			File[] files = dir.listFiles();
+
+			if (files != null) {
+
+				for (File file : files) {
+					if (Msc.isAppResource(file.getName())) count++;
+				}
+
+			} else {
+				throw U.rte("Couldn't access the root path: " + dir.getAbsolutePath());
+			}
+
+		} else {
+			throw U.rte("The configured root path must be a folder: " + dir.getAbsolutePath());
+		}
+
+		return count;
 	}
 
 }

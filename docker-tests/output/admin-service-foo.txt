@@ -7,20 +7,21 @@
 
 INFO | Starting Rapidoid v<?>, built on <?> [Dockerized] [Uniform output]
 INFO | System info | os = Linux | java = <?> | process = <?> | max memory = <?> | dir = /opt
-INFO | Setting platform root | root = /platform | items = 0
+INFO | Setting root path | root = /platform | items = 0
 INFO | No production/dev/test mode was configured, inferring mode | mode = PRODUCTION
-INFO | Initialized environment | mode = PRODUCTION | profiles = [production, platform] | platform = multi-process
-INFO | Loaded configuration | namespace = rapidoid | files = [built-in-config.yml, built-in-config-platform.yml]
+INFO | Initialized environment | mode = PRODUCTION | profiles = [production, platform]
+INFO | Loaded configuration | namespace = config | files = [built-in-config.yml, built-in-config-platform.yml]
+INFO | The platform has started | mode = multi-process
 Exception in thread "main" java.lang.IllegalArgumentException: Unknown service: 'foo'!
 	at org.rapidoid.u.U.illegal(U.java:442)
 	at org.rapidoid.u.U.must(U.java:468)
-	at org.rapidoid.util.Msc.bootService(Msc.java:999)
+	at org.rapidoid.util.Msc.bootService(Msc.java:994)
 	at org.rapidoid.setup.ServiceActivator.boot(ServiceActivator.java:82)
 	at org.rapidoid.setup.ServiceActivator.bootstrapServices(ServiceActivator.java:57)
 	at org.rapidoid.setup.ServiceActivator.activateServices(ServiceActivator.java:43)
 	at org.rapidoid.setup.AppBootstrap$1.bootstrap(AppBootstrap.java:39)
 	at org.rapidoid.setup.ServiceBootstrap.run(ServiceBootstrap.java:39)
 	at org.rapidoid.setup.AppBootstrap.services(AppBootstrap.java:158)
-	at org.rapidoid.platform.Platform.start(Platform.java:54)
-	at org.rapidoid.platform.Main.runMain(Main.java:68)
+	at org.rapidoid.platform.Platform.start(Platform.java:65)
+	at org.rapidoid.platform.Main.runMain(Main.java:64)
 	at org.rapidoid.platform.Main.main(Main.java:48)

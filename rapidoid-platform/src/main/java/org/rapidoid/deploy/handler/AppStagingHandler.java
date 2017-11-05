@@ -11,7 +11,7 @@ import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
 import org.rapidoid.io.Upload;
 import org.rapidoid.log.Log;
-import org.rapidoid.util.Msc;
+import org.rapidoid.platform.PlatformOpts;
 
 /*
  * #%L
@@ -43,7 +43,7 @@ public class AppStagingHandler extends GUI implements ReqHandler {
 			Upload upload = req.file("file");
 
 			AppDeployment app;
-			if (Msc.isSingleApp()) {
+			if (PlatformOpts.isSingleApp()) {
 				app = SingleApp.get();
 			} else {
 				app = AppDeployment.fromFilename(upload.filename());

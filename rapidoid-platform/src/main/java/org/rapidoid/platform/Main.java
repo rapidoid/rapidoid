@@ -39,7 +39,7 @@ public class Main extends RapidoidThing {
 		initPlatform();
 
 		// just print basic info if no args were specified
-		if (U.isEmpty(args) && !Msc.isSingleApp()) {
+		if (U.isEmpty(args) && !PlatformOpts.isSingleApp()) {
 			printWelcome();
 
 		} else {

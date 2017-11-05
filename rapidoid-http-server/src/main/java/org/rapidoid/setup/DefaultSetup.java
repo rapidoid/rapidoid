@@ -35,8 +35,8 @@ import org.rapidoid.util.Msc;
 @Since("5.3.2")
 public class DefaultSetup extends RapidoidInitializer {
 
-	private static final String MAIN_ZONE = Msc.isMultiAppPlatform() ? "platform" : "main";
-	private static final String ADMIN_ZONE = Msc.isMultiAppPlatform() ? "platform" : "admin";
+	private static final String MAIN_ZONE = Msc.isPlatform() ? "platform" : "main";
+	private static final String ADMIN_ZONE = Msc.isPlatform() ? "platform" : "admin";
 
 	final Setup on;
 	final Setup admin;
