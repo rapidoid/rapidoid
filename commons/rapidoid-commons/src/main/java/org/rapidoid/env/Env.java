@@ -83,8 +83,11 @@ public class Env extends RapidoidThing {
 	}
 
 	private static void processInitialConfig() {
-		setRoot(initial("root"));
+		// initialize root
+		String root = U.or(initial("root"), initial("default_root"));
+		setRoot(root);
 
+		// initialize config
 		String config = initial("config");
 		if (config != null) {
 			Conf.setFilenameBase(config);
