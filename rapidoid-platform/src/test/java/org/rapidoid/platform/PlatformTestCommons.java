@@ -22,13 +22,13 @@ package org.rapidoid.platform;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.RapidoidIntegrationTest;
 
 import java.io.File;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.4.6")
-public class PlatformTestCommons extends TestCommons {
+public class PlatformTestCommons extends RapidoidIntegrationTest {
 
 	static String appPath(String name) {
 		return new File("rapidoid-platform/src/test/" + name).getAbsolutePath();
