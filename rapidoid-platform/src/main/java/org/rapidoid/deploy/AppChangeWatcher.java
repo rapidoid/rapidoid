@@ -49,7 +49,7 @@ public class AppChangeWatcher extends RapidoidThing implements Operation<String>
 		active(true);
 
 		if (app.exists()) {
-			Log.info("Watching app root for changes...", "root", app.path());
+			Log.info("Watching app root for changes...", "app", app.name(), "root", app.path());
 			Watch.dir(app.path(), Watch.simpleListener(this));
 		}
 	}

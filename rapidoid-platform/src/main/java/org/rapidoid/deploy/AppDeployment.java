@@ -249,4 +249,14 @@ public class AppDeployment extends RapidoidThing {
 	public ProcessHandle process() {
 		return process;
 	}
+
+	@Override
+	public String toString() {
+		return "AppDeployment{" +
+			"name='" + name + '\'' +
+			", path='" + path + '\'' +
+			", port=" + port +
+			", process=" + process +
+			'}';
+	}
 }

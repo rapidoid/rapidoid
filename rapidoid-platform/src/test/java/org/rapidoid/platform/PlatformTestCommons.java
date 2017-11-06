@@ -22,6 +22,7 @@ package org.rapidoid.platform;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.deploy.AppDeployment;
 import org.rapidoid.test.RapidoidIntegrationTest;
 
 import java.io.File;
@@ -36,6 +37,22 @@ public class PlatformTestCommons extends RapidoidIntegrationTest {
 
 	static void runMain(String... args) {
 		Main.main(args);
+	}
+
+	static void makeAppDeployment(String name) {
+		AppDeployment app = AppDeployment.create(name);
+
+		app.stage("config.yml", makeAppConfig(name).getBytes());
+	}
+
+	static String makeAppConfig(String appId) {
+		String config = "" +
+			"pages:\n" +
+			"  /: ''\n\n" +
+			"gui:\n" +
+			"  brand: " + appId + "\n\n";
+
+		return config;
 	}
 
 }

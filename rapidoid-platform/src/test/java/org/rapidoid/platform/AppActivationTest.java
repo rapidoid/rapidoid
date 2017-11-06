@@ -41,12 +41,12 @@ public class AppActivationTest extends PlatformTestCommons {
 		isTrue(PlatformOpts.isSingleApp());
 		isFalse(Env.isInitialized());
 
-		runMain("dev");
+		runMain("mode=production");
 
 		isTrue(Env.isInitialized());
 		isTrue(Msc.isPlatform());
 		isTrue(PlatformOpts.isSingleApp());
-		isTrue(Env.dev());
+		isTrue(Env.production());
 	}
 
 }

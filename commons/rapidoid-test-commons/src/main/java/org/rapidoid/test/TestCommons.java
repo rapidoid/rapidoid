@@ -558,7 +558,7 @@ public abstract class TestCommons {
 	}
 
 	public static String createTempDir(String name) {
-		Path tmpDir = null;
+		Path tmpDir;
 		try {
 			tmpDir = Files.createTempDirectory(name);
 		} catch (IOException e) {

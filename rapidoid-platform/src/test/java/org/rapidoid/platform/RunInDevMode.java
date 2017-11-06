@@ -23,7 +23,6 @@ package org.rapidoid.platform;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.deploy.AppDeployment;
 import org.rapidoid.deploy.Apps;
 
 @Authors("Nikolche Mihajlovski")
@@ -35,21 +34,9 @@ public class RunInDevMode extends RapidoidThing {
 	public static void main(String[] args) {
 		Main.main(ARGS);
 
-//		makeApp("foo");
+//		PlatformTestCommons.makeAppDeployment("foo");
 
 		Apps.reload();
-	}
-
-	private static void makeApp(String name) {
-		AppDeployment app = AppDeployment.create(name);
-
-		String config = "" +
-			"pages:\n" +
-			"  /: ''\n\n" +
-			"gui:\n" +
-			"  brand: " + name + "\n";
-
-		app.stage("config.yml", config.getBytes());
 	}
 
 }
