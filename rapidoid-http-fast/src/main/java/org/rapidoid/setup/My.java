@@ -104,6 +104,7 @@ public class My extends RapidoidThing {
 	public static void xmlResponseRenderer(XmlResponseRenderer xmlResponseRenderer) {
 		GLOBAL.xmlResponseRenderer(xmlResponseRenderer);
 	}
+
 	public static void beanParameterFactory(BeanParameterFactory beanParameterFactory) {
 		GLOBAL.beanParameterFactory(beanParameterFactory);
 	}
@@ -131,8 +132,8 @@ public class My extends RapidoidThing {
 	public static void jackson(ObjectMapper jackson) {
 		GLOBAL.jackson(jackson);
 	}
-	
-	public static void jacksonXml(XmlMapper jacksonXml){
+
+	public static void jacksonXml(XmlMapper jacksonXml) {
 		GLOBAL.jacksonXml(jacksonXml);
 	}
 
@@ -143,7 +144,7 @@ public class My extends RapidoidThing {
 	public static JsonResponseRenderer jsonResponseRenderer() {
 		return GLOBAL.jsonResponseRenderer();
 	}
-	
+
 	public static XmlResponseRenderer xmlResponseRenderer() {
 		return GLOBAL.xmlResponseRenderer();
 	}

@@ -4,7 +4,10 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.TransactionMode;
-import org.rapidoid.http.*;
+import org.rapidoid.http.HttpWrapper;
+import org.rapidoid.http.MediaType;
+import org.rapidoid.http.ReqHandler;
+import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.lambda.*;
 
@@ -222,8 +225,7 @@ public class OnRoute extends RapidoidThing {
 		HttpHandlers.register(setup, verb, path, jsonOpts(), handler);
 	}
 
-       
-        /* XML */
+    /* XML */
 
 	public void xml(String response) {
 		HttpHandlers.registerPredefined(setup, verb, path, xmlOpts(), response);
@@ -276,7 +278,7 @@ public class OnRoute extends RapidoidThing {
 	public void xml(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
 		HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
 	}
-        
+
 	/* PLAIN */
 
 	public void plain(String response) {
@@ -399,10 +401,10 @@ public class OnRoute extends RapidoidThing {
 		return opts(MediaType.JSON);
 	}
 
-        private RouteOptions xmlOpts() {
+	private RouteOptions xmlOpts() {
 		return opts(MediaType.XML_UTF_8);
 	}
-	
+
 	private RouteOptions plainOpts() {
 		return opts(MediaType.PLAIN_TEXT_UTF_8);
 	}

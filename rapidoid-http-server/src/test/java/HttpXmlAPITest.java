@@ -27,36 +27,21 @@ import org.rapidoid.http.Self;
 import org.rapidoid.setup.On;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
-import org.rapidoid.util.MscOpts;
 
-@Authors("Nikolche Mihajlovski")
-@Since("5.2.9")
+@Authors({"Dan Cytermann", "Nikolche Mihajlovski"})
+@Since("5.5.0")
 public class HttpXmlAPITest extends TestCommons {
 
-	private void initAPI() {
-		
-	    
+	@Test
+	public void testXmlAPI() {
 		On.get("/inc/{x}").xml(new ReqHandler() {
 			@Override
 			public Object execute(Req req) {
 				return U.num(req.param("x")) + 1;
 			}
 		});
-	}
-
-	@Test
-	public void testIncludedModules() {
-		isFalse(MscOpts.hasRapidoidHTML());
-		isFalse(MscOpts.hasRapidoidGUI());
-	}
-
-	@Test
-	public void testRestAPI() {
-		initAPI();
 
 		Self.get("/inc/99").expect("<Integer>100</Integer>");
 	}
-
-
 
 }

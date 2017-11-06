@@ -13,7 +13,7 @@ import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.data.BufRanges;
 import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.http.customize.Customization;
-import org.rapidoid.http.customize.JsonResponseRenderer;
+import org.rapidoid.http.customize.MediaResponseRenderer;
 import org.rapidoid.http.impl.MaybeReq;
 import org.rapidoid.io.Res;
 import org.rapidoid.lambda.Mapper;
@@ -25,7 +25,6 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.regex.Pattern;
-import org.rapidoid.http.customize.MediaResponseRenderer;
 
 /*
  * #%L
