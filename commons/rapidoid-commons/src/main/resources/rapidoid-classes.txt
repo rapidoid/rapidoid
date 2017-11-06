@@ -802,6 +802,7 @@ org.rapidoid.util.Lorem
 org.rapidoid.util.MapEntry
 org.rapidoid.util.Msc
 org.rapidoid.util.MscOpts
+org.rapidoid.util.MscState
 org.rapidoid.util.None
 org.rapidoid.util.NullOutputStream
 org.rapidoid.util.Once

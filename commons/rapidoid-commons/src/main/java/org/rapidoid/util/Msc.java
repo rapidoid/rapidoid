@@ -84,18 +84,14 @@ public class Msc extends RapidoidThing {
 
 	public static final String OS_NAME = System.getProperty("os.name");
 
-	private static volatile String uid;
-
-	private static volatile long measureStart;
-
-	private static volatile boolean platform;
-
-	private static volatile boolean mavenBuild;
-
-	private static volatile boolean dockerized = MscOpts.hasDockerEnv();
-
 	public static final ScheduledThreadPoolExecutor EXECUTOR = new ScheduledThreadPoolExecutor(8,
 		new RapidoidThreadFactory("utils", true));
+
+	private static volatile MscState state = new MscState();
+
+	private static void resetState() {
+		state = new MscState();
+	}
 
 	public static final Mapper<Object, Object> TRANSFORM_TO_SIMPLE_CLASS_NAME = new Mapper<Object, Object>() {
 		@Override
@@ -338,21 +334,21 @@ public class Msc extends RapidoidThing {
 	}
 
 	public static void startMeasure() {
-		measureStart = U.time();
+		state.measureStart = U.time();
 	}
 
 	public static void endMeasure() {
-		long delta = U.time() - measureStart;
+		long delta = U.time() - state.measureStart;
 		Log.info("Benchmark", "time", delta + " ms");
 	}
 
 	public static void endMeasure(String info) {
-		long delta = U.time() - measureStart;
+		long delta = U.time() - state.measureStart;
 		Log.info("Benchmark", "info", info, "time", delta + " ms");
 	}
 
 	public static void endMeasure(long count, String info) {
-		long delta = U.time() - measureStart;
+		long delta = U.time() - state.measureStart;
 		long freq = Math.round(1000 * (double) count / delta);
 		Log.info("Benchmark", "performance", U.frmt("%s %s in %s ms (%s/sec)", count, info, delta, freq));
 	}
@@ -970,11 +966,6 @@ public class Msc extends RapidoidThing {
 		resetState();
 	}
 
-	private static void resetState() {
-		uid = null;
-		measureStart = 0;
-	}
-
 	public static boolean isAscii(String s) {
 		for (int i = 0; i < s.length(); i++) {
 			if (s.charAt(i) > 127) return false;
@@ -998,11 +989,11 @@ public class Msc extends RapidoidThing {
 	}
 
 	public static boolean dockerized() {
-		return dockerized;
+		return state.dockerized;
 	}
 
 	public static void dockerized(boolean dockerized) {
-		Msc.dockerized = dockerized;
+		state.dockerized = dockerized;
 	}
 
 	public static Object maybeMasked(Object value) {
@@ -1010,8 +1001,11 @@ public class Msc extends RapidoidThing {
 	}
 
 	public static synchronized String id() {
-		if (uid == null) uid = Conf.ROOT.entry("id").or(processName());
-		return uid;
+		if (state.uid == null) {
+			state.uid = Conf.ROOT.entry("id").or(processName());
+		}
+
+		return state.uid;
 	}
 
 	public static boolean hasConsole() {
@@ -1146,19 +1140,19 @@ public class Msc extends RapidoidThing {
 
 
 	public static void setPlatform(boolean platform) {
-		Msc.platform = platform;
+		state.platform = platform;
 	}
 
 	public static boolean isPlatform() {
-		return platform;
+		return state.platform;
 	}
 
 	public static boolean isMavenBuild() {
-		return mavenBuild;
+		return state.mavenBuild;
 	}
 
 	public static void setMavenBuild(boolean mavenBuild) {
-		Msc.mavenBuild = mavenBuild;
+		state.mavenBuild = mavenBuild;
 	}
 
 	public static String errorMsg(Throwable error) {
