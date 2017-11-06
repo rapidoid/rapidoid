@@ -26,9 +26,9 @@ import java.io.OutputStream;
  * #L%
  */
 
-@Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public interface JsonResponseRenderer extends MediaResponseRenderer{
+@Authors("Dan Cytermann")
+@Since("5.5.0")
+public interface XmlResponseRenderer extends MediaResponseRenderer{
 
 
 }

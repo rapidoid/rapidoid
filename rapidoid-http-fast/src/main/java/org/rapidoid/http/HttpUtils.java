@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.regex.Pattern;
+import org.rapidoid.http.customize.MediaResponseRenderer;
 
 /*
  * #%L
@@ -219,12 +220,12 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 		return (Conf.ROOT.is("https") ? "https://" : "http://") + x.host() + path;
 	}
 
-	public static byte[] responseToBytes(Req req, Object result, MediaType contentType, JsonResponseRenderer jsonRenderer) {
-		if (U.eq(contentType, MediaType.JSON)) {
+	public static byte[] responseToBytes(Req req, Object result, MediaType contentType, MediaResponseRenderer responseRenderer) {
+		if (U.eq(contentType, MediaType.JSON) || U.eq(contentType, MediaType.XML_UTF_8)) {
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 
 			try {
-				jsonRenderer.renderJson(req, result, out);
+				responseRenderer.render(req, result, out);
 			} catch (Exception e) {
 				throw U.rte(e);
 			}

@@ -21,6 +21,7 @@ package org.rapidoid.http.customize.defaults;
  */
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -33,6 +34,7 @@ import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
 
 import java.util.List;
+import org.rapidoid.data.XML;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.7")
@@ -45,6 +47,8 @@ public class Defaults extends RapidoidThing {
 	private static final ErrorHandler errorHandler = new DefaultErrorHandler();
 
 	private static final JsonResponseRenderer jsonResponseRenderer = new DefaultJsonResponseRenderer();
+	
+	private static final XmlResponseRenderer xmlResponseRenderer = new DefaultXmlResponseRenderer();
 
 	private static final BeanParameterFactory beanParameterFactory = new DefaultBeanParameterFactory();
 
@@ -61,12 +65,16 @@ public class Defaults extends RapidoidThing {
 	private static final ViewResolver viewResolver = new DefaultViewResolver();
 
 	private static final ObjectMapper jackson = JSON.newMapper();
+	
+	private static final XmlMapper jacksonXml = XML.newMapper();
 
 	private static final EntityManagerProvider entityManagerProvider = null;
 
 	private static final EntityManagerFactoryProvider entityManagerFactoryProvider = new DefaultEntityManagerFactoryProvider();
 
 	private static final JsonRequestBodyParser jsonRequestBodyParser = new DefaultJsonRequestBodyParser();
+	
+	private static final XmlRequestBodyParser xmlRequestBodyParser = new DefaultXmlRequestBodyParser();
 
 	private static final SessionManager sessionManager = new DefaultSessionManager();
 
@@ -88,6 +96,10 @@ public class Defaults extends RapidoidThing {
 
 	public static JsonResponseRenderer jsonResponseRenderer() {
 		return jsonResponseRenderer;
+	}
+	
+	public static XmlResponseRenderer xmlResponseRenderer(){
+		return xmlResponseRenderer;
 	}
 
 	public static BeanParameterFactory beanParameterFactory() {
@@ -118,6 +130,9 @@ public class Defaults extends RapidoidThing {
 		return jackson;
 	}
 
+	public static XmlMapper jacksonXml() {
+		return jacksonXml;
+	}
 	public static EntityManagerProvider entityManagerProvider() {
 		return entityManagerProvider;
 	}
@@ -132,6 +147,10 @@ public class Defaults extends RapidoidThing {
 
 	public static JsonRequestBodyParser jsonRequestBodyParser() {
 		return jsonRequestBodyParser;
+	}
+	
+	public static XmlRequestBodyParser xmlRequestBodyParser() {
+		return xmlRequestBodyParser;
 	}
 
 	public static SessionManager sessionManager() {

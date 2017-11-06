@@ -1,10 +1,4 @@
-package org.rapidoid.http.customize;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.http.Req;
-
-import java.io.OutputStream;
+package org.rapidoid.http.customize.defaults;
 
 /*
  * #%L
@@ -26,9 +20,23 @@ import java.io.OutputStream;
  * #L%
  */
 
-@Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public interface JsonResponseRenderer extends MediaResponseRenderer{
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.customize.Customization;
 
+import java.util.Map;
+import org.rapidoid.http.customize.XmlRequestBodyParser;
+
+@Authors("Dan Cytermann")
+@Since("5.5.0")
+public class DefaultXmlRequestBodyParser extends RapidoidThing implements XmlRequestBodyParser {
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, ?> parseXmlBody(Req req, byte[] body) throws Exception {
+		return Customization.of(req).jacksonXml().readValue(body, Map.class);
+	}
 
 }

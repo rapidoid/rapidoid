@@ -34,7 +34,7 @@ import java.io.OutputStream;
 public class DefaultJsonResponseRenderer extends RapidoidThing implements JsonResponseRenderer {
 
 	@Override
-	public void renderJson(Req req, Object value, OutputStream out) throws Exception {
+	public void render(Req req, Object value, OutputStream out) throws Exception {
 		Customization.of(req).jackson().writeValue(out, value);
 	}
 
