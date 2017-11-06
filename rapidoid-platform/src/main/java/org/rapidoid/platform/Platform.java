@@ -27,6 +27,7 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.deploy.AppDownloader;
 import org.rapidoid.deploy.SingleApp;
 import org.rapidoid.env.Env;
+import org.rapidoid.log.GlobalCfg;
 import org.rapidoid.log.Log;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
@@ -49,7 +50,7 @@ public class Platform extends RapidoidThing {
 
 		// prepare args
 		List<String> args = U.list(cmdArgs.args);
-		args.add("default_root=" + defaultRoot());
+		args.add("default_root=" + defaultRoot(cmdArgs));
 
 		// start application
 		App.init(U.arrayOf(String.class, args));
@@ -59,7 +60,8 @@ public class Platform extends RapidoidThing {
 
 		// [The application has started!]
 		String mode = PlatformOpts.isMultiProcess() ? "multi-process" : "single-process";
-		Log.info("The platform has started", "!mode", mode);
+		String apps = PlatformOpts.isSingleApp() ? "single" : "multi";
+		Log.info("The platform has started", "!mode", mode, "apps", apps);
 
 		// bootstrap services
 		App.boot().services();
@@ -86,8 +88,11 @@ public class Platform extends RapidoidThing {
 		}
 	}
 
-	private static String defaultRoot() {
-		if (PlatformOpts.hasAppFolder()) {
+	private static String defaultRoot(CmdArgs cmdArgs) {
+		boolean isDevMode = Msc.parseArgs(cmdArgs.args).get("mode").equalsIgnoreCase("dev")
+			|| GlobalCfg.has("MODE", "dev");
+
+		if (PlatformOpts.hasAppFolder() && !isDevMode) {
 			return PlatformOpts.singleAppPath();
 
 		} else {
