@@ -41,7 +41,7 @@ public class CmdArgs extends RapidoidThing {
 		"app.services=center",
 		"users.admin.password=admin",
 		"secret=NONE",
-		"/ -> localhost:8080"
+		"/ -> localhost:10000"
 	};
 
 	public final List<String> all;

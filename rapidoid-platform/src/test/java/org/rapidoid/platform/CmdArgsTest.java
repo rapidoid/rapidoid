@@ -59,9 +59,9 @@ public class CmdArgsTest extends PlatformTestCommons {
 
 		eq(args.all, U.list(CmdArgs.DEV_CMD_ARGS));
 		eq(args.command, CmdArgs.CMD_PLATFORM);
-		eq(args.args, U.list("mode=dev", "app.services=center", "users.admin.password=admin", "secret=NONE", "/ -> localhost:8080"));
+		eq(args.args, U.list("mode=dev", "app.services=center", "users.admin.password=admin", "secret=NONE", "/ -> localhost:10000"));
 		eq(args.options, U.list("mode=dev", "app.services=center", "users.admin.password=admin", "secret=NONE"));
-		eq(args.special, U.list("/ -> localhost:8080"));
+		eq(args.special, U.list("/ -> localhost:10000"));
 	}
 
 	@Test
@@ -75,7 +75,7 @@ public class CmdArgsTest extends PlatformTestCommons {
 		eq(args.command, CmdArgs.CMD_PLATFORM);
 
 		eq(args.options, U.list("mode=dev", "app.services=center", "users.admin.password=admin", "secret=NONE", "foo=123"));
-		eq(args.special, U.list("/ -> localhost:8080"));
+		eq(args.special, U.list("/ -> localhost:10000"));
 	}
 
 }

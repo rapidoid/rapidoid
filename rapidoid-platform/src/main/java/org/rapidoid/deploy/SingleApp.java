@@ -3,8 +3,8 @@ package org.rapidoid.deploy;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.env.Env;
 import org.rapidoid.log.Log;
+import org.rapidoid.platform.PlatformOpts;
 import org.rapidoid.util.LazyInit;
 
 /*
@@ -34,7 +34,7 @@ public class SingleApp extends RapidoidThing {
 	private static final LazyInit<AppDeployment> APP = new LazyInit<>(SingleApp::create);
 
 	private static AppDeployment create() {
-		AppDeployment app = AppDeployment.create("app", Env.root(), 8080);
+		AppDeployment app = AppDeployment.create("app", PlatformOpts.singleAppPath(), 10000);
 		Apps.deployments().add(new ManageableApp(app));
 		return app;
 	}
