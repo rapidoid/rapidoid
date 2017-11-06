@@ -20,22 +20,33 @@ package org.rapidoid.platform;
  * #L%
  */
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.test.RapidoidIntegrationTest;
+import org.rapidoid.env.Env;
+import org.rapidoid.util.Msc;
 
-import java.io.File;
+import static org.rapidoid.test.TestCommons.createTempDir;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.4.6")
-public class PlatformTestCommons extends RapidoidIntegrationTest {
+@Since("5.4.7")
+public class AppActivationTest extends PlatformTestCommons {
 
-	static String appPath(String name) {
-		return new File("rapidoid-platform/src/test/" + name).getAbsolutePath();
-	}
+	@Test
+	public void testAppDeployment() {
+		String appsDir = createTempDir("app");
+		PlatformOpts.singleAppPath(appsDir);
 
-	static void runMain(String... args) {
-		Main.main(args);
+		isFalse(Msc.isPlatform());
+		isTrue(PlatformOpts.isSingleApp());
+		isFalse(Env.isInitialized());
+
+		runMain("dev");
+
+		isTrue(Env.isInitialized());
+		isTrue(Msc.isPlatform());
+		isTrue(PlatformOpts.isSingleApp());
+		isTrue(Env.dev());
 	}
 
 }
