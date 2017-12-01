@@ -1,8 +1,12 @@
-package org.rapidoid.platform;
+package org.rapidoid.util;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 /*
  * #%L
- * rapidoid-platform
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -20,29 +24,18 @@ package org.rapidoid.platform;
  * #L%
  */
 
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.util.Msc;
-
-import static org.rapidoid.platform.PlatformTestCommons.appPath;
-
 @Authors("Nikolche Mihajlovski")
-@Since("5.4.6")
-public class RunInSingleAppProdMode extends RapidoidThing {
+@Since("5.4.7")
+public class MscState extends RapidoidThing {
 
-	private static final String[] ARGS = {
-		"mode=production",
-		"app.services=ping",
-		"admin.services=status",
-	};
+	volatile String uid;
 
-	public static void main(String[] args) {
-		Msc.dockerized(true);
+	volatile long measureStart;
 
-		PlatformOpts.singleAppPath(appPath("app1"));
+	volatile boolean platform;
 
-		Main.main(ARGS);
-	}
+	volatile boolean mavenBuild;
+
+	volatile boolean dockerized = MscOpts.hasDockerEnv();
 
 }

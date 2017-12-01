@@ -9,7 +9,9 @@ import org.rapidoid.lambda.Mapper;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 /*
@@ -56,6 +58,10 @@ public class JDBC extends JdbcUtil {
 
 	public static synchronized JdbcClient api(String name) {
 		return APIS.get(name);
+	}
+
+	static synchronized Set<String> apiNames() {
+		return Collections.unmodifiableSet(APIS.keySet());
 	}
 
 	/**
