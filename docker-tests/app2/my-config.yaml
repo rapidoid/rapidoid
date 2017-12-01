@@ -1,4 +1,0 @@
-id: wrong-config
-
-on:
-  port: 9999

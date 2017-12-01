@@ -33,8 +33,6 @@ public interface IGoodies {
 
 	void lifecycle(Setup setup);
 
-	void processes(Setup setup);
-
 	void dbAdmin(Setup setup);
 
 	void manageables(Setup setup);
