@@ -34,6 +34,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-fluent</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-test-commons</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
