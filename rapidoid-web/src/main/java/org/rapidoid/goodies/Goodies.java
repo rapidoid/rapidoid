@@ -74,7 +74,6 @@ public class Goodies extends RapidoidThing {
 		entities(setup);
 		application(setup);
 		lifecycle(setup);
-		processes(setup);
 		manageables(setup);
 		jmx(setup);
 		metrics(setup);
@@ -109,11 +108,6 @@ public class Goodies extends RapidoidThing {
 	public static void metrics(Setup setup) {
 		setup.page(uri("metrics")).zone(CENTER).mvc(new GraphsHandler());
 		setup.get(uri("graphs/{id:.*}")).json(new GraphDataHandler());
-	}
-
-	public static void processes(Setup setup) {
-		setup.page(uri("processes")).zone(CENTER).mvc(new ProcessesHandler());
-		setup.page(uri("processes/{id}")).zone(CENTER).mvc(new ProcessDetailsHandler());
 	}
 
 	public static void manageables(Setup setup) {

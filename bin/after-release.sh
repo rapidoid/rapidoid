@@ -58,49 +58,6 @@ process_docs() {
     git_commit "$git_dirty" "Bumped version"
 }
 
-process_docker() {
-    local git_dirty=`git status --porcelain`
-
-    sed -ri 's/^(ENV RAPIDOID_VERSION) .*/\1 '"${NEW_VER}"'/' Dockerfile
-    git add Dockerfile
-
-    git_commit "$git_dirty" "Rapidoid v${NEW_VER}"
-
-    echo "Will push..."
-    wait_enter
-    git push
-}
-
-process_official_images() {
-    local git_dirty=`git status --porcelain`
-
-    printf "Rebasing on upstream...\n\n"
-    git pull --rebase upstream master
-
-    readonly OLD_VER_MID=${OLD_VER:0:3}
-    readonly NEW_VER_MID=${NEW_VER:0:3}
-
-    printf "\nMinor releases: '$OLD_VER_MID' and '$NEW_VER_MID'\n\n"
-
-    echo
-    read -p "Enter COMMIT ID: " commit_id
-    echo
-
-    sed -i "s/${OLD_VER}/${NEW_VER}/g" library/rapidoid
-    sed -i "s/${OLD_VER_MID}/${NEW_VER_MID}/g" library/rapidoid
-    sed -ri "s/GitCommit:\s\w+/GitCommit: ${commit_id}/g" library/rapidoid
-
-    git diff
-    printf "\nWill commit and push...\n\n"
-    wait_enter
-
-    git add library/rapidoid
-    git_commit "$git_dirty" "Rapidoid v${NEW_VER}"
-    git push
-
-    echo === VISIT https://github.com/rapidoid/docker-official-images ===
-}
-
 git_commit() {
     local dirty=$1
     local msg=$2
@@ -125,16 +82,6 @@ do_processing() {
     printf "\n--- PROCESSING rapidoid.github.io...\n\n"
     cd ../rapidoid.github.io
     process_docs || true
-    wait_enter
-
-    printf "\n--- PROCESSING docker-rapidoid...\n\n"
-    cd ../docker-rapidoid
-    process_docker || true
-    wait_enter
-
-    printf "\n--- PROCESSING docker-official-images...\n\n"
-    cd ../docker-official-images/
-    process_official_images
     wait_enter
 
     echo DONE
