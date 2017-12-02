@@ -349,7 +349,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 	public synchronized Resp mvc(boolean mvc) {
 
 		if (mvc) {
-			U.must(MscOpts.hasRapidoidHTML(), "The rapidoid-html module must be included for the MVC feature!");
+			U.must(MscOpts.hasRapidoidGUI(), "The rapidoid-gui module must be included for the MVC feature!");
 		}
 
 		this.mvc = mvc;

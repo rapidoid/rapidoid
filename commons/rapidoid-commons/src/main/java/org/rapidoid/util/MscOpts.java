@@ -41,7 +41,6 @@ public class MscOpts extends RapidoidThing {
 
 	private static final boolean hasRapidoidJPA = Cls.exists("org.rapidoid.jpa.JPA");
 	private static final boolean hasRapidoidGUI = Cls.exists("org.rapidoid.gui.GUI");
-	private static final boolean hasRapidoidHTML = Cls.exists("org.rapidoid.html.HTML");
 	private static final boolean hasRapidoidWatch = Cls.exists("org.rapidoid.reload.Reload");
 	private static final boolean hasRapidoidPlatform = Cls.exists("org.rapidoid.standalone.Main");
 
@@ -51,7 +50,7 @@ public class MscOpts extends RapidoidThing {
 	private static final boolean hasC3P0 = Cls.exists("com.mchange.v2.c3p0.PooledDataSource");
 	private static final boolean hasHikari = Cls.exists("com.zaxxer.hikari.HikariDataSource");
 
-	private static final boolean isRestOnly = !hasRapidoidHTML();
+	private static final boolean isRestOnly = !hasRapidoidGUI();
 
 	public static boolean hasDockerEnv() {
 		return hasDockerEnv;
@@ -75,10 +74,6 @@ public class MscOpts extends RapidoidThing {
 
 	public static boolean hasRapidoidGUI() {
 		return hasRapidoidGUI;
-	}
-
-	public static boolean hasRapidoidHTML() {
-		return hasRapidoidHTML;
 	}
 
 	public static boolean hasRapidoidWatch() {
