@@ -103,7 +103,6 @@
 		<module>rapidoid-web</module>
 		<module>rapidoid-quick</module>
 		<module>rapidoid-watch</module>
-		<module>rapidoid-fluent</module>
 		<module>rapidoid-integration-tests</module>
 		<module>app-maven-plugin</module>
 	</modules>

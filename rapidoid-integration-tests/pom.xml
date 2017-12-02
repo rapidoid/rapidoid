@@ -32,10 +32,11 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<!-- FIXME replace rapidoid-fluent with essentials4j -->
 		<dependency>
 			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-fluent</artifactId>
-			<version>${project.version}</version>
+			<version>5.4.6</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
