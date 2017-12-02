@@ -15,7 +15,7 @@ import java.util.Set;
 
 /*
  * #%L
- * rapidoid-html
+ * rapidoid-gui
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
