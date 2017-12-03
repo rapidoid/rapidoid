@@ -176,6 +176,38 @@ public class App extends RapidoidInitializer {
 
 		restarted = true;
 
+		notifyListenersBeforeRestart();
+
+		resetAppStateBeforeRestart();
+
+		if (MscOpts.hasRapidoidJPA()) {
+			loader = ReloadUtil.reloader();
+			ClasspathUtil.setDefaultClassLoader(loader);
+		}
+
+		reloadAndRunMainClass();
+
+		restarted = true;
+
+		notifyListenersAfterRestart();
+
+		Log.info("!Successfully restarted the application!");
+
+	}
+
+	private static void notifyListenersAfterRestart() {
+		Set<AppRestartListener> listeners = U.set(On.changes().getRestartListeners());
+
+		for (AppRestartListener listener : listeners) {
+			try {
+				listener.afterAppRestart();
+			} catch (Exception e) {
+				Log.error("Error occurred in the app restart listener!", e);
+			}
+		}
+	}
+
+	private static void notifyListenersBeforeRestart() {
 		Set<AppRestartListener> listeners = U.set(On.changes().getRestartListeners());
 
 		for (AppRestartListener listener : listeners) {
@@ -185,33 +217,9 @@ public class App extends RapidoidInitializer {
 				Log.error("Error occurred in the app restart listener!", e);
 			}
 		}
+	}
 
-		App.path = null;
-		App.boot = null;
-
-		Groups.reset();
-		Conf.reset();
-		Env.reset();
-		Res.reset();
-		Templates.reset();
-		JSON.reset();
-		Beany.reset();
-
-		AppBootstrap.reset();
-		ClasspathScanner.reset();
-		invoked.clear();
-
-		SetupUtil.reloadAll();
-
-		Conf.reset(); // reset the config again
-		Setup.initDefaults(); // this changes the config
-		Conf.reset(); // reset the config again
-
-		if (MscOpts.hasRapidoidJPA()) {
-			loader = ReloadUtil.reloader();
-			ClasspathUtil.setDefaultClassLoader(loader);
-		}
-
+	private static void reloadAndRunMainClass() {
 		Class<?> entry;
 		try {
 			entry = loader.loadClass(mainClassName);
@@ -221,16 +229,33 @@ public class App extends RapidoidInitializer {
 		}
 
 		Msc.invokeMain(entry, U.arrayOf(String.class, Env.args()));
+	}
 
-		for (AppRestartListener listener : listeners) {
-			try {
-				listener.afterAppRestart();
-			} catch (Exception e) {
-				Log.error("Error occurred in the app restart listener!", e);
-			}
-		}
 
-		Log.info("!Successfully restarted the application!");
+	private static void resetAppStateBeforeRestart() {
+		App.path = null;
+		App.boot = null;
+		App.status = AppStatus.NOT_STARTED;
+		App.dirty = false;
+
+		Groups.reset();
+		Conf.reset();
+		Env.reset();
+		Res.reset();
+		Templates.reset();
+		JSON.reset();
+		Beany.reset();
+
+		AppStarter.reset();
+		AppBootstrap.reset();
+		ClasspathScanner.reset();
+		invoked.clear();
+
+		SetupUtil.reloadAll();
+
+		Conf.reset(); // reset the config again
+		Setup.initDefaults(); // this changes the config
+		Conf.reset(); // reset the config again
 	}
 
 	public static synchronized void resetGlobalState() {
