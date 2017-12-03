@@ -102,7 +102,9 @@ public class Customization extends RapidoidThing {
 		viewResolver = null;
 		pageDecorator = null;
 		jsonResponseRenderer = null;
+		jsonRequestBodyParser = null;
 		xmlResponseRenderer = null;
+		xmlRequestBodyParser = null;
 		beanParameterFactory = null;
 		loginProvider = null;
 		rolesProvider = null;
