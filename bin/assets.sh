@@ -6,11 +6,11 @@ DISTRO=dist
 DISTRO_JS=$DISTRO/rapidoid.min.js
 DISTRO_CSS=$DISTRO/rapidoid.min.css
 
-#curl http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css > rapidoid-html/src/main/resources/default/static/_rapidoid/bootstrap/css/bootstrap-3.3.6.min.css
-#curl http://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css > rapidoid-html/src/main/resources/default/static/_rapidoid/font-awesome/css/font-awesome-4.5.0.min.css
-#curl http://code.jquery.com/jquery-2.2.3.min.js > rapidoid-html/src/main/resources/default/static/_rapidoid/jquery-2.2.3.min.js
-#curl http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js > rapidoid-html/src/main/resources/default/static/_rapidoid/bootstrap/js/bootstrap-3.3.6.min.js
-#curl http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js > rapidoid-html/src/main/resources/default/static/_rapidoid/angular-1.5.8.min.js
+#curl http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css > rapidoid-gui/src/main/resources/default/static/_rapidoid/bootstrap/css/bootstrap-3.3.6.min.css
+#curl http://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css > rapidoid-gui/src/main/resources/default/static/_rapidoid/font-awesome/css/font-awesome-4.5.0.min.css
+#curl http://code.jquery.com/jquery-2.2.3.min.js > rapidoid-gui/src/main/resources/default/static/_rapidoid/jquery-2.2.3.min.js
+#curl http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js > rapidoid-gui/src/main/resources/default/static/_rapidoid/bootstrap/js/bootstrap-3.3.6.min.js
+#curl http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js > rapidoid-gui/src/main/resources/default/static/_rapidoid/angular-1.5.8.min.js
 
 # cd assets
 # rm ui-bootstrap-tpls.min.js && wget https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.1/ui-bootstrap-tpls.min.js
@@ -40,11 +40,11 @@ ls -l $DISTRO_CSS
 for DOCS in ../rapidoid.github.io/ ../java8org.github.io/; do
 cp $DISTRO_JS $DOCS/rapidoid.min.js
 cp $DISTRO_CSS $DOCS/rapidoid.min.css
-cp rapidoid-html/src/main/resources/default/static/_rapidoid/bootstrap/css/theme-default.css $DOCS/theme-default.css
+cp rapidoid-gui/src/main/resources/default/static/_rapidoid/bootstrap/css/theme-default.css $DOCS/theme-default.css
 done
 
-cp $DISTRO_JS rapidoid-html/src/main/resources/default/static/
-cp $DISTRO_CSS rapidoid-html/src/main/resources/default/static/
+cp $DISTRO_JS rapidoid-gui/src/main/resources/default/static/
+cp $DISTRO_CSS rapidoid-gui/src/main/resources/default/static/
 
 # cp ../rapidoid.github.io/docs.css ../java8org.github.io/docs.css
 

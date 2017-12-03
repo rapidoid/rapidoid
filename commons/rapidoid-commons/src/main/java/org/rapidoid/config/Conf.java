@@ -51,7 +51,6 @@ public class Conf extends RapidoidThing {
 		}
 	});
 
-	public static final Config SYSTEM = section("system");
 	public static final Config RAPIDOID = section("rapidoid");
 	public static final Config RAPIDOID_ADMIN = section("rapidoid-admin");
 	public static final Config USERS = section("users");
@@ -79,18 +78,14 @@ public class Conf extends RapidoidThing {
 	static void applyConfig(Config config) {
 		RapidoidEnv.touch();
 
-		if (Env.isInitialized()) {
-			if (!Env.production()) {
-				Log.options().fancy(true);
-			}
-		}
-
 		if (config == ROOT) {
 			activateRootConfig();
 		}
 	}
 
 	private static void activateRootConfig() {
+		U.must(Env.isInitialized());
+
 		String root = Env.root();
 
 		if (U.notEmpty(root) && !APP.has("jar")) {
@@ -102,10 +97,8 @@ public class Conf extends RapidoidThing {
 			ClasspathUtil.appJar(appJar);
 		}
 
-		boolean fancy = LOG.entry("fancy").bool().or(Msc.hasConsole());
-		if (fancy) {
-			Log.options().fancy(true);
-		}
+		boolean fancyByDefault = Env.dev() || System.console() != null;
+		Log.options().fancy(LOG.entry("fancy").bool().or(fancyByDefault));
 
 		LogLevel logLevel = LOG.entry("level").to(LogLevel.class).getOrNull();
 		if (logLevel != null && !Env.test()) {

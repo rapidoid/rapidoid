@@ -96,14 +96,12 @@
 		<module>rapidoid-http-fast</module>
 		<module>rapidoid-http-client</module>
 		<module>rapidoid-http-server</module>
-		<module>rapidoid-html</module>
 		<module>rapidoid-gui</module>
 		<module>rapidoid-oauth</module>
 		<module>rapidoid-integrate</module>
 		<module>rapidoid-web</module>
 		<module>rapidoid-quick</module>
 		<module>rapidoid-watch</module>
-		<module>rapidoid-fluent</module>
 		<module>rapidoid-integration-tests</module>
 		<module>app-maven-plugin</module>
 	</modules>

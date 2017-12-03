@@ -14,11 +14,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-html</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-render</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -40,5 +35,23 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+
+			<resource>
+				<directory>../dist</directory>
+				<targetPath>default/static/_rapidoid</targetPath>
+				<filtering>false</filtering>
+				<includes>
+					<include>**/*.js</include>
+					<include>**/*.css</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
 
 </project>

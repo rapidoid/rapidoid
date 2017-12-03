@@ -50,7 +50,7 @@ import java.util.regex.Pattern;
 @Since("5.0.0")
 public class HttpUtils extends RapidoidThing implements HttpMetadata {
 
-	private static final MediaType DEFAULT_CONTENT_TYPE = MscOpts.hasRapidoidHTML() ? MediaType.HTML_UTF_8 : MediaType.JSON;
+	private static final MediaType DEFAULT_CONTENT_TYPE = MscOpts.hasRapidoidGUI() ? MediaType.HTML_UTF_8 : MediaType.JSON;
 
 	private static final String PAGE_RELOAD = "<h2>&nbsp;Reloading...</h2><script>location.reload();</script>";
 

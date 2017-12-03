@@ -76,7 +76,7 @@ oauth:
 net:
   address: 0.0.0.0
   port: 8080
-#  workers: ${system.cpus}
+# workers: ${system.cpus}
   bufSizeKB: 256
   noDelay: false
   syncBufs: true
@@ -112,7 +112,7 @@ token:
 
 log:
   level: info
-  fancy: false # auto
+# fancy: auto
 
 tls:
   selfSigned: true
