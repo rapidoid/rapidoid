@@ -117,8 +117,7 @@
     "ttl" : 0
   },
   "log" : {
-    "level" : "info",
-    "fancy" : false
+    "level" : "info"
   },
   "tls" : {
     "selfSigned" : true,
