@@ -1,10 +1,11 @@
 
 package org.rapidoid.http.customize;
 
-import java.io.OutputStream;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Req;
+
+import java.io.OutputStream;
 
 
 /*

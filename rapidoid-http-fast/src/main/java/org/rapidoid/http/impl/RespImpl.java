@@ -592,7 +592,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 			return Customization.of(req).xmlResponseRenderer();
 
 		} else {
-			//default to json
+			// defaults to json
 			return Customization.of(req).jsonResponseRenderer();
 		}
 	}
