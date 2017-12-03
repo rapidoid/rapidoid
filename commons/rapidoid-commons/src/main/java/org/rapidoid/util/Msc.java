@@ -1008,10 +1008,6 @@ public class Msc extends RapidoidThing {
 		return state.uid;
 	}
 
-	public static boolean hasConsole() {
-		return System.console() != null;
-	}
-
 	public static Map<String, String> parseArgs(List<String> args) {
 		Map<String, String> arguments = U.map();
 

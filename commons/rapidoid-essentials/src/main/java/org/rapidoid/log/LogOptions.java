@@ -35,7 +35,7 @@ public class LogOptions extends RapidoidThing {
 
 	private volatile Callable<Logger> loggerFactory;
 
-	private volatile boolean fancy = System.console() != null;
+	private volatile boolean fancy;
 
 	private volatile String prefix;
 
