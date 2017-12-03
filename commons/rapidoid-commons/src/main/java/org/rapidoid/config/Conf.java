@@ -51,7 +51,6 @@ public class Conf extends RapidoidThing {
 		}
 	});
 
-	public static final Config SYSTEM = section("system");
 	public static final Config RAPIDOID = section("rapidoid");
 	public static final Config RAPIDOID_ADMIN = section("rapidoid-admin");
 	public static final Config USERS = section("users");
