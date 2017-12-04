@@ -599,10 +599,12 @@ org.rapidoid.net.impl.DefaultData
 org.rapidoid.net.impl.DefaultExchange
 org.rapidoid.net.impl.DefaultMultiData
 org.rapidoid.net.impl.ExchangeProtocol
+org.rapidoid.net.impl.ExtendedWorker
 org.rapidoid.net.impl.FiniteStateProtocol
 org.rapidoid.net.impl.Handler
 org.rapidoid.net.impl.IgnorantConnectionListener
 org.rapidoid.net.impl.LoopStatus
+org.rapidoid.net.impl.NetWorker
 org.rapidoid.net.impl.ProtocolBridge
 org.rapidoid.net.impl.ProtocolException
 org.rapidoid.net.impl.RapidoidChannel
