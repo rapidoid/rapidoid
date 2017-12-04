@@ -1,18 +1,4 @@
-package org.rapidoid.io.watch;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.collection.Coll;
-import org.rapidoid.config.RapidoidInitializer;
-import org.rapidoid.lambda.Operation;
-import org.rapidoid.log.Log;
-import org.rapidoid.u.U;
-
-import java.util.Collection;
-import java.util.Queue;
-import java.util.Set;
-
-/*
+/*-
  * #%L
  * rapidoid-watch
  * %%
@@ -31,6 +17,21 @@ import java.util.Set;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.io.watch;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.collection.Coll;
+import org.rapidoid.config.RapidoidInitializer;
+import org.rapidoid.lambda.Operation;
+import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
+
+import java.util.Collection;
+import java.util.Queue;
+import java.util.Set;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")

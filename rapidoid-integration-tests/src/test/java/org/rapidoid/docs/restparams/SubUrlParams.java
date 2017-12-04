@@ -1,11 +1,4 @@
-package org.rapidoid.docs.restparams;
-
-import org.rapidoid.annotation.Controller;
-import org.rapidoid.annotation.GET;
-import org.rapidoid.annotation.POST;
-import org.rapidoid.u.U;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -24,6 +17,14 @@ import org.rapidoid.u.U;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.restparams;
+
+import org.rapidoid.annotation.Controller;
+import org.rapidoid.annotation.GET;
+import org.rapidoid.annotation.POST;
+import org.rapidoid.u.U;
+
 
 @Controller
 public class SubUrlParams {

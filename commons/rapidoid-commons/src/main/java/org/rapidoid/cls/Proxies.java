@@ -1,15 +1,4 @@
-package org.rapidoid.cls;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.log.Log;
-import org.rapidoid.u.U;
-
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.Arrays;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -28,6 +17,18 @@ import java.util.Arrays;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.cls;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.Arrays;
+
 
 public class Proxies extends RapidoidThing {
 

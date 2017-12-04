@@ -1,5 +1,3 @@
-package org.rapidoid.http.impl;
-
 /*-
  * #%L
  * rapidoid-http-fast
@@ -19,6 +17,9 @@ package org.rapidoid.http.impl;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http.impl;
+
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.http.customize.Customization;

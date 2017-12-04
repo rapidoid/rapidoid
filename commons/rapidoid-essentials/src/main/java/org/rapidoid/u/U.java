@@ -1,6 +1,4 @@
-package org.rapidoid.u;
-
-/*
+/*-
  * #%L
  * rapidoid-essentials
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.u;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.u;
+
 
 import org.rapidoid.RapidoidThing;
 

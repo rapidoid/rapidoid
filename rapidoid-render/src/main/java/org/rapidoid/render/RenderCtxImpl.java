@@ -1,23 +1,4 @@
-package org.rapidoid.render;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.collection.Coll;
-import org.rapidoid.commons.Str;
-import org.rapidoid.render.retriever.GenericValueRetriever;
-import org.rapidoid.render.retriever.ValueRetriever;
-import org.rapidoid.u.U;
-import org.rapidoid.writable.WritableUtils;
-import org.rapidoid.writable.Writable;
-
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-/*
+/*-
  * #%L
  * rapidoid-render
  * %%
@@ -36,6 +17,26 @@ import java.util.Map;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.render;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.collection.Coll;
+import org.rapidoid.commons.Str;
+import org.rapidoid.render.retriever.GenericValueRetriever;
+import org.rapidoid.render.retriever.ValueRetriever;
+import org.rapidoid.u.U;
+import org.rapidoid.writable.Writable;
+import org.rapidoid.writable.WritableUtils;
+
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

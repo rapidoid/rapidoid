@@ -1,6 +1,4 @@
-package org.rapidoid.docs.profiles;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs.profiles;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.profiles;
+
 
 import org.rapidoid.annotation.Controller;
 import org.rapidoid.annotation.GET;

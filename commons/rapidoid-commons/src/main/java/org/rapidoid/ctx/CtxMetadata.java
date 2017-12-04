@@ -1,6 +1,4 @@
-package org.rapidoid.ctx;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.ctx;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.ctx;
+
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;

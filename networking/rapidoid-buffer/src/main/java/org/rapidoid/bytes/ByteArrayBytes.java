@@ -1,10 +1,4 @@
-package org.rapidoid.bytes;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-/*
+/*-
  * #%L
  * rapidoid-buffer
  * %%
@@ -23,6 +17,13 @@ import org.rapidoid.annotation.Since;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.bytes;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

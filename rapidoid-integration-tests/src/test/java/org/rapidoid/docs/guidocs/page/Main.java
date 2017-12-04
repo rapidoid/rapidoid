@@ -1,11 +1,4 @@
-package org.rapidoid.docs.guidocs.page;
-
-import org.junit.Test;
-import org.rapidoid.gui.GUI;
-import org.rapidoid.test.Doc;
-import org.rapidoid.test.TestCommons;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -24,6 +17,14 @@ import org.rapidoid.test.TestCommons;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.guidocs.page;
+
+import org.junit.Test;
+import org.rapidoid.gui.GUI;
+import org.rapidoid.test.Doc;
+import org.rapidoid.test.TestCommons;
+
 
 public class Main extends TestCommons {
 

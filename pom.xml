@@ -228,6 +228,8 @@
 						<verbose>false</verbose>
 						<canUpdateCopyright>true</canUpdateCopyright>
 						<canUpdateDescription>true</canUpdateDescription>
+						<addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
+						<emptyLineAfterHeader>true</emptyLineAfterHeader>
 						<includes>
 							<include>**/*.java</include>
 						</includes>

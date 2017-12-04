@@ -1,6 +1,4 @@
-package org.rapidoid.job;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.job;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.job;
+
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;

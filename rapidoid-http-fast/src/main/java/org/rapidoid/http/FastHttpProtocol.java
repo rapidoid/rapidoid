@@ -1,16 +1,4 @@
-package org.rapidoid.http;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.buffer.Buf;
-import org.rapidoid.http.impl.HttpParser;
-import org.rapidoid.http.processor.HttpProcessor;
-import org.rapidoid.net.Protocol;
-import org.rapidoid.net.abstracts.Channel;
-import org.rapidoid.net.impl.RapidoidHelper;
-
-/*
+/*-
  * #%L
  * rapidoid-http-fast
  * %%
@@ -29,6 +17,19 @@ import org.rapidoid.net.impl.RapidoidHelper;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.buffer.Buf;
+import org.rapidoid.http.impl.HttpParser;
+import org.rapidoid.http.processor.HttpProcessor;
+import org.rapidoid.net.Protocol;
+import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.net.impl.RapidoidHelper;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

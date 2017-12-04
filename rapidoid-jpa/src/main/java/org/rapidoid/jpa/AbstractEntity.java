@@ -1,12 +1,4 @@
-package org.rapidoid.jpa;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import javax.persistence.MappedSuperclass;
-
-/*
+/*-
  * #%L
  * rapidoid-jpa
  * %%
@@ -25,6 +17,15 @@ import javax.persistence.MappedSuperclass;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.jpa;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import javax.persistence.MappedSuperclass;
+
 
 @MappedSuperclass
 @Authors("Nikolche Mihajlovski")

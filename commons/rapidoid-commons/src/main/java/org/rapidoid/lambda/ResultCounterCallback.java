@@ -1,16 +1,4 @@
-package org.rapidoid.lambda;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.concurrent.Callback;
-import org.rapidoid.u.U;
-
-import java.util.Collections;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicLong;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -29,6 +17,19 @@ import java.util.concurrent.atomic.AtomicLong;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.lambda;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.concurrent.Callback;
+import org.rapidoid.u.U;
+
+import java.util.Collections;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")

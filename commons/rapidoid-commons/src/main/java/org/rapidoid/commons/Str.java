@@ -1,22 +1,4 @@
-package org.rapidoid.commons;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.lambda.Lmbd;
-import org.rapidoid.lambda.Mapper;
-import org.rapidoid.lambda.Operation;
-import org.rapidoid.u.U;
-
-import javax.xml.bind.DatatypeConverter;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -35,6 +17,25 @@ import java.util.regex.Pattern;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.commons;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.lambda.Lmbd;
+import org.rapidoid.lambda.Mapper;
+import org.rapidoid.lambda.Operation;
+import org.rapidoid.u.U;
+
+import javax.xml.bind.DatatypeConverter;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.4")

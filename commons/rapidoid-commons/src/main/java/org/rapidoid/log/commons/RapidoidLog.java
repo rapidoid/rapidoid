@@ -1,6 +1,4 @@
-package org.rapidoid.log.commons;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.log.commons;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.log.commons;
+
 
 import org.apache.commons.logging.Log;
 import org.rapidoid.RapidoidThing;

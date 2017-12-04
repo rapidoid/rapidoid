@@ -1,20 +1,4 @@
-package org.rapidoid.http;
-
-import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.collection.Coll;
-import org.rapidoid.concurrent.Callback;
-import org.rapidoid.concurrent.Future;
-import org.rapidoid.log.Log;
-import org.rapidoid.util.LazyInit;
-import org.rapidoid.util.MscOpts;
-
-import java.util.Map;
-import java.util.concurrent.Callable;
-
-/*
+/*-
  * #%L
  * rapidoid-http-client
  * %%
@@ -33,6 +17,23 @@ import java.util.concurrent.Callable;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http;
+
+import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.collection.Coll;
+import org.rapidoid.concurrent.Callback;
+import org.rapidoid.concurrent.Future;
+import org.rapidoid.log.Log;
+import org.rapidoid.util.LazyInit;
+import org.rapidoid.util.MscOpts;
+
+import java.util.Map;
+import java.util.concurrent.Callable;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

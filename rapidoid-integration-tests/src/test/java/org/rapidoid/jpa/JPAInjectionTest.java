@@ -1,23 +1,4 @@
-package org.rapidoid.jpa;
-
-import org.junit.Test;
-import org.rapidoid.annotation.*;
-import org.rapidoid.http.HttpUtils;
-import org.rapidoid.http.IsolatedIntegrationTest;
-import org.rapidoid.http.Req;
-import org.rapidoid.ioc.IoCContext;
-import org.rapidoid.ioc.impl.IoCContextWrapper;
-import org.rapidoid.ioc.Wired;
-import org.rapidoid.jpa.impl.SharedContextAwareEntityManagerProxy;
-import org.rapidoid.jpa.impl.SharedEntityManagerFactoryProxy;
-import org.rapidoid.setup.App;
-import org.rapidoid.u.U;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -36,6 +17,26 @@ import javax.persistence.PersistenceContext;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.jpa;
+
+import org.junit.Test;
+import org.rapidoid.annotation.*;
+import org.rapidoid.http.HttpUtils;
+import org.rapidoid.http.IsolatedIntegrationTest;
+import org.rapidoid.http.Req;
+import org.rapidoid.ioc.IoCContext;
+import org.rapidoid.ioc.Wired;
+import org.rapidoid.ioc.impl.IoCContextWrapper;
+import org.rapidoid.jpa.impl.SharedContextAwareEntityManagerProxy;
+import org.rapidoid.jpa.impl.SharedEntityManagerFactoryProxy;
+import org.rapidoid.setup.App;
+import org.rapidoid.u.U;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

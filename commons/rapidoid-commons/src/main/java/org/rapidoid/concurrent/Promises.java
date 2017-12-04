@@ -1,9 +1,4 @@
-package org.rapidoid.concurrent;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.concurrent.impl.PromiseImpl;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -22,6 +17,12 @@ import org.rapidoid.concurrent.impl.PromiseImpl;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.concurrent;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.concurrent.impl.PromiseImpl;
+
 
 /**
  * @author Nikolche Mihajlovski

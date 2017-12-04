@@ -1,6 +1,4 @@
-package org.rapidoid.security;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.security;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.security;
+
 
 import org.junit.Before;
 import org.junit.Test;

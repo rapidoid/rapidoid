@@ -1,21 +1,4 @@
-package org.rapidoid.beany;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.collection.Coll;
-import org.rapidoid.lambda.Lmbd;
-import org.rapidoid.lambda.Mapper;
-import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
-
-import java.lang.annotation.Annotation;
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentMap;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -34,6 +17,24 @@ import java.util.concurrent.ConcurrentMap;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.beany;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.collection.Coll;
+import org.rapidoid.lambda.Lmbd;
+import org.rapidoid.lambda.Mapper;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
+
+import java.lang.annotation.Annotation;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentMap;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

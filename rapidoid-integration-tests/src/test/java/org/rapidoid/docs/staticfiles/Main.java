@@ -1,6 +1,4 @@
-package org.rapidoid.docs.staticfiles;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs.staticfiles;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.staticfiles;
+
 
 import org.rapidoid.setup.On;
 

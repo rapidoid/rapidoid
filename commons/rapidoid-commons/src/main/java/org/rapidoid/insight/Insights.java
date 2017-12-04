@@ -1,12 +1,4 @@
-package org.rapidoid.insight;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.collection.Coll;
-
-import java.util.List;
-import java.util.Map;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -25,6 +17,15 @@ import java.util.Map;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.insight;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.collection.Coll;
+
+import java.util.List;
+import java.util.Map;
+
 
 /**
  * @author Nikolche Mihajlovski

@@ -1,12 +1,4 @@
-package org.rapidoid.concurrent;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.lambda.Mapper;
-import org.rapidoid.log.Log;
-
-import java.util.concurrent.CountDownLatch;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -25,6 +17,15 @@ import java.util.concurrent.CountDownLatch;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.concurrent;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.lambda.Mapper;
+import org.rapidoid.log.Log;
+
+import java.util.concurrent.CountDownLatch;
+
 
 /**
  * @author Nikolche Mihajlovski

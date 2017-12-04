@@ -1,6 +1,4 @@
-package org.rapidoid.io.watch;
-
-/*
+/*-
  * #%L
  * rapidoid-watch
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.io.watch;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.io.watch;
+
 
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;

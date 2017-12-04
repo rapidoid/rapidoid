@@ -1,8 +1,4 @@
-package org.rapidoid.docs.httpstop;
-
-import org.rapidoid.setup.On;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -21,6 +17,11 @@ import org.rapidoid.setup.On;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.httpstop;
+
+import org.rapidoid.setup.On;
+
 
 public class Main {
 

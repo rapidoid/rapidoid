@@ -1,6 +1,4 @@
-package org.rapidoid.buffer;
-
-/*
+/*-
  * #%L
  * rapidoid-buffer
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.buffer;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.buffer;
+
 
 import org.rapidoid.RapidoidThing;
 

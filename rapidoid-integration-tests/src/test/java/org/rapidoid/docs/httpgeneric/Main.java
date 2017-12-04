@@ -1,9 +1,4 @@
-package org.rapidoid.docs.httpgeneric;
-
-import org.rapidoid.setup.On;
-import org.rapidoid.u.U;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -22,6 +17,12 @@ import org.rapidoid.u.U;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.httpgeneric;
+
+import org.rapidoid.setup.On;
+import org.rapidoid.u.U;
+
 
 public class Main {
 

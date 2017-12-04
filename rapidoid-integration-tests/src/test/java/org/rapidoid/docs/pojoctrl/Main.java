@@ -1,6 +1,4 @@
-package org.rapidoid.docs.pojoctrl;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs.pojoctrl;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.pojoctrl;
+
 
 import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.POST;

@@ -1,10 +1,4 @@
-package org.rapidoid.http;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.data.Parse;
-import org.rapidoid.lambda.Mapper;
-
-/*
+/*-
  * #%L
  * rapidoid-http-client
  * %%
@@ -23,6 +17,13 @@ import org.rapidoid.lambda.Mapper;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.data.Parse;
+import org.rapidoid.lambda.Mapper;
+
 
 public class RESTResultMapper<T> extends RapidoidThing implements Mapper<HttpResp, T> {
 

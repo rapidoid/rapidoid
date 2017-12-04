@@ -1,17 +1,4 @@
-package org.rapidoid.reverseproxy;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.log.Log;
-import org.rapidoid.setup.On;
-import org.rapidoid.setup.OnRoute;
-import org.rapidoid.setup.Setup;
-import org.rapidoid.u.U;
-
-import java.util.List;
-
-/*
+/*-
  * #%L
  * rapidoid-http-server
  * %%
@@ -30,6 +17,20 @@ import java.util.List;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.reverseproxy;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.log.Log;
+import org.rapidoid.setup.On;
+import org.rapidoid.setup.OnRoute;
+import org.rapidoid.setup.Setup;
+import org.rapidoid.u.U;
+
+import java.util.List;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")

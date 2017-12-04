@@ -1,12 +1,4 @@
-package org.rapidoid.web;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.App;
-import org.rapidoid.setup.AppBootstrap;
-
-/*
+/*-
  * #%L
  * rapidoid-http-server
  * %%
@@ -25,6 +17,15 @@ import org.rapidoid.setup.AppBootstrap;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.web;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.setup.App;
+import org.rapidoid.setup.AppBootstrap;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.0.0")

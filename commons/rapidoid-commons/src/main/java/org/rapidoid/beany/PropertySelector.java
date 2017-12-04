@@ -1,14 +1,4 @@
-package org.rapidoid.beany;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.lambda.Predicate;
-
-import java.io.Serializable;
-import java.util.Comparator;
-import java.util.Set;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -27,6 +17,17 @@ import java.util.Set;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.beany;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.lambda.Predicate;
+
+import java.io.Serializable;
+import java.util.Comparator;
+import java.util.Set;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

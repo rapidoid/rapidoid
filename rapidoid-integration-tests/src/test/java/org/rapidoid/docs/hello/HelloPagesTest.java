@@ -1,6 +1,4 @@
-package org.rapidoid.docs.hello;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -20,8 +18,11 @@ package org.rapidoid.docs.hello;
  * #L%
  */
 
-import org.rapidoid.docs.DocTest;
+package org.rapidoid.docs.hello;
+
+
 import org.rapidoid.annotation.IntegrationTest;
+import org.rapidoid.docs.DocTest;
 import org.rapidoid.test.Doc;
 
 @IntegrationTest(main = Main.class)

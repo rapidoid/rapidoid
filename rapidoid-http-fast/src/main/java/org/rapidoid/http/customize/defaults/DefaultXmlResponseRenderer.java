@@ -1,15 +1,4 @@
-package org.rapidoid.http.customize.defaults;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.customize.Customization;
-import org.rapidoid.http.customize.HttpResponseRenderer;
-
-import java.io.OutputStream;
-
-	/*
+/*-
  * #%L
  * rapidoid-http-fast
  * %%
@@ -28,6 +17,18 @@ import java.io.OutputStream;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http.customize.defaults;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.customize.Customization;
+import org.rapidoid.http.customize.HttpResponseRenderer;
+
+import java.io.OutputStream;
+
 
 @Authors("Dan Cytermann")
 @Since("5.5.0")

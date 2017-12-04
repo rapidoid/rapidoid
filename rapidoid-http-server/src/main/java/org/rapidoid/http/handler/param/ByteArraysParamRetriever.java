@@ -1,14 +1,4 @@
-package org.rapidoid.http.handler.param;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.http.Req;
-import org.rapidoid.io.Upload;
-
-import java.util.List;
-
-/*
+/*-
  * #%L
  * rapidoid-http-server
  * %%
@@ -27,6 +17,17 @@ import java.util.List;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http.handler.param;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
+import org.rapidoid.io.Upload;
+
+import java.util.List;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

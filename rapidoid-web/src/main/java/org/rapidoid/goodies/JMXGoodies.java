@@ -1,12 +1,4 @@
-package org.rapidoid.goodies;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import java.lang.management.ManagementFactory;
-
-/*
+/*-
  * #%L
  * rapidoid-web
  * %%
@@ -25,6 +17,15 @@ import java.lang.management.ManagementFactory;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.goodies;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import java.lang.management.ManagementFactory;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")

@@ -1,12 +1,4 @@
-package org.rapidoid.validation;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -25,6 +17,15 @@ import javax.validation.constraints.Size;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.validation;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

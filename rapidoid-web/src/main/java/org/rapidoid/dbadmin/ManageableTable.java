@@ -1,6 +1,4 @@
-package org.rapidoid.dbadmin;
-
-/*
+/*-
  * #%L
  * rapidoid-web
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.dbadmin;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.dbadmin;
+
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;

@@ -1,16 +1,4 @@
-package org.rapidoid.jpa.impl;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.jpa.JPA;
-
-import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.metamodel.Metamodel;
-import java.util.Map;
-
-/*
+/*-
  * #%L
  * rapidoid-jpa
  * %%
@@ -29,6 +17,19 @@ import java.util.Map;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.jpa.impl;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.jpa.JPA;
+
+import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.metamodel.Metamodel;
+import java.util.Map;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

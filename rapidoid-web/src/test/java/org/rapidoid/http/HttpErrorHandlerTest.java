@@ -1,6 +1,4 @@
-package org.rapidoid.http;
-
-/*
+/*-
  * #%L
  * rapidoid-web
  * %%
@@ -20,6 +18,9 @@ package org.rapidoid.http;
  * #L%
  */
 
+package org.rapidoid.http;
+
+
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -38,7 +39,8 @@ public class HttpErrorHandlerTest extends HttpTestCommons {
 		On.custom().errorHandler(new ErrorHandler() {
 			@Override
 			public Object handleError(Req req, Resp resp, Throwable e) throws Exception {
-				if (e instanceof NotFound) return Defaults.errorHandler().handleError(req, resp, e); // default error processing
+				if (e instanceof NotFound)
+					return Defaults.errorHandler().handleError(req, resp, e); // default error processing
 				return req + ":err:" + e;
 			}
 		});
@@ -60,7 +62,8 @@ public class HttpErrorHandlerTest extends HttpTestCommons {
 		On.custom().errorHandler(new ErrorHandler() {
 			@Override
 			public Object handleError(Req req, Resp resp, Throwable e) throws Exception {
-				if (e instanceof NotFound) return Defaults.errorHandler().handleError(req, resp, e); // default error processing
+				if (e instanceof NotFound)
+					return Defaults.errorHandler().handleError(req, resp, e); // default error processing
 				return resp.code(200).result(req + ":err2:" + e);
 			}
 		});

@@ -1,6 +1,4 @@
-package org.rapidoid.concurrent.impl;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.concurrent.impl;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.concurrent.impl;
+
 
 import org.rapidoid.concurrent.Promise;
 

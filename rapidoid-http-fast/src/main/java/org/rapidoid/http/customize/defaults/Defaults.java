@@ -1,6 +1,4 @@
-package org.rapidoid.http.customize.defaults;
-
-/*
+/*-
  * #%L
  * rapidoid-http-fast
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.http.customize.defaults;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http.customize.defaults;
+
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;

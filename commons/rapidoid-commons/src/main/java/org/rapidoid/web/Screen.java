@@ -1,6 +1,4 @@
-package org.rapidoid.web;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.web;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.web;
+
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;

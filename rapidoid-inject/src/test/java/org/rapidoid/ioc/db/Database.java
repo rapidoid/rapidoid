@@ -1,6 +1,4 @@
-package org.rapidoid.ioc.db;
-
-/*
+/*-
  * #%L
  * rapidoid-inject
  * %%
@@ -20,10 +18,13 @@ package org.rapidoid.ioc.db;
  * #L%
  */
 
+package org.rapidoid.ioc.db;
+
+
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.ioc.Wired;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ioc.IoC;
+import org.rapidoid.ioc.Wired;
 
 import java.util.Map;
 

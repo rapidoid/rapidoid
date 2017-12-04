@@ -1,6 +1,4 @@
-package org.rapidoid.log;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.log;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.log;
+
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;

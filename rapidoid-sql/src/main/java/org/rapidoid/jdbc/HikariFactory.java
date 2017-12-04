@@ -1,15 +1,4 @@
-package org.rapidoid.jdbc;
-
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
-
-import javax.sql.DataSource;
-
-/*
+/*-
  * #%L
  * rapidoid-sql
  * %%
@@ -28,6 +17,18 @@ import javax.sql.DataSource;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.jdbc;
+
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
+
+import javax.sql.DataSource;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.4")

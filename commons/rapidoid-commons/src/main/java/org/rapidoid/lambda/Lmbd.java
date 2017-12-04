@@ -1,12 +1,4 @@
-package org.rapidoid.lambda;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.u.U;
-
-import java.util.Map;
-import java.util.concurrent.Callable;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -25,6 +17,15 @@ import java.util.concurrent.Callable;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.lambda;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.u.U;
+
+import java.util.Map;
+import java.util.concurrent.Callable;
+
 
 /**
  * @author Nikolche Mihajlovski

@@ -1,14 +1,4 @@
-package org.rapidoid.net.impl;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.buffer.BufProvider;
-import org.rapidoid.data.Data;
-import org.rapidoid.data.BufRange;
-import org.rapidoid.util.Msc;
-
-/*
+/*-
  * #%L
  * rapidoid-net
  * %%
@@ -27,6 +17,17 @@ import org.rapidoid.util.Msc;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.net.impl;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.buffer.BufProvider;
+import org.rapidoid.data.BufRange;
+import org.rapidoid.data.Data;
+import org.rapidoid.util.Msc;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

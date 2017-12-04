@@ -1,6 +1,4 @@
-package org.rapidoid.expire;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.expire;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.expire;
+
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;

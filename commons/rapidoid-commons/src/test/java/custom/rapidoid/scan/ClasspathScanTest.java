@@ -1,19 +1,4 @@
-package custom.rapidoid.scan;
-
-import cccccc.Ccccc;
-import com.moja.Aaa;
-import org.junit.Test;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.scan.Scan;
-import org.rapidoid.test.AbstractCommonsTest;
-import org.rapidoid.u.U;
-
-import java.util.List;
-import java.util.Set;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -32,6 +17,22 @@ import java.util.Set;
  * limitations under the License.
  * #L%
  */
+
+package custom.rapidoid.scan;
+
+import cccccc.Ccccc;
+import com.moja.Aaa;
+import org.junit.Test;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.scan.Scan;
+import org.rapidoid.test.AbstractCommonsTest;
+import org.rapidoid.u.U;
+
+import java.util.List;
+import java.util.Set;
+
 
 @MyAnnot
 class Foo {

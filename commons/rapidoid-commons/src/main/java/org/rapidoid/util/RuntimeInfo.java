@@ -1,13 +1,4 @@
-package org.rapidoid.util;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-
-import java.lang.reflect.Method;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -26,6 +17,16 @@ import java.lang.reflect.Method;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.util;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+
+import java.lang.reflect.Method;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

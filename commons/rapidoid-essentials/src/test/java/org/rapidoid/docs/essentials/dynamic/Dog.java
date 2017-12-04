@@ -1,6 +1,4 @@
-package org.rapidoid.docs.essentials.dynamic;
-
-/*
+/*-
  * #%L
  * rapidoid-essentials
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs.essentials.dynamic;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.essentials.dynamic;
+
 
 public interface Dog {
 

@@ -1,22 +1,4 @@
-package org.rapidoid.http.customize;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Config;
-import org.rapidoid.ctx.Ctx;
-import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.http.HttpWrapper;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.customize.defaults.DefaultTemplateLoader;
-import org.rapidoid.http.impl.ErrorHandlerResolver;
-import org.rapidoid.setup.My;
-import org.rapidoid.u.U;
-import org.rapidoid.util.ByType;
-
-/*
+/*-
  * #%L
  * rapidoid-http-fast
  * %%
@@ -35,6 +17,25 @@ import org.rapidoid.util.ByType;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http.customize;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Config;
+import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.http.HttpWrapper;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.customize.defaults.DefaultTemplateLoader;
+import org.rapidoid.http.impl.ErrorHandlerResolver;
+import org.rapidoid.setup.My;
+import org.rapidoid.u.U;
+import org.rapidoid.util.ByType;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

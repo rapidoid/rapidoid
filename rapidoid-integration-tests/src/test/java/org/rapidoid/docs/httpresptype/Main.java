@@ -1,11 +1,4 @@
-package org.rapidoid.docs.httpresptype;
-
-import org.rapidoid.http.MediaType;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.Resp;
-import org.rapidoid.setup.On;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -24,6 +17,14 @@ import org.rapidoid.setup.On;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.httpresptype;
+
+import org.rapidoid.http.MediaType;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.Resp;
+import org.rapidoid.setup.On;
+
 
 public class Main {
 

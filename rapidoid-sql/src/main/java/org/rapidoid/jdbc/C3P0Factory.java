@@ -1,16 +1,4 @@
-package org.rapidoid.jdbc;
-
-import com.mchange.v2.c3p0.ComboPooledDataSource;
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
-import org.rapidoid.u.U;
-
-import javax.sql.DataSource;
-import java.beans.PropertyVetoException;
-
-/*
+/*-
  * #%L
  * rapidoid-sql
  * %%
@@ -29,6 +17,19 @@ import java.beans.PropertyVetoException;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.jdbc;
+
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
+import org.rapidoid.u.U;
+
+import javax.sql.DataSource;
+import java.beans.PropertyVetoException;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")

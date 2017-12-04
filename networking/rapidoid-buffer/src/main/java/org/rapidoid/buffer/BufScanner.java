@@ -1,10 +1,4 @@
-package org.rapidoid.buffer;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.util.Constants;
-
-/*
+/*-
  * #%L
  * rapidoid-buffer
  * %%
@@ -23,6 +17,13 @@ import org.rapidoid.util.Constants;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.buffer;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.util.Constants;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

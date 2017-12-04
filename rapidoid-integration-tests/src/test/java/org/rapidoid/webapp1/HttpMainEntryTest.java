@@ -1,6 +1,4 @@
-package org.rapidoid.webapp1;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.webapp1;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.webapp1;
+
 
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;

@@ -1,8 +1,4 @@
-package org.rapidoid.lambda;
-
-import java.lang.reflect.Method;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -21,6 +17,11 @@ import java.lang.reflect.Method;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.lambda;
+
+import java.lang.reflect.Method;
+
 
 /**
  * @author Nikolche Mihajlovski

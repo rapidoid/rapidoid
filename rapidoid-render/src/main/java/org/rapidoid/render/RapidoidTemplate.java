@@ -1,19 +1,4 @@
-package org.rapidoid.render;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.activity.RapidoidThreadLocals;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
-import org.rapidoid.writable.ReusableWritable;
-import org.rapidoid.writable.Writable;
-import org.rapidoid.writable.WritableOutputStream;
-
-import java.io.OutputStream;
-import java.util.List;
-
-/*
+/*-
  * #%L
  * rapidoid-render
  * %%
@@ -32,6 +17,22 @@ import java.util.List;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.render;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.activity.RapidoidThreadLocals;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
+import org.rapidoid.writable.ReusableWritable;
+import org.rapidoid.writable.Writable;
+import org.rapidoid.writable.WritableOutputStream;
+
+import java.io.OutputStream;
+import java.util.List;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

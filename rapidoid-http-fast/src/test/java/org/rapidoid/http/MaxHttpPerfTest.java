@@ -1,6 +1,4 @@
-package org.rapidoid.http;
-
-/*
+/*-
  * #%L
  * rapidoid-http-fast
  * %%
@@ -20,13 +18,16 @@ package org.rapidoid.http;
  * #L%
  */
 
+package org.rapidoid.http;
+
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.bytes.BytesUtil;
-import org.rapidoid.env.Env;
 import org.rapidoid.data.BufRanges;
+import org.rapidoid.env.Env;
 import org.rapidoid.http.impl.HttpParser;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.TCP;

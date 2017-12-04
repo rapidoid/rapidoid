@@ -1,6 +1,4 @@
-package org.rapidoid.web.handler;
-
-/*
+/*-
  * #%L
  * rapidoid-web
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.web.handler;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.web.handler;
+
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;

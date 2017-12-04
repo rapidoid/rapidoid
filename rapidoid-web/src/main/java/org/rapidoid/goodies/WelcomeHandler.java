@@ -1,6 +1,4 @@
-package org.rapidoid.goodies;
-
-/*
+/*-
  * #%L
  * rapidoid-web
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.goodies;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.goodies;
+
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;

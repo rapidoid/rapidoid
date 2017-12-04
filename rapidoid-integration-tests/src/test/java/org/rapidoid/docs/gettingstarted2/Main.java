@@ -1,6 +1,4 @@
-package org.rapidoid.docs.gettingstarted2;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs.gettingstarted2;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.gettingstarted2;
+
 
 import org.rapidoid.annotation.Valid;
 import org.rapidoid.jpa.JPA;

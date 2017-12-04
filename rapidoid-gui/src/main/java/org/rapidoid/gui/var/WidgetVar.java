@@ -1,11 +1,4 @@
-package org.rapidoid.gui.var;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.reqinfo.ReqInfo;
-import org.rapidoid.var.impl.AbstractVar;
-
-/*
+/*-
  * #%L
  * rapidoid-gui
  * %%
@@ -24,6 +17,14 @@ import org.rapidoid.var.impl.AbstractVar;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.gui.var;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.reqinfo.ReqInfo;
+import org.rapidoid.var.impl.AbstractVar;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.0.2")

@@ -1,6 +1,4 @@
-package org.rapidoid.docs.errhandling;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs.errhandling;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.errhandling;
+
 
 import org.rapidoid.http.Req;
 import org.rapidoid.setup.App;

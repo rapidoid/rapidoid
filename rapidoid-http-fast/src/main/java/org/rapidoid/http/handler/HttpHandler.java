@@ -1,6 +1,4 @@
-package org.rapidoid.http.handler;
-
-/*
+/*-
  * #%L
  * rapidoid-http-fast
  * %%
@@ -20,14 +18,17 @@ package org.rapidoid.http.handler;
  * #L%
  */
 
+package org.rapidoid.http.handler;
+
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.MediaType;
 import org.rapidoid.http.HttpStatus;
+import org.rapidoid.http.MediaType;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Route;
-import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.http.impl.HandlerMatch;
+import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")

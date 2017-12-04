@@ -1,10 +1,4 @@
-package org.rapidoid.insight;
-
-import org.rapidoid.activity.RapidoidThread;
-import org.rapidoid.log.Log;
-import org.rapidoid.u.U;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -23,6 +17,13 @@ import org.rapidoid.u.U;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.insight;
+
+import org.rapidoid.activity.RapidoidThread;
+import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
+
 
 /**
  * @author Nikolche Mihajlovski

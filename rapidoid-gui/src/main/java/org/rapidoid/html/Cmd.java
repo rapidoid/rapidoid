@@ -1,14 +1,4 @@
-package org.rapidoid.html;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.var.Var;
-
-import java.io.Serializable;
-import java.util.Arrays;
-
-/*
+/*-
  * #%L
  * rapidoid-gui
  * %%
@@ -27,6 +17,17 @@ import java.util.Arrays;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.html;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.var.Var;
+
+import java.io.Serializable;
+import java.util.Arrays;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

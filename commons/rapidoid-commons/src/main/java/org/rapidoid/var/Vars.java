@@ -1,14 +1,4 @@
-package org.rapidoid.var;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.lambda.Predicate;
-import org.rapidoid.var.impl.MandatoryVar;
-import org.rapidoid.var.impl.SimpleVar;
-import org.rapidoid.var.impl.ValidatingVar;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -27,6 +17,17 @@ import org.rapidoid.var.impl.ValidatingVar;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.var;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.lambda.Predicate;
+import org.rapidoid.var.impl.MandatoryVar;
+import org.rapidoid.var.impl.SimpleVar;
+import org.rapidoid.var.impl.ValidatingVar;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

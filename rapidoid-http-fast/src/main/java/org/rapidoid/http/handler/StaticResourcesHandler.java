@@ -1,6 +1,4 @@
-package org.rapidoid.http.handler;
-
-/*
+/*-
  * #%L
  * rapidoid-http-fast
  * %%
@@ -20,6 +18,9 @@ package org.rapidoid.http.handler;
  * #L%
  */
 
+package org.rapidoid.http.handler;
+
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HttpStatus;
@@ -28,8 +29,8 @@ import org.rapidoid.http.MediaType;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.StaticFilesSecurity;
-import org.rapidoid.http.impl.lowlevel.HttpIO;
 import org.rapidoid.http.impl.RouteOptions;
+import org.rapidoid.http.impl.lowlevel.HttpIO;
 import org.rapidoid.io.Res;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.net.abstracts.Channel;

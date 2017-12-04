@@ -1,12 +1,4 @@
-package org.rapidoid.beany;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.u.U;
-import org.rapidoid.util.MscOpts;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -25,6 +17,15 @@ import org.rapidoid.util.MscOpts;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.beany;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.u.U;
+import org.rapidoid.util.MscOpts;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")

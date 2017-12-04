@@ -1,6 +1,4 @@
-package org.rapidoid.net.mime;
-
-/*
+/*-
  * #%L
  * rapidoid-net
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.net.mime;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.net.mime;
+
 
 import org.junit.Test;
 import org.rapidoid.NetTestCommons;

@@ -1,9 +1,4 @@
-package org.rapidoid.docs.blank;
-
-import org.rapidoid.annotation.Controller;
-import org.rapidoid.annotation.GET;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -22,6 +17,12 @@ import org.rapidoid.annotation.GET;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.blank;
+
+import org.rapidoid.annotation.Controller;
+import org.rapidoid.annotation.GET;
+
 
 @Controller
 public class MyCtrl {

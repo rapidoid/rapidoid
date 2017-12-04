@@ -1,9 +1,4 @@
-package org.rapidoid.docs.hello;
-
-import org.rapidoid.annotation.Controller;
-import org.rapidoid.annotation.Page;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -22,6 +17,12 @@ import org.rapidoid.annotation.Page;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.hello;
+
+import org.rapidoid.annotation.Controller;
+import org.rapidoid.annotation.Page;
+
 
 @Controller
 public class Hello {

@@ -1,6 +1,4 @@
-package org.rapidoid.concurrent;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.concurrent;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.concurrent;
+
 
 /**
  * @author Nikolche Mihajlovski

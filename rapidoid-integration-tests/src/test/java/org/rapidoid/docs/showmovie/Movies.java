@@ -1,11 +1,4 @@
-package org.rapidoid.docs.showmovie;
-
-import org.rapidoid.annotation.Controller;
-import org.rapidoid.annotation.Page;
-import org.rapidoid.gui.GUI;
-import org.rapidoid.gui.input.Form;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -24,6 +17,14 @@ import org.rapidoid.gui.input.Form;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.showmovie;
+
+import org.rapidoid.annotation.Controller;
+import org.rapidoid.annotation.Page;
+import org.rapidoid.gui.GUI;
+import org.rapidoid.gui.input.Form;
+
 
 @Controller
 public class Movies {

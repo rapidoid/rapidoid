@@ -1,14 +1,4 @@
-package org.rapidoid.cls;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.util.Deleted;
-import org.rapidoid.util.None;
-import org.rapidoid.util.TUUID;
-
-import java.util.*;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -27,6 +17,17 @@ import java.util.*;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.cls;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.util.Deleted;
+import org.rapidoid.util.None;
+import org.rapidoid.util.TUUID;
+
+import java.util.*;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

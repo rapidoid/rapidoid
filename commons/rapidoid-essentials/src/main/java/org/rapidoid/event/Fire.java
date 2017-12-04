@@ -1,13 +1,4 @@
-package org.rapidoid.event;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.log.Log;
-import org.rapidoid.u.U;
-
-import java.util.Collections;
-import java.util.Map;
-
-/*
+/*-
  * #%L
  * rapidoid-essentials
  * %%
@@ -26,6 +17,16 @@ import java.util.Map;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.event;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
+
+import java.util.Collections;
+import java.util.Map;
+
 
 /**
  * @author Nikolche Mihajlovski

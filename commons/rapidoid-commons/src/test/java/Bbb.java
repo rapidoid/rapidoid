@@ -1,4 +1,4 @@
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -17,6 +17,7 @@
  * limitations under the License.
  * #L%
  */
+
 public class Bbb {
 
 }

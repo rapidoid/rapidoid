@@ -1,13 +1,4 @@
-package org.rapidoid.http;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
-import org.rapidoid.util.AnsiColor;
-import org.rapidoid.util.Msc;
-
-/*
+/*-
  * #%L
  * rapidoid-http-fast
  * %%
@@ -26,6 +17,16 @@ import org.rapidoid.util.Msc;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
+import org.rapidoid.util.AnsiColor;
+import org.rapidoid.util.Msc;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.4")

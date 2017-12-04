@@ -1,16 +1,4 @@
-package org.rapidoid.timeseries;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.collection.Coll;
-import org.rapidoid.commons.Stats;
-import org.rapidoid.u.U;
-import org.rapidoid.util.SlidingWindowList;
-
-import java.util.*;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -29,6 +17,19 @@ import java.util.*;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.timeseries;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.collection.Coll;
+import org.rapidoid.commons.Stats;
+import org.rapidoid.u.U;
+import org.rapidoid.util.SlidingWindowList;
+
+import java.util.*;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

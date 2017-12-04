@@ -1,6 +1,4 @@
-package org.rapidoid.data;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.data;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.data;
+
 
 import org.rapidoid.u.U;
 

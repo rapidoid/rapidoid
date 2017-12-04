@@ -1,10 +1,4 @@
-package org.rapidoid.docs.highlighting;
-
-import org.rapidoid.annotation.Controller;
-import org.rapidoid.annotation.Page;
-import org.rapidoid.gui.GUI;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -23,6 +17,13 @@ import org.rapidoid.gui.GUI;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.highlighting;
+
+import org.rapidoid.annotation.Controller;
+import org.rapidoid.annotation.Page;
+import org.rapidoid.gui.GUI;
+
 
 @Controller
 public class Highlighting extends GUI {

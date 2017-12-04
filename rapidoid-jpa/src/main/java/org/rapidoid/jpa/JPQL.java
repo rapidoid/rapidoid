@@ -1,6 +1,4 @@
-package org.rapidoid.jpa;
-
-/*
+/*-
  * #%L
  * rapidoid-jpa
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.jpa;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.jpa;
+
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;

@@ -1,11 +1,4 @@
-package org.rapidoid.docs.httpresp;
-
-import org.rapidoid.http.MediaType;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.Resp;
-import org.rapidoid.setup.On;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -25,11 +18,19 @@ import org.rapidoid.setup.On;
  * #L%
  */
 
+package org.rapidoid.docs.httpresp;
+
+import org.rapidoid.http.MediaType;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.Resp;
+import org.rapidoid.setup.On;
+
+
 public class Main {
 
 	public static void main(String[] args) {
 
-	    /* Returning the request or response object means the response was constructed */
+		/* Returning the request or response object means the response was constructed */
 
 		On.get("/").html((Req req) -> {
 			Resp resp = req.response();

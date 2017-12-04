@@ -1,18 +1,4 @@
-package org.rapidoid.rest;
-
-import org.junit.Test;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.concurrent.Promise;
-import org.rapidoid.concurrent.Promises;
-import org.rapidoid.http.*;
-import org.rapidoid.job.Jobs;
-import org.rapidoid.setup.On;
-import org.rapidoid.u.U;
-
-import java.util.concurrent.TimeUnit;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -31,6 +17,21 @@ import java.util.concurrent.TimeUnit;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.rest;
+
+import org.junit.Test;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.concurrent.Promise;
+import org.rapidoid.concurrent.Promises;
+import org.rapidoid.http.*;
+import org.rapidoid.job.Jobs;
+import org.rapidoid.setup.On;
+import org.rapidoid.u.U;
+
+import java.util.concurrent.TimeUnit;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.4.0")

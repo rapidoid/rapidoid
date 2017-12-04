@@ -1,6 +1,4 @@
-package org.rapidoid.http;
-
-/*
+/*-
  * #%L
  * rapidoid-http-fast
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.http;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http;
+
 
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;

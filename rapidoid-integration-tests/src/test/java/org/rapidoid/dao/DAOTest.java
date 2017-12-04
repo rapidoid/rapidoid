@@ -1,6 +1,4 @@
-package org.rapidoid.dao;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.dao;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.dao;
+
 
 import org.junit.Test;
 import org.rapidoid.jpa.DAO;

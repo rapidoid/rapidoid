@@ -1,6 +1,4 @@
-package org.rapidoid.util;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.util;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.util;
+
 
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;

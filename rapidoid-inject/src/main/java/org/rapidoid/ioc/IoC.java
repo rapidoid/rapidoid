@@ -1,16 +1,4 @@
-package org.rapidoid.ioc;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.*;
-import org.rapidoid.ioc.impl.IoCContextImpl;
-import org.rapidoid.ioc.impl.IoCContextWrapper;
-
-import javax.inject.Named;
-import javax.inject.Singleton;
-import java.lang.annotation.Annotation;
-import java.util.Map;
-
-/*
+/*-
  * #%L
  * rapidoid-inject
  * %%
@@ -29,6 +17,19 @@ import java.util.Map;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.ioc;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.*;
+import org.rapidoid.ioc.impl.IoCContextImpl;
+import org.rapidoid.ioc.impl.IoCContextWrapper;
+
+import javax.inject.Named;
+import javax.inject.Singleton;
+import java.lang.annotation.Annotation;
+import java.util.Map;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

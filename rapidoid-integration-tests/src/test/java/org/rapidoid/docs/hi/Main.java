@@ -1,6 +1,4 @@
-package org.rapidoid.docs.hi;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs.hi;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.hi;
+
 
 import org.rapidoid.setup.App;
 

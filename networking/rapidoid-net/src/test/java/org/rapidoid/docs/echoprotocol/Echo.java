@@ -1,6 +1,4 @@
-package org.rapidoid.docs.echoprotocol;
-
-/*
+/*-
  * #%L
  * rapidoid-net
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs.echoprotocol;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.echoprotocol;
+
 
 import org.junit.Test;
 import org.rapidoid.net.Server;

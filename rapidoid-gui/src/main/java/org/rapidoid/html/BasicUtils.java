@@ -1,14 +1,4 @@
-package org.rapidoid.html;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.u.U;
-
-import java.util.Date;
-
-/*
+/*-
  * #%L
  * rapidoid-gui
  * %%
@@ -27,6 +17,17 @@ import java.util.Date;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.html;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.u.U;
+
+import java.util.Date;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

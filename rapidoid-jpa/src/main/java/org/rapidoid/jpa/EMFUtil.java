@@ -1,17 +1,4 @@
-package org.rapidoid.jpa;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
-import org.rapidoid.log.Log;
-import org.rapidoid.scan.Scan;
-
-import javax.persistence.Entity;
-import java.util.List;
-import java.util.Properties;
-
-/*
+/*-
  * #%L
  * rapidoid-jpa
  * %%
@@ -30,6 +17,20 @@ import java.util.Properties;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.jpa;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
+import org.rapidoid.log.Log;
+import org.rapidoid.scan.Scan;
+
+import javax.persistence.Entity;
+import java.util.List;
+import java.util.Properties;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

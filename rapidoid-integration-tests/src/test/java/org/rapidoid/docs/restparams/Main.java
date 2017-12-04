@@ -1,6 +1,4 @@
-package org.rapidoid.docs.restparams;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs.restparams;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.restparams;
+
 
 import org.rapidoid.setup.App;
 

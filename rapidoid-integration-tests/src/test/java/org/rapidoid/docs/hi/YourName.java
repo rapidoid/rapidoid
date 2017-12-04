@@ -1,12 +1,4 @@
-package org.rapidoid.docs.hi;
-
-import org.rapidoid.annotation.Controller;
-import org.rapidoid.annotation.Page;
-import org.rapidoid.gui.GUI;
-import org.rapidoid.html.Tag;
-import org.rapidoid.web.Screen;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -25,6 +17,15 @@ import org.rapidoid.web.Screen;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.hi;
+
+import org.rapidoid.annotation.Controller;
+import org.rapidoid.annotation.Page;
+import org.rapidoid.gui.GUI;
+import org.rapidoid.html.Tag;
+import org.rapidoid.web.Screen;
+
 
 @Controller
 public class YourName {

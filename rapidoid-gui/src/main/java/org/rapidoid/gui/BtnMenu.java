@@ -1,17 +1,4 @@
-package org.rapidoid.gui;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.base.AbstractWidget;
-import org.rapidoid.html.Tag;
-import org.rapidoid.u.U;
-
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-/*
+/*-
  * #%L
  * rapidoid-gui
  * %%
@@ -30,6 +17,20 @@ import java.util.Map;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.gui;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.base.AbstractWidget;
+import org.rapidoid.html.Tag;
+import org.rapidoid.u.U;
+
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 
 @Authors({"Marjan Ilievski", "Nikolche Mihajlovski"})
 @Since("5.0.11")

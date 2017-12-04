@@ -1,10 +1,4 @@
-package org.rapidoid.http;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.lambda.OneParamLambda;
-
-/*
+/*-
  * #%L
  * rapidoid-http-fast
  * %%
@@ -23,6 +17,13 @@ import org.rapidoid.lambda.OneParamLambda;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.lambda.OneParamLambda;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.2")

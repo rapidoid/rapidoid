@@ -1,22 +1,4 @@
-package org.rapidoid.setup;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.annotation.TransactionMode;
-import org.rapidoid.http.HttpWrapper;
-import org.rapidoid.http.MediaType;
-import org.rapidoid.http.ReqHandler;
-import org.rapidoid.http.ReqRespHandler;
-import org.rapidoid.http.impl.RouteOptions;
-import org.rapidoid.lambda.*;
-
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.Map;
-import java.util.concurrent.Callable;
-
-/*
+/*-
  * #%L
  * rapidoid-http-server
  * %%
@@ -35,6 +17,25 @@ import java.util.concurrent.Callable;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.setup;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.TransactionMode;
+import org.rapidoid.http.HttpWrapper;
+import org.rapidoid.http.MediaType;
+import org.rapidoid.http.ReqHandler;
+import org.rapidoid.http.ReqRespHandler;
+import org.rapidoid.http.impl.RouteOptions;
+import org.rapidoid.lambda.*;
+
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.Callable;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
@@ -225,7 +226,7 @@ public class OnRoute extends RapidoidThing {
 		HttpHandlers.register(setup, verb, path, jsonOpts(), handler);
 	}
 
-    /* XML */
+	/* XML */
 
 	public void xml(String response) {
 		HttpHandlers.registerPredefined(setup, verb, path, xmlOpts(), response);
@@ -390,7 +391,7 @@ public class OnRoute extends RapidoidThing {
 	public void mvc(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
 		HttpHandlers.register(setup, verb, path, mvcOpts(), handler);
 	}
-	
+
 	/* CONTENT TYPE */
 
 	private RouteOptions htmlOpts() {

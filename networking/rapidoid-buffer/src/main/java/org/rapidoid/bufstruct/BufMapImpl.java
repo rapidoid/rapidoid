@@ -1,6 +1,4 @@
-package org.rapidoid.bufstruct;
-
-/*
+/*-
  * #%L
  * rapidoid-buffer
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.bufstruct;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.bufstruct;
+
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;

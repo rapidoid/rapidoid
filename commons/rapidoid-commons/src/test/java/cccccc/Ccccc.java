@@ -1,6 +1,4 @@
-package cccccc;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package cccccc;
  * limitations under the License.
  * #L%
  */
+
+package cccccc;
+
 
 public class Ccccc {
 

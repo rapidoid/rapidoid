@@ -1,6 +1,4 @@
-package org.rapidoid.ioc.basic;
-
-/*
+/*-
  * #%L
  * rapidoid-inject
  * %%
@@ -20,9 +18,12 @@ package org.rapidoid.ioc.basic;
  * #L%
  */
 
+package org.rapidoid.ioc.basic;
+
+
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.ioc.Wired;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.ioc.Wired;
 
 import java.util.concurrent.Callable;
 

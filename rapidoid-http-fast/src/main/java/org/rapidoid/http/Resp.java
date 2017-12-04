@@ -1,16 +1,4 @@
-package org.rapidoid.http;
-
-import org.rapidoid.annotation.Since;
-import org.rapidoid.net.AsyncLogic;
-import org.rapidoid.web.Screen;
-
-import java.io.File;
-import java.io.OutputStream;
-import java.io.Serializable;
-import java.nio.ByteBuffer;
-import java.util.Map;
-
-/*
+/*-
  * #%L
  * rapidoid-http-fast
  * %%
@@ -29,6 +17,19 @@ import java.util.Map;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http;
+
+import org.rapidoid.annotation.Since;
+import org.rapidoid.net.AsyncLogic;
+import org.rapidoid.web.Screen;
+
+import java.io.File;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.nio.ByteBuffer;
+import java.util.Map;
+
 
 /**
  * HTTP Response API.

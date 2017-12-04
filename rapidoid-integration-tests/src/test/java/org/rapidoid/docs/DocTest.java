@@ -1,6 +1,4 @@
-package org.rapidoid.docs;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs;
+
 
 import org.junit.Test;
 import org.rapidoid.commons.Str;

@@ -1,6 +1,4 @@
-package org.rapidoid.jdbc;
-
-/*
+/*-
  * #%L
  * rapidoid-sql
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.jdbc;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.jdbc;
+
 
 import org.rapidoid.AbstractRapidoidModule;
 import org.rapidoid.annotation.Authors;

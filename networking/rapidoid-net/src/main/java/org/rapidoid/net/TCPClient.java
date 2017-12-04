@@ -1,12 +1,4 @@
-package org.rapidoid.net;
-
-import org.rapidoid.activity.Activity;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.net.abstracts.ChannelHolder;
-import org.rapidoid.net.impl.ConnState;
-
-/*
+/*-
  * #%L
  * rapidoid-net
  * %%
@@ -25,6 +17,15 @@ import org.rapidoid.net.impl.ConnState;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.net;
+
+import org.rapidoid.activity.Activity;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.net.abstracts.ChannelHolder;
+import org.rapidoid.net.impl.ConnState;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.5.0")

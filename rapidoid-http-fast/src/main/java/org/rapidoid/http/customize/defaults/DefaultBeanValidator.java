@@ -1,14 +1,4 @@
-package org.rapidoid.http.customize.defaults;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.customize.BeanValidator;
-import org.rapidoid.util.MscOpts;
-import org.rapidoid.validation.Validators;
-
-/*
+/*-
  * #%L
  * rapidoid-http-fast
  * %%
@@ -27,6 +17,17 @@ import org.rapidoid.validation.Validators;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http.customize.defaults;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.customize.BeanValidator;
+import org.rapidoid.util.MscOpts;
+import org.rapidoid.validation.Validators;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

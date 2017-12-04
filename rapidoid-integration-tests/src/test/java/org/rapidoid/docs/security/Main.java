@@ -1,6 +1,4 @@
-package org.rapidoid.docs.security;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs.security;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.security;
+
 
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.My;

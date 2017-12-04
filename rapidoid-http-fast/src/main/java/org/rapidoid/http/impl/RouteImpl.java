@@ -1,19 +1,4 @@
-package org.rapidoid.http.impl;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cache.Caching;
-import org.rapidoid.cache.Cache;
-import org.rapidoid.http.HttpVerb;
-import org.rapidoid.http.Route;
-import org.rapidoid.http.RouteConfig;
-import org.rapidoid.http.handler.HttpHandler;
-import org.rapidoid.u.U;
-
-import java.util.Date;
-
-/*
+/*-
  * #%L
  * rapidoid-http-fast
  * %%
@@ -32,6 +17,22 @@ import java.util.Date;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http.impl;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cache.Cache;
+import org.rapidoid.cache.Caching;
+import org.rapidoid.http.HttpVerb;
+import org.rapidoid.http.Route;
+import org.rapidoid.http.RouteConfig;
+import org.rapidoid.http.handler.HttpHandler;
+import org.rapidoid.u.U;
+
+import java.util.Date;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

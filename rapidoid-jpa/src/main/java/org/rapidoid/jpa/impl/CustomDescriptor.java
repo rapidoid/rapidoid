@@ -1,19 +1,4 @@
-package org.rapidoid.jpa.impl;
-
-import org.hibernate.jpa.boot.spi.PersistenceUnitDescriptor;
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
-
-import javax.persistence.SharedCacheMode;
-import javax.persistence.ValidationMode;
-import javax.persistence.spi.PersistenceUnitTransactionType;
-import java.net.URL;
-import java.util.List;
-import java.util.Properties;
-
-/*
+/*-
  * #%L
  * rapidoid-jpa
  * %%
@@ -32,6 +17,22 @@ import java.util.Properties;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.jpa.impl;
+
+import org.hibernate.jpa.boot.spi.PersistenceUnitDescriptor;
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
+
+import javax.persistence.SharedCacheMode;
+import javax.persistence.ValidationMode;
+import javax.persistence.spi.PersistenceUnitTransactionType;
+import java.net.URL;
+import java.util.List;
+import java.util.Properties;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

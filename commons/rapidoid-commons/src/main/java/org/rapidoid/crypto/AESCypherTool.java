@@ -1,6 +1,4 @@
-package org.rapidoid.crypto;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.crypto;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.crypto;
+
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;

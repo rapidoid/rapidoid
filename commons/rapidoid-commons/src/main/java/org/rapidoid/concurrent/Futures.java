@@ -1,13 +1,4 @@
-package org.rapidoid.concurrent;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.concurrent.impl.FutureImpl;
-import org.rapidoid.lambda.Mapper;
-import org.rapidoid.u.U;
-
-import java.util.concurrent.TimeoutException;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -26,6 +17,16 @@ import java.util.concurrent.TimeoutException;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.concurrent;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.concurrent.impl.FutureImpl;
+import org.rapidoid.lambda.Mapper;
+import org.rapidoid.u.U;
+
+import java.util.concurrent.TimeoutException;
+
 
 /**
  * @author Nikolche Mihajlovski

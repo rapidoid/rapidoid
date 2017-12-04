@@ -1,17 +1,4 @@
-package org.rapidoid.buffer;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.pool.Pool;
-import org.rapidoid.pool.Pools;
-import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
-
-import java.nio.ByteBuffer;
-import java.util.concurrent.Callable;
-
-/*
+/*-
  * #%L
  * rapidoid-buffer
  * %%
@@ -30,6 +17,20 @@ import java.util.concurrent.Callable;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.buffer;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.pool.Pool;
+import org.rapidoid.pool.Pools;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
+
+import java.nio.ByteBuffer;
+import java.util.concurrent.Callable;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

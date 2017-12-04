@@ -1,6 +1,4 @@
-package org.rapidoid.ioc.constructor;
-
-/*
+/*-
  * #%L
  * rapidoid-inject
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.ioc.constructor;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.ioc.constructor;
+
 
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;

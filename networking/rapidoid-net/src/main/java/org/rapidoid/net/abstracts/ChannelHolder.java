@@ -1,6 +1,4 @@
-package org.rapidoid.net.abstracts;
-
-/*
+/*-
  * #%L
  * rapidoid-net
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.net.abstracts;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.net.abstracts;
+
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;

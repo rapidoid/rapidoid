@@ -1,6 +1,4 @@
-package org.rapidoid.docs.paramgrid;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs.paramgrid;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.paramgrid;
+
 
 import org.rapidoid.setup.App;
 

@@ -1,6 +1,4 @@
-package org.rapidoid.env;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.env;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.env;
+
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;

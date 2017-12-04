@@ -1,6 +1,4 @@
-package org.rapidoid.cache;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.cache;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.cache;
+
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;

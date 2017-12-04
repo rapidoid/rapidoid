@@ -1,17 +1,4 @@
-package org.rapidoid.gui;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.base.AbstractWidget;
-import org.rapidoid.html.Tag;
-import org.rapidoid.html.tag.TableTag;
-import org.rapidoid.lambda.Lmbd;
-import org.rapidoid.lambda.Mapper;
-
-import java.util.Map;
-import java.util.Map.Entry;
-
-/*
+/*-
  * #%L
  * rapidoid-gui
  * %%
@@ -30,6 +17,20 @@ import java.util.Map.Entry;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.gui;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.base.AbstractWidget;
+import org.rapidoid.html.Tag;
+import org.rapidoid.html.tag.TableTag;
+import org.rapidoid.lambda.Lmbd;
+import org.rapidoid.lambda.Mapper;
+
+import java.util.Map;
+import java.util.Map.Entry;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.4.0")

@@ -1,6 +1,4 @@
-package org.rapidoid.ioc.profiles;
-
-/*
+/*-
  * #%L
  * rapidoid-inject
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.ioc.profiles;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.ioc.profiles;
+
 
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;

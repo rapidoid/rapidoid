@@ -1,22 +1,4 @@
-package org.rapidoid.cache;
-
-import org.junit.Test;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cache.impl.CacheStats;
-import org.rapidoid.cache.impl.ConcurrentCacheAtomWithStats;
-import org.rapidoid.commons.Rnd;
-import org.rapidoid.io.IO;
-import org.rapidoid.lambda.Mapper;
-import org.rapidoid.log.Log;
-import org.rapidoid.test.TestCommons;
-import org.rapidoid.u.U;
-import org.rapidoid.util.BenchmarkOperation;
-import org.rapidoid.util.Msc;
-
-import java.util.concurrent.atomic.AtomicInteger;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -35,6 +17,25 @@ import java.util.concurrent.atomic.AtomicInteger;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.cache;
+
+import org.junit.Test;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cache.impl.CacheStats;
+import org.rapidoid.cache.impl.ConcurrentCacheAtomWithStats;
+import org.rapidoid.commons.Rnd;
+import org.rapidoid.io.IO;
+import org.rapidoid.lambda.Mapper;
+import org.rapidoid.log.Log;
+import org.rapidoid.test.TestCommons;
+import org.rapidoid.u.U;
+import org.rapidoid.util.BenchmarkOperation;
+import org.rapidoid.util.Msc;
+
+import java.util.concurrent.atomic.AtomicInteger;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")

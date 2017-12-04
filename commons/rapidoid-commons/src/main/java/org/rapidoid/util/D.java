@@ -1,14 +1,4 @@
-package org.rapidoid.util;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
-
-import java.util.Map;
-import java.util.Map.Entry;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -27,6 +17,17 @@ import java.util.Map.Entry;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.util;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
+
+import java.util.Map;
+import java.util.Map.Entry;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.4.0")

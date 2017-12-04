@@ -1,6 +1,4 @@
-package org.rapidoid.docs.myem;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs.myem;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.myem;
+
 
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.setup.My;

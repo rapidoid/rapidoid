@@ -1,6 +1,4 @@
-package org.rapidoid.html.customtag;
-
-/*
+/*-
  * #%L
  * rapidoid-gui
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.html.customtag;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.html.customtag;
+
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;

@@ -1,6 +1,4 @@
-package org.rapidoid.web.config.bean;
-
-/*
+/*-
  * #%L
  * rapidoid-web
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.web.config.bean;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.web.config.bean;
+
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;

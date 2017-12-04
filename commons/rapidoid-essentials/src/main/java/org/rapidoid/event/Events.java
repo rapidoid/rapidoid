@@ -1,6 +1,4 @@
-package org.rapidoid.event;
-
-/*
+/*-
  * #%L
  * rapidoid-essentials
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.event;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.event;
+
 
 /**
  * @author Nikolche Mihajlovski

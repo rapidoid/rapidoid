@@ -1,12 +1,4 @@
-package org.rapidoid.config;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
-import org.rapidoid.value.ValueStore;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -25,6 +17,15 @@ import org.rapidoid.value.ValueStore;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.config;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
+import org.rapidoid.value.ValueStore;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

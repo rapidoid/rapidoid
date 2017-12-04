@@ -1,6 +1,4 @@
-package org.rapidoid.docs.httprespcode;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs.httprespcode;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.httprespcode;
+
 
 import org.rapidoid.annotation.IntegrationTest;
 import org.rapidoid.docs.DocTest;

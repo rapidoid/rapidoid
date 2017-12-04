@@ -1,17 +1,4 @@
-package org.rapidoid.data;
-
-import com.fasterxml.jackson.core.Base64Variants;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.env.Env;
-import org.rapidoid.writable.ReusableWritable;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -30,6 +17,20 @@ import java.io.IOException;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.data;
+
+import com.fasterxml.jackson.core.Base64Variants;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.env.Env;
+import org.rapidoid.writable.ReusableWritable;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
 
 /**
  * @author Nikolche Mihajlovski

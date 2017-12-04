@@ -1,22 +1,4 @@
-package org.rapidoid.config;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.collection.Coll;
-import org.rapidoid.env.Env;
-import org.rapidoid.env.RapidoidEnv;
-import org.rapidoid.lambda.Mapper;
-import org.rapidoid.log.GlobalCfg;
-import org.rapidoid.log.Log;
-import org.rapidoid.log.LogLevel;
-import org.rapidoid.scan.ClasspathUtil;
-import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
-
-import java.util.Map;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -35,6 +17,25 @@ import java.util.Map;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.config;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.collection.Coll;
+import org.rapidoid.env.Env;
+import org.rapidoid.env.RapidoidEnv;
+import org.rapidoid.lambda.Mapper;
+import org.rapidoid.log.GlobalCfg;
+import org.rapidoid.log.Log;
+import org.rapidoid.log.LogLevel;
+import org.rapidoid.scan.ClasspathUtil;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
+
+import java.util.Map;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

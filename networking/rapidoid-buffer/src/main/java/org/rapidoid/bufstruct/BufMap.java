@@ -1,11 +1,4 @@
-package org.rapidoid.bufstruct;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.buffer.Buf;
-import org.rapidoid.data.BufRange;
-
-/*
+/*-
  * #%L
  * rapidoid-buffer
  * %%
@@ -24,6 +17,14 @@ import org.rapidoid.data.BufRange;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.bufstruct;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.buffer.Buf;
+import org.rapidoid.data.BufRange;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")

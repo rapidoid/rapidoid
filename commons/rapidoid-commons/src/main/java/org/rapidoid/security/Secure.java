@@ -1,22 +1,4 @@
-package org.rapidoid.security;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.beany.Beany;
-import org.rapidoid.beany.Metadata;
-import org.rapidoid.beany.Prop;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.security.annotation.*;
-import org.rapidoid.u.U;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -35,6 +17,25 @@ import java.util.Set;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.security;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.beany.Beany;
+import org.rapidoid.beany.Metadata;
+import org.rapidoid.beany.Prop;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.security.annotation.*;
+import org.rapidoid.u.U;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

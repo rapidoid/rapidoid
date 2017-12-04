@@ -1,6 +1,4 @@
-package org.rapidoid.gui;
-
-/*
+/*-
  * #%L
  * rapidoid-gui
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.gui;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.gui;
+
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;

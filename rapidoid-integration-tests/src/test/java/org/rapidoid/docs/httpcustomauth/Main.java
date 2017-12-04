@@ -1,6 +1,4 @@
-package org.rapidoid.docs.httpcustomauth;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs.httpcustomauth;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.httpcustomauth;
+
 
 import org.rapidoid.http.Self;
 import org.rapidoid.setup.App;

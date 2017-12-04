@@ -1,6 +1,4 @@
-package org.rapidoid.http.handler.lambda;
-
-/*
+/*-
  * #%L
  * rapidoid-http-server
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.http.handler.lambda;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http.handler.lambda;
+
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;

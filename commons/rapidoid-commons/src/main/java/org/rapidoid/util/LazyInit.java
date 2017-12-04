@@ -1,14 +1,4 @@
-package org.rapidoid.util;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import java.io.Closeable;
-import java.io.IOException;
-import java.util.concurrent.Callable;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -27,6 +17,17 @@ import java.util.concurrent.Callable;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.util;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import java.io.Closeable;
+import java.io.IOException;
+import java.util.concurrent.Callable;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.4")

@@ -1,13 +1,4 @@
-package org.rapidoid.integrate;
-
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Module;
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-/*
+/*-
  * #%L
  * rapidoid-integrate
  * %%
@@ -26,6 +17,16 @@ import org.rapidoid.annotation.Since;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.integrate;
+
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Module;
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

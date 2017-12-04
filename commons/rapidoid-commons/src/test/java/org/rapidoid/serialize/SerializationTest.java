@@ -1,6 +1,4 @@
-package org.rapidoid.serialize;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.serialize;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.serialize;
+
 
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;

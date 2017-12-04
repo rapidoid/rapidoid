@@ -1,11 +1,4 @@
-package org.rapidoid.docs.paramgrid;
-
-import org.rapidoid.annotation.Controller;
-import org.rapidoid.annotation.Page;
-import org.rapidoid.gui.GUI;
-import org.rapidoid.http.Req;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -24,6 +17,14 @@ import org.rapidoid.http.Req;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.paramgrid;
+
+import org.rapidoid.annotation.Controller;
+import org.rapidoid.annotation.Page;
+import org.rapidoid.gui.GUI;
+import org.rapidoid.http.Req;
+
 
 @Controller
 public class ParamGrid {

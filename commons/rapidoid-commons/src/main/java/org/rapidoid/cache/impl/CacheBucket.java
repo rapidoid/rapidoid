@@ -1,10 +1,4 @@
-package org.rapidoid.cache.impl;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.util.SimpleList;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -23,6 +17,13 @@ import org.rapidoid.util.SimpleList;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.cache.impl;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.util.SimpleList;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.3")

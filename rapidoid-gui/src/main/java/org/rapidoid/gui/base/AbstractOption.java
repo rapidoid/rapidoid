@@ -1,10 +1,4 @@
-package org.rapidoid.gui.base;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.GUI;
-
-/*
+/*-
  * #%L
  * rapidoid-gui
  * %%
@@ -23,6 +17,13 @@ import org.rapidoid.gui.GUI;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.gui.base;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.GUI;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

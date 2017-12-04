@@ -1,8 +1,4 @@
-package org.rapidoid.data;
-
-import org.rapidoid.RapidoidThing;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -21,6 +17,11 @@ import org.rapidoid.RapidoidThing;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.data;
+
+import org.rapidoid.RapidoidThing;
+
 
 /**
  * @author Nikolche Mihajlovski

@@ -1,21 +1,4 @@
-package org.rapidoid.http;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.collection.Coll;
-import org.rapidoid.concurrent.Callback;
-import org.rapidoid.concurrent.Future;
-import org.rapidoid.data.JSON;
-import org.rapidoid.io.Upload;
-import org.rapidoid.u.U;
-import org.rapidoid.util.Expectation;
-import org.rapidoid.util.Msc;
-
-import java.util.List;
-import java.util.Map;
-
-/*
+/*-
  * #%L
  * rapidoid-http-client
  * %%
@@ -34,6 +17,24 @@ import java.util.Map;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.collection.Coll;
+import org.rapidoid.concurrent.Callback;
+import org.rapidoid.concurrent.Future;
+import org.rapidoid.data.JSON;
+import org.rapidoid.io.Upload;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Expectation;
+import org.rapidoid.util.Msc;
+
+import java.util.List;
+import java.util.Map;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

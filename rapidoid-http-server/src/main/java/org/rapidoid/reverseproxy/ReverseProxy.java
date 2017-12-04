@@ -1,20 +1,4 @@
-package org.rapidoid.reverseproxy;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.concurrent.Callback;
-import org.rapidoid.http.*;
-import org.rapidoid.http.impl.lowlevel.HttpIO;
-import org.rapidoid.job.Jobs;
-import org.rapidoid.log.LogLevel;
-import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
-
-import java.io.IOException;
-import java.net.ConnectException;
-import java.util.Map;
-
-/*
+/*-
  * #%L
  * rapidoid-http-server
  * %%
@@ -33,6 +17,23 @@ import java.util.Map;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.reverseproxy;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.concurrent.Callback;
+import org.rapidoid.http.*;
+import org.rapidoid.http.impl.lowlevel.HttpIO;
+import org.rapidoid.job.Jobs;
+import org.rapidoid.log.LogLevel;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
+
+import java.io.IOException;
+import java.net.ConnectException;
+import java.util.Map;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")

@@ -1,6 +1,4 @@
-package com.moja;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package com.moja;
  * limitations under the License.
  * #L%
  */
+
+package com.moja;
+
 
 public class Aaa {
 

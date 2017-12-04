@@ -1,6 +1,4 @@
-package org.rapidoid.integrate;
-
-/*
+/*-
  * #%L
  * rapidoid-integrate
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.integrate;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.integrate;
+
 
 import com.google.inject.Binding;
 import com.google.inject.Injector;

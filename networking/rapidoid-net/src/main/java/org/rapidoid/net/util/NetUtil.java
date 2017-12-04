@@ -1,6 +1,4 @@
-package org.rapidoid.net.util;
-
-/*
+/*-
  * #%L
  * rapidoid-net
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.net.util;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.net.util;
+
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;

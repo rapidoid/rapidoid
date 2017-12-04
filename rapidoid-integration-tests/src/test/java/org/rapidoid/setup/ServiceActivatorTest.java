@@ -1,6 +1,4 @@
-package org.rapidoid.setup;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.setup;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.setup;
+
 
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;

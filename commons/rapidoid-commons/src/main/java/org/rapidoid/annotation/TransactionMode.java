@@ -1,6 +1,4 @@
-package org.rapidoid.annotation;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.annotation;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.annotation;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")

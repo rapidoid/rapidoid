@@ -1,13 +1,4 @@
-package org.rapidoid.beany;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.JS;
-import org.rapidoid.u.U;
-
-import javax.script.ScriptException;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -26,6 +17,16 @@ import javax.script.ScriptException;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.beany;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.JS;
+import org.rapidoid.u.U;
+
+import javax.script.ScriptException;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")

@@ -1,10 +1,4 @@
-package org.rapidoid.docs.restnamedparams;
-
-import org.rapidoid.annotation.Controller;
-import org.rapidoid.annotation.GET;
-import org.rapidoid.annotation.Param;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -23,6 +17,13 @@ import org.rapidoid.annotation.Param;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.restnamedparams;
+
+import org.rapidoid.annotation.Controller;
+import org.rapidoid.annotation.GET;
+import org.rapidoid.annotation.Param;
+
 
 @Controller
 public class NamedParams {

@@ -1,17 +1,4 @@
-package org.rapidoid.setup;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
-import org.rapidoid.config.RapidoidInitializer;
-import org.rapidoid.env.Env;
-import org.rapidoid.http.customize.Customization;
-import org.rapidoid.http.impl.HttpRoutesImpl;
-import org.rapidoid.ioc.IoC;
-import org.rapidoid.security.Role;
-import org.rapidoid.util.Msc;
-
-/*
+/*-
  * #%L
  * rapidoid-http-server
  * %%
@@ -30,6 +17,20 @@ import org.rapidoid.util.Msc;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.setup;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
+import org.rapidoid.config.RapidoidInitializer;
+import org.rapidoid.env.Env;
+import org.rapidoid.http.customize.Customization;
+import org.rapidoid.http.impl.HttpRoutesImpl;
+import org.rapidoid.ioc.IoC;
+import org.rapidoid.security.Role;
+import org.rapidoid.util.Msc;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.2")

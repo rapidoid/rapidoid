@@ -1,20 +1,4 @@
-package org.rapidoid.integrate;
-
-import com.samskivert.mustache.Mustache;
-import com.samskivert.mustache.Template;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.http.View;
-import org.rapidoid.http.customize.ResourceLoader;
-import org.rapidoid.http.impl.AbstractViewResolver;
-import org.rapidoid.u.U;
-
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.Reader;
-import java.io.StringReader;
-
-/*
+/*-
  * #%L
  * rapidoid-integrate
  * %%
@@ -33,6 +17,23 @@ import java.io.StringReader;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.integrate;
+
+import com.samskivert.mustache.Mustache;
+import com.samskivert.mustache.Template;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.View;
+import org.rapidoid.http.customize.ResourceLoader;
+import org.rapidoid.http.impl.AbstractViewResolver;
+import org.rapidoid.u.U;
+
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.StringReader;
+
 
 /**
  * <p>ViewResolver for samskivert's JMustache. <br>

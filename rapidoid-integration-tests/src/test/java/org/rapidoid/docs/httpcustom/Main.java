@@ -1,12 +1,4 @@
-package org.rapidoid.docs.httpcustom;
-
-import org.rapidoid.config.Conf;
-import org.rapidoid.setup.Admin;
-import org.rapidoid.setup.App;
-import org.rapidoid.setup.AppBootstrap;
-import org.rapidoid.setup.On;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -25,6 +17,15 @@ import org.rapidoid.setup.On;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.httpcustom;
+
+import org.rapidoid.config.Conf;
+import org.rapidoid.setup.Admin;
+import org.rapidoid.setup.App;
+import org.rapidoid.setup.AppBootstrap;
+import org.rapidoid.setup.On;
+
 
 public class Main {
 

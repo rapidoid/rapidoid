@@ -1,6 +1,4 @@
-package org.rapidoid.docs.mytemplatesloader;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs.mytemplatesloader;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.mytemplatesloader;
+
 
 import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;

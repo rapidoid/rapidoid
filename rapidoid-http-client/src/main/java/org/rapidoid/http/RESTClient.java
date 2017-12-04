@@ -1,14 +1,4 @@
-package org.rapidoid.http;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.concurrent.Callback;
-import org.rapidoid.concurrent.Callbacks;
-import org.rapidoid.concurrent.Future;
-import org.rapidoid.concurrent.Futures;
-
-/*
+/*-
  * #%L
  * rapidoid-http-client
  * %%
@@ -27,6 +17,17 @@ import org.rapidoid.concurrent.Futures;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.concurrent.Callback;
+import org.rapidoid.concurrent.Callbacks;
+import org.rapidoid.concurrent.Future;
+import org.rapidoid.concurrent.Futures;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")

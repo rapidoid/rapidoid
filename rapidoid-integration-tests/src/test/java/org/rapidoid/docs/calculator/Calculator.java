@@ -1,14 +1,4 @@
-package org.rapidoid.docs.calculator;
-
-import org.rapidoid.annotation.Controller;
-import org.rapidoid.annotation.Page;
-import org.rapidoid.gui.Btn;
-import org.rapidoid.gui.GUI;
-import org.rapidoid.html.Tag;
-import org.rapidoid.value.Value;
-import org.rapidoid.value.Values;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -27,6 +17,17 @@ import org.rapidoid.value.Values;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.calculator;
+
+import org.rapidoid.annotation.Controller;
+import org.rapidoid.annotation.Page;
+import org.rapidoid.gui.Btn;
+import org.rapidoid.gui.GUI;
+import org.rapidoid.html.Tag;
+import org.rapidoid.value.Value;
+import org.rapidoid.value.Values;
+
 
 @Controller
 public class Calculator extends GUI {

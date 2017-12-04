@@ -1,14 +1,4 @@
-package org.rapidoid.http.client;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.buffer.Buf;
-import org.rapidoid.concurrent.Callback;
-import org.rapidoid.data.BufRanges;
-import org.rapidoid.job.Jobs;
-
-/*
+/*-
  * #%L
  * rapidoid-http-client
  * %%
@@ -27,6 +17,17 @@ import org.rapidoid.job.Jobs;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http.client;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.buffer.Buf;
+import org.rapidoid.concurrent.Callback;
+import org.rapidoid.data.BufRanges;
+import org.rapidoid.job.Jobs;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.5.0")

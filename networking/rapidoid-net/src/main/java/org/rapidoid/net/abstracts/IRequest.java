@@ -1,9 +1,4 @@
-package org.rapidoid.net.abstracts;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-/*
+/*-
  * #%L
  * rapidoid-net
  * %%
@@ -22,6 +17,12 @@ import org.rapidoid.annotation.Since;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.net.abstracts;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

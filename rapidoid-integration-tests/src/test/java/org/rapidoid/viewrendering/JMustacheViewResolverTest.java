@@ -1,6 +1,4 @@
-package org.rapidoid.viewrendering;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.viewrendering;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.viewrendering;
+
 
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;

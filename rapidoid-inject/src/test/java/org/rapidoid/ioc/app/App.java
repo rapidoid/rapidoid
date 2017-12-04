@@ -1,6 +1,4 @@
-package org.rapidoid.ioc.app;
-
-/*
+/*-
  * #%L
  * rapidoid-inject
  * %%
@@ -20,11 +18,14 @@ package org.rapidoid.ioc.app;
  * #L%
  */
 
+package org.rapidoid.ioc.app;
+
+
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.ioc.Autocreate;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ioc.Wired;
+import org.rapidoid.ioc.Autocreate;
 import org.rapidoid.ioc.Logger;
+import org.rapidoid.ioc.Wired;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;

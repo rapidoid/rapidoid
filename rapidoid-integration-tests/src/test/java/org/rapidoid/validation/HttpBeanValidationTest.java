@@ -1,6 +1,4 @@
-package org.rapidoid.validation;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.validation;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.validation;
+
 
 import org.junit.Test;
 import org.rapidoid.annotation.*;
@@ -99,6 +100,7 @@ class Foo extends AbstractEntity {
 	public Object getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}

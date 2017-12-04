@@ -1,21 +1,4 @@
-package org.rapidoid.goodies;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.group.GroupOf;
-import org.rapidoid.group.Groups;
-import org.rapidoid.group.Manageable;
-import org.rapidoid.gui.GUI;
-import org.rapidoid.gui.Grid;
-import org.rapidoid.lambda.Mapper;
-import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.Callable;
-
-/*
+/*-
  * #%L
  * rapidoid-web
  * %%
@@ -34,6 +17,24 @@ import java.util.concurrent.Callable;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.goodies;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.group.GroupOf;
+import org.rapidoid.group.Groups;
+import org.rapidoid.group.Manageable;
+import org.rapidoid.gui.GUI;
+import org.rapidoid.gui.Grid;
+import org.rapidoid.lambda.Mapper;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.Callable;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")

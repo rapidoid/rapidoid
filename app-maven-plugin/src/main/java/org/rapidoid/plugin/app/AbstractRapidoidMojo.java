@@ -1,6 +1,4 @@
-package org.rapidoid.plugin.app;
-
-/*
+/*-
  * #%L
  * Rapidoid App Plugin
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.plugin.app;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.plugin.app;
+
 
 import javassist.Modifier;
 import javassist.bytecode.ClassFile;

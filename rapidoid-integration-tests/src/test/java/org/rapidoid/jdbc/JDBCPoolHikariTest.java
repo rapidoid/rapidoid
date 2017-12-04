@@ -1,6 +1,4 @@
-package org.rapidoid.jdbc;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.jdbc;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.jdbc;
+
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.junit.Test;

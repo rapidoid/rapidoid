@@ -1,13 +1,4 @@
-package org.rapidoid.pool;
-
-import org.rapidoid.insight.AbstractInsightful;
-import org.rapidoid.log.Log;
-import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
-
-import java.util.concurrent.Callable;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -26,6 +17,16 @@ import java.util.concurrent.Callable;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.pool;
+
+import org.rapidoid.insight.AbstractInsightful;
+import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
+
+import java.util.concurrent.Callable;
+
 
 /**
  * @author Nikolche Mihajlovski

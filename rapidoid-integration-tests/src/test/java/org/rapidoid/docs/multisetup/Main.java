@@ -1,6 +1,4 @@
-package org.rapidoid.docs.multisetup;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs.multisetup;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.multisetup;
+
 
 import org.rapidoid.docs.multisetup.barsetup.BarSetupCtrl;
 import org.rapidoid.docs.multisetup.foosetup.FooSetupCtrl;

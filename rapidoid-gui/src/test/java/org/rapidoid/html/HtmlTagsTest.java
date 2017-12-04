@@ -1,6 +1,4 @@
-package org.rapidoid.html;
-
-/*
+/*-
  * #%L
  * rapidoid-gui
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.html;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.html;
+
 
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;

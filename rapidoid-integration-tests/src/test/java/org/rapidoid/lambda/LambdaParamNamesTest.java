@@ -1,17 +1,4 @@
-package org.rapidoid.lambda;
-
-import org.junit.Test;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.domain.Movie;
-import org.rapidoid.http.IsolatedIntegrationTest;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.Resp;
-import org.rapidoid.setup.On;
-import org.rapidoid.u.U;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -30,6 +17,20 @@ import org.rapidoid.u.U;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.lambda;
+
+import org.junit.Test;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.domain.Movie;
+import org.rapidoid.http.IsolatedIntegrationTest;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.Resp;
+import org.rapidoid.setup.On;
+import org.rapidoid.u.U;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

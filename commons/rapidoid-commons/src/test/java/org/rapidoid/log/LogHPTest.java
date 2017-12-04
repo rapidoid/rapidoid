@@ -1,9 +1,4 @@
-package org.rapidoid.log;
-
-import org.junit.Test;
-import org.rapidoid.test.TestCommons;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -22,6 +17,12 @@ import org.rapidoid.test.TestCommons;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.log;
+
+import org.junit.Test;
+import org.rapidoid.test.TestCommons;
+
 
 /**
  * @author Nikolche Mihajlovski

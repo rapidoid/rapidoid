@@ -1,6 +1,4 @@
-package org.rapidoid.ioc;
-
-/*
+/*-
  * #%L
  * rapidoid-inject
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.ioc;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.ioc;
+
 
 import org.junit.Before;
 import org.rapidoid.config.Conf;

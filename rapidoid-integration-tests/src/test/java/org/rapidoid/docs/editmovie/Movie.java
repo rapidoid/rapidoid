@@ -1,6 +1,4 @@
-package org.rapidoid.docs.editmovie;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs.editmovie;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.editmovie;
+
 
 public class Movie {
 	public String title;

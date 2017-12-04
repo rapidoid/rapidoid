@@ -1,16 +1,4 @@
-package org.rapidoid.goodies;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.timeseries.TimeSeries;
-import org.rapidoid.gui.GUI;
-import org.rapidoid.http.Req;
-import org.rapidoid.insight.Metrics;
-import org.rapidoid.lambda.FourParamLambda;
-
-import java.util.Collections;
-
-/*
+/*-
  * #%L
  * rapidoid-web
  * %%
@@ -29,6 +17,19 @@ import java.util.Collections;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.goodies;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.GUI;
+import org.rapidoid.http.Req;
+import org.rapidoid.insight.Metrics;
+import org.rapidoid.lambda.FourParamLambda;
+import org.rapidoid.timeseries.TimeSeries;
+
+import java.util.Collections;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

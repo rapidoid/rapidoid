@@ -1,21 +1,4 @@
-package org.rapidoid.net.tls;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.log.Log;
-import org.rapidoid.u.U;
-
-import javax.net.ssl.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-
-/*
+/*-
  * #%L
  * rapidoid-net
  * %%
@@ -34,6 +17,24 @@ import java.security.cert.X509Certificate;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.net.tls;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
+
+import javax.net.ssl.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.4.0")

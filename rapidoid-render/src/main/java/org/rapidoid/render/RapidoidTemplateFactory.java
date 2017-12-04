@@ -1,15 +1,4 @@
-package org.rapidoid.render;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cache.Cache;
-import org.rapidoid.cache.Caching;
-import org.rapidoid.env.Env;
-import org.rapidoid.lambda.Mapper;
-import org.rapidoid.u.U;
-
-/*
+/*-
  * #%L
  * rapidoid-render
  * %%
@@ -28,6 +17,18 @@ import org.rapidoid.u.U;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.render;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cache.Cache;
+import org.rapidoid.cache.Caching;
+import org.rapidoid.env.Env;
+import org.rapidoid.lambda.Mapper;
+import org.rapidoid.u.U;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")

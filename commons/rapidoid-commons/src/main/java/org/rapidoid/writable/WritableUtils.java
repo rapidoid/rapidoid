@@ -1,6 +1,4 @@
-package org.rapidoid.writable;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.writable;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.writable;
+
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;

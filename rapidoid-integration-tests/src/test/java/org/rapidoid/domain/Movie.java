@@ -1,6 +1,4 @@
-package org.rapidoid.domain;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.domain;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.domain;
+
 
 public class Movie {
 

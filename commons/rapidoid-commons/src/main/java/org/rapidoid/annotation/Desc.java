@@ -1,10 +1,4 @@
-package org.rapidoid.annotation;
-
-import java.lang.annotation.Retention;
-
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -23,6 +17,13 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.annotation;
+
+import java.lang.annotation.Retention;
+
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 
 @Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")

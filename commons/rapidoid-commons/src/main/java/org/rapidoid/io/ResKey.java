@@ -1,12 +1,4 @@
-package org.rapidoid.io;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import java.util.Arrays;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -25,6 +17,15 @@ import java.util.Arrays;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.io;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import java.util.Arrays;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.11")

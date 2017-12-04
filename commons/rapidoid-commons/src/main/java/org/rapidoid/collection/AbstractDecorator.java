@@ -1,6 +1,4 @@
-package org.rapidoid.collection;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.collection;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.collection;
+
 
 import org.rapidoid.RapidoidThing;
 

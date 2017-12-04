@@ -1,17 +1,4 @@
-package org.rapidoid.ctx;
-
-import org.junit.Test;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.job.Jobs;
-import org.rapidoid.test.AbstractCommonsTest;
-import org.rapidoid.u.U;
-
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -30,6 +17,20 @@ import java.util.concurrent.atomic.AtomicInteger;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.ctx;
+
+import org.junit.Test;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.job.Jobs;
+import org.rapidoid.test.AbstractCommonsTest;
+import org.rapidoid.u.U;
+
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")

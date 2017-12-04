@@ -1,6 +1,4 @@
-package org.rapidoid.docs.guidocs.buttons;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs.guidocs.buttons;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.guidocs.buttons;
+
 
 import org.junit.Test;
 import org.rapidoid.gui.GUI;

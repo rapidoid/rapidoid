@@ -1,6 +1,4 @@
-package org.rapidoid.http.customize;
-
-/*
+/*-
  * #%L
  * rapidoid-http-fast
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.http.customize;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http.customize;
+
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;

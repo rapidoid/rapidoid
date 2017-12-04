@@ -1,11 +1,4 @@
-package org.rapidoid.docs.singletoncounter;
-
-import org.rapidoid.annotation.Controller;
-import org.rapidoid.setup.App;
-
-import javax.inject.Inject;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -24,6 +17,14 @@ import javax.inject.Inject;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.singletoncounter;
+
+import org.rapidoid.annotation.Controller;
+import org.rapidoid.setup.App;
+
+import javax.inject.Inject;
+
 
 // Dependency injection of singletons :: Injecting a singleton 
 

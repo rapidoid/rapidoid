@@ -1,6 +1,4 @@
-package org.rapidoid.docs.httpfastest;
-
-/*
+/*-
  * #%L
  * rapidoid-http-fast
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs.httpfastest;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.httpfastest;
+
 
 public class Message {
 

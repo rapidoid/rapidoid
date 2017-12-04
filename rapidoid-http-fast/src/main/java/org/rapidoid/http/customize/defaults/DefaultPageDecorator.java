@@ -1,21 +1,4 @@
-package org.rapidoid.http.customize.defaults;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.GUI;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.Resp;
-import org.rapidoid.http.customize.PageDecorator;
-import org.rapidoid.u.U;
-import org.rapidoid.writable.WritableUtils;
-import org.rapidoid.writable.WritableOutputStream;
-import org.rapidoid.web.Screen;
-
-import java.io.OutputStream;
-import java.util.regex.Pattern;
-
-/*
+/*-
  * #%L
  * rapidoid-http-fast
  * %%
@@ -34,6 +17,24 @@ import java.util.regex.Pattern;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http.customize.defaults;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.GUI;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.Resp;
+import org.rapidoid.http.customize.PageDecorator;
+import org.rapidoid.u.U;
+import org.rapidoid.web.Screen;
+import org.rapidoid.writable.WritableOutputStream;
+import org.rapidoid.writable.WritableUtils;
+
+import java.io.OutputStream;
+import java.util.regex.Pattern;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")

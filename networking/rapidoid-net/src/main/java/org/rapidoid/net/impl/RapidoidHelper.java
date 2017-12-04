@@ -1,20 +1,4 @@
-package org.rapidoid.net.impl;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.data.BufRange;
-import org.rapidoid.data.BufRanges;
-import org.rapidoid.data.KeyValueRanges;
-import org.rapidoid.pool.Pool;
-import org.rapidoid.pool.Pools;
-import org.rapidoid.wrap.*;
-
-import java.util.Random;
-import java.util.concurrent.Callable;
-
-/*
+/*-
  * #%L
  * rapidoid-net
  * %%
@@ -33,6 +17,23 @@ import java.util.concurrent.Callable;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.net.impl;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.data.BufRange;
+import org.rapidoid.data.BufRanges;
+import org.rapidoid.data.KeyValueRanges;
+import org.rapidoid.pool.Pool;
+import org.rapidoid.pool.Pools;
+import org.rapidoid.wrap.*;
+
+import java.util.Random;
+import java.util.concurrent.Callable;
+
 
 /**
  * Helpers are instantiated per worker node (for thread-safe use), so they contain various data structures that can be

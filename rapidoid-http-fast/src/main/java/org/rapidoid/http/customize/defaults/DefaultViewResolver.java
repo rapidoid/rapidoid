@@ -1,19 +1,4 @@
-package org.rapidoid.http.customize.defaults;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.http.View;
-import org.rapidoid.http.customize.ResourceLoader;
-import org.rapidoid.http.impl.AbstractViewResolver;
-import org.rapidoid.render.RapidoidTemplateFactory;
-import org.rapidoid.render.Template;
-import org.rapidoid.render.TemplateFactory;
-import org.rapidoid.render.TemplateStore;
-import org.rapidoid.u.U;
-
-import java.io.OutputStream;
-
-/*
+/*-
  * #%L
  * rapidoid-http-fast
  * %%
@@ -32,6 +17,22 @@ import java.io.OutputStream;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http.customize.defaults;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.View;
+import org.rapidoid.http.customize.ResourceLoader;
+import org.rapidoid.http.impl.AbstractViewResolver;
+import org.rapidoid.render.RapidoidTemplateFactory;
+import org.rapidoid.render.Template;
+import org.rapidoid.render.TemplateFactory;
+import org.rapidoid.render.TemplateStore;
+import org.rapidoid.u.U;
+
+import java.io.OutputStream;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")

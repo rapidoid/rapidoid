@@ -1,21 +1,4 @@
-package org.rapidoid.gui.base;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.GUI;
-import org.rapidoid.gui.reqinfo.IReqInfo;
-import org.rapidoid.gui.reqinfo.ReqInfo;
-import org.rapidoid.html.Tag;
-import org.rapidoid.html.TagWidget;
-import org.rapidoid.html.impl.TagRenderer;
-import org.rapidoid.html.tag.ATag;
-import org.rapidoid.html.tag.TdTag;
-import org.rapidoid.html.tag.ThTag;
-import org.rapidoid.u.U;
-import org.rapidoid.util.Constants;
-
-/*
+/*-
  * #%L
  * rapidoid-gui
  * %%
@@ -34,6 +17,24 @@ import org.rapidoid.util.Constants;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.gui.base;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.GUI;
+import org.rapidoid.gui.reqinfo.IReqInfo;
+import org.rapidoid.gui.reqinfo.ReqInfo;
+import org.rapidoid.html.Tag;
+import org.rapidoid.html.TagWidget;
+import org.rapidoid.html.impl.TagRenderer;
+import org.rapidoid.html.tag.ATag;
+import org.rapidoid.html.tag.TdTag;
+import org.rapidoid.html.tag.ThTag;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Constants;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

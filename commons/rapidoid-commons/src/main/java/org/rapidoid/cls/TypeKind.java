@@ -1,15 +1,4 @@
-package org.rapidoid.cls;
-
-import org.rapidoid.u.U;
-import org.rapidoid.util.Deleted;
-import org.rapidoid.util.None;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -28,6 +17,18 @@ import java.util.Set;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.cls;
+
+import org.rapidoid.u.U;
+import org.rapidoid.util.Deleted;
+import org.rapidoid.util.None;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 
 interface TypeConstants {
 

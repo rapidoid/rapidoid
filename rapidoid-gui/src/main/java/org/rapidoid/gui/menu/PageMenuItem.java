@@ -1,13 +1,4 @@
-package org.rapidoid.gui.menu;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.commons.Str;
-
-import java.util.Map;
-
-/*
+/*-
  * #%L
  * rapidoid-gui
  * %%
@@ -26,6 +17,16 @@ import java.util.Map;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.gui.menu;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.Str;
+
+import java.util.Map;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")

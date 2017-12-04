@@ -1,17 +1,4 @@
-package org.rapidoid.gui.reqinfo;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.http.HttpVerb;
-import org.rapidoid.io.Upload;
-import org.rapidoid.u.U;
-
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-/*
+/*-
  * #%L
  * rapidoid-gui
  * %%
@@ -30,6 +17,20 @@ import java.util.Set;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.gui.reqinfo;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.HttpVerb;
+import org.rapidoid.io.Upload;
+import org.rapidoid.u.U;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 
 @SuppressWarnings("unchecked")
 @Authors("Nikolche Mihajlovski")

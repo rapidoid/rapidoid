@@ -1,6 +1,4 @@
-package org.rapidoid.docs.restjson;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs.restjson;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.restjson;
+
 
 import org.rapidoid.setup.App;
 

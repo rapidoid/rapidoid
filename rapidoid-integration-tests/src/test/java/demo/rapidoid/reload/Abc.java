@@ -1,6 +1,4 @@
-package demo.rapidoid.reload;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package demo.rapidoid.reload;
  * limitations under the License.
  * #L%
  */
+
+package demo.rapidoid.reload;
+
 
 import org.rapidoid.annotation.Controller;
 import org.rapidoid.annotation.GET;

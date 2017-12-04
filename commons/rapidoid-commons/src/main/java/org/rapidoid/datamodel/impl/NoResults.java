@@ -1,5 +1,3 @@
-package org.rapidoid.datamodel.impl;
-
 /*-
  * #%L
  * rapidoid-commons
@@ -19,6 +17,9 @@ package org.rapidoid.datamodel.impl;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.datamodel.impl;
+
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;

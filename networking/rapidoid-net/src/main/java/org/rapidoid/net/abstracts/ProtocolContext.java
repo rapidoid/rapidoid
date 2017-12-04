@@ -1,18 +1,4 @@
-package org.rapidoid.net.abstracts;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.buffer.Buf;
-import org.rapidoid.net.AsyncLogic;
-import org.rapidoid.net.impl.ConnState;
-import org.rapidoid.net.impl.RapidoidHelper;
-
-import java.io.File;
-import java.io.OutputStream;
-import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
-
-/*
+/*-
  * #%L
  * rapidoid-net
  * %%
@@ -31,6 +17,21 @@ import java.nio.ByteBuffer;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.net.abstracts;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.buffer.Buf;
+import org.rapidoid.net.AsyncLogic;
+import org.rapidoid.net.impl.ConnState;
+import org.rapidoid.net.impl.RapidoidHelper;
+
+import java.io.File;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

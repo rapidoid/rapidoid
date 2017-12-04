@@ -1,6 +1,4 @@
-package org.rapidoid.lambda;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.lambda;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.lambda;
+
 
 /**
  * @author Nikolche Mihajlovski

@@ -1,18 +1,4 @@
-package org.rapidoid.serialize;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.AbstractTypeSpecificVisitor;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.cls.TypeKind;
-import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
-import org.rapidoid.util.TUUID;
-
-import java.nio.ByteBuffer;
-import java.util.*;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -31,6 +17,21 @@ import java.util.*;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.serialize;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.AbstractTypeSpecificVisitor;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.cls.TypeKind;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
+import org.rapidoid.util.TUUID;
+
+import java.nio.ByteBuffer;
+import java.util.*;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

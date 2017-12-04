@@ -1,12 +1,4 @@
-package org.rapidoid.http.customize;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.http.Req;
-
-import javax.persistence.EntityManagerFactory;
-
-/*
+/*-
  * #%L
  * rapidoid-http-fast
  * %%
@@ -25,6 +17,15 @@ import javax.persistence.EntityManagerFactory;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http.customize;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
+
+import javax.persistence.EntityManagerFactory;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")

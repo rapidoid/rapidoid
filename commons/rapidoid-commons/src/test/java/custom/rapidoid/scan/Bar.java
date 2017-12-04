@@ -1,7 +1,4 @@
-package custom.rapidoid.scan;
-
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -20,6 +17,9 @@ package custom.rapidoid.scan;
  * limitations under the License.
  * #L%
  */
+
+package custom.rapidoid.scan;
+
 
 @MyAnnot
 class Bar {

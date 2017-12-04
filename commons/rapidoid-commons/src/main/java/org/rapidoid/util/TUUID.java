@@ -1,16 +1,4 @@
-package org.rapidoid.util;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Str;
-import org.rapidoid.crypto.Crypto;
-import org.rapidoid.u.U;
-
-import java.nio.ByteBuffer;
-import java.util.UUID;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -29,6 +17,19 @@ import java.util.UUID;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.util;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Str;
+import org.rapidoid.crypto.Crypto;
+import org.rapidoid.u.U;
+
+import java.nio.ByteBuffer;
+import java.util.UUID;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")

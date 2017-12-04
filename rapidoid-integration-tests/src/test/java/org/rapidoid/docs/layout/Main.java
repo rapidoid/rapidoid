@@ -1,6 +1,4 @@
-package org.rapidoid.docs.layout;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs.layout;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.layout;
+
 
 import org.rapidoid.setup.App;
 

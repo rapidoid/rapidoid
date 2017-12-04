@@ -1,10 +1,4 @@
-package org.rapidoid.docs.essentials.dynamic;
-
-import org.junit.Test;
-import org.rapidoid.test.Doc;
-import org.rapidoid.test.TestCommons;
-
-/*
+/*-
  * #%L
  * rapidoid-essentials
  * %%
@@ -23,6 +17,13 @@ import org.rapidoid.test.TestCommons;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.essentials.dynamic;
+
+import org.junit.Test;
+import org.rapidoid.test.Doc;
+import org.rapidoid.test.TestCommons;
+
 
 public class EssentialsDynamicTest extends TestCommons {
 

@@ -1,6 +1,4 @@
-package org.rapidoid.sql.test;
-
-/*
+/*-
  * #%L
  * rapidoid-sql
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.sql.test;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.sql.test;
+
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;

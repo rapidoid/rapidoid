@@ -1,5 +1,4 @@
-package org.rapidoid.render;
-/*
+/*-
  * #%L
  * rapidoid-render
  * %%
@@ -18,6 +17,8 @@ package org.rapidoid.render;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.render;
 
 import org.junit.Before;
 import org.rapidoid.data.JSON;

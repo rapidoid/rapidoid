@@ -1,14 +1,4 @@
-package org.rapidoid.docs.essentials.collutils;
-
-import org.junit.Test;
-import org.rapidoid.test.Doc;
-import org.rapidoid.test.TestCommons;
-import org.rapidoid.u.U;
-
-import java.util.List;
-import java.util.Map;
-
-/*
+/*-
  * #%L
  * rapidoid-essentials
  * %%
@@ -27,6 +17,17 @@ import java.util.Map;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.essentials.collutils;
+
+import org.junit.Test;
+import org.rapidoid.test.Doc;
+import org.rapidoid.test.TestCommons;
+import org.rapidoid.u.U;
+
+import java.util.List;
+import java.util.Map;
+
 
 public class EssentialsUtilsTest extends TestCommons {
 

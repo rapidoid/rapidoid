@@ -1,6 +1,4 @@
-package org.rapidoid.jpa;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.jpa;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.jpa;
+
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

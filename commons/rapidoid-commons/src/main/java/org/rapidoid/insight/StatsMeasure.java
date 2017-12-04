@@ -1,12 +1,4 @@
-package org.rapidoid.insight;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import java.util.concurrent.atomic.AtomicLong;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -25,6 +17,15 @@ import java.util.concurrent.atomic.AtomicLong;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.insight;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import java.util.concurrent.atomic.AtomicLong;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

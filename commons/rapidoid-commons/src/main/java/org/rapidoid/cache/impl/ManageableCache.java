@@ -1,15 +1,4 @@
-package org.rapidoid.cache.impl;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.group.Action;
-import org.rapidoid.group.AutoManageable;
-import org.rapidoid.group.ManageableBean;
-import org.rapidoid.u.U;
-
-import java.util.List;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -28,6 +17,18 @@ import java.util.List;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.cache.impl;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.group.Action;
+import org.rapidoid.group.AutoManageable;
+import org.rapidoid.group.ManageableBean;
+import org.rapidoid.u.U;
+
+import java.util.List;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")

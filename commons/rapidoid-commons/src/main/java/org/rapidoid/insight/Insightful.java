@@ -1,6 +1,4 @@
-package org.rapidoid.insight;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.insight;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.insight;
+
 
 /**
  * @author Nikolche Mihajlovski

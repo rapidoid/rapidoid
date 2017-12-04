@@ -1,21 +1,4 @@
-package org.rapidoid.http.impl;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.commons.Str;
-import org.rapidoid.lambda.Mapper;
-import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
-
-import java.lang.reflect.Method;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-/*
+/*-
  * #%L
  * rapidoid-http-fast
  * %%
@@ -34,6 +17,24 @@ import java.util.regex.Pattern;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http.impl;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.Str;
+import org.rapidoid.lambda.Mapper;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
+
+import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

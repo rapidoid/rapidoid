@@ -1,5 +1,3 @@
-package org.rapidoid.http.handler;
-
 /*-
  * #%L
  * rapidoid-http-fast
@@ -19,6 +17,9 @@ package org.rapidoid.http.handler;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http.handler;
+
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.datamodel.Results;

@@ -1,20 +1,4 @@
-package org.rapidoid.setup;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Ctx;
-import org.rapidoid.ctx.PersisterProvider;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.customize.Customization;
-import org.rapidoid.http.customize.EntityManagerFactoryProvider;
-import org.rapidoid.http.customize.EntityManagerProvider;
-import org.rapidoid.u.U;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-
-/*
+/*-
  * #%L
  * rapidoid-http-server
  * %%
@@ -33,6 +17,23 @@ import javax.persistence.EntityManagerFactory;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.setup;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.PersisterProvider;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.customize.Customization;
+import org.rapidoid.http.customize.EntityManagerFactoryProvider;
+import org.rapidoid.http.customize.EntityManagerProvider;
+import org.rapidoid.u.U;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")

@@ -1,6 +1,4 @@
-package org.rapidoid.render.retriever;
-
-/*
+/*-
  * #%L
  * rapidoid-render
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.render.retriever;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.render.retriever;
+
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;

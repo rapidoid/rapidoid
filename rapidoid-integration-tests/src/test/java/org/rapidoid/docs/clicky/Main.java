@@ -1,12 +1,4 @@
-package org.rapidoid.docs.clicky;
-
-import org.rapidoid.annotation.Controller;
-import org.rapidoid.gui.Btn;
-import org.rapidoid.gui.GUI;
-import org.rapidoid.html.Tag;
-import org.rapidoid.setup.App;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -25,6 +17,15 @@ import org.rapidoid.setup.App;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.clicky;
+
+import org.rapidoid.annotation.Controller;
+import org.rapidoid.gui.Btn;
+import org.rapidoid.gui.GUI;
+import org.rapidoid.html.Tag;
+import org.rapidoid.setup.App;
+
 
 // Basic event handling and session storage :: Increase n when the "+" button is clicked: 
 

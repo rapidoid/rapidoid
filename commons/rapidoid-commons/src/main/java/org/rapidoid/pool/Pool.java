@@ -1,6 +1,4 @@
-package org.rapidoid.pool;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.pool;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.pool;
+
 
 /**
  * @author Nikolche Mihajlovski

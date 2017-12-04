@@ -1,6 +1,4 @@
-package org.rapidoid.web.config.listener;
-
-/*
+/*-
  * #%L
  * rapidoid-web
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.web.config.listener;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.web.config.listener;
+
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;

@@ -1,6 +1,4 @@
-package org.rapidoid.config;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.config;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.config;
+
 
 import org.junit.Before;
 import org.junit.Test;

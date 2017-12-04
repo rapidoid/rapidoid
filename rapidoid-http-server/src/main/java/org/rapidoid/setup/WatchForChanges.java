@@ -1,14 +1,4 @@
-package org.rapidoid.setup;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.io.watch.FilesystemChangeListener;
-import org.rapidoid.io.watch.Watch;
-import org.rapidoid.log.Log;
-import org.rapidoid.scan.ClasspathUtil;
-
-import java.util.Set;
-
-/*
+/*-
  * #%L
  * rapidoid-http-server
  * %%
@@ -27,6 +17,17 @@ import java.util.Set;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.setup;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.io.watch.FilesystemChangeListener;
+import org.rapidoid.io.watch.Watch;
+import org.rapidoid.log.Log;
+import org.rapidoid.scan.ClasspathUtil;
+
+import java.util.Set;
+
 
 public class WatchForChanges extends RapidoidThing {
 

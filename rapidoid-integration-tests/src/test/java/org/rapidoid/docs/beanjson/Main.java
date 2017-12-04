@@ -1,6 +1,4 @@
-package org.rapidoid.docs.beanjson;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs.beanjson;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.beanjson;
+
 
 import org.rapidoid.setup.App;
 

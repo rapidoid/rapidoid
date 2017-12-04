@@ -1,11 +1,4 @@
-package org.rapidoid.util;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.ctx.Ctx;
-import org.rapidoid.ctx.PersisterProvider;
-import org.rapidoid.log.Log;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -24,6 +17,14 @@ import org.rapidoid.log.Log;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.util;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.PersisterProvider;
+import org.rapidoid.log.Log;
+
 
 public class SimplePersisterProvider extends RapidoidThing implements PersisterProvider {
 

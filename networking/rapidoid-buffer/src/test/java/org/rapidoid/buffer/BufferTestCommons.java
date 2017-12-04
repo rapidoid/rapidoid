@@ -1,14 +1,4 @@
-package org.rapidoid.buffer;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.data.KeyValueRanges;
-import org.rapidoid.data.BufRange;
-import org.rapidoid.test.TestCommons;
-
-import java.nio.ByteBuffer;
-
-/*
+/*-
  * #%L
  * rapidoid-buffer
  * %%
@@ -27,6 +17,17 @@ import java.nio.ByteBuffer;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.buffer;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.data.BufRange;
+import org.rapidoid.data.KeyValueRanges;
+import org.rapidoid.test.TestCommons;
+
+import java.nio.ByteBuffer;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

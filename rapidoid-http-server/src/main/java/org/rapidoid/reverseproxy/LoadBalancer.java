@@ -1,6 +1,4 @@
-package org.rapidoid.reverseproxy;
-
-/*
+/*-
  * #%L
  * rapidoid-http-server
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.reverseproxy;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.reverseproxy;
+
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;

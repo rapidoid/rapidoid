@@ -1,13 +1,4 @@
-package org.rapidoid.util;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Rnd;
-import org.rapidoid.commons.Str;
-import org.rapidoid.io.IO;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -26,6 +17,16 @@ import org.rapidoid.io.IO;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.util;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Rnd;
+import org.rapidoid.commons.Str;
+import org.rapidoid.io.IO;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

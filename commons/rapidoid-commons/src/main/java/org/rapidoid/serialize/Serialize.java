@@ -1,13 +1,4 @@
-package org.rapidoid.serialize;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
-
-import java.nio.ByteBuffer;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -26,6 +17,16 @@ import java.nio.ByteBuffer;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.serialize;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
+
+import java.nio.ByteBuffer;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

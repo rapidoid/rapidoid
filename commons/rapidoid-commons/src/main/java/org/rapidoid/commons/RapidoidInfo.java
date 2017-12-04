@@ -1,18 +1,4 @@
-package org.rapidoid.commons;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.log.GlobalCfg;
-import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-import java.util.Properties;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -31,6 +17,21 @@ import java.util.Properties;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.commons;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.log.GlobalCfg;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Properties;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.4")

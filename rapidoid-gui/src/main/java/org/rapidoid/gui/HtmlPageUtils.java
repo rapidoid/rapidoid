@@ -1,15 +1,4 @@
-package org.rapidoid.gui;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.reqinfo.IReqInfo;
-import org.rapidoid.gui.reqinfo.ReqInfo;
-import org.rapidoid.http.HttpVerb;
-import org.rapidoid.render.Getter;
-import org.rapidoid.util.Msc;
-
-/*
+/*-
  * #%L
  * rapidoid-gui
  * %%
@@ -28,6 +17,18 @@ import org.rapidoid.util.Msc;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.gui;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.reqinfo.IReqInfo;
+import org.rapidoid.gui.reqinfo.ReqInfo;
+import org.rapidoid.http.HttpVerb;
+import org.rapidoid.render.Getter;
+import org.rapidoid.util.Msc;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

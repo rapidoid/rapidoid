@@ -1,6 +1,4 @@
-package org.rapidoid.docs.gettingstarted;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs.gettingstarted;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.gettingstarted;
+
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

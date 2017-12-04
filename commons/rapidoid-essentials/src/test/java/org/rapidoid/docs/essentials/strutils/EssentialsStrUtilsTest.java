@@ -1,11 +1,4 @@
-package org.rapidoid.docs.essentials.strutils;
-
-import org.junit.Test;
-import org.rapidoid.test.Doc;
-import org.rapidoid.test.TestCommons;
-import org.rapidoid.u.U;
-
-/*
+/*-
  * #%L
  * rapidoid-essentials
  * %%
@@ -24,6 +17,14 @@ import org.rapidoid.u.U;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.essentials.strutils;
+
+import org.junit.Test;
+import org.rapidoid.test.Doc;
+import org.rapidoid.test.TestCommons;
+import org.rapidoid.u.U;
+
 
 public class EssentialsStrUtilsTest extends TestCommons {
 

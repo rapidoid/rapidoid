@@ -1,6 +1,4 @@
-package org.rapidoid.docs.httpchunked;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs.httpchunked;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.httpchunked;
+
 
 import org.rapidoid.job.Jobs;
 import org.rapidoid.setup.App;

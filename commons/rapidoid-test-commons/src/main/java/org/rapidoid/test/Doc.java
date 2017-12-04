@@ -1,6 +1,4 @@
-package org.rapidoid.test;
-
-/*
+/*-
  * #%L
  * rapidoid-test-commons
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.test;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.test;
+
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

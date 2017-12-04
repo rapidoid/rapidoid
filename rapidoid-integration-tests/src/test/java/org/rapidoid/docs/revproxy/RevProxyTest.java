@@ -1,6 +1,4 @@
-package org.rapidoid.docs.revproxy;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs.revproxy;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.revproxy;
+
 
 import org.rapidoid.annotation.IntegrationTest;
 import org.rapidoid.docs.DocTest;

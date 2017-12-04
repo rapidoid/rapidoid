@@ -1,6 +1,4 @@
-package org.rapidoid.integration.guice;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.integration.guice;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.integration.guice;
+
 
 import com.google.inject.AbstractModule;
 import org.rapidoid.annotation.Authors;

@@ -1,21 +1,4 @@
-package org.rapidoid.integrate;
-
-import com.github.mustachejava.DefaultMustacheFactory;
-import com.github.mustachejava.Mustache;
-import com.github.mustachejava.MustacheResolver;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.http.View;
-import org.rapidoid.http.customize.ResourceLoader;
-import org.rapidoid.http.impl.AbstractViewResolver;
-import org.rapidoid.u.U;
-
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.Reader;
-import java.io.StringReader;
-
-/*
+/*-
  * #%L
  * rapidoid-integrate
  * %%
@@ -34,6 +17,24 @@ import java.io.StringReader;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.integrate;
+
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.Mustache;
+import com.github.mustachejava.MustacheResolver;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.View;
+import org.rapidoid.http.customize.ResourceLoader;
+import org.rapidoid.http.impl.AbstractViewResolver;
+import org.rapidoid.u.U;
+
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.StringReader;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")

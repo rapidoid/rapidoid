@@ -1,6 +1,4 @@
-package org.rapidoid.setup;
-
-/*
+/*-
  * #%L
  * rapidoid-http-fast
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.setup;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.setup;
+
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;

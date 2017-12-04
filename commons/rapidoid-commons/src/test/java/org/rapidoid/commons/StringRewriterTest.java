@@ -1,6 +1,4 @@
-package org.rapidoid.commons;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.commons;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.commons;
+
 
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;

@@ -1,22 +1,4 @@
-package org.rapidoid.http.handler.lambda;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.commons.Arr;
-import org.rapidoid.http.FastHttp;
-import org.rapidoid.http.HttpRoutes;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.handler.AbstractDecoratingHttpHandler;
-import org.rapidoid.http.handler.param.ParamRetriever;
-import org.rapidoid.http.handler.param.ParamRetrievers;
-import org.rapidoid.http.impl.RouteOptions;
-import org.rapidoid.lambda.NParamLambda;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-
-/*
+/*-
  * #%L
  * rapidoid-http-server
  * %%
@@ -35,6 +17,25 @@ import java.lang.reflect.Method;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http.handler.lambda;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.Arr;
+import org.rapidoid.http.FastHttp;
+import org.rapidoid.http.HttpRoutes;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.handler.AbstractDecoratingHttpHandler;
+import org.rapidoid.http.handler.param.ParamRetriever;
+import org.rapidoid.http.handler.param.ParamRetrievers;
+import org.rapidoid.http.impl.RouteOptions;
+import org.rapidoid.lambda.NParamLambda;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

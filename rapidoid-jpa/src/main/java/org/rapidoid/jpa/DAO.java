@@ -1,13 +1,4 @@
-package org.rapidoid.jpa;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.u.U;
-
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.List;
-
-/*
+/*-
  * #%L
  * rapidoid-jpa
  * %%
@@ -26,6 +17,16 @@ import java.util.List;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.jpa;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.u.U;
+
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.List;
+
 
 /**
  * @author Nikolche Mihajlovski

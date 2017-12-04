@@ -1,33 +1,4 @@
-package org.rapidoid.goodies;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.commons.English;
-import org.rapidoid.datamodel.IRange;
-import org.rapidoid.datamodel.Range;
-import org.rapidoid.commons.Str;
-import org.rapidoid.gui.Btn;
-import org.rapidoid.gui.GUI;
-import org.rapidoid.gui.Grid;
-import org.rapidoid.gui.Pager;
-import org.rapidoid.gui.input.Form;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.ReqRespHandler;
-import org.rapidoid.http.Resp;
-import org.rapidoid.jpa.JPA;
-import org.rapidoid.setup.App;
-import org.rapidoid.setup.On;
-import org.rapidoid.setup.Setup;
-import org.rapidoid.jdbc.JDBC;
-import org.rapidoid.u.U;
-
-import javax.persistence.metamodel.EntityType;
-import java.util.List;
-import java.util.Map;
-
-/*
+/*-
  * #%L
  * rapidoid-web
  * %%
@@ -46,6 +17,36 @@ import java.util.Map;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.goodies;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.English;
+import org.rapidoid.commons.Str;
+import org.rapidoid.datamodel.IRange;
+import org.rapidoid.datamodel.Range;
+import org.rapidoid.gui.Btn;
+import org.rapidoid.gui.GUI;
+import org.rapidoid.gui.Grid;
+import org.rapidoid.gui.Pager;
+import org.rapidoid.gui.input.Form;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.ReqRespHandler;
+import org.rapidoid.http.Resp;
+import org.rapidoid.jdbc.JDBC;
+import org.rapidoid.jpa.JPA;
+import org.rapidoid.setup.App;
+import org.rapidoid.setup.On;
+import org.rapidoid.setup.Setup;
+import org.rapidoid.u.U;
+
+import javax.persistence.metamodel.EntityType;
+import java.util.List;
+import java.util.Map;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

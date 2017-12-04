@@ -1,6 +1,4 @@
-package org.rapidoid.docs.showmovie;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs.showmovie;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.showmovie;
+
 
 public class Movie {
 	public String title;

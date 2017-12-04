@@ -1,21 +1,4 @@
-package org.rapidoid.cache.impl;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cache.Cache;
-import org.rapidoid.cache.Caching;
-import org.rapidoid.commons.Rnd;
-import org.rapidoid.lambda.Mapper;
-import org.rapidoid.log.Log;
-import org.rapidoid.util.AbstractMapImpl;
-import org.rapidoid.util.MapEntry;
-import org.rapidoid.util.Msc;
-import org.rapidoid.util.SimpleBucket;
-
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -34,6 +17,24 @@ import java.util.concurrent.TimeUnit;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.cache.impl;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cache.Cache;
+import org.rapidoid.cache.Caching;
+import org.rapidoid.commons.Rnd;
+import org.rapidoid.lambda.Mapper;
+import org.rapidoid.log.Log;
+import org.rapidoid.util.AbstractMapImpl;
+import org.rapidoid.util.MapEntry;
+import org.rapidoid.util.Msc;
+import org.rapidoid.util.SimpleBucket;
+
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")

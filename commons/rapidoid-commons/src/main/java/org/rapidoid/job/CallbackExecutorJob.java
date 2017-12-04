@@ -1,11 +1,4 @@
-package org.rapidoid.job;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.concurrent.Callback;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -24,6 +17,14 @@ import org.rapidoid.concurrent.Callback;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.job;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.concurrent.Callback;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")

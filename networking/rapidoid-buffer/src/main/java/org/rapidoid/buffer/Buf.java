@@ -1,22 +1,4 @@
-package org.rapidoid.buffer;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.bytes.Bytes;
-import org.rapidoid.data.BufRange;
-import org.rapidoid.data.BufRanges;
-import org.rapidoid.writable.Writable;
-import org.rapidoid.wrap.IntWrap;
-
-import javax.net.ssl.SSLEngine;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.ByteBuffer;
-import java.nio.channels.ReadableByteChannel;
-import java.nio.channels.WritableByteChannel;
-
-/*
+/*-
  * #%L
  * rapidoid-buffer
  * %%
@@ -35,6 +17,25 @@ import java.nio.channels.WritableByteChannel;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.buffer;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.bytes.Bytes;
+import org.rapidoid.data.BufRange;
+import org.rapidoid.data.BufRanges;
+import org.rapidoid.wrap.IntWrap;
+import org.rapidoid.writable.Writable;
+
+import javax.net.ssl.SSLEngine;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.WritableByteChannel;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

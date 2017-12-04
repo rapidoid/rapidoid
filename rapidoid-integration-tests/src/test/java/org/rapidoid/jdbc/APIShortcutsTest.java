@@ -1,6 +1,4 @@
-package org.rapidoid.jdbc;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.jdbc;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.jdbc;
+
 
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;

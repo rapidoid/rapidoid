@@ -1,19 +1,4 @@
-package org.rapidoid.model.impl;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Err;
-import org.rapidoid.model.Item;
-import org.rapidoid.model.Items;
-import org.rapidoid.model.Property;
-import org.rapidoid.u.U;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
-/*
+/*-
  * #%L
  * rapidoid-gui
  * %%
@@ -32,6 +17,22 @@ import java.util.List;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.model.impl;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Err;
+import org.rapidoid.model.Item;
+import org.rapidoid.model.Items;
+import org.rapidoid.model.Property;
+import org.rapidoid.u.U;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

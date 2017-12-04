@@ -1,12 +1,4 @@
-package org.rapidoid.collection;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -25,6 +17,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.collection;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")

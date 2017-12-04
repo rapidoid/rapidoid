@@ -1,13 +1,4 @@
-package org.rapidoid.net.impl;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.util.Resetable;
-
-import java.util.List;
-
-/*
+/*-
  * #%L
  * rapidoid-net
  * %%
@@ -26,6 +17,16 @@ import java.util.List;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.net.impl;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.util.Resetable;
+
+import java.util.List;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

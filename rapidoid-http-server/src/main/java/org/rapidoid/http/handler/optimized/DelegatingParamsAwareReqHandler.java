@@ -1,6 +1,4 @@
-package org.rapidoid.http.handler.optimized;
-
-/*
+/*-
  * #%L
  * rapidoid-http-server
  * %%
@@ -20,13 +18,16 @@ package org.rapidoid.http.handler.optimized;
  * #L%
  */
 
+package org.rapidoid.http.handler.optimized;
+
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.HttpRoutes;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.http.handler.AbstractDecoratingHttpHandler;
+import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.lambda.OneParamLambda;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;

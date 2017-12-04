@@ -1,13 +1,4 @@
-package org.rapidoid.beany;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.TypeKind;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.ParameterizedType;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -26,6 +17,16 @@ import java.lang.reflect.ParameterizedType;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.beany;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.TypeKind;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.ParameterizedType;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

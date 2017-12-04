@@ -1,6 +1,4 @@
-package org.rapidoid.group;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.group;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.group;
+
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;

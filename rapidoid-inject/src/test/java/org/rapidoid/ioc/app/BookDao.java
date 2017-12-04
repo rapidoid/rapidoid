@@ -1,6 +1,4 @@
-package org.rapidoid.ioc.app;
-
-/*
+/*-
  * #%L
  * rapidoid-inject
  * %%
@@ -20,10 +18,13 @@ package org.rapidoid.ioc.app;
  * #L%
  */
 
+package org.rapidoid.ioc.app;
+
+
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.ioc.Wired;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ioc.Logger;
+import org.rapidoid.ioc.Wired;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

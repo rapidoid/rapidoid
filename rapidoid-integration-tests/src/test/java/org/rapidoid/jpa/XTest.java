@@ -1,13 +1,4 @@
-package org.rapidoid.jpa;
-
-import org.junit.Test;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.goodies.X;
-import org.rapidoid.http.IsolatedIntegrationTest;
-import org.rapidoid.u.U;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -26,6 +17,16 @@ import org.rapidoid.u.U;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.jpa;
+
+import org.junit.Test;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.goodies.X;
+import org.rapidoid.http.IsolatedIntegrationTest;
+import org.rapidoid.u.U;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

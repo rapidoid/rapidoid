@@ -1,13 +1,4 @@
-package org.rapidoid.html.impl;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Err;
-import org.rapidoid.html.Tag;
-import org.rapidoid.html.TagProcessor;
-
-/*
+/*-
  * #%L
  * rapidoid-gui
  * %%
@@ -26,6 +17,16 @@ import org.rapidoid.html.TagProcessor;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.html.impl;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Err;
+import org.rapidoid.html.Tag;
+import org.rapidoid.html.TagProcessor;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

@@ -1,12 +1,4 @@
-package org.rapidoid.docs.httpasync;
-
-import org.rapidoid.http.Req;
-import org.rapidoid.job.Jobs;
-import org.rapidoid.setup.On;
-
-import java.util.concurrent.TimeUnit;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -25,6 +17,15 @@ import java.util.concurrent.TimeUnit;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.httpasync;
+
+import org.rapidoid.http.Req;
+import org.rapidoid.job.Jobs;
+import org.rapidoid.setup.On;
+
+import java.util.concurrent.TimeUnit;
+
 
 public class Main {
 

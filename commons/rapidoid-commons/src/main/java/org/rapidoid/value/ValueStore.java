@@ -1,6 +1,4 @@
-package org.rapidoid.value;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.value;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.value;
+
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;

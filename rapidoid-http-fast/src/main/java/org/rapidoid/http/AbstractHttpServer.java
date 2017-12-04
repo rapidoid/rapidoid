@@ -1,6 +1,4 @@
-package org.rapidoid.http;
-
-/*
+/*-
  * #%L
  * rapidoid-http-fast
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.http;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http;
+
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
@@ -155,7 +156,7 @@ public abstract class AbstractHttpServer extends RapidoidThing implements Protoc
 		ctx.write(contentType.getBytes());
 		ctx.write(CR_LF);
 	}
-	
+
 	protected void writeBody(Channel ctx, byte[] body, MediaType contentType) {
 		writeBody(ctx, body, 0, body.length, contentType);
 	}
@@ -185,7 +186,7 @@ public abstract class AbstractHttpServer extends RapidoidThing implements Protoc
 		writeJsonBody(req, ctx, value);
 		return HttpStatus.DONE;
 	}
-	
+
 	protected HttpStatus ok(Channel ctx, boolean isKeepAlive, byte[] body, MediaType contentType) {
 		return ok(ctx, isKeepAlive, body, 0, body.length, contentType);
 	}

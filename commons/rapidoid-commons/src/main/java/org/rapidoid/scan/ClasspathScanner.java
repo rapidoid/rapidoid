@@ -1,6 +1,4 @@
-package org.rapidoid.scan;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.scan;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.scan;
+
 
 import javassist.bytecode.AnnotationsAttribute;
 import javassist.bytecode.ClassFile;

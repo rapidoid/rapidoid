@@ -1,6 +1,4 @@
-package org.rapidoid.http.client;
-
-/*
+/*-
  * #%L
  * rapidoid-http-client
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.http.client;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http.client;
+
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;

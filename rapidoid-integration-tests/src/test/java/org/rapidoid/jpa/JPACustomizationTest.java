@@ -1,16 +1,4 @@
-package org.rapidoid.jpa;
-
-import org.junit.Test;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.http.HTTP;
-import org.rapidoid.http.IsolatedIntegrationTest;
-import org.rapidoid.setup.My;
-import org.rapidoid.setup.On;
-
-import java.util.concurrent.atomic.AtomicInteger;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -29,6 +17,19 @@ import java.util.concurrent.atomic.AtomicInteger;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.jpa;
+
+import org.junit.Test;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.HTTP;
+import org.rapidoid.http.IsolatedIntegrationTest;
+import org.rapidoid.setup.My;
+import org.rapidoid.setup.On;
+
+import java.util.concurrent.atomic.AtomicInteger;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")

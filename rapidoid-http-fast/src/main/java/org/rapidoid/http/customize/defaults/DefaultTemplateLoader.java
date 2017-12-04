@@ -1,13 +1,4 @@
-package org.rapidoid.http.customize.defaults;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.http.customize.ResourceLoader;
-import org.rapidoid.io.Res;
-import org.rapidoid.render.Templates;
-
-/*
+/*-
  * #%L
  * rapidoid-http-fast
  * %%
@@ -26,6 +17,16 @@ import org.rapidoid.render.Templates;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http.customize.defaults;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.customize.ResourceLoader;
+import org.rapidoid.io.Res;
+import org.rapidoid.render.Templates;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")

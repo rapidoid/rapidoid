@@ -1,14 +1,4 @@
-package org.rapidoid.http.impl;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.util.Once;
-import org.rapidoid.writable.ReusableWritable;
-
-import java.io.IOException;
-import java.io.OutputStream;
-
-/*
+/*-
  * #%L
  * rapidoid-http-fast
  * %%
@@ -27,6 +17,17 @@ import java.io.OutputStream;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http.impl;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.util.Once;
+import org.rapidoid.writable.ReusableWritable;
+
+import java.io.IOException;
+import java.io.OutputStream;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.4.0")

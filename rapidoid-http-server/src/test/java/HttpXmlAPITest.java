@@ -1,4 +1,4 @@
-/*
+/*-
  * #%L
  * rapidoid-http-server
  * %%

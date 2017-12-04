@@ -1,6 +1,4 @@
-package org.rapidoid.docs.mvc;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs.mvc;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.mvc;
+
 
 import org.rapidoid.gui.GUI;
 import org.rapidoid.http.Req;

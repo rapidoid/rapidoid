@@ -1,6 +1,4 @@
-package org.rapidoid.http.handler.param;
-
-/*
+/*-
  * #%L
  * rapidoid-http-server
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.http.handler.param;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http.handler.param;
+
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;

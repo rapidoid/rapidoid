@@ -1,16 +1,4 @@
-package org.rapidoid.http;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.http.customize.Customization;
-import org.rapidoid.io.Upload;
-
-import java.io.OutputStream;
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
-
-/*
+/*-
  * #%L
  * rapidoid-http-fast
  * %%
@@ -29,6 +17,19 @@ import java.util.Map;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.http;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.customize.Customization;
+import org.rapidoid.io.Upload;
+
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
+
 
 /**
  * HTTP Request API.

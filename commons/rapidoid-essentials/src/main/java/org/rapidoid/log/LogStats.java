@@ -1,6 +1,4 @@
-package org.rapidoid.log;
-
-/*
+/*-
  * #%L
  * rapidoid-essentials
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.log;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.log;
+
 
 import org.rapidoid.RapidoidThing;
 

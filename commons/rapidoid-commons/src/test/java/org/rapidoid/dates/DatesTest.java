@@ -1,6 +1,4 @@
-package org.rapidoid.dates;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.dates;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.dates;
+
 
 import org.junit.Test;
 import org.rapidoid.commons.Dates;

@@ -1,6 +1,4 @@
-package org.rapidoid.jpa.impl;
-
-/*
+/*-
  * #%L
  * rapidoid-jpa
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.jpa.impl;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.jpa.impl;
+
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;

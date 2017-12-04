@@ -1,13 +1,4 @@
-package org.rapidoid.docs.restjson;
-
-import org.rapidoid.annotation.Controller;
-import org.rapidoid.annotation.GET;
-import org.rapidoid.annotation.POST;
-import org.rapidoid.u.U;
-
-import java.util.Map;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -26,6 +17,16 @@ import java.util.Map;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.restjson;
+
+import org.rapidoid.annotation.Controller;
+import org.rapidoid.annotation.GET;
+import org.rapidoid.annotation.POST;
+import org.rapidoid.u.U;
+
+import java.util.Map;
+
 
 @Controller
 public class TextTools {

@@ -1,17 +1,4 @@
-package org.rapidoid.job;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Ctx;
-import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.log.Log;
-import org.rapidoid.u.U;
-
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.RejectedExecutionException;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -30,6 +17,20 @@ import java.util.concurrent.RejectedExecutionException;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.job;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
+
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.RejectedExecutionException;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")

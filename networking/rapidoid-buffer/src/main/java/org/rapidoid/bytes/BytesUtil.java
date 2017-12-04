@@ -1,17 +1,4 @@
-package org.rapidoid.bytes;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Err;
-import org.rapidoid.data.BufRange;
-import org.rapidoid.data.BufRanges;
-import org.rapidoid.util.Msc;
-import org.rapidoid.wrap.IntWrap;
-
-import static org.rapidoid.util.Constants.*;
-
-/*
+/*-
  * #%L
  * rapidoid-buffer
  * %%
@@ -30,6 +17,20 @@ import static org.rapidoid.util.Constants.*;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.bytes;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Err;
+import org.rapidoid.data.BufRange;
+import org.rapidoid.data.BufRanges;
+import org.rapidoid.util.Msc;
+import org.rapidoid.wrap.IntWrap;
+
+import static org.rapidoid.util.Constants.*;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

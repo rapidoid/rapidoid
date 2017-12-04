@@ -1,6 +1,4 @@
-package org.rapidoid.arr;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.arr;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.arr;
+
 
 import org.junit.Test;
 import org.rapidoid.commons.Arr;

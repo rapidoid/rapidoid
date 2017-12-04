@@ -1,20 +1,4 @@
-package org.rapidoid.jdbc;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.collection.Coll;
-import org.rapidoid.datamodel.Results;
-import org.rapidoid.lambda.Mapper;
-
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
-/*
+/*-
  * #%L
  * rapidoid-sql
  * %%
@@ -33,6 +17,23 @@ import java.util.UUID;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.jdbc;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.collection.Coll;
+import org.rapidoid.datamodel.Results;
+import org.rapidoid.lambda.Mapper;
+
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")

@@ -1,6 +1,4 @@
-package org.rapidoid.goodies;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -20,12 +18,15 @@ package org.rapidoid.goodies;
  * #L%
  */
 
+package org.rapidoid.goodies;
+
+
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.env.Env;
 import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.config.Conf;
+import org.rapidoid.env.Env;
 import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.setup.App;

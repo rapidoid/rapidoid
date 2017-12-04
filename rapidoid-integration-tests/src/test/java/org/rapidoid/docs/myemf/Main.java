@@ -1,6 +1,4 @@
-package org.rapidoid.docs.myemf;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.docs.myemf;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.docs.myemf;
+
 
 import org.rapidoid.setup.My;
 

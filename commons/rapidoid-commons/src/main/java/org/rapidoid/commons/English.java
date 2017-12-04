@@ -1,17 +1,4 @@
-package org.rapidoid.commons;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.log.Log;
-import org.rapidoid.u.U;
-
-import java.io.IOException;
-import java.util.Map;
-import java.util.Properties;
-import java.util.regex.Pattern;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -30,6 +17,20 @@ import java.util.regex.Pattern;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.commons;
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
+
+import java.io.IOException;
+import java.util.Map;
+import java.util.Properties;
+import java.util.regex.Pattern;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

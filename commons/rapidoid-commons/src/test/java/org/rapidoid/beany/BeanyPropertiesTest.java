@@ -1,11 +1,4 @@
-package org.rapidoid.beany;
-
-import org.junit.Assert;
-import org.junit.Test;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -24,6 +17,14 @@ import org.rapidoid.annotation.Since;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.beany;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 
 enum XY {
 	X, Y

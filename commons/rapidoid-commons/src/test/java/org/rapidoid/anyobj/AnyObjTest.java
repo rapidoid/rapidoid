@@ -1,6 +1,4 @@
-package org.rapidoid.anyobj;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -19,6 +17,9 @@ package org.rapidoid.anyobj;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.anyobj;
+
 
 import org.junit.Test;
 import org.rapidoid.commons.AnyObj;

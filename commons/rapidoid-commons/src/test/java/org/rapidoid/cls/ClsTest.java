@@ -1,22 +1,4 @@
-package org.rapidoid.cls;
-
-import org.junit.Test;
-import org.rapidoid.annotation.*;
-import org.rapidoid.commons.Dates;
-import org.rapidoid.http.HttpVerb;
-import org.rapidoid.test.AbstractCommonsTest;
-import org.rapidoid.test.TestCommons;
-import org.rapidoid.u.U;
-
-import java.lang.reflect.Method;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-
-/*
+/*-
  * #%L
  * rapidoid-commons
  * %%
@@ -35,6 +17,25 @@ import java.util.HashSet;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.cls;
+
+import org.junit.Test;
+import org.rapidoid.annotation.*;
+import org.rapidoid.commons.Dates;
+import org.rapidoid.http.HttpVerb;
+import org.rapidoid.test.AbstractCommonsTest;
+import org.rapidoid.test.TestCommons;
+import org.rapidoid.u.U;
+
+import java.lang.reflect.Method;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

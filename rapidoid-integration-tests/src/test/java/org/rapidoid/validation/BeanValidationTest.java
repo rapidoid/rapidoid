@@ -1,15 +1,4 @@
-package org.rapidoid.validation;
-
-import org.junit.Test;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.test.TestCommons;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import java.util.Set;
-
-/*
+/*-
  * #%L
  * rapidoid-integration-tests
  * %%
@@ -28,6 +17,18 @@ import java.util.Set;
  * limitations under the License.
  * #L%
  */
+
+package org.rapidoid.validation;
+
+import org.junit.Test;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.test.TestCommons;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import java.util.Set;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
