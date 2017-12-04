@@ -15,16 +15,15 @@ Rapidoid is released under the liberal Apache Public License v2, so it is free t
 
 # Roadmap
 
-* Better documentation (work in progress)
-* SSL support (coming soon in 5.4)
-* RPC layer (high-level, POJO-based)
-* Off-heap cache storage
+* Better documentation (work in progress - as always)
+* Swagger / OpenAPI support
 
 # Contributing
 
 1. Fork (and then `git clone https://github.com/<your-username-here>/rapidoid.git`).
-2. Create a branch (`git checkout -b branch_name`).
+2. Make your changes
 3. Commit your changes (`git commit -am "Description of contribution"`).
-4. Push the branch (`git push origin branch_name`).
+4. Push to GitHub (`git push`).
 5. Open a Pull Request.
-6. Thank you for your contribution! Wait for a response...
+6. Please sign the CLA.
+7. Thank you for your contribution! Wait for a response...
