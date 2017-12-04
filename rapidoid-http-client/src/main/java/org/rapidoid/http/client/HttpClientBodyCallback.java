@@ -29,7 +29,7 @@ import org.rapidoid.job.Jobs;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("NET_EXTRAS")
+@Since("5.5.0")
 public class HttpClientBodyCallback extends RapidoidThing implements HttpClientCallback {
 
 	private final Callback<String> bodyCallback;

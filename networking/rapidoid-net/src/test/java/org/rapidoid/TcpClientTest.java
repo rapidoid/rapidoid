@@ -33,7 +33,7 @@ import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("NET_EXTRAS")
+@Since("5.5.0")
 public class TcpClientTest extends NetTestCommons {
 
 	private final Protocol UPPERCASE_SERVER = new Protocol() {

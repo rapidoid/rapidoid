@@ -31,7 +31,7 @@ import org.rapidoid.net.impl.RapidoidHelper;
 import javax.net.ssl.SSLContext;
 
 @Authors("Nikolche Mihajlovski")
-@Since("NET_EXTRAS")
+@Since("5.5.0")
 public class TCPClientBuilder extends RapidoidThing {
 
 	private volatile String host;

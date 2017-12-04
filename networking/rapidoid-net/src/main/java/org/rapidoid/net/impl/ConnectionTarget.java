@@ -30,7 +30,7 @@ import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 
 @Authors("Nikolche Mihajlovski")
-@Since("NET_EXTRAS")
+@Since("5.5.0")
 public class ConnectionTarget extends RapidoidThing {
 
 	volatile SocketChannel socketChannel;

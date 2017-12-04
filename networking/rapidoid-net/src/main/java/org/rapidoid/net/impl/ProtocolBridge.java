@@ -30,7 +30,7 @@ import org.rapidoid.u.U;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("NET_EXTRAS")
+@Since("5.5.0")
 public abstract class ProtocolBridge extends RapidoidThing {
 
 	protected abstract void peer1(Channel ctx);

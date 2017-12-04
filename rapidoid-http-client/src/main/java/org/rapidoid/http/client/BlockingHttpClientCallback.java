@@ -31,7 +31,7 @@ import org.rapidoid.data.BufRange;
 import org.rapidoid.data.BufRanges;
 
 @Authors("Nikolche Mihajlovski")
-@Since("NET_EXTRAS")
+@Since("5.5.0")
 public class BlockingHttpClientCallback extends RapidoidThing implements HttpClientCallback {
 
 	private final Promise<byte[]> promise = Promises.create();

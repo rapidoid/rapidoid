@@ -27,7 +27,7 @@ import org.rapidoid.net.impl.ConnState;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("NET_EXTRAS")
+@Since("5.5.0")
 public interface TCPClient extends Activity<TCPClient> {
 
 	ChannelHolder connect(String serverHost, int serverPort, Protocol clientProtocol, boolean autoreconnecting,

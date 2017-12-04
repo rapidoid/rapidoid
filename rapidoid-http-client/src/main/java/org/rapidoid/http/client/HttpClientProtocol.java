@@ -33,7 +33,7 @@ import org.rapidoid.util.Msc;
 import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
-@Since("NET_EXTRAS")
+@Since("5.5.0")
 public class HttpClientProtocol extends FiniteStateProtocol {
 
 	private final String request;

@@ -2,7 +2,7 @@ package org.rapidoid.http;
 
 /*
  * #%L
- * rapidoid-http-client
+ * rapidoid-integration-tests
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -31,7 +31,7 @@ import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("NET_EXTRAS")
+@Since("5.5.0")
 public class HttpClientTest extends IsolatedIntegrationTest {
 
 	private static final String GET_LOCALHOST = "GET / HTTP/1.1\nHost: localhost\n\n";

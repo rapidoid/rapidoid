@@ -26,7 +26,7 @@ import org.rapidoid.data.BufRanges;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("NET_EXTRAS")
+@Since("5.5.0")
 public interface HttpClientCallback {
 
 	void onResult(Buf buffer, BufRanges head, BufRanges body);

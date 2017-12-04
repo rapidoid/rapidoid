@@ -2,7 +2,7 @@ package org.rapidoid.http;
 
 /*
  * #%L
- * rapidoid-http-client
+ * rapidoid-integration-tests
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -37,7 +37,7 @@ import org.rapidoid.wrap.BoolWrap;
 import org.rapidoid.wrap.IntWrap;
 
 @Authors("Nikolche Mihajlovski")
-@Since("NET_EXTRAS")
+@Since("5.5.0")
 public class HttpClientPipeliningTest extends IsolatedIntegrationTest {
 
 	protected static final byte[] REQ = "GET /hello H\r\nasf:asf\r\n\r\n".getBytes();

@@ -29,7 +29,7 @@ import org.rapidoid.net.abstracts.ChannelHolder;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Authors("Nikolche Mihajlovski")
-@Since("NET_EXTRAS")
+@Since("5.5.0")
 public class ChannelHolderImpl extends RapidoidThing implements ChannelHolder {
 
 	private static final AtomicLong COUNTER = new AtomicLong();

@@ -30,7 +30,7 @@ import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 
 @Authors("Nikolche Mihajlovski")
-@Since("NET_EXTRAS")
+@Since("5.5.0")
 public abstract class FiniteStateProtocol extends RapidoidThing implements Constants, Protocol {
 
 	private static final int MAX_STATES = 20;

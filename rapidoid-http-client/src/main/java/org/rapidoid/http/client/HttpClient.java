@@ -27,7 +27,7 @@ import org.rapidoid.net.TCP;
 import org.rapidoid.net.TCPClient;
 
 @Authors("Nikolche Mihajlovski")
-@Since("NET_EXTRAS")
+@Since("5.5.0")
 public class HttpClient extends RapidoidThing {
 
 	private final TCPClient clients = TCP.client().build().start();
