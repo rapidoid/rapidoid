@@ -30,6 +30,7 @@ import java.util.Date;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.12")
+@SuppressWarnings("unchecked")
 public class HttpPojoApiTest extends HttpTestCommons {
 
 	@Test

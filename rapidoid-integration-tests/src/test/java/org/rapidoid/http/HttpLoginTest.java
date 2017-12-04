@@ -38,6 +38,7 @@ import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
+@SuppressWarnings("unchecked")
 public class HttpLoginTest extends IsolatedIntegrationTest {
 
 	private volatile boolean ready = false;

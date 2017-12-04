@@ -201,6 +201,7 @@ public class Arr extends RapidoidThing {
 
 	/* concat */
 
+	@SafeVarargs
 	public static <T> T[] concat(T[] left, T... right) {
 		T[] concatenated = Arrays.copyOf(left, left.length + right.length);
 		System.arraycopy(right, 0, concatenated, left.length, right.length);
@@ -365,6 +366,7 @@ public class Arr extends RapidoidThing {
 
 	/* split */
 
+	@SafeVarargs
 	public static <T> void split(T[] src, T[]... parts) {
 		int srcPos = 0;
 		for (T[] dest : parts) {

@@ -28,6 +28,7 @@ import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
+@SuppressWarnings("unchecked")
 public class RenderTest extends AbstractRenderTest {
 
 	private final static Object[] VALUES = {"abc", 123, 3.14, true, false, U.list(), U.set(1, 2), U.map(1, "one", "two", 2)};

@@ -82,6 +82,7 @@ public class Rnd extends RapidoidThing {
 		return RND.nextLong();
 	}
 
+	@SafeVarargs
 	public static <T> T of(T... options) {
 		return options[rnd(options.length)];
 	}

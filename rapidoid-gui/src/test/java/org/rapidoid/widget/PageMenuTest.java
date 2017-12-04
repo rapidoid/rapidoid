@@ -35,6 +35,7 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
+@SuppressWarnings("unchecked")
 public class PageMenuTest extends TestCommons {
 
 	@Test

@@ -41,6 +41,7 @@ public class JPQL extends ResultsImpl implements PageableData {
 
 	private final Object[] args;
 
+	@SuppressWarnings("unchecked")
 	public JPQL(String jpql, Map<String, ?> namedArgs, Object[] args) {
 		super(null);
 		this.jpql = jpql;

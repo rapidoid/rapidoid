@@ -54,6 +54,7 @@ public class Contextual extends RapidoidThing {
 		return user().roles;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> T request() {
 		Ctx ctx = Ctxs.get();
 		return ctx != null ? (T) ctx.exchange() : null;

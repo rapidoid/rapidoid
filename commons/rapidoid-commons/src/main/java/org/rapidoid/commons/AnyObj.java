@@ -119,6 +119,7 @@ public class AnyObj extends RapidoidThing {
 		return inserted;
 	}
 
+	@SafeVarargs
 	public static <T, V extends T> List<T> withoutNulls(V... values) {
 		List<T> list = U.list();
 

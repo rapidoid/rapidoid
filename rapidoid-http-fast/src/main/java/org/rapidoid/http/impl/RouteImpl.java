@@ -62,6 +62,7 @@ public class RouteImpl extends RapidoidThing implements Route {
 		return new RouteImpl(verb, path, null, null);
 	}
 
+	@SuppressWarnings("unchecked")
 	protected Cache<HTTPCacheKey, CachedResp> createCache() {
 		if (options == null || options.cacheTTL() <= 0) return null;
 

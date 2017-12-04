@@ -43,6 +43,7 @@ public class JobsDSL extends RapidoidThing {
 		this.timeUnit = timeUnit;
 	}
 
+	@SuppressWarnings("unchecked")
 	public ScheduledFuture<Void> run(Runnable action) {
 		if (after >= 0) {
 			return (ScheduledFuture<Void>) Jobs.schedule(action, after, timeUnit);

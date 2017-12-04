@@ -32,6 +32,7 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
+@SuppressWarnings("unchecked")
 public class JDBCNamedParamsTest extends SQLTestCommons {
 
 	@Test

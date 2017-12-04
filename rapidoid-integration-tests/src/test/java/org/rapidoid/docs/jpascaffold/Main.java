@@ -31,6 +31,7 @@ import java.util.List;
 
 public class Main extends GUI {
 
+	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 
 		On.page("/").mvc("Welcome!");

@@ -59,6 +59,7 @@ public abstract class AbstractValue<T> extends RapidoidThing implements Value<T>
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public <K> K or(K alternative) {
 		U.notNull(alternative, "alternative");
 		T value = getOrNull();

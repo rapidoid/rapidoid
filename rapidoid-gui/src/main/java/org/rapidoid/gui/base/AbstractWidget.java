@@ -80,6 +80,7 @@ public abstract class AbstractWidget<W extends AbstractWidget<?>> extends Rapido
 		return visible;
 	}
 
+	@SuppressWarnings("unchecked")
 	public W visible(boolean visible) {
 		this.visible = visible;
 		return (W) this;

@@ -45,6 +45,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author Nikolche Mihajlovski
  * @since 2.0.0
  */
+@SuppressWarnings("unchecked")
 public abstract class TestCommons {
 
 	protected static final boolean RAPIDOID_CI = "true".equalsIgnoreCase(System.getenv("RAPIDOID_CI"));

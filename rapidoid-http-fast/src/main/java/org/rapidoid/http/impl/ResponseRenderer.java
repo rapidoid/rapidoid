@@ -77,6 +77,7 @@ public class ResponseRenderer extends RapidoidThing {
 		return true;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static boolean renderView(ReqImpl req, Resp resp, Object result, boolean mandatory, ByteArrayOutputStream out) {
 
 		String viewName = resp.view();

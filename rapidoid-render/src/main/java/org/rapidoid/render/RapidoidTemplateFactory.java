@@ -44,6 +44,7 @@ public class RapidoidTemplateFactory extends RapidoidThing implements TemplateFa
 
 	private final Cache<String, RapidoidTemplate> compiledTemplates;
 
+	@SuppressWarnings("unchecked")
 	public RapidoidTemplateFactory(String name, TemplateStore templateStore) {
 		this.templateStore = templateStore;
 
