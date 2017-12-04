@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -127,7 +127,7 @@ public class ExtendedWorker extends AbstractEventLoop<ExtendedWorker> implements
 		this.bufSize = bufSizeKB * 1024;
 		this.noDelay = noDelay;
 		this.bufs = new BufGroup(bufSize, syncBufs);
-		this.bufSizeLimit = 1024L * Conf.NET.entry("buffer-limit").or(1024); // in KB
+		this.bufSizeLimit = 1024L * Conf.NET.entry("bufSizeLimit").or(1024); // in KB
 
 		this.serverProtocol = protocol;
 		this.helper = helper;
@@ -248,7 +248,6 @@ public class ExtendedWorker extends AbstractEventLoop<ExtendedWorker> implements
 		try {
 
 			if (conn.hasTLS) {
-				// FIXME is this needed? (from ext-net) if (conn.input.size() < bufSizeLimit) {
 				if (conn.tls.netIn.hasRemaining()) {
 					read = socketChannel.read(conn.tls.netIn);
 
@@ -256,7 +255,11 @@ public class ExtendedWorker extends AbstractEventLoop<ExtendedWorker> implements
 					read = 0;
 				}
 			} else {
-				read = conn.input.append(socketChannel);
+				if (conn.input.size() < bufSizeLimit) {
+					read = conn.input.append(socketChannel);
+				} else {
+					read = 0;
+				}
 			}
 
 		} catch (Exception e) {
