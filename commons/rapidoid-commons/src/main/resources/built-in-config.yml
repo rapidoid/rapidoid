@@ -19,33 +19,6 @@ gui:
 
 main-zone: {}
 
-admin-zone:
-  home: /_
-  brand: '<i class="fa fa-dashboard"></i> Admin Center'
-  search: false
-  fluid: true
-  menu:
-    Overview: /_
-    Routes: /_routes
-    Configuration: /_config
-    Processes: /_processes
-    Metrics: /_metrics
-    Manageables: /_manageables
-    Application:
-      Beans: /_beans
-      Entities: /_entities
-    System:
-      Terminate / Restart: /_terminate
-      Classpath: /_classpath
-      Memory pool: /_jmx/mempool
-      JVM Threads: /_jmx/threads
-      Operating system: /_jmx/os
-      Garbage collection: /_jmx/gc
-      Memory: /_jmx/memory
-      Runtime: /_jmx/runtime
-      Classes: /_jmx/classes
-      Compilation: /_jmx/compilation
-
 users:
   admin:
     roles: administrator
@@ -103,7 +76,7 @@ oauth:
 net:
   address: 0.0.0.0
   port: 8080
-#  workers: ${system.cpus}
+# workers: ${system.cpus}
   bufSizeKB: 256
   noDelay: false
   syncBufs: true
@@ -139,7 +112,7 @@ token:
 
 log:
   level: info
-  fancy: false # auto
+# fancy: auto
 
 tls:
   selfSigned: true

@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
+import org.rapidoid.u.U;
 
 /*
  * #%L
@@ -30,7 +31,9 @@ import org.rapidoid.config.Conf;
 @Since("5.3.0")
 public class MscOpts extends RapidoidThing {
 
-	private static final String appsPath = "/data/apps";
+	private static final boolean hasDockerEnv = U.eq(System.getenv("RAPIDOID_JAR"), "/opt/rapidoid.jar")
+		&& U.eq(System.getenv("RAPIDOID_TMP"), "/tmp/rapidoid")
+		&& U.notEmpty(System.getenv("RAPIDOID_VERSION"));
 
 	private static final boolean hasValidation = Cls.exists("javax.validation.Validation");
 	private static final boolean hasJPA = Cls.exists("javax.persistence.Entity");
@@ -38,18 +41,20 @@ public class MscOpts extends RapidoidThing {
 
 	private static final boolean hasRapidoidJPA = Cls.exists("org.rapidoid.jpa.JPA");
 	private static final boolean hasRapidoidGUI = Cls.exists("org.rapidoid.gui.GUI");
-	private static final boolean hasRapidoidHTML = Cls.exists("org.rapidoid.html.HTML");
 	private static final boolean hasRapidoidWatch = Cls.exists("org.rapidoid.reload.Reload");
 	private static final boolean hasRapidoidPlatform = Cls.exists("org.rapidoid.standalone.Main");
 
 	private static final boolean hasLogback = Cls.exists("ch.qos.logback.classic.Logger");
 	private static final boolean hasSlf4jImpl = Cls.exists("org.slf4j.impl.StaticLoggerBinder");
-	private static final boolean hasMavenEmbedder = Cls.exists("org.apache.maven.cli.MavenCli");
 
 	private static final boolean hasC3P0 = Cls.exists("com.mchange.v2.c3p0.PooledDataSource");
 	private static final boolean hasHikari = Cls.exists("com.zaxxer.hikari.HikariDataSource");
 
-	private static final boolean isRestOnly = !hasRapidoidHTML();
+	private static final boolean isRestOnly = !hasRapidoidGUI();
+
+	public static boolean hasDockerEnv() {
+		return hasDockerEnv;
+	}
 
 	public static boolean hasValidation() {
 		return hasValidation;
@@ -71,10 +76,6 @@ public class MscOpts extends RapidoidThing {
 		return hasRapidoidGUI;
 	}
 
-	public static boolean hasRapidoidHTML() {
-		return hasRapidoidHTML;
-	}
-
 	public static boolean hasRapidoidWatch() {
 		return hasRapidoidWatch;
 	}
@@ -91,10 +92,6 @@ public class MscOpts extends RapidoidThing {
 		return hasSlf4jImpl;
 	}
 
-	public static boolean hasMavenEmbedder() {
-		return hasMavenEmbedder;
-	}
-
 	public static boolean hasC3P0() {
 		return hasC3P0;
 	}
@@ -105,10 +102,6 @@ public class MscOpts extends RapidoidThing {
 
 	public static boolean isRestOnly() {
 		return isRestOnly;
-	}
-
-	public static String appsPath() {
-		return appsPath;
 	}
 
 	public static boolean isTLSEnabled() {

@@ -24,6 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Err;
 import org.rapidoid.datamodel.Results;
+import org.rapidoid.datamodel.impl.NoResults;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.gui.Grid;
 import org.rapidoid.http.Req;
@@ -82,10 +83,15 @@ public class PageHandler extends GenericHandler {
 	}
 
 	private Object fetchData(GuiConfig gui) {
-		if (gui.single()) {
-			return sqlItems(gui.sql()).single();
+		if (U.notEmpty(gui.sql())) {
+			if (gui.single()) {
+				return sqlItems(gui.sql()).single();
+			} else {
+				return sqlItems(gui.sql());
+			}
+
 		} else {
-			return sqlItems(gui.sql());
+			return new NoResults<>();
 		}
 	}
 

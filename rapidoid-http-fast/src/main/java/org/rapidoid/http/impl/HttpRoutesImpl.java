@@ -29,7 +29,6 @@ import org.rapidoid.util.Msc;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.regex.Pattern;
 
 /*
  * #%L
@@ -59,8 +58,6 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 
 	private static final int ROUTE_SETUP_WAITING_TIME_MS = Env.test() ? 0 : 500;
 
-	private static final Pattern PATTERN_PATTERN = Pattern.compile("[^\\w/-]");
-
 	private static final byte[] _POST = Constants.POST.getBytes();
 	private static final byte[] _PUT = Constants.PUT.getBytes();
 	private static final byte[] _DELETE = Constants.DELETE.getBytes();
@@ -69,25 +66,25 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 	private static final byte[] _HEAD = Constants.HEAD.getBytes();
 	private static final byte[] _TRACE = Constants.TRACE.getBytes();
 
-	final BufMap<HttpHandler> getHandlers = new BufMapImpl<HttpHandler>();
-	final BufMap<HttpHandler> postHandlers = new BufMapImpl<HttpHandler>();
-	final BufMap<HttpHandler> putHandlers = new BufMapImpl<HttpHandler>();
-	final BufMap<HttpHandler> deleteHandlers = new BufMapImpl<HttpHandler>();
-	final BufMap<HttpHandler> patchHandlers = new BufMapImpl<HttpHandler>();
-	final BufMap<HttpHandler> optionsHandlers = new BufMapImpl<HttpHandler>();
-	final BufMap<HttpHandler> headHandlers = new BufMapImpl<HttpHandler>();
-	final BufMap<HttpHandler> traceHandlers = new BufMapImpl<HttpHandler>();
-	final BufMap<HttpHandler> anyHandlers = new BufMapImpl<HttpHandler>();
+	final BufMap<HttpHandler> getHandlers = new BufMapImpl<>();
+	final BufMap<HttpHandler> postHandlers = new BufMapImpl<>();
+	final BufMap<HttpHandler> putHandlers = new BufMapImpl<>();
+	final BufMap<HttpHandler> deleteHandlers = new BufMapImpl<>();
+	final BufMap<HttpHandler> patchHandlers = new BufMapImpl<>();
+	final BufMap<HttpHandler> optionsHandlers = new BufMapImpl<>();
+	final BufMap<HttpHandler> headHandlers = new BufMapImpl<>();
+	final BufMap<HttpHandler> traceHandlers = new BufMapImpl<>();
+	final BufMap<HttpHandler> anyHandlers = new BufMapImpl<>();
 
-	final Map<PathPattern, HttpHandler> patternGetHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
-	final Map<PathPattern, HttpHandler> patternPostHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
-	final Map<PathPattern, HttpHandler> patternPutHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
-	final Map<PathPattern, HttpHandler> patternDeleteHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
-	final Map<PathPattern, HttpHandler> patternPatchHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
-	final Map<PathPattern, HttpHandler> patternOptionsHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
-	final Map<PathPattern, HttpHandler> patternHeadHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
-	final Map<PathPattern, HttpHandler> patternTraceHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
-	final Map<PathPattern, HttpHandler> patternAnyHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
+	final Map<PathPattern, HttpHandler> patternGetHandlers = new TreeMap<>();
+	final Map<PathPattern, HttpHandler> patternPostHandlers = new TreeMap<>();
+	final Map<PathPattern, HttpHandler> patternPutHandlers = new TreeMap<>();
+	final Map<PathPattern, HttpHandler> patternDeleteHandlers = new TreeMap<>();
+	final Map<PathPattern, HttpHandler> patternPatchHandlers = new TreeMap<>();
+	final Map<PathPattern, HttpHandler> patternOptionsHandlers = new TreeMap<>();
+	final Map<PathPattern, HttpHandler> patternHeadHandlers = new TreeMap<>();
+	final Map<PathPattern, HttpHandler> patternTraceHandlers = new TreeMap<>();
+	final Map<PathPattern, HttpHandler> patternAnyHandlers = new TreeMap<>();
 
 	private final long id;
 	private final String setupName;
@@ -119,7 +116,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 	}
 
 	private void register(HttpVerb verb, String path, HttpHandler handler) {
-		boolean isPattern = isPattern(path);
+		boolean isPattern = PathPattern.isPattern(path);
 		PathPattern pathPattern = isPattern ? PathPattern.from(path) : null;
 
 		RouteImpl route = new RouteImpl(verb, path, handler, handler.options());
@@ -221,7 +218,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 	}
 
 	private void deregister(HttpVerb verb, String path) {
-		boolean isPattern = isPattern(path);
+		boolean isPattern = PathPattern.isPattern(path);
 		PathPattern pathPattern = isPattern ? PathPattern.from(path) : null;
 
 		routes.remove(RouteImpl.matching(verb, path));
@@ -316,10 +313,6 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 		}
 
 		notifyChanged();
-	}
-
-	private boolean isPattern(String path) {
-		return PATTERN_PATTERN.matcher(path).find();
 	}
 
 	@Override

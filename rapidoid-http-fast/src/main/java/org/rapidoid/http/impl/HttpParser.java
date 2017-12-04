@@ -245,7 +245,7 @@ public class HttpParser extends RapidoidThing {
 	}
 
 	/**
-	 * @return <code>false</code> if JSON data was posted, so it wasn't completely parsed.
+	 * @return <code>false</code> if the data wasn't parsed.
 	 */
 	public boolean parseBody(Buf src, KeyValueRanges headers, BufRange body, KeyValueRanges data,
 	                         Map<String, List<Upload>> files, RapidoidHelper helper) {
@@ -280,7 +280,7 @@ public class HttpParser extends RapidoidThing {
 
 			case FORM_URLENCODED:
 				byte bodyStart = src.get(body.start);
-				if (bodyStart != '{' && bodyStart != '[') {
+				if (bodyStart != '{' && bodyStart != '[' && bodyStart != '<') { // not json nor xml
 					parseURLEncodedKV(src, data, body);
 					return true;
 				} else {
@@ -291,11 +291,10 @@ public class HttpParser extends RapidoidThing {
 				return false;
 
 			case OTHER:
-				return true;
+				return false;
 
 			case NOT_FOUND:
-				// fall back to json and try parsing the body
-				return src.get(body.start) != '{';
+				return false;
 
 			default:
 				throw Err.notExpected();

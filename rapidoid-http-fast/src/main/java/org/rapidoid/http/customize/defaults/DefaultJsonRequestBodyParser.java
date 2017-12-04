@@ -25,18 +25,18 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.customize.Customization;
-import org.rapidoid.http.customize.JsonRequestBodyParser;
+import org.rapidoid.http.customize.HttpRequestBodyParser;
 
 import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
-public class DefaultJsonRequestBodyParser extends RapidoidThing implements JsonRequestBodyParser {
+public class DefaultJsonRequestBodyParser extends RapidoidThing implements HttpRequestBodyParser {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Map<String, ?> parseJsonBody(Req req, byte[] body) throws Exception {
-		return Customization.of(req).jackson().readValue(body, Map.class);
+	public Map<String, ?> parseRequestBody(Req req, byte[] body) throws Exception {
+		return Customization.of(req).objectMapper().readValue(body, Map.class);
 	}
 
 }

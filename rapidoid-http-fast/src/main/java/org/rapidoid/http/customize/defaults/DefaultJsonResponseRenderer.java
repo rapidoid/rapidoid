@@ -5,7 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.customize.Customization;
-import org.rapidoid.http.customize.JsonResponseRenderer;
+import org.rapidoid.http.customize.HttpResponseRenderer;
 
 import java.io.OutputStream;
 
@@ -31,11 +31,11 @@ import java.io.OutputStream;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class DefaultJsonResponseRenderer extends RapidoidThing implements JsonResponseRenderer {
+public class DefaultJsonResponseRenderer extends RapidoidThing implements HttpResponseRenderer {
 
 	@Override
-	public void renderJson(Req req, Object value, OutputStream out) throws Exception {
-		Customization.of(req).jackson().writeValue(out, value);
+	public void render(Req req, Object value, OutputStream out) throws Exception {
+		Customization.of(req).objectMapper().writeValue(out, value);
 	}
 
 }

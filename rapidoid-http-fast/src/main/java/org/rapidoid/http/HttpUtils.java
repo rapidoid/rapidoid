@@ -13,7 +13,7 @@ import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.data.BufRanges;
 import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.http.customize.Customization;
-import org.rapidoid.http.customize.JsonResponseRenderer;
+import org.rapidoid.http.customize.HttpResponseRenderer;
 import org.rapidoid.http.impl.MaybeReq;
 import org.rapidoid.io.Res;
 import org.rapidoid.lambda.Mapper;
@@ -50,7 +50,7 @@ import java.util.regex.Pattern;
 @Since("5.0.0")
 public class HttpUtils extends RapidoidThing implements HttpMetadata {
 
-	private static final MediaType DEFAULT_CONTENT_TYPE = MscOpts.hasRapidoidHTML() ? MediaType.HTML_UTF_8 : MediaType.JSON;
+	private static final MediaType DEFAULT_CONTENT_TYPE = MscOpts.hasRapidoidGUI() ? MediaType.HTML_UTF_8 : MediaType.JSON;
 
 	private static final String PAGE_RELOAD = "<h2>&nbsp;Reloading...</h2><script>location.reload();</script>";
 
@@ -63,7 +63,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 		}
 	};
 
-	private static volatile Pattern REGEX_VALID_HTTP_RESOURCE = Pattern.compile("(?U)(?:/[\\w\\-\\.]+)*/?");
+	private static volatile Pattern REGEX_VALID_HTTP_RESOURCE = Pattern.compile("(?U)(?:/[ \\w\\-\\.]+)*/?");
 
 	private static final Mapper<String[], String> PATH_PARAM_EXTRACTOR = new Mapper<String[], String>() {
 		@Override
@@ -219,12 +219,12 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 		return (Conf.ROOT.is("https") ? "https://" : "http://") + x.host() + path;
 	}
 
-	public static byte[] responseToBytes(Req req, Object result, MediaType contentType, JsonResponseRenderer jsonRenderer) {
-		if (U.eq(contentType, MediaType.JSON)) {
+	public static byte[] responseToBytes(Req req, Object result, MediaType contentType, HttpResponseRenderer responseRenderer) {
+		if (U.eq(contentType, MediaType.JSON) || U.eq(contentType, MediaType.XML_UTF_8)) {
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 
 			try {
-				jsonRenderer.renderJson(req, result, out);
+				responseRenderer.render(req, result, out);
 			} catch (Exception e) {
 				throw U.rte(e);
 			}

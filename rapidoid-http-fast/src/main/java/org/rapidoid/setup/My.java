@@ -21,6 +21,7 @@ package org.rapidoid.setup;
  */
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -47,11 +48,14 @@ public class My extends RapidoidThing {
 			GLOBAL.pageDecorator(Defaults.pageDecorator());
 			GLOBAL.jsonResponseRenderer(Defaults.jsonResponseRenderer());
 			GLOBAL.jsonRequestBodyParser(Defaults.jsonRequestBodyParser());
+			GLOBAL.xmlResponseRenderer(Defaults.xmlResponseRenderer());
+			GLOBAL.xmlRequestBodyParser(Defaults.xmlRequestBodyParser());
 			GLOBAL.beanParameterFactory(Defaults.beanParameterFactory());
 			GLOBAL.loginProvider(Defaults.loginProvider());
 			GLOBAL.rolesProvider(Defaults.rolesProvider());
 			GLOBAL.validator(Defaults.validator());
-			GLOBAL.jackson(Defaults.jackson());
+			GLOBAL.objectMapper(Defaults.objectMapper());
+			GLOBAL.xmlMapper(Defaults.xmlMapper());
 			GLOBAL.entityManagerFactoryProvider(Defaults.entityManagerFactoryProvider());
 			GLOBAL.entityManagerProvider(Defaults.entityManagerProvider());
 			GLOBAL.sessionManager(Defaults.sessionManager());
@@ -93,8 +97,12 @@ public class My extends RapidoidThing {
 		GLOBAL.errorHandler(errorHandler);
 	}
 
-	public static void jsonResponseRenderer(JsonResponseRenderer jsonResponseRenderer) {
+	public static void jsonResponseRenderer(HttpResponseRenderer jsonResponseRenderer) {
 		GLOBAL.jsonResponseRenderer(jsonResponseRenderer);
+	}
+
+	public static void xmlResponseRenderer(HttpResponseRenderer xmlResponseRenderer) {
+		GLOBAL.xmlResponseRenderer(xmlResponseRenderer);
 	}
 
 	public static void beanParameterFactory(BeanParameterFactory beanParameterFactory) {
@@ -121,16 +129,24 @@ public class My extends RapidoidThing {
 		GLOBAL.viewResolver(viewResolver);
 	}
 
-	public static void jackson(ObjectMapper jackson) {
-		GLOBAL.jackson(jackson);
+	public static void objectMapper(ObjectMapper jackson) {
+		GLOBAL.objectMapper(jackson);
+	}
+
+	public static void xmlMapper(XmlMapper xmlMapper) {
+		GLOBAL.xmlMapper(xmlMapper);
 	}
 
 	public static ErrorHandler errorHandler() {
 		return GLOBAL.errorHandler();
 	}
 
-	public static JsonResponseRenderer jsonResponseRenderer() {
+	public static HttpResponseRenderer jsonResponseRenderer() {
 		return GLOBAL.jsonResponseRenderer();
+	}
+
+	public static HttpResponseRenderer xmlResponseRenderer() {
+		return GLOBAL.xmlResponseRenderer();
 	}
 
 	public static BeanParameterFactory beanParameterFactory() {
@@ -157,8 +173,8 @@ public class My extends RapidoidThing {
 		return GLOBAL.viewResolver();
 	}
 
-	public static ObjectMapper jackson() {
-		return GLOBAL.jackson();
+	public static ObjectMapper objectMapper() {
+		return GLOBAL.objectMapper();
 	}
 
 	public static EntityManagerProvider entityManagerProvider() {
@@ -177,11 +193,11 @@ public class My extends RapidoidThing {
 		GLOBAL.entityManagerFactoryProvider(entityManagerFactoryProvider);
 	}
 
-	public static JsonRequestBodyParser jsonRequestBodyParser() {
+	public static HttpRequestBodyParser jsonRequestBodyParser() {
 		return GLOBAL.jsonRequestBodyParser();
 	}
 
-	public static void jsonRequestBodyParser(JsonRequestBodyParser jsonRequestBodyParser) {
+	public static void jsonRequestBodyParser(HttpRequestBodyParser jsonRequestBodyParser) {
 		GLOBAL.jsonRequestBodyParser(jsonRequestBodyParser);
 	}
 

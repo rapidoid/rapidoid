@@ -51,7 +51,9 @@ public class OnChanges extends RapidoidThing {
 
 			if (Env.dev()) {
 				if (Msc.withWatchModule()) {
-					WatchForChanges.activate();
+					if (!Msc.isPlatform()) {
+						WatchForChanges.activate();
+					}
 				} else {
 					Log.warn("Cannot watch for class changes, the rapidoid-watch module is missing!");
 				}

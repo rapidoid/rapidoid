@@ -47,7 +47,6 @@ public class HttpRestAPITest extends TestCommons {
 
 	@Test
 	public void testIncludedModules() {
-		isFalse(MscOpts.hasRapidoidHTML());
 		isFalse(MscOpts.hasRapidoidGUI());
 	}
 

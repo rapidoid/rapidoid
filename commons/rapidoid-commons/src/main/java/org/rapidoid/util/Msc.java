@@ -5,10 +5,7 @@ import org.rapidoid.activity.AbstractLoopThread;
 import org.rapidoid.activity.RapidoidThread;
 import org.rapidoid.activity.RapidoidThreadFactory;
 import org.rapidoid.activity.RapidoidThreadLocals;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Profiles;
-import org.rapidoid.annotation.Run;
-import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.*;
 import org.rapidoid.cache.Caching;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.Coll;
@@ -83,29 +80,18 @@ import java.util.zip.ZipInputStream;
 @Since("2.0.0")
 public class Msc extends RapidoidThing {
 
-	public static final String APP_JAR = "/app/app.jar";
-
 	private static final String SPECIAL_ARG_REGEX = "\\s*(.*?)\\s*(->|<-|:=|<=|=>|==)\\s*(.*?)\\s*";
 
 	public static final String OS_NAME = System.getProperty("os.name");
 
-	private static volatile String uid;
-
-	private static volatile long measureStart;
-
-	private static boolean platform;
-
-	private static boolean mavenBuild;
-
 	public static final ScheduledThreadPoolExecutor EXECUTOR = new ScheduledThreadPoolExecutor(8,
 		new RapidoidThreadFactory("utils", true));
 
-	public static final Mapper<Object, Object> TRANSFORM_TO_STRING = new Mapper<Object, Object>() {
-		@Override
-		public Object map(Object src) throws Exception {
-			return src != null ? src.toString() : null;
-		}
-	};
+	private static volatile MscState state = new MscState();
+
+	private static void resetState() {
+		state = new MscState();
+	}
 
 	public static final Mapper<Object, Object> TRANSFORM_TO_SIMPLE_CLASS_NAME = new Mapper<Object, Object>() {
 		@Override
@@ -348,21 +334,21 @@ public class Msc extends RapidoidThing {
 	}
 
 	public static void startMeasure() {
-		measureStart = U.time();
+		state.measureStart = U.time();
 	}
 
 	public static void endMeasure() {
-		long delta = U.time() - measureStart;
+		long delta = U.time() - state.measureStart;
 		Log.info("Benchmark", "time", delta + " ms");
 	}
 
 	public static void endMeasure(String info) {
-		long delta = U.time() - measureStart;
+		long delta = U.time() - state.measureStart;
 		Log.info("Benchmark", "info", info, "time", delta + " ms");
 	}
 
 	public static void endMeasure(long count, String info) {
-		long delta = U.time() - measureStart;
+		long delta = U.time() - state.measureStart;
 		long freq = Math.round(1000 * (double) count / delta);
 		Log.info("Benchmark", "performance", U.frmt("%s %s in %s ms (%s/sec)", count, info, delta, freq));
 	}
@@ -980,11 +966,6 @@ public class Msc extends RapidoidThing {
 		resetState();
 	}
 
-	private static void resetState() {
-		uid = null;
-		measureStart = 0;
-	}
-
 	public static boolean isAscii(String s) {
 		for (int i = 0; i < s.length(); i++) {
 			if (s.charAt(i) > 127) return false;
@@ -1008,15 +989,11 @@ public class Msc extends RapidoidThing {
 	}
 
 	public static boolean dockerized() {
-		return U.eq(System.getenv("RAPIDOID_JAR"), "/opt/rapidoid.jar")
-			&& U.eq(System.getenv("RAPIDOID_TMP"), "/tmp/rapidoid")
-			&& U.notEmpty(System.getenv("RAPIDOID_VERSION"))
-			&& hasAppFolder();
+		return state.dockerized;
 	}
 
-	private static boolean hasAppFolder() {
-		File app = new File("/app");
-		return app.exists() && app.isDirectory();
+	public static void dockerized(boolean dockerized) {
+		state.dockerized = dockerized;
 	}
 
 	public static Object maybeMasked(Object value) {
@@ -1024,29 +1001,23 @@ public class Msc extends RapidoidThing {
 	}
 
 	public static synchronized String id() {
-		if (uid == null) uid = Conf.ROOT.entry("id").or(processName());
-		return uid;
+		if (state.uid == null) {
+			state.uid = Conf.ROOT.entry("id").or(processName());
+		}
+
+		return state.uid;
 	}
 
-	public static boolean hasConsole() {
-		return System.console() != null;
-	}
-
-	public static Map<String, Object> parseArgs(List<String> args) {
-		Map<String, Object> arguments = U.map();
+	public static Map<String, String> parseArgs(List<String> args) {
+		Map<String, String> arguments = U.map();
 
 		for (String arg : U.safe(args)) {
 			if (!isSpecialArg(arg)) {
 
 				String[] parts = arg.split("=", 2);
-				String name = parts[0];
+				U.must(parts.length == 2, "The argument '%s' doesn't have a key=value format!", arg);
 
-				if (parts.length > 1) {
-					String value = parts[1];
-					arguments.put(name, value);
-				} else {
-					arguments.put(name, true);
-				}
+				arguments.put(parts[0], parts[1]);
 
 			} else {
 				processSpecialArg(arguments, arg);
@@ -1060,7 +1031,7 @@ public class Msc extends RapidoidThing {
 		return arg.matches(SPECIAL_ARG_REGEX);
 	}
 
-	private static void processSpecialArg(Map<String, Object> arguments, String arg) {
+	private static void processSpecialArg(Map<String, String> arguments, String arg) {
 		Matcher m = Pattern.compile(SPECIAL_ARG_REGEX).matcher(arg);
 		U.must(m.matches(), "Invalid argument");
 
@@ -1099,9 +1070,15 @@ public class Msc extends RapidoidThing {
 		return !Msc.isInsideTest() && Env.dev();
 	}
 
-	public static String fileSizeReadable(String filename) {
-		long sizeKB = Math.round(new File(filename).length() / 1024.0);
+	public static String fileSizeReadable(long size) {
+		if (size < 1024) return size + " B";
+
+		long sizeKB = Math.round(size / 1024.0);
 		return sizeKB + " KB";
+	}
+
+	public static String fileSizeReadable(String filename) {
+		return fileSizeReadable(new File(filename).length());
 	}
 
 	public static void watchForChanges(String path, Operation<String> changeListener) {
@@ -1159,19 +1136,19 @@ public class Msc extends RapidoidThing {
 
 
 	public static void setPlatform(boolean platform) {
-		Msc.platform = platform;
+		state.platform = platform;
 	}
 
 	public static boolean isPlatform() {
-		return platform;
+		return state.platform;
 	}
 
 	public static boolean isMavenBuild() {
-		return mavenBuild;
+		return state.mavenBuild;
 	}
 
 	public static void setMavenBuild(boolean mavenBuild) {
-		Msc.mavenBuild = mavenBuild;
+		state.mavenBuild = mavenBuild;
 	}
 
 	public static String errorMsg(Throwable error) {
@@ -1343,23 +1320,14 @@ public class Msc extends RapidoidThing {
 		return (1 << bits) - 1;
 	}
 
-	public static boolean hasMainApp() {
-		List<String> appContent = IO.find().in("/app").ignoreRegex("(static|\\..*|.*~)").getNames();
-		return !appContent.isEmpty();
-	}
-
 	public static boolean isAppResource(String filename) {
 		String name = new File(filename).getName();
 		return !name.startsWith(".")
 			&& !filename.contains("/.")
 			&& !name.endsWith("~")
 			&& !filename.contains("/~")
-			&& !name.endsWith(".staged");
-	}
-
-	public static String mainAppJar() {
-		U.must(isPlatform());
-		return APP_JAR;
+			&& !name.endsWith(".staged")
+			&& !name.contains("___jb_"); // Jetbrains temporary files
 	}
 
 	public static int toInt(long value) {
@@ -1369,4 +1337,17 @@ public class Msc extends RapidoidThing {
 		return (int) value;
 	}
 
+	public static void sortByOrder(List<Method> methods) {
+		Collections.sort(methods, new Comparator<Method>() {
+			@Override
+			public int compare(Method a, Method b) {
+				return orderOf(a) - orderOf(b);
+			}
+
+			private int orderOf(Method m) {
+				Order order = m.getAnnotation(Order.class);
+				return order != null ? order.value() : 0;
+			}
+		});
+	}
 }

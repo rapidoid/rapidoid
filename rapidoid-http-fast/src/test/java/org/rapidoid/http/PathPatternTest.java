@@ -37,7 +37,6 @@ public class PathPatternTest extends TestCommons {
 	public void shouldMatchPathPatterns() {
 		Map<String, String> empty = U.map();
 
-
 		match("/abc", "/abc", "/abc", empty);
 
 		match("/.*", "/.*", "/", empty);
@@ -120,4 +119,36 @@ public class PathPatternTest extends TestCommons {
 		isNull(params);
 	}
 
+	@Test
+	public void testPrefix() {
+		eq(PathPattern.from("/*").prefix(), "/");
+		eq(PathPattern.from("/x*").prefix(), "/x");
+		eq(PathPattern.from("/foo/*/bar").prefix(), "/foo/");
+		eq(PathPattern.from("/foo/*/bar*/*").prefix(), "/foo/");
+		eq(PathPattern.from("/foo/bar*/*").prefix(), "/foo/bar");
+		eq(PathPattern.from("/foo/bar/*").prefix(), "/foo/bar/");
+
+		eq(PathPattern.from("/{id}").prefix(), "/");
+		eq(PathPattern.from("/x{p}").prefix(), "/x");
+		eq(PathPattern.from("/foo/{id}/bar").prefix(), "/foo/");
+		eq(PathPattern.from("/foo/{id}/bar*/*").prefix(), "/foo/");
+		eq(PathPattern.from("/foo/bar{id}/*").prefix(), "/foo/bar");
+		eq(PathPattern.from("/foo/bar/{id}").prefix(), "/foo/bar/");
+	}
+
+	@Test
+	public void testIsPattern() {
+		isFalse(PathPattern.isPattern("/"));
+		isFalse(PathPattern.isPattern("/a"));
+		isFalse(PathPattern.isPattern("/a/b/c"));
+		isFalse(PathPattern.isPattern("/xy"));
+		isFalse(PathPattern.isPattern("/abc.jpg"));
+		isFalse(PathPattern.isPattern("/test.txt"));
+
+		isTrue(PathPattern.isPattern("/*"));
+		isTrue(PathPattern.isPattern("/a*"));
+		isTrue(PathPattern.isPattern("/a/b/*/c"));
+		isTrue(PathPattern.isPattern("/xy/*"));
+		isTrue(PathPattern.isPattern("/xy*"));
+	}
 }

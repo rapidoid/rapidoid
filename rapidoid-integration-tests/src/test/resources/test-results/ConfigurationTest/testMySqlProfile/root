@@ -28,36 +28,6 @@
     "fluid" : false,
     "cdn" : "auto"
   },
-  "admin-zone" : {
-    "home" : "/_",
-    "brand" : "<i class=\"fa fa-dashboard\"></i> Admin Center",
-    "search" : false,
-    "fluid" : true,
-    "menu" : {
-      "Overview" : "/_",
-      "Routes" : "/_routes",
-      "Configuration" : "/_config",
-      "Processes" : "/_processes",
-      "Metrics" : "/_metrics",
-      "Manageables" : "/_manageables",
-      "Application" : {
-        "Beans" : "/_beans",
-        "Entities" : "/_entities"
-      },
-      "System" : {
-        "Terminate / Restart" : "/_terminate",
-        "Classpath" : "/_classpath",
-        "Memory pool" : "/_jmx/mempool",
-        "JVM Threads" : "/_jmx/threads",
-        "Operating system" : "/_jmx/os",
-        "Garbage collection" : "/_jmx/gc",
-        "Memory" : "/_jmx/memory",
-        "Runtime" : "/_jmx/runtime",
-        "Classes" : "/_jmx/classes",
-        "Compilation" : "/_jmx/compilation"
-      }
-    }
-  },
   "users" : {
     "admin" : {
       "roles" : "administrator"
@@ -148,8 +118,7 @@
     "ttl" : 0
   },
   "log" : {
-    "level" : "info",
-    "fancy" : false
+    "level" : "info"
   },
   "tls" : {
     "selfSigned" : true,

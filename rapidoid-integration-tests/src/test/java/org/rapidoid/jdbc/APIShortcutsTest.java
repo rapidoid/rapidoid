@@ -38,6 +38,8 @@ public class APIShortcutsTest extends IsolatedIntegrationTest {
 
 		App.run(new String[0], "/nums <= " + all, "POST /add <= " + add);
 
+		isFalse(JDBC.api().isInitialized());
+
 		JDBC.execute("create table nums (id int, name varchar(10))");
 
 		JDBC.execute("insert into nums values (?, ?)", 1, "one");
@@ -50,6 +52,8 @@ public class APIShortcutsTest extends IsolatedIntegrationTest {
 
 		onlyPost("/add");
 		onlyGet("/nums");
+
+		isTrue(JDBC.api().isInitialized());
 	}
 
 }

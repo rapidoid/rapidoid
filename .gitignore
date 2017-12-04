@@ -42,3 +42,8 @@ diff.txt
 
 */.metadata
 .metadata
+
+
+#netbeans
+nb-configuration.xml
+*/nb-configuration.xml

@@ -62,4 +62,7 @@ public class GlobalCfg extends RapidoidThing {
 		return value;
 	}
 
+	public static boolean has(String name, String value) {
+		return U.safe(get(name)).equalsIgnoreCase(value);
+	}
 }

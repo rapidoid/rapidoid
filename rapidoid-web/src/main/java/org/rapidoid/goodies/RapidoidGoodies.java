@@ -47,11 +47,6 @@ public class RapidoidGoodies extends RapidoidThing implements IGoodies {
 	}
 
 	@Override
-	public void processes(Setup setup) {
-		Goodies.processes(setup);
-	}
-
-	@Override
 	public void dbAdmin(Setup setup) {
 		Goodies.dbAdmin(setup);
 	}

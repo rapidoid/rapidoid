@@ -14,9 +14,9 @@ import org.rapidoid.render.Template;
 import org.rapidoid.render.Templates;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
-import org.rapidoid.writable.WritableUtils;
-import org.rapidoid.writable.WritableOutputStream;
 import org.rapidoid.web.ScreenBean;
+import org.rapidoid.writable.WritableOutputStream;
+import org.rapidoid.writable.WritableUtils;
 
 import java.io.OutputStream;
 import java.util.List;

@@ -4,11 +4,9 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
-import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
-import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -39,11 +37,11 @@ public class Env extends RapidoidThing {
 
 	private static final Environment env = new Environment();
 
-	private static volatile String root;
+	private static volatile RootContext rootCtx;
 
 	public static void reset() {
 		env.reset();
-		root = null;
+		rootCtx = null;
 		RapidoidEnv.reset();
 	}
 
@@ -76,30 +74,35 @@ public class Env extends RapidoidThing {
 	}
 
 	public static void setArgs(String... args) {
+		U.must(!Env.isInitialized(), "The environment was already initialized!");
+
+		U.must(Env.args().isEmpty(), "The application start-up arguments were already assigned!");
 		env.setArgs(args);
+
 		processInitialConfig();
 	}
 
 	private static void processInitialConfig() {
+		// initialize root
+		String root = U.or(initial("root"), initial("default_root"));
+		setRoot(root);
+
+		// initialize config
 		String config = initial("config");
-		String root = initial("root");
-
-		if (Msc.dockerized()) {
-			if (U.isEmpty(root)) root = "/app";
-		}
-
-		if (root != null) {
-			setRoot(root);
-		}
-
 		if (config != null) {
 			Conf.setFilenameBase(config);
 		}
 	}
 
 	static String initial(String key) {
-		Map<String, Object> envAndArgs = Env.argsAsMap();
-		return (String) U.or(envAndArgs.get(key), Env.properties().get(key));
+		Map<String, String> args = Env.argsAsMap();
+
+		return (String) U.or(
+			args.get(key),
+			args.get(key.toLowerCase()),
+			args.get(key.toUpperCase()),
+			Env.properties().get(key)
+		);
 	}
 
 	static boolean hasInitial(String key, Object value) {
@@ -122,42 +125,21 @@ public class Env extends RapidoidThing {
 		return env.properties();
 	}
 
-	public static Map<String, Object> argsAsMap() {
+	public static Map<String, String> argsAsMap() {
 		return env.argsAsMap();
 	}
 
 	public static void setRoot(String root) {
-		if (U.neq(Env.root, root)) {
-			File dir = new File(root);
-
-			if (dir.exists()) {
-				if (dir.isDirectory()) {
-					File[] files = dir.listFiles();
-
-					if (files != null) {
-						List<File> content = U.list();
-
-						for (File file : files) {
-							if (Msc.isAppResource(file.getName())) content.add(file);
-						}
-
-						Log.info("Setting application root", "!root", root, "items", content.size());
-					} else {
-						Log.error("Couldn't access the application root!", "!root", root);
-					}
-
-				} else {
-					Log.error("The configured application root must be a folder!", "!root", root);
-				}
-			} else {
-				Log.error("The configured application root folder doesn't exist!", "!root", root);
-			}
-
-			Env.root = root;
-		}
+		Env.rootCtx = RootContext.from(root);
 	}
 
 	public static String root() {
-		return root;
+		if (Env.rootCtx != null) {
+			return rootCtx.root();
+
+		} else {
+			U.must(!Msc.isPlatform(), "The root context must be initialized for the platform!");
+			return null;
+		}
 	}
 }

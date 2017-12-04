@@ -57,7 +57,6 @@ public class App extends RapidoidInitializer {
 	private static volatile String appPkgName;
 	private static volatile boolean dirty;
 	private static volatile boolean restarted;
-	private static volatile boolean managed;
 
 	private static volatile AppStatus status = AppStatus.NOT_STARTED;
 
@@ -72,7 +71,7 @@ public class App extends RapidoidInitializer {
 	 * Won't serve requests until App.ready() is called.
 	 */
 	public static synchronized AppBootstrap init(String[] args, String... extraArgs) {
-		PreApp.args(args, extraArgs);
+		AppStarter.startUp(args, extraArgs);
 
 		status = AppStatus.INITIALIZING;
 
@@ -85,7 +84,7 @@ public class App extends RapidoidInitializer {
 	 * Then starts serving requests immediately when routes are configured.
 	 */
 	public static synchronized AppBootstrap run(String[] args, String... extraArgs) {
-		PreApp.args(args, extraArgs);
+		AppStarter.startUp(args, extraArgs);
 
 		// no implicit classpath scanning here
 		boot();
@@ -102,7 +101,7 @@ public class App extends RapidoidInitializer {
 	 * Then starts serving requests immediately when routes are configured.
 	 */
 	public static synchronized AppBootstrap bootstrap(String[] args, String... extraArgs) {
-		PreApp.args(args, extraArgs);
+		AppStarter.startUp(args, extraArgs);
 
 		boot()
 			.beans() // scan classpath for beans
@@ -148,7 +147,7 @@ public class App extends RapidoidInitializer {
 	}
 
 	static void inferCallers() {
-		if (!restarted && appPkgName == null && mainClassName == null) {
+		if (!Msc.isPlatform() && !restarted && appPkgName == null && mainClassName == null) {
 
 			appPkgName = Msc.getCallingPackage();
 
@@ -159,7 +158,7 @@ public class App extends RapidoidInitializer {
 			}
 
 			if (mainClassName != null || appPkgName != null) {
-				Log.info("Inferring application root", "!main", mainClassName, "!package", appPkgName);
+				Log.info("Inferred application root", "!main", mainClassName, "!package", appPkgName);
 			}
 		}
 	}
@@ -177,6 +176,38 @@ public class App extends RapidoidInitializer {
 
 		restarted = true;
 
+		notifyListenersBeforeRestart();
+
+		resetAppStateBeforeRestart();
+
+		if (MscOpts.hasRapidoidJPA()) {
+			loader = ReloadUtil.reloader();
+			ClasspathUtil.setDefaultClassLoader(loader);
+		}
+
+		reloadAndRunMainClass();
+
+		restarted = true;
+
+		notifyListenersAfterRestart();
+
+		Log.info("!Successfully restarted the application!");
+
+	}
+
+	private static void notifyListenersAfterRestart() {
+		Set<AppRestartListener> listeners = U.set(On.changes().getRestartListeners());
+
+		for (AppRestartListener listener : listeners) {
+			try {
+				listener.afterAppRestart();
+			} catch (Exception e) {
+				Log.error("Error occurred in the app restart listener!", e);
+			}
+		}
+	}
+
+	private static void notifyListenersBeforeRestart() {
 		Set<AppRestartListener> listeners = U.set(On.changes().getRestartListeners());
 
 		for (AppRestartListener listener : listeners) {
@@ -186,33 +217,9 @@ public class App extends RapidoidInitializer {
 				Log.error("Error occurred in the app restart listener!", e);
 			}
 		}
+	}
 
-		App.path = null;
-		App.boot = null;
-
-		Groups.reset();
-		Conf.reset();
-		Env.reset();
-		Res.reset();
-		Templates.reset();
-		JSON.reset();
-		Beany.reset();
-
-		AppBootstrap.reset();
-		ClasspathScanner.reset();
-		invoked.clear();
-
-		SetupUtil.reloadAll();
-
-		Conf.reset(); // reset the config again
-		Setup.initDefaults(); // this changes the config
-		Conf.reset(); // reset the config again
-
-		if (MscOpts.hasRapidoidJPA()) {
-			loader = ReloadUtil.reloader();
-			ClasspathUtil.setDefaultClassLoader(loader);
-		}
-
+	private static void reloadAndRunMainClass() {
 		Class<?> entry;
 		try {
 			entry = loader.loadClass(mainClassName);
@@ -222,16 +229,33 @@ public class App extends RapidoidInitializer {
 		}
 
 		Msc.invokeMain(entry, U.arrayOf(String.class, Env.args()));
+	}
 
-		for (AppRestartListener listener : listeners) {
-			try {
-				listener.afterAppRestart();
-			} catch (Exception e) {
-				Log.error("Error occurred in the app restart listener!", e);
-			}
-		}
 
-		Log.info("!Successfully restarted the application!");
+	private static void resetAppStateBeforeRestart() {
+		App.path = null;
+		App.boot = null;
+		App.status = AppStatus.NOT_STARTED;
+		App.dirty = false;
+
+		Groups.reset();
+		Conf.reset();
+		Env.reset();
+		Res.reset();
+		Templates.reset();
+		JSON.reset();
+		Beany.reset();
+
+		AppStarter.reset();
+		AppBootstrap.reset();
+		ClasspathScanner.reset();
+		invoked.clear();
+
+		SetupUtil.reloadAll();
+
+		Conf.reset(); // reset the config again
+		Setup.initDefaults(); // this changes the config
+		Conf.reset(); // reset the config again
 	}
 
 	public static synchronized void resetGlobalState() {
@@ -239,12 +263,12 @@ public class App extends RapidoidInitializer {
 		mainClassName = null;
 		appPkgName = null;
 		restarted = false;
-		managed = false;
 		dirty = false;
 		path = null;
 		loader = App.class.getClassLoader();
 		boot = null;
 		Setup.initDefaults();
+		AppStarter.reset();
 		AppBootstrap.reset();
 		invoked.clear();
 	}
@@ -299,20 +323,11 @@ public class App extends RapidoidInitializer {
 	}
 
 	static void filterAndInvokeMainClasses(Object[] beans) {
-		managed(true);
 		Msc.filterAndInvokeMainClasses(beans, invoked);
 	}
 
 	static boolean isRestarted() {
 		return restarted;
-	}
-
-	public static boolean managed() {
-		return managed;
-	}
-
-	public static void managed(boolean managed) {
-		App.managed = managed;
 	}
 
 	public static synchronized void register(Beans beans) {
@@ -340,7 +355,7 @@ public class App extends RapidoidInitializer {
 		status = AppStatus.RUNNING;
 		IoC.ready();
 		Setup.ready();
-		Log.info("!The application has started!");
+		Log.info("!Ready.");
 	}
 
 	public static AppStatus status() {

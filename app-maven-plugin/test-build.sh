@@ -4,9 +4,9 @@ IFS=$'\n\t'
 
 mvn install
 
-cd ../examples/getting-started
+cd ../examples/hello-world
+#cd ../examples/getting-started
 #cd ../examples/guice-integration
-#cd ../rapidoid-platform
 
 mvn clean org.rapidoid:app:build
 

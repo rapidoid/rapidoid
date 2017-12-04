@@ -545,7 +545,7 @@ public abstract class TestCommons {
 		return Long.parseLong(num);
 	}
 
-	protected File createTempFile() {
+	public static File createTempFile() {
 		File file;
 		try {
 			file = File.createTempFile("temp", "" + System.nanoTime());
@@ -557,8 +557,8 @@ public abstract class TestCommons {
 		return file;
 	}
 
-	protected String createTempDir(String name) {
-		Path tmpDir = null;
+	public static String createTempDir(String name) {
+		Path tmpDir;
 		try {
 			tmpDir = Files.createTempDirectory(name);
 		} catch (IOException e) {

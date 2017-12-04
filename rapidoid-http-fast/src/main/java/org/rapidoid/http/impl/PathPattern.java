@@ -37,7 +37,7 @@ import java.util.regex.Pattern;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class PathPattern extends RapidoidThing {
+public class PathPattern extends RapidoidThing implements Comparable<PathPattern> {
 
 	public static final String ANY = "_";
 
@@ -162,5 +162,29 @@ public class PathPattern extends RapidoidThing {
 	@Override
 	public String toString() {
 		return "PathPattern{" + "path='" + path + '\'' + ", pattern=" + pattern + ", groups=" + groups + '}';
+	}
+
+	@Override
+	public int compareTo(PathPattern that) {
+		int lengthDiff = -(this.prefix().length() - that.prefix().length());
+		return lengthDiff != 0 ? lengthDiff : this.path.compareTo(that.path);
+	}
+
+	public String prefix() {
+		String simplifiedPattern = Str.replace(path, PATH_PARAM_REGEX, new Mapper<String[], String>() {
+			@Override
+			public String map(String[] gr) throws Exception {
+				return "*";
+			}
+		});
+
+		String prefix = Str.cutToFirst(simplifiedPattern, "*");
+
+		U.must(prefix != null, "Couldn't find pattern segments in the path pattern: %s", path);
+		return prefix;
+	}
+
+	public static boolean isPattern(String path) {
+		return path.contains("*") || path.contains("{");
 	}
 }

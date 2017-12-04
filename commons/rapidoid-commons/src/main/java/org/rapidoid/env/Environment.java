@@ -53,9 +53,9 @@ public class Environment extends RapidoidInitializer {
 
 	private final EnvProperties properties = new EnvProperties();
 
-	private final LazyInit<Map<String, Object>> argsAsMap = new LazyInit<>(new Callable<Map<String, Object>>() {
+	private final LazyInit<Map<String, String>> argsAsMap = new LazyInit<>(new Callable<Map<String, String>>() {
 		@Override
-		public Map<String, Object> call() throws Exception {
+		public Map<String, String> call() throws Exception {
 			U.notNull(args, "environment args");
 			return Msc.parseArgs(args);
 		}
@@ -128,7 +128,7 @@ public class Environment extends RapidoidInitializer {
 		}
 
 		String modeProfile = mode.name().toLowerCase();
-		if (!silent()) Log.info("Automatically activating mode-specific profile", "!profile", modeProfile);
+		if (!silent()) Log.debug("Automatically activating mode-specific profile", "!profile", modeProfile);
 		profiles.add(modeProfile);
 
 		if (Msc.isPlatform()) {
@@ -137,7 +137,9 @@ public class Environment extends RapidoidInitializer {
 
 		RapidoidEnv.touch();
 
-		if (!silent()) Log.info("Initialized environment", "!mode", mode, "!profiles", profiles);
+		if (!silent()) {
+			Log.info("Initialized environment", "!mode", mode, "!profiles", profiles);
+		}
 	}
 
 	private static boolean silent() {
@@ -149,8 +151,6 @@ public class Environment extends RapidoidInitializer {
 			return EnvMode.TEST;
 
 		} else {
-			if (Msc.dockerized()) return EnvMode.PRODUCTION;
-
 			return ClasspathUtil.getClasspathFolders().isEmpty() ? EnvMode.PRODUCTION : EnvMode.DEV;
 		}
 	}
@@ -225,7 +225,7 @@ public class Environment extends RapidoidInitializer {
 		return properties;
 	}
 
-	public Map<String, Object> argsAsMap() {
+	public Map<String, String> argsAsMap() {
 		RapidoidEnv.touch();
 		return argsAsMap.get();
 	}

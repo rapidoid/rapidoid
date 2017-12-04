@@ -1,13 +1,15 @@
 package org.rapidoid.data;
 
+import com.fasterxml.jackson.core.Base64Variants;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 import org.rapidoid.RapidoidThing;
+import org.rapidoid.env.Env;
+import org.rapidoid.writable.ReusableWritable;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /*
  * #%L
@@ -31,6 +33,7 @@ import java.io.ByteArrayOutputStream;
 
 /**
  * @author Nikolche Mihajlovski
+ * @author Dan Cytermann
  * @since 4.4.0
  */
 public class XML extends RapidoidThing {
@@ -38,20 +41,38 @@ public class XML extends RapidoidThing {
 	private XML() {
 	}
 
+	public static XmlMapper newMapper() {
+		XmlMapper mapper = new XmlMapper();
+		mapper.setBase64Variant(Base64Variants.MODIFIED_FOR_URL);
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+		if (!Env.dev()) {
+			mapper.registerModule(new AfterburnerModule());
+		}
+
+		return mapper;
+	}
+
 	public static String stringify(Object obj) {
+		XmlMapper mapper = newMapper();
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+
 		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(obj.getClass());
-			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+			mapper.writeValue(out, obj);
+		} catch (IOException ex) {
+			throw new RuntimeException(ex);
+		}
 
-			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+		return out.toString();
+	}
 
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			jaxbMarshaller.marshal(obj, out);
+	public static void stringify(Object value, ReusableWritable out) {
+		XmlMapper mapper = newMapper();
 
-			return out.toString();
-
-		} catch (JAXBException e) {
-			throw new RuntimeException(e);
+		try {
+			mapper.writeValue(out, value);
+		} catch (IOException ex) {
+			throw new RuntimeException(ex);
 		}
 	}
 
@@ -62,10 +83,9 @@ public class XML extends RapidoidThing {
 	@SuppressWarnings("unchecked")
 	public static <T> T parse(byte[] xml, Class<T> valueType) {
 		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(valueType);
-			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
-			return (T) jaxbUnmarshaller.unmarshal(new ByteArrayInputStream(xml));
+			XmlMapper mapper = newMapper();
+			return mapper.readValue(xml, valueType);
 
 		} catch (Exception e) {
 			throw new RuntimeException(e);

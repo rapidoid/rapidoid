@@ -12,7 +12,7 @@ import org.rapidoid.commons.Str;
 import org.rapidoid.http.*;
 import org.rapidoid.http.customize.BeanParameterFactory;
 import org.rapidoid.http.customize.Customization;
-import org.rapidoid.http.customize.JsonRequestBodyParser;
+import org.rapidoid.http.customize.HttpRequestBodyParser;
 import org.rapidoid.http.customize.SessionManager;
 import org.rapidoid.http.impl.lowlevel.HttpIO;
 import org.rapidoid.io.Upload;
@@ -39,9 +39,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -241,7 +241,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 			synchronized (this) {
 				if (pendingBodyParsing) {
 					pendingBodyParsing = false;
-					parseJsonBody();
+					parseRequestBody();
 				}
 			}
 		}
@@ -814,25 +814,41 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		response = null;
 	}
 
-	private void parseJsonBody() {
+	private void parseRequestBody() {
+		if (U.isEmpty(body())) return;
+
+		String contentTypeHeader = header("Content-Type", "application/json");
+
+		if (contentTypeHeader.startsWith("application/json")) {
+			parseRequestBodyUsing(custom().jsonRequestBodyParser());
+
+		} else if (contentTypeHeader.startsWith("application/xml")) {
+			parseRequestBodyUsing(custom().xmlRequestBodyParser());
+
+		} else {
+			throw U.rte("Couldn't parse the request body - unsupported content type: " + contentTypeHeader);
+		}
+	}
+
+	private void parseRequestBodyUsing(HttpRequestBodyParser parser) {
 		if (U.notEmpty(body())) {
 
-			Map<String, ?> jsonData = null;
-			JsonRequestBodyParser parser = custom().jsonRequestBodyParser();
+			Map<String, ?> bodyData = null;
 
 			try {
-				jsonData = parser.parseJsonBody(this, body);
+				bodyData = parser.parseRequestBody(this, body);
+
 			} catch (Exception e) {
-				Log.error("The attempt to parse the request body as JSON failed. Please make sure the correct content type is specified in the request header!", e);
+				Log.error("Couldn't parse the request body! Please make sure the correct content type is specified in the request header!", e);
 			}
 
-			if (jsonData != null) {
-				posted.putAll(jsonData);
+			if (bodyData != null) {
+				posted.putAll(bodyData);
 			}
 		}
 	}
 
-	public Map<String, Serializable> loadSession() {
+	private Map<String, Serializable> loadSession() {
 		SessionManager sessionManager = U.notNull(custom().sessionManager(), "session manager");
 
 		try {
@@ -842,7 +858,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		}
 	}
 
-	public void saveSession(Map<String, Serializable> session) {
+	private void saveSession(Map<String, Serializable> session) {
 		SessionManager sessionManager = U.notNull(custom().sessionManager(), "session manager");
 
 		try {

@@ -24,8 +24,12 @@ import org.rapidoid.AbstractRapidoidModule;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.RapidoidModuleDesc;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.env.Env;
 import org.rapidoid.jpa.JPAUtil;
-import org.rapidoid.setup.*;
+import org.rapidoid.setup.App;
+import org.rapidoid.setup.My;
+import org.rapidoid.setup.On;
+import org.rapidoid.setup.SetupUtil;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -41,6 +45,8 @@ public class HttpModule extends AbstractRapidoidModule {
 		On.changes().ignore();
 
 		SetupUtil.cleanUp();
+
+		Env.reset();
 	}
 
 }
