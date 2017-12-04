@@ -25,9 +25,9 @@ import org.rapidoid.util.ByType;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -56,25 +56,21 @@ public class Customization extends RapidoidThing {
 
 	private volatile PageDecorator pageDecorator;
 
-	private volatile JsonResponseRenderer jsonResponseRenderer;
+	private volatile HttpResponseRenderer jsonResponseRenderer;
+	private volatile HttpRequestBodyParser jsonRequestBodyParser;
 
-	private volatile JsonRequestBodyParser jsonRequestBodyParser;
-
-	private volatile XmlResponseRenderer xmlResponseRenderer;
-
-	private volatile XmlRequestBodyParser xmlRequestBodyParser;
+	private volatile HttpResponseRenderer xmlResponseRenderer;
+	private volatile HttpRequestBodyParser xmlRequestBodyParser;
 
 	private volatile BeanParameterFactory beanParameterFactory;
 
 	private volatile LoginProvider loginProvider;
-
 	private volatile RolesProvider rolesProvider;
 
 	private volatile BeanValidator validator;
 
-	private volatile ObjectMapper jackson;
-
-	private volatile XmlMapper jacksonXml;
+	private volatile ObjectMapper objectMapper;
+	private volatile XmlMapper xmlMapper;
 
 	private volatile EntityManagerProvider entityManagerProvider;
 
@@ -109,8 +105,8 @@ public class Customization extends RapidoidThing {
 		loginProvider = null;
 		rolesProvider = null;
 		validator = null;
-		jackson = null;
-		jacksonXml = null;
+		objectMapper = null;
+		xmlMapper = null;
 		entityManagerProvider = null;
 		entityManagerFactoryProvider = null;
 		sessionManager = null;
@@ -201,20 +197,20 @@ public class Customization extends RapidoidThing {
 		return this;
 	}
 
-	public JsonResponseRenderer jsonResponseRenderer() {
+	public HttpResponseRenderer jsonResponseRenderer() {
 		return jsonResponseRenderer != null || defaults == null ? jsonResponseRenderer : defaults.jsonResponseRenderer();
 	}
 
-	public Customization jsonResponseRenderer(JsonResponseRenderer jsonResponseRenderer) {
+	public Customization jsonResponseRenderer(HttpResponseRenderer jsonResponseRenderer) {
 		this.jsonResponseRenderer = jsonResponseRenderer;
 		return this;
 	}
 
-	public XmlResponseRenderer xmlResponseRenderer() {
+	public HttpResponseRenderer xmlResponseRenderer() {
 		return xmlResponseRenderer != null || defaults == null ? xmlResponseRenderer : defaults.xmlResponseRenderer();
 	}
 
-	public Customization xmlResponseRenderer(XmlResponseRenderer xmlResponseRenderer) {
+	public Customization xmlResponseRenderer(HttpResponseRenderer xmlResponseRenderer) {
 		this.xmlResponseRenderer = xmlResponseRenderer;
 		return this;
 	}
@@ -255,21 +251,21 @@ public class Customization extends RapidoidThing {
 		return this;
 	}
 
-	public ObjectMapper jackson() {
-		return jackson != null || defaults == null ? jackson : defaults.jackson();
+	public ObjectMapper objectMapper() {
+		return objectMapper != null || defaults == null ? objectMapper : defaults.objectMapper();
 	}
 
-	public Customization jackson(ObjectMapper jackson) {
-		this.jackson = jackson;
+	public Customization objectMapper(ObjectMapper objectMapper) {
+		this.objectMapper = objectMapper;
 		return this;
 	}
 
-	public XmlMapper jacksonXml() {
-		return jacksonXml != null || defaults == null ? jacksonXml : defaults.jacksonXml();
+	public XmlMapper xmlMapper() {
+		return xmlMapper != null || defaults == null ? xmlMapper : defaults.xmlMapper();
 	}
 
-	public Customization jacksonXml(XmlMapper jacksonXml) {
-		this.jacksonXml = jacksonXml;
+	public Customization xmlMapper(XmlMapper xmlMapper) {
+		this.xmlMapper = xmlMapper;
 		return this;
 	}
 
@@ -291,20 +287,20 @@ public class Customization extends RapidoidThing {
 		return this;
 	}
 
-	public JsonRequestBodyParser jsonRequestBodyParser() {
+	public HttpRequestBodyParser jsonRequestBodyParser() {
 		return jsonRequestBodyParser != null || defaults == null ? jsonRequestBodyParser : defaults.jsonRequestBodyParser();
 	}
 
-	public Customization jsonRequestBodyParser(JsonRequestBodyParser jsonRequestBodyParser) {
+	public Customization jsonRequestBodyParser(HttpRequestBodyParser jsonRequestBodyParser) {
 		this.jsonRequestBodyParser = jsonRequestBodyParser;
 		return this;
 	}
 
-	public XmlRequestBodyParser xmlRequestBodyParser() {
+	public HttpRequestBodyParser xmlRequestBodyParser() {
 		return xmlRequestBodyParser != null || defaults == null ? xmlRequestBodyParser : defaults.xmlRequestBodyParser();
 	}
 
-	public Customization xmlRequestBodyParser(XmlRequestBodyParser xmlRequestBodyParser) {
+	public Customization xmlRequestBodyParser(HttpRequestBodyParser xmlRequestBodyParser) {
 		this.xmlRequestBodyParser = xmlRequestBodyParser;
 		return this;
 	}

@@ -4,13 +4,12 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Req;
+import org.rapidoid.http.customize.Customization;
+import org.rapidoid.http.customize.HttpResponseRenderer;
 
 import java.io.OutputStream;
-import org.rapidoid.data.XML;
-import org.rapidoid.http.customize.Customization;
-import org.rapidoid.http.customize.XmlResponseRenderer;
 
-/*
+	/*
  * #%L
  * rapidoid-http-fast
  * %%
@@ -32,11 +31,11 @@ import org.rapidoid.http.customize.XmlResponseRenderer;
 
 @Authors("Dan Cytermann")
 @Since("5.5.0")
-public class DefaultXmlResponseRenderer extends RapidoidThing implements XmlResponseRenderer {
+public class DefaultXmlResponseRenderer extends RapidoidThing implements HttpResponseRenderer {
 
 	@Override
 	public void render(Req req, Object value, OutputStream out) throws Exception {
-		Customization.of(req).jacksonXml().writeValue(out, value);
+		Customization.of(req).xmlMapper().writeValue(out, value);
 	}
 
 }

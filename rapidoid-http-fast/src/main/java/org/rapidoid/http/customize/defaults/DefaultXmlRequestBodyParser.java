@@ -25,18 +25,18 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.customize.Customization;
+import org.rapidoid.http.customize.HttpRequestBodyParser;
 
 import java.util.Map;
-import org.rapidoid.http.customize.XmlRequestBodyParser;
 
 @Authors("Dan Cytermann")
 @Since("5.5.0")
-public class DefaultXmlRequestBodyParser extends RapidoidThing implements XmlRequestBodyParser {
+public class DefaultXmlRequestBodyParser extends RapidoidThing implements HttpRequestBodyParser {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Map<String, ?> parseXmlBody(Req req, byte[] body) throws Exception {
-		return Customization.of(req).jacksonXml().readValue(body, Map.class);
+	public Map<String, ?> parseRequestBody(Req req, byte[] body) throws Exception {
+		return Customization.of(req).xmlMapper().readValue(body, Map.class);
 	}
 
 }

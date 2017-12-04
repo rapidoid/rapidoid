@@ -11,7 +11,7 @@ import org.rapidoid.config.ConfigImpl;
 import org.rapidoid.data.BufRange;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.http.customize.Customization;
-import org.rapidoid.http.customize.JsonResponseRenderer;
+import org.rapidoid.http.customize.HttpResponseRenderer;
 import org.rapidoid.http.handler.HttpHandler;
 import org.rapidoid.http.impl.*;
 import org.rapidoid.http.impl.lowlevel.HttpIO;
@@ -289,7 +289,7 @@ public class FastHttp extends AbstractHttpProcessor {
 	private void internalServerError(final Channel channel, final boolean isKeepAlive, final Req req) {
 		MediaType contentType = req != null ? req.contentType() : HttpUtils.getDefaultContentType();
 
-		JsonResponseRenderer jsonRenderer = Customization.of(req).jsonResponseRenderer();
+		HttpResponseRenderer jsonRenderer = Customization.of(req).jsonResponseRenderer();
 		byte[] body = HttpUtils.responseToBytes(req, INTERNAL_SERVER_ERROR, contentType, jsonRenderer);
 
 		HttpIO.INSTANCE.respond(HttpUtils.maybe(req), channel, -1, -1, 500, isKeepAlive, contentType, body, null, null);

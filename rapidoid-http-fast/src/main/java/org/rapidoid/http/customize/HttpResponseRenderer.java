@@ -1,11 +1,3 @@
-package org.rapidoid.http.customize;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.http.Req;
-
-import java.util.Map;
-
 /*
  * #%L
  * rapidoid-http-fast
@@ -26,10 +18,18 @@ import java.util.Map;
  * #L%
  */
 
-@Authors("Dan Cytermann")
-@Since("5.5.0")
-public interface XmlRequestBodyParser {
+package org.rapidoid.http.customize;
 
-	Map<String, ?> parseXmlBody(Req req, byte[] body) throws Exception;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
+
+import java.io.OutputStream;
+
+@Authors("Nikolche Mihajlovski")
+@Since("5.5.0")
+public interface HttpResponseRenderer {
+
+	void render(Req req, Object value, OutputStream out) throws Exception;
 
 }

@@ -9,9 +9,9 @@ package org.rapidoid.http.customize.defaults;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,6 +26,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.JSON;
+import org.rapidoid.data.XML;
 import org.rapidoid.env.Env;
 import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.customize.*;
@@ -34,7 +35,6 @@ import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
 
 import java.util.List;
-import org.rapidoid.data.XML;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.7")
@@ -46,9 +46,9 @@ public class Defaults extends RapidoidThing {
 
 	private static final ErrorHandler errorHandler = new DefaultErrorHandler();
 
-	private static final JsonResponseRenderer jsonResponseRenderer = new DefaultJsonResponseRenderer();
-	
-	private static final XmlResponseRenderer xmlResponseRenderer = new DefaultXmlResponseRenderer();
+	private static final HttpResponseRenderer jsonResponseRenderer = new DefaultJsonResponseRenderer();
+
+	private static final HttpResponseRenderer xmlResponseRenderer = new DefaultXmlResponseRenderer();
 
 	private static final BeanParameterFactory beanParameterFactory = new DefaultBeanParameterFactory();
 
@@ -64,17 +64,17 @@ public class Defaults extends RapidoidThing {
 
 	private static final ViewResolver viewResolver = new DefaultViewResolver();
 
-	private static final ObjectMapper jackson = JSON.newMapper();
-	
-	private static final XmlMapper jacksonXml = XML.newMapper();
+	private static final ObjectMapper objectMapper = JSON.newMapper();
+
+	private static final XmlMapper xmlMapper = XML.newMapper();
 
 	private static final EntityManagerProvider entityManagerProvider = null;
 
 	private static final EntityManagerFactoryProvider entityManagerFactoryProvider = new DefaultEntityManagerFactoryProvider();
 
-	private static final JsonRequestBodyParser jsonRequestBodyParser = new DefaultJsonRequestBodyParser();
-	
-	private static final XmlRequestBodyParser xmlRequestBodyParser = new DefaultXmlRequestBodyParser();
+	private static final HttpRequestBodyParser jsonRequestBodyParser = new DefaultJsonRequestBodyParser();
+
+	private static final HttpRequestBodyParser xmlRequestBodyParser = new DefaultXmlRequestBodyParser();
 
 	private static final SessionManager sessionManager = new DefaultSessionManager();
 
@@ -94,11 +94,11 @@ public class Defaults extends RapidoidThing {
 		return errorHandler;
 	}
 
-	public static JsonResponseRenderer jsonResponseRenderer() {
+	public static HttpResponseRenderer jsonResponseRenderer() {
 		return jsonResponseRenderer;
 	}
-	
-	public static XmlResponseRenderer xmlResponseRenderer(){
+
+	public static HttpResponseRenderer xmlResponseRenderer() {
 		return xmlResponseRenderer;
 	}
 
@@ -126,13 +126,14 @@ public class Defaults extends RapidoidThing {
 		return viewResolver;
 	}
 
-	public static ObjectMapper jackson() {
-		return jackson;
+	public static ObjectMapper objectMapper() {
+		return objectMapper;
 	}
 
-	public static XmlMapper jacksonXml() {
-		return jacksonXml;
+	public static XmlMapper xmlMapper() {
+		return xmlMapper;
 	}
+
 	public static EntityManagerProvider entityManagerProvider() {
 		return entityManagerProvider;
 	}
@@ -145,11 +146,11 @@ public class Defaults extends RapidoidThing {
 		return Templates.getPath();
 	}
 
-	public static JsonRequestBodyParser jsonRequestBodyParser() {
+	public static HttpRequestBodyParser jsonRequestBodyParser() {
 		return jsonRequestBodyParser;
 	}
-	
-	public static XmlRequestBodyParser xmlRequestBodyParser() {
+
+	public static HttpRequestBodyParser xmlRequestBodyParser() {
 		return xmlRequestBodyParser;
 	}
 

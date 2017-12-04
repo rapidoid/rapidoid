@@ -15,8 +15,8 @@ import org.rapidoid.http.MediaType;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
 import org.rapidoid.http.customize.Customization;
+import org.rapidoid.http.customize.HttpResponseRenderer;
 import org.rapidoid.http.customize.LoginProvider;
-import org.rapidoid.http.customize.MediaResponseRenderer;
 import org.rapidoid.http.customize.RolesProvider;
 import org.rapidoid.io.IO;
 import org.rapidoid.net.AsyncLogic;
@@ -584,7 +584,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 		}
 	}
 
-	private MediaResponseRenderer mediaResponseRenderer() {
+	private HttpResponseRenderer mediaResponseRenderer() {
 		if (contentType.equals(MediaType.JSON)) {
 			return Customization.of(req).jsonResponseRenderer();
 

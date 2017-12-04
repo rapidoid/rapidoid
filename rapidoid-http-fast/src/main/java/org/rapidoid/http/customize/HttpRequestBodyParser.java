@@ -2,6 +2,9 @@ package org.rapidoid.http.customize;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
+
+import java.util.Map;
 
 /*
  * #%L
@@ -23,8 +26,10 @@ import org.rapidoid.annotation.Since;
  * #L%
  */
 
-@Authors("Dan Cytermann")
+@Authors("Nikolche Mihajlovski")
 @Since("5.5.0")
-public interface XmlResponseRenderer extends MediaResponseRenderer {
+public interface HttpRequestBodyParser {
+
+	Map<String, ?> parseRequestBody(Req req, byte[] body) throws Exception;
 
 }

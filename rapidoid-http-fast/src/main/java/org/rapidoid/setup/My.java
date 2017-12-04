@@ -54,8 +54,8 @@ public class My extends RapidoidThing {
 			GLOBAL.loginProvider(Defaults.loginProvider());
 			GLOBAL.rolesProvider(Defaults.rolesProvider());
 			GLOBAL.validator(Defaults.validator());
-			GLOBAL.jackson(Defaults.jackson());
-			GLOBAL.jacksonXml(Defaults.jacksonXml());
+			GLOBAL.objectMapper(Defaults.objectMapper());
+			GLOBAL.xmlMapper(Defaults.xmlMapper());
 			GLOBAL.entityManagerFactoryProvider(Defaults.entityManagerFactoryProvider());
 			GLOBAL.entityManagerProvider(Defaults.entityManagerProvider());
 			GLOBAL.sessionManager(Defaults.sessionManager());
@@ -97,11 +97,11 @@ public class My extends RapidoidThing {
 		GLOBAL.errorHandler(errorHandler);
 	}
 
-	public static void jsonResponseRenderer(JsonResponseRenderer jsonResponseRenderer) {
+	public static void jsonResponseRenderer(HttpResponseRenderer jsonResponseRenderer) {
 		GLOBAL.jsonResponseRenderer(jsonResponseRenderer);
 	}
 
-	public static void xmlResponseRenderer(XmlResponseRenderer xmlResponseRenderer) {
+	public static void xmlResponseRenderer(HttpResponseRenderer xmlResponseRenderer) {
 		GLOBAL.xmlResponseRenderer(xmlResponseRenderer);
 	}
 
@@ -129,23 +129,23 @@ public class My extends RapidoidThing {
 		GLOBAL.viewResolver(viewResolver);
 	}
 
-	public static void jackson(ObjectMapper jackson) {
-		GLOBAL.jackson(jackson);
+	public static void objectMapper(ObjectMapper jackson) {
+		GLOBAL.objectMapper(jackson);
 	}
 
-	public static void jacksonXml(XmlMapper jacksonXml) {
-		GLOBAL.jacksonXml(jacksonXml);
+	public static void xmlMapper(XmlMapper xmlMapper) {
+		GLOBAL.xmlMapper(xmlMapper);
 	}
 
 	public static ErrorHandler errorHandler() {
 		return GLOBAL.errorHandler();
 	}
 
-	public static JsonResponseRenderer jsonResponseRenderer() {
+	public static HttpResponseRenderer jsonResponseRenderer() {
 		return GLOBAL.jsonResponseRenderer();
 	}
 
-	public static XmlResponseRenderer xmlResponseRenderer() {
+	public static HttpResponseRenderer xmlResponseRenderer() {
 		return GLOBAL.xmlResponseRenderer();
 	}
 
@@ -173,8 +173,8 @@ public class My extends RapidoidThing {
 		return GLOBAL.viewResolver();
 	}
 
-	public static ObjectMapper jackson() {
-		return GLOBAL.jackson();
+	public static ObjectMapper objectMapper() {
+		return GLOBAL.objectMapper();
 	}
 
 	public static EntityManagerProvider entityManagerProvider() {
@@ -193,11 +193,11 @@ public class My extends RapidoidThing {
 		GLOBAL.entityManagerFactoryProvider(entityManagerFactoryProvider);
 	}
 
-	public static JsonRequestBodyParser jsonRequestBodyParser() {
+	public static HttpRequestBodyParser jsonRequestBodyParser() {
 		return GLOBAL.jsonRequestBodyParser();
 	}
 
-	public static void jsonRequestBodyParser(JsonRequestBodyParser jsonRequestBodyParser) {
+	public static void jsonRequestBodyParser(HttpRequestBodyParser jsonRequestBodyParser) {
 		GLOBAL.jsonRequestBodyParser(jsonRequestBodyParser);
 	}
 
