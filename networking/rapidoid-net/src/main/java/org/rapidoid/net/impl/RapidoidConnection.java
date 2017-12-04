@@ -66,7 +66,7 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 	final RapidoidTLS tls;
 
-	final RapidoidWorker worker;
+	final NetWorker worker;
 
 	public final Buf input;
 
@@ -124,7 +124,7 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 	private volatile boolean autoReconnect;
 
-	public RapidoidConnection(RapidoidWorker worker, BufGroup bufs) {
+	public RapidoidConnection(NetWorker worker, BufGroup bufs) {
 		this.worker = worker;
 
 		this.hasTLS = worker.sslContext() != null;
@@ -412,7 +412,7 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 	@Override
 	public RapidoidHelper helper() {
-		return worker.helper;
+		return worker.helper();
 	}
 
 	public CtxListener listener() {

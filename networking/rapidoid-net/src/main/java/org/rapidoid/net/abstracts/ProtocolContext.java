@@ -115,7 +115,7 @@ public interface ProtocolContext<T> {
 
 	ConnState state();
 
-	/* X-SPECIFIC */
+	/* EXTENDED NET */
 
 	Channel nextOp(int nextOp);
 

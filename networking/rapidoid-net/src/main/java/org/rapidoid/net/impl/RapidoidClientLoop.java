@@ -40,9 +40,9 @@ import java.nio.channels.SocketChannel;
 @Since("NET_EXTRAS")
 public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements TCPClient, TCPClientInfo {
 
-	private volatile RapidoidWorker[] ioWorkers;
+	private volatile ExtendedWorker[] ioWorkers;
 
-	private RapidoidWorker currentWorker;
+	private ExtendedWorker currentWorker;
 
 	private final String host;
 
@@ -110,12 +110,12 @@ public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements 
 	}
 
 	private void openSockets() throws IOException {
-		ioWorkers = new RapidoidWorker[workers];
+		ioWorkers = new ExtendedWorker[workers];
 
 		for (int i = 0; i < ioWorkers.length; i++) {
 			RapidoidHelper helper = Cls.newInstance(helperClass, exchangeClass);
 			String workerName = "client" + (i + 1);
-			ioWorkers[i] = new RapidoidWorker(workerName, protocol, helper, bufSizeKB, noDelay, syncBufs, sslContext);
+			ioWorkers[i] = new ExtendedWorker(workerName, protocol, helper, bufSizeKB, noDelay, syncBufs, sslContext);
 
 			new Thread(ioWorkers[i], workerName).start();
 		}
@@ -135,7 +135,7 @@ public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements 
 		ChannelHolderImpl holder = new ChannelHolderImpl();
 
 		try {
-			RapidoidWorker targetWorker = ioWorkers[currentWorkerInd];
+			ExtendedWorker targetWorker = ioWorkers[currentWorkerInd];
 			ConnectionTarget target = new ConnectionTarget(socketChannel, addr, clientProtocol, holder, autoreconnecting, state);
 			targetWorker.connect(target);
 
@@ -196,7 +196,7 @@ public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements 
 	public synchronized TCPClient shutdown() {
 		stopLoop();
 
-		for (RapidoidWorker worker : ioWorkers) {
+		for (ExtendedWorker worker : ioWorkers) {
 			worker.stopLoop();
 		}
 

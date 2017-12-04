@@ -121,7 +121,7 @@ public abstract class AbstractLoop<T> extends LifecycleActivity<T> implements Ru
 		}
 	}
 
-	protected boolean onSameThread() {
+	public boolean onSameThread() {
 		return ownerThread == Thread.currentThread();
 	}
 
