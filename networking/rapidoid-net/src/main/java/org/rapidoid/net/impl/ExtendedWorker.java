@@ -83,7 +83,7 @@ public class ExtendedWorker extends AbstractEventLoop<ExtendedWorker> implements
 
 	private final Set<RapidoidConnection> allConnections = Coll.concurrentSet();
 
-	private final int maxPipeline;
+	private final long maxPipeline;
 
 	private final int selectorTimeout = 10;
 
@@ -131,7 +131,7 @@ public class ExtendedWorker extends AbstractEventLoop<ExtendedWorker> implements
 		this.helper = helper;
 		this.sslContext = sslContext;
 
-		this.maxPipeline = Conf.HTTP.entry("maxPipeline").or(10);
+		this.maxPipeline = net.maxPipeline();
 
 		final int queueSize = ConfigUtil.micro() ? 1000 : 1000000;
 		final int growFactor = ConfigUtil.micro() ? 2 : 10;
