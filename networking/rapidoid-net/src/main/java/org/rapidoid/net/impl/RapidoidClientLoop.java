@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,7 +24,7 @@ package org.rapidoid.net.impl;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.config.ConfigUtil;
+import org.rapidoid.net.NetworkingParams;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.TCPClient;
 import org.rapidoid.net.TCPClientInfo;
@@ -34,65 +34,31 @@ import org.rapidoid.u.U;
 import javax.net.ssl.SSLContext;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.5.0")
 public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements TCPClient, TCPClientInfo {
 
-	private volatile ExtendedWorker[] ioWorkers;
-
-	private ExtendedWorker currentWorker;
-
-	private final String host;
-
-	private final int port;
-
-	private int workers = ConfigUtil.cpus();
-
-	private boolean blockingAccept = false;
-
-	protected final Protocol protocol;
-
-	private final Class<? extends RapidoidHelper> helperClass;
-
-	private final Class<? extends DefaultExchange<?>> exchangeClass;
-
-	private ServerSocketChannel serverSocketChannel;
-
-	private final int bufSizeKB;
-
-	private final boolean noDelay;
-
-	private final boolean syncBufs;
-
-	private final boolean autoreconnecting;
+	private final NetworkingParams net;
 
 	// initial number of connections to the default server
 	private final int connections;
 
-	// round-robin workers for new connections
-	private int currentWorkerInd = 0;
+	private final boolean autoReconnect;
 
 	private final SSLContext sslContext;
 
-	public RapidoidClientLoop(Protocol protocol, Class<? extends DefaultExchange<?>> exchangeClass,
-	                          Class<? extends RapidoidHelper> helperClass, String host, int port,
-	                          int workers, int bufSizeKB, boolean noDelay, boolean syncBufs,
-	                          boolean autoreconnecting, int connections, SSLContext sslContext) {
+	private volatile ExtendedWorker[] ioWorkers;
+
+	// round-robin workers for new connections
+	private int currentWorkerInd = 0;
+
+	public RapidoidClientLoop(NetworkingParams net, boolean autoReconnect, int connections, SSLContext sslContext) {
 		super("client");
 
-		this.protocol = protocol;
-		this.exchangeClass = exchangeClass;
-		this.host = host;
-		this.port = port;
-		this.workers = workers;
-		this.bufSizeKB = bufSizeKB;
-		this.noDelay = noDelay;
-		this.syncBufs = syncBufs;
-		this.helperClass = U.or(helperClass, RapidoidHelper.class);
-		this.autoreconnecting = autoreconnecting;
+		this.net = net;
+		this.autoReconnect = autoReconnect;
 		this.connections = connections;
 		this.sslContext = sslContext;
 	}
@@ -111,12 +77,12 @@ public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements 
 	}
 
 	private void openSockets() throws IOException {
-		ioWorkers = new ExtendedWorker[workers];
+		ioWorkers = new ExtendedWorker[net.workers()];
 
 		for (int i = 0; i < ioWorkers.length; i++) {
-			RapidoidHelper helper = Cls.newInstance(helperClass, exchangeClass);
+			RapidoidHelper helper = Cls.newInstance(net.helperClass(), net.exchangeClass());
 			String workerName = "client" + (i + 1);
-			ioWorkers[i] = new ExtendedWorker(workerName, protocol, helper, bufSizeKB, noDelay, syncBufs, sslContext);
+			ioWorkers[i] = new ExtendedWorker(workerName, helper, net, sslContext);
 
 			new Thread(ioWorkers[i], workerName).start();
 		}
@@ -188,7 +154,7 @@ public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements 
 
 		super.start();
 
-		connect(host, port, protocol, connections, autoreconnecting, null);
+		connect(net.address(), net.port(), net.protocol(), connections, autoReconnect, null);
 
 		return this;
 	}

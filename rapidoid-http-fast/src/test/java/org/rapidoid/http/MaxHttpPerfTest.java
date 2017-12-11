@@ -26,6 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.bytes.BytesUtil;
+import org.rapidoid.config.Conf;
 import org.rapidoid.data.BufRanges;
 import org.rapidoid.env.Env;
 import org.rapidoid.http.impl.HttpParser;
@@ -68,7 +69,7 @@ public class MaxHttpPerfTest {
 			});
 		}
 
-		TCP.server().protocol(new Protocol() {
+		TCP.server(Conf.HTTP).protocol(new Protocol() {
 			@Override
 			public void process(Channel ctx) {
 				if (ctx.isInitial()) {

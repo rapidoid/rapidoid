@@ -34,6 +34,7 @@ import org.rapidoid.expire.Expire;
 import org.rapidoid.insight.Insights;
 import org.rapidoid.insight.StatsMeasure;
 import org.rapidoid.log.Log;
+import org.rapidoid.net.NetworkingParams;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.pool.Pool;
 import org.rapidoid.pool.Pools;
@@ -82,7 +83,7 @@ public class ExtendedWorker extends AbstractEventLoop<ExtendedWorker> implements
 
 	private final Set<RapidoidConnection> allConnections = Coll.concurrentSet();
 
-	private final int maxPipelineSize;
+	private final int maxPipeline;
 
 	private final int selectorTimeout = 10;
 
@@ -102,8 +103,6 @@ public class ExtendedWorker extends AbstractEventLoop<ExtendedWorker> implements
 
 	private final SSLContext sslContext;
 
-	ExtendedWorker next;
-
 	private final StatsMeasure dataIn;
 
 	private final StatsMeasure dataOut;
@@ -119,21 +118,20 @@ public class ExtendedWorker extends AbstractEventLoop<ExtendedWorker> implements
 		}
 	}
 
-	public ExtendedWorker(String name, final Protocol protocol, final RapidoidHelper helper,
-	                      int bufSizeKB, boolean noDelay, boolean syncBufs, SSLContext sslContext) {
+	public ExtendedWorker(String name, RapidoidHelper helper, NetworkingParams net, SSLContext sslContext) {
 
 		super(name);
 
-		this.bufSize = bufSizeKB * 1024;
-		this.noDelay = noDelay;
-		this.bufs = new BufGroup(bufSize, syncBufs);
+		this.bufSize = net.bufSizeKB() * 1024;
+		this.noDelay = net.noDelay();
+		this.bufs = new BufGroup(bufSize, net.syncBufs());
 		this.bufSizeLimit = 1024L * Conf.NET.entry("bufSizeLimit").or(1024); // in KB
 
-		this.serverProtocol = protocol;
+		this.serverProtocol = net.protocol();
 		this.helper = helper;
 		this.sslContext = sslContext;
 
-		this.maxPipelineSize = Conf.HTTP.entry("maxPipeline").or(10);
+		this.maxPipeline = Conf.HTTP.entry("maxPipeline").or(10);
 
 		final int queueSize = ConfigUtil.micro() ? 1000 : 1000000;
 		final int growFactor = ConfigUtil.micro() ? 2 : 10;
@@ -211,7 +209,7 @@ public class ExtendedWorker extends AbstractEventLoop<ExtendedWorker> implements
 			Log.info("Connected", "address", target.addr);
 
 			connected.add(new RapidoidChannel(socketChannel, true, target.protocol, target.holder,
-				target.autoreconnecting, target.state));
+				target.reconnecting, target.state));
 
 		} catch (ConnectException e) {
 			retryConnecting(target);
@@ -310,7 +308,7 @@ public class ExtendedWorker extends AbstractEventLoop<ExtendedWorker> implements
 	private long processMsgs(RapidoidConnection conn) {
 		long reqN = 0;
 
-		while (reqN < maxPipelineSize && conn.input().hasRemaining() && processNext(conn, false, false)) {
+		while ((reqN < maxPipeline || maxPipeline <= 0) && conn.input().hasRemaining() && processNext(conn, false, false)) {
 			reqN++;
 		}
 

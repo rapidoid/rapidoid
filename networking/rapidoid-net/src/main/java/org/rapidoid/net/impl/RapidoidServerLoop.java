@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Rnd;
 import org.rapidoid.log.Log;
+import org.rapidoid.net.NetworkingParams;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.Server;
 import org.rapidoid.net.TCPServerInfo;
@@ -45,52 +46,20 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 
 	private static final int MAX_PENDING_CONNECTIONS = 16 * 1024;
 
+	private final NetworkingParams net;
+	private final SSLContext sslContext;
+
+	private final Selector selector;
+	private ServerSocketChannel serverSocketChannel;
+
 	private volatile RapidoidWorker[] ioWorkers;
 
 	private RapidoidWorker currentWorker;
 
-	private final String address;
-
-	private final int port;
-
-	private final int workers;
-
-	private final boolean blockingAccept;
-
-	protected final Protocol protocol;
-
-	private final Class<? extends RapidoidHelper> helperClass;
-
-	private final Class<? extends DefaultExchange<?>> exchangeClass;
-
-	private ServerSocketChannel serverSocketChannel;
-
-	private final Selector selector;
-
-	private final int bufSizeKB;
-
-	private final boolean noDelay;
-
-	private final boolean syncBufs;
-
-	private final SSLContext sslContext;
-
-	public RapidoidServerLoop(Protocol protocol, Class<? extends DefaultExchange<?>> exchangeClass,
-	                          Class<? extends RapidoidHelper> helperClass, String address, int port,
-	                          int workers, int bufSizeKB, boolean noDelay, boolean syncBufs,
-	                          boolean blockingAccept, SSLContext sslContext) {
+	public RapidoidServerLoop(NetworkingParams net, SSLContext sslContext) {
 		super("server");
 
-		this.protocol = protocol;
-		this.exchangeClass = exchangeClass;
-		this.address = address;
-		this.port = port;
-		this.workers = workers;
-		this.bufSizeKB = bufSizeKB;
-		this.noDelay = noDelay;
-		this.syncBufs = syncBufs;
-		this.blockingAccept = blockingAccept;
-		this.helperClass = U.or(helperClass, RapidoidHelper.class);
+		this.net = net;
 		this.sslContext = sslContext;
 
 		try {
@@ -113,28 +82,28 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 	}
 
 	private void validate() {
-		U.must(workers <= RapidoidWorker.MAX_IO_WORKERS, "Too many workers! Maximum = %s",
+		U.must(net.workers() <= RapidoidWorker.MAX_IO_WORKERS, "Too many workers! Maximum = %s",
 			RapidoidWorker.MAX_IO_WORKERS);
 	}
 
 	private void openSocket() throws IOException {
-		U.notNull(protocol, "protocol");
-		U.notNull(helperClass, "helperClass");
+		U.notNull(net.protocol(), "protocol");
+		U.notNull(net.helperClass(), "helperClass");
 
-		String blockingInfo = blockingAccept ? "blocking" : "non-blocking";
-		Log.debug("Initializing server", "address", address, "port", port, "sync", syncBufs, "accept", blockingInfo);
+		String blockingInfo = net.blockingAccept() ? "blocking" : "non-blocking";
+		Log.debug("Initializing server", "address", net.address(), "port", net.port(), "sync", net.syncBufs(), "accept", blockingInfo);
 
 		serverSocketChannel = ServerSocketChannel.open();
 
 		if ((serverSocketChannel.isOpen()) && (selector.isOpen())) {
 
-			serverSocketChannel.configureBlocking(blockingAccept);
+			serverSocketChannel.configureBlocking(net.blockingAccept());
 
 			ServerSocket socket = serverSocketChannel.socket();
 
-			Log.info("!Starting server", "!address", address, "!port", port, "I/O workers", workers, "sync", syncBufs, "accept", blockingInfo);
+			Log.info("!Starting server", "!address", net.address(), "!port", net.port(), "I/O workers", net.workers(), "sync", net.syncBufs(), "accept", blockingInfo);
 
-			InetSocketAddress addr = new InetSocketAddress(address, port);
+			InetSocketAddress addr = new InetSocketAddress(net.address(), net.port());
 
 			socket.setReceiveBufferSize(16 * 1024);
 			socket.setReuseAddress(true);
@@ -142,7 +111,7 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 
 			Log.debug("Opened server socket", "address", addr);
 
-			if (!blockingAccept) {
+			if (!net.blockingAccept()) {
 				Log.debug("Registering accept selector");
 				serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 			}
@@ -155,12 +124,11 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 	}
 
 	private void initWorkers() {
-		ioWorkers = new RapidoidWorker[workers];
+		ioWorkers = new RapidoidWorker[net.workers()];
 
 		for (int i = 0; i < ioWorkers.length; i++) {
 
-			RapidoidWorkerThread workerThread = new RapidoidWorkerThread(i, protocol, exchangeClass,
-				helperClass, bufSizeKB, noDelay, syncBufs, sslContext);
+			RapidoidWorkerThread workerThread = new RapidoidWorkerThread(i, net, sslContext);
 
 			workerThread.start();
 
@@ -235,13 +203,13 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 		RapidoidConnection conn = newConnection();
 		conn.setInitial(false);
 		conn.input.append(input);
-		conn.setProtocol(protocol);
+		conn.setProtocol(net.protocol());
 		process(conn);
 		return conn.output.asText();
 	}
 
 	public Protocol getProtocol() {
-		return protocol;
+		return net.protocol();
 	}
 
 	@Override
@@ -262,7 +230,7 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 
 	@Override
 	protected void insideLoop() {
-		if (blockingAccept) {
+		if (net.blockingAccept()) {
 			processBlocking();
 		} else {
 			processNonBlocking();

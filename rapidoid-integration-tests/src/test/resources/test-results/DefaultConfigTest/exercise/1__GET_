@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 19344
+Content-Length: 19415
 
 <!DOCTYPE html>
 <html lang="en">
@@ -480,6 +480,10 @@ Content-Length: 19344
         <td>
           <i class="fa fa-square-o"></i>
         </td>
+      </tr>
+      <tr>
+        <td>maxPipeline</td>
+        <td>0</td>
       </tr>
       <tr>
         <td>syncBufs</td>

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,6 +32,7 @@ import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.expire.ExpirationCrawlerThread;
 import org.rapidoid.expire.Expire;
 import org.rapidoid.log.Log;
+import org.rapidoid.net.NetworkingParams;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.pool.Pool;
 import org.rapidoid.pool.Pools;
@@ -71,8 +72,6 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> implements
 
 	private final Set<RapidoidConnection> allConnections = Coll.concurrentSet();
 
-	private final int maxPipelineSize;
-
 	final Protocol serverProtocol;
 
 	final RapidoidHelper helper;
@@ -80,6 +79,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> implements
 	private final int bufSize;
 
 	private final boolean noDelay;
+
+	private final long maxPipeline;
 
 	private final BufGroup bufs;
 
@@ -100,20 +101,19 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> implements
 		}
 	}
 
-	public RapidoidWorker(String name, final Protocol protocol, final RapidoidHelper helper,
-	                      int bufSizeKB, boolean noDelay, boolean syncBufs, SSLContext sslContext) {
+	public RapidoidWorker(String name, final RapidoidHelper helper, NetworkingParams net, SSLContext sslContext) {
 
 		super(name);
 
-		this.bufSize = bufSizeKB * 1024;
-		this.noDelay = noDelay;
-		this.bufs = new BufGroup(bufSize, syncBufs);
+		this.bufSize = net.bufSizeKB() * 1024;
+		this.noDelay = net.noDelay();
+		this.bufs = new BufGroup(bufSize, net.syncBufs());
 
-		this.serverProtocol = protocol;
+		this.serverProtocol = net.protocol();
 		this.helper = helper;
 		this.sslContext = sslContext;
 
-		this.maxPipelineSize = Conf.HTTP.entry("maxPipeline").or(10);
+		this.maxPipeline = net.maxPipeline();
 
 		final int queueSize = ConfigUtil.micro() ? 1000 : 1000000;
 		final int growFactor = ConfigUtil.micro() ? 2 : 10;
@@ -213,7 +213,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> implements
 	private long processMsgs(RapidoidConnection conn) {
 		long reqN = 0;
 
-		while (reqN < maxPipelineSize && conn.input().hasRemaining() && processNext(conn, false)) {
+		while ((reqN < maxPipeline || maxPipeline <= 0) && conn.input().hasRemaining() && processNext(conn, false)) {
 			reqN++;
 		}
 

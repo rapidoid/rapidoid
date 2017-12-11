@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,6 +24,7 @@ package org.rapidoid.http.processor;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
 import org.rapidoid.http.FastHttpProtocol;
 import org.rapidoid.http.HttpMetadata;
 import org.rapidoid.net.Server;
@@ -44,7 +45,14 @@ public abstract class AbstractHttpProcessor extends RapidoidThing implements Htt
 	@Override
 	public Server listen(String address, int port) {
 		FastHttpProtocol protocol = new FastHttpProtocol(this);
-		return TCP.server().protocol(protocol).address(address).port(port).syncBufs(syncBufs).build().start();
+
+		return TCP.server(Conf.HTTP)
+			.protocol(protocol)
+			.address(address)
+			.port(port)
+			.syncBufs(syncBufs)
+			.build()
+			.start();
 	}
 
 	@Override

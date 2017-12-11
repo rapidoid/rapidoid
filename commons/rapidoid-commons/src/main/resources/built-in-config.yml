@@ -79,6 +79,7 @@ net:
 # workers: ${system.cpus}
   bufSizeKB: 256
   noDelay: false
+  maxPipeline: 0
   syncBufs: true
   blockingAccept: false
 

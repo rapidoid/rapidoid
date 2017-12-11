@@ -84,6 +84,7 @@
     "port" : 8080,
     "bufSizeKB" : 256,
     "noDelay" : false,
+    "maxPipeline" : 0,
     "syncBufs" : true,
     "blockingAccept" : false
   },

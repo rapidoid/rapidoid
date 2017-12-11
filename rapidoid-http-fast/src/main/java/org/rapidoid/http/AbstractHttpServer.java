@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,6 +27,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.commons.Dates;
+import org.rapidoid.config.Conf;
 import org.rapidoid.data.BufRange;
 import org.rapidoid.data.JSON;
 import org.rapidoid.http.impl.HttpParser;
@@ -226,7 +227,7 @@ public abstract class AbstractHttpServer extends RapidoidThing implements Protoc
 	}
 
 	public Server listen(String address, int port) {
-		return TCP.server()
+		return TCP.server(Conf.HTTP)
 			.protocol(this)
 			.address(address)
 			.port(port)

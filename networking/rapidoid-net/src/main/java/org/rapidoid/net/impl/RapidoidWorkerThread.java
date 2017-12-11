@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,7 +25,7 @@ import org.rapidoid.activity.RapidoidThread;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.net.Protocol;
+import org.rapidoid.net.NetworkingParams;
 import org.rapidoid.u.U;
 
 import javax.net.ssl.SSLContext;
@@ -35,45 +35,25 @@ import javax.net.ssl.SSLContext;
 public class RapidoidWorkerThread extends RapidoidThread {
 
 	private final int workerIndex;
-
-	private final Protocol protocol;
-
-	private final Class<? extends DefaultExchange<?>> exchangeClass;
-
-	private final Class<? extends RapidoidHelper> helperClass;
+	private final NetworkingParams net;
+	private final SSLContext sslContext;
 
 	private volatile RapidoidWorker worker;
 
-	private final int bufSizeKB;
-
-	private final boolean noDelay;
-
-	private final boolean syncBufs;
-
-	private final SSLContext sslContext;
-
-	public RapidoidWorkerThread(int workerIndex, Protocol protocol, Class<? extends DefaultExchange<?>> exchangeClass,
-	                            Class<? extends RapidoidHelper> helperClass, int bufSizeKB, boolean noDelay,
-	                            boolean syncBufs, SSLContext sslContext) {
-
+	RapidoidWorkerThread(int workerIndex, NetworkingParams net, SSLContext sslContext) {
 		super("server" + (workerIndex + 1));
 
 		this.workerIndex = workerIndex;
-		this.protocol = protocol;
-		this.exchangeClass = exchangeClass;
-		this.helperClass = helperClass;
-		this.bufSizeKB = bufSizeKB;
-		this.noDelay = noDelay;
-		this.syncBufs = syncBufs;
+		this.net = net;
 		this.sslContext = sslContext;
 	}
 
 	@Override
 	public void run() {
-		RapidoidHelper helper = Cls.newInstance(helperClass, exchangeClass);
+		RapidoidHelper helper = Cls.newInstance(net.helperClass(), net.exchangeClass());
 		helper.requestIdGen = workerIndex; // to generate UNIQUE request ID (+= MAX_IO_WORKERS)
 
-		worker = new RapidoidWorker("server" + (workerIndex + 1), protocol, helper, bufSizeKB, noDelay, syncBufs, sslContext);
+		worker = new RapidoidWorker("server" + (workerIndex + 1), helper, net, sslContext);
 
 		worker.run();
 	}

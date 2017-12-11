@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,10 +24,11 @@ package org.rapidoid.net;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
+import org.rapidoid.config.BasicConfig;
 import org.rapidoid.net.impl.DefaultExchange;
 import org.rapidoid.net.impl.RapidoidClientLoop;
 import org.rapidoid.net.impl.RapidoidHelper;
+import org.rapidoid.u.U;
 
 import javax.net.ssl.SSLContext;
 
@@ -35,48 +36,113 @@ import javax.net.ssl.SSLContext;
 @Since("5.5.0")
 public class TCPClientBuilder extends RapidoidThing {
 
-	private volatile String host;
-
-	private volatile int port;
-
 	private volatile int connections;
 
 	private volatile boolean reconnecting = true;
 
-	private volatile int bufSizeKB = Conf.NET.entry("bufSizeKB").or(16);
+	private final NetworkingParams netParams;
 
-	private volatile boolean syncBufs = Conf.NET.entry("syncBufs").or(true);
+	private final TLSParams tlsParams = new TLSParams();
 
-	private volatile int workers = Conf.NET.entry("workers").or(Runtime.getRuntime().availableProcessors());
+	private volatile boolean built;
 
-	private volatile boolean noDelay = Conf.NET.entry("noDelay").or(false);
-
-	private volatile Protocol protocol;
-
-	private volatile Class<? extends DefaultExchange<?>> exchangeClass = null;
-
-	private volatile Class<? extends RapidoidHelper> helperClass = RapidoidHelper.class;
-
-	public String host() {
-		return host;
+	public TCPClientBuilder(BasicConfig cfg) {
+		this.netParams = new NetworkingParams(cfg);
 	}
 
 	public TCPClientBuilder host(String host) {
-		this.host = host;
+		netParams.address(host);
 		return this;
-	}
-
-	public int port() {
-		return port;
 	}
 
 	public TCPClientBuilder port(int port) {
-		this.port = port;
+		netParams.port(port);
 		return this;
 	}
 
-	public int connections() {
-		return connections;
+	public TCPClientBuilder workers(int workers) {
+		netParams.workers(workers);
+		return this;
+	}
+
+	public TCPClientBuilder bufSizeKB(int bufSizeKB) {
+		netParams.bufSizeKB(bufSizeKB);
+		return this;
+	}
+
+	public TCPClientBuilder noDelay(boolean noDelay) {
+		netParams.noDelay(noDelay);
+		return this;
+	}
+
+	public TCPClientBuilder maxPipeline(long maxPipelineSize) {
+		netParams.maxPipeline(maxPipelineSize);
+		return this;
+	}
+
+	public TCPClientBuilder syncBufs(boolean syncBufs) {
+		netParams.syncBufs(syncBufs);
+		return this;
+	}
+
+	public TCPClientBuilder blockingAccept(boolean blockingAccept) {
+		netParams.blockingAccept(blockingAccept);
+		return this;
+	}
+
+	public TCPClientBuilder protocol(Protocol protocol) {
+		netParams.protocol(protocol);
+		return this;
+	}
+
+	public TCPClientBuilder exchangeClass(Class<? extends DefaultExchange<?>> exchangeClass) {
+		netParams.exchangeClass(exchangeClass);
+		return this;
+	}
+
+	public TCPClientBuilder helperClass(Class<? extends RapidoidHelper> helperClass) {
+		netParams.helperClass(helperClass);
+		return this;
+	}
+
+	public TCPClientBuilder tls(boolean tls) {
+		tlsParams.tls(tls);
+		return this;
+	}
+
+	public TCPClientBuilder keystore(String keystore) {
+		tlsParams.keystore(keystore);
+		return this;
+	}
+
+	public TCPClientBuilder keystorePassword(char[] keystorePassword) {
+		tlsParams.keystorePassword(keystorePassword);
+		return this;
+	}
+
+	public TCPClientBuilder keyManagerPassword(char[] keyManagerPassword) {
+		tlsParams.keyManagerPassword(keyManagerPassword);
+		return this;
+	}
+
+	public TCPClientBuilder truststore(String truststore) {
+		tlsParams.truststore(truststore);
+		return this;
+	}
+
+	public TCPClientBuilder truststorePassword(char[] truststorePassword) {
+		tlsParams.truststorePassword(truststorePassword);
+		return this;
+	}
+
+	public TCPClientBuilder selfSignedTLS(boolean selfSignedTLS) {
+		tlsParams.selfSignedTLS(selfSignedTLS);
+		return this;
+	}
+
+	public TCPClientBuilder tlsContext(SSLContext tlsContext) {
+		tlsParams.tlsContext(tlsContext);
+		return this;
 	}
 
 	public TCPClientBuilder connections(int connections) {
@@ -84,85 +150,15 @@ public class TCPClientBuilder extends RapidoidThing {
 		return this;
 	}
 
-	public boolean reconnecting() {
-		return reconnecting;
-	}
-
 	public TCPClientBuilder reconnecting(boolean reconnecting) {
 		this.reconnecting = reconnecting;
 		return this;
 	}
 
-	public int bufSizeKB() {
-		return bufSizeKB;
-	}
-
-	public TCPClientBuilder bufSizeKB(int bufSizeKB) {
-		this.bufSizeKB = bufSizeKB;
-		return this;
-	}
-
-	public boolean syncBufs() {
-		return syncBufs;
-	}
-
-	public TCPClientBuilder syncBufs(boolean syncBufs) {
-		this.syncBufs = syncBufs;
-		return this;
-	}
-
-	public int workers() {
-		return workers;
-	}
-
-	public TCPClientBuilder workers(int workers) {
-		this.workers = workers;
-		return this;
-	}
-
-	public boolean noDelay() {
-		return noDelay;
-	}
-
-	public TCPClientBuilder noDelay(boolean noDelay) {
-		this.noDelay = noDelay;
-		return this;
-	}
-
-	public Protocol protocol() {
-		return protocol;
-	}
-
-	public TCPClientBuilder protocol(Protocol protocol) {
-		this.protocol = protocol;
-		return this;
-	}
-
-	public Class<? extends DefaultExchange<?>> exchangeClass() {
-		return exchangeClass;
-	}
-
-	public TCPClientBuilder exchangeClass(Class<? extends DefaultExchange<?>> exchangeClass) {
-		this.exchangeClass = exchangeClass;
-		return this;
-	}
-
-	public Class<? extends RapidoidHelper> helperClass() {
-		return helperClass;
-	}
-
-	public TCPClientBuilder helperClass(Class<? extends RapidoidHelper> helperClass) {
-		this.helperClass = helperClass;
-		return this;
-	}
-
-	public TCPClient build() {
-
-		// FIXME TLS support (see ServerBuilder)
-		SSLContext tlsCtx = null;
-
-		return new RapidoidClientLoop(protocol, exchangeClass, helperClass, host, port, workers,
-			bufSizeKB, noDelay, syncBufs, reconnecting, connections, tlsCtx);
+	public synchronized TCPClient build() {
+		U.must(!built, "This builder was already used! Please instantiate a new one!");
+		built = true;
+		return new RapidoidClientLoop(netParams, reconnecting, connections, tlsParams.buildTLSContext());
 	}
 
 }
