@@ -164,7 +164,7 @@ public abstract class AbstractHttpServer extends RapidoidThing implements Protoc
 
 	protected void writeBody(Channel ctx, byte[] body, int offset, int length, MediaType contentType) {
 		writeContentTypeHeader(ctx, contentType);
-		HttpIO.INSTANCE.writeContentLengthHeader(ctx, body.length);
+		HttpIO.INSTANCE.writeContentLengthHeader(ctx, length);
 
 		ctx.write(CR_LF);
 
