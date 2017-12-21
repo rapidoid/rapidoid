@@ -614,6 +614,7 @@ org.rapidoid.net.impl.RapidoidHelper
 org.rapidoid.net.impl.RapidoidServerLoop
 org.rapidoid.net.impl.RapidoidWorker
 org.rapidoid.net.impl.RapidoidWorkerThread
+org.rapidoid.net.NetworkingParams
 org.rapidoid.net.Protocol
 org.rapidoid.net.Server
 org.rapidoid.net.ServerBuilder
@@ -622,6 +623,7 @@ org.rapidoid.net.TCPClient
 org.rapidoid.net.TCPClientBuilder
 org.rapidoid.net.TCPClientInfo
 org.rapidoid.net.TCPServerInfo
+org.rapidoid.net.TLSParams
 org.rapidoid.net.tls.RapidoidTLS
 org.rapidoid.net.tls.SelfSignedCertGen
 org.rapidoid.net.tls.SelfSignedCertInfo
