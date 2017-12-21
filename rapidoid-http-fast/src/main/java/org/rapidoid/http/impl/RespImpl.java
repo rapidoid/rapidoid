@@ -30,10 +30,7 @@ import org.rapidoid.config.BasicConfig;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
-import org.rapidoid.http.HttpUtils;
-import org.rapidoid.http.MediaType;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.Resp;
+import org.rapidoid.http.*;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.HttpResponseRenderer;
 import org.rapidoid.http.customize.LoginProvider;
@@ -510,25 +507,30 @@ public class RespImpl extends RapidoidThing implements Resp {
 			'}';
 	}
 
-	byte[] renderToBytes() {
-		if (mvc()) {
+	RespBody createRespBodyFromResult() {
+		Object result = result();
+
+		if (result instanceof RespBody) {
+			return (RespBody) result;
+
+		} else if (mvc()) {
 			byte[] bytes = ResponseRenderer.renderMvc(req, this);
 			HttpUtils.postProcessResponse(this); // the response might have been changed, so post-process again
-			return bytes;
+			return new RespBodyBytes(bytes);
 
 		} else if (body() != null) {
-			return Msc.toBytes(body());
+			return new RespBodyBytes(Msc.toBytes(body()));
 
-		} else if (result() != null) {
-			return serializeResponseContent();
+		} else if (result != null) {
+			return resultToRespBody(result);
 
 		} else {
 			throw U.rte("There's nothing to render!");
 		}
 	}
 
-	private byte[] serializeResponseContent() {
-		return HttpUtils.responseToBytes(req, result(), contentType(), mediaResponseRenderer());
+	public RespBody resultToRespBody(Object result) {
+		return new RespBodyBytes(HttpUtils.responseToBytes(req, result, contentType(), mediaResponseRenderer()));
 	}
 
 	@Override
@@ -597,4 +599,5 @@ public class RespImpl extends RapidoidThing implements Resp {
 			return Customization.of(req).jsonResponseRenderer();
 		}
 	}
+
 }

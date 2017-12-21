@@ -291,7 +291,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		MediaType contentType = req != null ? req.contentType() : HttpUtils.getDefaultContentType();
 
 		HttpResponseRenderer jsonRenderer = Customization.of(req).jsonResponseRenderer();
-		byte[] body = HttpUtils.responseToBytes(req, INTERNAL_SERVER_ERROR, contentType, jsonRenderer);
+		RespBody body = new RespBodyBytes(HttpUtils.responseToBytes(req, INTERNAL_SERVER_ERROR, contentType, jsonRenderer));
 
 		HttpIO.INSTANCE.respond(HttpUtils.maybe(req), channel, -1, -1, 500, isKeepAlive, contentType, body, null, null);
 	}

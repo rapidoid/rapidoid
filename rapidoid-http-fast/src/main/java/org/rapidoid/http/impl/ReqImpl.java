@@ -446,17 +446,17 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		return response;
 	}
 
-	void doRendering(int code, byte[] responseBody) {
+	void doRendering(int code, RespBody body) {
 		if (!isRendering()) {
 			synchronized (this) {
 				if (!isRendering()) {
-					respond(code, responseBody);
+					respond(code, body);
 				}
 			}
 		}
 	}
 
-	private void respond(int code, byte[] responseBody) {
+	private void respond(int code, RespBody body) {
 		MediaType contentType = HttpUtils.getDefaultContentType();
 
 		if (tokenChanged.get()) {
@@ -471,16 +471,16 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 			contentType = U.or(response.contentType(), contentType);
 		}
 
-		renderResponse(code, contentType, responseBody);
+		renderResponse(code, contentType, body);
 	}
 
-	private void renderResponse(int code, MediaType contentType, byte[] responseBody) {
+	private void renderResponse(int code, MediaType contentType, RespBody body) {
 		rendering = true;
-		completed = responseBody != null;
+		completed = body != null;
 
 		HttpIO.INSTANCE.respond(
 			HttpUtils.maybe(this), channel, connId, handle,
-			code, isKeepAlive, contentType, responseBody,
+			code, isKeepAlive, contentType, body,
 			response != null ? response.headers() : null,
 			response != null ? response.cookies() : null
 		);
@@ -544,7 +544,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		String err = validateResponse();
 
 		if (err != null) {
-			doRendering(500, err.getBytes());
+			doRendering(500, new RespBodyBytes(err.getBytes()));
 
 		} else {
 			renderResponse();
@@ -566,27 +566,27 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 			HttpIO.INSTANCE.done(this);
 
 		} else {
-			// first serialize the response to bytes (with error handling)
-			byte[] bytes = responseToBytes();
+			// first create a response body from the result (with error handling)
+			RespBody body = toRespBody();
 
-			// then rendering
-			doRendering(response.code(), bytes);
+			// then render the response
+			doRendering(response.code(), body);
 		}
 	}
 
-	private byte[] responseToBytes() {
+	private RespBody toRespBody() {
 		try {
-			return response.renderToBytes();
+			return response.createRespBodyFromResult();
 
 		} catch (Throwable e) {
 			HttpIO.INSTANCE.error(this, e, LogLevel.ERROR);
 
 			try {
-				return response.renderToBytes();
+				return response.createRespBodyFromResult();
 
 			} catch (Exception e1) {
 				Log.error("Internal rendering error!", e1);
-				return HttpUtils.getErrorMessageAndSetCode(response, e1).getBytes();
+				return new RespBodyBytes(HttpUtils.getErrorMessageAndSetCode(response, e1).getBytes());
 			}
 		}
 	}

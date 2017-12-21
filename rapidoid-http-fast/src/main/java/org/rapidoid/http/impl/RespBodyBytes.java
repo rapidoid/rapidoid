@@ -18,35 +18,26 @@
  * #L%
  */
 
-package org.rapidoid.http.processor;
+package org.rapidoid.http.impl;
 
-
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.HttpUtils;
-import org.rapidoid.http.MediaType;
 import org.rapidoid.http.RespBody;
-import org.rapidoid.http.impl.RespBodyBytes;
-import org.rapidoid.http.impl.lowlevel.HttpIO;
-import org.rapidoid.net.abstracts.Channel;
-import org.rapidoid.net.impl.RapidoidHelper;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class NotFoundHttpProcessor extends AbstractHttpProcessor {
+@Since("5.5.1")
+public class RespBodyBytes extends RapidoidThing implements RespBody {
 
-	public NotFoundHttpProcessor() {
-		super(null);
+	private final byte[] bytes;
+
+	public RespBodyBytes(byte[] bytes) {
+		this.bytes = bytes;
 	}
 
 	@Override
-	public void onRequest(Channel channel, RapidoidHelper data) {
-		boolean isKeepAlive = data.isKeepAlive.value;
-
-		RespBody body = new RespBodyBytes("Not found!".getBytes());
-
-		HttpIO.INSTANCE.respond(HttpUtils.noReq(), channel, -1, -1, 404, isKeepAlive, MediaType.PLAIN_TEXT_UTF_8, body, null, null);
-
-		channel.send().closeIf(!isKeepAlive);
+	public byte[] toBytes() {
+		return bytes;
 	}
+
 }

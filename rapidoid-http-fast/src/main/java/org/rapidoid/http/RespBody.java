@@ -1,6 +1,6 @@
 /*-
  * #%L
- * rapidoid-integration-tests
+ * rapidoid-http-fast
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -18,47 +18,15 @@
  * #L%
  */
 
-package org.rapidoid.jpa;
+package org.rapidoid.http;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
-import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+@Authors("Nikolche Mihajlovski")
+@Since("5.5.1")
+public interface RespBody {
 
-@Entity
-public class Movie extends AbstractEntity {
-
-	@Id
-	@GeneratedValue
-	public Long id;
-
-	private String title;
-
-	@OneToMany(fetch = FetchType.LAZY)
-	public Set<Tag> tags = new HashSet<>();
-
-	public Movie() {
-	}
-
-	public Movie(String title) {
-		this.title = title;
-	}
-
-	@Override
-	public Object getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
+	byte[] toBytes();
 
 }

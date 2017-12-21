@@ -28,6 +28,7 @@ import org.rapidoid.http.*;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.impl.MaybeReq;
 import org.rapidoid.http.impl.ReqImpl;
+import org.rapidoid.http.impl.RespImpl;
 import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.http.impl.lowlevel.HttpIO;
 import org.rapidoid.jpa.JPA;
@@ -139,21 +140,12 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 		}
 	}
 
-	private TransactionMode before(final Req req, String username, Set<String> roles) {
-
+	private void before(final Req req, String username, Set<String> roles) {
 		if (U.notEmpty(options.roles()) && !Secure.hasAnyRole(username, roles, options.roles())) {
 			throw new SecurityException("The user doesn't have the required roles!");
 		}
 
 		req.response().view(options.view()).contentType(options.contentType()).mvc(options.mvc());
-
-		TransactionMode txMode = U.or(options.transaction(), TransactionMode.NONE);
-
-		if (txMode == TransactionMode.AUTO) {
-			txMode = HttpUtils.isGetReq(req) ? TransactionMode.READ_ONLY : TransactionMode.READ_WRITE;
-		}
-
-		return txMode;
 	}
 
 	private void execHandlerJob(final Channel channel, final boolean isKeepAlive, final MediaType contentType,
@@ -180,7 +172,9 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 					roles = userRoles(req, username);
 					scope = auth != null ? auth.scope : null;
 
-					TransactionMode txMode = before(req, username, roles);
+					before(req, username, roles);
+
+					TransactionMode txMode = TxUtil.txModeOf(req, options.transaction());
 					U.notNull(txMode, "txMode");
 
 					HttpWrapper[] wrappers = httpWrappers != null ? httpWrappers : U.or(Customization.of(req).wrappers(), NO_WRAPPERS);
@@ -234,7 +228,7 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 	}
 
 	private Object handleReqMaybeInTx(final Channel channel, final boolean isKeepAlive, final Req req,
-	                                  final Object extra, TransactionMode txMode) throws Throwable {
+	                                  final Object extra, TransactionMode txMode) {
 
 		if (txMode != null && txMode != TransactionMode.NONE) {
 
@@ -250,6 +244,12 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 							// throw to rollback
 							Throwable err = (Throwable) res;
 							throw U.rte("Error occurred inside the transactional web handler!", err);
+
+						} else {
+							// serialize the result into a HTTP response body, while still inside tx (see #153)
+							RespImpl resp = (RespImpl) req.response(); // TODO find cleaner access
+							RespBody body = resp.resultToRespBody(res);
+							res = body;
 						}
 
 						result.set(res);
@@ -264,21 +264,6 @@ public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler 
 
 		} else {
 			return handleReqAndPostProcess(channel, isKeepAlive, req, extra);
-		}
-	}
-
-	private Runnable txWrap(final TransactionMode txMode, final Runnable handleRequest) {
-		if (txMode != null && txMode != TransactionMode.NONE) {
-
-			return new Runnable() {
-				@Override
-				public void run() {
-					JPA.transaction(handleRequest, txMode == TransactionMode.READ_ONLY);
-				}
-			};
-
-		} else {
-			return handleRequest;
 		}
 	}
 

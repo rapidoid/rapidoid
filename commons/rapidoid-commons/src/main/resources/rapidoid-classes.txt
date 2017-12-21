@@ -399,6 +399,7 @@ org.rapidoid.http.handler.PredefinedResponseHandler
 org.rapidoid.http.handler.ResourceHttpHandler
 org.rapidoid.http.handler.StaticHttpHandler
 org.rapidoid.http.handler.StaticResourcesHandler
+org.rapidoid.http.handler.TxUtil
 org.rapidoid.http.Headers
 org.rapidoid.http.HTTP
 org.rapidoid.http.HttpClient
@@ -434,6 +435,7 @@ org.rapidoid.http.impl.MVCModelImpl
 org.rapidoid.http.impl.PathPattern
 org.rapidoid.http.impl.RapidoidReqInfo
 org.rapidoid.http.impl.ReqImpl
+org.rapidoid.http.impl.RespBodyBytes
 org.rapidoid.http.impl.RespImpl
 org.rapidoid.http.impl.ResponseRenderer
 org.rapidoid.http.impl.RouteCacheConfig
@@ -452,6 +454,7 @@ org.rapidoid.http.Req
 org.rapidoid.http.ReqHandler
 org.rapidoid.http.ReqRespHandler
 org.rapidoid.http.Resp
+org.rapidoid.http.RespBody
 org.rapidoid.http.REST
 org.rapidoid.http.RESTClient
 org.rapidoid.http.RESTResultMapper

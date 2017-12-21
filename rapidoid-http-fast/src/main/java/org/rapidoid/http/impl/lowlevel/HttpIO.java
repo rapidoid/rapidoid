@@ -28,6 +28,7 @@ import org.rapidoid.data.BufRange;
 import org.rapidoid.http.HttpStatus;
 import org.rapidoid.http.MediaType;
 import org.rapidoid.http.Req;
+import org.rapidoid.http.RespBody;
 import org.rapidoid.http.impl.MaybeReq;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.net.AsyncLogic;
@@ -92,7 +93,7 @@ public class HttpIO extends RapidoidThing {
 
 	public void respond(MaybeReq maybeReq, Channel channel, long connId, long handle,
 	                    int code, boolean isKeepAlive, MediaType contentType,
-	                    byte[] body, Map<String, String> headers, Map<String, String> cookies) {
+	                    RespBody body, Map<String, String> headers, Map<String, String> cookies) {
 
 		impl.respond(maybeReq, channel, connId, handle, code, isKeepAlive, contentType, body, headers, cookies);
 	}

@@ -466,8 +466,8 @@ class LowLevelHttpIO extends RapidoidThing {
 
 					} else {
 
-						if (body instanceof byte[]) {
-							byte[] bytes = (byte[]) body;
+						if (body instanceof RespBody) {
+							byte[] bytes = ((RespBody) body).toBytes();
 
 							writeContentLengthHeader(channel, bytes.length);
 							closeHeaders(maybeReq, output);

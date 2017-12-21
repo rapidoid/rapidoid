@@ -21,31 +21,27 @@
 package org.rapidoid.jpa;
 
 
-import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Entity
-public class Movie extends AbstractEntity {
+public class Tag {
 
 	@Id
 	@GeneratedValue
-	public Long id;
+	private Long id;
 
-	private String title;
+	private String name;
 
-	@OneToMany(fetch = FetchType.LAZY)
-	public Set<Tag> tags = new HashSet<>();
-
-	public Movie() {
+	public Tag() {
 	}
 
-	public Movie(String title) {
-		this.title = title;
+	public Tag(String name) {
+		this.name = name;
 	}
 
-	@Override
-	public Object getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -53,12 +49,11 @@ public class Movie extends AbstractEntity {
 		this.id = id;
 	}
 
-	public String getTitle() {
-		return title;
+	public String getName() {
+		return name;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setName(String name) {
+		this.name = name;
 	}
-
 }
