@@ -20,19 +20,16 @@
 
 package org.rapidoid.job;
 
-import org.rapidoid.activity.RapidoidThreadFactory;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
-import org.rapidoid.config.Conf;
-import org.rapidoid.config.Config;
 import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.WithContext;
 import org.rapidoid.log.Log;
+import org.rapidoid.optional.Opt;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Once;
 
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicLong;
@@ -42,66 +39,29 @@ import java.util.concurrent.atomic.AtomicLong;
 @Since("4.1.0")
 public class Jobs extends RapidoidInitializer {
 
-	public static final Config JOBS = Conf.JOBS;
-
-	private static final AtomicLong errorCounter = new AtomicLong();
-
-	private static ScheduledThreadPoolExecutor SCHEDULER;
-
-	private static ThreadPoolExecutor EXECUTOR;
-
-	private static final Once init = new Once();
+	private static final JobsService jobs = new JobsService();
 
 	private Jobs() {
 	}
 
 	public static synchronized void reset() {
-		errorCounter.set(0);
+		jobs.reset();
 	}
 
-	public static synchronized ScheduledExecutorService scheduler() {
-		if (SCHEDULER == null) {
-
-			int threads = JOBS.sub("scheduler").entry("threads").or(64);
-
-			SCHEDULER = new ScheduledThreadPoolExecutor(threads, new RapidoidThreadFactory("scheduler", true));
-
-			new ManageableExecutor("scheduler", SCHEDULER);
-
-			if (init.go()) init();
-		}
-
-		return SCHEDULER;
+	static void init() {
+		jobs.init();
 	}
 
-	public static synchronized Executor executor() {
-		if (EXECUTOR == null) {
-
-			int threads = JOBS.sub("executor").entry("threads").or(64);
-			int maxThreads = JOBS.sub("executor").entry("maxThreads").or(1024);
-			int maxQueueSize = JOBS.sub("executor").entry("maxQueueSize").or(1000000);
-
-			BlockingQueue<Runnable> queue = new ArrayBlockingQueue<>(maxQueueSize);
-			EXECUTOR = new ThreadPoolExecutor(threads, maxThreads, 300, TimeUnit.SECONDS, queue, new RapidoidThreadFactory("executor", true));
-
-			new ManageableExecutor("executor", EXECUTOR);
-
-			if (init.go()) init();
-		}
-
-		return EXECUTOR;
+	public static ThreadPoolExecutor executor() {
+		return jobs.executor().get();
 	}
 
-	private static void init() {
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			public void run() {
-				shutdownNow();
-			}
-		});
+	public static ScheduledThreadPoolExecutor scheduler() {
+		return jobs.scheduler().get();
 	}
 
 	public static ScheduledFuture<?> schedule(Runnable job, long delay, TimeUnit unit) {
-		return scheduler().schedule(wrap(job), delay, unit);
+		return requireActiveScheduler().schedule(wrap(job), delay, unit);
 	}
 
 	public static <T> ScheduledFuture<?> schedule(Callable<T> job, long delay, TimeUnit unit, Callback<T> callback) {
@@ -109,7 +69,7 @@ public class Jobs extends RapidoidInitializer {
 	}
 
 	public static ScheduledFuture<?> scheduleAtFixedRate(Runnable job, long initialDelay, long period, TimeUnit unit) {
-		return scheduler().scheduleAtFixedRate(wrap(job), initialDelay, period, unit);
+		return requireActiveScheduler().scheduleAtFixedRate(wrap(job), initialDelay, period, unit);
 	}
 
 	public static <T> ScheduledFuture<?> scheduleAtFixedRate(Callable<T> job, long initialDelay, long period,
@@ -118,7 +78,7 @@ public class Jobs extends RapidoidInitializer {
 	}
 
 	public static ScheduledFuture<?> scheduleWithFixedDelay(Runnable job, long initialDelay, long delay, TimeUnit unit) {
-		return scheduler().scheduleWithFixedDelay(wrap(job), initialDelay, delay, unit);
+		return requireActiveScheduler().scheduleWithFixedDelay(wrap(job), initialDelay, delay, unit);
 	}
 
 	public static <T> ScheduledFuture<?> scheduleWithFixedDelay(Callable<T> job, long initialDelay, long delay,
@@ -127,26 +87,34 @@ public class Jobs extends RapidoidInitializer {
 	}
 
 	public static void execute(Runnable job) {
-		ContextPreservingJobWrapper jobWrapper = wrap(job);
+		Opt<ThreadPoolExecutor> executor = jobs.executor();
 
-		try {
-			executor().execute(jobWrapper);
-		} catch (RejectedExecutionException e) {
-			Log.warn("Job execution was rejected!", "job", job);
+		if (executor.exists()) {
+			ContextPreservingJobWrapper jobWrapper = wrap(job);
+
+			try {
+				executor.get().execute(jobWrapper);
+			} catch (RejectedExecutionException e) {
+				Log.warn("Job execution was rejected!", "job", job);
+			}
 		}
 	}
 
 	public static void executeAndWait(Runnable job) {
-		ContextPreservingJobWrapper jobWrapper = wrap(job);
+		Opt<ThreadPoolExecutor> executor = jobs.executor();
 
-		try {
-			executor().execute(jobWrapper);
-		} catch (RejectedExecutionException e) {
-			Log.warn("Job execution was rejected!", "job", job);
-		}
+		if (executor.exists()) {
+			ContextPreservingJobWrapper jobWrapper = wrap(job);
 
-		while (!jobWrapper.isDone()) {
-			U.sleep(10);
+			try {
+				executor.get().execute(jobWrapper);
+			} catch (RejectedExecutionException e) {
+				Log.warn("Job execution was rejected!", "job", job);
+			}
+
+			while (!jobWrapper.isDone()) {
+				U.sleep(10);
+			}
 		}
 	}
 
@@ -166,7 +134,7 @@ public class Jobs extends RapidoidInitializer {
 	}
 
 	public static <T> void call(Callback<T> callback, T result, Throwable error) {
-		Jobs.execute(new CallbackExecutorJob<T>(callback, result, error));
+		Jobs.execute(new CallbackExecutorJob<>(callback, result, error));
 	}
 
 	private static <T> Runnable callbackJob(final Callable<T> job, final Callback<T> callback) {
@@ -188,10 +156,14 @@ public class Jobs extends RapidoidInitializer {
 	}
 
 	public static void executeInContext(WithContext context, Runnable action) {
-		try {
-			executor().execute(new PredefinedContextJobWrapper(context, action));
-		} catch (RejectedExecutionException e) {
-			Log.warn("The job was rejected by the executor/scheduler!", "context", context.tag());
+		Opt<ThreadPoolExecutor> executor = jobs.executor();
+
+		if (executor.exists()) {
+			try {
+				executor.get().execute(new PredefinedContextJobWrapper(context, action));
+			} catch (RejectedExecutionException e) {
+				Log.warn("The job was rejected by the executor/scheduler!", "context", context.tag());
+			}
 		}
 	}
 
@@ -208,30 +180,49 @@ public class Jobs extends RapidoidInitializer {
 	}
 
 	public static AtomicLong errorCounter() {
-		return errorCounter;
+		return jobs.errorCounter();
 	}
 
 	public static synchronized void shutdown() {
-		if (EXECUTOR != null) {
-			EXECUTOR.shutdown();
-			EXECUTOR = null;
-		}
-
-		if (SCHEDULER != null) {
-			SCHEDULER.shutdown();
-			SCHEDULER = null;
-		}
+		jobs.shutdown();
 	}
 
 	public static synchronized void shutdownNow() {
-		if (EXECUTOR != null) {
-			EXECUTOR.shutdownNow();
-			EXECUTOR = null;
-		}
+		jobs.shutdownNow();
+	}
 
-		if (SCHEDULER != null) {
-			SCHEDULER.shutdownNow();
-			SCHEDULER = null;
+	private static ScheduledThreadPoolExecutor requireActiveScheduler() {
+		return jobs.scheduler().orFail("The scheduler is not active!");
+	}
+
+	static void awaitTermination(ThreadPoolExecutor threadPoolExecutor) {
+		try {
+			threadPoolExecutor.awaitTermination(10, TimeUnit.SECONDS);
+		} catch (InterruptedException e) {
+			// do nothing
+		}
+	}
+
+	private static void executeWithRetriesOnReject(Runnable action) {
+		int attempt = 0;
+
+		while (true) {
+			attempt++;
+
+			try {
+				action.run();
+
+			} catch (RejectedExecutionException e) {
+
+				Log.warn("Job execution was rejected!", "attempt", attempt, "thread", Thread.currentThread().getName());
+
+				// retry later
+				try {
+					Thread.sleep(1);
+				} catch (InterruptedException e2) {
+					return; // stop if interrupted
+				}
+			}
 		}
 	}
 

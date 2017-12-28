@@ -524,9 +524,12 @@ org.rapidoid.jdbc.ReadWriteMode
 org.rapidoid.jdbc.SQLModule
 org.rapidoid.job.CallbackExecutorJob
 org.rapidoid.job.ContextPreservingJobWrapper
+org.rapidoid.job.JobExecutor
 org.rapidoid.job.Jobs
+org.rapidoid.job.JobScheduler
 org.rapidoid.job.JobsDelayDSL
 org.rapidoid.job.JobsDSL
+org.rapidoid.job.JobsService
 org.rapidoid.job.ManageableExecutor
 org.rapidoid.job.PredefinedContextJobWrapper
 org.rapidoid.jpa.AbstractEntity

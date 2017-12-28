@@ -41,6 +41,15 @@ public final class LazyInit<T> extends RapidoidThing {
 		this.initializer = initializer;
 	}
 
+	public LazyInit(final Class<T> clazz) {
+		this(new Callable<T>() {
+			@Override
+			public T call() throws Exception {
+				return clazz.newInstance();
+			}
+		});
+	}
+
 	public T get() {
 		T value = initializedValue;
 
