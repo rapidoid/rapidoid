@@ -20,13 +20,14 @@
 
 package org.rapidoid.net;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.config.Conf;
 import org.rapidoid.net.tls.TLSUtil;
 import org.rapidoid.util.MscOpts;
 
 import javax.net.ssl.SSLContext;
 
-public class TLSParams {
+public class TLSParams extends RapidoidThing {
 
 	// auto-activate if TLS is enabled
 	private volatile boolean tls = MscOpts.isTLSEnabled();

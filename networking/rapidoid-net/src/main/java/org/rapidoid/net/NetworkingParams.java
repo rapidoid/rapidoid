@@ -20,11 +20,12 @@
 
 package org.rapidoid.net;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.config.BasicConfig;
 import org.rapidoid.net.impl.DefaultExchange;
 import org.rapidoid.net.impl.RapidoidHelper;
 
-public class NetworkingParams {
+public class NetworkingParams extends RapidoidThing {
 
 	private volatile String address;
 

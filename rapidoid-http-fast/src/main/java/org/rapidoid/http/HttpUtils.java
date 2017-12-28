@@ -305,7 +305,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 	}
 
 	public static String inferRealIpAddress(Req req) {
-		// // FIXME if CloudFlare is detected, use req.header("cf-connecting-ip")
+		// TODO if CloudFlare is detected, use req.header("cf-connecting-ip")?
 		return req.clientIpAddress();
 	}
 

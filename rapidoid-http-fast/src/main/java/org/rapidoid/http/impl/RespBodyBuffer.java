@@ -18,30 +18,39 @@
  * #L%
  */
 
-package org.rapidoid.http.handler;
+package org.rapidoid.http.impl;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.annotation.TransactionMode;
-import org.rapidoid.http.HttpUtils;
-import org.rapidoid.http.Req;
+import org.rapidoid.http.RespBody;
+import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
 
+import java.nio.ByteBuffer;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.5.1")
-public class TxUtil extends RapidoidThing {
+public class RespBodyBuffer extends RapidoidThing implements RespBody {
 
-	static TransactionMode txModeOf(Req req, TransactionMode configuredTxMode) {
-		TransactionMode txMode = U.or(configuredTxMode, TransactionMode.NONE);
+	private final ByteBuffer buffer;
 
-		if (txMode == TransactionMode.AUTO) {
-			txMode = HttpUtils.isGetReq(req) ? TransactionMode.READ_ONLY : TransactionMode.READ_WRITE;
-		}
-
-		return txMode;
+	public RespBodyBuffer(ByteBuffer buffer) {
+		this.buffer = buffer;
 	}
 
+	@Override
+	public int length() {
+		return buffer.remaining();
+	}
 
+	@Override
+	public void writeTo(Channel channel) {
+		channel.write(buffer);
+	}
+
+	@Override
+	public String toString() {
+		return U.frmt("RespBodyBuffer(%s bytes)", length());
+	}
 }

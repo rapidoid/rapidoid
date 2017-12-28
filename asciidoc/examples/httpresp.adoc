@@ -15,7 +15,7 @@ public class Main {
 
 	public static void main(String[] args) {
 
-	    /* Returning the request or response object means the response was constructed */
+		/* Returning the request or response object means the response was constructed */
 
 		On.get("/").html((Req req) -> {
 			Resp resp = req.response();

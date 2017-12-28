@@ -1,6 +1,6 @@
 /*-
  * #%L
- * rapidoid-http-server
+ * rapidoid-http-fast
  * %%
  * Copyright (C) 2014 - 2017 Nikolche Mihajlovski and contributors
  * %%
@@ -18,38 +18,42 @@
  * #L%
  */
 
-package org.rapidoid.http.handler.optimized;
+package org.rapidoid.http.handler;
 
-
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.FastHttp;
-import org.rapidoid.http.HttpRoutes;
+import org.rapidoid.http.HttpStatus;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.handler.AbstractDecoratingHttpHandler;
-import org.rapidoid.http.impl.RouteOptions;
-import org.rapidoid.lambda.OneParamLambda;
 import org.rapidoid.net.abstracts.Channel;
-import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class DelegatingParamsAwareReqHandler extends AbstractDecoratingHttpHandler {
+@Since("5.5.1")
+public abstract class AbstractHttpHandlerDecorator extends RapidoidThing {
 
-	private final OneParamLambda<Object, Req> handler;
+	protected final AbstractDecoratingHttpHandler handler;
 
-	public DelegatingParamsAwareReqHandler(FastHttp http, HttpRoutes routes, RouteOptions options, OneParamLambda<?, ?> handler) {
-		super(http, options);
-		this.handler = U.cast(handler);
+	protected final FastHttp http;
+
+	AbstractHttpHandlerDecorator(AbstractDecoratingHttpHandler handler, FastHttp http) {
+		this.handler = handler;
+		this.http = http;
 	}
 
-	@Override
-	protected Object handleReq(Channel channel, boolean isKeepAlive, Req req) throws Exception {
-		return handler.execute(req);
+	Object handleReqAndPostProcess(Channel ctx, boolean isKeepAlive, Req req) {
+		Object result;
+
+		try {
+			result = handler.handleReq(ctx, isKeepAlive, req);
+
+		} catch (Throwable e) {
+			result = e;
+		}
+
+		return HandlerResultProcessor.INSTANCE.postProcessResult(req, result);
 	}
 
-	@Override
-	public String toString() {
-		return contentTypeInfo("(Req) -> ...");
-	}
+	abstract HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req);
+
 }

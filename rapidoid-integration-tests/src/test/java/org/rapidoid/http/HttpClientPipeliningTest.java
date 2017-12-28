@@ -41,16 +41,16 @@ import org.rapidoid.wrap.IntWrap;
 @Since("5.5.0")
 public class HttpClientPipeliningTest extends IsolatedIntegrationTest {
 
-	protected static final byte[] REQ = "GET /hello H\r\nasf:asf\r\n\r\n".getBytes();
+	private static final byte[] REQ = "GET /hi H\r\nasf:asf\r\n\r\n".getBytes();
 
-	protected static final byte[] RESP = "Hello".getBytes();
+	private static final byte[] RESP = "Hello".getBytes();
 
 	@Test
 	public void testHttpServerPipelining() {
 
 		Conf.NET.set("workers", 1);
 
-		On.get("/hello").plain(() -> "Hello");
+		On.get("/hi").plain(() -> "Hello");
 
 		final int connections = 100;
 		final int pipelining = 10;

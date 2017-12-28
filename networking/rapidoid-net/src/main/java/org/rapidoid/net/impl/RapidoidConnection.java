@@ -339,6 +339,11 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 				public void run() {
 					resume(expectedConnId, handle, asyncLogic);
 				}
+
+				@Override
+				public String toString() {
+					return U.frmt("RapidoidConnection.ResumeJob(handle=%s, expectedConnId=%s, logic=%s)", handle, expectedConnId, asyncLogic);
+				}
 			});
 
 		} else if (seq == handle - 1) {

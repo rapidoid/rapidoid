@@ -35,7 +35,7 @@ import org.rapidoid.net.abstracts.Channel;
 @Since("4.3.0")
 public interface HttpHandler extends HandlerMatch {
 
-	HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra);
+	HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req);
 
 	boolean needsParams();
 

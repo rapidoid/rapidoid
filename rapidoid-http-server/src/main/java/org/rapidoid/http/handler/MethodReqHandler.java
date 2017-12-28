@@ -47,7 +47,7 @@ public class MethodReqHandler extends NParamMethodHandler {
 	}
 
 	@Override
-	protected Object handleReq(Channel channel, boolean isKeepAlive, Req req, Object extra) throws Throwable {
+	protected Object handleReq(Channel channel, boolean isKeepAlive, Req req) throws Throwable {
 		Object[] args = args(req);
 
 		Object result = Cls.invokeRethrowing(method, instance, args);

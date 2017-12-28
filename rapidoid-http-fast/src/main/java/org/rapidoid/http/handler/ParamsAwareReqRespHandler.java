@@ -37,12 +37,12 @@ public class ParamsAwareReqRespHandler extends AbstractDecoratingHttpHandler {
 	private final ReqRespHandler handler;
 
 	public ParamsAwareReqRespHandler(FastHttp http, HttpRoutes routes, RouteOptions options, ReqRespHandler handler) {
-		super(http, routes, options);
+		super(http, options);
 		this.handler = handler;
 	}
 
 	@Override
-	protected Object handleReq(Channel ctx, boolean isKeepAlive, Req req, Object extra) throws Exception {
+	protected Object handleReq(Channel ctx, boolean isKeepAlive, Req req) throws Exception {
 		return handler.execute(req, req.response());
 	}
 

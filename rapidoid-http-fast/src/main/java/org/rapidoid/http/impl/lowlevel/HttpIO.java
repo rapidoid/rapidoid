@@ -35,7 +35,6 @@ import org.rapidoid.net.AsyncLogic;
 import org.rapidoid.net.abstracts.Channel;
 
 import java.io.ByteArrayOutputStream;
-import java.nio.ByteBuffer;
 import java.util.Map;
 
 
@@ -98,15 +97,8 @@ public class HttpIO extends RapidoidThing {
 		impl.respond(maybeReq, channel, connId, handle, code, isKeepAlive, contentType, body, headers, cookies);
 	}
 
-	public void respond(MaybeReq maybeReq, Channel channel, long connId, long handle,
-	                    int code, boolean isKeepAlive, MediaType contentType,
-	                    ByteBuffer body, Map<String, String> headers, Map<String, String> cookies) {
-
-		impl.respond(maybeReq, channel, connId, handle, code, isKeepAlive, contentType, body, headers, cookies);
-	}
-
-
 	public void closeHeaders(MaybeReq req, Buf out) {
 		impl.closeHeaders(req, out);
 	}
+
 }

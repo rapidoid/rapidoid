@@ -207,6 +207,7 @@ public class JPA extends RapidoidThing {
 		transaction(action, false);
 	}
 
+	// FIXME replace Runnable with Executable
 	public static void transaction(Runnable action, boolean readOnly) {
 		Ctx ctx = Ctxs.get();
 		boolean newContext = ctx == null;

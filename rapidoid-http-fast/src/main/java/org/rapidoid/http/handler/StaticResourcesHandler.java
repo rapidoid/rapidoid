@@ -48,7 +48,7 @@ public class StaticResourcesHandler extends AbstractHttpHandler {
 	}
 
 	@Override
-	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
+	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req) {
 
 		if (!HttpUtils.isGetReq(req)) return HttpStatus.NOT_FOUND;
 

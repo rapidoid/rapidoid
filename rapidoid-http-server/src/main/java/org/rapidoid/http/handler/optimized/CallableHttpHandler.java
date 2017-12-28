@@ -39,12 +39,12 @@ public class CallableHttpHandler extends AbstractDecoratingHttpHandler {
 	private final Callable<?> handler;
 
 	public CallableHttpHandler(FastHttp http, HttpRoutes routes, RouteOptions options, Callable<?> handler) {
-		super(http, routes, options);
+		super(http, options);
 		this.handler = handler;
 	}
 
 	@Override
-	protected Object handleReq(Channel ctx, boolean isKeepAlive, Req req, Object extra) throws Exception {
+	protected Object handleReq(Channel ctx, boolean isKeepAlive, Req req) throws Exception {
 		return handler.call();
 	}
 

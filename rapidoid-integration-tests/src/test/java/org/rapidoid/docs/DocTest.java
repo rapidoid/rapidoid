@@ -46,12 +46,12 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public abstract class DocTest extends IsolatedIntegrationTest {
 
-	private static final String LICENSE_HEADER = "(?sm)\\Q\n/*\n * #" + "%L\\E(.*?)\\Q * #L%\n */\n\\E";
+	private static final String LICENSE_HEADER = "(?sm)(^|\\n)\\Q/*-\n * #" + "%L\\E(.*?)\\Q * #L%\n */\n\\E";
 
 	private final AtomicInteger order = new AtomicInteger();
 
 	@Test
-	public void docs() throws Exception {
+	public void docs() {
 		if (this instanceof BlankTest) {
 			return; // not a real test
 		}
@@ -119,6 +119,8 @@ public abstract class DocTest extends IsolatedIntegrationTest {
 		if (ext.equals("java")) {
 			code = code.replaceAll(LICENSE_HEADER, "");
 		}
+
+		code = code.replaceAll("(?s)\\n{3,}", "\n\n");
 
 		return code.trim();
 	}

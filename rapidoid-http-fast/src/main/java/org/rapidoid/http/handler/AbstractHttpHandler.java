@@ -23,7 +23,6 @@ package org.rapidoid.http.handler;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.MediaType;
 import org.rapidoid.http.Route;
 import org.rapidoid.http.impl.RouteOptions;
@@ -40,14 +39,11 @@ public abstract class AbstractHttpHandler extends RapidoidThing implements HttpH
 
 	protected final MediaType contentType;
 
-	protected final HttpWrapper[] httpWrappers;
-
 	protected volatile Route route;
 
 	public AbstractHttpHandler(RouteOptions options) {
 		this.options = options;
 		this.contentType = options.contentType();
-		this.httpWrappers = options.wrappers();
 	}
 
 	@Override
@@ -77,6 +73,7 @@ public abstract class AbstractHttpHandler extends RapidoidThing implements HttpH
 
 	protected String contentTypeInfo(String inside) {
 		String type;
+
 		if (contentType == MediaType.HTML_UTF_8) {
 			type = options.mvc() ? "mvc" : "html";
 

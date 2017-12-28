@@ -107,6 +107,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 
 	private volatile boolean stable;
 	private volatile Date lastChangedAt = new Date();
+	private volatile FastHttp http;
 
 	public HttpRoutesImpl(String setupName, Customization customization) {
 		this.id = ID_GEN.incrementAndGet();
@@ -446,13 +447,15 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 
 	@Override
 	public synchronized void on(String verb, String path, ReqHandler handler) {
-		HttpHandler hnd = new ParamsAwareReqHandler(null, null, new RouteOptions(), handler);
+		U.notNull(http, "http");
+		HttpHandler hnd = new ParamsAwareReqHandler(http, null, new RouteOptions(), handler);
 		addOrRemove(true, verb, path, hnd);
 	}
 
 	@Override
 	public synchronized void on(String verb, String path, ReqRespHandler handler) {
-		HttpHandler hnd = new ParamsAwareReqRespHandler(null, null, new RouteOptions(), handler);
+		U.notNull(http, "http");
+		HttpHandler hnd = new ParamsAwareReqRespHandler(http, null, new RouteOptions(), handler);
 		addOrRemove(true, verb, path, hnd);
 	}
 
@@ -692,5 +695,9 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 			"id=" + id +
 			", setup='" + setupName + '\'' +
 			'}';
+	}
+
+	public void setHttp(FastHttp http) {
+		this.http = http;
 	}
 }

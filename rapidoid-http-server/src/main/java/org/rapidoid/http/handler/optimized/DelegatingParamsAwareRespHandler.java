@@ -40,12 +40,12 @@ public class DelegatingParamsAwareRespHandler extends AbstractDecoratingHttpHand
 	private final OneParamLambda<Object, Resp> handler;
 
 	public DelegatingParamsAwareRespHandler(FastHttp http, HttpRoutes routes, RouteOptions options, OneParamLambda<?, ?> handler) {
-		super(http, routes, options);
+		super(http, options);
 		this.handler = U.cast(handler);
 	}
 
 	@Override
-	protected Object handleReq(Channel channel, boolean isKeepAlive, Req req, Object extra) throws Exception {
+	protected Object handleReq(Channel channel, boolean isKeepAlive, Req req) throws Exception {
 		return handler.execute(req.response());
 	}
 

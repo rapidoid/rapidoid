@@ -509,17 +509,21 @@ public class RespImpl extends RapidoidThing implements Resp {
 
 	RespBody createRespBodyFromResult() {
 		Object result = result();
+		Object body = body();
 
 		if (result instanceof RespBody) {
 			return (RespBody) result;
+
+		} else if (body instanceof RespBody) {
+			return (RespBody) body;
 
 		} else if (mvc()) {
 			byte[] bytes = ResponseRenderer.renderMvc(req, this);
 			HttpUtils.postProcessResponse(this); // the response might have been changed, so post-process again
 			return new RespBodyBytes(bytes);
 
-		} else if (body() != null) {
-			return new RespBodyBytes(Msc.toBytes(body()));
+		} else if (body != null) {
+			return new RespBodyBytes(Msc.toBytes(body));
 
 		} else if (result != null) {
 			return resultToRespBody(result);

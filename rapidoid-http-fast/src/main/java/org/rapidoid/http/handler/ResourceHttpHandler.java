@@ -44,7 +44,7 @@ public class ResourceHttpHandler extends AbstractHttpHandler {
 	}
 
 	@Override
-	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
+	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req) {
 		byte[] bytes = resource.getBytesOrNull();
 
 		if (bytes != null) {

@@ -70,6 +70,7 @@ public class FastHttp extends AbstractHttpProcessor {
 	public FastHttp(HttpRoutesImpl routes, @SuppressWarnings("unused") Config serverConfig) {
 		super(null);
 		this.routes = routes;
+		routes.setHttp(this);
 	}
 
 	@Override
@@ -198,7 +199,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		req.cached(true);
 
 		HttpIO.INSTANCE.respond(HttpUtils.req(req), channel, -1, -1, resp.statusCode,
-			req.isKeepAlive(), resp.contentType, resp.body.duplicate(), resp.headers, null);
+			req.isKeepAlive(), resp.contentType, new RespBodyBuffer(resp.body.duplicate()), resp.headers, null);
 
 		channel.send().closeIf(!req.isKeepAlive());
 	}
@@ -281,7 +282,7 @@ public class FastHttp extends AbstractHttpProcessor {
 
 	private HttpStatus handleIfFound(Channel channel, boolean isKeepAlive, HttpHandler handler, Req req) {
 		try {
-			return handler.handle(channel, isKeepAlive, req, null);
+			return handler.handle(channel, isKeepAlive, req);
 		} catch (NotFound nf) {
 			return HttpStatus.NOT_FOUND;
 		}

@@ -25,7 +25,6 @@ import org.rapidoid.activity.RapidoidThreadLocals;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
-import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Dates;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
@@ -50,7 +49,6 @@ import org.rapidoid.util.Msc;
 import org.rapidoid.writable.ReusableWritable;
 
 import java.io.ByteArrayOutputStream;
-import java.nio.ByteBuffer;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -395,7 +393,7 @@ class LowLevelHttpIO extends RapidoidThing {
 	}
 
 	void respond(final MaybeReq maybeReq, final Channel channel, long connId, long handle,
-	             final int code, final boolean isKeepAlive, final MediaType contentType, final Object body,
+	             final int code, final boolean isKeepAlive, final MediaType contentType, final RespBody body,
 	             final Map<String, String> headers, final Map<String, String> cookies) {
 
 		final ReqImpl req = (ReqImpl) maybeReq.getReqOrNull();
@@ -422,8 +420,7 @@ class LowLevelHttpIO extends RapidoidThing {
 
 			@Override
 			public String toString() {
-				String bb = (body instanceof byte[]) ? new String((byte[]) body) : U.str(body);
-				return U.str(U.join(":", "#" + id, channel, code, bb, isKeepAlive, contentType));
+				return U.str(U.join(":", "#" + id, channel, code, body, isKeepAlive, contentType));
 			}
 
 			@Override
@@ -466,23 +463,9 @@ class LowLevelHttpIO extends RapidoidThing {
 
 					} else {
 
-						if (body instanceof RespBody) {
-							byte[] bytes = ((RespBody) body).toBytes();
-
-							writeContentLengthHeader(channel, bytes.length);
-							closeHeaders(maybeReq, output);
-							channel.write(bytes);
-
-						} else if (body instanceof ByteBuffer) {
-							ByteBuffer buf = (ByteBuffer) body;
-
-							writeContentLengthHeader(channel, buf.remaining());
-							closeHeaders(maybeReq, output);
-							channel.write(buf);
-
-						} else {
-							throw U.rte("Invalid response body type: %s", Cls.of(body));
-						}
+						writeContentLengthHeader(channel, body.length());
+						closeHeaders(maybeReq, output);
+						body.writeTo(channel);
 
 						if (req != null) {
 							req.completed(true);

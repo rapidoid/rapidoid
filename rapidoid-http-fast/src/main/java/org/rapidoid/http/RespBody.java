@@ -22,11 +22,14 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.5.1")
 public interface RespBody {
 
-	byte[] toBytes();
+	int length();
+
+	void writeTo(Channel channel);
 
 }

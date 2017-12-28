@@ -39,7 +39,7 @@ public class HttpClientTest extends IsolatedIntegrationTest {
 
 	private static final String GET_RAPIDOID_ORG = "GET / HTTP/1.1\nHost: www.rapidoid.org\n\n";
 
-	protected static final String SIMPLE_RESPONSE = "AbC";
+	private static final String SIMPLE_RESPONSE = "AbC";
 
 	@Test
 	public void testHttpClientOnLocalServer() {
@@ -52,7 +52,7 @@ public class HttpClientTest extends IsolatedIntegrationTest {
 
 			HttpClientCallback hcb = new HttpClientBodyCallback(cb);
 
-			org.rapidoid.http.client.HttpClient client = new org.rapidoid.http.client.HttpClient();
+			HttpClient client = new HttpClient();
 
 			int count1 = 1000;
 			for (int i = 0; i < count1; i++) {
@@ -77,7 +77,7 @@ public class HttpClientTest extends IsolatedIntegrationTest {
 
 			HttpClientCallback hcb = new HttpClientBodyCallback(cb);
 
-			org.rapidoid.http.client.HttpClient client = new HttpClient();
+			HttpClient client = new HttpClient();
 
 			int count = 3;
 			for (int i = 0; i < count; i++) {

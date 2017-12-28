@@ -43,7 +43,7 @@ public class OneParamLambdaHandler extends NParamLambdaHandler {
 	}
 
 	@Override
-	protected Object handleReq(Channel channel, boolean isKeepAlive, Req req, Object extra) throws Exception {
+	protected Object handleReq(Channel channel, boolean isKeepAlive, Req req) throws Exception {
 		return lambda.execute(arg(req, 0));
 	}
 

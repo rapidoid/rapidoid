@@ -112,6 +112,9 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 
 	@After
 	public void closeContext() {
+		Jobs.shutdownNow();
+		U.sleep(200);
+
 		if (Admin.setup().isRunning()) {
 			if (Admin.setup().port() == On.setup().port()) {
 				Admin.setup().reset();

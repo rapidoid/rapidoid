@@ -36,12 +36,12 @@ public class PredefinedResponseHandler extends AbstractDecoratingHttpHandler {
 	private final Object response;
 
 	public PredefinedResponseHandler(FastHttp http, HttpRoutes routes, RouteOptions options, Object response) {
-		super(http, routes, options);
+		super(http, options);
 		this.response = response;
 	}
 
 	@Override
-	protected Object handleReq(Channel ctx, boolean isKeepAlive, Req req, Object extra) throws Exception {
+	protected Object handleReq(Channel ctx, boolean isKeepAlive, Req req) throws Exception {
 		return response;
 	}
 

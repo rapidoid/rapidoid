@@ -43,7 +43,7 @@ public class StaticHttpHandler extends AbstractHttpHandler {
 	}
 
 	@Override
-	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
+	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req) {
 		HttpIO.INSTANCE.write200(HttpUtils.maybe(req), ctx, isKeepAlive, contentType, response);
 		return HttpStatus.DONE;
 	}

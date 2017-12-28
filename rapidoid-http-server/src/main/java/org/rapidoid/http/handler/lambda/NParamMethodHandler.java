@@ -48,7 +48,7 @@ public abstract class NParamMethodHandler extends AbstractDecoratingHttpHandler 
 	private final String paramsAsStr;
 
 	public NParamMethodHandler(FastHttp http, HttpRoutes routes, RouteOptions options, Method method, NParamLambda lambda) {
-		super(http, routes, options);
+		super(http, options);
 		this.method = method;
 
 		Class<?>[] paramTypes = method.getParameterTypes();

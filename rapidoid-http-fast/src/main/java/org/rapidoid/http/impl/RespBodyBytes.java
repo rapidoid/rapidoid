@@ -24,6 +24,8 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.RespBody;
+import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.5.1")
@@ -36,8 +38,17 @@ public class RespBodyBytes extends RapidoidThing implements RespBody {
 	}
 
 	@Override
-	public byte[] toBytes() {
-		return bytes;
+	public int length() {
+		return bytes.length;
 	}
 
+	@Override
+	public void writeTo(Channel channel) {
+		channel.write(bytes);
+	}
+
+	@Override
+	public String toString() {
+		return U.frmt("RespBodyBytes(%s bytes)", length());
+	}
 }

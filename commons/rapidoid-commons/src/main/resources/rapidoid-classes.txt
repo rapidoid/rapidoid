@@ -363,9 +363,15 @@ org.rapidoid.http.FastHttp
 org.rapidoid.http.FastHttpProtocol
 org.rapidoid.http.handler.AbstractDecoratingHttpHandler
 org.rapidoid.http.handler.AbstractHttpHandler
+org.rapidoid.http.handler.AbstractHttpHandlerDecorator
 org.rapidoid.http.handler.HandlerInvocation
 org.rapidoid.http.handler.HandlerResultProcessor
+org.rapidoid.http.handler.HttpAuthWrapper
 org.rapidoid.http.handler.HttpHandler
+org.rapidoid.http.handler.HttpManagedHandlerDecorator
+org.rapidoid.http.handler.HttpTxWrapper
+org.rapidoid.http.handler.HttpUnmanagedHandlerDecorator
+org.rapidoid.http.handler.HttpWrappers
 org.rapidoid.http.handler.lambda.FiveParamLambdaHandler
 org.rapidoid.http.handler.lambda.FourParamLambdaHandler
 org.rapidoid.http.handler.lambda.NParamLambdaHandler
@@ -399,7 +405,6 @@ org.rapidoid.http.handler.PredefinedResponseHandler
 org.rapidoid.http.handler.ResourceHttpHandler
 org.rapidoid.http.handler.StaticHttpHandler
 org.rapidoid.http.handler.StaticResourcesHandler
-org.rapidoid.http.handler.TxUtil
 org.rapidoid.http.Headers
 org.rapidoid.http.HTTP
 org.rapidoid.http.HttpClient
@@ -435,6 +440,7 @@ org.rapidoid.http.impl.MVCModelImpl
 org.rapidoid.http.impl.PathPattern
 org.rapidoid.http.impl.RapidoidReqInfo
 org.rapidoid.http.impl.ReqImpl
+org.rapidoid.http.impl.RespBodyBuffer
 org.rapidoid.http.impl.RespBodyBytes
 org.rapidoid.http.impl.RespImpl
 org.rapidoid.http.impl.ResponseRenderer
