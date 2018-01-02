@@ -4,7 +4,7 @@
 
 	<groupId>org.rapidoid</groupId>
 	<artifactId>rapidoid</artifactId>
-	<version>5.5.2</version>
+	<version>5.5.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Rapidoid</name>
@@ -37,7 +37,7 @@
 		<connection>scm:git:git://github.com/rapidoid/rapidoid.git</connection>
 		<developerConnection>scm:git:git@github.com:rapidoid/rapidoid.git</developerConnection>
 		<url>https://github.com/rapidoid/rapidoid</url>
-		<tag>5.5.2</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<properties>
