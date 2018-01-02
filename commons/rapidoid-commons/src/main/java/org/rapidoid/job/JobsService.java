@@ -44,7 +44,7 @@ public class JobsService extends RapidoidInitializer {
 
 	private final LazyInit<JobExecutor> executor = new LazyInit<>(JobExecutor.class);
 
-	private AtomicBoolean active = new AtomicBoolean();
+	private final AtomicBoolean active = new AtomicBoolean(true);
 
 	public synchronized void reset() {
 		errorCounter.set(0);
