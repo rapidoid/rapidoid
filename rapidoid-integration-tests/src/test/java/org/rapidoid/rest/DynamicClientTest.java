@@ -45,29 +45,18 @@ public class DynamicClientTest extends IsolatedIntegrationTest {
 
 		On.get("/nums").managed(false).contentType(MediaType.JSON).serve("[1, 2, 3]");
 
-		On.get("/size").json(new ReqHandler() {
-			@Override
-			public Object execute(Req req) throws Exception {
-				return req.param("s").length();
-			}
-		});
+		On.get("/size").json((ReqHandler) req -> req.param("s").length());
 
-		On.post("/echo").json(new ReqHandler() {
-			@Override
-			public Object execute(final Req req) throws Exception {
-				req.async();
+		On.post("/echo").json((ReqHandler) req -> {
+			req.async();
 
-				Jobs.schedule(new Runnable() {
-					@Override
-					public void run() {
-						U.must(Current.request() == req);
-						Resp resp = req.response();
-						resp.result(req.data()).done();
-					}
-				}, 1000, TimeUnit.MILLISECONDS);
+			Jobs.schedule(() -> {
+				U.must(Current.request() == req);
+				Resp resp = req.response();
+				resp.result(req.data()).done();
+			}, 1000, TimeUnit.MILLISECONDS);
 
-				return req;
-			}
+			return req;
 		});
 
 		eq(client.abc(), "abc-ok");

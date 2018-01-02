@@ -423,6 +423,7 @@ org.rapidoid.http.HttpUtils
 org.rapidoid.http.HttpVerb
 org.rapidoid.http.HttpWrapper
 org.rapidoid.http.impl.AbstractViewResolver
+org.rapidoid.http.impl.BodyRenderer
 org.rapidoid.http.impl.CachedResp
 org.rapidoid.http.impl.ChunkedResponse
 org.rapidoid.http.impl.ErrorHandlerResolver

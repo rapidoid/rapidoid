@@ -37,7 +37,6 @@ import org.rapidoid.http.customize.SessionManager;
 import org.rapidoid.http.impl.lowlevel.HttpIO;
 import org.rapidoid.io.Upload;
 import org.rapidoid.log.Log;
-import org.rapidoid.log.LogLevel;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.abstracts.IRequest;
 import org.rapidoid.u.U;
@@ -566,28 +565,11 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 			HttpIO.INSTANCE.done(this);
 
 		} else {
-			// first create a response body from the result (with error handling)
-			RespBody body = toRespBody();
+			// render the response body
+			RespBody body = BodyRenderer.toRespBody(this, response);
 
-			// then render the response
+			// render the response
 			doRendering(response.code(), body);
-		}
-	}
-
-	private RespBody toRespBody() {
-		try {
-			return response.createRespBodyFromResult();
-
-		} catch (Throwable e) {
-			HttpIO.INSTANCE.error(this, e, LogLevel.ERROR);
-
-			try {
-				return response.createRespBodyFromResult();
-
-			} catch (Exception e1) {
-				Log.error("Internal rendering error!", e1);
-				return new RespBodyBytes(HttpUtils.getErrorMessageAndSetCode(response, e1).getBytes());
-			}
 		}
 	}
 

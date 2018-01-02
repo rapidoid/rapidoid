@@ -29,6 +29,7 @@ import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.u.U;
 
+import java.util.Collections;
 import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
@@ -36,16 +37,16 @@ import java.util.List;
 public class HttpWrappers extends RapidoidThing {
 
 	static HttpWrapper[] assembleWrappers(FastHttp http, RouteOptions options) {
-		List<HttpWrapper> wrappers = U.list(getConfiguredWrappers(http, options));
+		List<HttpWrapper> wrappers = U.list();
+
+		wrappers.add(new HttpAuthWrapper(options.roles()));
 
 		TransactionMode txMode = U.or(options.transaction(), TransactionMode.NONE);
 		if (txMode != TransactionMode.NONE) {
-			HttpWrapper txWrapper = new HttpTxWrapper(txMode);
-			wrappers.add(0, txWrapper);
+			wrappers.add(new HttpTxWrapper(txMode));
 		}
 
-		HttpWrapper authWrapper = new HttpAuthWrapper(options.roles());
-		wrappers.add(0, authWrapper);
+		Collections.addAll(wrappers, getConfiguredWrappers(http, options));
 
 		return U.arrayOf(HttpWrapper.class, wrappers);
 	}

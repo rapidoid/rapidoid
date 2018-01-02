@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,15 +30,16 @@ import org.rapidoid.config.BasicConfig;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
-import org.rapidoid.http.*;
+import org.rapidoid.http.HttpUtils;
+import org.rapidoid.http.MediaType;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.Resp;
 import org.rapidoid.http.customize.Customization;
-import org.rapidoid.http.customize.HttpResponseRenderer;
 import org.rapidoid.http.customize.LoginProvider;
 import org.rapidoid.http.customize.RolesProvider;
 import org.rapidoid.io.IO;
 import org.rapidoid.net.AsyncLogic;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
 import org.rapidoid.util.MscOpts;
 import org.rapidoid.util.Tokens;
 import org.rapidoid.web.Screen;
@@ -507,36 +508,6 @@ public class RespImpl extends RapidoidThing implements Resp {
 			'}';
 	}
 
-	RespBody createRespBodyFromResult() {
-		Object result = result();
-		Object body = body();
-
-		if (result instanceof RespBody) {
-			return (RespBody) result;
-
-		} else if (body instanceof RespBody) {
-			return (RespBody) body;
-
-		} else if (mvc()) {
-			byte[] bytes = ResponseRenderer.renderMvc(req, this);
-			HttpUtils.postProcessResponse(this); // the response might have been changed, so post-process again
-			return new RespBodyBytes(bytes);
-
-		} else if (body != null) {
-			return new RespBodyBytes(Msc.toBytes(body));
-
-		} else if (result != null) {
-			return resultToRespBody(result);
-
-		} else {
-			throw U.rte("There's nothing to render!");
-		}
-	}
-
-	public RespBody resultToRespBody(Object result) {
-		return new RespBodyBytes(HttpUtils.responseToBytes(req, result, contentType(), mediaResponseRenderer()));
-	}
-
 	@Override
 	public Resp chunk(byte[] data) {
 		OutputStream chnk = out();
@@ -588,19 +559,6 @@ public class RespImpl extends RapidoidThing implements Resp {
 	void finish() {
 		if (chunked != null && !chunked.isClosed()) {
 			IO.close(chunked, false);
-		}
-	}
-
-	private HttpResponseRenderer mediaResponseRenderer() {
-		if (contentType.equals(MediaType.JSON)) {
-			return Customization.of(req).jsonResponseRenderer();
-
-		} else if (contentType.equals(MediaType.XML_UTF_8)) {
-			return Customization.of(req).xmlResponseRenderer();
-
-		} else {
-			// defaults to json
-			return Customization.of(req).jsonResponseRenderer();
 		}
 	}
 
