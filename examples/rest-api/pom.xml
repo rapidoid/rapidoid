@@ -8,7 +8,7 @@
 
 	<properties>
 		<!-- please change this to the latest non-snapshot version: -->
-		<rapidoid.version>5.5.2-SNAPSHOT</rapidoid.version>
+		<rapidoid.version>5.5.3-SNAPSHOT</rapidoid.version>
 	</properties>
 
 	<dependencies>
