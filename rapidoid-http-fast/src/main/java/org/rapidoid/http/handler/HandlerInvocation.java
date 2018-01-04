@@ -33,4 +33,6 @@ public interface HandlerInvocation {
 
 	Object invokeAndTransformResult(Mapper<Object, Object> transformation) throws Exception;
 
+	Object invokeAndTransformResultCatchingErrors(Mapper<Object, Object> transformation);
+
 }

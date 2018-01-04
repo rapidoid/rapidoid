@@ -29,8 +29,8 @@ import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.RespBody;
 import org.rapidoid.http.impl.BodyRenderer;
-import org.rapidoid.http.impl.RespImpl;
 import org.rapidoid.jpa.JPA;
+import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -47,7 +47,7 @@ public class HttpTxWrapper extends RapidoidThing implements HttpWrapper {
 
 	@Override
 	public Object wrap(final Req req, final HandlerInvocation invocation) {
-		final AtomicReference<Object> result = new AtomicReference<>();
+		final AtomicReference<Object> resultHolder = new AtomicReference<>();
 
 		U.must(txMode != null && txMode != TransactionMode.NONE);
 
@@ -59,15 +59,20 @@ public class HttpTxWrapper extends RapidoidThing implements HttpWrapper {
 			JPA.transaction(new Runnable() {
 				@Override
 				public void run() {
-					Object res;
 
-					try {
-						res = invocation.invoke();
+					Object res = invocation.invokeAndTransformResultCatchingErrors(new Mapper<Object, Object>() {
+						@Override
+						public Object map(Object result) {
+							if (result instanceof Throwable) {
+								return result;
+							}
 
-					} catch (Exception e) {
-						// throw to rollback
-						throw U.rte("Error occurred inside the transactional web handler!", e);
-					}
+							// serialize the result into a HTTP response body, while still inside tx (see #153)
+							RespBody body = BodyRenderer.resultToRespBody(req.response(), result);
+
+							return body;
+						}
+					});
 
 					if (res instanceof Throwable) {
 						// throw to rollback
@@ -75,21 +80,17 @@ public class HttpTxWrapper extends RapidoidThing implements HttpWrapper {
 						throw U.rte("Error occurred inside the transactional web handler!", err);
 
 					} else {
-
-						// serialize the result into a HTTP response body, while still inside tx (see #153)
-						RespImpl resp = (RespImpl) req.response(); // TODO find a cleaner access
-						RespBody body = BodyRenderer.resultToRespBody(resp, res);
-						result.set(body);
+						resultHolder.set(res);
 					}
 
 				}
 			}, readOnly);
 
 		} catch (Throwable e) {
-			result.set(e);
+			resultHolder.set(e);
 		}
 
-		return result.get();
+		return resultHolder.get();
 	}
 
 }

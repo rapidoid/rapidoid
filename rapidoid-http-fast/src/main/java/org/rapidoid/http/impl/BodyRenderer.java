@@ -23,10 +23,7 @@ package org.rapidoid.http.impl;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.HttpUtils;
-import org.rapidoid.http.MediaType;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.RespBody;
+import org.rapidoid.http.*;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.HttpResponseRenderer;
 import org.rapidoid.http.impl.lowlevel.HttpIO;
@@ -82,11 +79,15 @@ public class BodyRenderer extends RapidoidThing {
 		}
 	}
 
-	public static RespBody resultToRespBody(RespImpl resp, Object result) {
-		return new RespBodyBytes(HttpUtils.responseToBytes(resp.request(), result, resp.contentType(), mediaResponseRenderer(resp)));
+	public static RespBody resultToRespBody(Resp resp, Object result) {
+		if (result instanceof RespBody) return (RespBody) result;
+
+		byte[] bytes = HttpUtils.responseToBytes(resp.request(), result, resp.contentType(), mediaResponseRenderer(resp));
+
+		return new RespBodyBytes(bytes);
 	}
 
-	private static HttpResponseRenderer mediaResponseRenderer(RespImpl resp) {
+	private static HttpResponseRenderer mediaResponseRenderer(Resp resp) {
 		Customization customization = Customization.of(resp.request());
 
 		if (resp.contentType().equals(MediaType.JSON)) {

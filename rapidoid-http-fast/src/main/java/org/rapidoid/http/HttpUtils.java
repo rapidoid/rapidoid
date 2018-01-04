@@ -393,4 +393,10 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 		return webParams;
 	}
 
+	public static boolean isSpecialResult(Object result) {
+		return result == null
+			|| result instanceof HttpStatus
+			|| result instanceof Req
+			|| result instanceof Resp;
+	}
 }

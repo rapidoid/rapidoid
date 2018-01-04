@@ -117,26 +117,67 @@ public class HttpManagedHandlerDecorator extends AbstractHttpHandlerDecorator {
 		HandlerInvocation invocation = new HandlerInvocation() {
 
 			@Override
-			public Object invoke() {
-				return invokeAndTransformResult(null);
+			public Object invoke() throws Exception {
+				return invokeNext();
 			}
 
 			@Override
-			public Object invokeAndTransformResult(Mapper<Object, Object> transformation) {
+			public Object invokeAndTransformResult(Mapper<Object, Object> transformation) throws Exception {
+				Object result = invokeNext();
+
+				if (result instanceof Throwable) {
+					return result;
+
+				} else {
+					return transform(transformation, result);
+				}
+			}
+
+			@Override
+			public Object invokeAndTransformResultCatchingErrors(Mapper<Object, Object> transformation) {
+				Object resultOrError;
+
 				try {
-					int next = index + 1;
-
-					Object val;
-					if (next < wrappers.length) {
-						val = wrap(channel, isKeepAlive, req, next, wrappers);
-					} else {
-						val = handleReqAndPostProcess(channel, isKeepAlive, req);
-					}
-
-					return transformation != null ? transformation.map(val) : val;
+					resultOrError = invokeNext();
 
 				} catch (Throwable e) {
+					resultOrError = e;
+				}
+
+				try {
+					return transform(transformation, resultOrError);
+				} catch (Throwable e) {
 					return e;
+				}
+			}
+
+			private Object invokeNext() throws Exception {
+				int next = index + 1;
+
+				Object result;
+				if (next < wrappers.length) {
+					result = wrap(channel, isKeepAlive, req, next, wrappers);
+				} else {
+					result = handleReqAndPostProcess(channel, isKeepAlive, req);
+				}
+
+				return result;
+			}
+
+			private Object transform(Mapper<Object, Object> transformation, Object resultOrError) throws Exception {
+				U.notNull(transformation, "transformation");
+
+				if (HttpWrappers.shouldTransform(resultOrError)) {
+					return transformation.map(resultOrError);
+
+				} else {
+					Resp resp = req.response();
+
+					if (HttpWrappers.shouldTransform(resp.result())) {
+						resp.result(transformation.map(resp.result()));
+					}
+
+					return resultOrError;
 				}
 			}
 		};

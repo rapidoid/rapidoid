@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.http.FastHttp;
+import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.u.U;
@@ -57,6 +58,10 @@ public class HttpWrappers extends RapidoidThing {
 			http.custom().wrappers(), // or wrappers for the http setup
 			new HttpWrapper[0] // or no wrappers
 		);
+	}
+
+	static boolean shouldTransform(Object result) {
+		return !HttpUtils.isSpecialResult(result);
 	}
 
 }

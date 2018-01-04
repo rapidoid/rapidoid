@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.IsolatedIntegrationTest;
+import org.rapidoid.http.Resp;
 import org.rapidoid.setup.On;
 
 @Authors("Nikolche Mihajlovski")
@@ -36,8 +37,12 @@ public class JPALazyEntitiesTest extends IsolatedIntegrationTest {
 		initData();
 
 		On.get("/movies").json(() -> JPA.of(Movie.class).all());
+		On.get("/movies/{id}").json((Long id) -> JPA.get(Movie.class, id));
+		On.get("/movie/{id}").serve((Long id, Resp resp) -> resp.json(JPA.get(Movie.class, id)));
 
 		onlyGet("/movies");
+		onlyGet("/movies/1");
+		onlyGet("/movie/1");
 	}
 
 	@Test
@@ -46,8 +51,12 @@ public class JPALazyEntitiesTest extends IsolatedIntegrationTest {
 		initData();
 
 		On.get("/movies").transaction().json(() -> JPA.of(Movie.class).all());
+		On.get("/movies/{id}").transaction().json((Long id) -> JPA.get(Movie.class, id));
+		On.get("/movie/{id}").transaction().serve((Long id, Resp resp) -> resp.json(JPA.get(Movie.class, id)));
 
 		onlyGet("/movies");
+		onlyGet("/movies/1");
+		onlyGet("/movie/1");
 	}
 
 	private void initData() {

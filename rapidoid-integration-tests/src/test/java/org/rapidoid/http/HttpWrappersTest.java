@@ -67,8 +67,61 @@ public class HttpWrappersTest extends IsolatedIntegrationTest {
 		onlyPost("/z");
 	}
 
+	@Test
+	public void shouldTransformRespResult() {
+		My.wrappers(wrapper("wrap1"), wrapper("wrap2"));
+
+		On.get("/x").plain("X");
+
+		On.get("/req").serve(req -> {
+			req.response().plain("FOO");
+			return req;
+		});
+
+		On.get("/resp").serve((Resp resp) -> resp.plain("BAR"));
+
+		On.get("/json").json(() -> 123);
+
+		On.get("/html").html(req -> "<p>hello</p>");
+
+		On.get("/null").json(req -> null);
+
+		onlyGet("/x");
+		onlyGet("/req");
+		onlyGet("/resp");
+		onlyGet("/json");
+		onlyGet("/html");
+		onlyGet("/null");
+	}
+
+	@Test
+	public void shouldThrowErrorsWithNonCatchingWrappers() {
+		My.wrappers(wrapper("wrap1"), wrapper("wrap2"));
+
+		On.get("/err").plain(() -> {
+			throw U.rte("Intentional error!");
+		});
+
+		onlyGet("/err");
+	}
+
+	@Test
+	public void shouldTransformErrorsWithCatchingWrappers() {
+		My.wrappers(wrapper("wrap1"), catchingWrapper("wrap2"));
+
+		On.get("/err").plain(() -> {
+			throw U.rte("Intentional error!");
+		});
+
+		onlyGet("/err");
+	}
+
 	private static HttpWrapper wrapper(String msg) {
 		return (req, next) -> next.invokeAndTransformResult(result -> msg + "(" + req.uri() + ":" + result + ")");
+	}
+
+	private static HttpWrapper catchingWrapper(String msg) {
+		return (req, next) -> next.invokeAndTransformResultCatchingErrors(result -> msg + "(" + req.uri() + ":" + result + ")");
 	}
 
 }
