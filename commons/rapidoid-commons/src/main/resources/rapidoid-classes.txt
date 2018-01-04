@@ -23,6 +23,7 @@ org.rapidoid.annotation.OfType
 org.rapidoid.annotation.OPTIONS
 org.rapidoid.annotation.Order
 org.rapidoid.annotation.Page
+org.rapidoid.annotation.PageVerb
 org.rapidoid.annotation.Param
 org.rapidoid.annotation.PATCH
 org.rapidoid.annotation.POST

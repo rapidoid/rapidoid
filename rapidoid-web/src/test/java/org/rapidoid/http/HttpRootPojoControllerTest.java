@@ -44,7 +44,7 @@ public class HttpRootPojoControllerTest extends HttpTestCommons {
 				return "bar";
 			}
 
-			@Page(uri = "/the/page", raw = true)
+			@Page(uri = "/the/page", raw = true, verb = PageVerb.GET)
 			public Object thePage() {
 				return "the page";
 			}
@@ -69,7 +69,7 @@ public class HttpRootPojoControllerTest extends HttpTestCommons {
 
 		onlyGet("/a");
 		onlyPost("/b");
-		getAndPost("/the/page");
+		onlyGet("/the/page");
 
 		onlyGet("/num?a=1&b=2&c=3&d=4&e=5&f=12.345&g=9.81&h=true&i=false&j=abc");
 		getAndPost("/num2?a=1&b=2&c=3&d=4&e=5&f=12.345&g=9.81&h=true&i=false&j=abc");

@@ -20,35 +20,32 @@
 
 package org.rapidoid.annotation;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import org.rapidoid.util.Constants;
 
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
-
-@Target({METHOD})
-@Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
-@Since("4.1.0")
-@Documented
-public @interface Page {
+@Since("5.5.4")
+public enum PageVerb {
 
-	/**
-	 * Alias of the uri() attribute.
-	 */
-	String value() default "";
+	GET(Constants.GET),
 
-	/**
-	 * Alias of the value() attribute.
-	 */
-	String uri() default "";
+	POST(Constants.POST),
 
-	String view() default "";
+	PUT(Constants.PUT),
 
-	boolean raw() default false;
+	DELETE(Constants.DELETE),
 
-	PageVerb verb() default PageVerb.GET_OR_POST;
+	PATCH(Constants.PATCH),
+
+	GET_OR_POST(Constants.GET_OR_POST);
+
+	private final String verb;
+
+	PageVerb(String verb) {
+		this.verb = verb;
+	}
+
+	public String verb() {
+		return verb;
+	}
 
 }

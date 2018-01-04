@@ -152,10 +152,11 @@ public class PojoHandlersSetup extends RapidoidThing {
 			if (ann instanceof Page) {
 				Page page = (Page) ann;
 
+				String verb = page.verb().verb();
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					OnRoute route = route(setup.page(path), method);
+					OnRoute route = route(setup.route(verb, path), method);
 
 					if (U.notEmpty(page.view())) {
 						route.view(page.view());
@@ -168,7 +169,7 @@ public class PojoHandlersSetup extends RapidoidThing {
 					}
 
 				} else {
-					setup.deregister(Constants.GET_OR_POST, path);
+					setup.deregister(verb, path);
 				}
 
 			} else if (ann instanceof GET) {
