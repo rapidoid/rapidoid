@@ -56,9 +56,8 @@ public class CustomHibernatePersistenceProvider extends HibernatePersistenceProv
 
 		PersistenceUnitInfo info = new RapidoidPersistenceUnitInfo(persistenceUnitName, dataSource, providedClassLoader);
 		PersistenceUnitInfoDescriptor persistenceUnit = new PersistenceUnitInfoDescriptor(info);
-		final Map integration = wrap(properties);
 
-		return emfBuilder(persistenceUnit, integration, providedClassLoader);
+		return emfBuilder(persistenceUnit, properties, providedClassLoader);
 	}
 
 	private EntityManagerFactoryBuilder emfBuilder(PersistenceUnitDescriptor persistenceUnitDescriptor, Map integration, ClassLoader cl) {

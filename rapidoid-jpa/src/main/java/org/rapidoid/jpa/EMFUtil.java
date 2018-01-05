@@ -54,7 +54,7 @@ public class EMFUtil extends RapidoidThing {
 
 		return entityTypes;
 	}
-
+	
 	public static Properties hibernateProperties() {
 		return Conf.HIBERNATE.toProperties();
 	}
