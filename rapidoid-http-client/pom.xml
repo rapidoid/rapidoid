@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.rapidoid</groupId>
 		<artifactId>rapidoid</artifactId>
-		<version>5.5.4</version>
+		<version>5.5.5-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>rapidoid-http-client</artifactId>
