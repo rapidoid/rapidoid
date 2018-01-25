@@ -248,8 +248,9 @@ public class HttpParser extends RapidoidThing {
 	/**
 	 * @return <code>false</code> if the data wasn't parsed.
 	 */
-	public boolean parseBody(Buf src, KeyValueRanges headers, BufRange body, KeyValueRanges data,
-	                         Map<String, List<Upload>> files, RapidoidHelper helper) {
+	private boolean parseBody(Buf src, KeyValueRanges headers, BufRange body,
+	                          KeyValueRanges data, BufRanges dataContentTypes,
+	                          Map<String, List<Upload>> files, RapidoidHelper helper) {
 
 		if (body.isEmpty()) {
 			return true;
@@ -274,7 +275,7 @@ public class HttpParser extends RapidoidThing {
 				Err.rteIf(multipartBoundary.isEmpty(), "Invalid multi-part HTTP request!");
 
 				Map<String, List<Upload>> autoFiles = Coll.mapOfLists();
-				parseMultiParts(src, body, data, autoFiles, multipartBoundary, helper);
+				parseMultiParts(src, body, data, dataContentTypes, autoFiles, multipartBoundary, helper);
 				files.putAll(autoFiles);
 
 				return true;
@@ -308,8 +309,8 @@ public class HttpParser extends RapidoidThing {
 	}
 
 	/* http://www.w3.org/TR/html401/interact/forms.html#h-17.13.4.2 */
-	private void parseMultiParts(Buf src, BufRange body, KeyValueRanges data, Map<String, List<Upload>> files,
-	                             BufRange multipartBoundary, RapidoidHelper helper) {
+	private void parseMultiParts(Buf src, BufRange body, KeyValueRanges data, BufRanges dataContentTypes,
+	                             Map<String, List<Upload>> files, BufRange multipartBoundary, RapidoidHelper helper) {
 
 		int start = body.start;
 		int limit = body.limit();
@@ -323,7 +324,7 @@ public class HttpParser extends RapidoidThing {
 				if (pos1 >= 0 && pos2 >= 0) {
 					int from = pos1 + sepLen + 2;
 					int to = pos2 - 2;
-					parseMultiPart(src, body, data, files, multipartBoundary, helper, from, to);
+					parseMultiPart(src, data, dataContentTypes, files, helper, from, to);
 				}
 
 				pos1 = pos2;
@@ -336,8 +337,8 @@ public class HttpParser extends RapidoidThing {
 		}
 	}
 
-	private void parseMultiPart(Buf src, BufRange body, KeyValueRanges data, Map<String, List<Upload>> files,
-	                            BufRange multipartBoundary, RapidoidHelper helper, int from, int to) {
+	private void parseMultiPart(Buf src, KeyValueRanges data, BufRanges dataContentTypes,
+	                            Map<String, List<Upload>> files, RapidoidHelper helper, int from, int to) {
 
 		KeyValueRanges headers = helper.headersKV.reset();
 		BufRange partBody = helper.ranges4.ranges[0];
@@ -376,23 +377,11 @@ public class HttpParser extends RapidoidThing {
 		// video/mp4; codecs="avc1.640028 | DEFAULT=text/plain
 		BufRange contentType = headers.get(src, CONTENT_TYPE, false);
 
-		charset.reset();
 		contType.reset();
 		contEnc.reset();
 
-		if (contentType != null) {
-			BytesUtil.split(src.bytes(), contentType, SEMI_COL, contType, contEnc, true);
-			if (BytesUtil.startsWith(src.bytes(), contEnc, CHARSET_EQ, false)) {
-				charset.assign(contEnc);
-				charset.strip(CHARSET_EQ.length, 0);
-				BytesUtil.trim(src.bytes(), charset);
-
-				if (!BytesUtil.matches(src.bytes(), charset, _UTF_8, false)
-					&& !BytesUtil.matches(src.bytes(), charset, _ISO_8859_1, false)) {
-					Log.warn("Tipically the UTF-8 and ISO-8859-1 charsets are expected, but received different!",
-						"charset", src.get(charset));
-				}
-			}
+		if (Log.isDebugEnabled()) {
+			checkCharset(src, contType, contEnc, charset, contentType);
 		}
 
 		// (OPTIONAL) e.g. 7bit | 8bit | binary | DEFAULT=7bit
@@ -409,11 +398,37 @@ public class HttpParser extends RapidoidThing {
 			int ind = data.add();
 			data.keys[ind].assign(name);
 			data.values[ind].assign(partBody);
+
+			if (contentType != null) {
+				dataContentTypes.add(contentType.start, contentType.length);
+			} else {
+				dataContentTypes.add();
+			}
+
 		} else {
 			String uploadParamName = src.get(name);
 			String uploadFilename = src.get(filename);
 			byte[] uploadContent = partBody.bytes(src);
 			files.get(uploadParamName).add(new Upload(uploadFilename, uploadContent));
+		}
+	}
+
+	private void checkCharset(Buf src, BufRange contType, BufRange contEnc, BufRange charset, BufRange contentType) {
+		if (contentType != null) {
+			BytesUtil.split(src.bytes(), contentType, SEMI_COL, contType, contEnc, true);
+
+			if (BytesUtil.startsWith(src.bytes(), contEnc, CHARSET_EQ, false)) {
+				charset.assign(contEnc);
+				charset.strip(CHARSET_EQ.length, 0);
+				BytesUtil.trim(src.bytes(), charset);
+
+				if (!BytesUtil.matches(src.bytes(), charset, _UTF_8, false)
+					&& !BytesUtil.matches(src.bytes(), charset, _ISO_8859_1, false)) {
+
+					Log.warn("Tipically the UTF-8 and ISO-8859-1 charsets are expected, but received different!",
+						"charset", src.get(charset));
+				}
+			}
 		}
 	}
 
@@ -482,9 +497,11 @@ public class HttpParser extends RapidoidThing {
 	public boolean parsePosted(Buf input, KeyValueRanges headersKV, BufRange rBody, KeyValueRanges posted,
 	                           Map<String, List<Upload>> files, RapidoidHelper helper, Map<String, Object> dest) {
 
-		boolean completed = parseBody(input, headersKV, rBody, posted, files, helper);
+		BufRanges dataContentTypes = helper.ranges3.reset();
 
-		posted.toUrlEncodedParams(input, dest);
+		boolean completed = parseBody(input, headersKV, rBody, posted, dataContentTypes, files, helper);
+
+		posted.toUrlDecodedParams(input, dest, dataContentTypes);
 
 		return completed;
 	}

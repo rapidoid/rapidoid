@@ -149,28 +149,47 @@ public class KeyValueRanges extends RapidoidThing {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void toUrlEncodedParams(Buf src, Map<String, Object> params) {
+	public void toUrlDecodedParams(Buf src, Map<String, Object> params, BufRanges contentTypes) {
 		for (int i = 0; i < count; i++) {
 			String key = keys[i].str(src.bytes());
 			String val = values[i].str(src.bytes());
 
+			boolean isJSON = isJSON(src, contentTypes, i);
+
 			key = Msc.urlDecodeOrKeepOriginal(key);
-			val = Msc.urlDecodeOrKeepOriginal(val);
 
-			if (key.endsWith("[]")) {
-				key = Str.sub(key, 0, -2);
-				List<String> list = (List<String>) params.get(key);
+			if (!isJSON) {
+				val = Msc.urlDecodeOrKeepOriginal(val);
 
-				if (list == null) {
-					list = U.list();
-					params.put(key, list);
+				if (key.endsWith("[]")) {
+					key = Str.sub(key, 0, -2);
+					List<String> list = (List<String>) params.get(key);
+
+					if (list == null) {
+						list = U.list();
+						params.put(key, list);
+					}
+
+					list.add(val);
+
+				} else {
+					params.put(key, val);
 				}
 
-				list.add(val);
-
 			} else {
-				params.put(key, val);
+				params.put(key, JSON.parse(val));
 			}
+		}
+	}
+
+	private boolean isJSON(Buf src, BufRanges contentTypes, int index) {
+		if (contentTypes.count > 0) {
+			U.must(contentTypes.count > index);
+			BufRange ct = contentTypes.get(index);
+			return !ct.isEmpty() && ct.str(src.bytes()).startsWith("application/json");
+
+		} else {
+			return false;
 		}
 	}
 

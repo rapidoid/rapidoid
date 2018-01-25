@@ -1,0 +1,8 @@
+HTTP/1.1 200 OK
+Connection: keep-alive
+Server: Rapidoid
+Date: XXXXX GMT
+Content-Type: application/json
+Content-Length: 77
+
+{"n":1,"s":"abc","arr":[-10,0,20,9090909090909090909],"map":{"x":1,"t":true}}
