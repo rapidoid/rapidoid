@@ -2,6 +2,8 @@ package org.rapidoid.jpa.impl;
 
 import org.hibernate.jpa.boot.spi.EntityManagerFactoryBuilder;
 import org.junit.Test;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.jdbc.JDBC;
 import org.rapidoid.jdbc.JdbcClient;
 import org.rapidoid.u.U;
@@ -11,6 +13,8 @@ import java.util.Map;
 
 import static org.junit.Assert.assertNotNull;
 
+@Authors("Florian Boulay")
+@Since("5.5.4")
 public class CustomHibernatePersistenceProviderTest {
 
 	@Test
