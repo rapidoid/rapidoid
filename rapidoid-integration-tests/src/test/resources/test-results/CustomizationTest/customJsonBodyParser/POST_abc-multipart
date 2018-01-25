@@ -3,6 +3,6 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: application/json
-Content-Length: 40
+Content-Length: 38
 
-{"multipart":"","x":"13579","foo":"bar"}
+{"multipart":"","x":13579,"foo":"bar"}

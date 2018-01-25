@@ -45,6 +45,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Err;
 import org.rapidoid.commons.Str;
 import org.rapidoid.concurrent.*;
+import org.rapidoid.data.JSON;
 import org.rapidoid.io.IO;
 import org.rapidoid.io.Upload;
 import org.rapidoid.log.Log;
@@ -216,8 +217,8 @@ public class HttpClientUtil extends RapidoidThing {
 
 		for (Map.Entry<String, Object> entry : data.entrySet()) {
 			String name = entry.getKey();
-			String value = String.valueOf(entry.getValue());
-			builder = builder.addTextBody(name, value, ContentType.DEFAULT_TEXT);
+			String value = JSON.stringify(entry.getValue());
+			builder = builder.addTextBody(name, value, ContentType.APPLICATION_JSON);
 		}
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
