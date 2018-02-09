@@ -197,4 +197,13 @@ public class Goodies extends RapidoidThing {
 		return Msc.specialUri(path);
 	}
 
+	public static void openapi(Setup setup) {
+		Class<?> openApiClass = Cls.getClassIfExists("org.rapidoid.oauth.OpenAPI");
+		U.must(openApiClass != null, "Cannot find the OpenAPI components, is module 'rapidoid-openapi' missing?");
+
+		Method bootstrap = Cls.getMethod(openApiClass, "bootstrap", Setup.class);
+
+		Cls.invokeStatic(bootstrap, setup);
+	}
+
 }
