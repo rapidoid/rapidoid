@@ -105,7 +105,8 @@
 		<module>rapidoid-watch</module>
 		<module>rapidoid-integration-tests</module>
 		<module>app-maven-plugin</module>
-	</modules>
+        <module>rapidoid-openapi</module>
+    </modules>
 
 	<build>
 		<plugins>
