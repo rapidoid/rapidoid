@@ -148,6 +148,13 @@ public class AppBootstrap extends RapidoidThing {
 		}
 	};
 
+	private static final ServiceBootstrap openapi = new ServiceBootstrap() {
+		@Override
+		protected void bootstrap() {
+			getGoodies().openapi(On.setup());
+		}
+	};
+
 	public AppBootstrap services() {
 		services.run();
 		return this;
@@ -223,6 +230,11 @@ public class AppBootstrap extends RapidoidThing {
 		return this;
 	}
 
+	public AppBootstrap openapi() {
+		oauth.run();
+		return this;
+	}
+
 	static IGoodies getGoodies() {
 		Class<?> goodiesClass;
 
@@ -261,6 +273,7 @@ public class AppBootstrap extends RapidoidThing {
 		oauth.reset();
 		adminCenter.reset();
 		beans.reset();
+		openapi.reset();
 	}
 
 }
