@@ -673,6 +673,7 @@ org.rapidoid.render.Render
 org.rapidoid.render.RenderCtx
 org.rapidoid.render.RenderCtxImpl
 org.rapidoid.render.RenderDSL
+org.rapidoid.render.RenderModule
 org.rapidoid.render.retriever.CachedPropRetriever
 org.rapidoid.render.retriever.GenericValueRetriever
 org.rapidoid.render.retriever.Retriever

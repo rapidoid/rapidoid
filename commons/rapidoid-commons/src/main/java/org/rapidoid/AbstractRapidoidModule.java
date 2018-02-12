@@ -20,7 +20,6 @@
 
 package org.rapidoid;
 
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.RapidoidModuleDesc;
 import org.rapidoid.annotation.Since;
@@ -67,6 +66,11 @@ public abstract class AbstractRapidoidModule extends RapidoidThing implements Ra
 		RapidoidModuleDesc annotation = getClass().getAnnotation(RapidoidModuleDesc.class);
 		U.must(annotation != null, "The Rapidoid module must be annotated with: %s", RapidoidModuleDesc.class);
 		return annotation;
+	}
+
+	@Override
+	public void restartApp() {
+		// do nothing
 	}
 
 }

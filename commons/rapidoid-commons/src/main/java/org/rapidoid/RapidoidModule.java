@@ -20,7 +20,6 @@
 
 package org.rapidoid;
 
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
@@ -41,5 +40,7 @@ public interface RapidoidModule {
 	void initTest(Object test);
 
 	void afterTest(Object test);
+
+	void restartApp();
 
 }

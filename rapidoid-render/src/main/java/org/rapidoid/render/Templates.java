@@ -26,7 +26,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.u.U;
 
-
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class Templates extends RapidoidThing {

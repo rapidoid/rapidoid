@@ -20,7 +20,6 @@
 
 package org.rapidoid.setup;
 
-
 import org.rapidoid.RapidoidModule;
 import org.rapidoid.RapidoidModules;
 import org.rapidoid.annotation.Authors;
@@ -37,7 +36,6 @@ import org.rapidoid.ioc.Beans;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.log.Log;
-import org.rapidoid.render.Templates;
 import org.rapidoid.scan.ClasspathScanner;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.scan.Scan;
@@ -232,7 +230,6 @@ public class App extends RapidoidInitializer {
 		Msc.invokeMain(entry, U.arrayOf(String.class, Env.args()));
 	}
 
-
 	private static void resetAppStateBeforeRestart() {
 		App.path = null;
 		App.boot = null;
@@ -243,9 +240,12 @@ public class App extends RapidoidInitializer {
 		Conf.reset();
 		Env.reset();
 		Res.reset();
-		Templates.reset();
 		JSON.reset();
 		Beany.reset();
+
+		for (RapidoidModule mod : RapidoidModules.getAllAvailable()) {
+			mod.restartApp();
+		}
 
 		AppStarter.reset();
 		AppBootstrap.reset();

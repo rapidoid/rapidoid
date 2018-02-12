@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,7 +27,6 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
 import org.rapidoid.u.U;
 
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
 public class MscOpts extends RapidoidThing {
@@ -42,6 +41,7 @@ public class MscOpts extends RapidoidThing {
 
 	private static final boolean hasRapidoidJPA = Cls.exists("org.rapidoid.jpa.JPA");
 	private static final boolean hasRapidoidGUI = Cls.exists("org.rapidoid.gui.GUI");
+	private static final boolean hasRapidoidRender = Cls.exists("org.rapidoid.render.Templates");
 	private static final boolean hasRapidoidWatch = Cls.exists("org.rapidoid.reload.Reload");
 	private static final boolean hasRapidoidPlatform = Cls.exists("org.rapidoid.standalone.Main");
 
@@ -75,6 +75,10 @@ public class MscOpts extends RapidoidThing {
 
 	public static boolean hasRapidoidGUI() {
 		return hasRapidoidGUI;
+	}
+
+	public static boolean hasRapidoidRender() {
+		return hasRapidoidRender;
 	}
 
 	public static boolean hasRapidoidWatch() {
