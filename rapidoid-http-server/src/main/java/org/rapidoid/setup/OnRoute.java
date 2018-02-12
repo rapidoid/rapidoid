@@ -28,6 +28,7 @@ import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.MediaType;
 import org.rapidoid.http.ReqHandler;
 import org.rapidoid.http.ReqRespHandler;
+import org.rapidoid.http.impl.RouteMeta;
 import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.lambda.*;
 
@@ -442,6 +443,11 @@ public class OnRoute extends RapidoidThing {
 
 	public OnRoute contentType(MediaType contentType) {
 		options.contentType(contentType);
+		return this;
+	}
+
+	public OnRoute meta(RouteMeta meta) {
+		options.meta(meta);
 		return this;
 	}
 

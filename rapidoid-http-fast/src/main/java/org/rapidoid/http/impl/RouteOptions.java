@@ -32,6 +32,7 @@ import org.rapidoid.http.RouteConfig;
 import org.rapidoid.u.U;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
@@ -60,6 +61,8 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 
 	private volatile int cacheCapacity = 100;
 
+	private volatile RouteMeta meta = new RouteMeta();
+
 	@Override
 	public String toString() {
 		return "RouteOptions{" +
@@ -74,6 +77,7 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 			", wrappers=" + Arrays.toString(wrappers) +
 			", cacheTTL=" + cacheTTL +
 			", cacheCapacity=" + cacheCapacity +
+			", meta=" + meta +
 			'}';
 	}
 
@@ -189,6 +193,15 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 		return this;
 	}
 
+	public RouteMeta meta() {
+		return meta;
+	}
+
+	public RouteOptions meta(RouteMeta meta) {
+		this.meta = meta;
+		return this;
+	}
+
 	public RouteOptions copy() {
 		RouteOptions copy = new RouteOptions();
 
@@ -202,6 +215,7 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 		copy.managed = this.managed;
 		copy.cacheTTL = this.cacheTTL;
 		copy.cacheCapacity = this.cacheCapacity;
+		copy.meta = this.meta.copy();
 
 		return copy;
 	}
@@ -214,33 +228,26 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-
 		RouteOptions that = (RouteOptions) o;
 
-		if (mvc != that.mvc) return false;
-		if (managed != that.managed) return false;
-		if (cacheTTL != that.cacheTTL) return false;
-		if (cacheCapacity != that.cacheCapacity) return false;
-		if (contentType != null ? !contentType.equals(that.contentType) : that.contentType != null) return false;
-		if (view != null ? !view.equals(that.view) : that.view != null) return false;
-		if (zone != null ? !zone.equals(that.zone) : that.zone != null) return false;
-		if (transaction != that.transaction) return false;
-		if (roles != null ? !roles.equals(that.roles) : that.roles != null) return false;
-		return Arrays.equals(wrappers, that.wrappers);
+		return contentTypeCustomized == that.contentTypeCustomized &&
+			mvc == that.mvc &&
+			managed == that.managed &&
+			cacheTTL == that.cacheTTL &&
+			cacheCapacity == that.cacheCapacity &&
+			Objects.equals(contentType, that.contentType) &&
+			Objects.equals(view, that.view) &&
+			Objects.equals(zone, that.zone) &&
+			transaction == that.transaction &&
+			Objects.equals(roles, that.roles) &&
+			Arrays.equals(wrappers, that.wrappers) &&
+			Objects.equals(meta, that.meta);
 	}
 
 	@Override
 	public int hashCode() {
-		int result = contentType != null ? contentType.hashCode() : 0;
-		result = 31 * result + (view != null ? view.hashCode() : 0);
-		result = 31 * result + (mvc ? 1 : 0);
-		result = 31 * result + (zone != null ? zone.hashCode() : 0);
-		result = 31 * result + (managed ? 1 : 0);
-		result = 31 * result + (transaction != null ? transaction.hashCode() : 0);
-		result = 31 * result + (roles != null ? roles.hashCode() : 0);
+		int result = Objects.hash(contentType, contentTypeCustomized, view, mvc, zone, managed, transaction, roles, cacheTTL, cacheCapacity, meta);
 		result = 31 * result + Arrays.hashCode(wrappers);
-		result = 31 * result + (int) (cacheTTL ^ (cacheTTL >>> 32));
-		result = 31 * result + (cacheCapacity ^ (cacheCapacity >>> 32));
 		return result;
 	}
 }
