@@ -232,7 +232,7 @@ public class AppBootstrap extends RapidoidThing {
 	}
 
 	public AppBootstrap openapi() {
-		oauth.run();
+		openapi.run();
 		return this;
 	}
 
@@ -255,6 +255,7 @@ public class AppBootstrap extends RapidoidThing {
 		adminCenter();
 		auth();
 		oauth();
+		openapi();
 	}
 
 	static void reset() {

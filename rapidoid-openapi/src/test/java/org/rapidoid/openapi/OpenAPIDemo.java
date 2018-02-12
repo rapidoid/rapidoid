@@ -5,21 +5,20 @@ import org.rapidoid.setup.Setup;
 
 public class OpenAPIDemo {
 
-    public static void main(String[] args) {
-        Setup setup = On.setup();
+	public static void main(String[] args) {
+		Setup setup = On.setup();
 
-        On.get("/test1/").plain(OpenAPIDemo.sayHello());
-        On.get("/test2/saida").plain(OpenAPIDemo.sayHello());
-        On.get("/test2/output").plain(OpenAPIDemo.sayHello());
-        On.post("/test2/output").plain(OpenAPIDemo.sayHello());
-        On.delete("/test2/output").plain(OpenAPIDemo.sayHello());
+		On.get("/test1/").plain(sayHello());
+		On.get("/test2/foo").plain(sayHello());
+		On.get("/test2/output").plain(sayHello());
+		On.post("/test2/output").plain(sayHello());
+		On.delete("/test2/output").plain(sayHello());
 
-        OpenAPI.register(setup);
-        setup.activate();
-    }
+		OpenAPI.bootstrap(setup);
+	}
 
-    public static String sayHello() {
-        return "Hello";
-    }
+	private static String sayHello() {
+		return "Hello";
+	}
 
 }
