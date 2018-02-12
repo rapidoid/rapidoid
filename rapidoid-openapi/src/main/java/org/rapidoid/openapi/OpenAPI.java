@@ -23,7 +23,6 @@ package org.rapidoid.openapi;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
-import org.rapidoid.gui.GUI;
 import org.rapidoid.http.HttpRoutes;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
@@ -97,7 +96,7 @@ public class OpenAPI extends RapidoidThing {
 		setup.get(Msc.specialUri("openapi")).plain(new ReqHandler() {
 			@Override
 			public Object execute(Req req) {
-				return GUI.hardcoded(openApiYamlPage);
+				return openApiYamlPage;
 			}
 		});
 	}
