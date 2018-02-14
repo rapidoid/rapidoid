@@ -25,14 +25,15 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.bytes.ByteBufferBytes;
 import org.rapidoid.bytes.Bytes;
 import org.rapidoid.bytes.BytesUtil;
+import org.rapidoid.commons.Arr;
 import org.rapidoid.commons.Err;
+import org.rapidoid.commons.Nums;
 import org.rapidoid.data.BufRange;
 import org.rapidoid.data.BufRanges;
 import org.rapidoid.pool.Pool;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.D;
-import org.rapidoid.util.Msc;
 import org.rapidoid.wrap.IntWrap;
 
 import javax.net.ssl.SSLEngine;
@@ -107,7 +108,7 @@ public class MultiBuf extends OutputStream implements Buf, Constants {
 		this.name = name;
 		this.singleCap = (int) Math.pow(2, factor);
 		this.factor = factor;
-		this.addrMask = Msc.bitMask(factor);
+		this.addrMask = Nums.bitMask(factor);
 
 		assert invariant(true);
 	}
@@ -180,7 +181,7 @@ public class MultiBuf extends OutputStream implements Buf, Constants {
 
 	private void expandUnit() {
 		if (bufN == bufs.length) {
-			bufs = Msc.expand(bufs, 2);
+			bufs = Arr.expand(bufs, 2);
 		}
 
 		bufs[bufN] = bufPool.get();

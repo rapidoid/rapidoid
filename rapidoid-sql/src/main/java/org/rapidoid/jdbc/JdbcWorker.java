@@ -20,13 +20,12 @@
 
 package org.rapidoid.jdbc;
 
-import org.rapidoid.activity.AbstractLoopThread;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.log.Log;
+import org.rapidoid.thread.AbstractLoopThread;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
 
 import java.sql.Connection;
 import java.util.Queue;
@@ -74,7 +73,7 @@ public class JdbcWorker extends AbstractLoopThread {
 					break;
 				}
 
-			} while (Msc.timedOut(since, batchTimeMs));
+			} while (U.timedOut(since, batchTimeMs));
 
 		} catch (Exception e) {
 			Log.error("JDBC worker operation error!", e);

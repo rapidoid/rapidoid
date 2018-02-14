@@ -7,7 +7,7 @@ Rapidoid has built-in default configuration which provides sensible defaults for
 [source,yml]
 .built-in-config.yml
 ----
-include::../commons/rapidoid-commons/src/main/resources/built-in-config.yml[]
+include::../rapidoid-commons/src/main/resources/built-in-config.yml[]
 ----
 
 ### Custom configuration

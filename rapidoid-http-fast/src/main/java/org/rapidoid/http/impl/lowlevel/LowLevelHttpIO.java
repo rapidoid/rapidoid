@@ -21,7 +21,6 @@
 package org.rapidoid.http.impl.lowlevel;
 
 import org.rapidoid.RapidoidThing;
-import org.rapidoid.activity.RapidoidThreadLocals;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
@@ -43,6 +42,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.net.AsyncLogic;
 import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.thread.RapidoidThreadLocals;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 import org.rapidoid.writable.ReusableWritable;

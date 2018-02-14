@@ -45,7 +45,6 @@ import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.AnsiColor;
 import org.rapidoid.util.Constants;
-import org.rapidoid.util.Msc;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
@@ -671,7 +670,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 
 	public boolean ready() {
 		long lastChangedAt = lastChangedAt().getTime();
-		return !isEmpty() && Msc.timedOut(lastChangedAt, ROUTE_SETUP_WAITING_TIME_MS);
+		return !isEmpty() && U.timedOut(lastChangedAt, ROUTE_SETUP_WAITING_TIME_MS);
 	}
 
 	public void waitToStabilize() {

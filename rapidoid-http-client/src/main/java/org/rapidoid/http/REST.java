@@ -23,10 +23,10 @@ package org.rapidoid.http;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Err;
+import org.rapidoid.commons.RapidoidInitializer;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Future;
 import org.rapidoid.config.Config;
-import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")

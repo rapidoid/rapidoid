@@ -21,11 +21,11 @@
 package org.rapidoid.http;
 
 import org.junit.Test;
-import org.rapidoid.activity.RapidoidThread;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.setup.On;
+import org.rapidoid.thread.RapidoidThread;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.Wait;

@@ -28,7 +28,6 @@ import org.rapidoid.http.impl.lowlevel.HttpIO;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
 
 import java.io.IOException;
 import java.net.ConnectException;
@@ -134,7 +133,7 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 	private void handleError(Throwable error, final Req req, final Resp resp, final ProxyMapping mapping, final int attempts, final long since) {
 		if (error instanceof ConnectException || error instanceof IOException) {
 
-			if (HttpUtils.isGetReq(req) && !Msc.timedOut(since, timeout())) {
+			if (HttpUtils.isGetReq(req) && !U.timedOut(since, timeout())) {
 
 				Jobs.after(retryDelay()).milliseconds(new Runnable() {
 					@Override

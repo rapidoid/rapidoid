@@ -23,7 +23,7 @@ package org.rapidoid.io.watch;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
-import org.rapidoid.config.RapidoidInitializer;
+import org.rapidoid.commons.RapidoidInitializer;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;

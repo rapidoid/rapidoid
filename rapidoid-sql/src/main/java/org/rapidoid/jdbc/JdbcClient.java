@@ -24,6 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.Coll;
+import org.rapidoid.commons.Nums;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Callbacks;
 import org.rapidoid.config.Conf;
@@ -407,7 +408,7 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 		List<T> results = fetchData(resultType, resultMapper, sql, namedArgs, args);
 
 		if (needsPaging && !pagingInSql) {
-			results = Coll.range(results, Msc.toInt(skip), Msc.toInt(skip + limit));
+			results = Coll.range(results, Nums.toInt(skip), Nums.toInt(skip + limit));
 		}
 
 		U.must(results.size() <= limit, "Paging error: too many results!");

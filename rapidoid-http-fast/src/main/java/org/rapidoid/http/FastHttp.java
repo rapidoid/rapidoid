@@ -26,6 +26,7 @@ import org.rapidoid.buffer.Buf;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.cache.Cache;
 import org.rapidoid.collection.Coll;
+import org.rapidoid.commons.URIs;
 import org.rapidoid.config.Config;
 import org.rapidoid.config.ConfigImpl;
 import org.rapidoid.data.BufRange;
@@ -42,7 +43,6 @@ import org.rapidoid.log.LogLevel;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
 
 import java.util.Collections;
 import java.util.List;
@@ -251,8 +251,8 @@ public class FastHttp extends AbstractHttpProcessor {
 
 		String verb = helper.verb.str(buf);
 		String uri = helper.uri.str(buf);
-		String path = Msc.urlDecode(helper.path.str(buf));
-		String query = Msc.urlDecodeOrKeepOriginal(helper.query.str(buf));
+		String path = URIs.urlDecode(helper.path.str(buf));
+		String query = URIs.urlDecodeOrKeepOriginal(helper.query.str(buf));
 		String zone = null;
 
 		MediaType contentType = HttpUtils.getDefaultContentType();

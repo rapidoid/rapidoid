@@ -24,9 +24,9 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Err;
+import org.rapidoid.commons.Nums;
 import org.rapidoid.data.BufRange;
 import org.rapidoid.data.BufRanges;
-import org.rapidoid.util.Msc;
 import org.rapidoid.wrap.IntWrap;
 
 import static org.rapidoid.util.Constants.*;
@@ -443,7 +443,7 @@ public class BytesUtil extends RapidoidThing {
 			return NOT_FOUND;
 		}
 
-		int prefix = Msc.intFrom(b0, b1, b2, b3);
+		int prefix = Nums.intFrom(b0, b1, b2, b3);
 
 		boolean matchedPrefix = prefix == searchPrefix;
 
@@ -529,7 +529,7 @@ public class BytesUtil extends RapidoidThing {
 			return NOT_FOUND;
 		}
 
-		int prefix = Msc.intFrom(b0, b1, b2, b3);
+		int prefix = Nums.intFrom(b0, b1, b2, b3);
 
 		boolean matchedPrefix = prefix == searchPrefix;
 
@@ -601,24 +601,24 @@ public class BytesUtil extends RapidoidThing {
 		if (p < limit) {
 			b1 = bytes.get(p);
 		} else {
-			return Msc.intFrom(b0, BYTE_0, BYTE_0, BYTE_0);
+			return Nums.intFrom(b0, BYTE_0, BYTE_0, BYTE_0);
 		}
 
 		p++;
 		if (p < limit) {
 			b2 = bytes.get(p);
 		} else {
-			return Msc.intFrom(b0, b1, BYTE_0, BYTE_0);
+			return Nums.intFrom(b0, b1, BYTE_0, BYTE_0);
 		}
 
 		p++;
 		if (p < limit) {
 			b3 = bytes.get(p);
 		} else {
-			return Msc.intFrom(b0, b1, b2, BYTE_0);
+			return Nums.intFrom(b0, b1, b2, BYTE_0);
 		}
 
-		return Msc.intFrom(b0, b1, b2, b3);
+		return Nums.intFrom(b0, b1, b2, b3);
 	}
 
 }

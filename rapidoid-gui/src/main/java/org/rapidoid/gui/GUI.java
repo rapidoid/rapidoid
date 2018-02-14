@@ -24,10 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.commons.AnyObj;
-import org.rapidoid.commons.Dates;
-import org.rapidoid.commons.English;
-import org.rapidoid.commons.Str;
+import org.rapidoid.commons.*;
 import org.rapidoid.gui.input.*;
 import org.rapidoid.gui.reqinfo.IReqInfo;
 import org.rapidoid.gui.reqinfo.ReqInfo;
@@ -740,7 +737,7 @@ public abstract class GUI extends HTML implements Role {
 		List<Object> list = U.list();
 
 		for (Object value : values) {
-			if (Msc.isArray(value) && !hasGUIElements(value)) {
+			if (Arr.isArray(value) && !hasGUIElements(value)) {
 				value = U.str(value);
 			}
 			if (value == null || value instanceof Iterable<?>) {
@@ -921,9 +918,9 @@ public abstract class GUI extends HTML implements Role {
 				sb.append("&");
 			}
 
-			sb.append(Msc.urlEncode(e.getKey()));
+			sb.append(URIs.urlEncode(e.getKey()));
 			sb.append("=");
-			sb.append(Msc.urlEncode(e.getValue()));
+			sb.append(URIs.urlEncode(e.getValue()));
 		}
 
 		return uri(sb.toString());

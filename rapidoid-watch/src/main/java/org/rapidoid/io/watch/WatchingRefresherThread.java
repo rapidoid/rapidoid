@@ -20,11 +20,11 @@
 
 package org.rapidoid.io.watch;
 
-import org.rapidoid.activity.AbstractLoopThread;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
 import org.rapidoid.reload.Reload;
+import org.rapidoid.thread.AbstractLoopThread;
 import org.rapidoid.u.U;
 
 import java.io.File;

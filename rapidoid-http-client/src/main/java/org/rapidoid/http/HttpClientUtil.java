@@ -39,7 +39,6 @@ import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.nio.entity.NByteArrayEntity;
 import org.apache.http.protocol.HttpContext;
 import org.rapidoid.RapidoidThing;
-import org.rapidoid.activity.RapidoidThreadFactory;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Err;
@@ -50,6 +49,7 @@ import org.rapidoid.io.IO;
 import org.rapidoid.io.Upload;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.tls.TLSUtil;
+import org.rapidoid.thread.RapidoidThreadFactory;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 

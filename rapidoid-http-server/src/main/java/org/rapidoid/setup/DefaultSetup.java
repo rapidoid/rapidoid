@@ -22,8 +22,8 @@ package org.rapidoid.setup;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.RapidoidInitializer;
 import org.rapidoid.config.Conf;
-import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.env.Env;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.impl.HttpRoutesImpl;

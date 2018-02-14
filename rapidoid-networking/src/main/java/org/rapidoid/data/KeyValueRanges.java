@@ -26,8 +26,8 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.commons.Str;
+import org.rapidoid.commons.URIs;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
 
 import java.util.List;
 import java.util.Map;
@@ -126,11 +126,11 @@ public class KeyValueRanges extends RapidoidThing {
 			String val = values[i].str(src.bytes());
 
 			if (urlDecodeKeys) {
-				key = Msc.urlDecodeOrKeepOriginal(key);
+				key = URIs.urlDecodeOrKeepOriginal(key);
 			}
 
 			if (urlDecodeVals) {
-				val = Msc.urlDecodeOrKeepOriginal(val);
+				val = URIs.urlDecodeOrKeepOriginal(val);
 			}
 
 			if (lowerCaseKeys) {
@@ -155,10 +155,10 @@ public class KeyValueRanges extends RapidoidThing {
 
 			boolean isJSON = isJSON(src, contentTypes, i);
 
-			key = Msc.urlDecodeOrKeepOriginal(key);
+			key = URIs.urlDecodeOrKeepOriginal(key);
 
 			if (!isJSON) {
-				val = Msc.urlDecodeOrKeepOriginal(val);
+				val = URIs.urlDecodeOrKeepOriginal(val);
 
 				if (key.endsWith("[]")) {
 					key = Str.sub(key, 0, -2);
@@ -200,7 +200,7 @@ public class KeyValueRanges extends RapidoidThing {
 			byte[] val = values[i].bytes(src);
 
 			if (urlDecodeKeys) {
-				key = Msc.urlDecodeOrKeepOriginal(key);
+				key = URIs.urlDecodeOrKeepOriginal(key);
 			}
 
 			map.put(key, val);

@@ -21,9 +21,9 @@
 package org.rapidoid.render;
 
 import org.rapidoid.RapidoidThing;
-import org.rapidoid.activity.RapidoidThreadLocals;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.thread.RapidoidThreadLocals;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 import org.rapidoid.writable.ReusableWritable;

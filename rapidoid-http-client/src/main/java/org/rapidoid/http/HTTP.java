@@ -22,7 +22,7 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.RapidoidInitializer;
+import org.rapidoid.commons.RapidoidInitializer;
 import org.rapidoid.io.Upload;
 
 import java.util.List;

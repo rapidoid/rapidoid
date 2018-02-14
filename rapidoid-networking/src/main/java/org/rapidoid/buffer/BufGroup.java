@@ -23,10 +23,10 @@ package org.rapidoid.buffer;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Nums;
 import org.rapidoid.pool.Pool;
 import org.rapidoid.pool.Pools;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
 
 import java.nio.ByteBuffer;
 import java.util.concurrent.Callable;
@@ -47,7 +47,7 @@ public class BufGroup extends RapidoidThing {
 		U.must(capacity >= 2, "The capacity must >= 2!");
 		U.must((capacity & (capacity - 1)) == 0, "The capacity must be a power of 2!");
 
-		this.factor = Msc.log2(capacity);
+		this.factor = Nums.log2(capacity);
 
 		U.must(capacity == Math.pow(2, factor));
 

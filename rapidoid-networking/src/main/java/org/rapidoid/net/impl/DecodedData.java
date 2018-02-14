@@ -24,9 +24,9 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.BufProvider;
+import org.rapidoid.commons.URIs;
 import org.rapidoid.data.BufRange;
 import org.rapidoid.data.Data;
-import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -46,7 +46,7 @@ public class DecodedData extends RapidoidThing implements Data {
 	@Override
 	public synchronized String get() {
 		if (value == null) {
-			value = !range.isEmpty() ? Msc.urlDecode(src.buffer().get(range)) : "";
+			value = !range.isEmpty() ? URIs.urlDecode(src.buffer().get(range)) : "";
 		}
 
 		return value;

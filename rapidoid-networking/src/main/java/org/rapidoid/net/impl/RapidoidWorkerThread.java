@@ -20,11 +20,11 @@
 
 package org.rapidoid.net.impl;
 
-import org.rapidoid.activity.RapidoidThread;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.net.NetworkingParams;
+import org.rapidoid.thread.RapidoidThread;
 import org.rapidoid.u.U;
 
 import javax.net.ssl.SSLContext;

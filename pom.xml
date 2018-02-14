@@ -87,7 +87,8 @@
 	</properties>
 
 	<modules>
-		<module>commons</module>
+		<module>rapidoid-commons</module>
+		<module>rapidoid-test-commons</module>
 		<module>rapidoid-networking</module>
 		<module>rapidoid-sql</module>
 		<module>rapidoid-jpa</module>

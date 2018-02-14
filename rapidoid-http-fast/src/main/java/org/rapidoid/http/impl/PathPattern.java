@@ -25,9 +25,9 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Str;
+import org.rapidoid.commons.URIs;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -150,7 +150,7 @@ public class PathPattern extends RapidoidThing implements Comparable<PathPattern
 				String val = Cls.invoke(MATCHER_GROUP, matcher, e.getValue());
 
 				if (val != null) {
-					val = Msc.urlDecodeOrKeepOriginal(val);
+					val = URIs.urlDecodeOrKeepOriginal(val);
 					params.put(e.getKey(), val);
 				}
 			}
