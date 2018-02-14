@@ -20,10 +20,10 @@
 
 package org.rapidoid.jpa;
 
+import org.essentials4j.Do;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.fluent.Do;
 import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.u.U;
@@ -55,10 +55,10 @@ public class JPAWithoutTxTest extends IsolatedIntegrationTest {
 		eq(JPA.getAllEntities().size(), 2);
 
 		List<Book> books = JPA.of(Book.class).all();
-		eq(Do.map(books).to(Book::getTitle), U.list("book 2"));
+		eq(Do.map(books).toList(Book::getTitle), U.list("book 2"));
 
 		List<Movie> movies = JPA.of(Movie.class).all();
-		eq(Do.map(movies).to(Movie::getTitle), U.list("movie 1"));
+		eq(Do.map(movies).toList(Movie::getTitle), U.list("movie 1"));
 
 		eq(JPA.jpql("select title from Book where id = ?1", 2L).all(), U.list("book 2"));
 

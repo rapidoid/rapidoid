@@ -20,6 +20,7 @@
 
 package org.rapidoid.http;
 
+import org.essentials4j.Do;
 import org.junit.After;
 import org.junit.Before;
 import org.rapidoid.RapidoidModules;
@@ -31,7 +32,6 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.crypto.Crypto;
 import org.rapidoid.data.JSON;
 import org.rapidoid.env.Env;
-import org.rapidoid.fluent.Do;
 import org.rapidoid.io.IO;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.jpa.JPA;
@@ -388,7 +388,7 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 	}
 
 	protected String appRoutes() {
-		List<String> routes = Do.map(On.routes().all()).to((Route r) -> r.toString());
+		List<String> routes = Do.map(On.routes().all()).toList((Route r) -> r.toString());
 		Collections.sort(routes);
 		return U.join("\n", routes);
 	}

@@ -20,10 +20,10 @@
 
 package org.rapidoid.docs;
 
+import org.essentials4j.Do;
 import org.junit.Test;
 import org.rapidoid.commons.Str;
 import org.rapidoid.docs.blank.BlankTest;
-import org.rapidoid.fluent.Do;
 import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.io.FileSearchResult;
 import org.rapidoid.io.IO;
@@ -146,7 +146,7 @@ public abstract class DocTest extends IsolatedIntegrationTest {
 		Collections.sort(res);
 		filenames.addAll(res);
 
-		return Do.map(filenames).to(f -> f.relativeName(), f -> IO.load(f.absoluteName()));
+		return Do.map(filenames).toMap(f -> f.relativeName(), f -> IO.load(f.absoluteName()));
 	}
 
 	protected void exercise() {

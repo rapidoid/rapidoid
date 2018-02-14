@@ -13,11 +13,15 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.essentials4j</groupId>
+			<artifactId>essentials4j</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
 			<groupId>org.javassist</groupId>
 			<artifactId>javassist</artifactId>
 			<version>${javassist.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>

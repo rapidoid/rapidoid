@@ -20,10 +20,10 @@
 
 package org.rapidoid.httpfast;
 
+import org.essentials4j.Do;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.fluent.Flow;
 import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.net.util.NetUtil;
 import org.rapidoid.setup.On;
@@ -39,7 +39,7 @@ public class InvalidUrlDecodedParamsTest extends IsolatedIntegrationTest {
 
 		String resp = NetUtil.connect("localhost", 8080, (in, reader, out) -> {
 			out.writeBytes("GET /?a=[%A%]&b=bb!&c=%&d=%% HTTP/1.0\n\n");
-			return Flow.of(reader.lines()).findLast().get();
+			return Do.findIn(reader.lines()).last(s -> true).get();
 		});
 
 		verify(resp);

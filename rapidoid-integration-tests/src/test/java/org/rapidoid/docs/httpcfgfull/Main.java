@@ -20,9 +20,7 @@
 
 package org.rapidoid.docs.httpcfgfull;
 
-import org.rapidoid.fluent.Do;
-import org.rapidoid.fluent.Find;
-import org.rapidoid.fluent.Flow;
+import org.essentials4j.Do;
 import org.rapidoid.gui.Btn;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.gui.KVGrid;
@@ -34,6 +32,8 @@ import org.rapidoid.u.U;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Main extends GUI {
 
@@ -61,9 +61,10 @@ public class Main extends GUI {
 
 		/* Create buttons to filter by starting letter */
 
-		List<Btn> letters = Flow.chars('a', 'z').map(c -> {
+		List<Btn> letters = IntStream.rangeClosed('a', 'z').mapToObj(i -> {
+			char c = (char) i;
 			return btn(c).go("/find?p=" + c);
-		}).toList();
+		}).collect(Collectors.toList());
 
 		/* Display the configuration entries at the home renderPage */
 
@@ -89,7 +90,7 @@ public class Main extends GUI {
 		/* Search configuration entries by prefix */
 
 		On.page("/find").mvc((String p) -> {
-			return grid(Find.allOf(cfg).where((k, v) -> k.startsWith(p)));
+			return grid(Do.findIn(cfg).all((k, v) -> k.startsWith(p)));
 		});
 	}
 }
