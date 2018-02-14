@@ -20,6 +20,7 @@
 
 package org.rapidoid;
 
+import org.essentials4j.Do;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
@@ -39,6 +40,12 @@ public class RapidoidModules extends RapidoidThing {
 		}
 	};
 
+	public static RapidoidModule get(String name) {
+		return Do.findIn(getAllAvailable())
+			.first(module -> module.name().equals(name))
+			.orElseThrow(() -> U.rte("Can't find Rapidoid module with name: ''!", name));
+	}
+
 	public static List<RapidoidModule> getAll() {
 		return all(false);
 	}
@@ -47,7 +54,7 @@ public class RapidoidModules extends RapidoidThing {
 		return all(true);
 	}
 
-	public static List<RapidoidModule> all(boolean availableOnly) {
+	private static List<RapidoidModule> all(boolean availableOnly) {
 		List<RapidoidModule> modules = U.list();
 
 		addServiceLoaderModules(availableOnly, modules);

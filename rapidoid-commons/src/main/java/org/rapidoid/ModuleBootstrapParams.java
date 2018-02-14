@@ -1,6 +1,6 @@
 /*-
  * #%L
- * rapidoid-http-server
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2018 Nikolche Mihajlovski and contributors
  * %%
@@ -18,32 +18,23 @@
  * #L%
  */
 
-package org.rapidoid.http;
+package org.rapidoid;
 
-import org.rapidoid.AbstractRapidoidModule;
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.RapidoidModuleDesc;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.env.Env;
-import org.rapidoid.setup.App;
-import org.rapidoid.setup.My;
-import org.rapidoid.setup.On;
-import org.rapidoid.setup.SetupUtil;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.3.0")
-@RapidoidModuleDesc(name = "HTTP", order = 700)
-public class HttpModule extends AbstractRapidoidModule {
+@Since("5.6.0")
+public class ModuleBootstrapParams extends RapidoidThing {
 
-	@Override
-	public void cleanUp() {
-		My.reset();
-		App.resetGlobalState();
-		On.changes().ignore();
+	private volatile String[] path;
 
-		SetupUtil.cleanUp();
-
-		Env.reset();
+	public String[] path() {
+		return path;
 	}
 
+	public ModuleBootstrapParams path(String[] path) {
+		this.path = path;
+		return this;
+	}
 }

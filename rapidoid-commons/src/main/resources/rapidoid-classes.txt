@@ -544,6 +544,7 @@ org.rapidoid.jpa.impl.RapidoidPersistenceUnitInfo
 org.rapidoid.jpa.impl.SharedContextAwareEntityManagerProxy
 org.rapidoid.jpa.impl.SharedEntityManagerFactoryProxy
 org.rapidoid.jpa.JPA
+org.rapidoid.jpa.JPAModule
 org.rapidoid.jpa.JPATool
 org.rapidoid.jpa.JPAUtil
 org.rapidoid.jpa.JPQL
@@ -593,6 +594,7 @@ org.rapidoid.model.Items
 org.rapidoid.model.ModelPropertySelector
 org.rapidoid.model.Models
 org.rapidoid.model.Property
+org.rapidoid.ModuleBootstrapParams
 org.rapidoid.net.abstracts.Channel
 org.rapidoid.net.abstracts.ChannelHolder
 org.rapidoid.net.abstracts.IRequest

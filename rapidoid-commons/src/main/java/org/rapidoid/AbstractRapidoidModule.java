@@ -73,4 +73,14 @@ public abstract class AbstractRapidoidModule extends RapidoidThing implements Ra
 		// do nothing
 	}
 
+	@Override
+	public boolean preventsClassReload(String classname) {
+		return false;
+	}
+
+	@Override
+	public void bootstrap(ModuleBootstrapParams setup) {
+		// do nothing
+	}
+
 }

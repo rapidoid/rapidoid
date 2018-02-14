@@ -1,6 +1,6 @@
 /*-
  * #%L
- * rapidoid-http-server
+ * rapidoid-inject
  * %%
  * Copyright (C) 2014 - 2018 Nikolche Mihajlovski and contributors
  * %%
@@ -18,32 +18,32 @@
  * #L%
  */
 
-package org.rapidoid.http;
+package org.rapidoid.jpa;
 
 import org.rapidoid.AbstractRapidoidModule;
+import org.rapidoid.ModuleBootstrapParams;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.RapidoidModuleDesc;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.env.Env;
-import org.rapidoid.setup.App;
-import org.rapidoid.setup.My;
-import org.rapidoid.setup.On;
-import org.rapidoid.setup.SetupUtil;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.3.0")
-@RapidoidModuleDesc(name = "HTTP", order = 700)
-public class HttpModule extends AbstractRapidoidModule {
+@Since("5.6.0")
+@RapidoidModuleDesc(name = "JPA", order = 550)
+public class JPAModule extends AbstractRapidoidModule {
 
 	@Override
 	public void cleanUp() {
-		My.reset();
-		App.resetGlobalState();
-		On.changes().ignore();
+		JPAUtil.reset();
+	}
 
-		SetupUtil.cleanUp();
+	@Override
+	public void bootstrap(ModuleBootstrapParams setup) {
+		JPA.bootstrap(setup.path());
+	}
 
-		Env.reset();
+	@Override
+	public boolean preventsClassReload(String classname) {
+		return JPA.entities().contains(classname);
 	}
 
 }

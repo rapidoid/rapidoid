@@ -20,12 +20,11 @@
 
 package org.rapidoid.setup;
 
+import org.rapidoid.RapidoidModules;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.jpa.JPA;
 import org.rapidoid.reload.Reload;
-import org.rapidoid.util.MscOpts;
 
 import java.util.function.Predicate;
 
@@ -39,7 +38,8 @@ public class ReloadUtil extends RapidoidThing {
 	}
 
 	private static boolean isReloadForbidden(String classname) {
-		return MscOpts.hasRapidoidJPA() && JPA.entities().contains(classname);
+		return RapidoidModules.getAllAvailable().stream()
+			.anyMatch(module -> module.preventsClassReload(classname));
 	}
 
 }

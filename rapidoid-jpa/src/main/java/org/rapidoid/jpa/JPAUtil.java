@@ -25,6 +25,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.collection.Coll;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.jpa.impl.CustomHibernatePersistenceProvider;
@@ -49,9 +50,9 @@ public class JPAUtil extends RapidoidThing {
 
 	static volatile EntityManagerFactory emf;
 
-	static final List<String> entities = U.list();
+	static final List<String> entities = Coll.synchronizedList();
 
-	static final List<Class<?>> entityJavaTypes = U.list();
+	static final List<Class<?>> entityJavaTypes = Coll.synchronizedList();
 
 	public static void reset() {
 		emf = null;
@@ -63,7 +64,7 @@ public class JPAUtil extends RapidoidThing {
 		Ctx ctx = Ctxs.get();
 
 		if (ctx != null) {
-			return JPAInternals.wrapEM((EntityManager) ctx.persister());
+			return JPAInternals.wrapEM(ctx.persister());
 
 		} else {
 			EntityManagerFactory emf = JPAUtil.emf;

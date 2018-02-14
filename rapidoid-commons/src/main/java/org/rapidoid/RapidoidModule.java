@@ -43,4 +43,8 @@ public interface RapidoidModule {
 
 	void restartApp();
 
+	void bootstrap(ModuleBootstrapParams setup);
+
+	boolean preventsClassReload(String classname);
+
 }
