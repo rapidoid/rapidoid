@@ -660,7 +660,6 @@ org.rapidoid.RapidoidModule
 org.rapidoid.RapidoidModules
 org.rapidoid.RapidoidThing
 org.rapidoid.reload.ClassReloader
-org.rapidoid.reload.OptionalJPAUtil
 org.rapidoid.reload.Reload
 org.rapidoid.render.FileSystemTemplateStore
 org.rapidoid.render.Getter

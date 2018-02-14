@@ -27,6 +27,7 @@ import org.rapidoid.u.U;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 
 public class ClassReloaderTest extends TestCommons {
 
@@ -34,8 +35,9 @@ public class ClassReloaderTest extends TestCommons {
 	public void testReloading() throws ClassNotFoundException {
 		Set<String> classpath = ClasspathUtil.getClasspathFolders();
 		List<String> names = U.list();
+		Predicate<String> veto = classname -> false;
 
-		ClassReloader reloader = new ClassReloader(classpath, ClassReloaderTest.class.getClassLoader(), names);
+		ClassReloader reloader = new ClassReloader(classpath, ClassReloaderTest.class.getClassLoader(), names, veto);
 
 		Class<?> foo1 = reloader.loadClass(FooClass.class.getName());
 		Class<?> foo2 = reloader.loadClass(FooClass.class.getName());

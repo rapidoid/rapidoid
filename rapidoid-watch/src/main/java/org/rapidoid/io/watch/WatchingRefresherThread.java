@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -52,12 +53,16 @@ public class WatchingRefresherThread extends AbstractLoopThread {
 	private final Queue<String> modified;
 	private final Queue<String> deleted;
 
-	public WatchingRefresherThread(Collection<String> folders, Queue<String> created, Queue<String> modified, Queue<String> deleted, ClassRefresher refresher) {
+	private final Predicate<String> veto;
+
+	public WatchingRefresherThread(Collection<String> folders, Queue<String> created, Queue<String> modified,
+	                               Queue<String> deleted, ClassRefresher refresher, Predicate<String> veto) {
 		this.folders = folders;
 		this.created = created;
 		this.modified = modified;
 		this.deleted = deleted;
 		this.refresher = refresher;
+		this.veto = veto;
 
 		setName("reloader" + idGen.incrementAndGet());
 	}
@@ -100,7 +105,7 @@ public class WatchingRefresherThread extends AbstractLoopThread {
 
 		try {
 			List<String> classnames = filenamesToClassnames(filenames);
-			List<Class<?>> classes = Reload.reloadClasses(folders, classnames);
+			List<Class<?>> classes = Reload.reloadClasses(folders, classnames, veto);
 			refresher.refresh(classes, filenamesToClassnames(deletedFilenames));
 		} catch (Exception e) {
 			e.printStackTrace();

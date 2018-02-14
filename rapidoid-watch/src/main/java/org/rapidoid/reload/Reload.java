@@ -29,23 +29,26 @@ import org.rapidoid.u.U;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class Reload extends RapidoidThing {
 
-	public static ClassReloader createClassLoader() {
-		return createClassLoader(ClasspathUtil.getClasspathFolders());
+	public static ClassReloader createClassLoader(Predicate<String> veto) {
+		return createClassLoader(ClasspathUtil.getClasspathFolders(), veto);
 	}
 
-	public static ClassReloader createClassLoader(Collection<String> classpath) {
+	public static ClassReloader createClassLoader(Collection<String> classpath, Predicate<String> veto) {
 		Log.debug("Creating class loader", "classpath", classpath);
 		ClassLoader parentClassLoader = ClassReloader.class.getClassLoader();
-		return new ClassReloader(classpath, parentClassLoader, U.<String>list());
+		return new ClassReloader(classpath, parentClassLoader, U.list(), veto);
 	}
 
-	public static synchronized List<Class<?>> reloadClasses(Collection<String> classpath, List<String> classnames) {
-		ClassReloader classLoader = Reload.createClassLoader(classpath);
+	public static synchronized List<Class<?>> reloadClasses(Collection<String> classpath, List<String> classnames,
+	                                                        Predicate<String> veto) {
+
+		ClassReloader classLoader = Reload.createClassLoader(classpath, veto);
 
 		List<Class<?>> classes = U.list();
 
