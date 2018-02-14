@@ -7,9 +7,9 @@ set_versions() {
     NEW_VER=$2
 
     SNAPSHOT_VER=$(
-        grep -Po "<version>\d.\d.\d-SNAPSHOT</version>" pom.xml \
+        grep -Po "<version>\d+\.\d+\.\d+-SNAPSHOT</version>" pom.xml \
         | head -n 1 \
-        | grep -Po "\d.\d.\d-SNAPSHOT"
+        | grep -Po "\d+\.\d+\.\d+-SNAPSHOT"
     )
 }
 
