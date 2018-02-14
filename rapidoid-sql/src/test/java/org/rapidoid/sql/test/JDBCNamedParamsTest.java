@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,7 +19,6 @@
  */
 
 package org.rapidoid.sql.test;
-
 
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
@@ -45,7 +44,6 @@ public class JDBCNamedParamsTest extends SQLTestCommons {
 
 		List<Map<String, Object>> movies1 = JDBC.query("SELECT title as T FROM movie WHERE id = $id", U.map("id", 20)).all();
 		eq(movies1, U.list(U.map("T", "Hackers")));
-
 
 		List<Map<String, Object>> movies2 = JDBC.query("SELECT count(*) as N FROM movie WHERE id = $ID AND title = '$abc'", U.map("ID", 30)).all();
 		eq(movies2, U.list(U.map("N", 1L)));
