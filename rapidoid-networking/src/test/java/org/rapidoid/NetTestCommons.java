@@ -27,12 +27,12 @@ import org.rapidoid.log.Log;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.Server;
 import org.rapidoid.net.TCP;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.BasicTestCommons;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public abstract class NetTestCommons extends TestCommons {
+public abstract class NetTestCommons extends BasicTestCommons {
 
 	protected void server(Protocol protocol, Runnable client) {
 		Server server = TCP.server().protocol(protocol).build().start();
