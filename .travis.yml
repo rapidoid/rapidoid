@@ -1,7 +1,7 @@
 language: java
 sudo: false
 dist: trusty
-script: mvn clean install -DRAPIDOID_CI=true && bin/build-examples.sh
+script: mvn clean install -e -DRAPIDOID_CI=true && bin/build-examples.sh
 
 jdk:
   - oraclejdk8
