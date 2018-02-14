@@ -24,13 +24,13 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.BufRange;
 import org.rapidoid.data.KeyValueRanges;
-import org.rapidoid.test.BasicTestCommons;
+import org.rapidoid.test.TestCommons;
 
 import java.nio.ByteBuffer;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class BufferTestCommons extends BasicTestCommons {
+public class BufferTestCommons extends TestCommons {
 
 	protected void eq(String whole, BufRange range, String expected) {
 		eq(range.get(whole), expected);

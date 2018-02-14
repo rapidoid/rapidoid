@@ -18,10 +18,13 @@
 			<artifactId>rapidoid-commons</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
+		<!-- TEST -->
+
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-test-commons</artifactId>
+			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

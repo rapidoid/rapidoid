@@ -23,12 +23,13 @@ package org.rapidoid.docs.echoprotocol;
 import org.junit.Test;
 import org.rapidoid.net.Server;
 import org.rapidoid.net.TCP;
-import org.rapidoid.test.BasicTestCommons;
+import org.rapidoid.test.Doc;
+import org.rapidoid.test.TestCommons;
 
-public class Echo extends BasicTestCommons {
+public class Echo extends TestCommons {
 
 	@Test
-//	@Doc(title = "Implementing Echo protocol")
+	@Doc(title = "Implementing Echo protocol")
 	public void docs() {
 		Server server = TCP.server().protocol(new EchoProtocol()).port(5555).build().start();
 
