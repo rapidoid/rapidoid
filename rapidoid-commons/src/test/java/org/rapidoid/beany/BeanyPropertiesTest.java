@@ -20,7 +20,6 @@
 
 package org.rapidoid.beany;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -54,11 +53,12 @@ public class BeanyPropertiesTest extends BeanyTestCommons {
 	@Test
 	public void testGetPropValue() {
 		Baz baz = new Baz();
-		Assert.assertEquals(baz.x, Beany.getPropValue(baz, "x"));
+		Object bazX = Beany.getPropValue(baz, "x");
+		eq(baz.x, bazX);
 	}
 
 	public void testGetIdValue() {
 		Baz baz = new Baz();
-		Assert.assertEquals("114", Beany.getId(baz));
+		eq("114", Beany.getId(baz));
 	}
 }
