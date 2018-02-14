@@ -88,7 +88,7 @@
 
 	<modules>
 		<module>commons</module>
-		<module>networking</module>
+		<module>rapidoid-networking</module>
 		<module>rapidoid-sql</module>
 		<module>rapidoid-jpa</module>
 		<module>rapidoid-inject</module>

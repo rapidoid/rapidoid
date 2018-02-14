@@ -1,0 +1,66 @@
+/*-
+ * #%L
+ * rapidoid-networking
+ * %%
+ * Copyright (C) 2014 - 2018 Nikolche Mihajlovski and contributors
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
+package org.rapidoid.net.impl;
+
+
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.net.Protocol;
+import org.rapidoid.u.U;
+
+import java.net.InetSocketAddress;
+import java.nio.channels.SocketChannel;
+
+@Authors("Nikolche Mihajlovski")
+@Since("5.5.0")
+public class ConnectionTarget extends RapidoidThing {
+
+	volatile SocketChannel socketChannel;
+
+	final InetSocketAddress addr;
+
+	volatile long retryAfter;
+
+	final Protocol protocol;
+
+	final ChannelHolderImpl holder;
+
+	final boolean reconnecting;
+
+	final ConnState state;
+
+	public ConnectionTarget(SocketChannel socketChannel, InetSocketAddress addr, Protocol protocol,
+	                        ChannelHolderImpl holder, boolean reconnecting, ConnState state) {
+
+		U.notNull(protocol, "connection protocol");
+		U.notNull(holder, "connection holder");
+
+		this.socketChannel = socketChannel;
+		this.addr = addr;
+		this.protocol = protocol;
+		this.retryAfter = U.time();
+		this.holder = holder;
+		this.reconnecting = reconnecting;
+		this.state = state;
+	}
+
+}
