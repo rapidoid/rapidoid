@@ -23,7 +23,6 @@ package org.rapidoid.util;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Nums;
 import org.rapidoid.test.TestCommons;
 
 import java.io.File;
@@ -98,27 +97,6 @@ public class MscTest extends TestCommons {
 		UUID uuid = UUID.randomUUID();
 		UUID uuid2 = Msc.bytesToUUID(Msc.uuidToBytes(uuid));
 		eq(uuid2, uuid);
-	}
-
-	@Test
-	public void testLog2() {
-		eq(Nums.log2(1), 0);
-		eq(Nums.log2(2), 1);
-
-		eq(Nums.log2(3), 2);
-		eq(Nums.log2(4), 2);
-
-		eq(Nums.log2(5), 3);
-		eq(Nums.log2(8), 3);
-
-		eq(Nums.log2(9), 4);
-		eq(Nums.log2(16), 4);
-
-		eq(Nums.log2(1024), 10);
-		eq(Nums.log2(65536), 16);
-		eq(Nums.log2(65536 * 1024), 26);
-
-		eq(Nums.log2(Integer.MAX_VALUE), 31);
 	}
 
 }
