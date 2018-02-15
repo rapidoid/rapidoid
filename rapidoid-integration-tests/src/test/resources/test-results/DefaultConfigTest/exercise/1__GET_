@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 19415
+Content-Length: 19312
 
 <!DOCTYPE html>
 <html lang="en">
@@ -750,10 +750,6 @@ Content-Length: 19415
             <tr>
               <td>Configuration</td>
               <td>/_config</td>
-            </tr>
-            <tr>
-              <td>Processes</td>
-              <td>/_processes</td>
             </tr>
             <tr>
               <td>Metrics</td>

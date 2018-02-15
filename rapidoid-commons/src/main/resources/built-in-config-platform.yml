@@ -19,7 +19,6 @@ center-zone:
     Routes: /rapidoid/routes
     Configuration: /rapidoid/config
     Deployment: /rapidoid/deployment
-    Processes: /rapidoid/processes
     Metrics: /rapidoid/metrics
     Manageables: /rapidoid/manageables
     System:

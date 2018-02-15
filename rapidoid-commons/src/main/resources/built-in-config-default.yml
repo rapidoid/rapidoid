@@ -16,7 +16,6 @@ center-zone:
     Overview: /_
     Routes: /_routes
     Configuration: /_config
-    Processes: /_processes
     Metrics: /_metrics
     Manageables: /_manageables
     Application:
