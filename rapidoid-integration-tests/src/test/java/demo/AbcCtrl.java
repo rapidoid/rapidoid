@@ -18,20 +18,21 @@
  * #L%
  */
 
-package demo.rapidoid.reload;
+package demo;
 
 import org.rapidoid.annotation.Controller;
 import org.rapidoid.annotation.GET;
-import org.rapidoid.ioc.Wired;
+
+import javax.inject.Inject;
 
 @Controller
-public class Abc {
+public class AbcCtrl {
 
-	@Wired
+	@Inject
 	private Foo foo;
 
-	@GET("/")
-	public String index() {
+	@GET
+	public String hey() {
 		return "hey:" + foo.foo();
 	}
 

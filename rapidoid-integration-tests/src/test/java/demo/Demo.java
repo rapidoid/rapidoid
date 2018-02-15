@@ -21,14 +21,18 @@
 package demo;
 
 import org.rapidoid.http.Self;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 
 public class Demo {
 
 	public static void main(String[] args) {
-		On.get("/foo/{x}").json((String x) -> x);
+		App.bootstrap(args, "users.admin.password=a", "secret=X").full();
 
-		Self.get("/foo/ABC").print();
+		On.get("/length/{x}").json((String x) -> x.length());
+
+		Self.get("/length/abc").print();
+		Self.get("/hey").print();
 	}
 
 }

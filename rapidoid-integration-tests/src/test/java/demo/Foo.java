@@ -18,7 +18,7 @@
  * #L%
  */
 
-package demo.rapidoid.reload;
+package demo;
 
 public class Foo {
 
