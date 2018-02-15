@@ -53,7 +53,10 @@ public interface Cache<K, V> {
 	 */
 	void clear();
 
-	int size();
+	/**
+	 * Returns (an estimation of) the number of entries in the cache.
+	 */
+	long size();
 
 	/**
 	 * Notifies the cache that it's being bypassed due to any reason (useful for stats).
@@ -64,5 +67,20 @@ public interface Cache<K, V> {
 	 * Retrieves the cache statistics.
 	 */
 	CacheStats stats();
+
+	/**
+	 * Retrieves the cache name.
+	 */
+	String name();
+
+	/**
+	 * Retrieves the cache capacity.
+	 */
+	int capacity();
+
+	/**
+	 * Retrieves the cache TTL.
+	 */
+	long ttl();
 
 }

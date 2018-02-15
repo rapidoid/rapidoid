@@ -23,15 +23,17 @@ package org.rapidoid.cache.impl;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cache.Cache;
 import org.rapidoid.cache.CacheDSL;
+import org.rapidoid.cache.CaffeineCache;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
 public class CacheFactory extends RapidoidThing {
 
-	public static <K, V> ConcurrentCache<K, V> create(CacheDSL<K, V> params) {
-		return ConcurrentCache.create(params.name(), params.capacity(), params.loader(), params.ttl(),
-			params.crawler(), params.statistics(), params.manageable());
+	public static <K, V> Cache<K, V> create(CacheDSL<K, V> params) {
+		return new CaffeineCache<>(params.name(), params.capacity(), params.loader(), params.ttl(),
+			params.statistics(), params.manageable());
 	}
 
 }

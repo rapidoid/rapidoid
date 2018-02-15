@@ -30,48 +30,78 @@ import java.util.concurrent.atomic.AtomicLong;
 @Since("5.3.0")
 public class CacheStats extends RapidoidThing {
 
-	public final AtomicLong hits = new AtomicLong();
+	private final com.github.benmanes.caffeine.cache.stats.CacheStats stats;
 
-	public final AtomicLong misses = new AtomicLong();
+	private final AtomicLong bypassed;
 
-	public final AtomicLong errors = new AtomicLong();
-
-	public final AtomicLong bypassed = new AtomicLong();
-
-	public final AtomicLong crawls = new AtomicLong();
-
-	public final AtomicLong l1Hits = new AtomicLong();
-
-	public final AtomicLong l1Misses = new AtomicLong();
-
-	public void reset() {
-		// basic
-		hits.set(0);
-		misses.set(0);
-		errors.set(0);
-		bypassed.set(0);
-
-		// additional
-		crawls.set(0);
-		l1Hits.set(0);
-		l1Misses.set(0);
+	public CacheStats(com.github.benmanes.caffeine.cache.stats.CacheStats stats, AtomicLong bypassed) {
+		this.stats = stats;
+		this.bypassed = bypassed;
 	}
 
-	public long total() {
-		// without the additional stats
-		return hits.get() + misses.get() + errors.get() + bypassed.get();
+	public long requests() {
+		return stats.requestCount();
+	}
+
+	public long hits() {
+		return stats.hitCount();
+	}
+
+	public double hitRate() {
+		return stats.hitRate();
+	}
+
+	public long misses() {
+		return stats.missCount();
+	}
+
+	public double missRate() {
+		return stats.missRate();
+	}
+
+	public long loads() {
+		return stats.loadCount();
+	}
+
+	public long errors() {
+		return stats.loadFailureCount();
+	}
+
+	public double errorRate() {
+		return stats.loadFailureRate();
+	}
+
+	public long totalLoadTime() {
+		return stats.totalLoadTime();
+	}
+
+	public double averageLoadPenalty() {
+		return stats.averageLoadPenalty();
+	}
+
+	public long evictions() {
+		return stats.evictionCount();
+	}
+
+	public long bypassed() {
+		return bypassed.get();
 	}
 
 	@Override
 	public String toString() {
 		return "CacheStats{" +
-			"hits=" + hits +
-			", misses=" + misses +
-			", errors=" + errors +
-			", bypassed=" + bypassed +
-			", crawls=" + crawls +
-			", l1Hits=" + l1Hits +
-			", l1Misses=" + l1Misses +
+			"requests=" + requests() +
+			", hits=" + hits() +
+			", hitRate=" + hitRate() +
+			", misses=" + misses() +
+			", missRate=" + missRate() +
+			", loads=" + loads() +
+			", errors=" + errors() +
+			", errorRate=" + errorRate() +
+			", evictions=" + evictions() +
+			", bypassed=" + bypassed() +
+			", totalLoadTime=" + totalLoadTime() +
+			", averageLoadPenalty=" + averageLoadPenalty() +
 			'}';
 	}
 }

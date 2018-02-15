@@ -54,4 +54,8 @@ public class Nums extends RapidoidThing {
 		return (short) ((a << 8) + b);
 	}
 
+	public static double percent(double x) {
+		return Math.round(x * 10000.0) / 100.0;
+	}
+
 }

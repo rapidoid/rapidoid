@@ -22,6 +22,8 @@ package org.rapidoid.cache.impl;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cache.Cache;
+import org.rapidoid.commons.Nums;
 import org.rapidoid.group.Action;
 import org.rapidoid.group.AutoManageable;
 import org.rapidoid.group.ManageableBean;
@@ -34,9 +36,9 @@ import java.util.List;
 @ManageableBean(kind = "cache")
 public class ManageableCache extends AutoManageable<ManageableCache> {
 
-	private final ConcurrentCache<?, ?> cache;
+	private final Cache<?, ?> cache;
 
-	public ManageableCache(ConcurrentCache<?, ?> cache) {
+	public ManageableCache(Cache<?, ?> cache) {
 		super(cache.name());
 		this.cache = cache;
 	}
@@ -52,31 +54,34 @@ public class ManageableCache extends AutoManageable<ManageableCache> {
 	}
 
 	public long ttl() {
-		return cache.ttlInMs();
+		return cache.ttl();
+	}
+
+	public long loads() {
+		return cache.stats().loads();
 	}
 
 	public long misses() {
-		return cache.stats().misses.get();
+		return cache.stats().misses();
 	}
 
 	public long hits() {
-		return cache.stats().hits.get();
+		return cache.stats().hits();
 	}
 
 	public long errors() {
-		return cache.stats().errors.get();
+		return cache.stats().errors();
 	}
 
 	public long bypassed() {
-		return cache.stats().bypassed.get();
+		return cache.stats().bypassed();
 	}
 
 	public String hitRate() {
-		long total = cache.stats().total();
-		return total != 0 ? Math.round(hits() * 10000.0 / total) / 100.0 + " %" : "";
+		return Nums.percent(cache.stats().hitRate()) + " %";
 	}
 
-	public int size() {
+	public long size() {
 		return cache.size();
 	}
 

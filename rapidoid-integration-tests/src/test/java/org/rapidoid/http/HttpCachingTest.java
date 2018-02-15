@@ -37,14 +37,13 @@ public class HttpCachingTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testHttpCaching() {
-
 		// without caching
 		AtomicInteger x = new AtomicInteger();
-		On.get("/x").plain(() -> x.incrementAndGet());
+		On.get("/x").plain(x::incrementAndGet);
 
 		// with caching
 		AtomicInteger y = new AtomicInteger();
-		On.get("/y").cacheTTL(1000).plain(() -> y.incrementAndGet());
+		On.get("/y").cacheTTL(1000).plain(y::incrementAndGet);
 
 		exerciseCaching();
 	}
@@ -64,14 +63,12 @@ public class HttpCachingTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testHttpCachingWithAnnotations() {
-
 		App.beans(CachingCtrl.class);
 
 		exerciseCaching();
 	}
 
 	static class CachingCtrl {
-
 		// without caching
 		AtomicInteger x = new AtomicInteger();
 

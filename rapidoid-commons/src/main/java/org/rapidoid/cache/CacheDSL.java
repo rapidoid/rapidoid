@@ -46,23 +46,6 @@ public class CacheDSL<K, V> extends RapidoidThing {
 
 	private volatile boolean manageable;
 
-	/**
-	 * Please use loader(...) instead.
-	 */
-	@Deprecated
-	public CacheDSL<K, V> of(Mapper<K, V> of) {
-		this.loader = of;
-		return this;
-	}
-
-	/**
-	 * Please use loader() instead.
-	 */
-	@Deprecated
-	public Mapper<K, V> of() {
-		return this.loader;
-	}
-
 	public Mapper<K, V> loader() {
 		return loader;
 	}
