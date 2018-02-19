@@ -204,7 +204,7 @@ public abstract class AbstractRapidoidMojo extends AbstractMojo {
 			.replace("$url", U.or(project.getUrl(), "?"))
 			.replace("$main", U.safe(mainClass));
 
-		try (FileSystem fs = FileSystems.newFileSystem(uri, U.<String, Object>map())) {
+		try (FileSystem fs = FileSystems.newFileSystem(uri, U.map())) {
 			Path manifest = fs.getPath("META-INF/MANIFEST.MF");
 			try (Writer writer = Files.newBufferedWriter(manifest, StandardCharsets.UTF_8, StandardOpenOption.CREATE)) {
 				writer.write(manifestContent);

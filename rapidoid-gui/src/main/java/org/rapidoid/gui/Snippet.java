@@ -66,7 +66,7 @@ public class Snippet extends AbstractWidget<Snippet> {
 
 		snippet = Str.replace(snippet, regex, new Mapper<String[], String>() {
 			@Override
-			public String map(String[] src) throws Exception {
+			public String map(String[] src) {
 				String s = src[0];
 				char ch = s.charAt(0);
 

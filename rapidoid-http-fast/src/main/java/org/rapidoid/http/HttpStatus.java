@@ -27,6 +27,6 @@ import org.rapidoid.annotation.Since;
 @Since("5.0.0")
 public enum HttpStatus {
 
-	DONE, NOT_FOUND, ERROR, ASYNC;
+	DONE, NOT_FOUND, ERROR, ASYNC
 
 }

@@ -288,9 +288,9 @@ public class Coll extends RapidoidThing {
 
 				@SuppressWarnings("unchecked")
 				@Override
-				public V map(K key) throws Exception {
+				public V map(K key) {
 					try {
-						return (V) constructor.newInstance(key);
+						return constructor.newInstance(key);
 					} catch (Exception e) {
 						throw U.rte(e);
 					}
@@ -312,9 +312,9 @@ public class Coll extends RapidoidThing {
 
 				@SuppressWarnings("unchecked")
 				@Override
-				public V map(K key) throws Exception {
+				public V map(K key) {
 					try {
-						return (V) defConstructor.newInstance();
+						return defConstructor.newInstance();
 					} catch (Exception e) {
 						throw U.rte(e);
 					}
@@ -327,7 +327,7 @@ public class Coll extends RapidoidThing {
 		return autoExpandingMap(new Mapper<K1, Map<K2, V>>() {
 
 			@Override
-			public Map<K2, V> map(K1 src) throws Exception {
+			public Map<K2, V> map(K1 src) {
 				return synchronizedMap();
 			}
 
@@ -338,7 +338,7 @@ public class Coll extends RapidoidThing {
 		return autoExpandingMap(new Mapper<K1, Map<K2, Map<K3, V>>>() {
 
 			@Override
-			public Map<K2, Map<K3, V>> map(K1 src) throws Exception {
+			public Map<K2, Map<K3, V>> map(K1 src) {
 				return mapOfMaps();
 			}
 
@@ -350,7 +350,7 @@ public class Coll extends RapidoidThing {
 
 			@SuppressWarnings("unchecked")
 			@Override
-			public List<V> map(K src) throws Exception {
+			public List<V> map(K src) {
 				return synchronizedList();
 			}
 
@@ -361,7 +361,7 @@ public class Coll extends RapidoidThing {
 		return autoExpandingMap(new Mapper<K1, Map<K2, List<V>>>() {
 
 			@Override
-			public Map<K2, List<V>> map(K1 src) throws Exception {
+			public Map<K2, List<V>> map(K1 src) {
 				return mapOfLists();
 			}
 
@@ -373,7 +373,7 @@ public class Coll extends RapidoidThing {
 
 			@SuppressWarnings("unchecked")
 			@Override
-			public Set<V> map(K src) throws Exception {
+			public Set<V> map(K src) {
 				return synchronizedSet();
 			}
 
@@ -384,7 +384,7 @@ public class Coll extends RapidoidThing {
 		return autoExpandingMap(new Mapper<K1, Map<K2, Set<V>>>() {
 
 			@Override
-			public Map<K2, Set<V>> map(K1 src) throws Exception {
+			public Map<K2, Set<V>> map(K1 src) {
 				return mapOfSets();
 			}
 

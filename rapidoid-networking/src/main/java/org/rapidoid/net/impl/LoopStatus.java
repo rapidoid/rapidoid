@@ -27,6 +27,6 @@ import org.rapidoid.annotation.Since;
 @Since("2.0.0")
 public enum LoopStatus {
 
-	INIT, BEFORE_LOOP, LOOP, AFTER_LOOP, STOPPED, FAILED;
+	INIT, BEFORE_LOOP, LOOP, AFTER_LOOP, STOPPED, FAILED
 
 }

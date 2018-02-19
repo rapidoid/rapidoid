@@ -34,7 +34,7 @@ public class HttpTokenTest extends HttpTestCommons {
 	public void testHttpToken() {
 		On.req(new ReqRespHandler() {
 			@Override
-			public Object execute(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) {
 				Log.info("Token", "data", req.token());
 
 				int n = req.token("n", 0) + 1;

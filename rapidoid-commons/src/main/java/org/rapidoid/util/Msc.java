@@ -94,7 +94,7 @@ public class Msc extends RapidoidThing {
 
 	public static final Mapper<Object, Object> TRANSFORM_TO_SIMPLE_CLASS_NAME = new Mapper<Object, Object>() {
 		@Override
-		public Object map(Object src) throws Exception {
+		public Object map(Object src) {
 			if (src == null) {
 				return null;
 			}
@@ -372,7 +372,6 @@ public class Msc extends RapidoidThing {
 					latch.countDown();
 				}
 
-				;
 			}.start();
 		}
 
@@ -386,7 +385,7 @@ public class Msc extends RapidoidThing {
 	public static void multiThreaded(int threadsN, final Runnable executable) {
 		multiThreaded(threadsN, new Mapper<Integer, Void>() {
 			@Override
-			public Void map(Integer n) throws Exception {
+			public Void map(Integer n) {
 				executable.run();
 				return null;
 			}

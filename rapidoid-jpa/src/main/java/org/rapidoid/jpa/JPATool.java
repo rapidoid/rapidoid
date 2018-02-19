@@ -76,7 +76,7 @@ public class JPATool extends RapidoidThing {
 		return transactional(new Callable<E>() {
 
 			@Override
-			public E call() throws Exception {
+			public E call() {
 				em.persist(entity);
 				return entity;
 			}
@@ -90,7 +90,7 @@ public class JPATool extends RapidoidThing {
 		return transactional(new Callable<E>() {
 
 			@Override
-			public E call() throws Exception {
+			public E call() {
 				if (em.contains(entity)) {
 					em.persist(entity);
 					return entity;
@@ -106,7 +106,7 @@ public class JPATool extends RapidoidThing {
 		return transactional(new Callable<E>() {
 
 			@Override
-			public E call() throws Exception {
+			public E call() {
 				return em.merge(entity);
 			}
 
@@ -117,7 +117,7 @@ public class JPATool extends RapidoidThing {
 		transactional(new Callable<E>() {
 
 			@Override
-			public E call() throws Exception {
+			public E call() {
 				em.remove(get(clazz, id));
 				return null;
 			}
@@ -129,7 +129,7 @@ public class JPATool extends RapidoidThing {
 		transactional(new Callable<Object>() {
 
 			@Override
-			public Object call() throws Exception {
+			public Object call() {
 				em.remove(entity);
 				return null;
 			}
@@ -237,7 +237,7 @@ public class JPATool extends RapidoidThing {
 		transactional(new Callable<Object>() {
 
 			@Override
-			public Object call() throws Exception {
+			public Object call() {
 				em.flush();
 				return null;
 			}

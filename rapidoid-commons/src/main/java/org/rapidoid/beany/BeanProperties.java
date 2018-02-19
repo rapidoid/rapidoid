@@ -55,7 +55,7 @@ public class BeanProperties extends RapidoidThing implements Iterable<Prop> {
 	public final Map<PropertySelector, BeanProperties> selections = Coll
 		.autoExpandingMap(new Mapper<PropertySelector, BeanProperties>() {
 			@Override
-			public BeanProperties map(PropertySelector selector) throws Exception {
+			public BeanProperties map(PropertySelector selector) {
 
 				Set<String> include = selector.include();
 				Set<String> exclude = selector.exclude();

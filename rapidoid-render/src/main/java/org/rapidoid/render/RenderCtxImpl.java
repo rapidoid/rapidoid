@@ -50,17 +50,17 @@ public class RenderCtxImpl extends RapidoidThing implements RenderCtx {
 	private volatile boolean busy;
 
 	@Override
-	public void printAscii(String s) throws IOException {
+	public void printAscii(String s) {
 		WritableUtils.writeAscii(out, s);
 	}
 
 	@Override
-	public void printAscii(byte[] bytes) throws IOException {
+	public void printAscii(byte[] bytes) {
 		WritableUtils.writeAscii(out, bytes);
 	}
 
 	@Override
-	public void printUTF8(String s) throws IOException {
+	public void printUTF8(String s) {
 		WritableUtils.writeUTF8(out, s);
 	}
 

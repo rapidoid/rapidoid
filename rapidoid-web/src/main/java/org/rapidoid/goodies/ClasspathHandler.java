@@ -35,7 +35,7 @@ import java.util.concurrent.Callable;
 public class ClasspathHandler extends GUI implements Callable<Object> {
 
 	@Override
-	public Object call() throws Exception {
+	public Object call() {
 		List<Object> info = U.list();
 
 		if (!Msc.isPlatform()) {

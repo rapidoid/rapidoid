@@ -122,7 +122,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> implements
 
 		connections = Pools.create("connections", new Callable<RapidoidConnection>() {
 			@Override
-			public RapidoidConnection call() throws Exception {
+			public RapidoidConnection call() {
 				return newConnection(false);
 			}
 		}, 100000);
@@ -149,7 +149,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> implements
 	}
 
 	@Override
-	protected void readOP(SelectionKey key) throws IOException {
+	protected void readOP(SelectionKey key) {
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 		RapidoidConnection conn = (RapidoidConnection) key.attachment();
 
@@ -380,7 +380,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> implements
 	}
 
 	@Override
-	protected void writeOP(SelectionKey key) throws IOException {
+	protected void writeOP(SelectionKey key) {
 		RapidoidConnection conn = (RapidoidConnection) key.attachment();
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 

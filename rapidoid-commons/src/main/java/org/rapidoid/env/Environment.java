@@ -55,7 +55,7 @@ public class Environment extends RapidoidInitializer {
 
 	private final LazyInit<Map<String, String>> argsAsMap = new LazyInit<>(new Callable<Map<String, String>>() {
 		@Override
-		public Map<String, String> call() throws Exception {
+		public Map<String, String> call() {
 			U.notNull(args, "environment args");
 			return Msc.parseArgs(args);
 		}

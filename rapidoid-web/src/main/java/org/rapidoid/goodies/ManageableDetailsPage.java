@@ -48,9 +48,9 @@ public class ManageableDetailsPage extends GUI implements ReqRespHandler {
 	@Override
 	public Object execute(Req req, Resp resp) {
 
-		String type = mngType != null ? mngType : req.<String>data("type");
-		String id = mngId != null ? mngId : req.<String>data("id");
-		String sub = mngSub != null ? mngSub : req.<String>data("_", null);
+		String type = mngType != null ? mngType : req.data("type");
+		String id = mngId != null ? mngId : req.data("id");
+		String sub = mngSub != null ? mngSub : req.data("_", null);
 
 		List<String> nav = U.list(type, id);
 		if (U.notEmpty(sub)) Collections.addAll(nav, sub.split("/"));

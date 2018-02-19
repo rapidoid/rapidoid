@@ -40,7 +40,7 @@ public class PredefinedResponseHandler extends AbstractDecoratingHttpHandler {
 	}
 
 	@Override
-	protected Object handleReq(Channel ctx, boolean isKeepAlive, Req req) throws Exception {
+	protected Object handleReq(Channel ctx, boolean isKeepAlive, Req req) {
 		return response;
 	}
 

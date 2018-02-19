@@ -53,7 +53,7 @@ public abstract class AbstractReverseProxyBean<T> extends RapidoidThing {
 
 	private final LazyInit<HttpClient> client = new LazyInit<HttpClient>(new Callable<HttpClient>() {
 		@Override
-		public HttpClient call() throws Exception {
+		public HttpClient call() {
 			return createClient();
 		}
 	});

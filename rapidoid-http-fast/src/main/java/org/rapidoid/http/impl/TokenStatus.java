@@ -27,6 +27,6 @@ import org.rapidoid.annotation.Since;
 @Since("5.2.0")
 public enum TokenStatus {
 
-	PENDING, NONE, LOADED, INVALID;
+	PENDING, NONE, LOADED, INVALID
 
 }

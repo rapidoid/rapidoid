@@ -67,7 +67,7 @@ public class JdbcUtil extends RapidoidThing {
 	private static String substituteNamedParams(String sql, final Map<String, ?> namedArgs, final List<Object> arguments) {
 		return NAMED_PARAMS_REWRITER.rewrite(sql, new Mapper<String[], String>() {
 			@Override
-			public String map(String[] groups) throws Exception {
+			public String map(String[] groups) {
 				String name = groups[1];
 
 				if (namedArgs.containsKey(name)) {

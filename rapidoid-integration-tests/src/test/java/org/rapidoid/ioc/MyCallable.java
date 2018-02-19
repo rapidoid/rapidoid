@@ -33,7 +33,7 @@ public class MyCallable implements Callable<String> {
 	Foo foo;
 
 	@Override
-	public String call() throws Exception {
+	public String call() {
 		return "abc";
 	}
 

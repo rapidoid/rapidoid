@@ -308,7 +308,7 @@ public class BeanProp extends RapidoidThing implements Prop {
 	@SuppressWarnings("unchecked")
 	private void collSet(Object target, Object value) {
 		U.must(value instanceof Collection<?>, "Expected a collection, but found: %s", value);
-		Collection<Object> coll = (Collection<Object>) get(target);
+		Collection<Object> coll = get(target);
 
 		if (coll == null) {
 			coll = (Collection<Object>) Cls.newInstance(type);
@@ -321,7 +321,7 @@ public class BeanProp extends RapidoidThing implements Prop {
 	@SuppressWarnings("unchecked")
 	private void mapSet(Object target, Object value) {
 		U.must(value instanceof Map, "Expected a map, but found: %s", value);
-		Map<Object, Object> map = (Map<Object, Object>) get(target);
+		Map<Object, Object> map = get(target);
 
 		if (map == null) {
 			map = (Map<Object, Object>) Cls.newInstance(type);
@@ -483,11 +483,8 @@ public class BeanProp extends RapidoidThing implements Prop {
 		} else if (!name.equals(other.name))
 			return false;
 		if (type == null) {
-			if (other.type != null)
-				return false;
-		} else if (!type.equals(other.type))
-			return false;
-		return true;
+			return other.type == null;
+		} else return type.equals(other.type);
 	}
 
 }

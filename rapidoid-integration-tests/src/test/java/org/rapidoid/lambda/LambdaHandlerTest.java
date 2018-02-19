@@ -36,7 +36,7 @@ public class LambdaHandlerTest extends IsolatedIntegrationTest {
 	public void testLambdaHandlerWithAnonymousClass() {
 		TwoParamLambda<Resp, Req, Integer> oneParamLambda = new TwoParamLambda<Resp, Req, Integer>() {
 			@Override
-			public Resp execute(Req param, Integer x) throws Exception {
+			public Resp execute(Req param, Integer x) {
 				return param.response().result("x=" + x);
 			}
 		};

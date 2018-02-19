@@ -46,7 +46,7 @@ public class Conf extends RapidoidThing {
 
 	private static final Map<String, Config> SECTIONS = Coll.autoExpandingMap(new Mapper<String, Config>() {
 		@Override
-		public Config map(String name) throws Exception {
+		public Config map(String name) {
 			return createSection(name);
 		}
 	});

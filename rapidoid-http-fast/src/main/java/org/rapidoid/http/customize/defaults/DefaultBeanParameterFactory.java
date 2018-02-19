@@ -34,7 +34,7 @@ import java.util.Map;
 public class DefaultBeanParameterFactory extends RapidoidThing implements BeanParameterFactory {
 
 	@Override
-	public Object getParamValue(Req req, Class<?> paramType, String paramName, Map<String, Object> properties) throws Exception {
+	public Object getParamValue(Req req, Class<?> paramType, String paramName, Map<String, Object> properties) {
 		return Customization.of(req).objectMapper().convertValue(properties, paramType);
 	}
 

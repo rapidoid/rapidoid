@@ -86,7 +86,7 @@ public class Models extends RapidoidThing {
 	public static List<Property> propertiesOf(Object target, String... propertyNames) {
 		return properties(Beany.propertiesOf(target).select(new ModelPropertySelector(propertyNames) {
 			@Override
-			public boolean eval(Prop prop) throws Exception {
+			public boolean eval(Prop prop) {
 				return isReadable(prop);
 			}
 		}));
@@ -95,7 +95,7 @@ public class Models extends RapidoidThing {
 	public static List<Property> editablePropertiesOf(Object target, String... propertyNames) {
 		return properties(Beany.propertiesOf(target).select(new ModelPropertySelector(propertyNames) {
 			@Override
-			public boolean eval(Prop prop) throws Exception {
+			public boolean eval(Prop prop) {
 				return isEditable(prop);
 			}
 		}));
@@ -104,7 +104,7 @@ public class Models extends RapidoidThing {
 	public static List<Property> readablePropertiesOf(Object target, String... propertyNames) {
 		return properties(Beany.propertiesOf(target).select(new ModelPropertySelector(propertyNames) {
 			@Override
-			public boolean eval(Prop prop) throws Exception {
+			public boolean eval(Prop prop) {
 				return isReadable(prop);
 			}
 		}));
@@ -138,11 +138,7 @@ public class Models extends RapidoidThing {
 			return false;
 		}
 
-		if (prop.isReadOnly() && !Collection.class.isAssignableFrom(prop.getType())) {
-			return false;
-		}
-
-		return true;
+		return !prop.isReadOnly() || Collection.class.isAssignableFrom(prop.getType());
 	}
 
 	public static boolean isReadable(Prop prop) {

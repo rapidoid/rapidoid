@@ -49,7 +49,7 @@ public class RapidoidTemplateFactory extends RapidoidThing implements TemplateFa
 
 		compiledTemplates = Caching.of(new Mapper<String, RapidoidTemplate>() {
 			@Override
-			public RapidoidTemplate map(String filename) throws Exception {
+			public RapidoidTemplate map(String filename) {
 				return loadAndCompile(filename);
 			}
 		}).name(name).capacity(10000).ttl(CACHE_TTL).manageable(true).statistics(true).build();

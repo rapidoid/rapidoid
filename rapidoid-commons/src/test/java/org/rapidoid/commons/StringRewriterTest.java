@@ -68,7 +68,7 @@ public class StringRewriterTest extends AbstractCommonsTest {
 
 		Mapper<String[], String> replacer = new Mapper<String[], String>() {
 			@Override
-			public String map(String[] groups) throws Exception {
+			public String map(String[] groups) {
 				return "<" + groups[0].toUpperCase() + ">";
 			}
 		};
@@ -97,7 +97,7 @@ public class StringRewriterTest extends AbstractCommonsTest {
 
 		String s2 = Str.replace(s, mask, regex, new Mapper<String[], String>() {
 			@Override
-			public String map(String[] src) throws Exception {
+			public String map(String[] src) {
 				return "-";
 			}
 		});

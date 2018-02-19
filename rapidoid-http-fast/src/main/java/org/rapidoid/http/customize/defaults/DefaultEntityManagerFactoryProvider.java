@@ -34,7 +34,7 @@ import javax.persistence.EntityManagerFactory;
 public class DefaultEntityManagerFactoryProvider extends RapidoidThing implements EntityManagerFactoryProvider {
 
 	@Override
-	public EntityManagerFactory getEntityManagerFactory(Req req) throws Exception {
+	public EntityManagerFactory getEntityManagerFactory(Req req) {
 		return JPA.provideEmf();
 	}
 

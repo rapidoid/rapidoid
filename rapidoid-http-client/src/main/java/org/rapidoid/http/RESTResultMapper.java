@@ -33,7 +33,7 @@ public class RESTResultMapper<T> extends RapidoidThing implements Mapper<HttpRes
 	}
 
 	@Override
-	public T map(HttpResp resp) throws Exception {
+	public T map(HttpResp resp) {
 		return !resultType.equals(void.class) ? Parse.data(resp.bodyBytes(), resultType) : null;
 	}
 

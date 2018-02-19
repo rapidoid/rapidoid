@@ -48,7 +48,7 @@ public class DefaultSessionManager extends RapidoidThing implements SessionManag
 	private final Map<String, SessionHolder> sessions = Coll.autoExpandingMap(String.class, SessionHolder.class);
 
 	@Override
-	public Map<String, Serializable> loadSession(Req req, String sessionId) throws Exception {
+	public Map<String, Serializable> loadSession(Req req, String sessionId) {
 		Fire.event(Events.SESSION_LOAD, "id", sessionId);
 
 		SessionHolder holder = sessions.get(sessionId);
@@ -74,7 +74,7 @@ public class DefaultSessionManager extends RapidoidThing implements SessionManag
 	}
 
 	@Override
-	public void saveSession(Req req, String sessionId, Map<String, Serializable> session) throws Exception {
+	public void saveSession(Req req, String sessionId, Map<String, Serializable> session) {
 		Fire.event(Events.SESSION_SAVE, "id", sessionId);
 
 		SessionHolder holder = sessions.get(sessionId);

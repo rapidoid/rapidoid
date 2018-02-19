@@ -23,7 +23,6 @@ package org.rapidoid.util;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
-import java.io.IOException;
 import java.io.OutputStream;
 
 @Authors("Nikolche Mihajlovski")
@@ -39,15 +38,15 @@ public class NullOutputStream extends OutputStream {
 	}
 
 	@Override
-	public void write(byte[] b) throws IOException {
+	public void write(byte[] b) {
 	}
 
 	@Override
-	public void flush() throws IOException {
+	public void flush() {
 	}
 
 	@Override
-	public void close() throws IOException {
+	public void close() {
 	}
 
 }

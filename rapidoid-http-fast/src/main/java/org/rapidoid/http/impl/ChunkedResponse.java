@@ -45,22 +45,22 @@ public class ChunkedResponse extends OutputStream {
 	}
 
 	@Override
-	public synchronized void write(int b) throws IOException {
+	public synchronized void write(int b) {
 		chunk.write(b);
 	}
 
 	@Override
-	public synchronized void write(byte[] b) throws IOException {
+	public synchronized void write(byte[] b) {
 		chunk.write(b);
 	}
 
 	@Override
-	public synchronized void write(byte[] b, int off, int len) throws IOException {
+	public synchronized void write(byte[] b, int off, int len) {
 		chunk.write(b, off, len);
 	}
 
 	@Override
-	public synchronized void flush() throws IOException {
+	public synchronized void flush() {
 		// lazy init
 		if (startChunkedResp.go()) resp.startChunkedOutputStream();
 

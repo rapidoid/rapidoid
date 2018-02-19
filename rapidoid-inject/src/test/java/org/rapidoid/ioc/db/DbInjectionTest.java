@@ -31,7 +31,7 @@ import org.rapidoid.ioc.IoC;
 public class DbInjectionTest extends AbstractInjectTest {
 
 	@Test
-	public void shouldInject() throws Exception {
+	public void shouldInject() {
 		Database db = IoC.singleton(Database.class);
 		isTrue(db == IoC.singleton(Database.class));
 		isTrue(db == IoC.singleton(Database.class));

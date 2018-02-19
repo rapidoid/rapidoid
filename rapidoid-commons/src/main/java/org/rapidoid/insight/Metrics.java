@@ -142,7 +142,7 @@ public class Metrics extends RapidoidThing implements Runnable {
 	public static TimeSeries measure(String title, final Number var, long period, TimeUnit timeUnit) {
 		return measure(title, new Callable<Number>() {
 			@Override
-			public Number call() throws Exception {
+			public Number call() {
 				return var;
 			}
 		}, period, timeUnit);

@@ -43,7 +43,7 @@ public abstract class AbstractTypeSpecificVisitor<T, R> extends RapidoidThing im
 				return processNull(context);
 
 			case UNKNOWN:
-				return processUnknown(context, (Object) value);
+				return processUnknown(context, value);
 
 			case OBJECT_ARR:
 				return processArray(context, (Object[]) value);

@@ -32,7 +32,6 @@ import java.io.FileInputStream;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 @Authors("Nikolche Mihajlovski")
@@ -49,10 +48,10 @@ public class TLSUtil extends RapidoidThing {
 		}
 
 		TrustManager tm = new X509TrustManager() {
-			public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+			public void checkClientTrusted(X509Certificate[] chain, String authType) {
 			}
 
-			public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+			public void checkServerTrusted(X509Certificate[] chain, String authType) {
 			}
 
 			public X509Certificate[] getAcceptedIssuers() {

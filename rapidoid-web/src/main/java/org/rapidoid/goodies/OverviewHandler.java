@@ -38,7 +38,7 @@ import java.util.concurrent.Callable;
 public class OverviewHandler extends GUI implements Callable<Object> {
 
 	@Override
-	public Object call() throws Exception {
+	public Object call() {
 		List<Object> info = U.list();
 
 		info.add(h3(center("Basic overview:")));

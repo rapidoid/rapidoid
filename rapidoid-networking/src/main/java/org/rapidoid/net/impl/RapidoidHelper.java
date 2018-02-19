@@ -129,7 +129,7 @@ public class RapidoidHelper extends RapidoidThing {
 			exchange = Cls.newInstance(exchangeClass);
 			pool = Pools.create("exchanges", new Callable() {
 				@Override
-				public Object call() throws Exception {
+				public Object call() {
 					return Cls.newInstance(exchangeClass);
 				}
 			}, 1000);

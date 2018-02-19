@@ -42,7 +42,7 @@ public class MultiDetailsHandler extends GUI implements Callable<Object> {
 	}
 
 	@Override
-	public Object call() throws Exception {
+	public Object call() {
 		return row(h1(title + ":"), grid(items).columns(properties));
 	}
 

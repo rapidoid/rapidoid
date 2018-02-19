@@ -32,7 +32,7 @@ import org.rapidoid.ioc.IoC;
 public class InjectionProfilesTest extends AbstractInjectTest {
 
 	@Test
-	public void shouldFailOnNonMatchingProfile() throws Exception {
+	public void shouldFailOnNonMatchingProfile() {
 		withoutABCProfiles();
 		IoC.manage(BazA.class, BazB.class, BazC.class);
 

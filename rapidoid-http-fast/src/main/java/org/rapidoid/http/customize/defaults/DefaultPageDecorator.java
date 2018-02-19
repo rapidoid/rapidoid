@@ -44,7 +44,7 @@ public class DefaultPageDecorator extends RapidoidThing implements PageDecorator
 	private static final Pattern FULL_PAGE_PATTERN = Pattern.compile(FULL_PAGE_REGEX);
 
 	@Override
-	public void renderPage(Req req, String content, OutputStream out) throws Exception {
+	public void renderPage(Req req, String content, OutputStream out) {
 		U.notNull(content, "page content");
 
 		Resp resp = req.response();

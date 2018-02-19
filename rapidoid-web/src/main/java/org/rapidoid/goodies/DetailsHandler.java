@@ -47,7 +47,7 @@ public class DetailsHandler extends GUI implements Callable<Object> {
 	}
 
 	@Override
-	public Object call() throws Exception {
+	public Object call() {
 		String[] targetProps;
 
 		if (sorted) {

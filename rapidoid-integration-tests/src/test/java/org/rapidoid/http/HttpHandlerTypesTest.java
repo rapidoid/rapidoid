@@ -41,14 +41,14 @@ public class HttpHandlerTypesTest extends IsolatedIntegrationTest {
 
 		On.get("/c").html(new ReqHandler() {
 			@Override
-			public Object execute(Req req) throws Exception {
+			public Object execute(Req req) {
 				return "c";
 			}
 		});
 
 		On.get("/d").html(new ReqRespHandler() {
 			@Override
-			public Object execute(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) {
 				return "d";
 			}
 		});

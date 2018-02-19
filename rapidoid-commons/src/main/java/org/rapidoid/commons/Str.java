@@ -62,7 +62,7 @@ public class Str extends RapidoidThing {
 
 	private static final Mapper<String[], String> MASK_REPLACER = new Mapper<String[], String>() {
 		@Override
-		public String map(String[] src) throws Exception {
+		public String map(String[] src) {
 			return Str.mul("\u0000", src[0].length());
 		}
 	};
@@ -97,7 +97,7 @@ public class Str extends RapidoidThing {
 
 		replace(target, Pattern.compile(regex), new Mapper<String[], String>() {
 			@Override
-			public String map(String[] found) throws Exception {
+			public String map(String[] found) {
 				counter.incrementAndGet();
 				Lmbd.call(action, found);
 				return "";

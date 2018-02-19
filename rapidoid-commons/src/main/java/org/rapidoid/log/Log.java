@@ -426,7 +426,7 @@ public class Log extends RapidoidThing {
 	private static Callable<Logger> createSlf4jLoggerFactory() {
 		return new Callable<Logger>() {
 			@Override
-			public Logger call() throws Exception {
+			public Logger call() {
 				return LoggerFactory.getLogger(getCallingClass());
 			}
 		};
@@ -435,7 +435,7 @@ public class Log extends RapidoidThing {
 	private static Callable<Logger> createNullLoggerFactory() {
 		return new Callable<Logger>() {
 			@Override
-			public Logger call() throws Exception {
+			public Logger call() {
 				return null;
 			}
 		};

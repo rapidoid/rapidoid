@@ -40,7 +40,7 @@ public class MicroServicesTest extends HttpTestCommons {
 	public void testMicroserviceCommunication() {
 		On.req(new ReqHandler() {
 			@Override
-			public Object execute(Req req) throws Exception {
+			public Object execute(Req req) {
 				return U.num(req.param("n")) + 1;
 			}
 		});
@@ -66,7 +66,7 @@ public class MicroServicesTest extends HttpTestCommons {
 
 			Callback<Integer> callback = new Callback<Integer>() {
 				@Override
-				public void onDone(Integer result, Throwable error) throws Exception {
+				public void onDone(Integer result, Throwable error) {
 					if (result != null) {
 						eq(result.intValue(), expected);
 					} else {

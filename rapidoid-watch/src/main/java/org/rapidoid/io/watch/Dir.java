@@ -47,7 +47,7 @@ public class Dir extends RapidoidInitializer implements FilesystemChangeListener
 
 	private static final Map<String, Dir> DIRS = Coll.autoExpandingMap(new Mapper<String, Dir>() {
 		@Override
-		public Dir map(String path) throws Exception {
+		public Dir map(String path) {
 			return new Dir(path);
 		}
 	});

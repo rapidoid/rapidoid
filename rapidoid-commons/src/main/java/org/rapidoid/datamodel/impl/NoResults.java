@@ -32,7 +32,7 @@ import java.util.List;
 public class NoResults<T> extends ResultsImpl<T> {
 
 	public NoResults() {
-		super((PageableData<T>) noData());
+		super(noData());
 	}
 
 	private static <T> PageableData<T> noData() {

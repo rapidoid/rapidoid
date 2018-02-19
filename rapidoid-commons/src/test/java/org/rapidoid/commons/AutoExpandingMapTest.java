@@ -70,7 +70,7 @@ public class AutoExpandingMapTest extends AbstractCommonsTest {
 	private Map<Object, Object> autoToStr(final AtomicInteger counter) {
 		return Coll.autoExpandingMap(new Mapper<Object, Object>() {
 			@Override
-			public Object map(Object src) throws Exception {
+			public Object map(Object src) {
 				counter.incrementAndGet();
 				return src + "";
 			}

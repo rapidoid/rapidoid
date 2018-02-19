@@ -35,7 +35,7 @@ public abstract class AutoManageable<T extends AutoManageable> extends AbstractM
 
 	private static final Map<Class<? extends Manageable>, GroupOf<? extends Manageable>> GROUPS = Coll.autoExpandingMap(new Mapper<Class<? extends Manageable>, GroupOf<? extends Manageable>>() {
 		@Override
-		public GroupOf<?> map(Class<? extends Manageable> cls) throws Exception {
+		public GroupOf<?> map(Class<? extends Manageable> cls) {
 			return new GroupOf<>(cls);
 		}
 	});

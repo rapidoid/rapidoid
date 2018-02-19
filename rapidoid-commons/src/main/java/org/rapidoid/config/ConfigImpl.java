@@ -447,7 +447,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 		if (new File(path).isAbsolute()) {
 			Msc.watchForChanges(path, new Operation<String>() {
 				@Override
-				public void execute(String filename) throws Exception {
+				public void execute(String filename) {
 					onFileSystemChange(filename);
 				}
 			});
@@ -538,7 +538,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 
 				val = Str.replace(val, "\\$\\{([^\\}]+)\\}", new Mapper<String[], String>() {
 					@Override
-					public String map(String[] src) throws Exception {
+					public String map(String[] src) {
 
 						String name = src[1];
 						Object value = flat.get(name);

@@ -155,7 +155,7 @@ public class PageHandler extends GenericHandler {
 		if (U.notEmpty(gui.uri())) {
 			grid.toUri(new Mapper<Object, String>() {
 				@Override
-				public String map(Object item) throws Exception {
+				public String map(Object item) {
 					return Render.template(gui.uri()).model(item);
 				}
 			});

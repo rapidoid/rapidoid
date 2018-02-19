@@ -29,8 +29,6 @@ import org.rapidoid.job.Jobs;
 import org.rapidoid.setup.On;
 import org.rapidoid.util.Msc;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.concurrent.TimeUnit;
 
 @Authors("Nikolche Mihajlovski")
@@ -40,7 +38,7 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 	private static final int N = Msc.normalOrHeavy(1, 100);
 
 	@Test
-	public void shouldHandleVariousHttpRequests() throws IOException, URISyntaxException {
+	public void shouldHandleVariousHttpRequests() {
 		On.get("/fileabc").html(new ReqHandler() {
 			@Override
 			public Object execute(Req x) {
@@ -126,7 +124,7 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 	}
 
 	@Test
-	public void shouldRenderRabbit() throws Exception { // :)
+	public void shouldRenderRabbit() { // :)
 		On.get("/rabbit.jpg").html(new ReqHandler() {
 			@Override
 			public Object execute(Req x) {

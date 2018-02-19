@@ -115,7 +115,7 @@ public class WatcherThread extends AbstractLoopThread {
 		try {
 			Dir.traverse(root, new SimpleFileVisitor<Path>() {
 				@Override
-				public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+				public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
 					init(dir);
 					return FileVisitResult.CONTINUE;
 				}

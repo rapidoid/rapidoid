@@ -72,7 +72,7 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 
 	private final LazyInit<JdbcWorkers> workers = new LazyInit<>(new Callable<JdbcWorkers>() {
 		@Override
-		public JdbcWorkers call() throws Exception {
+		public JdbcWorkers call() {
 			return new JdbcWorkers(JdbcClient.this);
 		}
 	});
@@ -589,7 +589,7 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 		execute(new Operation<Connection>() {
 
 			@Override
-			public void execute(Connection conn) throws Exception {
+			public void execute(Connection conn) {
 				List<T> results = U.list();
 
 				try (PreparedStatement stmt = JdbcUtil.prepare(conn, sql, null, args)) {

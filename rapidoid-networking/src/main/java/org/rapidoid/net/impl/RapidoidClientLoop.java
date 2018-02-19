@@ -68,14 +68,10 @@ public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements 
 
 	@Override
 	protected final void beforeLoop() {
-		try {
-			openSockets();
-		} catch (IOException e) {
-			throw U.rte("Cannot open socket!", e);
-		}
+		openSockets();
 	}
 
-	private void openSockets() throws IOException {
+	private void openSockets() {
 		ioWorkers = new ExtendedWorker[net.workers()];
 
 		for (int i = 0; i < ioWorkers.length; i++) {

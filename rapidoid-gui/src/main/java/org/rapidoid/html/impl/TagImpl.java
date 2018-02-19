@@ -119,7 +119,7 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 	}
 
 	public TagImpl base() {
-		return (TagImpl) this;
+		return this;
 	}
 
 	@Override

@@ -46,7 +46,7 @@ public class ManageablesOverviewPage extends GUI implements Callable<Object> {
 	private volatile String baseUri;
 
 	@Override
-	public Object call() throws Exception {
+	public Object call() {
 
 		List<Object> info = U.list();
 		Collection<? extends GroupOf<?>> targetGroups = retrieveTargetGroups();
@@ -99,7 +99,7 @@ public class ManageablesOverviewPage extends GUI implements Callable<Object> {
 			.headers(columns)
 			.toUri(new Mapper<Manageable, String>() {
 				@Override
-				public String map(Manageable item) throws Exception {
+				public String map(Manageable item) {
 
 					final List<String> uri = U.list(nav);
 					uri.add(0, U.safe(baseUri));

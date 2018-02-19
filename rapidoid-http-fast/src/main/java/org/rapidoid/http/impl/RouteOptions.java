@@ -240,7 +240,7 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 		result = 31 * result + (roles != null ? roles.hashCode() : 0);
 		result = 31 * result + Arrays.hashCode(wrappers);
 		result = 31 * result + (int) (cacheTTL ^ (cacheTTL >>> 32));
-		result = 31 * result + (int) (cacheCapacity ^ (cacheCapacity >>> 32));
+		result = 31 * result + (cacheCapacity ^ (cacheCapacity >>> 32));
 		return result;
 	}
 }

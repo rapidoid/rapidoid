@@ -95,7 +95,7 @@ public class OAuth extends RapidoidThing {
 
 		setup.get(Msc.specialUri("oauth")).mvc(new ReqHandler() {
 			@Override
-			public Object execute(Req x) throws Exception {
+			public Object execute(Req x) {
 				return GUI.hardcoded(loginPage);
 			}
 		});

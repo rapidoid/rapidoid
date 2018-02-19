@@ -57,7 +57,7 @@ public class StrTest extends AbstractCommonsTest {
 	}
 
 	@Test
-	public void testCut() throws Exception {
+	public void testCut() {
 		eq(Str.cutToFirst("a.b.c", "."), "a");
 		eq(Str.cutToFirst("a.b.c", "-"), null);
 

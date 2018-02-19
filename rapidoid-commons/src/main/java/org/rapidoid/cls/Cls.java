@@ -373,7 +373,7 @@ public class Cls extends RapidoidThing {
 
 	public static <T> Constructor<T> getConstructor(Class<T> clazz, Class<?>... paramTypes) {
 		try {
-			return (Constructor<T>) clazz.getConstructor(paramTypes);
+			return clazz.getConstructor(paramTypes);
 		} catch (Exception e) {
 			throw U.rte("Cannot find the constructor for %s with param types: %s", e, clazz,
 				U.str(paramTypes));
@@ -789,7 +789,7 @@ public class Cls extends RapidoidThing {
 	}
 
 	public static boolean instanceOf(Object obj, Class<?>... classes) {
-		return obj != null ? isAssignableTo(obj.getClass(), classes) : false;
+		return obj != null && isAssignableTo(obj.getClass(), classes);
 	}
 
 	public static boolean isAssignableTo(Class<?> clazz, Class<?>... targetClasses) {

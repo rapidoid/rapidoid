@@ -39,7 +39,7 @@ public class AnnotatedPropertyFilter extends PropertyFilter implements Serializa
 	}
 
 	@Override
-	public boolean eval(Prop prop) throws Exception {
+	public boolean eval(Prop prop) {
 		return prop.getAnnotation(annotated) != null;
 	}
 
@@ -61,11 +61,8 @@ public class AnnotatedPropertyFilter extends PropertyFilter implements Serializa
 			return false;
 		AnnotatedPropertyFilter other = (AnnotatedPropertyFilter) obj;
 		if (annotated == null) {
-			if (other.annotated != null)
-				return false;
-		} else if (!annotated.equals(other.annotated))
-			return false;
-		return true;
+			return other.annotated == null;
+		} else return annotated.equals(other.annotated);
 	}
 
 }

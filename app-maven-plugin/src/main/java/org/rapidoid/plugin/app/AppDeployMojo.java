@@ -90,7 +90,7 @@ public class AppDeployMojo extends AbstractRapidoidMojo {
 		}
 	}
 
-	private void validateConfig() throws MojoExecutionException {
+	private void validateConfig() {
 		if (U.isEmpty(servers)) {
 			servers = "localhost";
 			Log.warn("No 'servers' were configured, using 'localhost' as default");

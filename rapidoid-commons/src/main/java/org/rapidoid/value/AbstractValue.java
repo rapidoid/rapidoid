@@ -104,7 +104,7 @@ public abstract class AbstractValue<T> extends RapidoidThing implements Value<T>
 	@Override
 	public List<String> list() {
 		String s = str().getOrNull();
-		return s != null ? U.list(s.split(",")) : U.<String>list();
+		return s != null ? U.list(s.split(",")) : U.list();
 	}
 
 	@Override

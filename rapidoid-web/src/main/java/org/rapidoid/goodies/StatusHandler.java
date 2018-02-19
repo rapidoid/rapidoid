@@ -38,7 +38,7 @@ import java.util.concurrent.Callable;
 public class StatusHandler extends RapidoidThing implements Callable<Object> {
 
 	@Override
-	public Map<String, ?> call() throws Exception {
+	public Map<String, ?> call() {
 		String appJar = U.safe(ClasspathUtil.appJar());
 
 		return U.map(

@@ -27,6 +27,6 @@ import org.rapidoid.annotation.Since;
 @Since("5.0.4")
 public enum HttpContentType {
 
-	MULTIPART, FORM_URLENCODED, JSON, OTHER, NOT_FOUND;
+	MULTIPART, FORM_URLENCODED, JSON, OTHER, NOT_FOUND
 
 }

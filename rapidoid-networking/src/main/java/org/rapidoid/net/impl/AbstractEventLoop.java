@@ -65,9 +65,9 @@ public abstract class AbstractEventLoop<T> extends AbstractLoop<T> {
 
 			try {
 				acceptOP(key);
-			} catch (IOException e) {
-				failedOP(key, e);
-				Log.error("accept IO error for key: " + key, e);
+//			} catch (IOException e) {
+//				failedOP(key, e);
+//				Log.error("accept IO error for key: " + key, e);
 			} catch (Throwable e) {
 				failedOP(key, e);
 				Log.error("accept failed for key: " + key, e);
@@ -156,7 +156,7 @@ public abstract class AbstractEventLoop<T> extends AbstractLoop<T> {
 
 	protected abstract void doProcessing();
 
-	protected void acceptOP(SelectionKey key) throws IOException {
+	protected void acceptOP(SelectionKey key) {
 		throw new RuntimeException("Accept operation is not implemented!");
 	}
 

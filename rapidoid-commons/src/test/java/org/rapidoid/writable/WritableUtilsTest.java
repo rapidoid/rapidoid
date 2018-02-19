@@ -44,7 +44,7 @@ public class WritableUtilsTest extends TestCommons {
 		}
 	}
 
-	private void check(long n1, long n2, long n3) throws IOException {
+	private void check(long n1, long n2, long n3) {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		WritableOutputStream out = new WritableOutputStream(baos);
 

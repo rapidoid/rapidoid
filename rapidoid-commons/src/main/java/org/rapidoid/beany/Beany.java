@@ -54,7 +54,7 @@ public class Beany extends RapidoidThing {
 		.autoExpandingMap(new Mapper<Class<?>, BeanProperties>() {
 
 			@Override
-			public BeanProperties map(Class<?> clazz) throws Exception {
+			public BeanProperties map(Class<?> clazz) {
 				Map<String, BeanProp> properties = new LinkedHashMap<String, BeanProp>();
 
 				getBeanProperties(clazz, properties);
@@ -577,7 +577,7 @@ public class Beany extends RapidoidThing {
 		List<TO> projection = U.list();
 
 		for (FROM item : coll) {
-			projection.add((TO) getPropValue(item, propertyName));
+			projection.add(getPropValue(item, propertyName));
 		}
 
 		return projection;

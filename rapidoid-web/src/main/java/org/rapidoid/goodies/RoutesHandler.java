@@ -40,7 +40,7 @@ import java.util.concurrent.Callable;
 public class RoutesHandler extends GUI implements Callable<Object> {
 
 	@Override
-	public Object call() throws Exception {
+	public Object call() {
 		List<Object> routes = U.list();
 
 		Set<Route> appRoutes = On.setup().routes().allNonAdmin();

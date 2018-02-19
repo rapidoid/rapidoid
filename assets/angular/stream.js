@@ -38,7 +38,7 @@ Rapidoid.plugin(function(app) {
             if (cols >= 1 && cols <= 4) {
                 this.cols = cols;
             }
-        }
+        };
 
         return StreamData;
 

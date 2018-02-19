@@ -65,7 +65,7 @@ public class Callbacks extends RapidoidThing {
 	public static <T> Callback<T> countDown(final CountDownLatch latch) {
 		return new Callback<T>() {
 			@Override
-			public void onDone(T result, Throwable error) throws Exception {
+			public void onDone(T result, Throwable error) {
 				latch.countDown();
 			}
 		};

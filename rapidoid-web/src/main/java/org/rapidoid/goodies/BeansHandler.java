@@ -34,7 +34,7 @@ import java.util.concurrent.Callable;
 public class BeansHandler extends GUI implements Callable<Object> {
 
 	@Override
-	public Object call() throws Exception {
+	public Object call() {
 		List<Object> routes = U.list();
 
 		routes.add(h3("Application context of managed beans:"));

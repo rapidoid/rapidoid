@@ -63,7 +63,7 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 	private final Map<Class<?>, ClassMetadata> metadata = Coll
 		.autoExpandingMap(new Mapper<Class<?>, ClassMetadata>() {
 			@Override
-			public ClassMetadata map(Class<?> clazz) throws Exception {
+			public ClassMetadata map(Class<?> clazz) {
 				return new ClassMetadata(clazz);
 			}
 		});
@@ -362,7 +362,7 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 			instance = getInjectableByName(target, type, name, properties, true);
 		}
 
-		return (T) instance;
+		return instance;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -476,7 +476,7 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 	public <K, V> Map<K, V> autoExpandingInjectingMap(final Class<V> clazz) {
 		return Coll.autoExpandingMap(new Mapper<K, V>() {
 			@Override
-			public V map(K src) throws Exception {
+			public V map(K src) {
 				return inject(Cls.newInstance(clazz));
 			}
 		});

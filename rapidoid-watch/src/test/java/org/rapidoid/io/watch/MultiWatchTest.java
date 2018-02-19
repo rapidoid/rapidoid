@@ -30,7 +30,6 @@ import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
-import java.io.IOException;
 import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
@@ -38,7 +37,7 @@ import java.util.Set;
 public class MultiWatchTest extends TestCommons {
 
 	@Test(timeout = 60000)
-	public void shouldSupportMultipleWatchCalls() throws IOException {
+	public void shouldSupportMultipleWatchCalls() {
 		String dir = createTempDir("watch-service-test");
 
 		if (!TestCommons.RAPIDOID_CI) {
@@ -57,7 +56,7 @@ public class MultiWatchTest extends TestCommons {
 			final int seenBy = i;
 			Msc.watchForChanges(dir, new Operation<String>() {
 					@Override
-					public void execute(String filename) throws Exception {
+					public void execute(String filename) {
 						seen.add(seenBy);
 					}
 				}

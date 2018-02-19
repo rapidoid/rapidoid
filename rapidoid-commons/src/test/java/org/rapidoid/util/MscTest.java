@@ -39,7 +39,7 @@ public class MscTest extends TestCommons {
 
 		isFalse(Msc.exists(new Callable<Object>() {
 			@Override
-			public Object call() throws Exception {
+			public Object call() {
 				return null;
 			}
 		}));
@@ -47,7 +47,7 @@ public class MscTest extends TestCommons {
 		isFalse(Msc.exists(new Callable<Object>() {
 			@SuppressWarnings("null")
 			@Override
-			public Object call() throws Exception {
+			public Object call() {
 				String s = null;
 				return s.length(); // throws NPE!
 			}
@@ -55,7 +55,7 @@ public class MscTest extends TestCommons {
 
 		isTrue(Msc.exists(new Callable<Object>() {
 			@Override
-			public Object call() throws Exception {
+			public Object call() {
 				String s = "abc";
 				return s.length();
 			}

@@ -48,7 +48,7 @@ public class ClasspathScanner extends RapidoidThing {
 
 	private static Map<ScanParams, List<String>> cache = Coll.autoExpandingMap(new Mapper<ScanParams, List<String>>() {
 		@Override
-		public List<String> map(ScanParams params) throws Exception {
+		public List<String> map(ScanParams params) {
 			return scanClasses(params); // FIXME equality of 'params'
 		}
 	});
@@ -234,7 +234,7 @@ public class ClasspathScanner extends RapidoidThing {
 		}
 	}
 
-	private static boolean isAnnotated(ClassFile cfile, Class<? extends Annotation>[] annotated) throws IOException {
+	private static boolean isAnnotated(ClassFile cfile, Class<? extends Annotation>[] annotated) {
 		List attributes = U.safe(cfile.getAttributes());
 
 		for (Object attribute : attributes) {
@@ -302,9 +302,7 @@ public class ClasspathScanner extends RapidoidThing {
 			p2 = pkgDirName.indexOf(File.separatorChar, p1 + 1);
 			if (p2 > 0) {
 				String part2 = pkgDirName.substring(p1 + 1, p2);
-				if (U.isEmpty(part2)) {
-					return true;
-				}
+				return U.isEmpty(part2);
 			}
 		}
 

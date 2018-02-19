@@ -56,7 +56,7 @@ public class X extends RapidoidThing {
 	public static ReqRespHandler sql(final String sql, final Object... args) {
 		return new ReqRespHandler() {
 			@Override
-			public Object execute(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) {
 				return JDBC.query(sql, args);
 			}
 		};
@@ -65,7 +65,7 @@ public class X extends RapidoidThing {
 	public static ReqRespHandler jpql(final String jpql, final Object... args) {
 		return new ReqRespHandler() {
 			@Override
-			public Object execute(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) {
 				Map<String, Object> namedArgs = req != null ? req.data() : null;
 				return JPA.jpql(jpql).bind(namedArgs).bind(args).all();
 			}
@@ -75,7 +75,7 @@ public class X extends RapidoidThing {
 	public static ReqRespHandler index(final Class<?> entityType) {
 		return new ReqRespHandler() {
 			@Override
-			public Object execute(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) {
 				return JPA.of(entityType).all();
 			}
 		};
@@ -84,7 +84,7 @@ public class X extends RapidoidThing {
 	public static ReqRespHandler read(final Class<?> entityType) {
 		return new ReqRespHandler() {
 			@Override
-			public Object execute(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) {
 				Object id = Cls.convert(req.param("id"), idType(entityType));
 				return JPA.get(entityType, id);
 			}
@@ -94,7 +94,7 @@ public class X extends RapidoidThing {
 	public static ReqRespHandler insert(final Class<?> entityType) {
 		return new ReqRespHandler() {
 			@Override
-			public Object execute(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) {
 				return JPA.save(req.data(entityType));
 			}
 		};
@@ -103,7 +103,7 @@ public class X extends RapidoidThing {
 	public static ReqRespHandler update(final Class<?> entityType) {
 		return new ReqRespHandler() {
 			@Override
-			public Object execute(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) {
 				Object id = Cls.convert(req.param("id"), idType(entityType));
 				JPA.get(entityType, id); // make sure it exists
 				JPA.merge(req.data(entityType));  // FIXME improve the merge
@@ -115,7 +115,7 @@ public class X extends RapidoidThing {
 	public static ReqRespHandler delete(final Class<?> entityType) {
 		return new ReqRespHandler() {
 			@Override
-			public Object execute(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) {
 				Object id = Cls.convert(req.param("id"), idType(entityType));
 				JPA.delete(entityType, id);
 				return OK;
@@ -126,7 +126,7 @@ public class X extends RapidoidThing {
 	public static ReqRespHandler manage(final Class<?> entityType, final String baseUri) {
 		return new ReqRespHandler() {
 			@Override
-			public Object execute(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) {
 				if (resp.screen().title() == null) {
 					resp.screen().title("Manage " + English.plural(name(entityType)));
 				}
@@ -153,7 +153,7 @@ public class X extends RapidoidThing {
 	public static ReqRespHandler add(final Class<?> entityType, final String baseUri) {
 		return new ReqRespHandler() {
 			@Override
-			public Object execute(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) {
 				final Object entity = Cls.newInstance(entityType);
 
 				if (resp.screen().title() == null) {
@@ -173,7 +173,7 @@ public class X extends RapidoidThing {
 
 		return new ReqRespHandler() {
 			@Override
-			public Object execute(Req req, final Resp resp) throws Exception {
+			public Object execute(Req req, final Resp resp) {
 
 				final Object id = Cls.convert(req.param("id"), idType);
 				final Object entity = JPA.getIfExists(entityType, id);
@@ -213,7 +213,7 @@ public class X extends RapidoidThing {
 	public static ReqRespHandler edit(final Class<?> entityType, final String baseUri) {
 		return new ReqRespHandler() {
 			@Override
-			public Object execute(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) {
 
 				Object id = Cls.convert(req.param("id"), idType(entityType));
 				Object entity = JPA.getIfExists(entityType, id);

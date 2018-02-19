@@ -36,7 +36,7 @@ import java.util.Map;
 public class HttpMultipartFormTest extends IsolatedIntegrationTest {
 
 	@Test
-	public void shouldHandleUploads() throws Throwable {
+	public void shouldHandleUploads() {
 		defaultServerSetup();
 
 		String hash1 = Crypto.md5(IO.loadBytes("test1.txt"));
@@ -62,7 +62,7 @@ public class HttpMultipartFormTest extends IsolatedIntegrationTest {
 	}
 
 	@Test
-	public void shouldHandleBigUploads() throws Throwable {
+	public void shouldHandleBigUploads() {
 		defaultServerSetup();
 
 		Map<String, String> cookies = U.map("foo", "bar", "COOKIE1", "a");

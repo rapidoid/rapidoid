@@ -73,7 +73,7 @@ public class Setup extends RapidoidInitializer {
 
 	private static final LazyInit<DefaultSetup> DEFAULT = new LazyInit<>(new Callable<DefaultSetup>() {
 		@Override
-		public DefaultSetup call() throws Exception {
+		public DefaultSetup call() {
 			return new DefaultSetup();
 		}
 	});
@@ -123,7 +123,7 @@ public class Setup extends RapidoidInitializer {
 
 	private final LazyInit<FastHttp> lazyHttp = new LazyInit<>(new Callable<FastHttp>() {
 		@Override
-		public FastHttp call() throws Exception {
+		public FastHttp call() {
 			return initHttp();
 		}
 	});

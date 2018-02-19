@@ -35,7 +35,7 @@ import java.util.concurrent.Callable;
 public class TerminateHandler extends GUI implements Callable<Object> {
 
 	@Override
-	public Object call() throws Exception {
+	public Object call() {
 
 		Btn shutdown = btn("Shutdown").danger()
 			.confirm("Do you really want to SHUTDOWN / RESTART the application?")

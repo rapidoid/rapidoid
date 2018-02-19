@@ -33,7 +33,7 @@ public class HttpRedirectTest extends HttpTestCommons {
 	public void testSimpleRedirect() {
 		On.get("/redir").html(new ReqHandler() {
 			@Override
-			public Object execute(Req req) throws Exception {
+			public Object execute(Req req) {
 				return req.response().redirect("/target");
 			}
 		});
@@ -45,7 +45,7 @@ public class HttpRedirectTest extends HttpTestCommons {
 	public void testRedirectWithCustomCode() {
 		On.get("/redir2").json(new ReqHandler() {
 			@Override
-			public Object execute(Req req) throws Exception {
+			public Object execute(Req req) {
 				return req.response().redirect("/target2").code(302);
 			}
 		});

@@ -521,7 +521,7 @@ public abstract class GUI extends HTML implements Role {
 
 	public static Var<List<String>> listVar(String name) {
 		Class<List<String>> type = U.cast(List.class);
-		return new ReqDataVar<>(name, type, U.<String>list());
+		return new ReqDataVar<>(name, type, U.list());
 	}
 
 	public static Var<List<String>> listVar(String name, List<String> defaultValue) {

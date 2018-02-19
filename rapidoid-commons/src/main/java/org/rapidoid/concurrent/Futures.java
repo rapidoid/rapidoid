@@ -25,8 +25,6 @@ import org.rapidoid.concurrent.impl.FutureImpl;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
 
-import java.util.concurrent.TimeoutException;
-
 /**
  * @author Nikolche Mihajlovski
  * @since 4.1.0
@@ -37,7 +35,7 @@ public class Futures extends RapidoidThing {
 		return new FutureImpl<TO>() {
 
 			@Override
-			public TO get(long timeoutMs, long sleepingIntervalMs) throws TimeoutException {
+			public TO get(long timeoutMs, long sleepingIntervalMs) {
 				try {
 					return mapper.map(future.get(timeoutMs, sleepingIntervalMs));
 				} catch (Exception e) {

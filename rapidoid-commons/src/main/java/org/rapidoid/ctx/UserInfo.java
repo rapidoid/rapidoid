@@ -36,7 +36,7 @@ public class UserInfo extends RapidoidThing implements Serializable {
 
 	private static final long serialVersionUID = 7062732348562440194L;
 
-	public static final UserInfo ANONYMOUS = new UserInfo(null, U.<String>set(), null);
+	public static final UserInfo ANONYMOUS = new UserInfo(null, U.set(), null);
 
 	public final String username;
 
@@ -102,11 +102,8 @@ public class UserInfo extends RapidoidThing implements Serializable {
 			return false;
 		UserInfo other = (UserInfo) obj;
 		if (username == null) {
-			if (other.username != null)
-				return false;
-		} else if (!username.equals(other.username))
-			return false;
-		return true;
+			return other.username == null;
+		} else return username.equals(other.username);
 	}
 
 }

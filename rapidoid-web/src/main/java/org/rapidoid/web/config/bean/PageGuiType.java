@@ -27,6 +27,6 @@ import org.rapidoid.annotation.Since;
 @Since("5.3.0")
 public enum PageGuiType {
 
-	grid, form;
+	grid, form
 
 }

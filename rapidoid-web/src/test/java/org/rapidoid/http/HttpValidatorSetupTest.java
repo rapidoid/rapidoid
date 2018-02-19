@@ -30,7 +30,7 @@ import org.rapidoid.setup.On;
 public class HttpValidatorSetupTest extends HttpTestCommons {
 
 	@Test
-	public void testHttpServer() throws Exception {
+	public void testHttpServer() {
 		On.custom().validator().validate(null, new Object());
 	}
 

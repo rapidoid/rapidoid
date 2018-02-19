@@ -32,7 +32,7 @@ import java.util.concurrent.Callable;
 public class BazC implements Callable<String> {
 
 	@Override
-	public String call() throws Exception {
+	public String call() {
 		return "C";
 	}
 

@@ -391,19 +391,19 @@ public class U extends RapidoidThing {
 	}
 
 	public static <T> List<T> safe(List<T> list) {
-		return list != null ? list : U.<T>list();
+		return list != null ? list : U.list();
 	}
 
 	public static <T> Set<T> safe(Set<T> set) {
-		return set != null ? set : U.<T>set();
+		return set != null ? set : U.set();
 	}
 
 	public static <T> Collection<T> safe(Collection<T> coll) {
-		return coll != null ? coll : U.<T>list();
+		return coll != null ? coll : U.list();
 	}
 
 	public static <K, V> Map<K, V> safe(Map<K, V> map) {
-		return map != null ? map : U.<K, V>map();
+		return map != null ? map : U.map();
 	}
 
 	public static long time() {

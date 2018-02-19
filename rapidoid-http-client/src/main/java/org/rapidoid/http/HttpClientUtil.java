@@ -56,9 +56,6 @@ import org.rapidoid.util.Msc;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -70,19 +67,17 @@ public class HttpClientUtil extends RapidoidThing {
 
 	private static final RedirectStrategy NO_REDIRECTS = new RedirectStrategy() {
 		@Override
-		public boolean isRedirected(HttpRequest request, HttpResponse response, HttpContext context)
-			throws ProtocolException {
+		public boolean isRedirected(HttpRequest request, HttpResponse response, HttpContext context) {
 			return false;
 		}
 
 		@Override
-		public HttpUriRequest getRedirect(HttpRequest request, HttpResponse response, HttpContext context)
-			throws ProtocolException {
+		public HttpUriRequest getRedirect(HttpRequest request, HttpResponse response, HttpContext context) {
 			return null;
 		}
 	};
 
-	static CloseableHttpAsyncClient client(HttpClient client) throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
+	static CloseableHttpAsyncClient client(HttpClient client) {
 
 		ConnectionReuseStrategy reuseStrategy = client.reuseConnections() ? new DefaultConnectionReuseStrategy() : new NoConnectionReuseStrategy();
 

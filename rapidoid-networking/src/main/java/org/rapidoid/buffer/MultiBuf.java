@@ -590,9 +590,7 @@ public class MultiBuf extends OutputStream implements Buf, Constants {
 	}
 
 	private boolean invariant(boolean writing) {
-		if (this.readOnly) {
-			assert !writing;
-		}
+		assert !this.readOnly || !writing;
 
 		try {
 
@@ -1433,7 +1431,7 @@ public class MultiBuf extends OutputStream implements Buf, Constants {
 	}
 
 	@Override
-	public void write(int byteValue) throws IOException {
+	public void write(int byteValue) {
 		// used as OutputStream
 		append((byte) byteValue);
 	}

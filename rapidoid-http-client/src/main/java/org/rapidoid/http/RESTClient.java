@@ -43,7 +43,7 @@ public class RESTClient extends RapidoidThing {
 	}
 
 	public <T> T get(String uri, Class<T> resultType) {
-		return (T) get(uri, resultType, null).get();
+		return get(uri, resultType, null).get();
 	}
 
 	/* POST */
@@ -55,7 +55,7 @@ public class RESTClient extends RapidoidThing {
 	}
 
 	public <T> T post(String uri, Class<T> resultType) {
-		return (T) post(uri, resultType, null).get();
+		return post(uri, resultType, null).get();
 	}
 
 	/* PUT */
@@ -67,7 +67,7 @@ public class RESTClient extends RapidoidThing {
 	}
 
 	public <T> T put(String uri, Class<T> resultType) {
-		return (T) put(uri, resultType, null).get();
+		return put(uri, resultType, null).get();
 	}
 
 	/* DELETE */
@@ -79,7 +79,7 @@ public class RESTClient extends RapidoidThing {
 	}
 
 	public <T> T delete(String uri, Class<T> resultType) {
-		return (T) delete(uri, resultType, null).get();
+		return delete(uri, resultType, null).get();
 	}
 
 	/* PATCH */
@@ -91,7 +91,7 @@ public class RESTClient extends RapidoidThing {
 	}
 
 	public <T> T patch(String uri, Class<T> resultType) {
-		return (T) patch(uri, resultType, null).get();
+		return patch(uri, resultType, null).get();
 	}
 
 	/* OPTIONS */
@@ -103,7 +103,7 @@ public class RESTClient extends RapidoidThing {
 	}
 
 	public <T> T options(String uri, Class<T> resultType) {
-		return (T) options(uri, resultType, null).get();
+		return options(uri, resultType, null).get();
 	}
 
 	/* HEAD */
@@ -115,7 +115,7 @@ public class RESTClient extends RapidoidThing {
 	}
 
 	public <T> T head(String uri, Class<T> resultType) {
-		return (T) head(uri, resultType, null).get();
+		return head(uri, resultType, null).get();
 	}
 
 	/* TRACE */
@@ -127,7 +127,7 @@ public class RESTClient extends RapidoidThing {
 	}
 
 	public <T> T trace(String uri, Class<T> resultType) {
-		return (T) trace(uri, resultType, null).get();
+		return trace(uri, resultType, null).get();
 	}
 
 	public void close() {

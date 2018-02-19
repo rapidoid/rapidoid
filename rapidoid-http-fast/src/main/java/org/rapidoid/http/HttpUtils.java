@@ -68,7 +68,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 
 	private static final Mapper<String[], String> PATH_PARAM_EXTRACTOR = new Mapper<String[], String>() {
 		@Override
-		public String map(String[] src) throws Exception {
+		public String map(String[] src) {
 			return src[1].split(":", 2)[0];
 		}
 	};

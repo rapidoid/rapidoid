@@ -39,7 +39,7 @@ public class HttpCookiesTest extends HttpTestCommons {
 
 		On.req(new ReqRespHandler() {
 			@Override
-			public Object execute(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) {
 				resp.cookie(req.uri(), "" + req.cookies().size());
 				return resp.json(req.cookies());
 			}
@@ -69,7 +69,7 @@ public class HttpCookiesTest extends HttpTestCommons {
 
 		On.req(new ReqRespHandler() {
 			@Override
-			public Object execute(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) {
 				isTrue(req.cookies().isEmpty());
 				return req.cookies().size();
 			}

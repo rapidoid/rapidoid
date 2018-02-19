@@ -38,7 +38,7 @@ import java.util.concurrent.Callable;
 public class EntitiesHandler extends GUI implements Callable<Object> {
 
 	@Override
-	public Object call() throws Exception {
+	public Object call() {
 		if (JPA.isActive()) {
 
 			List<Object> data = U.list();
@@ -47,7 +47,7 @@ public class EntitiesHandler extends GUI implements Callable<Object> {
 
 			grid.toUri(new Mapper<Map<String, ?>, String>() {
 				@Override
-				public String map(Map<String, ?> row) throws Exception {
+				public String map(Map<String, ?> row) {
 					return GUI.typeUri(row.get("type") + "") + "/manage";
 				}
 			});

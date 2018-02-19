@@ -1271,9 +1271,7 @@ public class MediaType extends RapidoidThing {
 		if (getClass() != obj.getClass())
 			return false;
 		MediaType other = (MediaType) obj;
-		if (!Arrays.equals(bytes, other.bytes))
-			return false;
-		return true;
+		return Arrays.equals(bytes, other.bytes);
 	}
 
 	public String info() {

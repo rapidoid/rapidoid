@@ -71,7 +71,7 @@ public class PathPattern extends RapidoidThing implements Comparable<PathPattern
 
 		String regex = Str.replace(path, PATH_PARAM_REGEX, new Mapper<String[], String>() {
 			@Override
-			public String map(String[] gr) throws Exception {
+			public String map(String[] gr) {
 				return toPathParamRegex(groups, counter, gr[1]);
 			}
 		});
@@ -173,7 +173,7 @@ public class PathPattern extends RapidoidThing implements Comparable<PathPattern
 	public String prefix() {
 		String simplifiedPattern = Str.replace(path, PATH_PARAM_REGEX, new Mapper<String[], String>() {
 			@Override
-			public String map(String[] gr) throws Exception {
+			public String map(String[] gr) {
 				return "*";
 			}
 		});

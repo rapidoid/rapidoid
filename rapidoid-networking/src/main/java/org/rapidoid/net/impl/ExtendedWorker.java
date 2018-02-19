@@ -46,7 +46,6 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketException;
 import java.nio.channels.CancelledKeyException;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
@@ -145,7 +144,7 @@ public class ExtendedWorker extends AbstractEventLoop<ExtendedWorker> implements
 
 		connections = Pools.create("connections", new Callable<RapidoidConnection>() {
 			@Override
-			public RapidoidConnection call() throws Exception {
+			public RapidoidConnection call() {
 				return newConnection(false);
 			}
 		}, 100000);
@@ -178,7 +177,7 @@ public class ExtendedWorker extends AbstractEventLoop<ExtendedWorker> implements
 		selector.wakeup();
 	}
 
-	private void configureSocket(SocketChannel socketChannel) throws IOException, SocketException {
+	private void configureSocket(SocketChannel socketChannel) throws IOException {
 		socketChannel.configureBlocking(false);
 
 		Socket socket = socketChannel.socket();
@@ -484,7 +483,7 @@ public class ExtendedWorker extends AbstractEventLoop<ExtendedWorker> implements
 	}
 
 	@Override
-	protected void writeOP(SelectionKey key) throws IOException {
+	protected void writeOP(SelectionKey key) {
 		RapidoidConnection conn = (RapidoidConnection) key.attachment();
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 

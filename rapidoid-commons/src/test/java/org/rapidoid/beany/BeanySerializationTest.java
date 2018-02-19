@@ -31,7 +31,7 @@ import java.util.Map;
 
 enum ABC {
 	A, B, C
-};
+}
 
 class Foo {
 

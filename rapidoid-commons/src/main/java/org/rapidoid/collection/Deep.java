@@ -82,7 +82,7 @@ public class Deep extends RapidoidThing {
 	public static <T> T[] copyOf(T[] source, Mapper<Object, ?> transformation) {
 		Err.argMust(source != null, "source cannot be null!");
 
-		T[] destination = (T[]) newInstance(source);
+		T[] destination = newInstance(source);
 		copy(destination, source, transformation);
 
 		return destination;

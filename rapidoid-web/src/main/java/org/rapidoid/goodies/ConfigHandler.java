@@ -38,7 +38,7 @@ public class ConfigHandler extends GUI implements Callable<Object> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object call() throws Exception {
+	public Object call() {
 
 		List<Object> grids = U.list();
 		Map<String, Object> sections = U.cast(Conf.ROOT.toMap());

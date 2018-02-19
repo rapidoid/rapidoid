@@ -32,7 +32,7 @@ public class AutoExpandingMap<K, V> extends AbstractMapDecorator<K, V> {
 	private final Mapper<K, V> valueFactory;
 
 	public AutoExpandingMap(Mapper<K, V> valueFactory) {
-		super(Coll.<K, V>synchronizedMap());
+		super(Coll.synchronizedMap());
 		this.valueFactory = valueFactory;
 	}
 

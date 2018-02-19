@@ -44,7 +44,7 @@ public abstract class AbstractViewResolver<T> extends RapidoidThing implements V
 	private final Map<ResourceLoader, T> factoriesPerLoader = Coll.autoExpandingMap(
 		new Mapper<ResourceLoader, T>() {
 			@Override
-			public T map(ResourceLoader templateLoader) throws Exception {
+			public T map(ResourceLoader templateLoader) {
 				return customize(createViewFactory(templateLoader));
 			}
 		});

@@ -30,14 +30,13 @@ import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
 import java.io.File;
-import java.io.IOException;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class WatchServiceTest extends TestCommons {
 
 	@Test
-	public void testDirRefresh() throws IOException {
+	public void testDirRefresh() {
 		String tmpPath = createTempDir("watch-service-test");
 
 		Dir dir = Dir.from(tmpPath);

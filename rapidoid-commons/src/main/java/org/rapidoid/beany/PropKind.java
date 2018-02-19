@@ -27,6 +27,6 @@ import org.rapidoid.annotation.Since;
 @Since("2.0.0")
 public enum PropKind {
 
-	NORMAL, COLLECTION, MAP, VAR;
+	NORMAL, COLLECTION, MAP, VAR
 
 }
