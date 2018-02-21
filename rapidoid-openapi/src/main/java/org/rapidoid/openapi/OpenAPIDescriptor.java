@@ -27,6 +27,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
+import org.rapidoid.http.MediaType;
 import org.rapidoid.http.Route;
 import org.rapidoid.http.impl.RouteMeta;
 import org.rapidoid.log.Log;
@@ -38,6 +39,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Generates structured API docs, based on the OpenAPI specification:
+ *
+ * https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md
+ */
 @Authors("Nikolche Mihajlovski")
 @Since("5.6.0")
 public class OpenAPIDescriptor extends RapidoidThing {
@@ -57,10 +63,18 @@ public class OpenAPIDescriptor extends RapidoidThing {
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> getAPIDocs() {
 		Map<String, Object> docs = createRoot();
+
 		Map<String, Object> paths = (Map<String, Object>) docs.computeIfAbsent("paths", x -> U.map());
+		Map<String, Object> components = (Map<String, Object>) docs.computeIfAbsent("components", x -> U.map());
+		Map<String, Object> schemas = (Map<String, Object>) components.computeIfAbsent("schemas", x -> U.map());
+
+		schemas.computeIfAbsent("Error", x -> OpenAPIModel.defaultErrorSchema());
 
 		Do.group(findPublishableRoutes()).by(Route::path).forEach((path, routes) -> {
-			paths.put(path, Do.map(routes).toMap(route -> route.verb().name().toLowerCase(), this::descRoute));
+			paths.put(path, Do.map(routes).toMap(
+				route -> route.verb().name().toLowerCase(),
+				route -> descRoute(route, components)
+			));
 		});
 
 		return docs;
@@ -70,10 +84,15 @@ public class OpenAPIDescriptor extends RapidoidThing {
 		// admin zone routes are considered private, don't publish them
 		Set<Route> nonAdmin = setup.routes().allNonAdmin();
 
-		// TODO routes can be marked as private/public
+		return Do.findIn(nonAdmin).all(this::isPublishable);
+	}
 
-		// routes having paths starting with '/_' are considered private, don't publish them
-		return Do.findIn(nonAdmin).all(route -> !route.path().startsWith("/_"));
+	private boolean isPublishable(Route route) {
+		RouteMeta meta = route.config().meta();
+
+		return route.isAPI() // non-API routes (e.g. pages) won't be published
+			&& meta.publish() // routes can be marked as private/public
+			&& !route.path().startsWith("/_"); // routes having paths starting with '/_' are considered private
 	}
 
 	private Map<String, Object> createRoot() {
@@ -97,13 +116,17 @@ public class OpenAPIDescriptor extends RapidoidThing {
 		return spec;
 	}
 
-	private Map<String, Object> descRoute(Route route) {
+	private Map<String, Object> descRoute(Route route, Map<String, Object> components) {
 		Map<String, Object> desc = U.map();
 
 		RouteMeta meta = route.config().meta();
 
 		if (meta.summary() != null) {
 			desc.put("summary", meta.summary());
+		}
+
+		if (meta.description() != null) {
+			desc.put("description", meta.description());
 		}
 
 		if (meta.id() != null) {
@@ -114,8 +137,8 @@ public class OpenAPIDescriptor extends RapidoidThing {
 			desc.put("tags", meta.tags());
 		}
 
-		if (U.notEmpty(meta.schema())) {
-			desc.put("parameters", meta.schema());
+		if (U.notEmpty(meta.inputSchema())) {
+			desc.put("parameters", meta.inputSchema().toOpenAPISchema());
 		}
 
 		desc.put("responses", U.notEmpty(meta.responses()) ? meta.responses() : defaultResponses(route));
@@ -124,12 +147,18 @@ public class OpenAPIDescriptor extends RapidoidThing {
 	}
 
 	private Map<String, Object> defaultResponses(Route route) {
+		RouteMeta meta = route.config().meta();
 		Map<String, Object> responses = U.map();
 
+		Map<String, Object> schema = U.notEmpty(meta.outputSchema()) ? meta.outputSchema().toOpenAPISchema() : U.map();
+
+		MediaType mediaType = U.or(route.config().contentType(), MediaType.JSON);
+		String contentType = new String(mediaType.getBytes());
+
 		Map<String, Object> ok = U.map(
-			"description", "successful result",
+			"description", "success",
 			"content", U.map(
-				"application/json", U.map() // FIXME schemaRef(outputSchema)
+				contentType, schema
 			)
 		);
 		responses.put("200", ok);
@@ -137,19 +166,13 @@ public class OpenAPIDescriptor extends RapidoidThing {
 		Map<String, Object> error = U.map(
 			"description", "unexpected error",
 			"content", U.map(
-				"application/json", schemaRef("Error")
+				contentType, OpenAPIModel.schemaRef("Error")
 			)
 		);
 
 		responses.put("default", error);
 
 		return responses;
-	}
-
-	private Map<String, Map<String, String>> schemaRef(String schemaId) {
-		return U.map(
-			"schema", U.map("$ref", "#/components/schemas/" + schemaId)
-		);
 	}
 
 }

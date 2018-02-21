@@ -26,6 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cache.Cache;
 import org.rapidoid.cache.Caching;
 import org.rapidoid.http.HttpVerb;
+import org.rapidoid.http.MediaType;
 import org.rapidoid.http.Route;
 import org.rapidoid.http.RouteConfig;
 import org.rapidoid.http.handler.HttpHandler;
@@ -132,5 +133,12 @@ public class RouteImpl extends RapidoidThing implements Route {
 	@Override
 	public Date lastChangedAt() {
 		return lastChangedAt;
+	}
+
+	@Override
+	public boolean isAPI() {
+		if (options.mvc()) return false;
+
+		return config().contentType() != MediaType.HTML_UTF_8;
 	}
 }

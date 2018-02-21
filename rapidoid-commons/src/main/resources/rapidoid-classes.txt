@@ -352,12 +352,14 @@ org.rapidoid.http.customize.RolesProvider
 org.rapidoid.http.customize.SessionManager
 org.rapidoid.http.customize.StaticFilesSecurity
 org.rapidoid.http.customize.ViewResolver
+org.rapidoid.http.DataSchema
 org.rapidoid.http.DynamicRESTClient
 org.rapidoid.http.FastHttp
 org.rapidoid.http.FastHttpProtocol
 org.rapidoid.http.handler.AbstractDecoratingHttpHandler
 org.rapidoid.http.handler.AbstractHttpHandler
 org.rapidoid.http.handler.AbstractHttpHandlerDecorator
+org.rapidoid.http.handler.DataSchemas
 org.rapidoid.http.handler.HandlerInvocation
 org.rapidoid.http.handler.HandlerResultProcessor
 org.rapidoid.http.handler.HttpAuthWrapper
@@ -432,6 +434,7 @@ org.rapidoid.http.impl.lowlevel.LowLevelHttpIO
 org.rapidoid.http.impl.MaybeReq
 org.rapidoid.http.impl.MVCModel
 org.rapidoid.http.impl.MVCModelImpl
+org.rapidoid.http.impl.OpenAPIDataSchema
 org.rapidoid.http.impl.PathPattern
 org.rapidoid.http.impl.RapidoidReqInfo
 org.rapidoid.http.impl.ReqImpl
@@ -647,6 +650,7 @@ org.rapidoid.oauth.OAuthStateCheck
 org.rapidoid.oauth.OAuthTokenHandler
 org.rapidoid.openapi.OpenAPI
 org.rapidoid.openapi.OpenAPIDescriptor
+org.rapidoid.openapi.OpenAPIModel
 org.rapidoid.optional.Opt
 org.rapidoid.plugin.app.AbstractRapidoidMojo
 org.rapidoid.plugin.app.AppBuildMojo

@@ -22,12 +22,11 @@ package org.rapidoid.openapi;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.handler.DataSchemas;
 import org.rapidoid.http.impl.RouteMeta;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
 import org.rapidoid.u.U;
-
-import java.util.Map;
 
 @Authors({"Daniel Braga", "Nikolche Mihajlovski"})
 @Since("5.6.0")
@@ -37,27 +36,19 @@ public class OpenAPIDemo {
 		Setup setup = On.setup();
 
 		RouteMeta meta = new RouteMeta();
-		meta.id("test1").summary("Test 1").tags(U.set("test")).schema(test1Schema());
+		meta.id("test1").summary("Test 1")
+			.tags(U.set("tag1", "tag2"))
+			.inputSchema(DataSchemas.openAPI("in", OpenAPIModel.arraySchema("string")))
+			.outputSchema(DataSchemas.openAPI("out", OpenAPIModel.arraySchema("string")));
 
-		On.get("/test1/").meta(meta).plain(sayHello());
+		On.get("/test1/").meta(meta).plain("hello");
 
-		On.get("/test2/foo").plain(sayHello());
-		On.get("/test2/output").plain(sayHello());
-		On.post("/test2/output").plain(sayHello());
-		On.delete("/test2/output").plain(sayHello());
+		On.get("/test2/foo").plain("hello");
+		On.get("/test2/output").json("hello");
+		On.post("/test2/output").xml("hello");
+		On.delete("/test2/output").serve("hello");
 
 		OpenAPI.bootstrap(setup);
-	}
-
-	private static Map<String, Object> test1Schema() {
-		return U.map(
-			"type", "array",
-			"items", U.map("type", "string")
-		);
-	}
-
-	private static String sayHello() {
-		return "Hello";
 	}
 
 }

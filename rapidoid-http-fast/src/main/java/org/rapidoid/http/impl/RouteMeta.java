@@ -24,6 +24,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
+import org.rapidoid.http.DataSchema;
 import org.rapidoid.u.U;
 
 import java.util.Map;
@@ -41,9 +42,13 @@ public class RouteMeta extends RapidoidThing {
 
 	private volatile Set<String> tags;
 
-	private volatile Map<String, Object> schema;
+	private volatile DataSchema inputSchema;
+
+	private volatile DataSchema outputSchema;
 
 	private volatile Map<String, Object> responses;
+
+	private volatile boolean publish = true;
 
 	public String id() {
 		return id;
@@ -76,29 +81,26 @@ public class RouteMeta extends RapidoidThing {
 		return tags;
 	}
 
-	@Override
-	public String toString() {
-		return "RouteMeta{" +
-			"id='" + id + '\'' +
-			", summary='" + summary + '\'' +
-			", description='" + description + '\'' +
-			", tags=" + tags +
-			", schema=" + schema +
-			", responses=" + responses +
-			'}';
-	}
-
 	public RouteMeta tags(Set<String> tags) {
 		this.tags = tags;
 		return this;
 	}
 
-	public Map<String, Object> schema() {
-		return schema;
+	public DataSchema inputSchema() {
+		return inputSchema;
 	}
 
-	public RouteMeta schema(Map<String, Object> schema) {
-		this.schema = schema;
+	public RouteMeta inputSchema(DataSchema inputSchema) {
+		this.inputSchema = inputSchema;
+		return this;
+	}
+
+	public DataSchema outputSchema() {
+		return outputSchema;
+	}
+
+	public RouteMeta outputSchema(DataSchema outputSchema) {
+		this.outputSchema = outputSchema;
 		return this;
 	}
 
@@ -111,16 +113,41 @@ public class RouteMeta extends RapidoidThing {
 		return this;
 	}
 
+	public boolean publish() {
+		return publish;
+	}
+
+	public RouteMeta publish(boolean publish) {
+		this.publish = publish;
+		return this;
+	}
+
 	public RouteMeta copy() {
 		RouteMeta copy = new RouteMeta();
 
 		copy.id = this.id;
 		copy.summary = this.summary;
 		copy.description = this.description;
+		copy.publish = this.publish;
 		copy.tags = Coll.copyOf(U.safe(this.tags));
-		copy.schema = Coll.deepCopyOf(U.safe(this.schema));
+		copy.inputSchema = this.inputSchema;
+		copy.outputSchema = this.outputSchema;
 		copy.responses = Coll.deepCopyOf(U.safe(this.responses));
 
 		return copy;
+	}
+
+	@Override
+	public String toString() {
+		return "RouteMeta{" +
+			"id='" + id + '\'' +
+			", summary='" + summary + '\'' +
+			", description='" + description + '\'' +
+			", tags=" + tags +
+			", inputSchema=" + inputSchema +
+			", outputSchema=" + outputSchema +
+			", responses=" + responses +
+			", publish=" + publish +
+			'}';
 	}
 }

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * rapidoid-openapi
+ * rapidoid-http-fast
  * %%
  * Copyright (C) 2014 - 2018 Nikolche Mihajlovski and contributors
  * %%
@@ -18,25 +18,19 @@
  * #L%
  */
 
-package org.rapidoid.openapi;
+package org.rapidoid.http;
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
-import org.rapidoid.data.YAML;
-import org.rapidoid.setup.Setup;
-import org.rapidoid.util.Msc;
 
-@Authors({"Nikolche Mihajlovski", "Daniel Braga"})
+import java.util.Map;
+
+@Authors("Nikolche Mihajlovski")
 @Since("5.6.0")
-public class OpenAPI extends RapidoidThing {
+public interface DataSchema {
 
-	public static void bootstrap(Setup setup) {
-		OpenAPIDescriptor descriptor = new OpenAPIDescriptor(setup, Conf.OPENAPI);
+	String id();
 
-		setup.get(Msc.specialUri("api/openapi.json")).json(descriptor::getAPIDocs);
-		setup.get(Msc.specialUri("api/openapi.yaml")).plain(() -> YAML.stringify(descriptor.getAPIDocs()));
-	}
+	Map<String, Object> toOpenAPISchema();
 
 }

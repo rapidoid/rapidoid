@@ -23,20 +23,40 @@ package org.rapidoid.openapi;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
-import org.rapidoid.data.YAML;
-import org.rapidoid.setup.Setup;
-import org.rapidoid.util.Msc;
+import org.rapidoid.u.U;
 
-@Authors({"Nikolche Mihajlovski", "Daniel Braga"})
+import java.util.Map;
+
+@Authors("Nikolche Mihajlovski")
 @Since("5.6.0")
-public class OpenAPI extends RapidoidThing {
+public class OpenAPIModel extends RapidoidThing {
 
-	public static void bootstrap(Setup setup) {
-		OpenAPIDescriptor descriptor = new OpenAPIDescriptor(setup, Conf.OPENAPI);
+	public static Map<String, Map<String, String>> schemaRef(String schemaId) {
+		return U.map(
+			"schema", U.map("$ref", "#/components/schemas/" + schemaId)
+		);
+	}
 
-		setup.get(Msc.specialUri("api/openapi.json")).json(descriptor::getAPIDocs);
-		setup.get(Msc.specialUri("api/openapi.yaml")).plain(() -> YAML.stringify(descriptor.getAPIDocs()));
+	public static Map<String, String> primitiveSchema(String type) {
+		return U.map("type", type);
+	}
+
+	public static Map<String, Object> arraySchema(String componentType) {
+		return U.map(
+			"type", "array",
+			"items", primitiveSchema(componentType)
+		);
+	}
+
+	public static Map<String, Object> defaultErrorSchema() {
+		return U.map(
+			"type", "object",
+			"properties", U.map(
+				"error", primitiveSchema("string"),
+				"code", primitiveSchema("integer"),
+				"status", primitiveSchema("string")
+			)
+		);
 	}
 
 }
