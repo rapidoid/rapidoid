@@ -1,6 +1,6 @@
 /*-
  * #%L
- * rapidoid-inject
+ * rapidoid-jpa
  * %%
  * Copyright (C) 2014 - 2018 Nikolche Mihajlovski and contributors
  * %%
