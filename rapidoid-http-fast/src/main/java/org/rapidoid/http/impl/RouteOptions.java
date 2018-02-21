@@ -193,10 +193,12 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 		return this;
 	}
 
+	@Override
 	public RouteMeta meta() {
 		return meta;
 	}
 
+	@Override
 	public RouteOptions meta(RouteMeta meta) {
 		this.meta = meta;
 		return this;

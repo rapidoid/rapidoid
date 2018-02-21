@@ -441,6 +441,7 @@ org.rapidoid.http.impl.RespImpl
 org.rapidoid.http.impl.ResponseRenderer
 org.rapidoid.http.impl.RouteCacheConfig
 org.rapidoid.http.impl.RouteImpl
+org.rapidoid.http.impl.RouteMeta
 org.rapidoid.http.impl.RouteOptions
 org.rapidoid.http.impl.TokenStatus
 org.rapidoid.http.MediaType
@@ -644,6 +645,8 @@ org.rapidoid.oauth.OAuthLoginHandler
 org.rapidoid.oauth.OAuthProvider
 org.rapidoid.oauth.OAuthStateCheck
 org.rapidoid.oauth.OAuthTokenHandler
+org.rapidoid.openapi.OpenAPI
+org.rapidoid.openapi.OpenAPIDescriptor
 org.rapidoid.optional.Opt
 org.rapidoid.plugin.app.AbstractRapidoidMojo
 org.rapidoid.plugin.app.AppBuildMojo

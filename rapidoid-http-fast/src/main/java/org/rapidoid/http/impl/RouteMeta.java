@@ -39,20 +39,11 @@ public class RouteMeta extends RapidoidThing {
 
 	private volatile String description;
 
-	private volatile Set<String> tags = U.set();
+	private volatile Set<String> tags;
 
-	private volatile Map<String, Object> schema = U.map();
+	private volatile Map<String, Object> schema;
 
-	@Override
-	public String toString() {
-		return "RouteMeta{" +
-			"id='" + id + '\'' +
-			", summary='" + summary + '\'' +
-			", description='" + description + '\'' +
-			", tags=" + tags +
-			", schema=" + schema +
-			'}';
-	}
+	private volatile Map<String, Object> responses;
 
 	public String id() {
 		return id;
@@ -72,8 +63,29 @@ public class RouteMeta extends RapidoidThing {
 		return this;
 	}
 
+	public String description() {
+		return description;
+	}
+
+	public RouteMeta description(String description) {
+		this.description = description;
+		return this;
+	}
+
 	public Set<String> tags() {
 		return tags;
+	}
+
+	@Override
+	public String toString() {
+		return "RouteMeta{" +
+			"id='" + id + '\'' +
+			", summary='" + summary + '\'' +
+			", description='" + description + '\'' +
+			", tags=" + tags +
+			", schema=" + schema +
+			", responses=" + responses +
+			'}';
 	}
 
 	public RouteMeta tags(Set<String> tags) {
@@ -90,14 +102,24 @@ public class RouteMeta extends RapidoidThing {
 		return this;
 	}
 
+	public Map<String, Object> responses() {
+		return responses;
+	}
+
+	public RouteMeta responses(Map<String, Object> responses) {
+		this.responses = responses;
+		return this;
+	}
+
 	public RouteMeta copy() {
 		RouteMeta copy = new RouteMeta();
 
 		copy.id = this.id;
 		copy.summary = this.summary;
 		copy.description = this.description;
-		copy.tags = Coll.copyOf(this.tags);
-		copy.schema = Coll.deepCopyOf(this.schema);
+		copy.tags = Coll.copyOf(U.safe(this.tags));
+		copy.schema = Coll.deepCopyOf(U.safe(this.schema));
+		copy.responses = Coll.deepCopyOf(U.safe(this.responses));
 
 		return copy;
 	}

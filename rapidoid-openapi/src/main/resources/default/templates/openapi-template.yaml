@@ -1,9 +1,0 @@
-openapi: "3.0.0"
-info:
-  version: ${openapi_project_version}
-  title: ${openapi_project_title}
-  license:
-    name: MIT
-servers:
-  - url: ${openapi_project_url}
-paths:

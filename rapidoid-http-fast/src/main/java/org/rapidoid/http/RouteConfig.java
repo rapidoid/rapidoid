@@ -23,6 +23,7 @@ package org.rapidoid.http;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.TransactionMode;
+import org.rapidoid.http.impl.RouteMeta;
 import org.rapidoid.http.impl.RouteOptions;
 
 import java.util.Set;
@@ -70,4 +71,8 @@ public interface RouteConfig {
 	int cacheCapacity();
 
 	RouteOptions cacheCapacity(int cacheCapacity);
+
+	RouteMeta meta();
+
+	RouteOptions meta(RouteMeta meta);
 }
