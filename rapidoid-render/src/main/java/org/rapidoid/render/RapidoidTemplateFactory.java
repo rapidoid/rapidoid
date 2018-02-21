@@ -26,7 +26,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cache.Cache;
 import org.rapidoid.cache.Caching;
 import org.rapidoid.env.Env;
-import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
@@ -47,12 +46,13 @@ public class RapidoidTemplateFactory extends RapidoidThing implements TemplateFa
 	public RapidoidTemplateFactory(String name, TemplateStore templateStore) {
 		this.templateStore = templateStore;
 
-		compiledTemplates = Caching.of(new Mapper<String, RapidoidTemplate>() {
-			@Override
-			public RapidoidTemplate map(String filename) {
-				return loadAndCompile(filename);
-			}
-		}).name(name).capacity(10000).ttl(CACHE_TTL).manageable(true).statistics(true).build();
+		compiledTemplates = Caching.of(this::loadAndCompile)
+			.name(name)
+			.capacity(10000)
+			.ttl(CACHE_TTL)
+			.manageable(true)
+			.statistics(true)
+			.build();
 	}
 
 	@Override

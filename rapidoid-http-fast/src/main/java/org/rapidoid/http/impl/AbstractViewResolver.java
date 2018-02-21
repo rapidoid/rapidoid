@@ -27,7 +27,6 @@ import org.rapidoid.collection.Coll;
 import org.rapidoid.http.customize.ResourceLoader;
 import org.rapidoid.http.customize.ViewResolver;
 import org.rapidoid.lambda.Customizer;
-import org.rapidoid.lambda.Mapper;
 
 import java.util.Map;
 
@@ -42,12 +41,7 @@ public abstract class AbstractViewResolver<T> extends RapidoidThing implements V
 	protected abstract T createViewFactory(ResourceLoader templateLoader);
 
 	private final Map<ResourceLoader, T> factoriesPerLoader = Coll.autoExpandingMap(
-		new Mapper<ResourceLoader, T>() {
-			@Override
-			public T map(ResourceLoader templateLoader) {
-				return customize(createViewFactory(templateLoader));
-			}
-		});
+		templateLoader -> customize(createViewFactory(templateLoader)));
 
 	protected T getViewFactory(ResourceLoader templateLoader) {
 		return factoriesPerLoader.get(templateLoader);

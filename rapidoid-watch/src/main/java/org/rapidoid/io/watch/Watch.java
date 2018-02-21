@@ -40,11 +40,7 @@ public class Watch extends RapidoidInitializer {
 	private static final Set<WatcherThread> WATCHERS = Coll.synchronizedSet();
 
 	static {
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			public void run() {
-				cancelAll();
-			}
-		});
+		Runtime.getRuntime().addShutdownHook(new Thread(Watch::cancelAll));
 	}
 
 	public static WatcherThread dirs(Collection<String> folders, final FilesystemChangeListener changes) {

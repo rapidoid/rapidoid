@@ -36,7 +36,7 @@ public class UTest extends TestCommons {
 	public void testTextCollectionOfObject() {
 		eq(U.str(new ArrayList<Integer>()), "[]");
 
-		List<String> lst = new ArrayList<String>();
+		List<String> lst = new ArrayList<>();
 
 		lst.add("java");
 		lst.add("c");

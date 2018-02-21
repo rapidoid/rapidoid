@@ -30,7 +30,7 @@ import org.rapidoid.concurrent.impl.PromiseImpl;
 public class Promises extends RapidoidThing {
 
 	public static <T> Promise<T> create() {
-		return new PromiseImpl<T>();
+		return new PromiseImpl<>();
 	}
 
 }

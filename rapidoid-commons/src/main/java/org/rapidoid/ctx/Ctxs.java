@@ -31,7 +31,7 @@ import org.rapidoid.u.U;
 @Since("4.1.0")
 public class Ctxs extends RapidoidThing {
 
-	private static volatile ThreadLocal<Ctx> CTXS = new ThreadLocal<Ctx>();
+	private static volatile ThreadLocal<Ctx> CTXS = new ThreadLocal<>();
 
 	private static volatile PersisterProvider persisterProvider;
 
@@ -118,6 +118,6 @@ public class Ctxs extends RapidoidThing {
 	}
 
 	public static void reset() {
-		CTXS = new ThreadLocal<Ctx>();
+		CTXS = new ThreadLocal<>();
 	}
 }

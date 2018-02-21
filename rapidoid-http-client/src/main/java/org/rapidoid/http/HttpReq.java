@@ -290,12 +290,9 @@ public class HttpReq extends RapidoidThing {
 		final HttpReq req = this;
 
 		for (int i = 0; i < rounds; i++) {
-			Msc.benchmarkMT(threads, "req", requests, new Runnable() {
-				@Override
-				public void run() {
-					HttpResp resp = client.executeRequest(req, null).get();
-					U.notNull(resp, "HTTP response");
-				}
+			Msc.benchmarkMT(threads, "req", requests, () -> {
+				HttpResp resp = client.executeRequest(req, null).get();
+				U.notNull(resp, "HTTP response");
 			});
 		}
 

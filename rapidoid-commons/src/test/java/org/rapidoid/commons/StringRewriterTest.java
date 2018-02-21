@@ -66,12 +66,7 @@ public class StringRewriterTest extends AbstractCommonsTest {
 
 		StringRewriter rewriter = new StringRewriter(esc, "\\w+");
 
-		Mapper<String[], String> replacer = new Mapper<String[], String>() {
-			@Override
-			public String map(String[] groups) {
-				return "<" + groups[0].toUpperCase() + ">";
-			}
-		};
+		Mapper<String[], String> replacer = groups -> "<" + groups[0].toUpperCase() + ">";
 
 		eq(rewriter.rewrite("", replacer), "");
 		eq(rewriter.rewrite("a", replacer), "<A>");
@@ -95,12 +90,7 @@ public class StringRewriterTest extends AbstractCommonsTest {
 	private void checkRewrite(String s, String repl) {
 		String mask = Str.mask(s, maskRegex);
 
-		String s2 = Str.replace(s, mask, regex, new Mapper<String[], String>() {
-			@Override
-			public String map(String[] src) {
-				return "-";
-			}
-		});
+		String s2 = Str.replace(s, mask, regex, src -> "-");
 
 		eq(s2, repl);
 	}

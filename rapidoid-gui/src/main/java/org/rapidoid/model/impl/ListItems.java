@@ -39,7 +39,7 @@ public class ListItems extends AbstractModel implements Items {
 
 	private static final long serialVersionUID = -4233673233447713903L;
 
-	private final List<Item> list = new ArrayList<Item>();
+	private final List<Item> list = new ArrayList<>();
 
 	@Override
 	public void insert(int index, Item item) {

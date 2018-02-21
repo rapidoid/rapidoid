@@ -29,12 +29,7 @@ import org.rapidoid.writable.ReusableWritable;
 @Since("5.2.0")
 public class RapidoidThreadLocals extends RapidoidThing {
 
-	private static final ThreadLocal<RapidoidThreadLocals> THREAD_LOCALS = new ThreadLocal<RapidoidThreadLocals>() {
-		@Override
-		protected RapidoidThreadLocals initialValue() {
-			return new RapidoidThreadLocals();
-		}
-	};
+	private static final ThreadLocal<RapidoidThreadLocals> THREAD_LOCALS = ThreadLocal.withInitial(RapidoidThreadLocals::new);
 
 	public static RapidoidThreadLocals get() {
 		Thread thread = Thread.currentThread();

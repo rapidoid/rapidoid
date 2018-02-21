@@ -23,7 +23,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.JSON;
 import org.rapidoid.http.HttpResp;
-import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
 import org.rapidoid.http.Self;
 import org.rapidoid.setup.On;
@@ -37,12 +36,7 @@ import org.rapidoid.util.MscOpts;
 public class HttpRestAPITest extends TestCommons {
 
 	private void initAPI() {
-		On.get("/inc/{x}").json(new ReqHandler() {
-			@Override
-			public Object execute(Req req) {
-				return U.num(req.param("x")) + 1;
-			}
-		});
+		On.get("/inc/{x}").json((ReqHandler) req -> U.num(req.param("x")) + 1);
 	}
 
 	@Test

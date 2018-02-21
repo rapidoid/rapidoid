@@ -469,20 +469,18 @@ public abstract class TestCommons {
 		final CountDownLatch latch = new CountDownLatch(threadsN);
 
 		for (int i = 1; i <= threadsN; i++) {
-			new Thread() {
-				public void run() {
-					for (int j = 0; j < countPerThread && !failed.get(); j++) {
-						try {
-							runnable.run();
+			new Thread(() -> {
+				for (int j = 0; j < countPerThread && !failed.get(); j++) {
+					try {
+						runnable.run();
 
-						} catch (Throwable e) {
-							failed.set(true);
-							e.printStackTrace();
-						}
+					} catch (Throwable e) {
+						failed.set(true);
+						e.printStackTrace();
 					}
-					latch.countDown();
 				}
-			}.start();
+				latch.countDown();
+			}).start();
 		}
 
 		try {

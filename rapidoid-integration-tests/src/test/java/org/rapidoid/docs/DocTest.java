@@ -146,7 +146,7 @@ public abstract class DocTest extends IsolatedIntegrationTest {
 		Collections.sort(res);
 		filenames.addAll(res);
 
-		return Do.map(filenames).toMap(f -> f.relativeName(), f -> IO.load(f.absoluteName()));
+		return Do.map(filenames).toMap(FileSearchResult::relativeName, f -> IO.load(f.absoluteName()));
 	}
 
 	protected void exercise() {

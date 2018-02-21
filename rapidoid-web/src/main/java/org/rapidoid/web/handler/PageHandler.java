@@ -29,7 +29,6 @@ import org.rapidoid.gui.GUI;
 import org.rapidoid.gui.Grid;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
-import org.rapidoid.lambda.Mapper;
 import org.rapidoid.render.Render;
 import org.rapidoid.u.U;
 import org.rapidoid.web.config.bean.GuiConfig;
@@ -153,12 +152,7 @@ public class PageHandler extends GenericHandler {
 		if (pageSize != null) grid.pageSize(U.num(pageSize));
 
 		if (U.notEmpty(gui.uri())) {
-			grid.toUri(new Mapper<Object, String>() {
-				@Override
-				public String map(Object item) {
-					return Render.template(gui.uri()).model(item);
-				}
-			});
+			grid.toUri(item -> Render.template(gui.uri()).model(item));
 		}
 
 		return grid;

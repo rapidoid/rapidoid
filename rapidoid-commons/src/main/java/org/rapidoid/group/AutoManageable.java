@@ -23,7 +23,6 @@ package org.rapidoid.group;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
-import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
 
 import java.util.Map;
@@ -33,12 +32,7 @@ import java.util.UUID;
 @Since("5.3.0")
 public abstract class AutoManageable<T extends AutoManageable> extends AbstractManageable {
 
-	private static final Map<Class<? extends Manageable>, GroupOf<? extends Manageable>> GROUPS = Coll.autoExpandingMap(new Mapper<Class<? extends Manageable>, GroupOf<? extends Manageable>>() {
-		@Override
-		public GroupOf<?> map(Class<? extends Manageable> cls) {
-			return new GroupOf<>(cls);
-		}
-	});
+	private static final Map<Class<? extends Manageable>, GroupOf<? extends Manageable>> GROUPS = Coll.autoExpandingMap(GroupOf::new);
 
 	private final String id;
 

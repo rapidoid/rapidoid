@@ -34,9 +34,7 @@ public class HttpRenderTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testRender() {
-		On.get("/view1").html((Req req, Resp resp) -> {
-			return resp.mvc(true);
-		});
+		On.get("/view1").html((Req req, Resp resp) -> resp.mvc(true));
 
 		On.page("/view2").mvc((Req req, Resp resp) -> {
 			resp.model().put("x", 12345);

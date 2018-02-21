@@ -47,7 +47,7 @@ public class HttpClientTest extends IsolatedIntegrationTest {
 
 		for (int k = 0; k < 3; k++) {
 
-			ResultCounterCallback<String> cb = new ResultCounterCallback<String>();
+			ResultCounterCallback<String> cb = new ResultCounterCallback<>();
 
 			HttpClientCallback hcb = new HttpClientBodyCallback(cb);
 
@@ -72,7 +72,7 @@ public class HttpClientTest extends IsolatedIntegrationTest {
 	// @Test
 	public void testHttpClientOnRealWebSites() {
 		for (int k = 0; k < 3; k++) {
-			ResultCounterCallback<String> cb = new ResultCounterCallback<String>();
+			ResultCounterCallback<String> cb = new ResultCounterCallback<>();
 
 			HttpClientCallback hcb = new HttpClientBodyCallback(cb);
 

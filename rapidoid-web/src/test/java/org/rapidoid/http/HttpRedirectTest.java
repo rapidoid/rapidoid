@@ -31,24 +31,14 @@ public class HttpRedirectTest extends HttpTestCommons {
 
 	@Test
 	public void testSimpleRedirect() {
-		On.get("/redir").html(new ReqHandler() {
-			@Override
-			public Object execute(Req req) {
-				return req.response().redirect("/target");
-			}
-		});
+		On.get("/redir").html((ReqHandler) req -> req.response().redirect("/target"));
 
 		onlyGet("/redir");
 	}
 
 	@Test
 	public void testRedirectWithCustomCode() {
-		On.get("/redir2").json(new ReqHandler() {
-			@Override
-			public Object execute(Req req) {
-				return req.response().redirect("/target2").code(302);
-			}
-		});
+		On.get("/redir2").json((ReqHandler) req -> req.response().redirect("/target2").code(302));
 
 		onlyGet("/redir2");
 	}

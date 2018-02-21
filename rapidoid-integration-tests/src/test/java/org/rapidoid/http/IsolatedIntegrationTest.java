@@ -388,7 +388,7 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 	}
 
 	protected String appRoutes() {
-		List<String> routes = Do.map(On.routes().all()).toList((Route r) -> r.toString());
+		List<String> routes = Do.map(On.routes().all()).toList(Object::toString);
 		Collections.sort(routes);
 		return U.join("\n", routes);
 	}

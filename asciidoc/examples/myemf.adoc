@@ -19,9 +19,7 @@ public class Main {
 		EntityManagerFactory emf1 = null; // FIXME
 		EntityManagerFactory emf2 = null; // FIXME
 
-		My.entityManagerFactoryProvider(req -> {
-			return req.path().startsWith("/db1/") ? emf1 : emf2;
-		});
+		My.entityManagerFactoryProvider(req -> req.path().startsWith("/db1/") ? emf1 : emf2);
 
 	}
 

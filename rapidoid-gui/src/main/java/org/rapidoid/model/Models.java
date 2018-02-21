@@ -46,7 +46,7 @@ public class Models extends RapidoidThing {
 		"lastupdatedby", "lastupdatedon");
 
 	public static <T> Items beanItems(Class<T> beanType, Object... beans) {
-		ListItems items = new BeanListItems<T>(beanType);
+		ListItems items = new BeanListItems<>(beanType);
 
 		for (Object bean : beans) {
 			items.add(item(bean));
@@ -163,7 +163,7 @@ public class Models extends RapidoidThing {
 	}
 
 	public static <T> Var<T> propertyVar(String name, Item item, String property, T initValue, boolean readOnly) {
-		return new ItemPropertyVar<T>(name, item, property, initValue, readOnly);
+		return new ItemPropertyVar<>(name, item, property, initValue, readOnly);
 	}
 
 	public static boolean isSpecialProperty(String name) {

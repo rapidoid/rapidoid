@@ -89,8 +89,6 @@ public class Main extends GUI {
 
 		/* Search configuration entries by prefix */
 
-		On.page("/find").mvc((String p) -> {
-			return grid(Do.findIn(cfg).all((k, v) -> k.startsWith(p)));
-		});
+		On.page("/find").mvc((String p) -> grid(Do.findIn(cfg).all((k, v) -> k.startsWith(p))));
 	}
 }

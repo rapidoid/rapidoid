@@ -29,9 +29,7 @@ import org.rapidoid.http.customize.ResourceLoader;
 import org.rapidoid.http.impl.AbstractViewResolver;
 import org.rapidoid.u.U;
 
-import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.io.Reader;
 import java.io.StringReader;
 
 /**
@@ -71,25 +69,19 @@ public class JMustacheViewResolver extends AbstractViewResolver<Mustache.Compile
 	}
 
 	protected Mustache.TemplateLoader loader(final ResourceLoader templateLoader) {
-		return new Mustache.TemplateLoader() {
-			@Override
-			public Reader getTemplate(String name) throws Exception {
-				String filename = filename(name);
-				byte[] bytes = templateLoader.load(filename);
-				U.must(bytes != null, "The JMustache template '%s' doesn't exist!", filename);
-				return new StringReader(new String(bytes));
-			}
+		return name -> {
+			String filename = filename(name);
+			byte[] bytes = templateLoader.load(filename);
+			U.must(bytes != null, "The JMustache template '%s' doesn't exist!", filename);
+			return new StringReader(new String(bytes));
 		};
 	}
 
 	protected View view(final Template mustache) {
-		return new View() {
-			@Override
-			public void render(Object model, OutputStream out) {
-				PrintWriter writer = new PrintWriter(out);
-				mustache.execute(model, writer);
-				writer.flush();
-			}
+		return (model, out) -> {
+			PrintWriter writer = new PrintWriter(out);
+			mustache.execute(model, writer);
+			writer.flush();
 		};
 	}
 }

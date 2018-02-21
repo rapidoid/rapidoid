@@ -22,7 +22,6 @@ package org.rapidoid.reverseproxy;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.concurrent.Callback;
 import org.rapidoid.http.*;
 import org.rapidoid.http.impl.lowlevel.HttpIO;
 import org.rapidoid.job.Jobs;
@@ -79,30 +78,25 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 			.cookies(req.cookies())
 			.body(req.body())
 			.raw(true)
-			.execute(new Callback<HttpResp>() {
+			.execute((result, error) -> {
+				if (error == null) {
 
-				@Override
-				public void onDone(HttpResp result, Throwable error) {
-					if (error == null) {
+					resp.code(result.code());
+					resp.body(result.bodyBytes());
 
-						resp.code(result.code());
-						resp.body(result.bodyBytes());
+					// process the response headers
+					SimpleHttpResp proxyResp = new SimpleHttpResp();
+					HttpUtils.proxyResponseHeaders(result.headers(), proxyResp);
 
-						// process the response headers
-						SimpleHttpResp proxyResp = new SimpleHttpResp();
-						HttpUtils.proxyResponseHeaders(result.headers(), proxyResp);
+					if (proxyResp.contentType != null) resp.contentType(proxyResp.contentType);
+					if (proxyResp.headers != null) resp.headers().putAll(proxyResp.headers);
+					if (proxyResp.cookies != null) resp.cookies().putAll(proxyResp.cookies);
 
-						if (proxyResp.contentType != null) resp.contentType(proxyResp.contentType);
-						if (proxyResp.headers != null) resp.headers().putAll(proxyResp.headers);
-						if (proxyResp.cookies != null) resp.cookies().putAll(proxyResp.cookies);
+					resp.done();
 
-						resp.done();
-
-					} else {
-						handleError(error, req, resp, mapping, attempts, since);
-					}
+				} else {
+					handleError(error, req, resp, mapping, attempts, since);
 				}
-
 			});
 	}
 
@@ -135,12 +129,7 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 
 			if (HttpUtils.isGetReq(req) && !U.timedOut(since, timeout())) {
 
-				Jobs.after(retryDelay()).milliseconds(new Runnable() {
-					@Override
-					public void run() {
-						process(req, resp, mapping, attempts + 1, since);
-					}
-				});
+				Jobs.after(retryDelay()).milliseconds(() -> process(req, resp, mapping, attempts + 1, since));
 
 			} else {
 				HttpIO.INSTANCE.errorAndDone(req, U.rte("Couldn't connect to the upstream!", error), LogLevel.DEBUG);

@@ -127,12 +127,7 @@ public class RapidoidHelper extends RapidoidThing {
 
 		if (exchangeClass != null) {
 			exchange = Cls.newInstance(exchangeClass);
-			pool = Pools.create("exchanges", new Callable() {
-				@Override
-				public Object call() {
-					return Cls.newInstance(exchangeClass);
-				}
-			}, 1000);
+			pool = Pools.create("exchanges", (Callable) () -> Cls.newInstance(exchangeClass), 1000);
 		} else {
 			exchange = null;
 			pool = null;

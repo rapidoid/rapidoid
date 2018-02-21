@@ -53,7 +53,6 @@ import java.nio.channels.SocketChannel;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.5.0")
@@ -142,12 +141,7 @@ public class ExtendedWorker extends AbstractEventLoop<ExtendedWorker> implements
 		this.dataIn = Insights.stats(name + ":datain");
 		this.dataOut = Insights.stats(name + ":dataout");
 
-		connections = Pools.create("connections", new Callable<RapidoidConnection>() {
-			@Override
-			public RapidoidConnection call() {
-				return newConnection(false);
-			}
-		}, 100000);
+		connections = Pools.create("connections", () -> newConnection(false), 100000);
 
 		if (idleConnectionsCrawler != null) {
 			idleConnectionsCrawler.register(allConnections);

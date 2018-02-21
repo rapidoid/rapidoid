@@ -25,7 +25,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Str;
 import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.html.Tag;
-import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
@@ -64,25 +63,22 @@ public class Snippet extends AbstractWidget<Snippet> {
 
 		final String prim = "|" + PRIMITIVE_TYPES + "|";
 
-		snippet = Str.replace(snippet, regex, new Mapper<String[], String>() {
-			@Override
-			public String map(String[] src) {
-				String s = src[0];
-				char ch = s.charAt(0);
+		snippet = Str.replace(snippet, regex, src -> {
+			String s = src[0];
+			char ch = s.charAt(0);
 
-				if (Character.isUpperCase(ch) || prim.contains("|" + s + "|")) {
-					return "<span class=\"_code_cls\">" + s + "</span>";
-				} else if (ch == '"' || ch == "'".charAt(0)) {
-					return "<span class=\"_code_str\">" + s + "</span>";
-				} else if (ch == '@') {
-					return "<span class=\"_code_ann\">" + s + "</span>";
-				} else if (Character.isDigit(ch)) {
-					return "<span class=\"_code_num\">" + s + "</span>";
-				} else if (s.equals("\t")) {
-					return "    ";
-				} else {
-					return "<span class=\"_code_kw\">" + s + "</span>";
-				}
+			if (Character.isUpperCase(ch) || prim.contains("|" + s + "|")) {
+				return "<span class=\"_code_cls\">" + s + "</span>";
+			} else if (ch == '"' || ch == "'".charAt(0)) {
+				return "<span class=\"_code_str\">" + s + "</span>";
+			} else if (ch == '@') {
+				return "<span class=\"_code_ann\">" + s + "</span>";
+			} else if (Character.isDigit(ch)) {
+				return "<span class=\"_code_num\">" + s + "</span>";
+			} else if (s.equals("\t")) {
+				return "    ";
+			} else {
+				return "<span class=\"_code_kw\">" + s + "</span>";
 			}
 		});
 

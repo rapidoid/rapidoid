@@ -43,7 +43,7 @@ public class JdbcWorkers extends RapidoidThing {
 	private final JdbcWorker[] workers;
 
 	public JdbcWorkers(JdbcClient jdbc) {
-		this(jdbc, new ArrayBlockingQueue<Operation<Connection>>(DEFAULT_CAPACITY));
+		this(jdbc, new ArrayBlockingQueue<>(DEFAULT_CAPACITY));
 	}
 
 	public JdbcWorkers(JdbcClient jdbc, BlockingQueue<Operation<Connection>> queue) {

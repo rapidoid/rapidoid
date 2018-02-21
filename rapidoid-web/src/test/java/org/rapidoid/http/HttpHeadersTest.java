@@ -33,26 +33,11 @@ public class HttpHeadersTest extends HttpTestCommons {
 	@Test
 	public void headerNamesCaseInsensitive() {
 
-		On.get("/hdrs").json(new ReqRespHandler() {
-			@Override
-			public Object execute(Req req, Resp resp) {
-				return U.list(req.headers().get("foo"), req.headers().get("abc"));
-			}
-		});
+		On.get("/hdrs").json((ReqRespHandler) (req, resp) -> U.list(req.headers().get("foo"), req.headers().get("abc")));
 
-		On.get("/host").json(new ReqRespHandler() {
-			@Override
-			public Object execute(Req req, Resp resp) {
-				return req.host();
-			}
-		});
+		On.get("/host").json((ReqRespHandler) (req, resp) -> req.host());
 
-		On.get("/xnum").json(new ReqRespHandler() {
-			@Override
-			public Object execute(Req req, Resp resp) {
-				return U.list(req.header("X-NuM"), req.header("X-NuM", "?"), req.header("foo"), req.header("FOO", "?"));
-			}
-		});
+		On.get("/xnum").json((ReqRespHandler) (req, resp) -> U.list(req.header("X-NuM"), req.header("X-NuM", "?"), req.header("foo"), req.header("FOO", "?")));
 
 		verify("hdrs", HTTP.get(localhost("/hdrs")).header("Abc", "XYZ").header("Foo", "Bar").fetch());
 

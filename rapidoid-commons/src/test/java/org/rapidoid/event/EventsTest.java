@@ -27,7 +27,6 @@ import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Nikolche Mihajlovski
@@ -45,13 +44,10 @@ public class EventsTest extends TestCommons {
 
 		final List<String> warnings = U.list();
 
-		Events.LOG_WARN.listener(new EventListener() {
-			@Override
-			public void onEvent(Event event, Map<String, Object> data) {
-				isFalse(data.isEmpty());
-				eq(event, Events.LOG_WARN);
-				warnings.add(data.get("_").toString());
-			}
+		Events.LOG_WARN.listener((event, data) -> {
+			isFalse(data.isEmpty());
+			eq(event, Events.LOG_WARN);
+			warnings.add(data.get("_").toString());
 		});
 
 		Log.warn("WRN!");

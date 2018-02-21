@@ -43,12 +43,7 @@ public class Calculator extends GUI {
 
 			Btn b = btn(digit).command("num", i);
 
-			b.onClick(new Runnable() {
-				@Override
-				public void run() {
-					pressed.set(digit);
-				}
-			});
+			b.onClick(() -> pressed.set(digit));
 
 			row = row.append(b);
 			if (i % 3 == 0) {

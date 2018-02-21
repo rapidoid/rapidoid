@@ -32,7 +32,6 @@ import org.rapidoid.util.LazyInit;
 import org.rapidoid.util.MscOpts;
 
 import java.util.Map;
-import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -64,16 +63,11 @@ public class HttpClient extends RapidoidThing {
 
 	private final Map<String, String> cookies = Coll.synchronizedMap();
 
-	private final LazyInit<CloseableHttpAsyncClient> client = new LazyInit<CloseableHttpAsyncClient>(
-		new Callable<CloseableHttpAsyncClient>() {
-
-			@Override
-			public CloseableHttpAsyncClient call() throws Exception {
-				CloseableHttpAsyncClient client = HttpClientUtil.client(HttpClient.this);
-				client.start();
-				return client;
-			}
-
+	private final LazyInit<CloseableHttpAsyncClient> client = new LazyInit<>(
+		() -> {
+			CloseableHttpAsyncClient client = HttpClientUtil.client(HttpClient.this);
+			client.start();
+			return client;
 		});
 
 	public Future<HttpResp> executeRequest(HttpReq req, Callback<HttpResp> callback) {

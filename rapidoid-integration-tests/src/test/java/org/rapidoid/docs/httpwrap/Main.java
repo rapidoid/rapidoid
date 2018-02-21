@@ -27,9 +27,7 @@ public class Main {
 	public static void main(String[] args) {
 		/* A wrapper executes before the handler */
 
-		On.defaults().wrappers((req, next) -> {
-			return next.invokeAndTransformResult(result -> "Hey: " + result);
-		});
+		On.defaults().wrappers((req, next) -> next.invokeAndTransformResult(result -> "Hey: " + result));
 
 		/* and provides transformation for the result */
 

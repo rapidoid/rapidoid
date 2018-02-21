@@ -41,7 +41,7 @@ import java.util.*;
 @Since("2.0.0")
 public class ClasspathUtil extends RapidoidInitializer {
 
-	private static final Set<String> CLASSPATH = new TreeSet<String>();
+	private static final Set<String> CLASSPATH = new TreeSet<>();
 
 	private static volatile String appJar;
 
@@ -58,7 +58,7 @@ public class ClasspathUtil extends RapidoidInitializer {
 	}
 
 	public static synchronized List<File> files(String packageName, Predicate<File> filter) {
-		ArrayList<File> files = new ArrayList<File>();
+		ArrayList<File> files = new ArrayList<>();
 
 		files(packageName, files, filter);
 
@@ -66,7 +66,7 @@ public class ClasspathUtil extends RapidoidInitializer {
 	}
 
 	public static synchronized List<File> dir(String dir, Predicate<File> filter) {
-		ArrayList<File> files = new ArrayList<File>();
+		ArrayList<File> files = new ArrayList<>();
 
 		getFiles(files, new File(dir), filter);
 

@@ -25,7 +25,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.io.IO;
-import org.rapidoid.lambda.Operation;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -54,12 +53,7 @@ public class MultiWatchTest extends TestCommons {
 
 		for (int i = 0; i < total; i++) {
 			final int seenBy = i;
-			Msc.watchForChanges(dir, new Operation<String>() {
-					@Override
-					public void execute(String filename) {
-						seen.add(seenBy);
-					}
-				}
+			Msc.watchForChanges(dir, filename -> seen.add(seenBy)
 			);
 		}
 

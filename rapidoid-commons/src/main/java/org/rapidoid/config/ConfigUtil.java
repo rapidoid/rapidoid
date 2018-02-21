@@ -38,13 +38,10 @@ public class ConfigUtil extends RapidoidThing {
 
 	public static final String YML_OR_YAML_OR_JSON = ".yml_or_yaml_or_json";
 
-	private static final ConfigParser YAML_OR_JSON_PARSER = new ConfigParser() {
-		@SuppressWarnings("unchecked")
-		@Override
-		public Map<String, Object> parse(byte[] bytes) {
-			if (new String(bytes).trim().isEmpty()) return U.map();
-			return Parse.data(bytes, Map.class);
-		}
+	private static final ConfigParser YAML_OR_JSON_PARSER = bytes -> {
+		if (new String(bytes).trim().isEmpty()) return U.map();
+
+		return Parse.data(bytes, Map.class);
 	};
 
 	static synchronized void load(String filename, Config config, List<String> loaded) {

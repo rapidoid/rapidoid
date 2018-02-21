@@ -27,7 +27,6 @@ import org.rapidoid.lambda.Dynamic;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 
-import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 @Authors("Nikolche Mihajlovski")
@@ -36,12 +35,7 @@ public class DynamicTest extends TestCommons {
 
 	@Test
 	public void testDynamic() {
-		Dynamic dynamic = new Dynamic() {
-			@Override
-			public Object call(Method m, Object[] args) {
-				return m.getName() + ":" + U.join(",", args);
-			}
-		};
+		Dynamic dynamic = (m, args) -> m.getName() + ":" + U.join(",", args);
 
 		EgInterface dyn = Msc.dynamic(EgInterface.class, dynamic);
 		EgInterface dyn2 = Msc.dynamic(EgInterface.class, dynamic);

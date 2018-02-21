@@ -28,7 +28,6 @@ import org.rapidoid.group.AbstractManageable;
 import org.rapidoid.group.Manageable;
 import org.rapidoid.group.ManageableBean;
 import org.rapidoid.jdbc.JdbcClient;
-import org.rapidoid.lambda.Operation;
 import org.rapidoid.u.U;
 
 import java.sql.Connection;
@@ -65,12 +64,7 @@ public class ManageableDatabase extends AbstractManageable {
 
 	@Override
 	protected void doReloadManageable(Callback<Void> callback) {
-		jdbc.execute(callback, new Operation<Connection>() {
-			@Override
-			public void execute(Connection conn) throws SQLException {
-				reload(conn);
-			}
-		});
+		jdbc.execute(callback, this::reload);
 	}
 
 	private synchronized void reload(Connection conn) throws SQLException {

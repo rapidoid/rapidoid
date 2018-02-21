@@ -60,12 +60,8 @@ public class Str extends RapidoidThing {
 		{"\"", "\\\\\""},
 	};
 
-	private static final Mapper<String[], String> MASK_REPLACER = new Mapper<String[], String>() {
-		@Override
-		public String map(String[] src) {
-			return Str.mul("\u0000", src[0].length());
-		}
-	};
+	private static final Mapper<String[], String> MASK_REPLACER = src ->
+		Str.mul("\u0000", src[0].length());
 
 	private Str() {
 	}
@@ -95,13 +91,10 @@ public class Str extends RapidoidThing {
 	public static int find(String target, String regex, final Operation<String[]> action) {
 		final AtomicInteger counter = new AtomicInteger();
 
-		replace(target, Pattern.compile(regex), new Mapper<String[], String>() {
-			@Override
-			public String map(String[] found) {
-				counter.incrementAndGet();
-				Lmbd.call(action, found);
-				return "";
-			}
+		replace(target, Pattern.compile(regex), found -> {
+			counter.incrementAndGet();
+			Lmbd.call(action, found);
+			return "";
 		});
 
 		return counter.get();

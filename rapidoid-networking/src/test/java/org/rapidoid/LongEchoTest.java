@@ -31,7 +31,6 @@ import org.rapidoid.util.Msc;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -45,12 +44,9 @@ public class LongEchoTest extends NetTestCommons {
 
 	@Test
 	public void longEcho() {
-		server(new EchoProtocol(), new Runnable() {
-			@Override
-			public void run() {
-				for (int i = 0; i < ROUNDS; i++) {
-					connectAndExercise();
-				}
+		server(new EchoProtocol(), () -> {
+			for (int i = 0; i < ROUNDS; i++) {
+				connectAndExercise();
 			}
 		});
 	}
@@ -58,19 +54,16 @@ public class LongEchoTest extends NetTestCommons {
 	private void connectAndExercise() {
 		final AtomicBoolean completed = new AtomicBoolean();
 
-		NetUtil.connect("localhost", 8080, new F3<Void, InputStream, BufferedReader, DataOutputStream>() {
-			@Override
-			public Void execute(InputStream inputStream, BufferedReader in, DataOutputStream out) throws IOException {
+		NetUtil.connect("localhost", 8080, (F3<Void, InputStream, BufferedReader, DataOutputStream>) (inputStream, in, out) -> {
 
-				out.writeBytes(MSG + "\n");
-				eq(in.readLine(), MSG.toUpperCase());
+			out.writeBytes(MSG + "\n");
+			eq(in.readLine(), MSG.toUpperCase());
 
-				out.writeBytes("bye\n");
-				eq(in.readLine(), "BYE");
+			out.writeBytes("bye\n");
+			eq(in.readLine(), "BYE");
 
-				completed.set(true);
-				return null;
-			}
+			completed.set(true);
+			return null;
 		});
 	}
 

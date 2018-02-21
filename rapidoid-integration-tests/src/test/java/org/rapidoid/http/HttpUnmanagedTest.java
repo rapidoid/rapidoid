@@ -39,9 +39,7 @@ public class HttpUnmanagedTest extends IsolatedIntegrationTest {
 	@Test
 	public void testUnmanagedHandlersWithPrerenderedJSON1() {
 
-		On.post("/json").managed(false).json((Req req, Resp resp) -> {
-			return resp.body(PRE_RENDERED);
-		});
+		On.post("/json").managed(false).json((Req req, Resp resp) -> resp.body(PRE_RENDERED));
 
 		onlyPost("/json");
 	}
@@ -49,9 +47,7 @@ public class HttpUnmanagedTest extends IsolatedIntegrationTest {
 	@Test
 	public void testUnmanagedHandlersWithPrerenderedJSON2() {
 
-		On.get("/json").managed(false).serve((Req req, Resp resp) -> {
-			return resp.contentType(MediaType.JSON).body(PRE_RENDERED);
-		});
+		On.get("/json").managed(false).serve((Req req, Resp resp) -> resp.contentType(MediaType.JSON).body(PRE_RENDERED));
 
 		onlyGet("/json");
 	}
@@ -111,9 +107,7 @@ public class HttpUnmanagedTest extends IsolatedIntegrationTest {
 	@Test
 	public void testUnmanagedHandlersWithHtml() {
 
-		On.post("/").managed(false).serve((Req req, Resp resp) -> {
-			return resp.html("denied!").code(403);
-		});
+		On.post("/").managed(false).serve((Req req, Resp resp) -> resp.html("denied!").code(403));
 
 		onlyPost("/");
 	}

@@ -77,7 +77,7 @@ public class ChangeTrackingMap<K, V> extends AbstractMapDecorator<K, V> {
 	@Override
 	public Set<Entry<K, V>> entrySet() {
 		if (entrySet == null) {
-			entrySet = new ChangeTrackingSet<Entry<K, V>>(super.entrySet(), dirtyFlag);
+			entrySet = new ChangeTrackingSet<>(super.entrySet(), dirtyFlag);
 		}
 
 		return entrySet;
@@ -86,7 +86,7 @@ public class ChangeTrackingMap<K, V> extends AbstractMapDecorator<K, V> {
 	@Override
 	public Set<K> keySet() {
 		if (keySet == null) {
-			keySet = new ChangeTrackingSet<K>(super.keySet(), dirtyFlag);
+			keySet = new ChangeTrackingSet<>(super.keySet(), dirtyFlag);
 		}
 
 		return keySet;
@@ -95,7 +95,7 @@ public class ChangeTrackingMap<K, V> extends AbstractMapDecorator<K, V> {
 	@Override
 	public Collection<V> values() {
 		if (values == null) {
-			values = new ChangeTrackingCollection<V>(super.values(), dirtyFlag);
+			values = new ChangeTrackingCollection<>(super.values(), dirtyFlag);
 		}
 
 		return values;

@@ -39,49 +39,33 @@ public class TerminateHandler extends GUI implements Callable<Object> {
 
 		Btn shutdown = btn("Shutdown").danger()
 			.confirm("Do you really want to SHUTDOWN / RESTART the application?")
-			.onClick(new Runnable() {
-				         @Override
-				         public void run() {
-					         shutdownSoon();
-				         }
-			         }
+			.onClick(TerminateHandler::shutdownSoon
 			);
 
 		Btn halt = btn("Halt").danger()
 			.confirm("Do you really want to HALT / RESTART the application?")
-			.onClick(new Runnable() {
-				         @Override
-				         public void run() {
-					         haltSoon();
-				         }
-			         }
+			.onClick(TerminateHandler::haltSoon
 			);
 
 		return multi(h1("Terminate / restart the application?"), shutdown, halt);
 	}
 
 	public static void shutdownSoon() {
-		new Thread() {
-			@Override
-			public void run() {
-				U.sleep(1000);
-				Jobs.shutdown();
-				Setup.shutdownAll();
-				System.exit(0);
-			}
-		}.start();
+		new Thread(() -> {
+			U.sleep(1000);
+			Jobs.shutdown();
+			Setup.shutdownAll();
+			System.exit(0);
+		}).start();
 	}
 
 	public static void haltSoon() {
-		new Thread() {
-			@Override
-			public void run() {
-				U.sleep(1000);
-				Jobs.shutdownNow();
-				Setup.haltAll();
-				System.exit(0);
-			}
-		}.start();
+		new Thread(() -> {
+			U.sleep(1000);
+			Jobs.shutdownNow();
+			Setup.haltAll();
+			System.exit(0);
+		}).start();
 	}
 }
 

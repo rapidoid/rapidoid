@@ -39,75 +39,30 @@ public class JMXMetrics extends RapidoidThing {
 		if (osBean instanceof com.sun.management.OperatingSystemMXBean) {
 			final com.sun.management.OperatingSystemMXBean os = (com.sun.management.OperatingSystemMXBean) osBean;
 
-			Metrics.measure("Total memory (MB)", new Callable<Double>() {
-				@Override
-				public Double call() {
-					return os.getCommittedVirtualMemorySize() / 1024.0 / 1024.0;
-				}
-			});
+			Metrics.measure("Total memory (MB)", (Callable<Double>) () -> os.getCommittedVirtualMemorySize() / 1024.0 / 1024.0);
 		}
 
 		List<GarbageCollectorMXBean> gcs = ManagementFactory.getGarbageCollectorMXBeans();
 
 		for (final GarbageCollectorMXBean gc : gcs) {
-			Metrics.measure(gc.getName() + " - GC count", new Callable<Long>() {
-				@Override
-				public Long call() {
-					return gc.getCollectionCount();
-				}
-			});
+			Metrics.measure(gc.getName() + " - GC count", (Callable<Long>) gc::getCollectionCount);
 
-			Metrics.measure(gc.getName() + " - GC time", new Callable<Long>() {
-				@Override
-				public Long call() {
-					return gc.getCollectionTime();
-				}
-			});
+			Metrics.measure(gc.getName() + " - GC time", (Callable<Long>) gc::getCollectionTime);
 		}
 
 		final MemoryMXBean mem = ManagementFactory.getMemoryMXBean();
 
-		Metrics.measure("Heap memory used (MB)", new Callable<Double>() {
-			@Override
-			public Double call() {
-				return mem.getHeapMemoryUsage().getUsed() / 1024.0 / 1024.0;
-			}
-		});
+		Metrics.measure("Heap memory used (MB)", (Callable<Double>) () -> mem.getHeapMemoryUsage().getUsed() / 1024.0 / 1024.0);
 
-		Metrics.measure("Non-heap memory used (MB)", new Callable<Double>() {
-			@Override
-			public Double call() {
-				return mem.getNonHeapMemoryUsage().getUsed() / 1024.0 / 1024.0;
-			}
-		});
+		Metrics.measure("Non-heap memory used (MB)", (Callable<Double>) () -> mem.getNonHeapMemoryUsage().getUsed() / 1024.0 / 1024.0);
 
-		Metrics.measure("Heap memory committed (MB)", new Callable<Double>() {
-			@Override
-			public Double call() {
-				return mem.getHeapMemoryUsage().getCommitted() / 1024.0 / 1024.0;
-			}
-		});
+		Metrics.measure("Heap memory committed (MB)", (Callable<Double>) () -> mem.getHeapMemoryUsage().getCommitted() / 1024.0 / 1024.0);
 
-		Metrics.measure("Non-heap memory committed (MB)", new Callable<Double>() {
-			@Override
-			public Double call() {
-				return mem.getNonHeapMemoryUsage().getCommitted() / 1024.0 / 1024.0;
-			}
-		});
+		Metrics.measure("Non-heap memory committed (MB)", (Callable<Double>) () -> mem.getNonHeapMemoryUsage().getCommitted() / 1024.0 / 1024.0);
 
-		Metrics.measure("Heap memory max (MB)", new Callable<Double>() {
-			@Override
-			public Double call() {
-				return mem.getHeapMemoryUsage().getMax() / 1024.0 / 1024.0;
-			}
-		});
+		Metrics.measure("Heap memory max (MB)", (Callable<Double>) () -> mem.getHeapMemoryUsage().getMax() / 1024.0 / 1024.0);
 
-		Metrics.measure("Non-heap memory max (MB)", new Callable<Double>() {
-			@Override
-			public Double call() {
-				return mem.getNonHeapMemoryUsage().getMax() / 1024.0 / 1024.0;
-			}
-		});
+		Metrics.measure("Non-heap memory max (MB)", (Callable<Double>) () -> mem.getNonHeapMemoryUsage().getMax() / 1024.0 / 1024.0);
 
 		memDetails();
 	}
@@ -116,12 +71,7 @@ public class JMXMetrics extends RapidoidThing {
 		List<MemoryPoolMXBean> mems = ManagementFactory.getMemoryPoolMXBeans();
 
 		for (final MemoryPoolMXBean mx : mems) {
-			Metrics.measure(mx.getName() + " (MB)", new Callable<Double>() {
-				@Override
-				public Double call() {
-					return mx.getUsage().getUsed() / 1024.0 / 1024.0;
-				}
-			});
+			Metrics.measure(mx.getName() + " (MB)", (Callable<Double>) () -> mx.getUsage().getUsed() / 1024.0 / 1024.0);
 		}
 	}
 

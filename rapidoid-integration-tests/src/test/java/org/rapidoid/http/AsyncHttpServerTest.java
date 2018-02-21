@@ -74,14 +74,10 @@ public class AsyncHttpServerTest extends IsolatedIntegrationTest {
 			req.async();
 			U.must(req.isAsync());
 
-			async(() -> {
-				appendTo(req, "O", false, () -> {
-					async(() -> {
-						appendTo(req, "K", true, null);
-						// req.done() is in "appendTo"
-					});
-				});
-			});
+			async(() -> appendTo(req, "O", false, () -> async(() -> {
+				appendTo(req, "K", true, null);
+				// req.done() is in "appendTo"
+			})));
 
 			return req;
 		});

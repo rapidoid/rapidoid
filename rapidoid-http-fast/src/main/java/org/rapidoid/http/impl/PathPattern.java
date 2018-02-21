@@ -26,7 +26,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Str;
 import org.rapidoid.commons.URIs;
-import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
 
 import java.lang.reflect.Method;
@@ -69,12 +68,7 @@ public class PathPattern extends RapidoidThing implements Comparable<PathPattern
 		final Map<String, String> groups = U.map();
 		final AtomicInteger counter = new AtomicInteger();
 
-		String regex = Str.replace(path, PATH_PARAM_REGEX, new Mapper<String[], String>() {
-			@Override
-			public String map(String[] gr) {
-				return toPathParamRegex(groups, counter, gr[1]);
-			}
-		});
+		String regex = Str.replace(path, PATH_PARAM_REGEX, gr -> toPathParamRegex(groups, counter, gr[1]));
 
 		if (regex.equals("/*")) {
 			regex = "/" + toPathParamRegex(groups, counter, ANY, ".*");
@@ -171,12 +165,7 @@ public class PathPattern extends RapidoidThing implements Comparable<PathPattern
 	}
 
 	public String prefix() {
-		String simplifiedPattern = Str.replace(path, PATH_PARAM_REGEX, new Mapper<String[], String>() {
-			@Override
-			public String map(String[] gr) {
-				return "*";
-			}
-		});
+		String simplifiedPattern = Str.replace(path, PATH_PARAM_REGEX, gr -> "*");
 
 		String prefix = Str.cutToFirst(simplifiedPattern, "*");
 

@@ -33,7 +33,7 @@ import org.rapidoid.var.impl.ValidatingVar;
 public class Vars extends RapidoidThing {
 
 	public static <T> Var<T> var(String name, T value) {
-		return new SimpleVar<T>(name, value);
+		return new SimpleVar<>(name, value);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -48,7 +48,7 @@ public class Vars extends RapidoidThing {
 	}
 
 	public static <T> Var<T> mandatory(Var<T> var) {
-		return new MandatoryVar<T>(var);
+		return new MandatoryVar<>(var);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -62,7 +62,7 @@ public class Vars extends RapidoidThing {
 	}
 
 	public static <T> Var<T> validate(Var<T> var, Predicate<T> isValid, String message) {
-		return new ValidatingVar<T>(var, isValid, message);
+		return new ValidatingVar<>(var, isValid, message);
 	}
 
 }

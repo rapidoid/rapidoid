@@ -222,13 +222,10 @@ class LowLevelHttpIO extends RapidoidThing {
 		req.revert();
 		req.async();
 
-		Runnable errorHandler = new Runnable() {
-			@Override
-			public void run() {
-				error(req, error, logLevel);
-				// the Req object will do the rendering
-				req.done();
-			}
+		Runnable errorHandler = () -> {
+			error(req, error, logLevel);
+			// the Req object will do the rendering
+			req.done();
 		};
 
 		Ctx ctx = Ctxs.get();

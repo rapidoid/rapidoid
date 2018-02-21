@@ -60,7 +60,7 @@ public class BeanProperties extends RapidoidThing implements Iterable<Prop> {
 				Set<String> include = selector.include();
 				Set<String> exclude = selector.exclude();
 
-				List<Prop> selected = new ArrayList<Prop>(10);
+				List<Prop> selected = new ArrayList<>(10);
 
 				for (String propName : include) {
 					Prop prop = map.get(propName);
@@ -91,7 +91,7 @@ public class BeanProperties extends RapidoidThing implements Iterable<Prop> {
 				}
 
 				if (U.isEmpty(include)) {
-					Collections.sort(selected, selector);
+					selected.sort(selector);
 				}
 
 				return from(selected);

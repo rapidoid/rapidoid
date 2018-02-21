@@ -52,12 +52,7 @@ public class GUIActions extends GUI {
 		Btn btn = cmd(action, cls, kind, id).smallest();
 
 		final String cmd = btn.command();
-		btn.onClick(new Runnable() {
-			@Override
-			public void run() {
-				manageable.runManageableAction(cmd);
-			}
-		});
+		btn.onClick(() -> manageable.runManageableAction(cmd));
 
 		return btn;
 	}

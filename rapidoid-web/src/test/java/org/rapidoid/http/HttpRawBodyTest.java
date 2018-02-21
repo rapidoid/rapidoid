@@ -32,24 +32,14 @@ public class HttpRawBodyTest extends HttpTestCommons {
 
 	@Test
 	public void testBytesResponse() {
-		On.get("/bytes").html(new ReqHandler() {
-			@Override
-			public Object execute(Req req) {
-				return req.response().body("ABC".getBytes());
-			}
-		});
+		On.get("/bytes").html((ReqHandler) req -> req.response().body("ABC".getBytes()));
 
 		onlyGet("/bytes");
 	}
 
 	@Test
 	public void testByteBufferResponse() {
-		On.get("/buf").json(new ReqHandler() {
-			@Override
-			public Object execute(Req req) {
-				return req.response().body(Bufs.buf("{\"byte-buffer\": true}"));
-			}
-		});
+		On.get("/buf").json((ReqHandler) req -> req.response().body(Bufs.buf("{\"byte-buffer\": true}")));
 
 		onlyGet("/buf");
 	}

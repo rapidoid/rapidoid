@@ -24,7 +24,6 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
-import org.rapidoid.lambda.Mapper;
 import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -43,12 +42,9 @@ public class AutoExpandingMapTest extends AbstractCommonsTest {
 
 		final int k = 1000;
 
-		Msc.benchmarkMT(200, "gets", 100000000, new Runnable() {
-			@Override
-			public void run() {
-				int rnd = Rnd.rnd(k);
-				eq(map.get(rnd), rnd + "");
-			}
+		Msc.benchmarkMT(200, "gets", 100000000, () -> {
+			int rnd = Rnd.rnd(k);
+			eq(map.get(rnd), rnd + "");
 		});
 
 		// it is highly unlikely to be less than K, for a small value of K
@@ -68,12 +64,9 @@ public class AutoExpandingMapTest extends AbstractCommonsTest {
 	}
 
 	private Map<Object, Object> autoToStr(final AtomicInteger counter) {
-		return Coll.autoExpandingMap(new Mapper<Object, Object>() {
-			@Override
-			public Object map(Object src) {
-				counter.incrementAndGet();
-				return src + "";
-			}
+		return Coll.autoExpandingMap(src -> {
+			counter.incrementAndGet();
+			return src + "";
 		});
 	}
 }

@@ -49,7 +49,6 @@ import java.nio.channels.SocketChannel;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -117,15 +116,10 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> implements
 		final int queueSize = ConfigUtil.micro() ? 1000 : 1000000;
 		final int growFactor = ConfigUtil.micro() ? 2 : 10;
 
-		this.connected = new ArrayBlockingQueue<SocketChannel>(queueSize);
-		this.done = new SimpleList<RapidoidConnection>(queueSize / 10, growFactor);
+		this.connected = new ArrayBlockingQueue<>(queueSize);
+		this.done = new SimpleList<>(queueSize / 10, growFactor);
 
-		connections = Pools.create("connections", new Callable<RapidoidConnection>() {
-			@Override
-			public RapidoidConnection call() {
-				return newConnection(false);
-			}
-		}, 100000);
+		connections = Pools.create("connections", () -> newConnection(false), 100000);
 
 		if (idleConnectionsCrawler != null) {
 			idleConnectionsCrawler.register(allConnections);

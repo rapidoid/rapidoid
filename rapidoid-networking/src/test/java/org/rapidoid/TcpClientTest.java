@@ -29,33 +29,26 @@ import org.rapidoid.net.Protocol;
 import org.rapidoid.net.Server;
 import org.rapidoid.net.TCP;
 import org.rapidoid.net.TCPClient;
-import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.5.0")
 public class TcpClientTest extends NetTestCommons {
 
-	private final Protocol UPPERCASE_SERVER = new Protocol() {
-		@Override
-		public void process(Channel ctx) {
-			if (ctx.isInitial()) {
-				return;
-			}
-			ctx.writeln(ctx.readln().toUpperCase());
+	private final Protocol UPPERCASE_SERVER = ctx -> {
+		if (ctx.isInitial()) {
+			return;
 		}
+		ctx.writeln(ctx.readln().toUpperCase());
 	};
 
-	private final Protocol HI_CLIENT = new Protocol() {
-		@Override
-		public void process(Channel ctx) {
-			if (ctx.isInitial()) {
-				ctx.writeln("Hi there!");
-				return;
-			}
-
-			eq(ctx.readln(), "HI THERE!");
+	private final Protocol HI_CLIENT = ctx -> {
+		if (ctx.isInitial()) {
+			ctx.writeln("Hi there!");
+			return;
 		}
+
+		eq(ctx.readln(), "HI THERE!");
 	};
 
 	@Test

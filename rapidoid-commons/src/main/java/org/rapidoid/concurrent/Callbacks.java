@@ -51,24 +51,14 @@ public class Callbacks extends RapidoidThing {
 	}
 
 	public static <FROM, TO> Callback<FROM> mapping(final Callback<TO> callback, final Mapper<FROM, TO> mapper) {
-		return new Callback<FROM>() {
-
-			@Override
-			public void onDone(FROM result, Throwable error) throws Exception {
-				TO mapped = error == null ? mapper.map(result) : null;
-				Callbacks.done(callback, mapped, error);
-			}
-
+		return (result, error) -> {
+			TO mapped = error == null ? mapper.map(result) : null;
+			Callbacks.done(callback, mapped, error);
 		};
 	}
 
 	public static <T> Callback<T> countDown(final CountDownLatch latch) {
-		return new Callback<T>() {
-			@Override
-			public void onDone(T result, Throwable error) {
-				latch.countDown();
-			}
-		};
+		return (result, error) -> latch.countDown();
 	}
 
 }

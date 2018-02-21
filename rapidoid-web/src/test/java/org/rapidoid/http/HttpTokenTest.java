@@ -32,19 +32,16 @@ public class HttpTokenTest extends HttpTestCommons {
 
 	@Test
 	public void testHttpToken() {
-		On.req(new ReqRespHandler() {
-			@Override
-			public Object execute(Req req, Resp resp) {
-				Log.info("Token", "data", req.token());
+		On.req((ReqRespHandler) (req, resp) -> {
+			Log.info("Token", "data", req.token());
 
-				int n = req.token("n", 0) + 1;
-				resp.token("n", n);
+			int n = req.token("n", 0) + 1;
+			resp.token("n", n);
 
-				int m = req.token("m", 10) + 1;
-				resp.token("m", m);
+			int m = req.token("m", 10) + 1;
+			resp.token("m", m);
 
-				return n + ":" + m;
-			}
+			return n + ":" + m;
 		});
 
 		HttpClient client = HTTP.client().keepCookies(true);

@@ -74,7 +74,7 @@ public class ChangeTrackingCollection<E> extends AbstractCollectionDecorator<E> 
 
 	@Override
 	public Iterator<E> iterator() {
-		return new ChangeTrackingIterator<E>(super.iterator(), dirtyFlag);
+		return new ChangeTrackingIterator<>(super.iterator(), dirtyFlag);
 	}
 
 	protected boolean changedIf(boolean changed) {

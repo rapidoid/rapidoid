@@ -33,12 +33,7 @@ import java.util.concurrent.Callable;
 public class Lmbd extends RapidoidThing {
 
 	public static <FROM, TO> Mapper<FROM, TO> mapper(final Map<FROM, TO> map) {
-		return new Mapper<FROM, TO>() {
-			@Override
-			public TO map(FROM key) {
-				return map.get(key);
-			}
-		};
+		return map::get;
 	}
 
 	public static <T> boolean eval(Predicate<T> predicate, T target) {
@@ -75,12 +70,9 @@ public class Lmbd extends RapidoidThing {
 	}
 
 	public static <T> Callable<T> callable(final Runnable action) {
-		return new Callable<T>() {
-			@Override
-			public T call() {
-				action.run();
-				return null;
-			}
+		return () -> {
+			action.run();
+			return null;
 		};
 	}
 

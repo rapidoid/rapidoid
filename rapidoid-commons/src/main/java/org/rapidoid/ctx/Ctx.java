@@ -47,9 +47,9 @@ public class Ctx extends RapidoidThing implements CtxMetadata {
 
 	private volatile boolean closed = false;
 
-	private volatile ThreadLocal<Object> persisters = new ThreadLocal<Object>();
+	private volatile ThreadLocal<Object> persisters = new ThreadLocal<>();
 
-	private final List<Object> persistersToClose = Collections.synchronizedList(new LinkedList<Object>());
+	private final List<Object> persistersToClose = Collections.synchronizedList(new LinkedList<>());
 
 	private final Map<Object, Object> extras = Coll.synchronizedMap();
 

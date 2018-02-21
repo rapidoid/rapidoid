@@ -97,16 +97,13 @@ public class ManageablesOverviewPage extends GUI implements Callable<Object> {
 		Grid grid = grid(items)
 			.columns(columns)
 			.headers(columns)
-			.toUri(new Mapper<Manageable, String>() {
-				@Override
-				public String map(Manageable item) {
+			.toUri((Mapper<Manageable, String>) item -> {
 
-					final List<String> uri = U.list(nav);
-					uri.add(0, U.safe(baseUri));
-					uri.add(item.id());
+				final List<String> uri = U.list(nav);
+				uri.add(0, U.safe(baseUri));
+				uri.add(item.id());
 
-					return Msc.uri(U.arrayOf(uri));
-				}
+				return Msc.uri(U.arrayOf(uri));
 			})
 			.pageSize(100);
 

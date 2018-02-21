@@ -54,7 +54,7 @@ public abstract class AbstractValue<T> extends RapidoidThing implements Value<T>
 	@Override
 	public Value<T> orElse(Value<T> alternative) {
 		U.notNull(alternative, "alternative");
-		return new OrValue<T>(this, alternative);
+		return new OrValue<>(this, alternative);
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public abstract class AbstractValue<T> extends RapidoidThing implements Value<T>
 	@Override
 	public <K> Value<K> to(Class<K> type) {
 		U.notNull(type, "type");
-		return new ToValue<K>(this, type);
+		return new ToValue<>(this, type);
 	}
 
 	@Override

@@ -38,21 +38,11 @@ public abstract class ProtocolBridge extends RapidoidThing {
 	protected abstract void peer2(Channel ctx);
 
 	public Protocol peer1() {
-		return new Protocol() {
-			@Override
-			public void process(Channel ctx) {
-				peer1(ctx);
-			}
-		};
+		return this::peer1;
 	}
 
 	public Protocol peer2() {
-		return new Protocol() {
-			@Override
-			public void process(Channel ctx) {
-				peer2(ctx);
-			}
-		};
+		return this::peer2;
 	}
 
 	protected Channel peer(Channel ctx) {

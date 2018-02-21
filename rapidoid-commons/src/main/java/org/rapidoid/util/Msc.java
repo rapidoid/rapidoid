@@ -92,18 +92,15 @@ public class Msc extends RapidoidThing {
 		state = new MscState();
 	}
 
-	public static final Mapper<Object, Object> TRANSFORM_TO_SIMPLE_CLASS_NAME = new Mapper<Object, Object>() {
-		@Override
-		public Object map(Object src) {
-			if (src == null) {
-				return null;
-			}
+	public static final Mapper<Object, Object> TRANSFORM_TO_SIMPLE_CLASS_NAME = src -> {
+		if (src == null) {
+			return null;
+		}
 
-			if (src instanceof Class<?>) {
-				return ((Class<?>) src).getSimpleName();
-			} else {
-				return src.getClass().getName() + "@" + System.identityHashCode(src);
-			}
+		if (src instanceof Class<?>) {
+			return ((Class<?>) src).getSimpleName();
+		} else {
+			return src.getClass().getName() + "@" + System.identityHashCode(src);
 		}
 	};
 
@@ -191,12 +188,7 @@ public class Msc extends RapidoidThing {
 	}
 
 	public static void benchmark(String name, int count, final Runnable runnable) {
-		doBenchmark(name, count, new BenchmarkOperation() {
-			@Override
-			public void run(int iteration) {
-				runnable.run();
-			}
-		}, false);
+		doBenchmark(name, count, iteration -> runnable.run(), false);
 	}
 
 	public static void benchmark(String name, int count, BenchmarkOperation operation) {
@@ -288,12 +280,7 @@ public class Msc extends RapidoidThing {
 	}
 
 	public static void benchmarkMT(int threadsN, final String name, final int count, final Runnable runnable) {
-		benchmarkMT(threadsN, name, count, null, new BenchmarkOperation() {
-			@Override
-			public void run(int iteration) {
-				runnable.run();
-			}
-		});
+		benchmarkMT(threadsN, name, count, null, iteration -> runnable.run());
 	}
 
 	public static void benchmarkMT(int threadsN, final String name, final int count, final BenchmarkOperation operation) {
@@ -365,14 +352,10 @@ public class Msc extends RapidoidThing {
 
 		for (int i = 1; i <= threadsN; i++) {
 			final Integer n = i;
-			new Thread() {
-				@Override
-				public void run() {
-					Lmbd.eval(executable, n);
-					latch.countDown();
-				}
-
-			}.start();
+			new Thread(() -> {
+				Lmbd.eval(executable, n);
+				latch.countDown();
+			}).start();
 		}
 
 		try {
@@ -383,13 +366,9 @@ public class Msc extends RapidoidThing {
 	}
 
 	public static void multiThreaded(int threadsN, final Runnable executable) {
-		multiThreaded(threadsN, new Mapper<Integer, Void>() {
-			@Override
-			public Void map(Integer n) {
-				executable.run();
-				return null;
-			}
-
+		multiThreaded(threadsN, n -> {
+			executable.run();
+			return null;
 		});
 	}
 
@@ -605,21 +584,16 @@ public class Msc extends RapidoidThing {
 	public static <T> T dynamic(final Class<T> targetInterface, final Dynamic dynamic) {
 		final Object obj = new Object();
 
-		InvocationHandler handler = new InvocationHandler() {
+		InvocationHandler handler = (proxy, method, args) -> {
 
-			@Override
-			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-
-				if (method.getDeclaringClass().equals(Object.class)) {
-					if (method.getName().equals("toString")) {
-						return targetInterface.getSimpleName() + "@" + Integer.toHexString(obj.hashCode());
-					}
-					return method.invoke(obj, args);
+			if (method.getDeclaringClass().equals(Object.class)) {
+				if (method.getName().equals("toString")) {
+					return targetInterface.getSimpleName() + "@" + Integer.toHexString(obj.hashCode());
 				}
-
-				return dynamic.call(method, U.safe(args));
+				return method.invoke(obj, args);
 			}
 
+			return dynamic.call(method, U.safe(args));
 		};
 
 		return ((T) Proxy.newProxyInstance(targetInterface.getClassLoader(), new Class[]{targetInterface}, handler));
@@ -631,29 +605,23 @@ public class Msc extends RapidoidThing {
 
 	public static void terminate(final int afterSeconds) {
 		Log.warn("Terminating application in " + afterSeconds + " seconds...");
-		new Thread() {
-			@Override
-			public void run() {
-				U.sleep(afterSeconds * 1000);
-				terminate();
-			}
-		}.start();
+		new Thread(() -> {
+			U.sleep(afterSeconds * 1000);
+			terminate();
+		}).start();
 	}
 
 	public static void terminateIfIdleFor(final int idleSeconds) {
 		Log.warn("Will terminate if idle for " + idleSeconds + " seconds...");
 
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				while (!Thread.interrupted()) {
-					U.sleep(500);
-					long lastUsed = Usage.getLastAppUsedOn();
-					long idleSec = (U.time() - lastUsed) / 1000;
-					if (idleSec >= idleSeconds) {
-						Usage.touchLastAppUsedOn();
-						terminate();
-					}
+		new Thread(() -> {
+			while (!Thread.interrupted()) {
+				U.sleep(500);
+				long lastUsed = Usage.getLastAppUsedOn();
+				long idleSec = (U.time() - lastUsed) / 1000;
+				if (idleSec >= idleSeconds) {
+					Usage.touchLastAppUsedOn();
+					terminate();
 				}
 			}
 		}).start();
@@ -1234,7 +1202,7 @@ public class Msc extends RapidoidThing {
 	}
 
 	public static void sortByOrder(List<Method> methods) {
-		Collections.sort(methods, new Comparator<Method>() {
+		methods.sort(new Comparator<Method>() {
 			@Override
 			public int compare(Method a, Method b) {
 				return orderOf(a) - orderOf(b);

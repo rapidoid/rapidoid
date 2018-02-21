@@ -105,14 +105,9 @@ public class NetUtil extends RapidoidThing {
 	}
 
 	public static byte[] writeAndRead(String address, int port, final byte[] req, final int timeout) {
-		return connect(address, port, timeout, new F3<byte[], InputStream, BufferedReader, DataOutputStream>() {
-
-			@Override
-			public byte[] execute(InputStream in, BufferedReader reader, DataOutputStream out) throws Exception {
-				out.write(req);
-				return IO.readWithTimeout(in);
-			}
-
+		return connect(address, port, timeout, (in, reader, out) -> {
+			out.write(req);
+			return IO.readWithTimeout(in);
 		});
 	}
 

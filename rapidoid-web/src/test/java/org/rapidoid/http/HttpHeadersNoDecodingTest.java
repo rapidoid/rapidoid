@@ -31,12 +31,7 @@ public class HttpHeadersNoDecodingTest extends HttpTestCommons {
 
 	@Test
 	public void httpHeadersShouldNotBeDecoded() {
-		On.get("/").plain(new ReqHandler() {
-			@Override
-			public Object execute(Req req) {
-				return req.header("a+a-a") + ":::" + req.cookie("b+b-b");
-			}
-		});
+		On.get("/").plain((ReqHandler) req -> req.header("a+a-a") + ":::" + req.cookie("b+b-b"));
 
 		String a = "x-y+z++=123";
 		String b = "c!@#d35f=-+1#";

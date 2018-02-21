@@ -567,12 +567,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 	public Set<Route> allAdmin() {
 		Set<Route> routes = U.set(all());
 
-		for (Iterator<Route> it = routes.iterator(); it.hasNext(); ) {
-			Route route = it.next();
-			if (!route.config().zone().equalsIgnoreCase("admin")) {
-				it.remove();
-			}
-		}
+		routes.removeIf(route -> !route.config().zone().equalsIgnoreCase("admin"));
 
 		return routes;
 	}
@@ -581,12 +576,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 	public Set<Route> allNonAdmin() {
 		Set<Route> routes = U.set(all());
 
-		for (Iterator<Route> it = routes.iterator(); it.hasNext(); ) {
-			Route route = it.next();
-			if (route.config().zone().equalsIgnoreCase("admin")) {
-				it.remove();
-			}
-		}
+		routes.removeIf(route -> route.config().zone().equalsIgnoreCase("admin"));
 
 		return routes;
 	}

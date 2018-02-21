@@ -52,12 +52,7 @@ public class MultiBuf extends OutputStream implements Buf, Constants {
 
 	private final byte[] HELPER = new byte[20];
 
-	private final ThreadLocal<ByteBuffer> tmpBufs = new ThreadLocal<ByteBuffer>() {
-		@Override
-		protected ByteBuffer initialValue() {
-			return ByteBuffer.allocateDirect(20 * 1024);
-		}
-	};
+	private final ThreadLocal<ByteBuffer> tmpBufs = ThreadLocal.withInitial(() -> ByteBuffer.allocateDirect(20 * 1024));
 
 	private final BufRange HELPER_RANGE = new BufRange();
 

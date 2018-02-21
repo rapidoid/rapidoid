@@ -43,7 +43,10 @@ import javax.annotation.PostConstruct;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -60,13 +63,7 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 
 	private volatile IoCContextWrapper wrapper;
 
-	private final Map<Class<?>, ClassMetadata> metadata = Coll
-		.autoExpandingMap(new Mapper<Class<?>, ClassMetadata>() {
-			@Override
-			public ClassMetadata map(Class<?> clazz) {
-				return new ClassMetadata(clazz);
-			}
-		});
+	private final Map<Class<?>, ClassMetadata> metadata = Coll.autoExpandingMap(ClassMetadata::new);
 
 	private final Once activate = new Once();
 
@@ -459,13 +456,7 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 			metadata.remove(clazz);
 
 			for (Map.Entry<Class<?>, Set<Object>> e : state.providersByType.entrySet()) {
-				Iterator<Object> it = e.getValue().iterator();
-				while (it.hasNext()) {
-					Object provider = it.next();
-					if (Cls.instanceOf(provider, bean.getClass())) {
-						it.remove();
-					}
-				}
+				e.getValue().removeIf(provider -> Cls.instanceOf(provider, bean.getClass()));
 			}
 		}
 
@@ -474,12 +465,7 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 
 	@Override
 	public <K, V> Map<K, V> autoExpandingInjectingMap(final Class<V> clazz) {
-		return Coll.autoExpandingMap(new Mapper<K, V>() {
-			@Override
-			public V map(K src) {
-				return inject(Cls.newInstance(clazz));
-			}
-		});
+		return Coll.autoExpandingMap(src -> inject(Cls.newInstance(clazz)));
 	}
 
 	@Override

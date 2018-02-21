@@ -34,7 +34,7 @@ public class ThreadSafeArrayPool<T> extends ArrayPool<T> {
 
 	public ThreadSafeArrayPool(String name, Callable<T> factory, int capacity) {
 		super(name, factory, capacity);
-		this.synchronizedPool = new SynchronizedArrayPool<T>(name, factory, capacity);
+		this.synchronizedPool = new SynchronizedArrayPool<>(name, factory, capacity);
 	}
 
 	@Override

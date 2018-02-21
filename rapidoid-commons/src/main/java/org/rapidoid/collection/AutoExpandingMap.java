@@ -63,7 +63,7 @@ public class AutoExpandingMap<K, V> extends AbstractMapDecorator<K, V> {
 	}
 
 	public AutoExpandingMap<K, V> copy() {
-		return new AutoExpandingMap<K, V>(valueFactory);
+		return new AutoExpandingMap<>(valueFactory);
 	}
 
 }

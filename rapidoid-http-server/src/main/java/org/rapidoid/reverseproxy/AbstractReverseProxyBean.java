@@ -28,8 +28,6 @@ import org.rapidoid.config.Config;
 import org.rapidoid.http.HttpClient;
 import org.rapidoid.util.LazyInit;
 
-import java.util.concurrent.Callable;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
 public abstract class AbstractReverseProxyBean<T> extends RapidoidThing {
@@ -51,12 +49,7 @@ public abstract class AbstractReverseProxyBean<T> extends RapidoidThing {
 	private volatile boolean setXUsernameHeader = SET_HEADERS.entry("X-Username").or(false);
 	private volatile boolean setXRolesHeader = SET_HEADERS.entry("X-Roles").or(false);
 
-	private final LazyInit<HttpClient> client = new LazyInit<HttpClient>(new Callable<HttpClient>() {
-		@Override
-		public HttpClient call() {
-			return createClient();
-		}
-	});
+	private final LazyInit<HttpClient> client = new LazyInit<>(this::createClient);
 
 	protected abstract HttpClient createClient();
 

@@ -29,7 +29,6 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Dates;
-import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
@@ -51,20 +50,16 @@ public class Beany extends RapidoidThing {
 	private static final String SETTER = "^set[A-Z].*";
 
 	protected static final Map<Class<?>, BeanProperties> BEAN_PROPERTIES = Coll
-		.autoExpandingMap(new Mapper<Class<?>, BeanProperties>() {
+		.autoExpandingMap(clazz -> {
+			Map<String, BeanProp> properties = new LinkedHashMap<String, BeanProp>();
 
-			@Override
-			public BeanProperties map(Class<?> clazz) {
-				Map<String, BeanProp> properties = new LinkedHashMap<String, BeanProp>();
+			getBeanProperties(clazz, properties);
 
-				getBeanProperties(clazz, properties);
-
-				for (Entry<String, BeanProp> e : properties.entrySet()) {
-					e.getValue().init();
-				}
-
-				return new BeanProperties(properties);
+			for (Entry<String, BeanProp> e : properties.entrySet()) {
+				e.getValue().init();
 			}
+
+			return new BeanProperties(properties);
 		});
 
 	private static void getBeanProperties(Class<?> clazz, Map<String, BeanProp> properties) {
@@ -104,12 +99,7 @@ public class Beany extends RapidoidThing {
 							propName = name.substring(3, 4).toLowerCase() + name.substring(4);
 						}
 
-						BeanProp prop = properties.get(propName);
-
-						if (prop == null) {
-							prop = new BeanProp(propName);
-							properties.put(propName, prop);
-						}
+						BeanProp prop = properties.computeIfAbsent(propName, BeanProp::new);
 
 						if (name.startsWith("set")) {
 							prop.setSetter(method);
@@ -117,29 +107,18 @@ public class Beany extends RapidoidThing {
 						} else {
 							prop.setGetter(method);
 						}
+
 					} else if (!name.matches("^to[A-Z].*") && !name.equals("hashCode")) {
 
 						if (params.length == 0 && !ret.equals(void.class)) {
 
-							String propName = name;
-							BeanProp prop = properties.get(propName);
-
-							if (prop == null) {
-								prop = new BeanProp(propName);
-								properties.put(propName, prop);
-							}
+							BeanProp prop = properties.computeIfAbsent(name, BeanProp::new);
 
 							prop.setGetter(method);
 
 						} else if (params.length == 1) {
 
-							String propName = name;
-							BeanProp prop = properties.get(propName);
-
-							if (prop == null) {
-								prop = new BeanProp(propName);
-								properties.put(propName, prop);
-							}
+							BeanProp prop = properties.computeIfAbsent(name, BeanProp::new);
 
 							prop.setReadOnly(false);
 							prop.setSetter(method);
@@ -169,12 +148,8 @@ public class Beany extends RapidoidThing {
 					if (!fieldName.startsWith("_") && !fieldName.contains("$")
 						&& !field.isAnnotationPresent(Transient.class)) {
 
-						BeanProp prop = properties.get(fieldName);
-
-						if (prop == null) {
-							prop = new BeanProp(fieldName, field, (modif & Modifier.FINAL) != 0);
-							properties.put(fieldName, prop);
-						}
+						properties.computeIfAbsent(fieldName, n ->
+							new BeanProp(n, field, (modif & Modifier.FINAL) != 0));
 					}
 				}
 			}
@@ -549,24 +524,21 @@ public class Beany extends RapidoidThing {
 		final int sign = orderBy.startsWith("-") ? -1 : 1;
 		final String order = sign == 1 ? orderBy : orderBy.substring(1);
 
-		Comparator<E> comparator = new Comparator<E>() {
-			@Override
-			public int compare(E o1, E o2) {
+		Comparator<E> comparator = (o1, o2) -> {
 
-				try {
-					E val1 = getPropValue(o1, order);
-					E val2 = getPropValue(o2, order);
+			try {
+				E val1 = getPropValue(o1, order);
+				E val2 = getPropValue(o2, order);
 
-					U.must(val1 == null || val1 instanceof Comparable, "The property '%s' (%s) is not comparable!",
-						order, Cls.of((val1)));
-					U.must(val2 == null || val2 instanceof Comparable, "The property '%s' (%s) is not comparable!",
-						order, Cls.of((val2)));
+				U.must(val1 == null || val1 instanceof Comparable, "The property '%s' (%s) is not comparable!",
+					order, Cls.of((val1)));
+				U.must(val2 == null || val2 instanceof Comparable, "The property '%s' (%s) is not comparable!",
+					order, Cls.of((val2)));
 
-					return sign * U.compare(val1, val2);
-				} catch (Exception e) {
-					Log.error("Cannot compare values by: " + orderBy, e);
-					return 0;
-				}
+				return sign * U.compare(val1, val2);
+			} catch (Exception e) {
+				Log.error("Cannot compare values by: " + orderBy, e);
+				return 0;
 			}
 		};
 		return comparator;

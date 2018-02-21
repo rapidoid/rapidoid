@@ -51,12 +51,7 @@ public class JobChainingTest extends AbstractCommonsTest {
 	private void asyncLoop(final int n) {
 		if (n == 0) return;
 
-		Jobs.after(1).milliseconds(new Runnable() {
-			@Override
-			public void run() {
-				asyncLoop(n - 1);
-			}
-		});
+		Jobs.after(1).milliseconds(() -> asyncLoop(n - 1));
 	}
 
 }

@@ -31,10 +31,10 @@ public class HttpPathMatchingTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testHttpPathMatching() {
-		On.get("/movies/{id}").json((Req req) -> req.params());
-		On.post("/users/{x}/").json((Req req) -> req.params());
-		On.put("/books/{__}/abc").json((Req req) -> req.params());
-		On.delete("/tags/{_f}/ref{n:\\d+}/").json((Req req) -> req.params());
+		On.get("/movies/{id}").json(Req::params);
+		On.post("/users/{x}/").json(Req::params);
+		On.put("/books/{__}/abc").json(Req::params);
+		On.delete("/tags/{_f}/ref{n:\\d+}/").json(Req::params);
 
 		onlyGet("/movies/123");
 		onlyGet("/movies/1/");

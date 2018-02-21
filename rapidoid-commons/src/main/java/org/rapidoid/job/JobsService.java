@@ -57,11 +57,7 @@ public class JobsService extends RapidoidInitializer {
 		active.set(true); // activate
 
 		if (init.go()) {
-			Runtime.getRuntime().addShutdownHook(new Thread() {
-				public void run() {
-					shutdownNow();
-				}
-			});
+			Runtime.getRuntime().addShutdownHook(new Thread(this::shutdownNow));
 		}
 	}
 

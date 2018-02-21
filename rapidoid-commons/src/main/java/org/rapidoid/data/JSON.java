@@ -213,12 +213,9 @@ public class JSON extends RapidoidThing {
 	}
 
 	public static void warmUp() {
-		Msc.thread(new Runnable() {
-			@Override
-			public void run() {
-				JSON.stringify(123);
-				JSON.parse("{}", Map.class);
-			}
+		Msc.thread(() -> {
+			JSON.stringify(123);
+			JSON.parse("{}", Map.class);
 		});
 	}
 

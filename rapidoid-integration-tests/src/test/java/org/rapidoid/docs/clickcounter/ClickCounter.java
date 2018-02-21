@@ -33,12 +33,7 @@ public class ClickCounter extends GUI {
 
 	@Page
 	public Object counter() {
-		Btn inc = btn("+").onClick(new Runnable() {
-			@Override
-			public void run() {
-				n++;
-			}
-		});
+		Btn inc = btn("+").onClick(() -> n++);
 
 		Tag info = span("You clicked ", n, " times!");
 

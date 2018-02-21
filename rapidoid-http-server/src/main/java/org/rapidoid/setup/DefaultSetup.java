@@ -62,12 +62,9 @@ public class DefaultSetup extends RapidoidInitializer {
 	void initDefaults() {
 		admin.defaults().roles(Role.ADMINISTRATOR);
 
-		admin.onInit(new Runnable() {
-			@Override
-			public void run() {
-				if (Env.dev()) {
+		admin.onInit(() -> {
+			if (Env.dev()) {
 //					AuthBootstrap.bootstrapAdminCredentials();
-				}
 			}
 		});
 	}

@@ -38,7 +38,7 @@ public abstract class AbstractMapImpl<K, V> extends RapidoidThing implements Sim
 	}
 
 	public AbstractMapImpl(int capacity, int bucketSize) {
-		this(new SimpleHashTable<MapEntry<K, V>>(capacity, bucketSize));
+		this(new SimpleHashTable<>(capacity, bucketSize));
 	}
 
 	@Override

@@ -37,7 +37,7 @@ public class RESTClient extends RapidoidThing {
 	/* GET */
 
 	public <T> Future<T> get(String uri, Class<T> resultType, Callback<T> callback) {
-		RESTResultMapper<T> mapper = new RESTResultMapper<T>(resultType);
+		RESTResultMapper<T> mapper = new RESTResultMapper<>(resultType);
 		Callback<HttpResp> cb = Callbacks.mapping(callback, mapper);
 		return Futures.mapping(client.req().get(uri).execute(cb), mapper);
 	}
@@ -49,7 +49,7 @@ public class RESTClient extends RapidoidThing {
 	/* POST */
 
 	public <T> Future<T> post(String uri, Class<T> resultType, Callback<T> callback) {
-		RESTResultMapper<T> mapper = new RESTResultMapper<T>(resultType);
+		RESTResultMapper<T> mapper = new RESTResultMapper<>(resultType);
 		Callback<HttpResp> cb = Callbacks.mapping(callback, mapper);
 		return Futures.mapping(client.req().post(uri).execute(cb), mapper);
 	}
@@ -61,7 +61,7 @@ public class RESTClient extends RapidoidThing {
 	/* PUT */
 
 	public <T> Future<T> put(String uri, Class<T> resultType, Callback<T> callback) {
-		RESTResultMapper<T> mapper = new RESTResultMapper<T>(resultType);
+		RESTResultMapper<T> mapper = new RESTResultMapper<>(resultType);
 		Callback<HttpResp> cb = Callbacks.mapping(callback, mapper);
 		return Futures.mapping(client.req().put(uri).execute(cb), mapper);
 	}
@@ -73,7 +73,7 @@ public class RESTClient extends RapidoidThing {
 	/* DELETE */
 
 	public <T> Future<T> delete(String uri, Class<T> resultType, Callback<T> callback) {
-		RESTResultMapper<T> mapper = new RESTResultMapper<T>(resultType);
+		RESTResultMapper<T> mapper = new RESTResultMapper<>(resultType);
 		Callback<HttpResp> cb = Callbacks.mapping(callback, mapper);
 		return Futures.mapping(client.req().delete(uri).execute(cb), mapper);
 	}
@@ -85,7 +85,7 @@ public class RESTClient extends RapidoidThing {
 	/* PATCH */
 
 	public <T> Future<T> patch(String uri, Class<T> resultType, Callback<T> callback) {
-		RESTResultMapper<T> mapper = new RESTResultMapper<T>(resultType);
+		RESTResultMapper<T> mapper = new RESTResultMapper<>(resultType);
 		Callback<HttpResp> cb = Callbacks.mapping(callback, mapper);
 		return Futures.mapping(client.req().patch(uri).execute(cb), mapper);
 	}
@@ -97,7 +97,7 @@ public class RESTClient extends RapidoidThing {
 	/* OPTIONS */
 
 	public <T> Future<T> options(String uri, Class<T> resultType, Callback<T> callback) {
-		RESTResultMapper<T> mapper = new RESTResultMapper<T>(resultType);
+		RESTResultMapper<T> mapper = new RESTResultMapper<>(resultType);
 		Callback<HttpResp> cb = Callbacks.mapping(callback, mapper);
 		return Futures.mapping(client.req().options(uri).execute(cb), mapper);
 	}
@@ -109,7 +109,7 @@ public class RESTClient extends RapidoidThing {
 	/* HEAD */
 
 	public <T> Future<T> head(String uri, Class<T> resultType, Callback<T> callback) {
-		RESTResultMapper<T> mapper = new RESTResultMapper<T>(resultType);
+		RESTResultMapper<T> mapper = new RESTResultMapper<>(resultType);
 		Callback<HttpResp> cb = Callbacks.mapping(callback, mapper);
 		return Futures.mapping(client.req().head(uri).execute(cb), mapper);
 	}
@@ -121,7 +121,7 @@ public class RESTClient extends RapidoidThing {
 	/* TRACE */
 
 	public <T> Future<T> trace(String uri, Class<T> resultType, Callback<T> callback) {
-		RESTResultMapper<T> mapper = new RESTResultMapper<T>(resultType);
+		RESTResultMapper<T> mapper = new RESTResultMapper<>(resultType);
 		Callback<HttpResp> cb = Callbacks.mapping(callback, mapper);
 		return Futures.mapping(client.req().trace(uri).execute(cb), mapper);
 	}

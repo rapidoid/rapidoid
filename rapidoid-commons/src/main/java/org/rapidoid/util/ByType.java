@@ -53,7 +53,7 @@ public class ByType<K, T> extends RapidoidThing {
 	}
 
 	public static <K, T> ByType<K, T> create() {
-		return new ByType<K, T>();
+		return new ByType<>();
 	}
 
 	public void reset() {

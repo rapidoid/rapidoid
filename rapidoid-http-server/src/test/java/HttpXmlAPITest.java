@@ -22,7 +22,6 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.XML;
-import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
 import org.rapidoid.http.Self;
 import org.rapidoid.setup.My;
@@ -38,25 +37,17 @@ public class HttpXmlAPITest extends TestCommons {
 
 	@Test
 	public void testXmlAPI() {
-		On.get("/inc/{x}").xml(new ReqHandler() {
-			@Override
-			public Object execute(Req req) {
-				return U.num(req.param("x")) + 1;
-			}
-		});
+		On.get("/inc/{x}").xml((ReqHandler) req -> U.num(req.param("x")) + 1);
 
 		eq(Self.get("/inc/99").fetch(), "<Integer>100</Integer>");
 	}
 
 	@Test
 	public void testXmlRequestBody() {
-		On.post("/echo").xml(new ReqHandler() {
-			@Override
-			public Object execute(Req req) {
-				Point point = new Point();
-				point.coordinates = req.data();
-				return point;
-			}
+		On.post("/echo").xml((ReqHandler) req -> {
+			Point point = new Point();
+			point.coordinates = req.data();
+			return point;
 		});
 
 		My.xmlMapper(XML.newMapper());

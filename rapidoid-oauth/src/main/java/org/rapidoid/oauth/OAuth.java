@@ -93,12 +93,7 @@ public class OAuth extends RapidoidThing {
 		loginHtml.append("</div>");
 		final String loginPage = loginHtml.toString();
 
-		setup.get(Msc.specialUri("oauth")).mvc(new ReqHandler() {
-			@Override
-			public Object execute(Req x) {
-				return GUI.hardcoded(loginPage);
-			}
-		});
+		setup.get(Msc.specialUri("oauth")).mvc((ReqHandler) x -> GUI.hardcoded(loginPage));
 	}
 
 	public static String getLoginURL(Req req, OAuthProvider provider, String oauthDomain) {

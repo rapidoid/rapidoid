@@ -32,7 +32,9 @@ import org.rapidoid.setup.Admin;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
@@ -91,14 +93,9 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 	}
 
 	private static void sortRoutes(List<Route> routes) {
-		Collections.sort(routes, new Comparator<Route>() {
-
-			@Override
-			public int compare(Route a, Route b) {
-				int cmpByPath = a.path().compareTo(b.path());
-				return cmpByPath != 0 ? cmpByPath : a.verb().compareTo(b.verb());
-			}
-
+		routes.sort((a, b) -> {
+			int cmpByPath = a.path().compareTo(b.path());
+			return cmpByPath != 0 ? cmpByPath : a.verb().compareTo(b.verb());
 		});
 	}
 

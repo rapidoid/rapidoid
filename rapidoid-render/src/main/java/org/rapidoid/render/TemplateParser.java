@@ -49,7 +49,7 @@ public class TemplateParser extends RapidoidThing {
 	public static XNode parse(String s) {
 		U.notNull(s, "template source");
 
-		Stack<XNode> stack = new Stack<XNode>();
+		Stack<XNode> stack = new Stack<>();
 
 		XNode root = new XNode(XNode.OP.OP_ROOT, null);
 		stack.push(root);

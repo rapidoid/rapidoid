@@ -28,7 +28,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Str;
 import org.rapidoid.lambda.Lmbd;
-import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
@@ -46,12 +45,8 @@ import java.util.zip.ZipFile;
 @Since("5.3.0")
 public class ClasspathScanner extends RapidoidThing {
 
-	private static Map<ScanParams, List<String>> cache = Coll.autoExpandingMap(new Mapper<ScanParams, List<String>>() {
-		@Override
-		public List<String> map(ScanParams params) {
-			return scanClasses(params); // FIXME equality of 'params'
-		}
-	});
+	// FIXME equality of 'params'
+	private static Map<ScanParams, List<String>> cache = Coll.autoExpandingMap(ClasspathScanner::scanClasses);
 
 	public static synchronized void reset() {
 		cache.clear();

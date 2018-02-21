@@ -25,7 +25,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.RapidoidInitializer;
 import org.rapidoid.io.Res;
-import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
@@ -45,12 +44,7 @@ public class Dir extends RapidoidInitializer implements FilesystemChangeListener
 
 	private static final ScheduledExecutorService EXECUTORS = Executors.newScheduledThreadPool(8);
 
-	private static final Map<String, Dir> DIRS = Coll.autoExpandingMap(new Mapper<String, Dir>() {
-		@Override
-		public Dir map(String path) {
-			return new Dir(path);
-		}
-	});
+	private static final Map<String, Dir> DIRS = Coll.autoExpandingMap(Dir::new);
 
 	private final String path;
 
@@ -136,12 +130,7 @@ public class Dir extends RapidoidInitializer implements FilesystemChangeListener
 	private synchronized void refreshLater() {
 		dirty = true;
 
-		EXECUTORS.schedule(new Runnable() {
-			@Override
-			public void run() {
-				refresh();
-			}
-		}, 500, TimeUnit.MILLISECONDS);
+		EXECUTORS.schedule(this::refresh, 500, TimeUnit.MILLISECONDS);
 	}
 
 	public synchronized boolean exists() {

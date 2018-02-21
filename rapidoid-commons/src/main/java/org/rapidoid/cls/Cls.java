@@ -294,9 +294,7 @@ public class Cls extends RapidoidThing {
 	public static Field findField(Class<?> clazz, String name) {
 		try {
 			return clazz.getField(name);
-		} catch (NoSuchFieldException e) {
-			return null;
-		} catch (SecurityException e) {
+		} catch (NoSuchFieldException | SecurityException e) {
 			return null;
 		}
 	}
@@ -348,7 +346,7 @@ public class Cls extends RapidoidThing {
 
 	public static Class<?>[] getImplementedInterfaces(Class<?> clazz) {
 		try {
-			List<Class<?>> interfaces = new LinkedList<Class<?>>();
+			List<Class<?>> interfaces = new LinkedList<>();
 
 			for (Class<?> c = clazz; c.getSuperclass() != null; c = c.getSuperclass()) {
 				for (Class<?> interf : c.getInterfaces()) {
@@ -703,7 +701,7 @@ public class Cls extends RapidoidThing {
 	}
 
 	public static Map<String, Class<?>> classMap(Iterable<Class<?>> classes) {
-		Map<String, Class<?>> map = new LinkedHashMap<String, Class<?>>();
+		Map<String, Class<?>> map = new LinkedHashMap<>();
 
 		for (Class<?> cls : classes) {
 			map.put(cls.getSimpleName(), cls);

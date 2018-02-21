@@ -82,9 +82,7 @@ public class HTTPRefreshingConfigTest extends IsolatedIntegrationTest {
 			}
 		});
 
-		Conf.ROOT.sub("abcd").addChangeListener(changes -> {
-			fail("The 'abcd' config change is not expected!");
-		});
+		Conf.ROOT.sub("abcd").addChangeListener(changes -> fail("The 'abcd' config change is not expected!"));
 
 		String cfgFile = Msc.path(cfgDir, "config.yml");
 

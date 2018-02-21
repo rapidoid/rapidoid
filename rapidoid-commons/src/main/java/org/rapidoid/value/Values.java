@@ -29,11 +29,11 @@ import org.rapidoid.annotation.Since;
 public class Values extends RapidoidThing {
 
 	public static <T> Value<T> wrap(ValueStore<T> store) {
-		return new StoredValue<T>(store);
+		return new StoredValue<>(store);
 	}
 
 	public static <T> Value<T> of(T value) {
-		return wrap(new SimpleValueStore<T>(value));
+		return wrap(new SimpleValueStore<>(value));
 	}
 
 	public static Value<String> none() {

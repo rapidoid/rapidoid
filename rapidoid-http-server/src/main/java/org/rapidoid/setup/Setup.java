@@ -57,7 +57,6 @@ import org.rapidoid.util.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
 import static org.rapidoid.util.Constants.*;
 
@@ -71,12 +70,7 @@ public class Setup extends RapidoidInitializer {
 	private static final String DEFAULT_ADDRESS = "0.0.0.0";
 	private static final int DEFAULT_PORT = Msc.isPlatform() ? 8888 : 8080;
 
-	private static final LazyInit<DefaultSetup> DEFAULT = new LazyInit<>(new Callable<DefaultSetup>() {
-		@Override
-		public DefaultSetup call() {
-			return new DefaultSetup();
-		}
-	});
+	private static final LazyInit<DefaultSetup> DEFAULT = new LazyInit<>(DefaultSetup::new);
 
 	static final List<Setup> instances = Coll.synchronizedList();
 
@@ -88,12 +82,10 @@ public class Setup extends RapidoidInitializer {
 
 		JSON.warmUp();
 
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			public void run() {
-				shutdownAll();
-				Jobs.shutdownNow();
-			}
-		});
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+			shutdownAll();
+			Jobs.shutdownNow();
+		}));
 	}
 
 	private final String name;
@@ -121,12 +113,7 @@ public class Setup extends RapidoidInitializer {
 
 	private final Once bootstrappedBeans = new Once();
 
-	private final LazyInit<FastHttp> lazyHttp = new LazyInit<>(new Callable<FastHttp>() {
-		@Override
-		public FastHttp call() {
-			return initHttp();
-		}
-	});
+	private final LazyInit<FastHttp> lazyHttp = new LazyInit<>(this::initHttp);
 
 	public static Setup create(String name) {
 		IoCContext ioc = IoC.createContext().name(name);

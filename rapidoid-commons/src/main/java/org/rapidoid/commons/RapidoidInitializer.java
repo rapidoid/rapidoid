@@ -36,7 +36,7 @@ public class RapidoidInitializer extends RapidoidThing {
 		initialize();
 	}
 
-	private static synchronized void initialize() {
+	public static synchronized void initialize() {
 
 		if (Msc.isMavenBuild()) {
 			Msc.printRapidoidBanner();

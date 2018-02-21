@@ -20,6 +20,7 @@
 
 package org.rapidoid.docs.mytemplatesloader;
 
+import org.rapidoid.http.Req;
 import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;
 
@@ -36,7 +37,7 @@ public class Main {
 
 		// The URL parameters will be the MVC model
 
-		On.get("/showx").mvc((req) -> req.params());
+		On.get("/showx").mvc(Req::params);
 	}
 
 }

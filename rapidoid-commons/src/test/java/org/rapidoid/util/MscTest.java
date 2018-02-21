@@ -27,7 +27,6 @@ import org.rapidoid.test.TestCommons;
 
 import java.io.File;
 import java.util.UUID;
-import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -37,28 +36,16 @@ public class MscTest extends TestCommons {
 	public void testExists() {
 		isFalse(Msc.exists(null));
 
-		isFalse(Msc.exists(new Callable<Object>() {
-			@Override
-			public Object call() {
-				return null;
-			}
+		isFalse(Msc.exists(() -> null));
+
+		isFalse(Msc.exists(() -> {
+			String s = null;
+			return s.length(); // throws NPE!
 		}));
 
-		isFalse(Msc.exists(new Callable<Object>() {
-			@SuppressWarnings("null")
-			@Override
-			public Object call() {
-				String s = null;
-				return s.length(); // throws NPE!
-			}
-		}));
-
-		isTrue(Msc.exists(new Callable<Object>() {
-			@Override
-			public Object call() {
-				String s = "abc";
-				return s.length();
-			}
+		isTrue(Msc.exists(() -> {
+			String s = "abc";
+			return s.length();
 		}));
 	}
 

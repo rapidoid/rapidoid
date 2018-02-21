@@ -137,20 +137,17 @@ public class Jobs extends RapidoidInitializer {
 	}
 
 	private static <T> Runnable callbackJob(final Callable<T> job, final Callback<T> callback) {
-		return new Runnable() {
-			@Override
-			public void run() {
-				T result;
+		return () -> {
+			T result;
 
-				try {
-					result = job.call();
-				} catch (Throwable e) {
-					call(callback, null, e);
-					return;
-				}
-
-				call(callback, result, null);
+			try {
+				result = job.call();
+			} catch (Throwable e) {
+				call(callback, null, e);
+				return;
 			}
+
+			call(callback, result, null);
 		};
 	}
 

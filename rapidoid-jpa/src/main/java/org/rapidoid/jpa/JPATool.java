@@ -73,67 +73,40 @@ public class JPATool extends RapidoidThing {
 	}
 
 	public <E> E insert(final E entity) {
-		return transactional(new Callable<E>() {
-
-			@Override
-			public E call() {
-				em.persist(entity);
-				return entity;
-			}
-
+		return transactional(() -> {
+			em.persist(entity);
+			return entity;
 		});
 	}
 
 	public <E> E update(final E entity) {
 		U.notNull(getIdentifier(entity), "entity identifier");
 
-		return transactional(new Callable<E>() {
-
-			@Override
-			public E call() {
-				if (em.contains(entity)) {
-					em.persist(entity);
-					return entity;
-				} else {
-					return em.merge(entity);
-				}
+		return transactional(() -> {
+			if (em.contains(entity)) {
+				em.persist(entity);
+				return entity;
+			} else {
+				return em.merge(entity);
 			}
-
 		});
 	}
 
 	public <E> E merge(final E entity) {
-		return transactional(new Callable<E>() {
-
-			@Override
-			public E call() {
-				return em.merge(entity);
-			}
-
-		});
+		return transactional(() -> em.merge(entity));
 	}
 
 	public <E> void delete(final Class<E> clazz, final Object id) {
-		transactional(new Callable<E>() {
-
-			@Override
-			public E call() {
-				em.remove(get(clazz, id));
-				return null;
-			}
-
+		transactional((Callable<E>) () -> {
+			em.remove(get(clazz, id));
+			return null;
 		});
 	}
 
 	public void delete(final Object entity) {
-		transactional(new Callable<Object>() {
-
-			@Override
-			public Object call() {
-				em.remove(entity);
-				return null;
-			}
-
+		transactional(() -> {
+			em.remove(entity);
+			return null;
 		});
 	}
 
@@ -234,14 +207,9 @@ public class JPATool extends RapidoidThing {
 	}
 
 	public void flush() {
-		transactional(new Callable<Object>() {
-
-			@Override
-			public Object call() {
-				em.flush();
-				return null;
-			}
-
+		transactional(() -> {
+			em.flush();
+			return null;
 		});
 	}
 
@@ -266,7 +234,7 @@ public class JPATool extends RapidoidThing {
 	}
 
 	public <T> Results<T> find(CriteriaQuery<T> query) {
-		return new ResultsImpl<>(new JPACriteriaQueryEntities<T>(query));
+		return new ResultsImpl<>(new JPACriteriaQueryEntities<>(query));
 	}
 
 	public <T> Results<T> of(Class<T> clazz) {

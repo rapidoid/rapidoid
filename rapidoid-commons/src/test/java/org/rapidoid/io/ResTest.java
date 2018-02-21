@@ -65,12 +65,9 @@ public class ResTest extends AbstractCommonsTest {
 		}
 
 		// should be fast
-		multiThreaded(100, 1000000, new Runnable() {
-			@Override
-			public void run() {
-				Res file = Res.from("abc.txt", "");
-				notNull(file.getBytes());
-			}
+		multiThreaded(100, 1000000, () -> {
+			Res file = Res.from("abc.txt", "");
+			notNull(file.getBytes());
 		});
 	}
 

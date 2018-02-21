@@ -39,15 +39,15 @@ public final class Opt<E> extends RapidoidThing {
 
 	public static <T> Opt<T> of(T value) {
 		U.notNull(value, "value");
-		return new Opt<T>(value);
+		return new Opt<>(value);
 	}
 
 	public static <T> Opt<T> maybe(T value) {
-		return new Opt<T>(value);
+		return new Opt<>(value);
 	}
 
 	public static <T> Opt<T> empty() {
-		return new Opt<T>(null);
+		return new Opt<>(null);
 	}
 
 	public boolean exists() {

@@ -33,12 +33,7 @@ import java.util.*;
 @Since("5.3.0")
 public class RapidoidModules extends RapidoidThing {
 
-	private static final Comparator<RapidoidModule> MODULE_COMPARATOR = new Comparator<RapidoidModule>() {
-		@Override
-		public int compare(RapidoidModule mod1, RapidoidModule mod2) {
-			return mod1.order() - mod2.order();
-		}
-	};
+	private static final Comparator<RapidoidModule> MODULE_COMPARATOR = (mod1, mod2) -> mod1.order() - mod2.order();
 
 	public static RapidoidModule get(String name) {
 		return Do.findIn(getAllAvailable())
@@ -63,7 +58,7 @@ public class RapidoidModules extends RapidoidThing {
 
 		validate(modules);
 
-		Collections.sort(modules, MODULE_COMPARATOR);
+		modules.sort(MODULE_COMPARATOR);
 
 		return modules;
 	}

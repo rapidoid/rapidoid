@@ -25,7 +25,6 @@ import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
 import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
 
@@ -39,28 +38,20 @@ public class Proxies extends RapidoidThing {
 	public static <T> T implement(final Object target, final InvocationHandler handler, Class<?>... interfaces) {
 		final Class<?> targetClass = target.getClass();
 
-		return createProxy(new InvocationHandler() {
+		return createProxy((proxy, method, args) -> {
 
-			@Override
-			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-
-				if (method.getDeclaringClass().isAssignableFrom(targetClass)) {
-					return method.invoke(target, args);
-				}
-
-				return handler.invoke(proxy, method, args);
+			if (method.getDeclaringClass().isAssignableFrom(targetClass)) {
+				return method.invoke(target, args);
 			}
 
+			return handler.invoke(proxy, method, args);
 		}, interfaces);
 	}
 
 	public static <T> T tracer(Object target) {
-		return implementInterfaces(target, new InvocationHandler() {
-			@Override
-			public Object invoke(Object target, Method method, Object[] args) throws Throwable {
-				Log.trace("intercepting", "method", method.getName(), "args", Arrays.toString(args));
-				return method.invoke(target, args);
-			}
+		return implementInterfaces(target, (target1, method, args) -> {
+			Log.trace("intercepting", "method", method.getName(), "args", Arrays.toString(args));
+			return method.invoke(target1, args);
 		});
 	}
 

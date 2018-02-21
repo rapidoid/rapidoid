@@ -59,12 +59,13 @@ public abstract class AbstractItem extends AbstractModel implements Item {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T get(String property) {
-		if (property.equals("_class")) {
-			return (T) Cls.entityName(value);
-		} else if (property.equals("_toString")) {
-			return (T) value.toString();
-		} else if (property.equals("_str")) {
-			return (T) Beany.beanToNiceText(value, false);
+		switch (property) {
+			case "_class":
+				return (T) Cls.entityName(value);
+			case "_toString":
+				return (T) value.toString();
+			case "_str":
+				return (T) Beany.beanToNiceText(value, false);
 		}
 
 		Prop prop = Beany.property(value, property, true);

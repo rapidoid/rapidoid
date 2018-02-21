@@ -33,12 +33,7 @@ public class HttpServerTest extends HttpTestCommons {
 	public void testHttpServer() {
 		On.get("/").html("home");
 
-		On.req(new ReqHandler() {
-			@Override
-			public Object execute(Req req) {
-				return req.response().json("abc");
-			}
-		});
+		On.req((ReqHandler) req -> req.response().json("abc"));
 
 		eq(HTTP.get(localhost("/")).fetch(), "home");
 		eq(HTTP.post(localhost("/")).fetch(), "\"abc\"");

@@ -37,20 +37,12 @@ public class HttpCookiesTest extends HttpTestCommons {
 	@Test
 	public void testHttpCookies() {
 
-		On.req(new ReqRespHandler() {
-			@Override
-			public Object execute(Req req, Resp resp) {
-				resp.cookie(req.uri(), "" + req.cookies().size());
-				return resp.json(req.cookies());
-			}
+		On.req((ReqRespHandler) (req, resp) -> {
+			resp.cookie(req.uri(), "" + req.cookies().size());
+			return resp.json(req.cookies());
 		});
 
-		multiThreaded(THREADS, ROUNDS, new Runnable() {
-			@Override
-			public void run() {
-				checkCookies();
-			}
-		});
+		multiThreaded(THREADS, ROUNDS, this::checkCookies);
 	}
 
 	private void checkCookies() {
@@ -67,20 +59,14 @@ public class HttpCookiesTest extends HttpTestCommons {
 	@Test
 	public void testNoCookies() {
 
-		On.req(new ReqRespHandler() {
-			@Override
-			public Object execute(Req req, Resp resp) {
-				isTrue(req.cookies().isEmpty());
-				return req.cookies().size();
-			}
+		On.req((ReqRespHandler) (req, resp) -> {
+			isTrue(req.cookies().isEmpty());
+			return req.cookies().size();
 		});
 
-		multiThreaded(THREADS, ROUNDS, new Runnable() {
-			@Override
-			public void run() {
-				checkNoCookies(true);
-				checkNoCookies(false);
-			}
+		multiThreaded(THREADS, ROUNDS, () -> {
+			checkNoCookies(true);
+			checkNoCookies(false);
 		});
 	}
 

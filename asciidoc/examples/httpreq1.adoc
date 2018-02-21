@@ -14,11 +14,11 @@ public class Main {
 	public static void main(String[] args) {
 		/* Retrieving request info from the Req parameter */
 
-		On.get("/showVerb").json((Req req) -> req.verb());
+		On.get("/showVerb").json(Req::verb);
 
-		On.get("/showPath").json((Req req) -> req.path());
+		On.get("/showPath").json(Req::path);
 
-		On.get("/showUri").json((Req req) -> req.uri());
+		On.get("/showUri").json(Req::uri);
 
 		On.get("/showData").json((Req req) -> req.data());
 	}

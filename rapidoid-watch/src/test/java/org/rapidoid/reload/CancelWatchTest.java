@@ -37,11 +37,8 @@ public class CancelWatchTest extends TestCommons {
 		// expecting a lot of content with frequent changes
 		String userHome = System.getProperty("user.home");
 
-		Operation<String> noOp = new Operation<String>() {
-			@Override
-			public void execute(String obj) {
-				// do nothing
-			}
+		Operation<String> noOp = obj -> {
+			// do nothing
 		};
 
 		for (int i = 0; i < 30; i++) {

@@ -65,19 +65,16 @@ public class JdbcUtil extends RapidoidThing {
 	}
 
 	private static String substituteNamedParams(String sql, final Map<String, ?> namedArgs, final List<Object> arguments) {
-		return NAMED_PARAMS_REWRITER.rewrite(sql, new Mapper<String[], String>() {
-			@Override
-			public String map(String[] groups) {
-				String name = groups[1];
+		return NAMED_PARAMS_REWRITER.rewrite(sql, groups -> {
+			String name = groups[1];
 
-				if (namedArgs.containsKey(name)) {
-					Object value = namedArgs.get(name);
-					arguments.add(value);
-					return "?";
+			if (namedArgs.containsKey(name)) {
+				Object value = namedArgs.get(name);
+				arguments.add(value);
+				return "?";
 
-				} else {
-					return groups[0]; // not in the args -> leave it untouched
-				}
+			} else {
+				return groups[0]; // not in the args -> leave it untouched
 			}
 		});
 	}

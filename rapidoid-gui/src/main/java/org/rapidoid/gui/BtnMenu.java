@@ -41,7 +41,7 @@ public class BtnMenu extends AbstractWidget<BtnMenu> {
 
 	public BtnMenu() {
 		menuItems = U.list();
-		menuItems.add(new LinkedHashMap<Object, String>());
+		menuItems.add(new LinkedHashMap<>());
 	}
 
 	public void addMenuItem(String text, String url) {
@@ -49,7 +49,7 @@ public class BtnMenu extends AbstractWidget<BtnMenu> {
 	}
 
 	public void addSeparator() {
-		menuItems.add(new LinkedHashMap<Object, String>());
+		menuItems.add(new LinkedHashMap<>());
 	}
 
 	private Tag generateButtonHtmlContent() {

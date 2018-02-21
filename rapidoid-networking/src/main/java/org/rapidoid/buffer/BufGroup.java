@@ -29,7 +29,6 @@ import org.rapidoid.pool.Pools;
 import org.rapidoid.u.U;
 
 import java.nio.ByteBuffer;
-import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -51,12 +50,7 @@ public class BufGroup extends RapidoidThing {
 
 		U.must(capacity == Math.pow(2, factor));
 
-		pool = Pools.create("buffers", new Callable<ByteBuffer>() {
-			@Override
-			public ByteBuffer call() {
-				return ByteBuffer.allocateDirect(capacity);
-			}
-		}, 1000);
+		pool = Pools.create("buffers", () -> ByteBuffer.allocateDirect(capacity), 1000);
 	}
 
 	public BufGroup(int capacity) {

@@ -57,21 +57,11 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 
 	private static final byte[] EMPTY_RESPONSE = {};
 
-	private static final MaybeReq NO_REQ = new MaybeReq() {
-		@Override
-		public Req getReqOrNull() {
-			return null;
-		}
-	};
+	private static final MaybeReq NO_REQ = () -> null;
 
 	private static volatile Pattern REGEX_VALID_HTTP_RESOURCE = Pattern.compile("(?U)(?:/[ \\w\\-\\.]+)*/?");
 
-	private static final Mapper<String[], String> PATH_PARAM_EXTRACTOR = new Mapper<String[], String>() {
-		@Override
-		public String map(String[] src) {
-			return src[1].split(":", 2)[0];
-		}
-	};
+	private static final Mapper<String[], String> PATH_PARAM_EXTRACTOR = src -> src[1].split(":", 2)[0];
 
 	public static Map<String, Serializable> initAndDeserializeToken(Req req) {
 		String token = req.cookie(TOKEN, null);

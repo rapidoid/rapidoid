@@ -31,7 +31,6 @@ import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.commons.Str;
 import org.rapidoid.env.Env;
 import org.rapidoid.env.RapidoidEnv;
-import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.log.GlobalCfg;
 import org.rapidoid.log.Log;
@@ -97,7 +96,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 
 	@Override
 	public Value<Object> entry(String key) {
-		return Values.wrap(new ConfigValueStore<Object>(this, key));
+		return Values.wrap(new ConfigValueStore<>(this, key));
 	}
 
 	private List<String> keyChain(Iterator<String> keys) {
@@ -195,12 +194,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 				Map<String, Object> props = base.properties;
 
 				for (String key : baseKeys) {
-					Object value = props.get(key);
-
-					if (value == null) {
-						value = Coll.synchronizedMap();
-						props.put(key, value);
-					}
+					Object value = props.computeIfAbsent(key, k -> Coll.synchronizedMap());
 
 					if (value instanceof Map<?, ?>) {
 						props = (Map<String, Object>) value;
@@ -445,12 +439,7 @@ public class ConfigImpl extends RapidoidThing implements Config {
 		}
 
 		if (new File(path).isAbsolute()) {
-			Msc.watchForChanges(path, new Operation<String>() {
-				@Override
-				public void execute(String filename) {
-					onFileSystemChange(filename);
-				}
-			});
+			Msc.watchForChanges(path, this::onFileSystemChange);
 		}
 
 		return this;
@@ -536,28 +525,25 @@ public class ConfigImpl extends RapidoidThing implements Config {
 
 			if (val.contains("${")) {
 
-				val = Str.replace(val, "\\$\\{([^\\}]+)\\}", new Mapper<String[], String>() {
-					@Override
-					public String map(String[] src) {
+				val = Str.replace(val, "\\$\\{([^\\}]+)\\}", src -> {
 
-						String name = src[1];
-						Object value = flat.get(name);
+					String name = src[1];
+					Object value = flat.get(name);
 
-						if (value == null) {
-							value = GlobalCfg.get(name);
-						}
-
-						if (value == null) {
-							value = getSpecialValue(name);
-						}
-
-						U.must(value != null, "Cannot find configuration entry '%s' for key '%s'!", name, cfgKey);
-
-						changed.value = true;
-						changedKeys.add(cfgKey);
-
-						return value.toString();
+					if (value == null) {
+						value = GlobalCfg.get(name);
 					}
+
+					if (value == null) {
+						value = getSpecialValue(name);
+					}
+
+					U.must(value != null, "Cannot find configuration entry '%s' for key '%s'!", name, cfgKey);
+
+					changed.value = true;
+					changedKeys.add(cfgKey);
+
+					return value.toString();
 				});
 
 				flat.put(cfgKey, val);

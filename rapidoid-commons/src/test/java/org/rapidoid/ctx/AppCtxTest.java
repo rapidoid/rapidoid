@@ -36,21 +36,16 @@ public class AppCtxTest extends AbstractCommonsTest {
 	public void testAppCtx() {
 		Log.setLogLevel(LogLevel.INFO);
 
-		multiThreaded(1000, 1000000, new Runnable() {
+		multiThreaded(1000, 1000000, () -> {
+			Ctxs.open("test");
 
-			@Override
-			public void run() {
-				Ctxs.open("test");
+			UserInfo user = new UserInfo(rndStr(10), U.set("role1"), null);
 
-				UserInfo user = new UserInfo(rndStr(10), U.set("role1"), null);
+			Ctxs.required().setUser(user);
 
-				Ctxs.required().setUser(user);
+			eq(Ctxs.required().user(), user);
 
-				eq(Ctxs.required().user(), user);
-
-				Ctxs.close();
-			}
-
+			Ctxs.close();
 		});
 	}
 

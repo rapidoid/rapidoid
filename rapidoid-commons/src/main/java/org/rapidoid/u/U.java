@@ -247,7 +247,7 @@ public class U extends RapidoidThing {
 	}
 
 	public static <T> Set<T> set() {
-		return new LinkedHashSet<T>();
+		return new LinkedHashSet<>();
 	}
 
 	public static <T> Set<T> set(Iterable<? extends T> values) {
@@ -270,7 +270,7 @@ public class U extends RapidoidThing {
 	}
 
 	public static <T> List<T> list() {
-		return new ArrayList<T>();
+		return new ArrayList<>();
 	}
 
 	public static <T> List<T> list(Iterable<? extends T> values) {
@@ -293,7 +293,7 @@ public class U extends RapidoidThing {
 	}
 
 	public static <K, V> Map<K, V> map() {
-		return new LinkedHashMap<K, V>();
+		return new LinkedHashMap<>();
 	}
 
 	public static <K, V> Map<K, V> map(Map<? extends K, ? extends V> src) {

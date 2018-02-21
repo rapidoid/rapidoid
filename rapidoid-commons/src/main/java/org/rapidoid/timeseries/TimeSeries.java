@@ -114,7 +114,7 @@ public class TimeSeries extends RapidoidThing {
 
 	private NavigableMap<Long, Double> overviewOf(long from, long to) {
 
-		NavigableMap<Long, Double> overview = new TreeMap<Long, Double>();
+		NavigableMap<Long, Double> overview = new TreeMap<>();
 
 		long diff = to - from;
 		U.must(diff >= 0);

@@ -28,16 +28,13 @@ import org.rapidoid.commons.Rnd;
 import org.rapidoid.docs.echoprotocol.EchoProtocol;
 import org.rapidoid.io.IO;
 import org.rapidoid.lambda.F3;
-import org.rapidoid.net.AsyncLogic;
-import org.rapidoid.net.Protocol;
-import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.util.NetUtil;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Constants;
 import org.rapidoid.util.Msc;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -71,30 +68,22 @@ public class EchoProtocolTest extends NetTestCommons {
 
 	@Test
 	public void echo() {
-		server(new EchoProtocol(), new Runnable() {
-			@Override
-			public void run() {
-				connectAndExercise();
-			}
-		});
+		server(new EchoProtocol(), this::connectAndExercise);
 	}
 
 	private void connectAndExercise() {
 
-		NetUtil.connect("localhost", 8080, new F3<Void, InputStream, BufferedReader, DataOutputStream>() {
-			@Override
-			public Void execute(InputStream inputStream, BufferedReader in, DataOutputStream out) throws IOException {
-				out.writeBytes("hello\n");
-				eq(in.readLine(), "HELLO");
+		NetUtil.connect("localhost", 8080, (F3<Void, InputStream, BufferedReader, DataOutputStream>) (inputStream, in, out) -> {
+			out.writeBytes("hello\n");
+			eq(in.readLine(), "HELLO");
 
-				out.writeBytes("Foo\n");
-				eq(in.readLine(), "FOO");
+			out.writeBytes("Foo\n");
+			eq(in.readLine(), "FOO");
 
-				out.writeBytes("bye\n");
-				eq(in.readLine(), "BYE");
+			out.writeBytes("bye\n");
+			eq(in.readLine(), "BYE");
 
-				return null;
-			}
+			return null;
 		});
 
 		for (int i = 1; i <= ROUNDS; i++) {
@@ -106,16 +95,13 @@ public class EchoProtocolTest extends NetTestCommons {
 
 				Msc.startMeasure();
 
-				NetUtil.connect("localhost", 8080, new F3<Void, InputStream, BufferedReader, DataOutputStream>() {
-					@Override
-					public Void execute(InputStream inputStream, BufferedReader in, DataOutputStream out) throws IOException {
-						out.writeBytes(testCase);
+				NetUtil.connect("localhost", 8080, (F3<Void, InputStream, BufferedReader, DataOutputStream>) (inputStream, in, out) -> {
+					out.writeBytes(testCase);
 
-						List<String> lines = IO.readLines(in);
+					List<String> lines = IO.readLines(in);
 
-						eq(lines, expected);
-						return null;
-					}
+					eq(lines, expected);
+					return null;
 				});
 
 				Msc.endMeasure(expected.size(), "messages");
@@ -125,48 +111,27 @@ public class EchoProtocolTest extends NetTestCommons {
 
 	@Test
 	public void echoAsync() {
-		server(new Protocol() {
+		server(ctx -> {
 
-			@Override
-			public void process(final Channel ctx) {
-
-				if (ctx.isInitial()) {
-					BufUtil.doneWriting(ctx.output());
-					return;
-				}
-
-				final String in = ctx.readln();
-				final long handle = ctx.async();
-				final long connId = ctx.connId();
-
-				Msc.EXECUTOR.schedule(new Runnable() {
-					@Override
-					public void run() {
-
-						ctx.resume(connId, handle, new AsyncLogic() {
-
-							@Override
-							public boolean resumeAsync() {
-								ctx.write(in.toUpperCase());
-								ctx.write(CR_LF);
-								ctx.send();
-
-								ctx.closeIf(in.equals("bye"));
-								return true; // finished
-							}
-						});
-
-					}
-				}, Rnd.rnd(100), TimeUnit.MILLISECONDS);
-
+			if (ctx.isInitial()) {
+				BufUtil.doneWriting(ctx.output());
+				return;
 			}
 
-		}, new Runnable() {
-			@Override
-			public void run() {
-				connectAndExercise();
-			}
-		});
+			final String in = ctx.readln();
+			final long handle = ctx.async();
+			final long connId = ctx.connId();
+
+			Msc.EXECUTOR.schedule(() -> ctx.resume(connId, handle, () -> {
+				ctx.write(in.toUpperCase());
+				ctx.write(Constants.CR_LF);
+				ctx.send();
+
+				ctx.closeIf(in.equals("bye"));
+				return true; // finished
+			}), Rnd.rnd(100), TimeUnit.MILLISECONDS);
+
+		}, this::connectAndExercise);
 	}
 
 }

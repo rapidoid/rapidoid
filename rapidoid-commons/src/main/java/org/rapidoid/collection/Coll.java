@@ -113,7 +113,7 @@ public class Coll extends RapidoidThing {
 	}
 
 	public static <K, V> ConcurrentMap<K, V> concurrentMap() {
-		return new ConcurrentHashMap<K, V>();
+		return new ConcurrentHashMap<>();
 	}
 
 	public static <K, V> ConcurrentMap<K, V> concurrentMap(Map<? extends K, ? extends V> src, boolean ignoreNullValues) {
@@ -174,7 +174,7 @@ public class Coll extends RapidoidThing {
 	}
 
 	public static <K, V> Map<K, V> orderedMap() {
-		return new LinkedHashMap<K, V>();
+		return new LinkedHashMap<>();
 	}
 
 	public static <K, V> Map<K, V> orderedMap(Map<? extends K, ? extends V> src, boolean ignoreNullValues) {
@@ -238,12 +238,12 @@ public class Coll extends RapidoidThing {
 	}
 
 	public static <T> Queue<T> queue() {
-		return new ConcurrentLinkedQueue<T>();
+		return new ConcurrentLinkedQueue<>();
 	}
 
 	public static <T> BlockingQueue<T> queue(int maxSize) {
 		Err.argMust(maxSize > 0, "Maximum queue size must be > 0!");
-		return new ArrayBlockingQueue<T>(maxSize);
+		return new ArrayBlockingQueue<>(maxSize);
 	}
 
 	public static Integer getSizeOrNull(Iterable<?> items) {
@@ -284,16 +284,11 @@ public class Coll extends RapidoidThing {
 			// search for the key-based constructor
 			final Constructor<V> constructor = valueClass.getConstructor(keyClass);
 
-			return autoExpandingMap(new Mapper<K, V>() {
-
-				@SuppressWarnings("unchecked")
-				@Override
-				public V map(K key) {
-					try {
-						return constructor.newInstance(key);
-					} catch (Exception e) {
-						throw U.rte(e);
-					}
+			return autoExpandingMap(key -> {
+				try {
+					return constructor.newInstance(key);
+				} catch (Exception e) {
+					throw U.rte(e);
 				}
 			});
 
@@ -308,87 +303,38 @@ public class Coll extends RapidoidThing {
 			}
 
 			final Constructor<V> defConstructor = constructor;
-			return autoExpandingMap(new Mapper<K, V>() {
-
-				@SuppressWarnings("unchecked")
-				@Override
-				public V map(K key) {
-					try {
-						return defConstructor.newInstance();
-					} catch (Exception e) {
-						throw U.rte(e);
-					}
+			return autoExpandingMap(key -> {
+				try {
+					return defConstructor.newInstance();
+				} catch (Exception e1) {
+					throw U.rte(e1);
 				}
 			});
 		}
 	}
 
 	public static <K1, K2, V> Map<K1, Map<K2, V>> mapOfMaps() {
-		return autoExpandingMap(new Mapper<K1, Map<K2, V>>() {
-
-			@Override
-			public Map<K2, V> map(K1 src) {
-				return synchronizedMap();
-			}
-
-		});
+		return autoExpandingMap(src -> synchronizedMap());
 	}
 
 	public static <K1, K2, K3, V> Map<K1, Map<K2, Map<K3, V>>> mapOfMapOfMaps() {
-		return autoExpandingMap(new Mapper<K1, Map<K2, Map<K3, V>>>() {
-
-			@Override
-			public Map<K2, Map<K3, V>> map(K1 src) {
-				return mapOfMaps();
-			}
-
-		});
+		return autoExpandingMap(src -> mapOfMaps());
 	}
 
 	public static <K, V> Map<K, List<V>> mapOfLists() {
-		return autoExpandingMap(new Mapper<K, List<V>>() {
-
-			@SuppressWarnings("unchecked")
-			@Override
-			public List<V> map(K src) {
-				return synchronizedList();
-			}
-
-		});
+		return autoExpandingMap(src -> synchronizedList());
 	}
 
 	public static <K1, K2, V> Map<K1, Map<K2, List<V>>> mapOfMapOfLists() {
-		return autoExpandingMap(new Mapper<K1, Map<K2, List<V>>>() {
-
-			@Override
-			public Map<K2, List<V>> map(K1 src) {
-				return mapOfLists();
-			}
-
-		});
+		return autoExpandingMap(src -> mapOfLists());
 	}
 
 	public static <K, V> Map<K, Set<V>> mapOfSets() {
-		return autoExpandingMap(new Mapper<K, Set<V>>() {
-
-			@SuppressWarnings("unchecked")
-			@Override
-			public Set<V> map(K src) {
-				return synchronizedSet();
-			}
-
-		});
+		return autoExpandingMap(src -> synchronizedSet());
 	}
 
 	public static <K1, K2, V> Map<K1, Map<K2, Set<V>>> mapOfMapOfSets() {
-		return autoExpandingMap(new Mapper<K1, Map<K2, Set<V>>>() {
-
-			@Override
-			public Map<K2, Set<V>> map(K1 src) {
-				return mapOfSets();
-			}
-
-		});
+		return autoExpandingMap(src -> mapOfSets());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -413,7 +359,7 @@ public class Coll extends RapidoidThing {
 	}
 
 	public static <K, V> ChangeTrackingMap<K, V> trackChanges(Map<K, V> map, AtomicBoolean dirtyFlag) {
-		return new ChangeTrackingMap<K, V>(map, dirtyFlag);
+		return new ChangeTrackingMap<>(map, dirtyFlag);
 	}
 
 	public static <T> Map<String, T> toBeanMap(Map<String, Object> data, Class<T> type) {

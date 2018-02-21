@@ -140,12 +140,7 @@ public class Metrics extends RapidoidThing implements Runnable {
 	}
 
 	public static TimeSeries measure(String title, final Number var, long period, TimeUnit timeUnit) {
-		return measure(title, new Callable<Number>() {
-			@Override
-			public Number call() {
-				return var;
-			}
-		}, period, timeUnit);
+		return measure(title, () -> var, period, timeUnit);
 	}
 
 	public static TimeSeries measure(String title, Callable<? extends Number> var) {
@@ -157,12 +152,9 @@ public class Metrics extends RapidoidThing implements Runnable {
 		final TimeSeries ts = new TimeSeries();
 		ts.title(title);
 
-		Jobs.every(period, timeUnit).run(new Runnable() {
-			@Override
-			public void run() {
-				Number value = Lmbd.call(var);
-				if (value != null) ts.put(U.time(), value.doubleValue());
-			}
+		Jobs.every(period, timeUnit).run(() -> {
+			Number value = Lmbd.call(var);
+			if (value != null) ts.put(U.time(), value.doubleValue());
 		});
 
 		register("/" + Str.textToId(title), ts);

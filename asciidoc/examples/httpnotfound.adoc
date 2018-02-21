@@ -14,9 +14,7 @@ public class Main {
 	public static void main(String[] args) {
 		/* Returning a [null] means [NOT FOUND] */
 
-		On.get("/").json((Req req) -> {
-			return req.params().size() == 1 ? req.params() : null;
-		});
+		On.get("/").json((Req req) -> req.params().size() == 1 ? req.params() : null);
 	}
 
 }

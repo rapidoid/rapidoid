@@ -40,19 +40,16 @@ public class HttpSessionTest extends HttpTestCommons {
 	@Test
 	public void testHttpSession() {
 
-		On.req(new ReqRespHandler() {
-			@Override
-			public Object execute(Req req, Resp resp) {
-				Log.info("Session", "ID", req.sessionId(), "data", req.session());
+		On.req((ReqRespHandler) (req, resp) -> {
+			Log.info("Session", "ID", req.sessionId(), "data", req.session());
 
-				int n = req.session("n", 0) + 1;
-				resp.session("n", n);
+			int n = req.session("n", 0) + 1;
+			resp.session("n", n);
 
-				int m = req.session("m", 10) + 1;
-				resp.session("m", m);
+			int m = req.session("m", 10) + 1;
+			resp.session("m", m);
 
-				return n + ":" + m;
-			}
+			return n + ":" + m;
 		});
 
 		final AtomicInteger loadCounter = new AtomicInteger();

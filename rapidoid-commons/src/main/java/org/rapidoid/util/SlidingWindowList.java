@@ -40,7 +40,7 @@ public class SlidingWindowList<E> extends AbstractListDecorator<E> {
 	}
 
 	public SlidingWindowList(int maxSize, double stretchingFactor) {
-		super(new ArrayList<E>());
+		super(new ArrayList<>());
 
 		this.maxSize = maxSize;
 		this.stretchingFactor = stretchingFactor;

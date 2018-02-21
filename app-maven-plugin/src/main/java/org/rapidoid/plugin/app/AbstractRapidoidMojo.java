@@ -33,18 +33,22 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HttpReq;
 import org.rapidoid.http.HttpResp;
 import org.rapidoid.io.IO;
-import org.rapidoid.lambda.Predicate;
 import org.rapidoid.scan.Scan;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.Writer;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.FileSystem;
 import java.nio.file.*;
 import java.nio.file.attribute.FileAttribute;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -279,24 +283,15 @@ public abstract class AbstractRapidoidMojo extends AbstractMojo {
 		if (namedMain.size() == 1) return U.single(namedMain);
 
 		// the.group.id.foo.bar.Main (the shortest name)
-		Collections.sort(withGroupIdPkg, new Comparator<String>() {
-			@Override
-			public int compare(String s1, String s2) {
-				return s1.length() - s2.length();
-			}
-		});
+		withGroupIdPkg.sort((s1, s2) -> s1.length() - s2.length());
 		getLog().info("Candidates by group ID - picking one with the shortest name: " + withGroupIdPkg);
 
 		return U.first(withGroupIdPkg);
 	}
 
 	private static void scanForMainClass(String path, Collection<String> mainClasses) {
-		mainClasses.addAll(Scan.classpath(path).bytecodeFilter(new Predicate<InputStream>() {
-			@Override
-			public boolean eval(InputStream input) throws Exception {
-				return hasMainMethod(new ClassFile(new DataInputStream(input)));
-			}
-		}).getAll());
+		mainClasses.addAll(Scan.classpath(path).bytecodeFilter(input ->
+			hasMainMethod(new ClassFile(new DataInputStream(input)))).getAll());
 	}
 
 	private static boolean hasMainMethod(ClassFile cls) {

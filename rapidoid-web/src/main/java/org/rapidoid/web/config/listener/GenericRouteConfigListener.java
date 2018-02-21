@@ -44,16 +44,19 @@ public abstract class GenericRouteConfigListener<T extends AbstractRouteConfig> 
 		final HttpVerb verb;
 		String uri;
 
-		if (verbUri.length == 1) {
-			verb = null;
-			uri = verbUri[0];
+		switch (verbUri.length) {
+			case 1:
+				verb = null;
+				uri = verbUri[0];
 
-		} else if (verbUri.length == 2) {
-			verb = HttpVerb.from(verbUri[0]);
-			uri = verbUri[1];
+				break;
+			case 2:
+				verb = HttpVerb.from(verbUri[0]);
+				uri = verbUri[1];
 
-		} else {
-			throw U.rte("Invalid route!");
+				break;
+			default:
+				throw U.rte("Invalid route!");
 		}
 
 		addRoute(config, verb, uri);

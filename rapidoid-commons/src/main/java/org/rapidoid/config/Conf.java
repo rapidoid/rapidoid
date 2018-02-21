@@ -26,7 +26,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.env.Env;
 import org.rapidoid.env.RapidoidEnv;
-import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.GlobalCfg;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
@@ -44,12 +43,7 @@ public class Conf extends RapidoidThing {
 
 	public static final Config ROOT = new ConfigImpl(CONFIG_NAME, true);
 
-	private static final Map<String, Config> SECTIONS = Coll.autoExpandingMap(new Mapper<String, Config>() {
-		@Override
-		public Config map(String name) {
-			return createSection(name);
-		}
-	});
+	private static final Map<String, Config> SECTIONS = Coll.autoExpandingMap(name -> createSection(name));
 
 	public static final Config RAPIDOID = section("rapidoid");
 	public static final Config RAPIDOID_ADMIN = section("rapidoid-admin");

@@ -319,13 +319,8 @@ public class Res extends RapidoidThing {
 	public synchronized Res trackChanges() {
 		if (!trackingChanges) {
 			this.trackingChanges = true;
-			EXECUTOR.scheduleWithFixedDelay(new Runnable() {
-				@Override
-				public void run() {
-					// loading the resource causes the resource to check for changes
-					loadResource();
-				}
-			}, 0, 300, TimeUnit.MILLISECONDS);
+			// loading the resource causes the resource to check for changes
+			EXECUTOR.scheduleWithFixedDelay(this::loadResource, 0, 300, TimeUnit.MILLISECONDS);
 		}
 
 		return this;

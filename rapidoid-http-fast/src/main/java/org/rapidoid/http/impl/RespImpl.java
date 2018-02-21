@@ -527,31 +527,25 @@ public class RespImpl extends RapidoidThing implements Resp {
 	public void chunk(final byte[] data, final int offset, final int length) {
 		U.notNull(data, "data");
 
-		resume(new AsyncLogic() {
-			@Override
-			public boolean resumeAsync() {
-				Buf out = req.channel().output();
+		resume(() -> {
+			Buf out = req.channel().output();
 
-				out.append(Integer.toHexString(length));
-				out.append("\r\n");
-				out.append(data, offset, length);
-				out.append("\r\n");
+			out.append(Integer.toHexString(length));
+			out.append("\r\n");
+			out.append(data, offset, length);
+			out.append("\r\n");
 
-				req.channel().send();
+			req.channel().send();
 
-				return false;
-			}
+			return false;
 		});
 	}
 
 	void terminatingChunk() {
-		resume(new AsyncLogic() {
-			@Override
-			public boolean resumeAsync() {
-				Buf out = req.channel().output();
-				out.append("0\r\n\r\n");
-				return true;
-			}
+		resume(() -> {
+			Buf out = req.channel().output();
+			out.append("0\r\n\r\n");
+			return true;
 		});
 	}
 

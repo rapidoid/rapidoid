@@ -41,35 +41,27 @@ public class JobsTest extends AbstractCommonsTest {
 		int total = 100000;
 		final AtomicInteger counter = new AtomicInteger();
 
-		multiThreaded(1000, total, new Runnable() {
+		multiThreaded(1000, total, () -> {
+			Ctxs.open("test-job");
 
-			@Override
-			public void run() {
-				Ctxs.open("test-job");
+			final UserInfo user = new UserInfo(rndStr(50), U.set("role1"), null);
 
-				final UserInfo user = new UserInfo(rndStr(50), U.set("role1"), null);
+			Ctxs.required().setUser(user);
+			ensureProperContext(user);
 
-				Ctxs.required().setUser(user);
+			ScheduledFuture<?> future = Jobs.after(100, TimeUnit.MILLISECONDS).run(() -> {
 				ensureProperContext(user);
+				counter.incrementAndGet();
+			});
 
-				ScheduledFuture<?> future = Jobs.after(100, TimeUnit.MILLISECONDS).run(new Runnable() {
-					@Override
-					public void run() {
-						ensureProperContext(user);
-						counter.incrementAndGet();
-					}
-				});
-
-				try {
-					future.get();
-				} catch (Exception e) {
-					e.printStackTrace();
-					fail("The job throwed an exception!");
-				}
-
-				Ctxs.close();
+			try {
+				future.get();
+			} catch (Exception e) {
+				e.printStackTrace();
+				fail("The job throwed an exception!");
 			}
 
+			Ctxs.close();
 		});
 
 		eq(counter.get(), total);

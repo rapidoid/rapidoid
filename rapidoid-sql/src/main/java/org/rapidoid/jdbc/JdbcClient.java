@@ -46,7 +46,6 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
@@ -70,12 +69,7 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 
 	private final Config config;
 
-	private final LazyInit<JdbcWorkers> workers = new LazyInit<>(new Callable<JdbcWorkers>() {
-		@Override
-		public JdbcWorkers call() {
-			return new JdbcWorkers(JdbcClient.this);
-		}
-	});
+	private final LazyInit<JdbcWorkers> workers = new LazyInit<>(() -> new JdbcWorkers(JdbcClient.this));
 
 	public JdbcClient(String name) {
 		super(name);
@@ -567,46 +561,37 @@ public class JdbcClient extends AutoManageable<JdbcClient> {
 	}
 
 	public void execute(final Callback<Void> callback, final Operation<Connection> operation) {
-		execute(new Operation<Connection>() {
+		execute(conn -> {
 
-			@Override
-			public void execute(Connection conn) {
+			try {
+				operation.execute(conn);
 
-				try {
-					operation.execute(conn);
-
-				} catch (Throwable e) {
-					Callbacks.done(callback, null, e);
-					return;
-				}
-
-				Callbacks.done(callback, null, null);
+			} catch (Throwable e) {
+				Callbacks.done(callback, null, e);
+				return;
 			}
+
+			Callbacks.done(callback, null, null);
 		});
 	}
 
 	public <T> void execute(final Mapper<ResultSet, T> resultMapper, final Callback<List<T>> callback, final String sql, final Object... args) {
-		execute(new Operation<Connection>() {
+		execute(conn -> {
+			List<T> results = U.list();
 
-			@Override
-			public void execute(Connection conn) {
-				List<T> results = U.list();
+			try (PreparedStatement stmt = JdbcUtil.prepare(conn, sql, null, args)) {
 
-				try (PreparedStatement stmt = JdbcUtil.prepare(conn, sql, null, args)) {
-
-					ResultSet rs = stmt.executeQuery();
-					while (rs.next()) {
-						results.add(resultMapper.map(rs));
-					}
-
-				} catch (Throwable e) {
-					Callbacks.done(callback, null, e);
-					return;
+				ResultSet rs = stmt.executeQuery();
+				while (rs.next()) {
+					results.add(resultMapper.map(rs));
 				}
 
-				Callbacks.done(callback, results, null);
+			} catch (Throwable e) {
+				Callbacks.done(callback, null, e);
+				return;
 			}
 
+			Callbacks.done(callback, results, null);
 		});
 	}
 
