@@ -51,7 +51,5 @@ public interface IGoodies {
 
 	void entities(Setup setup);
 
-	void status(Setup setup);
-
 	void openapi(Setup setup);
 }

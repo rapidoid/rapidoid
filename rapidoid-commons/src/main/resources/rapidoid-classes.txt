@@ -207,7 +207,6 @@ org.rapidoid.goodies.MultiDetailsHandler
 org.rapidoid.goodies.OverviewHandler
 org.rapidoid.goodies.RapidoidGoodies
 org.rapidoid.goodies.RoutesHandler
-org.rapidoid.goodies.StatusHandler
 org.rapidoid.goodies.TerminateHandler
 org.rapidoid.goodies.X
 org.rapidoid.group.AbstractManageable

@@ -71,7 +71,6 @@ public class Goodies extends RapidoidThing {
 		jmx(setup);
 		metrics(setup);
 		auth(setup);
-		status(setup);
 	}
 
 	public static void auth(Setup setup) {
@@ -154,10 +153,6 @@ public class Goodies extends RapidoidThing {
 	public static void oauth(Setup setup) {
 		ModuleBootstrapParams params = new ModuleBootstrapParams().setup(setup);
 		RapidoidModules.get("OAuth").bootstrap(params);
-	}
-
-	public static void status(Setup setup) {
-		setup.get(uri("status")).json(new StatusHandler());
 	}
 
 	static String uri(String path) {
