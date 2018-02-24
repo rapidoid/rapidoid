@@ -28,11 +28,9 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.dbadmin.ManageableRdbms;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.http.HttpUtils;
-import org.rapidoid.http.HttpVerb;
 import org.rapidoid.insight.Metrics;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.security.Role;
-import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.MscOpts;
@@ -156,12 +154,6 @@ public class Goodies extends RapidoidThing {
 	public static void oauth(Setup setup) {
 		ModuleBootstrapParams params = new ModuleBootstrapParams().setup(setup);
 		RapidoidModules.get("OAuth").bootstrap(params);
-	}
-
-	public static void welcome(Setup setup) {
-		if (!setup.routes().hasRouteOrResource(HttpVerb.GET, "/")) {
-			On.get("/").view("_welcome").zone(CENTER).mvc(new WelcomeHandler());
-		}
 	}
 
 	public static void status(Setup setup) {
