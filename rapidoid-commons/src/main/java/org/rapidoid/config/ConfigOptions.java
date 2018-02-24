@@ -36,8 +36,6 @@ public class ConfigOptions extends RapidoidThing {
 
 	public static final List<ConfigOption> ALL = configOptions();
 
-	public static final List<ConfigOption> SERVICES = serviceOptions();
-
 	public static final List<ConfigOption> COMMANDS = commandOptions();
 
 	private static List<ConfigOption> configOptions() {
@@ -57,32 +55,6 @@ public class ConfigOptions extends RapidoidThing {
 
 		opts.add(opt("admin.port=<P>", "the Admin server will listen at port P", "same as on.port"));
 		opts.add(opt("admin.address=<ADDR>", "the Admin server will listen at address ADDR", "on.address"));
-
-		opts.add(opt("app.services=<S1,S2...>", "comma-separated list of services to bootstrap on the App server", "none"));
-		opts.add(opt("admin.services=<S1,S2...>", "comma-separated list of services to bootstrap on the Admin server", "none"));
-
-		return opts;
-	}
-
-	private static List<ConfigOption> serviceOptions() {
-		List<ConfigOption> opts = U.list();
-
-		opts.add(srvOpt("center", "Admin Center"));
-		opts.add(srvOpt("ping", "Simple ping"));
-		opts.add(srvOpt("status", "Application and system status"));
-		opts.add(srvOpt("overview", "General overview"));
-		opts.add(srvOpt("application", "Application management"));
-		opts.add(srvOpt("lifecycle", "Lifecycle management"));
-		opts.add(srvOpt("manageables", "Manageable objects"));
-		opts.add(srvOpt("jmx", "JMX overview"));
-		opts.add(srvOpt("metrics", "Metrics"));
-		opts.add(srvOpt("deploy", "Application deployment"));
-		opts.add(srvOpt("auth", "Authentication"));
-		opts.add(srvOpt("oauth", "OAuth authentication"));
-		opts.add(srvOpt("entities", "JPA entities management"));
-		opts.add(srvOpt("welcome", "Welcome page"));
-		opts.add(srvOpt("discovery", "Peer discovery (transient state)"));
-		opts.add(srvOpt("echo", "Echo of the request (for debugging)"));
 
 		return opts;
 	}

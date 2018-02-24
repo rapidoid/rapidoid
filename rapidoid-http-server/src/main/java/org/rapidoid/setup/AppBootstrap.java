@@ -34,13 +34,6 @@ import org.rapidoid.util.MscOpts;
 @Since("5.1.0")
 public class AppBootstrap extends RapidoidThing {
 
-	private static final ServiceBootstrap services = new ServiceBootstrap() {
-		@Override
-		protected void bootstrap() {
-			ServiceActivator.activateServices();
-		}
-	};
-
 	private static final ServiceBootstrap jpa = new ServiceBootstrap() {
 		@Override
 		protected void bootstrap() {
@@ -156,11 +149,6 @@ public class AppBootstrap extends RapidoidThing {
 		}
 	};
 
-	public AppBootstrap services() {
-		services.run();
-		return this;
-	}
-
 	public AppBootstrap jpa() {
 		jpa.run();
 		return this;
@@ -259,7 +247,6 @@ public class AppBootstrap extends RapidoidThing {
 	}
 
 	static void reset() {
-		services.reset();
 		jpa.reset();
 		entities.reset();
 		overview.reset();

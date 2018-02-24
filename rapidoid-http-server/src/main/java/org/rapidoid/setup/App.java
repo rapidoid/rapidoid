@@ -102,9 +102,7 @@ public class App extends RapidoidInitializer {
 	public static synchronized AppBootstrap bootstrap(String[] args, String... extraArgs) {
 		AppStarter.startUp(args, extraArgs);
 
-		boot()
-			.beans() // scan classpath for beans
-			.services(); // activate the services
+		boot().beans(); // scan classpath for beans
 
 		// finish initialization and start the application
 		onAppReady();

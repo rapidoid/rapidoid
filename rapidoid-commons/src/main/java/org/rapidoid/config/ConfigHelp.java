@@ -76,10 +76,7 @@ public class ConfigHelp extends RapidoidThing {
 		show("\nSupported commands:");
 		showOpts(ConfigOptions.COMMANDS);
 
-		show("\nService activation options:");
-		showOpts(ConfigOptions.SERVICES);
-
-		show("\nFor a complete list of options see: http://www.rapidoid.org/the-default-configuration.html");
+		show("\nFor a complete list of options see: https://www.rapidoid.org/docs.html#_the_built_in_configuration");
 	}
 
 	private static void showOpts(List<ConfigOption> opts) {
