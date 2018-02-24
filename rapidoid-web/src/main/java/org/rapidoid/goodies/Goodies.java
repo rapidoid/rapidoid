@@ -20,10 +20,11 @@
 
 package org.rapidoid.goodies;
 
+import org.rapidoid.ModuleBootstrapParams;
+import org.rapidoid.RapidoidModules;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
 import org.rapidoid.dbadmin.ManageableRdbms;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.http.HttpUtils;
@@ -33,11 +34,8 @@ import org.rapidoid.jpa.JPA;
 import org.rapidoid.security.Role;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
-import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.MscOpts;
-
-import java.lang.reflect.Method;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -156,12 +154,8 @@ public class Goodies extends RapidoidThing {
 	}
 
 	public static void oauth(Setup setup) {
-		Class<?> oauthClass = Cls.getClassIfExists("org.rapidoid.oauth.OAuth");
-		U.must(oauthClass != null, "Cannot find the OAuth components, is module 'rapidoid-oauth' missing?");
-
-		Method bootstrap = Cls.getMethod(oauthClass, "bootstrap", Setup.class);
-
-		Cls.invokeStatic(bootstrap, setup);
+		ModuleBootstrapParams params = new ModuleBootstrapParams().setup(setup);
+		RapidoidModules.get("OAuth").bootstrap(params);
 	}
 
 	public static void welcome(Setup setup) {
@@ -179,12 +173,8 @@ public class Goodies extends RapidoidThing {
 	}
 
 	public static void openapi(Setup setup) {
-		Class<?> openApiClass = Cls.getClassIfExists("org.rapidoid.oauth.OpenAPI");
-		U.must(openApiClass != null, "Cannot find the OpenAPI components, is module 'rapidoid-openapi' missing?");
-
-		Method bootstrap = Cls.getMethod(openApiClass, "bootstrap", Setup.class);
-
-		Cls.invokeStatic(bootstrap, setup);
+		ModuleBootstrapParams params = new ModuleBootstrapParams().setup(setup);
+		RapidoidModules.get("OpenAPI").bootstrap(params);
 	}
 
 }

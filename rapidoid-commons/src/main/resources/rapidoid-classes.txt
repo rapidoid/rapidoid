@@ -640,12 +640,14 @@ org.rapidoid.net.util.NetUtil
 org.rapidoid.oauth.DefaultOAuthStateCheck
 org.rapidoid.oauth.OAuth
 org.rapidoid.oauth.OAuthLoginHandler
+org.rapidoid.oauth.OAuthModule
 org.rapidoid.oauth.OAuthProvider
 org.rapidoid.oauth.OAuthStateCheck
 org.rapidoid.oauth.OAuthTokenHandler
 org.rapidoid.openapi.OpenAPI
 org.rapidoid.openapi.OpenAPIDescriptor
 org.rapidoid.openapi.OpenAPIModel
+org.rapidoid.openapi.OpenAPIModule
 org.rapidoid.optional.Opt
 org.rapidoid.plugin.app.AbstractRapidoidMojo
 org.rapidoid.plugin.app.AppBuildMojo
@@ -824,6 +826,7 @@ org.rapidoid.web.Rapidoid
 org.rapidoid.web.Screen
 org.rapidoid.web.ScreenBean
 org.rapidoid.web.WebModule
+org.rapidoid.web.WebSetup
 org.rapidoid.wrap.BoolWrap
 org.rapidoid.wrap.CharWrap
 org.rapidoid.wrap.DoubleWrap
