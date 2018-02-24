@@ -43,8 +43,6 @@ public interface IGoodies {
 
 	void deploy(Setup setup);
 
-	void ping(Setup setup);
-
 	void auth(Setup setup);
 
 	void oauth(Setup setup);

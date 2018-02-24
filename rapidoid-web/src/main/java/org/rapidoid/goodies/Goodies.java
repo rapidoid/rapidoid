@@ -83,10 +83,6 @@ public class Goodies extends RapidoidThing {
 		setup.get(uri("logout")).roles(Role.LOGGED_IN).json(new LogoutHandler());
 	}
 
-	public static void ping(Setup setup) {
-		setup.get(uri("ping")).plain("OK");
-	}
-
 	public static void lifecycle(Setup setup) {
 		setup.page(uri("terminate")).zone(CENTER).mvc(new TerminateHandler());
 	}

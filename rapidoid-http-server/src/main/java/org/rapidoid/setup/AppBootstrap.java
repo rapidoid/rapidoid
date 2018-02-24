@@ -44,13 +44,6 @@ public class AppBootstrap extends RapidoidThing {
 		}
 	};
 
-	private static final ServiceBootstrap ping = new ServiceBootstrap() {
-		@Override
-		protected void bootstrap() {
-			getGoodies().ping(On.setup());
-		}
-	};
-
 	private static final ServiceBootstrap auth = new ServiceBootstrap() {
 		@Override
 		protected void bootstrap() {
@@ -194,11 +187,6 @@ public class AppBootstrap extends RapidoidThing {
 		return this;
 	}
 
-	public AppBootstrap ping() {
-		ping.run();
-		return this;
-	}
-
 	public AppBootstrap auth() {
 		auth.run();
 		return this;
@@ -257,7 +245,6 @@ public class AppBootstrap extends RapidoidThing {
 		metrics.reset();
 		deploy.reset();
 		status.reset();
-		ping.reset();
 		auth.reset();
 		oauth.reset();
 		adminCenter.reset();

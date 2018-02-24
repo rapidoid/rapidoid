@@ -72,11 +72,6 @@ public class RapidoidGoodies extends RapidoidThing implements IGoodies {
 	}
 
 	@Override
-	public void ping(Setup setup) {
-		Goodies.ping(setup);
-	}
-
-	@Override
 	public void auth(Setup setup) {
 		Goodies.auth(setup);
 	}
