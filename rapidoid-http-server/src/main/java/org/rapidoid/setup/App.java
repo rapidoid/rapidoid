@@ -314,7 +314,7 @@ public class App extends RapidoidInitializer {
 	}
 
 	public static void beans(Object... beans) {
-		Setup.on().beans(beans);
+		Setup.getOnSetup().beans(beans);
 	}
 
 	public static IoCContext context() {
@@ -330,7 +330,7 @@ public class App extends RapidoidInitializer {
 	}
 
 	public static synchronized void register(Beans beans) {
-		Setup.on().register(beans);
+		Setup.getOnSetup().register(beans);
 	}
 
 	public static synchronized void shutdown() {

@@ -38,8 +38,8 @@ public class AppBootstrap extends RapidoidThing {
 		@Override
 		protected void bootstrap() {
 			if (MscOpts.hasJPA()) {
-				ModuleBootstrapParams setup = new ModuleBootstrapParams().path(App.path());
-				RapidoidModules.get("JPA").bootstrap(setup);
+				ModuleBootstrapParams params = new ModuleBootstrapParams().path(App.path());
+				RapidoidModules.get("JPA").bootstrap(params);
 			}
 		}
 	};

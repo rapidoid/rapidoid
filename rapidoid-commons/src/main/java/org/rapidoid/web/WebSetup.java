@@ -18,33 +18,13 @@
  * #L%
  */
 
-package org.rapidoid;
+package org.rapidoid.web;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.3.0")
-public interface RapidoidModule {
-
-	String name();
-
-	int order();
-
-	void boot();
-
-	void cleanUp();
-
-	void beforeTest(Object test);
-
-	void initTest(Object test);
-
-	void afterTest(Object test);
-
-	void restartApp();
-
-	void bootstrap(ModuleBootstrapParams params);
-
-	boolean preventsClassReload(String classname);
-
+@Since("6.0.0")
+public interface WebSetup {
+	// marker interface
 }

@@ -22,6 +22,7 @@ package org.rapidoid;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.web.WebSetup;
 
 @Authors("Nikolche Mihajlovski")
 @Since("6.0.0")
@@ -29,12 +30,23 @@ public class ModuleBootstrapParams extends RapidoidThing {
 
 	private volatile String[] path;
 
+	private volatile WebSetup setup;
+
 	public String[] path() {
 		return path;
 	}
 
 	public ModuleBootstrapParams path(String[] path) {
 		this.path = path;
+		return this;
+	}
+
+	public WebSetup setup() {
+		return setup;
+	}
+
+	public ModuleBootstrapParams setup(WebSetup setup) {
+		this.setup = setup;
 		return this;
 	}
 }

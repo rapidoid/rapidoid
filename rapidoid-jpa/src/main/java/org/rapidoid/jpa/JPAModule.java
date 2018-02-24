@@ -37,8 +37,8 @@ public class JPAModule extends AbstractRapidoidModule {
 	}
 
 	@Override
-	public void bootstrap(ModuleBootstrapParams setup) {
-		JPA.bootstrap(setup.path());
+	public void bootstrap(ModuleBootstrapParams params) {
+		JPA.bootstrap(params.path());
 	}
 
 	@Override

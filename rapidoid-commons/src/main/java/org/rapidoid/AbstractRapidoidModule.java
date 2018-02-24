@@ -79,7 +79,7 @@ public abstract class AbstractRapidoidModule extends RapidoidThing implements Ra
 	}
 
 	@Override
-	public void bootstrap(ModuleBootstrapParams setup) {
+	public void bootstrap(ModuleBootstrapParams params) {
 		// do nothing
 	}
 

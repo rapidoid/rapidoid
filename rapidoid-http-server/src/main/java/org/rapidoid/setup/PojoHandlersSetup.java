@@ -155,7 +155,7 @@ public class PojoHandlersSetup extends RapidoidThing {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					OnRoute route = route(setup.route(verb, path), method);
+					OnRoute route = route(setup.on(verb, path), method);
 
 					if (U.notEmpty(page.view())) {
 						route.view(page.view());

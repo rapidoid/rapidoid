@@ -53,6 +53,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.net.Server;
 import org.rapidoid.u.U;
 import org.rapidoid.util.*;
+import org.rapidoid.web.WebSetup;
 
 import java.util.Collections;
 import java.util.List;
@@ -62,7 +63,7 @@ import static org.rapidoid.util.Constants.*;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class Setup extends RapidoidInitializer {
+public class Setup extends RapidoidInitializer implements WebSetup {
 
 	static final Config MAIN_CFG = Msc.isPlatform() ? Conf.RAPIDOID : Conf.ON;
 	static final Config ADMIN_CFG = Msc.isPlatform() ? Conf.RAPIDOID_ADMIN : Conf.ADMIN;
@@ -146,25 +147,25 @@ public class Setup extends RapidoidInitializer {
 		this.defaults.zone(zone);
 	}
 
-	static Setup on() {
+	static Setup getOnSetup() {
 		return DEFAULT.get().on;
 	}
 
-	static Setup admin() {
+	static Setup getAdminSetup() {
 		return DEFAULT.get().admin;
 	}
 
 	private FastHttp initHttp() {
-		if (isAdminAndSameAsApp() && on().lazyHttp.isInitialized()) {
-			return on().http();
+		if (isAdminAndSameAsApp() && getOnSetup().lazyHttp.isInitialized()) {
+			return getOnSetup().http();
 
-		} else if (isAppAndSameAsAdmin() && admin().lazyHttp.isInitialized()) {
-			return admin().http();
+		} else if (isAppAndSameAsAdmin() && getAdminSetup().lazyHttp.isInitialized()) {
+			return getAdminSetup().http();
 		}
 
 		if (isAppOrAdminOnSameServer()) {
-			U.must(on().routes == admin().routes);
-			return new FastHttp(on().routes, on().serverConfig);
+			U.must(getOnSetup().routes == getAdminSetup().routes);
+			return new FastHttp(getOnSetup().routes, getOnSetup().serverConfig);
 		} else {
 			return new FastHttp(routes, serverConfig);
 		}
@@ -190,18 +191,18 @@ public class Setup extends RapidoidInitializer {
 			}
 
 			if (delegateAdminToApp()) {
-				server = on().server();
+				server = getOnSetup().server();
 
 			} else if (delegateAppToAdmin()) {
-				server = admin().server();
+				server = getAdminSetup().server();
 			}
 
 			if (server == null) {
 				int targetPort;
 
 				if (isAppOrAdminOnSameServer()) {
-					targetPort = on().port();
-					server = proc.listen(on().address(), targetPort);
+					targetPort = getOnSetup().port();
+					server = proc.listen(getOnSetup().address(), targetPort);
 				} else {
 					targetPort = port();
 					server = proc.listen(address(), targetPort);
@@ -218,11 +219,11 @@ public class Setup extends RapidoidInitializer {
 	}
 
 	private boolean delegateAdminToApp() {
-		return isAdminAndSameAsApp() && on().server != null;
+		return isAdminAndSameAsApp() && getOnSetup().server != null;
 	}
 
 	private boolean delegateAppToAdmin() {
-		return isAppAndSameAsAdmin() && admin().server != null;
+		return isAppAndSameAsAdmin() && getAdminSetup().server != null;
 	}
 
 	static boolean appAndAdminOnSameServer() {
@@ -240,11 +241,11 @@ public class Setup extends RapidoidInitializer {
 	}
 
 	public boolean isAdmin() {
-		return this == admin();
+		return this == getAdminSetup();
 	}
 
 	public boolean isApp() {
-		return this == on();
+		return this == getOnSetup();
 	}
 
 	void autoActivate() {
@@ -277,48 +278,48 @@ public class Setup extends RapidoidInitializer {
 		}
 	}
 
-	public OnRoute route(String verb, String path) {
+	public OnRoute on(String verb, String path) {
 		return new OnRoute(this, verb.toUpperCase(), path);
 	}
 
 	public OnRoute any(String path) {
-		return new OnRoute(this, ANY, path);
+		return on(ANY, path);
 	}
 
 	public OnRoute get(String path) {
-		return new OnRoute(this, GET, path);
+		return on(GET, path);
 	}
 
 	public OnRoute post(String path) {
-		return new OnRoute(this, POST, path);
+		return on(POST, path);
 	}
 
 	public OnRoute put(String path) {
-		return new OnRoute(this, PUT, path);
+		return on(PUT, path);
 	}
 
 	public OnRoute delete(String path) {
-		return new OnRoute(this, DELETE, path);
+		return on(DELETE, path);
 	}
 
 	public OnRoute patch(String path) {
-		return new OnRoute(this, PATCH, path);
+		return on(PATCH, path);
 	}
 
 	public OnRoute options(String path) {
-		return new OnRoute(this, OPTIONS, path);
+		return on(OPTIONS, path);
 	}
 
 	public OnRoute head(String path) {
-		return new OnRoute(this, HEAD, path);
+		return on(HEAD, path);
 	}
 
 	public OnRoute trace(String path) {
-		return new OnRoute(this, TRACE, path);
+		return on(TRACE, path);
 	}
 
 	public OnRoute page(String path) {
-		return new OnRoute(this, GET_OR_POST, path);
+		return on(GET_OR_POST, path);
 	}
 
 	public Setup req(ReqHandler handler) {
