@@ -175,17 +175,6 @@ public class ConfigurationTest extends IsolatedIntegrationTest {
 	}
 
 	@Test
-	public void testPlatformProfile() {
-		if (TLS_ENABLED) return;
-
-		Env.setArgs("profiles=platform");
-
-		eq(Env.profiles(), U.set("platform", "test"));
-
-		verifyJson("root", Conf.ROOT.toMap());
-	}
-
-	@Test
 	public void testBuiltInConfig() {
 		if (TLS_ENABLED) return;
 

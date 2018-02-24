@@ -17,8 +17,6 @@ gui:
   cdn: auto
   menu: {}
 
-main-zone: {}
-
 users:
   admin:
     roles: administrator

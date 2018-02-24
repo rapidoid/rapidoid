@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 19312
+Content-Length: 15768
 
 <!DOCTYPE html>
 <html lang="en">
@@ -700,136 +700,6 @@ Content-Length: 19312
         <td>truststorePassword</td>
         <td>
           <i class="fa fa-question-circle"></i>
-        </td>
-      </tr>
-    </table>
-    <h4>
-      <span class="label bg-metal">center-zone</span>
-    </h4>
-    <table class="table table-striped table-hover">
-      <tr>
-        <th>Key</th>
-        <th>Value</th>
-      </tr>
-      <tr>
-        <td>home</td>
-        <td>/_</td>
-      </tr>
-      <tr>
-        <td>brand</td>
-        <td>&lt;i class=&quot;fa fa-dashboard&quot;&gt;&lt;/i&gt; Admin Center</td>
-      </tr>
-      <tr>
-        <td>search</td>
-        <td>
-          <i class="fa fa-square-o"></i>
-        </td>
-      </tr>
-      <tr>
-        <td>fluid</td>
-        <td>
-          <i class="fa fa-check-square-o"></i>
-        </td>
-      </tr>
-      <tr>
-        <td>menu</td>
-        <td>
-          <table class="table table-striped table-hover">
-            <tr>
-              <th>Key</th>
-              <th>Value</th>
-            </tr>
-            <tr>
-              <td>Overview</td>
-              <td>/_</td>
-            </tr>
-            <tr>
-              <td>Routes</td>
-              <td>/_routes</td>
-            </tr>
-            <tr>
-              <td>Configuration</td>
-              <td>/_config</td>
-            </tr>
-            <tr>
-              <td>Metrics</td>
-              <td>/_metrics</td>
-            </tr>
-            <tr>
-              <td>Manageables</td>
-              <td>/_manageables</td>
-            </tr>
-            <tr>
-              <td>Application</td>
-              <td>
-                <table class="table table-striped table-hover">
-                  <tr>
-                    <th>Key</th>
-                    <th>Value</th>
-                  </tr>
-                  <tr>
-                    <td>Beans</td>
-                    <td>/_beans</td>
-                  </tr>
-                  <tr>
-                    <td>Entities</td>
-                    <td>/_entities</td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-            <tr>
-              <td>System</td>
-              <td>
-                <table class="table table-striped table-hover">
-                  <tr>
-                    <th>Key</th>
-                    <th>Value</th>
-                  </tr>
-                  <tr>
-                    <td>Terminate / Restart</td>
-                    <td>/_terminate</td>
-                  </tr>
-                  <tr>
-                    <td>Classpath</td>
-                    <td>/_classpath</td>
-                  </tr>
-                  <tr>
-                    <td>Memory pool</td>
-                    <td>/_jmx/mempool</td>
-                  </tr>
-                  <tr>
-                    <td>JVM Threads</td>
-                    <td>/_jmx/threads</td>
-                  </tr>
-                  <tr>
-                    <td>Operating system</td>
-                    <td>/_jmx/os</td>
-                  </tr>
-                  <tr>
-                    <td>Garbage collection</td>
-                    <td>/_jmx/gc</td>
-                  </tr>
-                  <tr>
-                    <td>Memory</td>
-                    <td>/_jmx/memory</td>
-                  </tr>
-                  <tr>
-                    <td>Runtime</td>
-                    <td>/_jmx/runtime</td>
-                  </tr>
-                  <tr>
-                    <td>Classes</td>
-                    <td>/_jmx/classes</td>
-                  </tr>
-                  <tr>
-                    <td>Compilation</td>
-                    <td>/_jmx/compilation</td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-          </table>
         </td>
       </tr>
     </table>

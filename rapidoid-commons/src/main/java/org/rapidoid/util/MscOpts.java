@@ -43,7 +43,6 @@ public class MscOpts extends RapidoidThing {
 	private static final boolean hasRapidoidGUI = Cls.exists("org.rapidoid.gui.GUI");
 	private static final boolean hasRapidoidRender = Cls.exists("org.rapidoid.render.Templates");
 	private static final boolean hasRapidoidWatch = Cls.exists("org.rapidoid.reload.Reload");
-	private static final boolean hasRapidoidPlatform = Cls.exists("org.rapidoid.standalone.Main");
 
 	private static final boolean hasLogback = Cls.exists("ch.qos.logback.classic.Logger");
 	private static final boolean hasSlf4jImpl = Cls.exists("org.slf4j.impl.StaticLoggerBinder");
@@ -83,10 +82,6 @@ public class MscOpts extends RapidoidThing {
 
 	public static boolean hasRapidoidWatch() {
 		return hasRapidoidWatch;
-	}
-
-	public static boolean hasRapidoidPlatform() {
-		return hasRapidoidPlatform;
 	}
 
 	public static boolean hasLogback() {
