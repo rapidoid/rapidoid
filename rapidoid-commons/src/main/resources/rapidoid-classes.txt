@@ -173,10 +173,6 @@ org.rapidoid.data.TUUIDDeserializer
 org.rapidoid.data.TUUIDSerializer
 org.rapidoid.data.XML
 org.rapidoid.data.YAML
-org.rapidoid.dbadmin.DbAdmin
-org.rapidoid.dbadmin.ManageableDatabase
-org.rapidoid.dbadmin.ManageableRdbms
-org.rapidoid.dbadmin.ManageableTable
 org.rapidoid.env.Env
 org.rapidoid.env.Environment
 org.rapidoid.env.EnvMode

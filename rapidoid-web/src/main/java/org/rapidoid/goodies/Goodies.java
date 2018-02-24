@@ -25,7 +25,6 @@ import org.rapidoid.RapidoidModules;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.dbadmin.ManageableRdbms;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.insight.Metrics;
@@ -110,21 +109,6 @@ public class Goodies extends RapidoidThing {
 			.baseUri(baseUri);
 
 		setup.page(uri("manageables/{type}/{id}/*")).zone(CENTER).mvc(details);
-	}
-
-	public static void dbAdmin(Setup setup) {
-		String baseUri = uri("db");
-
-		ManageablesOverviewPage overview = new ManageablesOverviewPage()
-			.groupType(ManageableRdbms.class)
-			.baseUri(baseUri);
-
-		setup.page(baseUri).zone(CENTER).mvc(overview);
-
-		ManageableDetailsPage details = new ManageableDetailsPage()
-			.baseUri(baseUri);
-
-		setup.page(baseUri + "/{type}/{id}/*").zone(CENTER).mvc(details);
 	}
 
 	public static void jmx(Setup setup) {
