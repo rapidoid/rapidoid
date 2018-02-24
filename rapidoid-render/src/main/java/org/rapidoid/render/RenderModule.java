@@ -26,7 +26,7 @@ import org.rapidoid.annotation.RapidoidModuleDesc;
 import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.6.0")
+@Since("6.0.0")
 @RapidoidModuleDesc(name = "Render", order = 400)
 public class RenderModule extends AbstractRapidoidModule {
 

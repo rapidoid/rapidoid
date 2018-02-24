@@ -27,7 +27,7 @@ import org.rapidoid.commons.Nums;
 import org.rapidoid.test.TestCommons;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.6.0")
+@Since("6.0.0")
 public class NumsTest extends TestCommons {
 
 	@Test

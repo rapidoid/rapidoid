@@ -29,7 +29,7 @@ import org.rapidoid.setup.Setup;
 import org.rapidoid.u.U;
 
 @Authors({"Daniel Braga", "Nikolche Mihajlovski"})
-@Since("5.6.0")
+@Since("6.0.0")
 public class OpenAPIDemo {
 
 	public static void main(String[] args) {

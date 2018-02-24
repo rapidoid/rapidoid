@@ -26,7 +26,7 @@ import org.rapidoid.annotation.Since;
 import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.6.0")
+@Since("6.0.0")
 public interface DataSchema {
 
 	String id();

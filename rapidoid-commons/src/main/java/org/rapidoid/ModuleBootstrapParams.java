@@ -24,7 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.6.0")
+@Since("6.0.0")
 public class ModuleBootstrapParams extends RapidoidThing {
 
 	private volatile String[] path;

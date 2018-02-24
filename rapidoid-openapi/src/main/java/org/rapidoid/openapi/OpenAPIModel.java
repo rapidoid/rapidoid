@@ -28,7 +28,7 @@ import org.rapidoid.u.U;
 import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.6.0")
+@Since("6.0.0")
 public class OpenAPIModel extends RapidoidThing {
 
 	public static Map<String, Map<String, String>> schemaRef(String schemaId) {

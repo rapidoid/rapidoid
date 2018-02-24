@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.6.0")
+@Since("6.0.0")
 public class RouteMeta extends RapidoidThing {
 
 	private volatile String id;

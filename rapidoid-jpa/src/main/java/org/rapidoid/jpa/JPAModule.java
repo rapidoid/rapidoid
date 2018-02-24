@@ -27,7 +27,7 @@ import org.rapidoid.annotation.RapidoidModuleDesc;
 import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.6.0")
+@Since("6.0.0")
 @RapidoidModuleDesc(name = "JPA", order = 550)
 public class JPAModule extends AbstractRapidoidModule {
 

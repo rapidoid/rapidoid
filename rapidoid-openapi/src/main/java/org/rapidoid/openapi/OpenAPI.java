@@ -29,7 +29,7 @@ import org.rapidoid.setup.Setup;
 import org.rapidoid.util.Msc;
 
 @Authors({"Nikolche Mihajlovski", "Daniel Braga"})
-@Since("5.6.0")
+@Since("6.0.0")
 public class OpenAPI extends RapidoidThing {
 
 	public static void bootstrap(Setup setup) {

@@ -45,7 +45,7 @@ import java.util.Set;
  * https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md
  */
 @Authors("Nikolche Mihajlovski")
-@Since("5.6.0")
+@Since("6.0.0")
 public class OpenAPIDescriptor extends RapidoidThing {
 
 	private final Setup setup;

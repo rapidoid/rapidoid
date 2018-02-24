@@ -30,7 +30,7 @@ import org.rapidoid.http.impl.OpenAPIDataSchema;
 import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.6.0")
+@Since("6.0.0")
 public class DataSchemas extends RapidoidThing {
 
 	public static DataSchema openAPI(String id, Map<String, Object> schema) {
