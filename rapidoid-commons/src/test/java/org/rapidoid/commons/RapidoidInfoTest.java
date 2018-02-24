@@ -32,7 +32,7 @@ public class RapidoidInfoTest extends AbstractCommonsTest {
 	@Test
 	public void testVersion() {
 		notNull(RapidoidInfo.version());
-		isTrue(RapidoidInfo.version().startsWith("5."));
+		isTrue(RapidoidInfo.version().startsWith("6."));
 	}
 
 	@Test
