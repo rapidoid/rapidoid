@@ -20,6 +20,7 @@
 
 package org.rapidoid.http.impl;
 
+import org.essentials4j.Do;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -565,20 +566,12 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 
 	@Override
 	public Set<Route> allAdmin() {
-		Set<Route> routes = U.set(all());
-
-		routes.removeIf(route -> !route.config().zone().equalsIgnoreCase("admin"));
-
-		return routes;
+		return U.set(Do.findIn(all()).all(Route::isAdminOnly));
 	}
 
 	@Override
 	public Set<Route> allNonAdmin() {
-		Set<Route> routes = U.set(all());
-
-		routes.removeIf(route -> route.config().zone().equalsIgnoreCase("admin"));
-
-		return routes;
+		return U.set(Do.findIn(all()).all(route -> !route.isAdminOnly()));
 	}
 
 	@Override
@@ -588,13 +581,9 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 
 	@Override
 	public Route find(HttpVerb verb, String path) {
-		for (Route route : all()) {
-			if (route.verb().equals(verb) && route.path().equals(path)) {
-				return route;
-			}
-		}
-
-		return null;
+		return Do.findIn(all())
+			.first(route -> route.verb().equals(verb) && route.path().equals(path))
+			.orElse(null);
 	}
 
 	@Override

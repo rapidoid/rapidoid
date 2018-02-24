@@ -38,13 +38,13 @@ import java.util.Date;
 @Since("5.1.0")
 public class RouteImpl extends RapidoidThing implements Route {
 
-	private volatile HttpVerb verb;
+	private final HttpVerb verb;
 
-	private volatile String path;
+	private final String path;
 
 	private volatile HttpHandler handler;
 
-	private volatile RouteOptions options;
+	private final RouteOptions options;
 
 	private volatile Date lastChangedAt = new Date();
 
@@ -139,6 +139,11 @@ public class RouteImpl extends RapidoidThing implements Route {
 	public boolean isAPI() {
 		if (options.mvc()) return false;
 
-		return config().contentType() != MediaType.HTML_UTF_8;
+		return options.contentType() != MediaType.HTML_UTF_8;
+	}
+
+	@Override
+	public boolean isAdminOnly() {
+		return options.zone().equalsIgnoreCase("admin");
 	}
 }

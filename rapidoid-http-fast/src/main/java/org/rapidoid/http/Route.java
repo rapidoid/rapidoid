@@ -46,4 +46,7 @@ public interface Route {
 	Date lastChangedAt();
 
 	boolean isAPI();
+
+	boolean isAdminOnly();
+
 }
