@@ -194,11 +194,6 @@ org.rapidoid.goodies.BeansHandler
 org.rapidoid.goodies.ClasspathHandler
 org.rapidoid.goodies.ConfigHandler
 org.rapidoid.goodies.DetailsHandler
-org.rapidoid.goodies.discovery.DiscoveryIndexHandler
-org.rapidoid.goodies.discovery.DiscoveryRegistrationHandler
-org.rapidoid.goodies.discovery.DiscoveryState
-org.rapidoid.goodies.discovery.PeerDiscoveryInfo
-org.rapidoid.goodies.EchoHandler
 org.rapidoid.goodies.EntitiesHandler
 org.rapidoid.goodies.Goodies
 org.rapidoid.goodies.GraphDataHandler

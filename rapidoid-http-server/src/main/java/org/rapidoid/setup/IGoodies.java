@@ -57,9 +57,5 @@ public interface IGoodies {
 
 	void status(Setup setup);
 
-	void discovery(Setup setup);
-
-	void echo(Setup setup);
-
 	void openapi(Setup setup);
 }

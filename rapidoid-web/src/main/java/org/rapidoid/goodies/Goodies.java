@@ -25,9 +25,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.dbadmin.ManageableRdbms;
-import org.rapidoid.goodies.discovery.DiscoveryIndexHandler;
-import org.rapidoid.goodies.discovery.DiscoveryRegistrationHandler;
-import org.rapidoid.goodies.discovery.DiscoveryState;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.HttpVerb;
@@ -179,17 +176,6 @@ public class Goodies extends RapidoidThing {
 
 	public static void status(Setup setup) {
 		setup.get(uri("status")).json(new StatusHandler());
-	}
-
-	public static void discovery(Setup setup) {
-		DiscoveryState state = new DiscoveryState();
-
-		setup.post(uri("discovery/{scope}/register")).json(new DiscoveryRegistrationHandler(state));
-		setup.get(uri("discovery/{scope}")).json(new DiscoveryIndexHandler(state));
-	}
-
-	public static void echo(Setup setup) {
-		setup.get(uri("echo")).json(new EchoHandler());
 	}
 
 	static String uri(String path) {
