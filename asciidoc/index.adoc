@@ -3,9 +3,9 @@ Nikolche Mihajlovski <rapidoid@googlegroups.com>
 
 include::style.adoc[]
 
-This is the new documentation for http://www.rapidoid.org[Rapidoid] (v5.4).
+This is the new documentation for https://www.rapidoid.org[Rapidoid] (v6.0).
 
-For older versions of Rapidoid, please see http://www.rapidoid.org/docs-5.3.html[v5.3] and http://www.rapidoid.org/documentation.html[the old docs].
+For older versions of Rapidoid, please see http://www.rapidoid.org/docs-5.3.html[v5.3], http://www.rapidoid.org/docs-5.4.html[v5.4], http://www.rapidoid.org/docs-5.5.html[v5.5] and http://www.rapidoid.org/documentation.html[the old docs].
 
 Things to improve in the docs:
 
