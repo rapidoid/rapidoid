@@ -44,8 +44,7 @@ public class RapidoidThingsTest {
 		for (String cls : Cls.getRapidoidClasses()) {
 
 			if (cls.startsWith("org.rapidoid.plugin.app.")
-				|| cls.startsWith("org.rapidoid.fluent.")
-				|| cls.startsWith("org.rapidoid.benchmark.")) continue;
+				|| cls.startsWith("org.rapidoid.test.")) continue;
 
 			Class<?> clazz = Cls.get(cls);
 
