@@ -1,0 +1,19 @@
+== Release 5.4
+
+=== What's new:
+
+ - *`HTTPS` support* (`TLS`, in general) - this was the most frequently requested feature
+ - *HTTP streaming* support
+ - high performance database connection pools - powered by `Hikari`
+ - implemented `JDBC` paging
+ - atomic application start-up
+ - extended capabilities of the `JDBC` client API (async. processing, result mappers etc.)
+ - unified data source configuration for `Hibernate` and `JDBC` (only `JDBC` for both)
+ - simplified bootstrap of `Hibernate`
+ - several bug fixes
+ - many small improvements
+
+=== Breaking changes:
+
+ - the built-in `C3P0` library has been replaced by `Hikari` in rapidoid-quick module
+ - the `hibernate` data source configuration section has been replaced by `jdbc`

@@ -1,0 +1,11 @@
+== Release 6.0 (NOT RELEASED YET)
+
+=== New features:
+
+ - *basic `OpenAPI` support* - see `OpenAPI#bootstrap` (thanks, https://github.com/danielbraga[Daniel Braga] for https://github.com/rapidoid/rapidoid/pull/158/files[contributing]!)
+ - included `Swagger UI` in the `rapidoid-openapi` module (visit `/api`)
+
+=== Breaking changes:
+
+ - merged the `rapidoid-essentials` module into `rapidoid-commons`
+ - renamed the `rapidoid-http-server` module to `rapidoid-rest`

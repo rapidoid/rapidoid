@@ -1,0 +1,35 @@
+== Release 5.2
+
+=== What's new:
+
+ - OAuth bootstrap: `App.bootstrap(args).oauth()` with pre-defined configuration structure
+ - customizable session management: `My.sessionManager(...)` - in-memory by default
+ - customizable JSON parser for the HTTP request body: `My.jsonRequestBodyParser(...)` - using Jackson by default
+ - customizable JPA management: `My.entityManagerFactoryProvider(...)` and `My.entityManagerProvider(...)`
+ - customizable security strategy when serving serving static files: `My.staticFilesSecurity(...)`
+ - customizable templates path: `My.templatesPath(...)`
+ - customizable templates loader (e.g. load them from DB): `My.templateLoader(...)`
+ - customizable error handlers by type: `On.error(...).handler(...)`
+ - customizable wrappers of the HTTP handlers (request/response interceptors): `My.wrappers(...)`
+ - redesigned token API (previously known as the cookie-pack session)
+ - smart serialization of the session and token - only when changed
+ - basic reverse proxy (easily configurable from command-line or Docker)
+ - round-robin load balancer (enabled by default in the reverse proxy)
+ - customizable context path for web applications
+ - great performance improvements in the built-in template engine
+ - few GUI enhancements
+ - several bug fixes
+ - many small improvements
+
+=== Breaking changes:
+
+ - Renamed cookiepack to token in the HTTP Req and Resp API
+ - the application.yml configuration files are not loaded by default, only config.yml
+ - renamed `profile-*.yml` configuration files to `config-*.yml`
+ - renamed application segment to zone in the HTTP API
+ - redesigned `ViewRenderer` and renamed to `ViewResolver`
+ - added `Req` parameter in the `LoginProvider` API
+ - added `Req` parameter in the `RolesProvider` API
+ - renamed `Templates.fromFile` to `Templates.load`, `Templates.fromString` to `Templates.compile`
+ - renamed `PageRenderer` to `PageDecorator`
+ - using `My.jackson()` instead of `JSON.MAPPER`

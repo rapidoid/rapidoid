@@ -1,0 +1,21 @@
+== Release 5.5
+
+=== What's new:
+
+ - built-in support for *XML requests and responses* (many thanks to https://github.com/cyterdan[Dan Cytermann] for the nice https://github.com/rapidoid/rapidoid/pull/149/files[contribution]!)
+ - the dockerized web platform has been extracted out in a separate project: https://github.com/rapidoid/rapidoid-web-platform[Rapidoid Web Platform]
+ - end of life for the `rapidoid-fluent` module (last released version: `5.4.6`), its successor is https://essentials4j.org/[essentials4j]
+ - support for *high-performance TCP clients* (`TCP.client()`)
+ - simple *high-performance HTTP client* (experimental)
+ - extended networking capabilities (`rapidoid-net` module)
+ - some bug fixes
+ - many small improvements
+
+=== Breaking changes:
+
+ - the `rapidoid-html` module has been merged into the `rapidoid-gui` module
+ - the `rapidoid-fluent` module has been removed
+ - renamed `jackson` to `objectMapper` in the customization API
+ - renamed `JsonResponseRenderer` to `HttpResponseRenderer` in the customization API
+ - renamed `JsonRequestBodyParser` to `HttpRequestBodyParser` in the customization API
+ - the process management components have been moved out from the `rapidoid-commons` module, into the Rapidoid Web Platform

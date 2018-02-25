@@ -1,0 +1,13 @@
+= Release notes
+
+include::v6.0.adoc[]
+
+include::v5.5.adoc[]
+
+include::v5.4.adoc[]
+
+include::v5.3.adoc[]
+
+include::v5.2.adoc[]
+
+include::v5.1.adoc[]
