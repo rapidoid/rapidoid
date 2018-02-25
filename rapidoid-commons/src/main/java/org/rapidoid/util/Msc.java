@@ -70,8 +70,6 @@ import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -910,46 +908,15 @@ public class Msc extends RapidoidThing {
 				arguments.put(parts[0], parts[1]);
 
 			} else {
-				processSpecialArg(arguments, arg);
+				throw U.rte("Special arguments are not supported since v6.0. Found: " + arg);
 			}
 		}
 
 		return arguments;
 	}
 
-	public static boolean isSpecialArg(String arg) {
+	private static boolean isSpecialArg(String arg) {
 		return arg.matches(SPECIAL_ARG_REGEX);
-	}
-
-	private static void processSpecialArg(Map<String, String> arguments, String arg) {
-		Matcher m = Pattern.compile(SPECIAL_ARG_REGEX).matcher(arg);
-		U.must(m.matches(), "Invalid argument");
-
-		String left = m.group(1);
-		String sep = m.group(2);
-		String right = m.group(3);
-
-		switch (sep) {
-
-			case "->":
-				left = "proxy." + left;
-				break;
-
-			case "<=":
-				left = "api." + left;
-				break;
-
-			case "<-":
-				left = "pages." + left;
-				break;
-
-			default:
-				throw U.rte("Argument operator not supported: " + sep);
-		}
-
-		Log.info("Replacing configuration shortcut", "shortcut", arg, "key", left, "value", right);
-
-		arguments.put(left, right);
 	}
 
 	public static boolean isDev() {
