@@ -23,8 +23,7 @@ package org.rapidoid.http;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
-import org.rapidoid.setup.App;
+import org.rapidoid.reverseproxy.Reverse;
 import org.rapidoid.setup.Setup;
 
 @Authors("Nikolche Mihajlovski")
@@ -33,7 +32,7 @@ public class HTTPProxyTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testProxy() {
-		App.run(new String[0], "/->localhost:5555,localhost:6666");
+		Reverse.proxy("/").to("localhost:5555", "localhost:6666").add();
 
 		Setup x = Setup.create("x").port(5555);
 		Setup y = Setup.create("y").port(6666);
@@ -50,29 +49,6 @@ public class HTTPProxyTest extends IsolatedIntegrationTest {
 		} finally {
 			x.shutdown();
 			y.shutdown();
-		}
-	}
-
-	@Test
-	public void testProxySimpleConfig() {
-		Conf.PROXY.set("/", "localhost:5555,localhost:6666");
-		App.boot();
-
-		Setup a = Setup.create("a").port(5555);
-		Setup b = Setup.create("b").port(6666);
-
-		try {
-			a.get("/who").html("A");
-			b.get("/who").html("B");
-
-			eq(Self.get("/who").fetch(), "A");
-			eq(Self.get("/who").fetch(), "B");
-			eq(Self.get("/who").fetch(), "A");
-			eq(Self.get("/who").fetch(), "B");
-
-		} finally {
-			a.shutdown();
-			b.shutdown();
 		}
 	}
 
