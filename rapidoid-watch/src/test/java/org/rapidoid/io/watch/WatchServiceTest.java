@@ -26,6 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.io.IO;
 import org.rapidoid.io.Res;
 import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.TestIO;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
@@ -37,7 +38,7 @@ public class WatchServiceTest extends TestCommons {
 
 	@Test
 	public void testDirRefresh() {
-		String tmpPath = createTempDir("watch-service-test");
+		String tmpPath = TestIO.createTempDir("watch-service-test");
 
 		Dir dir = Dir.from(tmpPath);
 		Dir dir2 = Dir.from(tmpPath);

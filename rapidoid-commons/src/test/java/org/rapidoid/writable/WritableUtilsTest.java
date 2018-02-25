@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.TestRnd;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -40,7 +41,7 @@ public class WritableUtilsTest extends TestCommons {
 		check(12345, -125521209, Long.MIN_VALUE);
 
 		for (int i = 0; i < 1000000; i++) {
-			check(RND.nextLong(), RND.nextLong(), RND.nextLong());
+			check(TestRnd.rndL(), TestRnd.rndL(), TestRnd.rndL());
 		}
 	}
 

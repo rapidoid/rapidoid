@@ -23,6 +23,7 @@ package org.rapidoid.data;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.Test;
 import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.TestIO;
 import org.rapidoid.u.U;
 
 import java.util.List;
@@ -42,14 +43,14 @@ public class YAMLTest extends TestCommons {
 
 	@Test
 	public void parseMap() {
-		String yaml = new String(loadRes("test.yaml"));
+		String yaml = new String(TestIO.loadRes("test.yaml"));
 		Map<String, Object> data = YAML.parseMap(yaml);
 		eq(data, U.map("aa", 1, "bb", "2am", "cc", U.map("x", true, "z", false)));
 	}
 
 	@Test
 	public void parseBeans() {
-		String yaml = new String(loadRes("persons.yaml"));
+		String yaml = new String(TestIO.loadRes("persons.yaml"));
 
 		List<User> persons = YAML.parse(yaml, personList);
 		eq(persons.size(), 2);

@@ -30,6 +30,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.security.Role;
 import org.rapidoid.setup.On;
+import org.rapidoid.test.TestCtx;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
@@ -64,6 +65,7 @@ public class HttpLoginTest extends IsolatedIntegrationTest {
 		multiThreaded(Msc.normalOrHeavy(5, 150), Msc.normalOrHeavy(10, 15000), this::randomUserLogin);
 	}
 
+	@TestCtx
 	private void randomUserLogin() {
 		while (!ready) U.sleep(100); // wait
 

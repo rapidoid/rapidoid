@@ -26,6 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.test.AbstractCommonsTest;
+import org.rapidoid.test.TestRnd;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
@@ -39,7 +40,7 @@ public class AppCtxTest extends AbstractCommonsTest {
 		multiThreaded(1000, 1000000, () -> {
 			Ctxs.open("test");
 
-			UserInfo user = new UserInfo(rndStr(10), U.set("role1"), null);
+			UserInfo user = new UserInfo(TestRnd.rndStr(10), U.set("role1"), null);
 
 			Ctxs.required().setUser(user);
 

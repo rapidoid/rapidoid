@@ -27,6 +27,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.env.Env;
 import org.rapidoid.io.IO;
 import org.rapidoid.test.AbstractCommonsTest;
+import org.rapidoid.test.TestIO;
 import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")
@@ -41,7 +42,7 @@ public class RootCustomizationTest extends AbstractCommonsTest {
 
 	@Test
 	public void testConfigRootSetup() {
-		String dir = createTempDir("app");
+		String dir = TestIO.createTempDir("app");
 
 		IO.save(Msc.path(dir, "config.yml"), "id: abc1");
 
@@ -52,7 +53,7 @@ public class RootCustomizationTest extends AbstractCommonsTest {
 
 	@Test
 	public void testConfigRootAndFileSetup() {
-		String dir = createTempDir("app");
+		String dir = TestIO.createTempDir("app");
 
 		IO.save(Msc.path(dir, "the-config.yml"), "id: abc2");
 

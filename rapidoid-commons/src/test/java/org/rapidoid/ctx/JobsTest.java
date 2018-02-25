@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.test.AbstractCommonsTest;
+import org.rapidoid.test.TestRnd;
 import org.rapidoid.u.U;
 
 import java.util.concurrent.ScheduledFuture;
@@ -44,7 +45,7 @@ public class JobsTest extends AbstractCommonsTest {
 		multiThreaded(1000, total, () -> {
 			Ctxs.open("test-job");
 
-			final UserInfo user = new UserInfo(rndStr(50), U.set("role1"), null);
+			final UserInfo user = new UserInfo(TestRnd.rndStr(50), U.set("role1"), null);
 
 			Ctxs.required().setUser(user);
 			ensureProperContext(user);

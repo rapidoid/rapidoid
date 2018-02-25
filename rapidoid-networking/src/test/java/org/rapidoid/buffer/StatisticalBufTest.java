@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Err;
+import org.rapidoid.test.TestRnd;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -37,14 +38,14 @@ public class StatisticalBufTest extends BufferTestCommons {
 		String s;
 
 		for (int i = 0; i < 1000; i++) {
-			if (rnd(3) > 0 || copy.isEmpty()) {
-				s = rndStr(0, 9);
+			if (TestRnd.rnd(3) > 0 || copy.isEmpty()) {
+				s = TestRnd.rndStr(0, 9);
 				buf.append(s);
 				copy += s;
 			} else {
-				int len = rnd(Math.min(17, copy.length() + 1));
+				int len = TestRnd.rnd(Math.min(17, copy.length() + 1));
 
-				switch (rnd(3)) {
+				switch (TestRnd.rnd(3)) {
 					case 0:
 						copy = copy.substring(len);
 						buf.deleteBefore(len);
@@ -56,10 +57,10 @@ public class StatisticalBufTest extends BufferTestCommons {
 						break;
 
 					case 2:
-						s = rndStr(0, len);
+						s = TestRnd.rndStr(0, len);
 						int maxPos = copy.length() - s.length();
 						assert maxPos >= 0;
-						int pos = rnd(maxPos + 1); // range [0..maxPos]
+						int pos = TestRnd.rnd(maxPos + 1); // range [0..maxPos]
 
 						copy = copy.substring(0, pos) + s + copy.substring(pos + s.length());
 						buf.put(pos, s.getBytes(), 0, s.length());
@@ -70,7 +71,7 @@ public class StatisticalBufTest extends BufferTestCommons {
 				}
 			}
 
-			if (rnd(1000) == 0) {
+			if (TestRnd.rnd(1000) == 0) {
 				copy = "";
 				buf.clear();
 			}

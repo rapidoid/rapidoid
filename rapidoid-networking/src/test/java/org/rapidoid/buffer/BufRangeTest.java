@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.BufRange;
+import org.rapidoid.test.TestRnd;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -57,7 +58,7 @@ public class BufRangeTest extends BufferTestCommons {
 		}
 
 		for (int i = 0; i < 1000000; i++) {
-			check(rng, rnd(), rnd());
+			check(rng, TestRnd.rnd(), TestRnd.rnd());
 		}
 	}
 
@@ -68,7 +69,7 @@ public class BufRangeTest extends BufferTestCommons {
 		eq(rng.limit(), rng.start + rng.length);
 
 		long backup = rng.backup();
-		rng.set(rnd(), rnd());
+		rng.set(TestRnd.rnd(), TestRnd.rnd());
 
 		rng.restore(backup);
 		eq(rng, a, b);

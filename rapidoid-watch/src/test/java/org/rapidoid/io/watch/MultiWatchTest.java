@@ -26,6 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.io.IO;
 import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.TestIO;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
@@ -37,7 +38,7 @@ public class MultiWatchTest extends TestCommons {
 
 	@Test(timeout = 60000)
 	public void shouldSupportMultipleWatchCalls() {
-		String dir = createTempDir("watch-service-test");
+		String dir = TestIO.createTempDir("watch-service-test");
 
 		if (!TestCommons.RAPIDOID_CI) {
 			for (int i = 0; i < 10; i++) {
