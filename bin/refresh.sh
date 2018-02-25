@@ -3,7 +3,6 @@ set -euo pipefail
 IFS=$'\n\t'
 
 bin/pkgs.sh
-bin/license-update.sh
 
 git reset
 git add rapidoid-commons/src/main/resources/rapidoid-classes.txt
