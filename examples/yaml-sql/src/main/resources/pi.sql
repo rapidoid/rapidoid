@@ -1,1 +1,0 @@
-SELECT 3.14 AS Pi

@@ -12,7 +12,6 @@
 		<module>guice-integration</module>
 		<module>hello-world</module>
 		<module>rest-api</module>
-		<module>yaml-sql</module>
 		<!--...-->
 	</modules>
 
