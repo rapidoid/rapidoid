@@ -96,7 +96,7 @@
 		<module>rapidoid-render</module>
 		<module>rapidoid-http-fast</module>
 		<module>rapidoid-http-client</module>
-		<module>rapidoid-http-server</module>
+		<module>rapidoid-rest</module>
 		<module>rapidoid-gui</module>
 		<module>rapidoid-oauth</module>
 		<module>rapidoid-integrate</module>
