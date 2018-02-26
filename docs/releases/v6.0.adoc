@@ -9,3 +9,4 @@
 
  - merged the `rapidoid-essentials` module into `rapidoid-commons`
  - renamed the `rapidoid-http-server` module to `rapidoid-rest`
+ - removed the support for service activation from CLI arguments
