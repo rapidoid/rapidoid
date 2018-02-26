@@ -79,13 +79,6 @@ public class AppBootstrap extends RapidoidThing {
 		}
 	};
 
-	private static final ServiceBootstrap manageables = new ServiceBootstrap() {
-		@Override
-		protected void bootstrap() {
-			getGoodies().manageables(Admin.setup());
-		}
-	};
-
 	private static final ServiceBootstrap lifecycle = new ServiceBootstrap() {
 		@Override
 		protected void bootstrap() {
@@ -147,11 +140,6 @@ public class AppBootstrap extends RapidoidThing {
 
 	public AppBootstrap application() {
 		application.run();
-		return this;
-	}
-
-	public AppBootstrap manageables() {
-		manageables.run();
 		return this;
 	}
 
@@ -227,7 +215,6 @@ public class AppBootstrap extends RapidoidThing {
 		entities.reset();
 		overview.reset();
 		application.reset();
-		manageables.reset();
 		lifecycle.reset();
 		jmx.reset();
 		metrics.reset();

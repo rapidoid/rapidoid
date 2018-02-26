@@ -47,11 +47,6 @@ public class RapidoidGoodies extends RapidoidThing implements IGoodies {
 	}
 
 	@Override
-	public void manageables(Setup setup) {
-		Goodies.manageables(setup);
-	}
-
-	@Override
 	public void jmx(Setup setup) {
 		Goodies.jmx(setup);
 	}

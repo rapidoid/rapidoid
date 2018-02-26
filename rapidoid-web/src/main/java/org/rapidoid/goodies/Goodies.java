@@ -60,13 +60,10 @@ public class Goodies extends RapidoidThing {
 	public static void adminCenter(Setup setup) {
 		Msc.logSection("Registering Admin Center:");
 
-		Metrics.bootstrap();
-
 		overview(setup);
 		entities(setup);
 		application(setup);
 		lifecycle(setup);
-		manageables(setup);
 		jmx(setup);
 		metrics(setup);
 		auth(setup);
@@ -93,22 +90,9 @@ public class Goodies extends RapidoidThing {
 	}
 
 	public static void metrics(Setup setup) {
+		Metrics.bootstrap();
 		setup.page(uri("metrics")).zone(CENTER).mvc(new GraphsHandler());
 		setup.get(uri("graphs/{id:.*}")).json(new GraphDataHandler());
-	}
-
-	public static void manageables(Setup setup) {
-		String baseUri = uri("manageables");
-
-		ManageablesOverviewPage overview = new ManageablesOverviewPage()
-			.baseUri(baseUri);
-
-		setup.page(baseUri).zone(CENTER).mvc(overview);
-
-		ManageableDetailsPage details = new ManageableDetailsPage()
-			.baseUri(baseUri);
-
-		setup.page(uri("manageables/{type}/{id}/*")).zone(CENTER).mvc(details);
 	}
 
 	public static void jmx(Setup setup) {
