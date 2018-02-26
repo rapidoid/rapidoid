@@ -1,6 +1,6 @@
 == Release 5.1
 
-=== What's new:
+=== Features and improvements
 
  - automatic hot reload when the source code changes,
  - lambdas as handlers - with named and type-safe parameters,

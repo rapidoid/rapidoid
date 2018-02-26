@@ -1,6 +1,6 @@
 == Release 5.4
 
-=== What's new:
+=== Features and improvements
 
  - *`HTTPS` support* (`TLS`, in general) - this was the most frequently requested feature
  - *HTTP streaming* support
@@ -13,7 +13,7 @@
  - several bug fixes
  - many small improvements
 
-=== Breaking changes:
+=== Breaking changes
 
  - the built-in `C3P0` library has been replaced by `Hikari` in rapidoid-quick module
  - the `hibernate` data source configuration section has been replaced by `jdbc`

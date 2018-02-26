@@ -1,4 +1,4 @@
-= Release notes
+= Release notes for Rapidoid
 
 include::v6.0.adoc[]
 

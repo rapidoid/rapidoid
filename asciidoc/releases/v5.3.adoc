@@ -1,6 +1,6 @@
 == Release 5.3
 
-=== What's new:
+=== Features and improvements
 
  - https://hub.docker.com/_/rapidoid/[Official Docker repository] for Rapidoid: `docker run rapidoid --help`
  - Maven plug-in for simple & easy packaging of uber-JAR: `mvn org.rapidoid:app:build` - it works on any Maven project, without configuring anything
@@ -29,7 +29,7 @@
  - several bug fixes
  - many small improvements
 
-=== Breaking changes:
+=== Breaking changes
 
  - changes in the low-level async Net API - added `void resume(long connId, long handle, AsyncLogic asyncLogic)`
  - renamed URIs for the built-in services from `/_/*` to `/_*`

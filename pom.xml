@@ -213,6 +213,28 @@
 							</attributes>
 						</configuration>
 					</execution>
+					<execution>
+						<id>release-notes</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>process-asciidoc</goal>
+						</goals>
+						<inherited>false</inherited>
+						<configuration>
+							<sourceDirectory>asciidoc/releases</sourceDirectory>
+							<headerFooter>true</headerFooter>
+							<imagesDir>img</imagesDir>
+							<sourceHighlighter>coderay</sourceHighlighter>
+							<backend>html5</backend>
+							<sourceDocumentName>notes.adoc</sourceDocumentName>
+							<attributes>
+								<toc>left</toc>
+								<linkcss>false</linkcss>
+								<project-version>${project.version}</project-version>
+								<sectnums>false</sectnums>
+							</attributes>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 
