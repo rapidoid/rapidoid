@@ -224,7 +224,6 @@
 						<inherited>false</inherited>
 						<configuration>
 							<sourceDirectory>docs/releases</sourceDirectory>
-							<sourceDocumentName>notes.adoc</sourceDocumentName>
 							<attributes>
 								<sectnums>false</sectnums>
 							</attributes>

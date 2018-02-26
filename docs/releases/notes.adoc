@@ -1,13 +1,13 @@
 = Release notes for Rapidoid
 
-include::v6.0.adoc[]
+include::release-6.0.adoc[]
 
-include::v5.5.adoc[]
+include::release-5.5.adoc[]
 
-include::v5.4.adoc[]
+include::release-5.4.adoc[]
 
-include::v5.3.adoc[]
+include::release-5.3.adoc[]
 
-include::v5.2.adoc[]
+include::release-5.2.adoc[]
 
-include::v5.1.adoc[]
+include::release-5.1.adoc[]
