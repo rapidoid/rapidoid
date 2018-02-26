@@ -75,7 +75,7 @@ public abstract class DocTest extends IsolatedIntegrationTest {
 		String dir = System.getProperty("user.dir");
 		dir = Str.cutToFirst(dir, "rapidoid") + "rapidoid";
 
-		String asciidoc = Msc.path(dir, "asciidoc", "examples");
+		String asciidoc = Msc.path(dir, "docs", "examples");
 		new File(asciidoc).mkdirs();
 
 		generateAsciiDoc(doc, pkg, asciidoc, files);

@@ -198,7 +198,7 @@
 							<goal>process-asciidoc</goal>
 						</goals>
 						<configuration>
-							<sourceDirectory>asciidoc</sourceDirectory>
+							<sourceDirectory>docs</sourceDirectory>
 							<headerFooter>true</headerFooter>
 							<imagesDir>img</imagesDir>
 							<sourceHighlighter>coderay</sourceHighlighter>
@@ -221,7 +221,7 @@
 						</goals>
 						<inherited>false</inherited>
 						<configuration>
-							<sourceDirectory>asciidoc/releases</sourceDirectory>
+							<sourceDirectory>docs/releases</sourceDirectory>
 							<headerFooter>true</headerFooter>
 							<imagesDir>img</imagesDir>
 							<sourceHighlighter>coderay</sourceHighlighter>

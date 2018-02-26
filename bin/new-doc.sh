@@ -9,7 +9,7 @@ echo "Adding new doc/example '$PKG', class $CLS"
 
 # ASCIIDOC
 
-cd asciidoc
+cd docs
 
 cp blank.adoc "${PKG}.adoc"
 
