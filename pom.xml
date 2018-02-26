@@ -105,8 +105,8 @@
 		<module>rapidoid-watch</module>
 		<module>rapidoid-integration-tests</module>
 		<module>app-maven-plugin</module>
-        <module>rapidoid-openapi</module>
-    </modules>
+		<module>rapidoid-openapi</module>
+	</modules>
 
 	<build>
 		<plugins>
@@ -167,7 +167,7 @@
 					<useReleaseProfile>false</useReleaseProfile>
 					<releaseProfiles>release</releaseProfiles>
 					<tagNameFormat>@{project.version}</tagNameFormat>
-					<scmCommentPrefix>[maven-release-plugin] [ci skip] </scmCommentPrefix>
+					<scmCommentPrefix>[maven-release-plugin] [ci skip]</scmCommentPrefix>
 				</configuration>
 			</plugin>
 
@@ -190,27 +190,29 @@
 				<artifactId>asciidoctor-maven-plugin</artifactId>
 				<version>1.5.3</version>
 				<inherited>false</inherited>
+				<configuration>
+					<sourceDirectory>docs</sourceDirectory>
+					<headerFooter>true</headerFooter>
+					<imagesDir>img</imagesDir>
+					<sourceHighlighter>coderay</sourceHighlighter>
+					<backend>html5</backend>
+					<attributes>
+						<toc>left</toc>
+						<linkcss>false</linkcss>
+						<project-version>${project.version}</project-version>
+						<sectnums>true</sectnums>
+						<sectnumlevels>2</sectnumlevels>
+					</attributes>
+				</configuration>
 				<executions>
 					<execution>
-						<id>output-html</id>
+						<id>main-docs</id>
 						<phase>generate-resources</phase>
 						<goals>
 							<goal>process-asciidoc</goal>
 						</goals>
 						<configuration>
-							<sourceDirectory>docs</sourceDirectory>
-							<headerFooter>true</headerFooter>
-							<imagesDir>img</imagesDir>
-							<sourceHighlighter>coderay</sourceHighlighter>
-							<backend>html5</backend>
 							<sourceDocumentName>index.adoc</sourceDocumentName>
-							<attributes>
-								<toc>left</toc>
-								<linkcss>false</linkcss>
-								<project-version>${project.version}</project-version>
-								<sectnums>true</sectnums>
-								<sectnumlevels>2</sectnumlevels>
-							</attributes>
 						</configuration>
 					</execution>
 					<execution>
@@ -222,15 +224,8 @@
 						<inherited>false</inherited>
 						<configuration>
 							<sourceDirectory>docs/releases</sourceDirectory>
-							<headerFooter>true</headerFooter>
-							<imagesDir>img</imagesDir>
-							<sourceHighlighter>coderay</sourceHighlighter>
-							<backend>html5</backend>
 							<sourceDocumentName>notes.adoc</sourceDocumentName>
 							<attributes>
-								<toc>left</toc>
-								<linkcss>false</linkcss>
-								<project-version>${project.version}</project-version>
 								<sectnums>false</sectnums>
 							</attributes>
 						</configuration>
