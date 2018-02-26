@@ -65,7 +65,7 @@ public class RenderCtxImpl extends RapidoidThing implements RenderCtx {
 	}
 
 	@Override
-	public void printValue(Object value, boolean escape) throws IOException {
+	public void printValue(Object value, boolean escape) {
 		if (!escape) {
 			printUTF8(str(value));
 			return;

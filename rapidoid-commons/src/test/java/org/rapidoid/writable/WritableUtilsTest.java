@@ -27,14 +27,13 @@ import org.rapidoid.test.TestCommons;
 import org.rapidoid.test.TestRnd;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.4")
 public class WritableUtilsTest extends TestCommons {
 
 	@Test
-	public void testUri() throws IOException {
+	public void testUri() {
 		check(123, 2, 34);
 		check(0, -1, -44);
 		check(Long.MAX_VALUE, 100023, Long.MIN_VALUE + 1);

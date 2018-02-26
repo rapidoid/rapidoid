@@ -15,12 +15,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-gui</artifactId>
+			<artifactId>rapidoid-rest</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-rest</artifactId>
+			<artifactId>rapidoid-gui</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

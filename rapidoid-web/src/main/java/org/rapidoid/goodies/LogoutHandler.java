@@ -33,7 +33,7 @@ import org.rapidoid.http.Resp;
 public class LogoutHandler extends RapidoidThing implements ReqRespHandler {
 
 	@Override
-	public Object execute(Req req, Resp resp) throws Exception {
+	public Object execute(Req req, Resp resp) {
 		resp.logout();
 		return resp.redirect(req.header(Headers.REFERER));
 	}

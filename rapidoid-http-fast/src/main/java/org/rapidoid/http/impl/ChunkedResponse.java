@@ -25,7 +25,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.util.Once;
 import org.rapidoid.writable.ReusableWritable;
 
-import java.io.IOException;
 import java.io.OutputStream;
 
 @Authors("Nikolche Mihajlovski")
@@ -72,7 +71,7 @@ public class ChunkedResponse extends OutputStream {
 	}
 
 	@Override
-	public synchronized void close() throws IOException {
+	public synchronized void close() {
 		flush();
 		resp.terminatingChunk();
 		closed = true;

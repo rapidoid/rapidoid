@@ -43,7 +43,7 @@ public class ReverseProxy extends AbstractReverseProxyBean<ReverseProxy> impleme
 	}
 
 	@Override
-	public Object execute(final Req req, final Resp resp) throws Exception {
+	public Object execute(final Req req, final Resp resp) {
 
 		ProxyMapping mapping = findMapping(req);
 		if (mapping == null) return null; // not found!

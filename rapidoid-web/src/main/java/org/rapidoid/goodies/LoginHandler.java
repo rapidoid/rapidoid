@@ -34,7 +34,7 @@ import org.rapidoid.util.Tokens;
 public class LoginHandler extends RapidoidThing implements ReqRespHandler {
 
 	@Override
-	public AuthResponse execute(Req req, Resp resp) throws Exception {
+	public AuthResponse execute(Req req, Resp resp) {
 		AuthResponse auth = new AuthResponse();
 
 		String username = req.data("username");

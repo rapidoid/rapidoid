@@ -255,7 +255,7 @@ public class ConcurrentCacheAtom<K, V> extends RapidoidThing implements CacheAto
 	}
 
 	@Override
-	public V call() throws Exception {
+	public V call() {
 		return get();
 	}
 

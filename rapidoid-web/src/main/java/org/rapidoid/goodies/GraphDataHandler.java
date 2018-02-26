@@ -35,7 +35,7 @@ import java.util.Collections;
 public class GraphDataHandler extends GUI implements FourParamLambda<Object, Req, Double, Double, String> {
 
 	@Override
-	public Object execute(Req req, Double from, Double to, String id) throws Exception {
+	public Object execute(Req req, Double from, Double to, String id) {
 		TimeSeries metrics = Metrics.get(id);
 
 		if (metrics == null) {
