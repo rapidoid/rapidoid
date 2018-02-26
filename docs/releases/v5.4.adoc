@@ -1,6 +1,6 @@
 == Release 5.4
 
-=== Features and improvements
+=== New features and improvements
 
  - *`HTTPS` support* (`TLS`, in general) - this was the most frequently requested feature
  - *HTTP streaming* support

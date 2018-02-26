@@ -1,6 +1,6 @@
 == Release 5.5
 
-=== Features and improvements
+=== New features and improvements
 
  - built-in support for *XML requests and responses* (many thanks to https://github.com/cyterdan[Dan Cytermann] for the nice https://github.com/rapidoid/rapidoid/pull/149/files[contribution]!)
  - the dockerized web platform has been extracted out in a separate project: https://github.com/rapidoid/rapidoid-web-platform[Rapidoid Web Platform]

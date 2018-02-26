@@ -1,6 +1,6 @@
 == Release 5.2
 
-=== Features and improvements
+=== New features and improvements
 
  - OAuth bootstrap: `App.bootstrap(args).oauth()` with pre-defined configuration structure
  - customizable session management: `My.sessionManager(...)` - in-memory by default

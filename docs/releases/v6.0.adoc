@@ -1,6 +1,6 @@
 == Release 6.0 (NOT RELEASED YET)
 
-=== Features and improvements
+=== New features and improvements
 
  - *basic `OpenAPI` support* - see `OpenAPI#bootstrap` (thanks, https://github.com/danielbraga[Daniel Braga] for https://github.com/rapidoid/rapidoid/pull/158/files[contributing]!)
  - included `Swagger UI` in the `rapidoid-openapi` module (visit `/api`)
