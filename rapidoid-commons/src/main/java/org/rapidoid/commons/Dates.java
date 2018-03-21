@@ -50,7 +50,7 @@ public class Dates extends RapidoidThing {
 		long time = System.currentTimeMillis();
 
 		// avoid synchronization for better performance
-		if (time > updateCurrDateAfter) {
+		if (time >= updateCurrDateAfter) {
 
 			// RFC 1123 date-time format, e.g. Sun, 07 Sep 2014 00:17:29 GMT
 			DateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.ROOT);
@@ -60,7 +60,7 @@ public class Dates extends RapidoidThing {
 			date.setTime(time);
 
 			CURR_DATE_BYTES = dateFormat.format(date).getBytes();
-			updateCurrDateAfter = time + 1000;
+			updateCurrDateAfter = time - (time % 1000) + 1000;
 		}
 
 		return CURR_DATE_BYTES;
