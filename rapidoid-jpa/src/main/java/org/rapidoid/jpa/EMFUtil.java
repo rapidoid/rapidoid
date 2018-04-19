@@ -36,9 +36,9 @@ import java.util.Properties;
 public class EMFUtil extends RapidoidThing {
 
 	@SuppressWarnings("unchecked")
-	public static synchronized List<String> getEntityTypes(String path[], Class<?>... entities) {
+	public static synchronized List<String> getEntityTypes(String packages[], Class<?>... entities) {
 
-		List<String> entityTypes = Scan.annotated(Entity.class).in(path).getAll();
+		List<String> entityTypes = Scan.annotated(Entity.class).in(packages).getAll();
 
 		for (Class<?> entity : entities) {
 			String type = entity.getName();

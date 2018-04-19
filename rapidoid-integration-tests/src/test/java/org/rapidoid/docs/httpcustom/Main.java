@@ -21,9 +21,9 @@
 package org.rapidoid.docs.httpcustom;
 
 import org.rapidoid.config.Conf;
+import org.rapidoid.goodies.Boot;
 import org.rapidoid.setup.Admin;
 import org.rapidoid.setup.App;
-import org.rapidoid.setup.AppBootstrap;
 import org.rapidoid.setup.On;
 
 public class Main {
@@ -31,7 +31,7 @@ public class Main {
 	public static void main(String[] args) {
 
 		// first thing to do - initializing Rapidoid, without bootstrapping anything at the moment
-		AppBootstrap bootstrap = App.run(args); // instead of App.bootstrap(args), which might start the server
+		App.run(args); // instead of App.bootstrap(args), which might start the server
 
 		// customizing the server address and port - before the server is bootstrapped
 		On.address("0.0.0.0").port(9998);
@@ -41,8 +41,11 @@ public class Main {
 		Conf.HTTP.set("maxPipeline", 32);
 		Conf.NET.set("bufSizeKB", 16);
 
-		// now bootstrap some components, e.g. built-in services, classpath scanning (beans), JMX, Admin Center
-		bootstrap.beans().jmx().adminCenter();
+		// now bootstrap some components, e.g. classpath scanning (beans)
+		App.scan();
+
+		Boot.jmx(App.setup());
+		Boot.adminCenter(App.adminSetup());
 
 		// continue with normal setup
 		On.get("/x").json("x");

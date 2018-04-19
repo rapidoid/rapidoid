@@ -187,21 +187,18 @@ org.rapidoid.expire.ExpirationCrawlerThread
 org.rapidoid.expire.Expire
 org.rapidoid.expire.Expiring
 org.rapidoid.goodies.BeansHandler
+org.rapidoid.goodies.Boot
 org.rapidoid.goodies.ClasspathHandler
 org.rapidoid.goodies.ConfigHandler
 org.rapidoid.goodies.DetailsHandler
 org.rapidoid.goodies.EntitiesHandler
-org.rapidoid.goodies.Goodies
 org.rapidoid.goodies.GraphDataHandler
 org.rapidoid.goodies.GraphsHandler
 org.rapidoid.goodies.JMXGoodies
 org.rapidoid.goodies.LoginHandler
 org.rapidoid.goodies.LogoutHandler
-org.rapidoid.goodies.ManageableDetailsPage
-org.rapidoid.goodies.ManageablesOverviewPage
 org.rapidoid.goodies.MultiDetailsHandler
 org.rapidoid.goodies.OverviewHandler
-org.rapidoid.goodies.RapidoidGoodies
 org.rapidoid.goodies.RoutesHandler
 org.rapidoid.goodies.TerminateHandler
 org.rapidoid.goodies.X
@@ -714,7 +711,6 @@ org.rapidoid.serialize.TypeSpecificDeserializer
 org.rapidoid.serialize.TypeSpecificSerializer
 org.rapidoid.setup.Admin
 org.rapidoid.setup.App
-org.rapidoid.setup.AppBootstrap
 org.rapidoid.setup.AppRestartListener
 org.rapidoid.setup.AppRestartProcessor
 org.rapidoid.setup.AppStarter
@@ -722,7 +718,6 @@ org.rapidoid.setup.AppStatus
 org.rapidoid.setup.CustomizableSetupAwarePersisterProvider
 org.rapidoid.setup.DefaultSetup
 org.rapidoid.setup.HttpHandlers
-org.rapidoid.setup.IGoodies
 org.rapidoid.setup.My
 org.rapidoid.setup.On
 org.rapidoid.setup.OnChanges
@@ -733,7 +728,7 @@ org.rapidoid.setup.ReloadUtil
 org.rapidoid.setup.ServerSetup
 org.rapidoid.setup.ServiceBootstrap
 org.rapidoid.setup.Setup
-org.rapidoid.setup.SetupUtil
+org.rapidoid.setup.Setups
 org.rapidoid.setup.WatchForChanges
 org.rapidoid.test.Doc
 org.rapidoid.test.ExpectErrors
@@ -808,7 +803,6 @@ org.rapidoid.var.impl.SimpleVar
 org.rapidoid.var.impl.ValidatingVar
 org.rapidoid.var.Var
 org.rapidoid.var.Vars
-org.rapidoid.web.Rapidoid
 org.rapidoid.web.Screen
 org.rapidoid.web.ScreenBean
 org.rapidoid.web.WebModule

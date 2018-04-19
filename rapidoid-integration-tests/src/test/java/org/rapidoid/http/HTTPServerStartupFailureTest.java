@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.setup.Setup;
+import org.rapidoid.setup.Setups;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -31,17 +32,17 @@ public class HTTPServerStartupFailureTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void shouldStartAndStop() {
-		Setup x = Setup.create("x").port(5656);
+		Setup x = Setups.create("x").port(5656);
 		x.activate();
 		x.shutdown();
 	}
 
 	@Test
 	public void shouldFailIfCannotListen() {
-		Setup.create("x").port(5656).activate();
+		Setups.create("x").port(5656).activate();
 
 		try {
-			Setup.create("y").port(5656).activate();
+			Setups.create("y").port(5656).activate();
 		} catch (Exception e) {
 			return; // OK
 		}

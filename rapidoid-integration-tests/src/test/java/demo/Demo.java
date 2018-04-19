@@ -20,6 +20,7 @@
 
 package demo;
 
+import org.rapidoid.goodies.Boot;
 import org.rapidoid.http.Self;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
@@ -27,7 +28,9 @@ import org.rapidoid.setup.On;
 public class Demo {
 
 	public static void main(String[] args) {
-		App.bootstrap(args, "users.admin.password=a", "secret=X").full();
+		App.bootstrap(args, "users.admin.password=a", "secret=X");
+
+		Boot.all();
 
 		On.get("/length/{x}").json((String x) -> x.length());
 

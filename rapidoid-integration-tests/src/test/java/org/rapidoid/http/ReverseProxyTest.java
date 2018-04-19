@@ -26,6 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
+import org.rapidoid.setup.Setups;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.3")
@@ -56,7 +57,7 @@ public class ReverseProxyTest extends IsolatedIntegrationTest {
 	public void shouldRetryOnConnectionErrors() {
 		proxy("/", "localhost:9999");
 
-		Setup app = Setup.create("app").port(9999);
+		Setup app = Setups.create("app").port(9999);
 
 		Jobs.after(2).seconds(() -> app.req(req -> "From app: " + req.uri()));
 

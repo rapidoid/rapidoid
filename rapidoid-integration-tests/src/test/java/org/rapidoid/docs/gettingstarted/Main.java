@@ -21,6 +21,7 @@
 package org.rapidoid.docs.gettingstarted;
 
 import org.rapidoid.annotation.Valid;
+import org.rapidoid.goodies.Boot;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
@@ -28,7 +29,9 @@ import org.rapidoid.setup.On;
 public class Main {
 
 	public static void main(String[] args) {
-		App.bootstrap(args).jpa(); // bootstrap JPA
+		App.bootstrap(args);
+
+		Boot.jpa(App.path()); // bootstrap JPA
 
 		On.get("/books").json(() -> JPA.of(Book.class).all()); // get all books
 

@@ -194,12 +194,12 @@ public class JPA extends RapidoidThing {
 		return dataSource;
 	}
 
-	public static void bootstrap(String[] path, Class<?>... providedEntities) {
-		JPAUtil.bootstrap(path, bootstrapDatasource(), providedEntities);
+	public static void bootstrap(String[] packages, Class<?>... providedEntities) {
+		JPAUtil.bootstrap(packages, bootstrapDatasource(), providedEntities);
 	}
 
-	public static void bootstrap(String[] path, DataSource dataSource, Class<?>... providedEntities) {
-		JPAUtil.bootstrap(path, dataSource, providedEntities);
+	public static void bootstrap(String[] packages, DataSource dataSource, Class<?>... providedEntities) {
+		JPAUtil.bootstrap(packages, dataSource, providedEntities);
 	}
 
 	public static void transaction(Runnable action) {

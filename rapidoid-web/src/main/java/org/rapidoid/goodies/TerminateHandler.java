@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.Btn;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.job.Jobs;
-import org.rapidoid.setup.Setup;
+import org.rapidoid.setup.Setups;
 import org.rapidoid.u.U;
 
 import java.util.concurrent.Callable;
@@ -54,7 +54,7 @@ public class TerminateHandler extends GUI implements Callable<Object> {
 		new Thread(() -> {
 			U.sleep(1000);
 			Jobs.shutdown();
-			Setup.shutdownAll();
+			Setups.shutdownAll();
 			System.exit(0);
 		}).start();
 	}
@@ -63,7 +63,7 @@ public class TerminateHandler extends GUI implements Callable<Object> {
 		new Thread(() -> {
 			U.sleep(1000);
 			Jobs.shutdownNow();
-			Setup.haltAll();
+			Setups.haltAll();
 			System.exit(0);
 		}).start();
 	}

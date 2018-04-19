@@ -22,13 +22,9 @@ package org.rapidoid.setup;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.AnyObj;
 import org.rapidoid.commons.RapidoidInitializer;
-import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
-import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.data.JSON;
 import org.rapidoid.env.Env;
 import org.rapidoid.env.RapidoidEnv;
 import org.rapidoid.http.FastHttp;
@@ -47,7 +43,6 @@ import org.rapidoid.http.processor.HttpProcessor;
 import org.rapidoid.ioc.Beans;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.ioc.IoCContext;
-import org.rapidoid.job.Jobs;
 import org.rapidoid.lambda.NParamLambda;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Server;
@@ -55,84 +50,46 @@ import org.rapidoid.u.U;
 import org.rapidoid.util.*;
 import org.rapidoid.web.WebSetup;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
+import static org.rapidoid.setup.Setups.admin;
+import static org.rapidoid.setup.Setups.main;
 import static org.rapidoid.util.Constants.*;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class Setup extends RapidoidInitializer implements WebSetup {
 
-	static final Config MAIN_CFG = Msc.isPlatform() ? Conf.RAPIDOID : Conf.ON;
-	static final Config ADMIN_CFG = Msc.isPlatform() ? Conf.RAPIDOID_ADMIN : Conf.ADMIN;
-
 	private static final String DEFAULT_ADDRESS = "0.0.0.0";
 	private static final int DEFAULT_PORT = Msc.isPlatform() ? 8888 : 8080;
 
-	private static final LazyInit<DefaultSetup> DEFAULT = new LazyInit<>(DefaultSetup::new);
-
-	static final List<Setup> instances = Coll.synchronizedList();
-
-	static {
-
-		if (Ctxs.getPersisterProvider() == null) {
-			Ctxs.setPersisterProvider(new CustomizableSetupAwarePersisterProvider());
-		}
-
-		JSON.warmUp();
-
-		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-			shutdownAll();
-			Jobs.shutdownNow();
-		}));
-	}
-
 	private final String name;
+
 	private final String zone;
 	private final Config serverConfig;
-
 	private final IoCContext ioCContext;
 
 	private final Customization customization;
+
 	private final HttpRoutesImpl routes;
 	private volatile RouteOptions defaults = new RouteOptions();
-
 	private volatile Integer port;
+
 	private volatile String address;
 
 	private volatile HttpProcessor processor;
 
 	private volatile boolean listening;
+
 	private volatile Server server;
 	private volatile boolean activated;
 	private volatile boolean reloaded;
-	private volatile boolean autoActivating = !isAppSetupAtomic();
-
+	private volatile boolean autoActivating = !Setups.isAppSetupAtomic();
 	private volatile Runnable onInit;
 
 	private final Once bootstrappedBeans = new Once();
 
 	private final LazyInit<FastHttp> lazyHttp = new LazyInit<>(this::initHttp);
-
-	public static Setup create(String name) {
-		IoCContext ioc = IoC.createContext().name(name);
-		Config config = Conf.section(name);
-
-		Customization customization = new Customization(name, My.custom(), config);
-		HttpRoutesImpl routes = new HttpRoutesImpl(name, customization);
-
-		Setup setup = new Setup(name, "main", ioc, config, customization, routes);
-
-		instances.add(setup);
-		return setup;
-	}
-
-	public void destroy() {
-		halt();
-		instances.remove(this);
-	}
 
 	Setup(String name, String zone, IoCContext ioCContext,
 	      Config serverConfig, Customization customization, HttpRoutesImpl routes) {
@@ -147,25 +104,22 @@ public class Setup extends RapidoidInitializer implements WebSetup {
 		this.defaults.zone(zone);
 	}
 
-	static Setup getOnSetup() {
-		return DEFAULT.get().on;
-	}
-
-	static Setup getAdminSetup() {
-		return DEFAULT.get().admin;
+	public void destroy() {
+		halt();
+		Setups.deregister(this);
 	}
 
 	private FastHttp initHttp() {
-		if (isAdminAndSameAsApp() && getOnSetup().lazyHttp.isInitialized()) {
-			return getOnSetup().http();
+		if (isAdminAndSameAsApp() && main().lazyHttp.isInitialized()) {
+			return main().http();
 
-		} else if (isAppAndSameAsAdmin() && getAdminSetup().lazyHttp.isInitialized()) {
-			return getAdminSetup().http();
+		} else if (isAppAndSameAsAdmin() && admin().lazyHttp.isInitialized()) {
+			return admin().http();
 		}
 
 		if (isAppOrAdminOnSameServer()) {
-			U.must(getOnSetup().routes == getAdminSetup().routes);
-			return new FastHttp(getOnSetup().routes, getOnSetup().serverConfig);
+			U.must(main().routes == admin().routes);
+			return new FastHttp(main().routes, main().serverConfig);
 		} else {
 			return new FastHttp(routes, serverConfig);
 		}
@@ -191,18 +145,18 @@ public class Setup extends RapidoidInitializer implements WebSetup {
 			}
 
 			if (delegateAdminToApp()) {
-				server = getOnSetup().server();
+				server = main().server();
 
 			} else if (delegateAppToAdmin()) {
-				server = getAdminSetup().server();
+				server = admin().server();
 			}
 
 			if (server == null) {
 				int targetPort;
 
 				if (isAppOrAdminOnSameServer()) {
-					targetPort = getOnSetup().port();
-					server = proc.listen(getOnSetup().address(), targetPort);
+					targetPort = main().port();
+					server = proc.listen(main().address(), targetPort);
 				} else {
 					targetPort = port();
 					server = proc.listen(address(), targetPort);
@@ -215,37 +169,31 @@ public class Setup extends RapidoidInitializer implements WebSetup {
 	}
 
 	private boolean isAppOrAdminOnSameServer() {
-		return appAndAdminOnSameServer() && (isApp() || isAdmin());
+		return DefaultSetup.appAndAdminOnSameServer() && (isApp() || isAdmin());
 	}
 
 	private boolean delegateAdminToApp() {
-		return isAdminAndSameAsApp() && getOnSetup().server != null;
+		return isAdminAndSameAsApp() && main().server != null;
 	}
 
 	private boolean delegateAppToAdmin() {
-		return isAppAndSameAsAdmin() && getAdminSetup().server != null;
-	}
-
-	static boolean appAndAdminOnSameServer() {
-		String mainPort = MAIN_CFG.entry("port").str().getOrNull();
-		String adminPort = ADMIN_CFG.entry("port").str().getOrNull();
-		return U.eq(mainPort, adminPort);
+		return isAppAndSameAsAdmin() && admin().server != null;
 	}
 
 	private boolean isAppAndSameAsAdmin() {
-		return isApp() && appAndAdminOnSameServer();
+		return isApp() && DefaultSetup.appAndAdminOnSameServer();
 	}
 
 	private boolean isAdminAndSameAsApp() {
-		return isAdmin() && appAndAdminOnSameServer();
+		return isAdmin() && DefaultSetup.appAndAdminOnSameServer();
 	}
 
 	public boolean isAdmin() {
-		return this == getAdminSetup();
+		return this == admin();
 	}
 
 	public boolean isApp() {
-		return this == getOnSetup();
+		return this == main();
 	}
 
 	void autoActivate() {
@@ -412,7 +360,7 @@ public class Setup extends RapidoidInitializer implements WebSetup {
 		activated = false;
 		ioCContext.reset();
 		server = null;
-		autoActivating = !isAppSetupAtomic();
+		autoActivating = !Setups.isAppSetupAtomic();
 
 		defaults = new RouteOptions();
 		defaults().zone(zone);
@@ -429,7 +377,7 @@ public class Setup extends RapidoidInitializer implements WebSetup {
 
 		bootstrappedBeans.reset();
 
-		initDefaults();
+		Setups.initDefaults();
 	}
 
 	public Server server() {
@@ -478,10 +426,6 @@ public class Setup extends RapidoidInitializer implements WebSetup {
 		}
 	}
 
-	static List<Setup> instances() {
-		return Collections.unmodifiableList(instances);
-	}
-
 	public Config config() {
 		return serverConfig;
 	}
@@ -514,26 +458,6 @@ public class Setup extends RapidoidInitializer implements WebSetup {
 		return activated;
 	}
 
-	public static synchronized void haltAll() {
-		for (Setup setup : instances()) {
-			setup.halt();
-		}
-	}
-
-	public static synchronized void shutdownAll() {
-		for (Setup setup : instances()) {
-			setup.shutdown();
-		}
-	}
-
-	public static synchronized boolean isAnyRunning() {
-		for (Setup setup : instances()) {
-			if (setup.isRunning()) return true;
-		}
-
-		return false;
-	}
-
 	public int port() {
 		if (port == null) {
 			port = serverConfig.entry("port").or(DEFAULT_PORT);
@@ -562,14 +486,6 @@ public class Setup extends RapidoidInitializer implements WebSetup {
 		beans(beans.getAnnotated(U.set(IoC.ANNOTATIONS)));
 	}
 
-	static void initDefaults() {
-		DefaultSetup defaultSetup = DEFAULT.getValue();
-
-		if (defaultSetup != null) {
-			defaultSetup.initDefaults();
-		}
-	}
-
 	@Override
 	public String toString() {
 		return "Setup{" +
@@ -592,16 +508,6 @@ public class Setup extends RapidoidInitializer implements WebSetup {
 	public Setup autoActivating(boolean autoActivating) {
 		this.autoActivating = autoActivating;
 		return this;
-	}
-
-	public static void ready() {
-		for (Setup setup : instances) {
-			setup.activate();
-		}
-	}
-
-	private static boolean isAppSetupAtomic() {
-		return App.status() == AppStatus.INITIALIZING;
 	}
 
 }

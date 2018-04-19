@@ -1,6 +1,7 @@
 package com.example;
 
 import org.rapidoid.annotation.Valid;
+import org.rapidoid.goodies.Boot;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.log.Log;
 import org.rapidoid.security.Auth;
@@ -16,7 +17,9 @@ public class GettingStartedExample {
 
 		Log.info("Starting application");
 
-		App.boot().beans().jpa().auth(); // bootstrap beans (controllers, services etc.), JPA and Auth
+		App.scan(); // bootstrap beans (controllers, services etc.)
+		Boot.jpa(App.path()); // bootstrap JPA
+		Boot.auth(App.setup()); // bootstrap Auth
 
 		On.get("/books").json(() -> JPA.of(Book.class).all()); // get all books
 

@@ -42,6 +42,7 @@ import org.rapidoid.scan.Scan;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.MscOpts;
+import org.rapidoid.util.Once;
 
 import java.util.List;
 import java.util.Set;
@@ -50,39 +51,38 @@ import java.util.Set;
 @Since("5.1.0")
 public class App extends RapidoidInitializer {
 
-	private static volatile String[] path;
-
 	private static volatile String mainClassName;
 	private static volatile String appPkgName;
+	private static volatile String[] packages;
 	private static volatile boolean dirty;
 	private static volatile boolean restarted;
 
 	private static volatile AppStatus status = AppStatus.NOT_STARTED;
 
-	private static volatile AppBootstrap boot;
-
 	private static final Set<Class<?>> invoked = Coll.synchronizedSet();
 
 	static volatile ClassLoader loader = App.class.getClassLoader();
+
+	private static final Once boot = new Once();
 
 	/**
 	 * Initializes the app in atomic way.
 	 * Won't serve requests until App.ready() is called.
 	 */
-	public static synchronized AppBootstrap init(String[] args, String... extraArgs) {
+	public static synchronized void init(String[] args, String... extraArgs) {
 		AppStarter.startUp(args, extraArgs);
 
 		status = AppStatus.INITIALIZING;
 
 		// no implicit classpath scanning here
-		return boot();
+		boot();
 	}
 
 	/**
 	 * Initializes the app in non-atomic way.
 	 * Then starts serving requests immediately when routes are configured.
 	 */
-	public static synchronized AppBootstrap run(String[] args, String... extraArgs) {
+	public static synchronized void run(String[] args, String... extraArgs) {
 		AppStarter.startUp(args, extraArgs);
 
 		// no implicit classpath scanning here
@@ -91,7 +91,7 @@ public class App extends RapidoidInitializer {
 		// finish initialization and start the application
 		onAppReady();
 
-		return boot();
+		boot();
 	}
 
 	/**
@@ -99,29 +99,25 @@ public class App extends RapidoidInitializer {
 	 * Then scans the classpath for beans.
 	 * Then starts serving requests immediately when routes are configured.
 	 */
-	public static synchronized AppBootstrap bootstrap(String[] args, String... extraArgs) {
+	public static synchronized void bootstrap(String[] args, String... extraArgs) {
 		AppStarter.startUp(args, extraArgs);
 
-		boot().beans(); // scan classpath for beans
+		boot();
+
+		App.scan(); // scan classpath for beans
 
 		// finish initialization and start the application
 		onAppReady();
 
-		return boot();
-
+		boot();
 	}
 
-	public synchronized static AppBootstrap boot() {
-		if (boot == null) {
-
-			boot = new AppBootstrap();
-
+	public synchronized static void boot() {
+		if (boot.go()) {
 			for (RapidoidModule module : RapidoidModules.getAll()) {
 				module.boot();
 			}
 		}
-
-		return boot;
 	}
 
 	public static synchronized void profiles(String... profiles) {
@@ -129,18 +125,18 @@ public class App extends RapidoidInitializer {
 		Conf.reset();
 	}
 
-	public static void path(String... path) {
-		App.path = path;
+	public static void path(String... packages) {
+		App.packages = packages;
 	}
 
 	public static synchronized String[] path() {
 		inferCallers();
 
-		if (App.path == null) {
-			App.path = appPkgName != null ? U.array(appPkgName) : new String[0];
+		if (packages == null) {
+			packages = appPkgName != null ? U.array(appPkgName) : new String[0];
 		}
 
-		return path;
+		return packages;
 	}
 
 	static void inferCallers() {
@@ -229,10 +225,10 @@ public class App extends RapidoidInitializer {
 	}
 
 	private static void resetAppStateBeforeRestart() {
-		App.path = null;
-		App.boot = null;
+		App.boot.reset();
 		App.status = AppStatus.NOT_STARTED;
 		App.dirty = false;
+		App.packages = null;
 
 		Groups.reset();
 		Conf.reset();
@@ -246,14 +242,13 @@ public class App extends RapidoidInitializer {
 		}
 
 		AppStarter.reset();
-		AppBootstrap.reset();
 		ClasspathScanner.reset();
 		invoked.clear();
 
-		SetupUtil.reloadAll();
+		Setups.reloadAll();
 
 		Conf.reset(); // reset the config again
-		Setup.initDefaults(); // this changes the config
+		Setups.initDefaults(); // this changes the config
 		Conf.reset(); // reset the config again
 	}
 
@@ -263,12 +258,11 @@ public class App extends RapidoidInitializer {
 		appPkgName = null;
 		restarted = false;
 		dirty = false;
-		path = null;
+		packages = null;
 		loader = App.class.getClassLoader();
-		boot = null;
-		Setup.initDefaults();
+		boot.reset();
+		Setups.initDefaults();
 		AppStarter.reset();
-		AppBootstrap.reset();
 		invoked.clear();
 	}
 
@@ -281,7 +275,7 @@ public class App extends RapidoidInitializer {
 
 	static boolean restartIfDirty() {
 		if (dirty && mainClassName != null) {
-			synchronized (Setup.class) {
+			synchronized (Setups.class) {
 				if (dirty && mainClassName != null) {
 					restartApp();
 					dirty = false;
@@ -302,10 +296,11 @@ public class App extends RapidoidInitializer {
 	}
 
 	public static synchronized boolean scan(String... packages) {
-
 		String appPath = Conf.APP.entry("path").str().getOrNull();
+
 		if (U.notEmpty(appPath)) {
-			App.path(appPath);
+			packages = appPath.split("\\s*,\\s*");
+			App.path(packages);
 		}
 
 		List<Class<?>> beans = App.findBeans(packages);
@@ -314,7 +309,7 @@ public class App extends RapidoidInitializer {
 	}
 
 	public static void beans(Object... beans) {
-		Setup.getOnSetup().beans(beans);
+		setup().beans(beans);
 	}
 
 	public static IoCContext context() {
@@ -330,13 +325,13 @@ public class App extends RapidoidInitializer {
 	}
 
 	public static synchronized void register(Beans beans) {
-		Setup.getOnSetup().register(beans);
+		setup().register(beans);
 	}
 
 	public static synchronized void shutdown() {
 		status = AppStatus.STOPPING;
 
-		Setup.shutdownAll();
+		Setups.shutdownAll();
 
 		status = AppStatus.STOPPED;
 	}
@@ -353,11 +348,19 @@ public class App extends RapidoidInitializer {
 	private static void onAppReady() {
 		status = AppStatus.RUNNING;
 		IoC.ready();
-		Setup.ready();
+		Setups.ready();
 		Log.info("!Ready.");
 	}
 
 	public static AppStatus status() {
 		return status;
+	}
+
+	public static Setup setup() {
+		return Setups.main();
+	}
+
+	public static Setup adminSetup() {
+		return Setups.admin();
 	}
 }

@@ -2,11 +2,14 @@
 
 === New features and improvements
 
- - *basic `OpenAPI` support* - see `OpenAPI#bootstrap` (thanks, https://github.com/danielbraga[Daniel Braga] for https://github.com/rapidoid/rapidoid/pull/158/files[contributing]!)
+ - *basic `OpenAPI` support* - see `OpenAPI#bootstrap` (thanks to https://github.com/danielbraga[Daniel Braga] for https://github.com/rapidoid/rapidoid/pull/158/files[contributing]!)
  - included `Swagger UI` in the `rapidoid-openapi` module (visit `/api`)
 
 === Breaking changes
 
+ - migrated to Java 8
  - merged the `rapidoid-essentials` module into `rapidoid-commons`
  - renamed the `rapidoid-http-server` module to `rapidoid-rest`
  - removed the support for service activation from CLI arguments
+ - removed the "manageables"
+ - separated the bootstrap of services out of the application bootstrap - please use e.g. `App.bootstrap(args); Boot.foo(App.setup()); Boot.bar(App.setup())` instead of `App.bootstrap(args).foo().bar()`

@@ -24,11 +24,12 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.RapidoidInitializer;
 import org.rapidoid.config.Conf;
-import org.rapidoid.env.Env;
+import org.rapidoid.config.Config;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.impl.HttpRoutesImpl;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.security.Role;
+import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")
@@ -38,11 +39,14 @@ public class DefaultSetup extends RapidoidInitializer {
 	private static final String MAIN_ZONE = Msc.isPlatform() ? "platform" : "main";
 	private static final String ADMIN_ZONE = Msc.isPlatform() ? "platform" : "admin";
 
-	final Setup on;
+	private static final Config MAIN_CFG = Msc.isPlatform() ? Conf.RAPIDOID : Conf.ON;
+	private static final Config ADMIN_CFG = Msc.isPlatform() ? Conf.RAPIDOID_ADMIN : Conf.ADMIN;
+
+	final Setup main;
 	final Setup admin;
 
 	DefaultSetup() {
-		boolean onSameServer = Setup.appAndAdminOnSameServer();
+		boolean onSameServer = appAndAdminOnSameServer();
 
 		Customization appCustomization = new Customization("main", My.custom(), Conf.ROOT);
 		Customization adminCustomization = onSameServer ? appCustomization : new Customization("admin", My.custom(), Conf.ROOT);
@@ -50,23 +54,24 @@ public class DefaultSetup extends RapidoidInitializer {
 		HttpRoutesImpl appRoutes = new HttpRoutesImpl("main", appCustomization);
 		HttpRoutesImpl adminRoutes = onSameServer ? appRoutes : new HttpRoutesImpl("admin", adminCustomization);
 
-		on = new Setup("main", MAIN_ZONE, IoC.defaultContext(), Setup.MAIN_CFG, appCustomization, appRoutes);
-		admin = new Setup("admin", ADMIN_ZONE, IoC.defaultContext(), Setup.ADMIN_CFG, adminCustomization, adminRoutes);
+		main = new Setup("main", MAIN_ZONE, IoC.defaultContext(), MAIN_CFG, appCustomization, appRoutes);
+		admin = new Setup("admin", ADMIN_ZONE, IoC.defaultContext(), ADMIN_CFG, adminCustomization, adminRoutes);
 
-		Setup.instances.add(on);
-		Setup.instances.add(admin);
+		Setups.register(main);
+		Setups.register(admin);
 
 		initDefaults();
 	}
 
 	void initDefaults() {
 		admin.defaults().roles(Role.ADMINISTRATOR);
+	}
 
-		admin.onInit(() -> {
-			if (Env.dev()) {
-//					AuthBootstrap.bootstrapAdminCredentials();
-			}
-		});
+	static boolean appAndAdminOnSameServer() {
+		String mainPort = MAIN_CFG.entry("port").str().getOrNull();
+		String adminPort = ADMIN_CFG.entry("port").str().getOrNull();
+
+		return U.eq(mainPort, adminPort);
 	}
 
 }

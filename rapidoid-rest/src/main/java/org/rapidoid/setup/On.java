@@ -37,7 +37,7 @@ import org.rapidoid.http.impl.RouteOptions;
 public class On extends RapidoidThing {
 
 	public static synchronized Setup setup() {
-		return Setup.getOnSetup();
+		return Setups.main();
 	}
 
 	public static synchronized OnRoute route(String verb, String path) {

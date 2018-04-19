@@ -20,6 +20,7 @@
 
 package org.rapidoid.docs.security;
 
+import org.rapidoid.goodies.Boot;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;
@@ -28,7 +29,8 @@ import org.rapidoid.u.U;
 public class Main {
 
 	public static void main(String[] args) {
-		App.bootstrap(args).auth();
+		App.bootstrap(args);
+		Boot.auth(App.setup());
 
 		On.get("/").html((req, resp) -> "this is public!");
 

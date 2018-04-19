@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.reverseproxy.Reverse;
 import org.rapidoid.setup.Setup;
+import org.rapidoid.setup.Setups;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -34,8 +35,8 @@ public class HTTPProxyTest extends IsolatedIntegrationTest {
 	public void testProxy() {
 		Reverse.proxy("/").to("localhost:5555", "localhost:6666").add();
 
-		Setup x = Setup.create("x").port(5555);
-		Setup y = Setup.create("y").port(6666);
+		Setup x = Setups.create("x").port(5555);
+		Setup y = Setups.create("y").port(6666);
 
 		try {
 			x.get("/who").html("X");

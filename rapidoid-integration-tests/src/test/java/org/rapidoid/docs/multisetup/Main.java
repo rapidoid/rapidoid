@@ -25,14 +25,15 @@ import org.rapidoid.docs.multisetup.foosetup.FooSetupCtrl;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.Setup;
+import org.rapidoid.setup.Setups;
 
 public class Main {
 
 	public static void main(String[] args) {
 		App.run(args);
 
-		Setup setup1 = Setup.create("foo").port(2222);
-		Setup setup2 = Setup.create("bar").port(3333);
+		Setup setup1 = Setups.create("foo").port(2222);
+		Setup setup2 = Setups.create("bar").port(3333);
 
 		setup1.scan(FooSetupCtrl.class.getPackage().getName());
 		setup2.scan(BarSetupCtrl.class.getPackage().getName());

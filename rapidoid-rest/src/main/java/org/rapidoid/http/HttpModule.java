@@ -28,7 +28,7 @@ import org.rapidoid.env.Env;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;
-import org.rapidoid.setup.SetupUtil;
+import org.rapidoid.setup.Setups;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -41,7 +41,7 @@ public class HttpModule extends AbstractRapidoidModule {
 		App.resetGlobalState();
 		On.changes().ignore();
 
-		SetupUtil.cleanUp();
+		Setups.clear();
 
 		Env.reset();
 	}

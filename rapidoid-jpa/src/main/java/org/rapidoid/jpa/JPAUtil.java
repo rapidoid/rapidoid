@@ -77,11 +77,11 @@ public class JPAUtil extends RapidoidThing {
 		return Ctxs.required().persister();
 	}
 
-	public static void bootstrap(String[] path, DataSource dataSource, Class<?>... providedEntities) {
+	public static void bootstrap(String[] packages, DataSource dataSource, Class<?>... providedEntities) {
 		if (MscOpts.hasHibernate()) {
 
 			if (emf() == null) {
-				bootstrapJPA(path, dataSource, providedEntities);
+				bootstrapJPA(packages, dataSource, providedEntities);
 			} else {
 				Log.info("JPA has already been bootstrapped");
 			}
@@ -91,10 +91,10 @@ public class JPAUtil extends RapidoidThing {
 		}
 	}
 
-	private static void bootstrapJPA(String[] path, DataSource dataSource, Class<?>[] providedEntities) {
+	private static void bootstrapJPA(String[] packages, DataSource dataSource, Class<?>[] providedEntities) {
 		Msc.logSection("Bootstrapping JPA (Hibernate)...");
 
-		List<String> entityTypes = EMFUtil.getEntityTypes(path, providedEntities);
+		List<String> entityTypes = EMFUtil.getEntityTypes(packages, providedEntities);
 
 		if (entityTypes.isEmpty()) {
 			Log.info("Didn't find JPA entities, canceling JPA/Hibernate setup!");

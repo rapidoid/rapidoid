@@ -30,32 +30,20 @@ import org.rapidoid.http.HttpUtils;
 import org.rapidoid.insight.Metrics;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.security.Role;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.Setup;
+import org.rapidoid.setup.Setups;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.MscOpts;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class Goodies extends RapidoidThing {
+@Since("6.0.0")
+@SuppressWarnings("WeakerAccess")
+public class Boot extends RapidoidThing {
 
 	public static final JMXGoodies JMX = new JMXGoodies();
 
 	public static final String CENTER = "center";
-
-	public static void bootstrap(Setup setup) {
-		if (setup.isAdmin()) {
-			adminCenter(setup);
-
-		} else if (setup.isApp()) {
-			bootstrapAppGoodies(setup);
-		}
-	}
-
-	public static void bootstrapAppGoodies(Setup setup) {
-		Msc.logSection("Registering App services:");
-
-		auth(setup);
-	}
 
 	public static void adminCenter(Setup setup) {
 		Msc.logSection("Registering Admin Center:");
@@ -123,13 +111,28 @@ public class Goodies extends RapidoidThing {
 		RapidoidModules.get("OAuth").bootstrap(params);
 	}
 
-	static String uri(String path) {
-		return Msc.specialUri(path);
-	}
-
 	public static void openapi(Setup setup) {
 		ModuleBootstrapParams params = new ModuleBootstrapParams().setup(setup);
 		RapidoidModules.get("OpenAPI").bootstrap(params);
+	}
+
+	public static void jpa(String... packages) {
+		JPA.bootstrap(packages);
+	}
+
+	public static void all() {
+		Setup setup = App.setup();
+
+		jpa(App.path());
+		auth(setup);
+		oauth(setup);
+		openapi(setup);
+
+		adminCenter(Setups.admin());
+	}
+
+	private static String uri(String path) {
+		return Msc.specialUri(path);
 	}
 
 }

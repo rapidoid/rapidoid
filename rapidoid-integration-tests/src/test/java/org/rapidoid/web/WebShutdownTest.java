@@ -27,6 +27,7 @@ import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
+import org.rapidoid.setup.Setups;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.4.2")
@@ -34,7 +35,7 @@ public class WebShutdownTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void step1() {
-		Setup app = Setup.create("my-app").port(9999);
+		Setup app = Setups.create("my-app").port(9999);
 		app.shutdown();
 	}
 

@@ -20,6 +20,7 @@
 
 package org.rapidoid.docs.jpacrud;
 
+import org.rapidoid.goodies.Boot;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
@@ -29,7 +30,9 @@ import javax.validation.Valid;
 public class Main {
 
 	public static void main(String[] args) {
-		App.bootstrap(args).jpa(); // bootstrap JPA
+		App.bootstrap(args);
+
+		Boot.jpa(App.path());
 
 		On.get("/books").json(() -> JPA.of(Book.class).all());
 		On.get("/books/{id}").json((Integer id) -> JPA.get(Book.class, id));
