@@ -43,6 +43,7 @@ import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.MscOpts;
 import org.rapidoid.util.Once;
+import org.rapidoid.web.Screen;
 
 import java.util.List;
 import java.util.Set;
@@ -226,6 +227,7 @@ public class App extends RapidoidInitializer {
 
 	private static void resetAppStateBeforeRestart() {
 		App.boot.reset();
+		App.gui().reset();
 		App.status = AppStatus.NOT_STARTED;
 		App.dirty = false;
 		App.packages = null;
@@ -261,6 +263,7 @@ public class App extends RapidoidInitializer {
 		packages = null;
 		loader = App.class.getClassLoader();
 		boot.reset();
+		gui().reset();
 		Setups.initDefaults();
 		AppStarter.reset();
 		invoked.clear();
@@ -363,4 +366,9 @@ public class App extends RapidoidInitializer {
 	public static Setup adminSetup() {
 		return Setups.admin();
 	}
+
+	public static Screen gui() {
+		return setup().gui();
+	}
+
 }

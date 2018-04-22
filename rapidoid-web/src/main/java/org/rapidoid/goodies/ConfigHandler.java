@@ -73,6 +73,7 @@ public class ConfigHandler extends GUI implements Callable<Object> {
 				return "bg-gray";
 
 			case "app":
+			case "app/admin":
 				return "label-primary";
 
 			case "on":
@@ -109,7 +110,6 @@ public class ConfigHandler extends GUI implements Callable<Object> {
 				return "bg-steel";
 
 			case "oauth":
-			case "gui":
 				return "bg-pink";
 
 			default:

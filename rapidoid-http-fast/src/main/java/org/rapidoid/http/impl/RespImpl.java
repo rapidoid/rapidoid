@@ -24,9 +24,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
-import org.rapidoid.cls.Cls;
 import org.rapidoid.collection.Coll;
-import org.rapidoid.config.BasicConfig;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
@@ -423,40 +421,10 @@ public class RespImpl extends RapidoidThing implements Resp {
 
 	private Screen createScreen() {
 		Screen screen = MscOpts.hasRapidoidGUI() ? GUIUtil.newPage() : new ScreenBean();
-		initScreen(screen);
+
+		screen.assign(req.http().gui());
+
 		return screen;
-	}
-
-	private void initScreen(Screen screen) {
-		BasicConfig zone = HttpUtils.zone(req);
-
-		String brand = zone.entry("brand").str().getOrNull();
-		String title = zone.entry("title").str().getOrNull();
-
-		String siteName = req.host();
-		if (U.isEmpty(siteName)
-			|| siteName.equals("localhost") || siteName.startsWith("localhost:")
-			|| siteName.equals("127.0.0.1") || siteName.startsWith("127.0.0.1:")) {
-			siteName = "Rapidoid";
-		}
-
-		screen.brand(U.or(brand, siteName));
-		screen.title(U.or(title, siteName));
-
-		screen.home(zone.entry("home").str().or("/"));
-
-		screen.search(zone.entry("search").bool().or(false));
-		screen.navbar(zone.entry("navbar").bool().or(brand != null));
-		screen.fluid(zone.entry("fluid").bool().or(false));
-
-		String cdn = zone.entry("cdn").or("auto");
-		if (!"auto".equalsIgnoreCase(cdn)) {
-			screen.cdn(Cls.bool(cdn));
-		}
-
-		if (zone.has("menu")) {
-			screen.menu(zone.sub("menu").toMap());
-		}
 	}
 
 	@Override

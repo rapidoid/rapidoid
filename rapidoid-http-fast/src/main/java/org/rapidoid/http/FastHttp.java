@@ -43,6 +43,8 @@ import org.rapidoid.log.LogLevel;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.u.U;
+import org.rapidoid.web.Screen;
+import org.rapidoid.web.ScreenBean;
 
 import java.util.Collections;
 import java.util.List;
@@ -60,15 +62,18 @@ public class FastHttp extends AbstractHttpProcessor {
 
 	private final HttpRoutesImpl routes;
 
+	private final Screen gui;
+
 	private final Map<String, Object> attributes = Coll.synchronizedMap();
 
 	public FastHttp(HttpRoutesImpl routes) {
-		this(routes, new ConfigImpl());
+		this(routes, new ConfigImpl(), new ScreenBean());
 	}
 
-	public FastHttp(HttpRoutesImpl routes, @SuppressWarnings("unused") Config serverConfig) {
+	public FastHttp(HttpRoutesImpl routes, @SuppressWarnings("unused") Config serverConfig, Screen gui) {
 		super(null);
 		this.routes = routes;
+		this.gui = gui;
 		routes.setHttp(this);
 	}
 
@@ -253,8 +258,8 @@ public class FastHttp extends AbstractHttpProcessor {
 		String uri = helper.uri.str(buf);
 		String path = URIs.urlDecode(helper.path.str(buf));
 		String query = URIs.urlDecodeOrKeepOriginal(helper.query.str(buf));
-		String zone = null;
 
+		String zone = null;
 		MediaType contentType = HttpUtils.getDefaultContentType();
 
 		if (handler != null) {
@@ -351,6 +356,7 @@ public class FastHttp extends AbstractHttpProcessor {
 
 	public synchronized void resetConfig() {
 		routes.reset();
+		gui.reset();
 	}
 
 	public void notFound(Channel ctx, boolean isKeepAlive, MediaType contentType, HttpHandler fromHandler, Req req) {
@@ -384,6 +390,10 @@ public class FastHttp extends AbstractHttpProcessor {
 
 	public HttpRoutesImpl routes() {
 		return routes;
+	}
+
+	public Screen gui() {
+		return gui;
 	}
 
 	public boolean hasRouteOrResource(HttpVerb verb, String uri) {

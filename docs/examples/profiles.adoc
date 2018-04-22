@@ -41,6 +41,8 @@ public class Main {
 	public static void main(String[] args) {
 		App.bootstrap(args, "profiles=mysql,foo");
 
+		App.gui().navbar(false);
+
 		On.get("/profiles").mvc(() -> GUI.display(Env.profiles()));
 
 		Map<String, Object> myConfig = Conf.section("my").toMap();
@@ -84,9 +86,6 @@ my:
 [source,yml]
 .config.yml
 ----
-gui:
-  navbar: false
-
 my:
   msg: 'hello!'
   desc: 'simple example'

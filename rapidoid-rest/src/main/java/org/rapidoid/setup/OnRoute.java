@@ -497,8 +497,12 @@ public class OnRoute extends RapidoidThing {
 		return this;
 	}
 
+	public OnRoute menu(String... menuItems) {
+		setup.gui().addMenuItem(path, menuItems);
+		return this;
+	}
+
 	public RouteOptions options() {
 		return options;
 	}
-
 }

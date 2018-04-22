@@ -26,7 +26,7 @@ import org.rapidoid.test.Doc;
 
 @IntegrationTest(main = Main.class)
 @Doc(title = "JPA Scaffolding")
-public class JpaScafTest extends DocTest {
+public class JpaScaffoldTest extends DocTest {
 
 	@Override
 	protected void exercise() {

@@ -63,39 +63,39 @@ public class Boot extends RapidoidThing {
 	}
 
 	public static void lifecycle(Setup setup) {
-		setup.page(uri("terminate")).zone(CENTER).mvc(new TerminateHandler());
+		setup.page(uri("terminate")).zone(CENTER).menu("System", "Terminate / Restart").mvc(new TerminateHandler());
 	}
 
 	public static void overview(Setup setup) {
-		setup.page(uri("")).zone(CENTER).zone(CENTER).mvc(new OverviewHandler());
+		setup.page(uri("")).zone(CENTER).zone(CENTER).menu("System", "Memory").mvc(new OverviewHandler());
 	}
 
 	public static void application(Setup setup) {
-		setup.page(uri("routes")).zone(CENTER).mvc(new RoutesHandler());
-		setup.page(uri("beans")).zone(CENTER).mvc(new BeansHandler());
-		setup.page(uri("config")).zone(CENTER).mvc(new ConfigHandler());
-		setup.get(uri("classpath")).zone(CENTER).mvc(new ClasspathHandler());
+		setup.page(uri("routes")).zone(CENTER).menu("Routes").mvc(new RoutesHandler());
+		setup.page(uri("config")).zone(CENTER).menu("Configuration").mvc(new ConfigHandler());
+		setup.page(uri("beans")).zone(CENTER).menu("Application", "Beans").mvc(new BeansHandler());
+		setup.get(uri("classpath")).zone(CENTER).menu("Application", "Classpath").mvc(new ClasspathHandler());
 	}
 
 	public static void metrics(Setup setup) {
 		Metrics.bootstrap();
-		setup.page(uri("metrics")).zone(CENTER).mvc(new GraphsHandler());
+		setup.page(uri("metrics")).zone(CENTER).menu("Metrics").mvc(new GraphsHandler());
 		setup.get(uri("graphs/{id:.*}")).json(new GraphDataHandler());
 	}
 
 	public static void jmx(Setup setup) {
-		setup.page(uri("jmx/memory")).zone(CENTER).mvc(JMX.memory());
-		setup.page(uri("jmx/mempool")).zone(CENTER).mvc(JMX.memoryPool());
-		setup.page(uri("jmx/classes")).zone(CENTER).mvc(JMX.classes());
-		setup.page(uri("jmx/os")).zone(CENTER).mvc(JMX.os());
-		setup.page(uri("jmx/threads")).zone(CENTER).mvc(JMX.threads());
-		setup.page(uri("jmx/compilation")).zone(CENTER).mvc(JMX.compilation());
-		setup.page(uri("jmx/runtime")).zone(CENTER).mvc(JMX.runtime());
-		setup.page(uri("jmx/gc")).zone(CENTER).mvc(JMX.gc());
+		setup.page(uri("jmx/mempool")).zone(CENTER).menu("System", "Memory pool").mvc(JMX.memoryPool());
+		setup.page(uri("jmx/threads")).zone(CENTER).menu("System", "JVM Threads").mvc(JMX.threads());
+		setup.page(uri("jmx/os")).zone(CENTER).menu("System", "Operating system").mvc(JMX.os());
+		setup.page(uri("jmx/gc")).zone(CENTER).menu("System", "Garbage collection").mvc(JMX.gc());
+		setup.page(uri("jmx/memory")).zone(CENTER).menu("System", "Memory").mvc(JMX.memory());
+		setup.page(uri("jmx/runtime")).zone(CENTER).menu("System", "Runtime").mvc(JMX.runtime());
+		setup.page(uri("jmx/classes")).zone(CENTER).menu("System", "Classes").mvc(JMX.classes());
+		setup.page(uri("jmx/compilation")).zone(CENTER).menu("System", "Compilation").mvc(JMX.compilation());
 	}
 
 	public static void entities(Setup setup) {
-		setup.page(uri("entities")).zone(CENTER).mvc(new EntitiesHandler());
+		setup.page(uri("entities")).zone(CENTER).menu("System", "Memory").mvc(new EntitiesHandler());
 
 		if (MscOpts.hasJPA()) {
 			for (Class<?> type : JPA.getEntityJavaTypes()) {

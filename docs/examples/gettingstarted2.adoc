@@ -111,15 +111,6 @@ app:
   home: /
   contextPath: /
 
-gui:
-  domain: ''
-  brand: App
-  search: false
-  navbar: true
-  fluid: false
-  cdn: auto # in DEV mode is false, in PRODUCTION is true
-  menu: {}
-
 users:
   root:
     roles:

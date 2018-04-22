@@ -31,6 +31,8 @@ import org.rapidoid.ioc.IoC;
 import org.rapidoid.security.Role;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
+import org.rapidoid.web.Screen;
+import org.rapidoid.web.ScreenBean;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.2")
@@ -54,8 +56,10 @@ public class DefaultSetup extends RapidoidInitializer {
 		HttpRoutesImpl appRoutes = new HttpRoutesImpl("main", appCustomization);
 		HttpRoutesImpl adminRoutes = onSameServer ? appRoutes : new HttpRoutesImpl("admin", adminCustomization);
 
-		main = new Setup("main", MAIN_ZONE, IoC.defaultContext(), MAIN_CFG, appCustomization, appRoutes);
-		admin = new Setup("admin", ADMIN_ZONE, IoC.defaultContext(), ADMIN_CFG, adminCustomization, adminRoutes);
+		Screen gui = new ScreenBean();
+
+		main = new Setup("main", MAIN_ZONE, IoC.defaultContext(), MAIN_CFG, appCustomization, appRoutes, gui);
+		admin = new Setup("admin", ADMIN_ZONE, IoC.defaultContext(), ADMIN_CFG, adminCustomization, adminRoutes, gui);
 
 		Setups.register(main);
 		Setups.register(admin);

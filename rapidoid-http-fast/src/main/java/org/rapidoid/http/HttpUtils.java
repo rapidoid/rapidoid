@@ -28,6 +28,7 @@ import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.commons.Str;
 import org.rapidoid.config.BasicConfig;
 import org.rapidoid.config.Conf;
+import org.rapidoid.config.Config;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.data.BufRanges;
@@ -254,11 +255,12 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 	}
 
 	public static BasicConfig zone(Customization custom, String zone) {
-		BasicConfig defaultConfig = custom.config().sub("gui").or(custom.config().sub("app"));
+		Config cfg = custom.config();
+		BasicConfig defaultConfig = cfg.sub("app");
 
 		if (zone != null) {
-			String zoneKey = zone + "-zone";
-			return custom.config().sub(zoneKey).or(defaultConfig);
+			String zoneKey = "app/" + zone;
+			return cfg.sub(zoneKey).or(defaultConfig);
 
 		} else {
 			return defaultConfig;

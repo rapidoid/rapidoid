@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 15768
+Content-Length: 15132
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +13,6 @@ Content-Length: 15768
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Rapidoid</title>
 
 
 
@@ -132,37 +131,6 @@ Content-Length: 15768
       <tr>
         <td>home</td>
         <td>/</td>
-      </tr>
-    </table>
-    <h4>
-      <span class="label bg-pink">gui</span>
-    </h4>
-    <table class="table table-striped table-hover">
-      <tr>
-        <th>Key</th>
-        <th>Value</th>
-      </tr>
-      <tr>
-        <td>search</td>
-        <td>
-          <i class="fa fa-square-o"></i>
-        </td>
-      </tr>
-      <tr>
-        <td>navbar</td>
-        <td>
-          <i class="fa fa-check-square-o"></i>
-        </td>
-      </tr>
-      <tr>
-        <td>fluid</td>
-        <td>
-          <i class="fa fa-square-o"></i>
-        </td>
-      </tr>
-      <tr>
-        <td>cdn</td>
-        <td>auto</td>
       </tr>
     </table>
     <h4>

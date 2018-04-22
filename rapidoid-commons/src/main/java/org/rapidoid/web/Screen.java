@@ -86,6 +86,11 @@ public interface Screen {
 	Map<String, Object> menu();
 
 	/**
+	 * Adds menu item.
+	 */
+	Screen addMenuItem(String targetUrl, String... nav);
+
+	/**
 	 * Sets the "<b>search</b>" attribute in the MVC model of the response, used for GUI page rendering.
 	 */
 	Screen search(boolean search);
@@ -155,4 +160,13 @@ public interface Screen {
 	 */
 	Set<String> css();
 
+	/**
+	 * Assigns (copies) all properties from the provided source.
+	 */
+	void assign(Screen src);
+
+	/**
+	 * Resets all properties to their defaults.
+	 */
+	void reset();
 }

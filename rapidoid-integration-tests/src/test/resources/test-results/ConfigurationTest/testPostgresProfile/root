@@ -12,12 +12,6 @@
     "contextPath" : "",
     "home" : "/"
   },
-  "gui" : {
-    "search" : false,
-    "navbar" : true,
-    "fluid" : false,
-    "cdn" : "auto"
-  },
   "users" : {
     "admin" : {
       "roles" : "administrator"

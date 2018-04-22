@@ -36,6 +36,8 @@ import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.u.U;
 import org.rapidoid.util.LazyInit;
+import org.rapidoid.web.Screen;
+import org.rapidoid.web.ScreenBean;
 
 import java.util.Collections;
 import java.util.List;
@@ -71,8 +73,9 @@ public class Setups extends RapidoidInitializer {
 
 		Customization customization = new Customization(name, My.custom(), config);
 		HttpRoutesImpl routes = new HttpRoutesImpl(name, customization);
+		Screen gui = new ScreenBean();
 
-		Setup setup = new Setup(name, "main", ioc, config, customization, routes);
+		Setup setup = new Setup(name, "main", ioc, config, customization, routes, gui);
 
 		instances.add(setup);
 		return setup;

@@ -24,7 +24,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.commons.Str;
-import org.rapidoid.config.Conf;
 import org.rapidoid.gui.menu.PageMenu;
 import org.rapidoid.gui.reqinfo.IReqInfo;
 import org.rapidoid.gui.reqinfo.ReqInfo;
@@ -39,7 +38,6 @@ import org.rapidoid.writable.WritableOutputStream;
 import org.rapidoid.writable.WritableUtils;
 
 import java.io.OutputStream;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -130,22 +128,6 @@ public class HtmlPage extends ScreenBean {
 		model.put("navbar", navbar());
 		model.put("fluid", fluid());
 		model.put("cdn", cdn());
-
-		List<String> assets = (List<String>) Conf.GUI.entry("assets").getOrNull();
-
-		if (U.notEmpty(assets)) {
-			for (String asset : assets) {
-				String res = asset.toLowerCase();
-
-				if (res.endsWith(".js")) {
-					js().add(res);
-				} else if (res.endsWith(".css")) {
-					css().add(res);
-				} else {
-					throw U.rte("Expected .css or .js asset, but found: " + res);
-				}
-			}
-		}
 
 		setupAssets(req, model);
 

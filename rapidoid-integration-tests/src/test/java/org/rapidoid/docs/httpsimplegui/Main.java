@@ -20,11 +20,21 @@
 
 package org.rapidoid.docs.httpsimplegui;
 
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 
 public class Main {
 
 	public static void main(String[] args) {
+		App.gui()
+			.brand("Cool app!")
+			.title("the head title")
+			.search(true)
+			.addMenuItem("/", "Home")
+			.addMenuItem("/portfolio", "Portfolio")
+			.addMenuItem("/about", "About", "About Us")
+			.addMenuItem("/", "About", "About You");
+
 		/* On [GET /hi] or [POST /hi] return a "Hello World" web page */
 
 		On.page("/hi").mvc("Hello <b>world</b>!");

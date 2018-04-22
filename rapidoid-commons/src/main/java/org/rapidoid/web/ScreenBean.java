@@ -36,19 +36,40 @@ import java.util.Set;
 @Since("5.1.0")
 public class ScreenBean extends RapidoidThing implements Screen {
 
-	private volatile String home = "/";
+	private volatile String home;
 	private volatile Object brand;
 	private volatile String title;
 	private volatile Object[] content;
 	private volatile Map<String, Object> menu;
 	private volatile boolean embedded;
 	private volatile boolean search;
-	private volatile boolean navbar = true;
+	private volatile boolean navbar;
 	private volatile boolean fluid;
-	private volatile boolean cdn = Env.production() && !RapidoidInfo.isSnapshot();
+	private volatile boolean cdn;
 
 	private final Set<String> js = Coll.synchronizedSet();
 	private final Set<String> css = Coll.synchronizedSet();
+
+	public ScreenBean() {
+		reset();
+	}
+
+	@Override
+	public void reset() {
+		home = "/";
+		brand = "Rapidoid";
+		title = null;
+		content = null;
+		menu = null;
+		embedded = false;
+		search = false;
+		navbar = true;
+		fluid = false;
+		cdn = Env.production() && !RapidoidInfo.isSnapshot();
+
+		js.clear();
+		css.clear();
+	}
 
 	@Override
 	public String render() {
@@ -178,6 +199,43 @@ public class ScreenBean extends RapidoidThing implements Screen {
 	@Override
 	public Set<String> css() {
 		return css;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public synchronized Screen addMenuItem(String targetUrl, String... nav) {
+		U.must(U.notEmpty(targetUrl), "The target URL cannot be empty!");
+		U.must(U.notEmpty(nav), "The menu navigation elements cannot be empty!");
+
+		if (menu == null) {
+			menu = Coll.synchronizedMap();
+		}
+
+		Map<String, Object> subMenu = menu;
+		for (int i = 0; i < nav.length - 1; i++) {
+			subMenu = (Map<String, Object>) subMenu.computeIfAbsent(nav[i], x -> Coll.synchronizedMap());
+		}
+
+		subMenu.put(nav[nav.length - 1], targetUrl);
+
+		return this;
+	}
+
+	@Override
+	public void assign(Screen src) {
+		home(src.home());
+		brand(src.brand());
+		title(src.title());
+		content(src.content());
+		menu(Coll.deepCopyOf(src.menu()));
+		embedded(src.embedded());
+		search(src.search());
+		navbar(src.navbar());
+		fluid(src.fluid());
+		cdn(src.cdn());
+
+		Coll.assign(js, src.js());
+		Coll.assign(css, src.css());
 	}
 
 }

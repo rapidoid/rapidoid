@@ -48,6 +48,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.net.Server;
 import org.rapidoid.u.U;
 import org.rapidoid.util.*;
+import org.rapidoid.web.Screen;
 import org.rapidoid.web.WebSetup;
 
 import java.util.Map;
@@ -68,19 +69,18 @@ public class Setup extends RapidoidInitializer implements WebSetup {
 	private final String zone;
 	private final Config serverConfig;
 	private final IoCContext ioCContext;
+	private final Screen gui;
 
 	private final Customization customization;
 
 	private final HttpRoutesImpl routes;
 	private volatile RouteOptions defaults = new RouteOptions();
-	private volatile Integer port;
 
+	private volatile Integer port;
 	private volatile String address;
 
 	private volatile HttpProcessor processor;
-
 	private volatile boolean listening;
-
 	private volatile Server server;
 	private volatile boolean activated;
 	private volatile boolean reloaded;
@@ -92,7 +92,7 @@ public class Setup extends RapidoidInitializer implements WebSetup {
 	private final LazyInit<FastHttp> lazyHttp = new LazyInit<>(this::initHttp);
 
 	Setup(String name, String zone, IoCContext ioCContext,
-	      Config serverConfig, Customization customization, HttpRoutesImpl routes) {
+	      Config serverConfig, Customization customization, HttpRoutesImpl routes, Screen gui) {
 
 		this.name = name;
 		this.zone = zone;
@@ -101,6 +101,7 @@ public class Setup extends RapidoidInitializer implements WebSetup {
 		this.serverConfig = serverConfig;
 		this.customization = customization;
 		this.routes = routes;
+		this.gui = gui;
 		this.defaults.zone(zone);
 	}
 
@@ -119,9 +120,9 @@ public class Setup extends RapidoidInitializer implements WebSetup {
 
 		if (isAppOrAdminOnSameServer()) {
 			U.must(main().routes == admin().routes);
-			return new FastHttp(main().routes, main().serverConfig);
+			return new FastHttp(main().routes, main().serverConfig, main().gui);
 		} else {
-			return new FastHttp(routes, serverConfig);
+			return new FastHttp(routes, serverConfig, gui);
 		}
 	}
 
@@ -362,6 +363,8 @@ public class Setup extends RapidoidInitializer implements WebSetup {
 		server = null;
 		autoActivating = !Setups.isAppSetupAtomic();
 
+		gui.reset();
+
 		defaults = new RouteOptions();
 		defaults().zone(zone);
 
@@ -452,6 +455,10 @@ public class Setup extends RapidoidInitializer implements WebSetup {
 
 	public String zone() {
 		return zone;
+	}
+
+	public Screen gui() {
+		return gui;
 	}
 
 	public boolean isRunning() {

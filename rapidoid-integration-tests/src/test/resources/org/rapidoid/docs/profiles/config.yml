@@ -1,6 +1,3 @@
-gui:
-  navbar: false
-
 my:
   msg: 'hello!'
   desc: 'simple example'
