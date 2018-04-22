@@ -44,6 +44,8 @@ public class DefaultSetup extends RapidoidInitializer {
 	private static final Config MAIN_CFG = Msc.isPlatform() ? Conf.RAPIDOID : Conf.ON;
 	private static final Config ADMIN_CFG = Msc.isPlatform() ? Conf.RAPIDOID_ADMIN : Conf.ADMIN;
 
+	private static final Screen gui = new ScreenBean();
+
 	final Setup main;
 	final Setup admin;
 
@@ -56,8 +58,6 @@ public class DefaultSetup extends RapidoidInitializer {
 		HttpRoutesImpl appRoutes = new HttpRoutesImpl("main", appCustomization);
 		HttpRoutesImpl adminRoutes = onSameServer ? appRoutes : new HttpRoutesImpl("admin", adminCustomization);
 
-		Screen gui = new ScreenBean();
-
 		main = new Setup("main", MAIN_ZONE, IoC.defaultContext(), MAIN_CFG, appCustomization, appRoutes, gui);
 		admin = new Setup("admin", ADMIN_ZONE, IoC.defaultContext(), ADMIN_CFG, adminCustomization, adminRoutes, gui);
 
@@ -68,6 +68,7 @@ public class DefaultSetup extends RapidoidInitializer {
 	}
 
 	void initDefaults() {
+		gui.reset();
 		admin.defaults().roles(Role.ADMINISTRATOR);
 	}
 

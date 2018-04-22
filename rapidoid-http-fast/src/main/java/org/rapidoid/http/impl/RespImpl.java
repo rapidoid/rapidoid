@@ -25,9 +25,11 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.collection.Coll;
+import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
+import org.rapidoid.env.Env;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.MediaType;
 import org.rapidoid.http.Req;
@@ -423,6 +425,11 @@ public class RespImpl extends RapidoidThing implements Resp {
 		Screen screen = MscOpts.hasRapidoidGUI() ? GUIUtil.newPage() : new ScreenBean();
 
 		screen.assign(req.http().gui());
+
+		if (screen.cdn() == null) {
+			// auto mode
+			screen.cdn(Env.production() && !RapidoidInfo.isSnapshot());
+		}
 
 		return screen;
 	}

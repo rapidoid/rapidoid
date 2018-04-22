@@ -227,7 +227,6 @@ public class App extends RapidoidInitializer {
 
 	private static void resetAppStateBeforeRestart() {
 		App.boot.reset();
-		App.gui().reset();
 		App.status = AppStatus.NOT_STARTED;
 		App.dirty = false;
 		App.packages = null;
@@ -263,7 +262,6 @@ public class App extends RapidoidInitializer {
 		packages = null;
 		loader = App.class.getClassLoader();
 		boot.reset();
-		gui().reset();
 		Setups.initDefaults();
 		AppStarter.reset();
 		invoked.clear();

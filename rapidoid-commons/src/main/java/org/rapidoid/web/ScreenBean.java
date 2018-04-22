@@ -24,8 +24,6 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
-import org.rapidoid.commons.RapidoidInfo;
-import org.rapidoid.env.Env;
 import org.rapidoid.u.U;
 
 import java.io.OutputStream;
@@ -45,7 +43,7 @@ public class ScreenBean extends RapidoidThing implements Screen {
 	private volatile boolean search;
 	private volatile boolean navbar;
 	private volatile boolean fluid;
-	private volatile boolean cdn;
+	private volatile Boolean cdn;
 
 	private final Set<String> js = Coll.synchronizedSet();
 	private final Set<String> css = Coll.synchronizedSet();
@@ -65,7 +63,7 @@ public class ScreenBean extends RapidoidThing implements Screen {
 		search = false;
 		navbar = true;
 		fluid = false;
-		cdn = Env.production() && !RapidoidInfo.isSnapshot();
+		cdn = null;
 
 		js.clear();
 		css.clear();
@@ -181,12 +179,12 @@ public class ScreenBean extends RapidoidThing implements Screen {
 	}
 
 	@Override
-	public boolean cdn() {
+	public Boolean cdn() {
 		return cdn;
 	}
 
 	@Override
-	public Screen cdn(boolean cdn) {
+	public Screen cdn(Boolean cdn) {
 		this.cdn = cdn;
 		return this;
 	}

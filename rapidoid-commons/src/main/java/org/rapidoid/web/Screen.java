@@ -113,12 +113,12 @@ public interface Screen {
 	/**
 	 * Sets the "<b>cdn</b>" attribute in the MVC model of the response, used for GUI page rendering.
 	 */
-	Screen cdn(boolean cdn);
+	Screen cdn(Boolean cdn);
 
 	/**
 	 * Gets the "<b>cdn</b>" attribute from the MVC model of the response, used for GUI page rendering.
 	 */
-	boolean cdn();
+	Boolean cdn();
 
 	/**
 	 * Sets the "<b>navbar</b>" attribute in the MVC model of the response, used for GUI page rendering.

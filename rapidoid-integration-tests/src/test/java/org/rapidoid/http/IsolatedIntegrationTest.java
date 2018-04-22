@@ -95,8 +95,6 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 
 		App.path(getTestPackageName());
 
-		App.setup().http().gui().reset(); // FIXME
-
 		verifyNoRoutes();
 
 		U.must(Msc.isInsideTest());
