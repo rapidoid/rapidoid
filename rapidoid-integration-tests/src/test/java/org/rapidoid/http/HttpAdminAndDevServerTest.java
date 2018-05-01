@@ -35,26 +35,31 @@ public class HttpAdminAndDevServerTest extends IsolatedIntegrationTest {
 	@Test
 	public void testAdminOnAppServer() {
 		sameSetup();
-		sameRequests(8080);
+		sendRequests(9090);
+
+		Admin.setup().halt();
 	}
 
 	@Test
 	public void testAdminServerConfig() {
 		int port = 8881;
-		Conf.section("admin").set("port", port);
+		Conf.ADMIN.set("port", port);
 
 		sameSetup();
-		sameRequests(port);
+		sendRequests(port);
+
+		Admin.setup().halt();
 	}
 
 	private void sameSetup() {
 		On.get("/a").html((Req x) -> "default " + U.join(":", x.uri(), x.zone(), x.contextPath()));
-		Admin.get("/b").roles().json((Req x) -> "admin " + U.join(":", x.uri(), x.zone(), x.contextPath()));
+
+		Admin.get("/b").zone("admin").roles().json((Req x) -> "admin " + U.join(":", x.uri(), x.zone(), x.contextPath()));
 		Admin.get("/c").json((Req x) -> "unauthorized");
 		Admin.get("/d").html((Req x) -> "unauthorized");
 	}
 
-	private void sameRequests(int port) {
+	private void sendRequests(int port) {
 		onlyGet("/a"); // app
 		onlyGet(port, "/b"); // admin
 		onlyGet(port, "/c"); // admin - unauthorized

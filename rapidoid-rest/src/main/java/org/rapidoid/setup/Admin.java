@@ -24,76 +24,65 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
-import org.rapidoid.config.Config;
-import org.rapidoid.http.HttpRoutes;
-import org.rapidoid.http.ReqHandler;
-import org.rapidoid.http.ReqRespHandler;
-import org.rapidoid.http.customize.Customization;
-import org.rapidoid.http.handler.HttpHandler;
-import org.rapidoid.http.impl.RouteOptions;
+import org.rapidoid.security.Role;
+import org.rapidoid.util.LazyInit;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class Admin extends RapidoidThing {
 
+	private static final LazyInit<Setup> setup = new LazyInit<>(Admin::createAdminSetup);
+
+	private static Setup createAdminSetup() {
+		return Setups.create("admin");
+	}
+
 	public static synchronized Setup setup() {
-		return Setups.admin();
+		return setup.get();
 	}
 
 	public static synchronized OnRoute route(String verb, String path) {
-		return setup().on(verb, path);
+		return setup().on(verb, path).roles(Role.ADMINISTRATOR);
 	}
 
 	public static synchronized OnRoute any(String path) {
-		return setup().any(path);
+		return setup().any(path).roles(Role.ADMINISTRATOR);
 	}
 
 	public static synchronized OnRoute get(String path) {
-		return setup().get(path);
+		return setup().get(path).roles(Role.ADMINISTRATOR);
 	}
 
 	public static synchronized OnRoute post(String path) {
-		return setup().post(path);
+		return setup().post(path).roles(Role.ADMINISTRATOR);
 	}
 
 	public static synchronized OnRoute put(String path) {
-		return setup().put(path);
+		return setup().put(path).roles(Role.ADMINISTRATOR);
 	}
 
 	public static synchronized OnRoute delete(String path) {
-		return setup().delete(path);
+		return setup().delete(path).roles(Role.ADMINISTRATOR);
 	}
 
 	public static synchronized OnRoute patch(String path) {
-		return setup().patch(path);
+		return setup().patch(path).roles(Role.ADMINISTRATOR);
 	}
 
 	public static synchronized OnRoute options(String path) {
-		return setup().options(path);
+		return setup().options(path).roles(Role.ADMINISTRATOR);
 	}
 
 	public static synchronized OnRoute head(String path) {
-		return setup().head(path);
+		return setup().head(path).roles(Role.ADMINISTRATOR);
 	}
 
 	public static synchronized OnRoute trace(String path) {
-		return setup().trace(path);
+		return setup().trace(path).roles(Role.ADMINISTRATOR);
 	}
 
 	public static synchronized OnRoute page(String path) {
-		return setup().page(path);
-	}
-
-	public static synchronized Setup req(ReqHandler handler) {
-		return setup().req(handler);
-	}
-
-	public static synchronized Setup req(ReqRespHandler handler) {
-		return setup().req(handler);
-	}
-
-	public static synchronized Setup req(HttpHandler handler) {
-		return setup().req(handler);
+		return setup().page(path).roles(Role.ADMINISTRATOR);
 	}
 
 	public static synchronized ServerSetup port(int port) {
@@ -104,35 +93,4 @@ public class Admin extends RapidoidThing {
 		return new ServerSetup(Conf.ADMIN).address(address);
 	}
 
-	public static synchronized OnError error(Class<? extends Throwable> error) {
-		return setup().error(error);
-	}
-
-	public static Setup deregister(String verb, String path) {
-		return setup().deregister(verb, path);
-	}
-
-	public static Setup deregister(Object... controllers) {
-		return setup().deregister(controllers);
-	}
-
-	public static Config config() {
-		return setup().config();
-	}
-
-	public static Customization custom() {
-		return setup().custom();
-	}
-
-	public static HttpRoutes routes() {
-		return setup().routes();
-	}
-
-	public static RouteOptions defaults() {
-		return setup().defaults();
-	}
-
-	public static OnChanges changes() {
-		return OnChanges.INSTANCE;
-	}
 }

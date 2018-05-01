@@ -29,6 +29,7 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.data.JSON;
+import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.impl.HttpRoutesImpl;
 import org.rapidoid.ioc.IoC;
@@ -74,8 +75,9 @@ public class Setups extends RapidoidInitializer {
 		Customization customization = new Customization(name, My.custom(), config);
 		HttpRoutesImpl routes = new HttpRoutesImpl(name, customization);
 		Screen gui = new ScreenBean();
+		FastHttp http = new FastHttp(routes, config, gui);
 
-		Setup setup = new Setup(name, "main", ioc, config, customization, routes, gui);
+		Setup setup = new SetupImpl(name, "main", http, ioc, config, customization, routes, gui, false);
 
 		instances.add(setup);
 		return setup;
@@ -83,10 +85,6 @@ public class Setups extends RapidoidInitializer {
 
 	public static Setup main() {
 		return DEFAULT.get().main;
-	}
-
-	public static Setup admin() {
-		return DEFAULT.get().admin;
 	}
 
 	public static synchronized void haltAll() {

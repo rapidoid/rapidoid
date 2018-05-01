@@ -23,8 +23,6 @@ package org.rapidoid.gui.reqinfo;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
-import org.rapidoid.util.AppInfo;
 import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")
@@ -33,38 +31,12 @@ public class ReqInfoUtils extends RapidoidThing {
 
 	public static String adminUrl() {
 		IReqInfo req = ReqInfo.get();
-		int appPort = AppInfo.appPort;
-		int adminPort = AppInfo.adminPort;
-		boolean appAndAdminOnSamePort = adminPort == appPort;
-
-		if (U.notEmpty(req.host())) {
-			String hostname = req.host().split(":")[0];
-
-			if (AppInfo.isAdminServerActive) {
-				String path = req.contextPath() + Msc.specialUriPrefix();
-				return appAndAdminOnSamePort ? path : "http://" + hostname + ":" + adminPort + path;
-			}
-		}
-
-		return null;
+		return req.contextPath() + Msc.specialUriPrefix();
 	}
 
 	public static String appUrl() {
 		IReqInfo req = ReqInfo.get();
-		int appPort = AppInfo.appPort;
-		int adminPort = AppInfo.adminPort;
-		boolean appAndAdminOnSamePort = adminPort == appPort;
-
-		if (U.notEmpty(req.host())) {
-			String hostname = req.host().split(":")[0];
-
-			if (AppInfo.isAppServerActive) {
-				String path = req.contextPath() + "/";
-				return appAndAdminOnSamePort ? path : "http://" + hostname + ":" + appPort + path;
-			}
-		}
-
-		return null;
+		return req.contextPath() + "/";
 	}
 
 }

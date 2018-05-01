@@ -31,8 +31,10 @@ public class HttpAdminServerTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testAdminServer() {
-		Admin.port(9898);
+		Admin.port(9898).address("127.0.0.1");
+
 		Admin.get("/").json(() -> "ok");
+
 		onlyGet(9898, "/");
 	}
 

@@ -102,32 +102,32 @@ class HttpHandlers extends RapidoidThing {
 		}
 	}
 
-	static void registerStatic(Setup setup, String verb, String path, RouteOptions options, byte[] response) {
+	static void registerStatic(SetupImpl setup, String verb, String path, RouteOptions options, byte[] response) {
 		setup.routes().on(verb, path, new StaticHttpHandler(options, response));
 		setup.autoActivate();
 	}
 
-	static void registerPredefined(Setup setup, String verb, String path, RouteOptions options, Object response) {
+	static void registerPredefined(SetupImpl setup, String verb, String path, RouteOptions options, Object response) {
 		FastHttp http = setup.http();
 		HttpRoutes routes = setup.routes();
 		routes.on(verb, path, new PredefinedResponseHandler(http, routes, options, response));
 		setup.autoActivate();
 	}
 
-	static void register(Setup setup, String verb, String path, RouteOptions options, Callable<?> handler) {
+	static void register(SetupImpl setup, String verb, String path, RouteOptions options, Callable<?> handler) {
 		FastHttp http = setup.http();
 		HttpRoutes routes = setup.routes();
 		routes.on(verb, path, new CallableHttpHandler(http, routes, options, handler));
 		setup.autoActivate();
 	}
 
-	static void register(Setup setup, String verb, String path, RouteOptions options, NParamLambda lambda) {
+	static void register(SetupImpl setup, String verb, String path, RouteOptions options, NParamLambda lambda) {
 		HttpHandler handler = HttpHandlers.from(setup, lambda, options);
 		setup.routes().on(verb, path, handler);
 		setup.autoActivate();
 	}
 
-	static void register(Setup setup, String verb, String path, RouteOptions options, Method method, Object instance) {
+	static void register(SetupImpl setup, String verb, String path, RouteOptions options, Method method, Object instance) {
 		FastHttp http = setup.http();
 		HttpRoutes routes = setup.routes();
 		routes.on(verb, path, new MethodReqHandler(http, routes, options, method, instance));

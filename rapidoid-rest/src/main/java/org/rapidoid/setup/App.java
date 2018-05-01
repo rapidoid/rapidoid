@@ -248,8 +248,7 @@ public class App extends RapidoidInitializer {
 
 		Setups.reloadAll();
 
-		Conf.reset(); // reset the config again
-		Setups.initDefaults(); // this changes the config
+		Setups.initDefaults();
 		Conf.reset(); // reset the config again
 	}
 
@@ -359,10 +358,6 @@ public class App extends RapidoidInitializer {
 
 	public static Setup setup() {
 		return Setups.main();
-	}
-
-	public static Setup adminSetup() {
-		return Setups.admin();
 	}
 
 	public static Screen gui() {

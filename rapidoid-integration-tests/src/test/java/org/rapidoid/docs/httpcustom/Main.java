@@ -45,7 +45,7 @@ public class Main {
 		App.scan();
 
 		Boot.jmx(App.setup());
-		Boot.adminCenter(App.adminSetup());
+		Boot.adminCenter(App.setup());
 
 		// continue with normal setup
 		On.get("/x").json("x");

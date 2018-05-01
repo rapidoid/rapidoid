@@ -88,6 +88,7 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 		My.reset();
 
 		App.resetGlobalState();
+
 		On.changes().ignore();
 
 		On.setup().activate();

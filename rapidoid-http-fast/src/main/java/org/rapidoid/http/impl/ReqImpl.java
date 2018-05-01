@@ -87,7 +87,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	private final Map<String, List<Upload>> files;
 
-	private final Map<String, Object> attrs = Collections.synchronizedMap(new HashMap<String, Object>());
+	private final Map<String, Object> attrs = Collections.synchronizedMap(new HashMap<>());
 
 	private volatile Map<String, Object> data;
 

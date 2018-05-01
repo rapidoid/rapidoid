@@ -728,6 +728,7 @@ org.rapidoid.setup.ReloadUtil
 org.rapidoid.setup.ServerSetup
 org.rapidoid.setup.ServiceBootstrap
 org.rapidoid.setup.Setup
+org.rapidoid.setup.SetupImpl
 org.rapidoid.setup.Setups
 org.rapidoid.setup.WatchForChanges
 org.rapidoid.test.Doc
@@ -751,7 +752,6 @@ org.rapidoid.timeseries.TimeSeries
 org.rapidoid.timeseries.TSValue
 org.rapidoid.util.AbstractMapImpl
 org.rapidoid.util.AnsiColor
-org.rapidoid.util.AppInfo
 org.rapidoid.util.BenchmarkOperation
 org.rapidoid.util.Bufs
 org.rapidoid.util.ByType

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * rapidoid-commons
+ * rapidoid-web
  * %%
  * Copyright (C) 2014 - 2018 Nikolche Mihajlovski and contributors
  * %%
@@ -18,29 +18,36 @@
  * #L%
  */
 
-package org.rapidoid.util;
+package org.rapidoid.http;
 
-import org.rapidoid.RapidoidThing;
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.setup.On;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class AppInfo extends RapidoidThing {
+@Since("6.0.0")
+public class MiniHttpTest extends HttpTestCommons {
 
-	public static volatile boolean isAppServerActive;
+	@Test
+	public void testA() {
+		On.get("/a").plain("A");
 
-	public static volatile boolean isAdminServerActive;
+		eq(Self.get("/a").fetchRaw(), "A");
+	}
 
-	public static volatile int appPort;
+	@Test
+	public void testB() {
+		On.get("/b").plain("B");
 
-	public static volatile int adminPort;
+		eq(Self.get("/b").fetchRaw(), "B");
+	}
 
-	public static void reset() {
-		isAppServerActive = false;
-		isAdminServerActive = false;
-		appPort = 0;
-		adminPort = 0;
+	@Test
+	public void testC() {
+		On.get("/c").plain("C");
+
+		eq(Self.get("/c").fetchRaw(), "C");
 	}
 
 }

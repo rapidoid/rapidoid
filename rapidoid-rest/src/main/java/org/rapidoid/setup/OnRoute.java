@@ -41,7 +41,7 @@ import java.util.concurrent.Callable;
 @Since("4.3.0")
 public class OnRoute extends RapidoidThing {
 
-	private final Setup setup;
+	private final SetupImpl setup;
 
 	private final String verb;
 
@@ -49,7 +49,7 @@ public class OnRoute extends RapidoidThing {
 
 	private final RouteOptions options;
 
-	public OnRoute(Setup setup, String verb, String path) {
+	public OnRoute(SetupImpl setup, String verb, String path) {
 		this.setup = setup;
 		this.verb = verb;
 		this.path = path;

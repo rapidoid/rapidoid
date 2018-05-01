@@ -27,6 +27,7 @@ import org.rapidoid.annotation.Since;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.concurrent.Callable;
+import java.util.function.Consumer;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.4")
@@ -118,4 +119,13 @@ public final class LazyInit<T> extends RapidoidThing {
 	public boolean isInitialized() {
 		return initializedValue != null;
 	}
+
+	public synchronized void ifPresent(Consumer<? super T> action) {
+		T value = initializedValue;
+
+		if (value != null) {
+			action.accept(value);
+		}
+	}
+
 }

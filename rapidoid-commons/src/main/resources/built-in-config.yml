@@ -3,8 +3,8 @@ on:
   address: 0.0.0.0
 
 admin:
-  port: ${on.port}
-  address: ${on.address}
+  port: 9090
+  address: 0.0.0.0
 
 app:
   contextPath: ''
