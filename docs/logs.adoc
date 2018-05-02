@@ -1,7 +1,0 @@
-## Logging
-
-Please see the `Log` class.
-
-### Configuring
-
-Please see the `log` configuration section.

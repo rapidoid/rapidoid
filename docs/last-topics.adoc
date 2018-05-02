@@ -1,5 +1,0 @@
-include::custom.adoc[]
-
-include::logs.adoc[]
-
-include::cli.adoc[]

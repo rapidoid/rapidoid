@@ -1,7 +1,0 @@
-## Rapidoid's template engine
-
-Starting from v5.1, Rapidoid has its own template engine. Basically, it is very similar to Mustache, with the following differences:
-
-  - Using `${x}` instead of `{{x}}`. This syntax is very common in the Java world, and it also avoids collision of the `{{x}}` tags with the front-end libraries (e.g. Angular).
-  - Supporting additional `{{?x}}...{{/}}` tag for `if`. The traditional `{{#x}}...{{/x}}` remains unchanged, having both `foreach` and `if` semantics.
-  - Providing text alternative if the value if not available e.g. `${x|something else}`

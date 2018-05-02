@@ -1,3 +1,0 @@
-The most of this documentation covers the aspects of using Rapidoid as a web framework with Java.
-
-But Rapidoid can also be used as a web platform. For more details, please see the documentation of the https://store.docker.com/images/rapidoid[Official Docker repository for Rapidoid].

@@ -1,3 +1,0 @@
-## HTTP Chunked response
-
-include::examples/httpchunked.adoc[]

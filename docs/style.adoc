@@ -1,9 +1,0 @@
-++++
-<style>
-
-code, kbd, pre, samp {
-    font-size: 12px !important;
-}
-
-</style>
-++++

@@ -73,15 +73,19 @@ public abstract class DocTest extends IsolatedIntegrationTest {
 		pkg = Str.triml(pkg, "org.rapidoid.docs.");
 
 		String dir = System.getProperty("user.dir");
-		dir = Str.cutToFirst(dir, "rapidoid") + "rapidoid";
+		dir = Str.cutToFirst(dir, "rapidoid") + "rapidoid-docs";
 
-		String asciidoc = Msc.path(dir, "docs", "examples");
-		new File(asciidoc).mkdirs();
+		String examplesDir = Msc.path(dir, "docs", "examples");
 
-		generateAsciiDoc(doc, pkg, asciidoc, files);
+		if (!new File(examplesDir).exists()) {
+			Msc.logSection("Skipping docs generation - cannot find: " + examplesDir);
+			return;
+		}
+
+		generateAsciiDoc(doc, pkg, examplesDir, files);
 	}
 
-	private void generateAsciiDoc(Doc doc, String id, String asciidoc, Map<String, String> files) {
+	private void generateAsciiDoc(Doc doc, String id, String examplesDir, Map<String, String> files) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append(U.frmt("### %s\n\n", doc.title()));
@@ -99,17 +103,17 @@ public abstract class DocTest extends IsolatedIntegrationTest {
 
 		String filename = id + ".adoc";
 
-		IO.save(Msc.path(asciidoc, filename), sb.toString());
+		IO.save(Msc.path(examplesDir, filename), sb.toString());
 
 		if (GlobalCfg.is("DOCS")) {
-			appendToIndex(asciidoc, filename);
+			appendToIndex(examplesDir, filename);
 		}
 	}
 
-	private void appendToIndex(String asciidoc, String filename) {
+	private void appendToIndex(String examplesDir, String filename) {
 		String toIndex = U.frmt("include::%s[]\n\n", filename);
 
-		String index = Msc.path(asciidoc, "index.adoc");
+		String index = Msc.path(examplesDir, "index.adoc");
 
 		IO.append(index, toIndex.getBytes());
 	}
