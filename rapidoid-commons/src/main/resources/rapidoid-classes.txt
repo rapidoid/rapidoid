@@ -28,7 +28,6 @@ org.rapidoid.annotation.PUT
 org.rapidoid.annotation.RapidoidModuleDesc
 org.rapidoid.annotation.Required
 org.rapidoid.annotation.Run
-org.rapidoid.annotation.Scaffold
 org.rapidoid.annotation.ScanPackages
 org.rapidoid.annotation.Service
 org.rapidoid.annotation.Since
@@ -200,6 +199,8 @@ org.rapidoid.goodies.LogoutHandler
 org.rapidoid.goodies.MultiDetailsHandler
 org.rapidoid.goodies.OverviewHandler
 org.rapidoid.goodies.RoutesHandler
+org.rapidoid.goodies.ScaffoldDSL
+org.rapidoid.goodies.ScaffoldUtil
 org.rapidoid.goodies.TerminateHandler
 org.rapidoid.goodies.X
 org.rapidoid.group.AbstractManageable

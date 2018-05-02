@@ -20,7 +20,7 @@
 
 package org.rapidoid.docs.jpascaffold;
 
-import org.rapidoid.goodies.X;
+import org.rapidoid.goodies.Boot;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.setup.App;
@@ -33,13 +33,18 @@ public class Main extends GUI {
 
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
+		App.run(args, "users.admin.password=a"); // demo-only password
+
+		Boot.jpa(App.path());
+		Boot.auth(App.setup());
+		Boot.entities(App.setup());
+		Boot.overview(App.setup());
+
 		App.gui()
 			.search(true)
 			.brand("Cool app");
 
 		On.page("/").mvc("Welcome!");
-
-		X.scaffold(Book.class);
 
 		String search = "FROM Book b WHERE b.title LIKE ?1";
 		On.page("/search").mvc((String q) -> {

@@ -25,7 +25,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.English;
-import org.rapidoid.commons.Str;
 import org.rapidoid.datamodel.IRange;
 import org.rapidoid.datamodel.Range;
 import org.rapidoid.gui.Btn;
@@ -36,9 +35,6 @@ import org.rapidoid.gui.input.Form;
 import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.jdbc.JDBC;
 import org.rapidoid.jpa.JPA;
-import org.rapidoid.setup.App;
-import org.rapidoid.setup.On;
-import org.rapidoid.setup.Setup;
 import org.rapidoid.u.U;
 
 import javax.persistence.metamodel.EntityType;
@@ -216,46 +212,8 @@ public class X extends RapidoidThing {
 		return GUI.uriFor(baseUri, entity);
 	}
 
-	public static void scaffold(String uri, Class<?> entityType) {
-		scaffold(On.setup(), uri, entityType);
-	}
-
-	public static void scaffold(Setup setup, String uri, Class<?> entityType) {
-		JPA.bootstrap(App.path(), entityType);
-
-		scaffoldEntity(setup, uri, entityType);
-	}
-
-	public static void scaffold(Class<?>... entityTypes) {
-		scaffold(On.setup(), entityTypes);
-	}
-
-	public static void scaffold(Setup setup, Class<?>... entityTypes) {
-		JPA.bootstrap(App.path(), entityTypes);
-
-		for (Class<?> entityType : entityTypes) {
-			scaffoldEntity(setup, GUI.typeUri(entityType), entityType);
-		}
-	}
-
-	private static void scaffoldEntity(Setup setup, String baseUri, Class<?> entityType) {
-		if (baseUri.length() > 1) {
-			baseUri = Str.trimr(baseUri, "/");
-		}
-
-		// RESTful services
-		setup.get(baseUri).json(X.index(entityType));
-		setup.get(baseUri + "/{id}").json(X.read(entityType));
-
-		setup.post(baseUri).transaction().json(X.insert(entityType));
-		setup.put(baseUri + "/{id}").transaction().json(X.update(entityType));
-		setup.delete(baseUri + "/{id}").transaction().json(X.delete(entityType));
-
-		// GUI
-		setup.page(baseUri + "/manage").mvc(X.manage(entityType, baseUri));
-		setup.page(baseUri + "/add").transaction().mvc(X.add(entityType, baseUri));
-		setup.page(baseUri + "/{id}/view").transaction().mvc(X.view(entityType, baseUri));
-		setup.page(baseUri + "/{id}/edit").transaction().mvc(X.edit(entityType, baseUri));
+	public static ScaffoldDSL scaffold(Class<?> entityType) {
+		return new ScaffoldDSL(entityType);
 	}
 
 }

@@ -182,8 +182,14 @@ public class Boot extends RapidoidThing {
 		if (MscOpts.hasJPA()) {
 			for (Class<?> type : JPA.getEntityJavaTypes()) {
 				String uri = GUI.typeUri(type);
-				String contextPath = HttpUtils.zone(setup.custom(), setup.zone()).entry("home").or(uri(""));
-				X.scaffold(setup, Msc.uri(contextPath, uri), type);
+
+				BasicConfig zone = HttpUtils.zone(setup.custom(), setup.zone());
+				String contextPath = zone.entry("home").or(uri(""));
+
+				X.scaffold(type)
+					.baseUri(Msc.uri(contextPath, uri))
+					.roles(Role.ADMINISTRATOR)
+					.on(setup);
 			}
 		}
 	}

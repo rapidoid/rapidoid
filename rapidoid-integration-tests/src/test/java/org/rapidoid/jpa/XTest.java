@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.goodies.X;
 import org.rapidoid.http.IsolatedIntegrationTest;
+import org.rapidoid.setup.App;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
@@ -34,7 +35,8 @@ public class XTest extends IsolatedIntegrationTest {
 	@Test
 	public void testXQueries() {
 		JPA.bootstrap(path());
-		X.scaffold(Book.class);
+
+		X.scaffold(Book.class).on(App.setup());
 
 		getReq("/books?a");
 
