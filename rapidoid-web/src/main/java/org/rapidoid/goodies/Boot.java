@@ -25,6 +25,7 @@ import org.rapidoid.RapidoidModules;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.BasicConfig;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.insight.Metrics;
@@ -78,7 +79,7 @@ public class Boot extends RapidoidThing {
 		setup.page(uri(""))
 			.roles(Role.ADMINISTRATOR)
 			.zone(CENTER)
-			.menu("System", "Memory")
+			.menu("System", "Overview")
 			.mvc(new OverviewHandler());
 	}
 
@@ -176,7 +177,7 @@ public class Boot extends RapidoidThing {
 		setup.page(uri("entities"))
 			.roles(Role.ADMINISTRATOR)
 			.zone(CENTER)
-			.menu("System", "Memory")
+			.menu("System", "Entities")
 			.mvc(new EntitiesHandler());
 
 		if (MscOpts.hasJPA()) {
