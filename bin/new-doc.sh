@@ -2,6 +2,8 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+# USAGE: bin/new-doc.sh pkgname ClsName
+
 PKG=$1
 CLS="${2}Test"
 
@@ -9,7 +11,7 @@ echo "Adding new doc/example '$PKG', class $CLS"
 
 # ASCIIDOC
 
-cd docs
+cd ../rapidoid-docs/docs
 
 cp blank.adoc "${PKG}.adoc"
 
@@ -21,7 +23,7 @@ cd ..
 
 # JAVA TESTS
 
-cd rapidoid-integration-tests/src/test/java/org/rapidoid/docs/
+cd ../rapidoid/rapidoid-integration-tests/src/test/java/org/rapidoid/docs/
 cp -R blank $PKG
 
 cd "$PKG"
