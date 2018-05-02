@@ -185,53 +185,6 @@
 				</configuration>
 			</plugin>
 
-			<plugin>
-				<groupId>org.asciidoctor</groupId>
-				<artifactId>asciidoctor-maven-plugin</artifactId>
-				<version>1.5.3</version>
-				<inherited>false</inherited>
-				<configuration>
-					<sourceDirectory>docs</sourceDirectory>
-					<headerFooter>true</headerFooter>
-					<imagesDir>img</imagesDir>
-					<sourceHighlighter>coderay</sourceHighlighter>
-					<backend>html5</backend>
-					<attributes>
-						<toc>left</toc>
-						<linkcss>false</linkcss>
-						<project-version>${project.version}</project-version>
-						<sectnums>true</sectnums>
-						<sectnumlevels>2</sectnumlevels>
-					</attributes>
-				</configuration>
-				<executions>
-					<execution>
-						<id>main-docs</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>process-asciidoc</goal>
-						</goals>
-						<configuration>
-							<sourceDocumentName>index.adoc</sourceDocumentName>
-						</configuration>
-					</execution>
-					<execution>
-						<id>release-notes</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>process-asciidoc</goal>
-						</goals>
-						<inherited>false</inherited>
-						<configuration>
-							<sourceDirectory>docs/releases</sourceDirectory>
-							<attributes>
-								<sectnums>false</sectnums>
-							</attributes>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
 		</plugins>
 
 		<pluginManagement>
