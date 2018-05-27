@@ -45,7 +45,7 @@ public class JobsTest extends AbstractCommonsTest {
 		multiThreaded(1000, total, () -> {
 			Ctxs.open("test-job");
 
-			final UserInfo user = new UserInfo(TestRnd.rndStr(50), U.set("role1"), null);
+			final UserInfo user = new UserInfo(TestRnd.rndStr(50), U.set("role1"));
 
 			Ctxs.required().setUser(user);
 			ensureProperContext(user);

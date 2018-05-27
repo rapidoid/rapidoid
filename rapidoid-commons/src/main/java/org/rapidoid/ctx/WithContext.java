@@ -26,7 +26,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.job.Jobs;
 
 import java.util.Map;
-import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.5.0")
@@ -34,11 +33,7 @@ public class WithContext extends RapidoidThing {
 
 	private volatile String tag;
 
-	private volatile String username;
-
-	private volatile Set<String> roles;
-
-	private volatile Set<String> scope;
+	private volatile UserInfo user;
 
 	private volatile Object persister;
 
@@ -55,31 +50,13 @@ public class WithContext extends RapidoidThing {
 		return this;
 	}
 
-	public WithContext username(String username) {
-		this.username = username;
+	public UserInfo user() {
+		return user;
+	}
+
+	public WithContext user(UserInfo user) {
+		this.user = user;
 		return this;
-	}
-
-	public String username() {
-		return this.username;
-	}
-
-	public WithContext roles(Set<String> roles) {
-		this.roles = roles;
-		return this;
-	}
-
-	public Set<String> roles() {
-		return this.roles;
-	}
-
-	public WithContext scope(Set<String> scope) {
-		this.scope = scope;
-		return this;
-	}
-
-	public Set<String> scope() {
-		return scope;
 	}
 
 	public WithContext persister(Object persister) {

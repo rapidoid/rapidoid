@@ -25,7 +25,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
 import java.util.Map;
-import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.5.0")
@@ -35,16 +34,8 @@ public class With extends RapidoidThing {
 		return new WithContext().tag(tag);
 	}
 
-	public static WithContext username(String username) {
-		return new WithContext().username(username);
-	}
-
-	public static WithContext roles(Set<String> roles) {
-		return new WithContext().roles(roles);
-	}
-
-	public static WithContext scope(Set<String> scope) {
-		return new WithContext().scope(scope);
+	public static WithContext user(UserInfo user) {
+		return new WithContext().user(user);
 	}
 
 	public static WithContext persister(Object persister) {

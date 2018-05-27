@@ -32,7 +32,6 @@ import org.apache.oltu.oauth2.common.message.types.GrantType;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.data.JSON;
 import org.rapidoid.http.HttpUtils;
@@ -125,7 +124,7 @@ public class OAuthTokenHandler extends RapidoidThing implements ReqHandler {
 			String username = email;
 			Set<String> roles = customization.rolesProvider().getRolesForUser(req, username);
 
-			UserInfo user = new UserInfo(username, roles, null);
+			UserInfo user = new UserInfo(username, roles);
 			user.name = name;
 			user.email = email;
 			user.oauthProvider = provider.getName();

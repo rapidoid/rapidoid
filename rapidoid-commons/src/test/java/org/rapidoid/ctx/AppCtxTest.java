@@ -40,7 +40,7 @@ public class AppCtxTest extends AbstractCommonsTest {
 		multiThreaded(1000, 1000000, () -> {
 			Ctxs.open("test");
 
-			UserInfo user = new UserInfo(TestRnd.rndStr(10), U.set("role1"), null);
+			UserInfo user = new UserInfo(TestRnd.rndStr(10), U.set("role1"));
 
 			Ctxs.required().setUser(user);
 

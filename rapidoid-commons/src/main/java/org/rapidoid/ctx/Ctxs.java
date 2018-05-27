@@ -71,7 +71,7 @@ public class Ctxs extends RapidoidThing {
 
 		ctx.setExchange(context.exchange());
 		ctx.setPersister(context.persister());
-		ctx.setUser(new UserInfo(context.username(), context.roles(), context.scope()));
+		ctx.setUser(context.user());
 		Coll.assign(ctx.extras(), U.safe(context.extras()));
 
 		return ctx;

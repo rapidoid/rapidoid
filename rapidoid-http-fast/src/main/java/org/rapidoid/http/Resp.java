@@ -21,6 +21,7 @@
 package org.rapidoid.http;
 
 import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.net.AsyncLogic;
 import org.rapidoid.web.Screen;
 
@@ -258,6 +259,11 @@ public interface Resp {
 	 * Returns information whether the login was successful
 	 */
 	boolean login(String username, String password);
+
+	/**
+	 * Authorizes the specified logged-in user.
+	 */
+	void authorize(UserInfo user);
 
 	/**
 	 * Initiates a user logout process, clearing the login information (username) from the token.

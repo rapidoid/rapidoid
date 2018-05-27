@@ -433,6 +433,7 @@ org.rapidoid.http.impl.RouteCacheConfig
 org.rapidoid.http.impl.RouteImpl
 org.rapidoid.http.impl.RouteMeta
 org.rapidoid.http.impl.RouteOptions
+org.rapidoid.http.impl.TokenAuth
 org.rapidoid.http.impl.TokenStatus
 org.rapidoid.http.MediaType
 org.rapidoid.http.NiceResponse

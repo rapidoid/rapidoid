@@ -34,9 +34,6 @@ import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.MediaType;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
-import org.rapidoid.http.customize.Customization;
-import org.rapidoid.http.customize.LoginProvider;
-import org.rapidoid.http.customize.RolesProvider;
 import org.rapidoid.io.IO;
 import org.rapidoid.net.AsyncLogic;
 import org.rapidoid.u.U;
@@ -52,7 +49,6 @@ import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.x")
@@ -362,38 +358,26 @@ public class RespImpl extends RapidoidThing implements Resp {
 
 	@Override
 	public boolean login(String username, String password) {
+		UserInfo user = TokenAuth.login(req, username, password);
 
-		LoginProvider loginProvider = Customization.of(req).loginProvider();
-		U.must(loginProvider != null, "A login provider wasn't set!");
-
-		RolesProvider rolesProvider = Customization.of(req).rolesProvider();
-		U.must(rolesProvider != null, "A roles provider wasn't set!");
-
-		req.tokenChanged.set(true);
-
-		boolean success;
-
-		try {
-			success = loginProvider.login(req, username, password);
-
-			if (success) {
-				Set<String> roles = rolesProvider.getRolesForUser(req, username);
-
-				long ttl = Conf.TOKEN.entry("ttl").or(0);
-				long expiresOn = ttl > 0 ? U.time() + ttl : Long.MAX_VALUE;
-
-				UserInfo user = new UserInfo(username, roles, null);
-				Ctxs.required().setUser(user);
-
-				request().token().put(Tokens._USER, username);
-				request().token().put(Tokens._EXPIRES, expiresOn);
-			}
-
-		} catch (Throwable e) {
-			throw U.rte("Login error!", e);
+		if (user != null) {
+			authorize(user);
 		}
 
-		return success;
+		return user != null;
+	}
+
+	@Override
+	public void authorize(UserInfo user) {
+		Ctxs.required().setUser(user);
+
+		req.token().put(Tokens._USER, user.username);
+
+		long ttl = Conf.TOKEN.entry("ttl").or(0);
+		long expiresOn = ttl > 0 ? U.time() + ttl : Long.MAX_VALUE;
+		req.token().put(Tokens._EXPIRES, expiresOn);
+
+		req.tokenChanged.set(true);
 	}
 
 	@Override

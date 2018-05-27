@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Err;
 import org.rapidoid.ctx.Contextual;
+import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.ctx.With;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Wait;
@@ -44,13 +45,13 @@ public class WithContextTest extends IsolatedIntegrationTest {
 
 		eq(ctxInfo(), "null:[]:false");
 
-		With.username("root").roles(U.set("admin")).run(() -> {
+		With.user(new UserInfo("root", U.set("admin"))).run(() -> {
 			eq(ctxInfo(), "root:[admin]:true");
 
 			for (int i = 0; i < JOB_COUNT; i++) {
 				int n = i;
 
-				With.username("user" + n).roles(U.set("manager" + n)).run(() -> {
+				With.user(new UserInfo("user" + n, U.set("manager" + n))).run(() -> {
 					eq(ctxInfo(), U.frmt("user%s:[manager%s]:true", n, n));
 					latch.countDown();
 				});
