@@ -47,6 +47,8 @@ public class LogOptions extends RapidoidThing {
 
 	private volatile boolean inferCaller = true;
 
+	private volatile boolean stackTraceOnStdErr;
+
 	public Callable<Logger> loggerFactory() {
 		return loggerFactory;
 	}
@@ -107,6 +109,15 @@ public class LogOptions extends RapidoidThing {
 
 	public LogOptions inferCaller(boolean inferCaller) {
 		this.inferCaller = inferCaller;
+		return this;
+	}
+
+	public boolean stackTraceOnStdErr() {
+		return stackTraceOnStdErr;
+	}
+
+	public LogOptions stackTraceOnStdErr(boolean stackTraceOnStdErr) {
+		this.stackTraceOnStdErr = stackTraceOnStdErr;
 		return this;
 	}
 }
