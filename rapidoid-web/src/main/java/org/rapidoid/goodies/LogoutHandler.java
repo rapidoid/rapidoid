@@ -27,16 +27,27 @@ import org.rapidoid.http.Headers;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.Resp;
+import org.rapidoid.u.U;
 
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class LogoutHandler extends RapidoidThing implements ReqRespHandler {
 
+	private static final String MSG = "Successfully logged out.";
+
 	@Override
 	public Object execute(Req req, Resp resp) throws Exception {
 		resp.logout();
-		return resp.redirect(req.header(Headers.REFERER));
+
+		String referer = req.header(Headers.REFERER, null);
+
+		if (referer != null) {
+			return resp.redirect(referer);
+
+		} else {
+			return U.map("success", true, "message", MSG);
+		}
 	}
 
 }
