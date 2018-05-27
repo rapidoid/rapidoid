@@ -49,7 +49,7 @@ public class OAuth extends RapidoidThing {
 
 	private static final Config OAUTH = Conf.OAUTH;
 
-	private static final Value<String> DOMAIN = Conf.APP.entry("domain").str();
+	private static final Value<String> DOMAIN = Conf.OAUTH.or(Conf.APP).entry("domain").str();
 
 	public static void bootstrap(Setup setup) {
 		register(setup, new DefaultOAuthStateCheck());

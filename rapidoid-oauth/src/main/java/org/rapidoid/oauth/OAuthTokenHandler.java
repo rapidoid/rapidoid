@@ -95,8 +95,11 @@ public class OAuthTokenHandler extends RapidoidThing implements ReqHandler {
 			String redirectUrl = U.notEmpty(domain) ? domain + callbackPath : HttpUtils.constructUrl(req, callbackPath);
 
 			TokenRequestBuilder reqBuilder = OAuthClientRequest.tokenLocation(provider.getTokenEndpoint())
-				.setGrantType(GrantType.AUTHORIZATION_CODE).setClientId(id).setClientSecret(secret)
-				.setRedirectURI(redirectUrl).setCode(code);
+				.setGrantType(GrantType.AUTHORIZATION_CODE)
+				.setClientId(id)
+				.setClientSecret(secret)
+				.setRedirectURI(redirectUrl)
+				.setCode(code);
 
 			OAuthClientRequest request = paramsInBody() ? reqBuilder.buildBodyMessage() : reqBuilder.buildBodyMessage();
 
@@ -130,11 +133,10 @@ public class OAuthTokenHandler extends RapidoidThing implements ReqHandler {
 			user.oauthProvider = provider.getName();
 			user.oauthId = String.valueOf(auth.get("id"));
 
-			Ctxs.required().setUser(user);
+			req.response().authorize(user);
 
-			// user.saveTo(x.token()); // FIXME use token
+			return req.response().redirect("/");
 
-			return req.response().redirect("/"); // FIXME use page stack
 		} else {
 			String error = req.param("error");
 			if (error != null) {
