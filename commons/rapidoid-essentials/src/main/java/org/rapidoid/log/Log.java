@@ -202,10 +202,16 @@ public class Log extends RapidoidThing {
 
 		if (value instanceof Throwable) {
 			Throwable err = (Throwable) value;
-			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			err.printStackTrace(new PrintStream(stream));
-			out.append("\n");
-			out.append(stream.toString());
+
+			if (options.stackTraceOnStdErr()) {
+				err.printStackTrace();
+
+			} else {
+				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				err.printStackTrace(new PrintStream(stream));
+				out.append("\n");
+				out.append(stream.toString());
+			}
 		}
 	}
 
@@ -515,10 +521,7 @@ public class Log extends RapidoidThing {
 	}
 
 	public static void log(String topic, LogLevel level, String msg, Throwable err) {
-		if (isEnabled(level)) {
-			log(topic, level, msg, "message", err.getMessage());
-			err.printStackTrace();
-		}
+		log(topic, level, msg, "error", err);
 	}
 
 	/* TRACE */
@@ -561,10 +564,7 @@ public class Log extends RapidoidThing {
 	}
 
 	public static void trace(String msg, Throwable err) {
-		if (isTraceEnabled()) {
-			trace(msg, "message", err.getMessage());
-			err.printStackTrace();
-		}
+		trace(msg, "error", err);
 	}
 
 	/* DEBUG */
@@ -607,10 +607,7 @@ public class Log extends RapidoidThing {
 	}
 
 	public static void debug(String msg, Throwable err) {
-		if (isDebugEnabled()) {
-			debug(msg, "message", err.getMessage());
-			err.printStackTrace();
-		}
+		debug(msg, "error", err);
 	}
 
 	/* INFO */
@@ -653,10 +650,7 @@ public class Log extends RapidoidThing {
 	}
 
 	public static void info(String msg, Throwable err) {
-		if (isInfoEnabled()) {
-			info(msg, "message", err.getMessage());
-			err.printStackTrace();
-		}
+		info(msg, "error", err);
 	}
 
 	/* WARN */
@@ -699,10 +693,7 @@ public class Log extends RapidoidThing {
 	}
 
 	public static void warn(String msg, Throwable err) {
-		if (isWarnEnabled()) {
-			warn(msg, "message", err.getMessage());
-			err.printStackTrace();
-		}
+		warn(msg, "error", err);
 	}
 
 	/* ERROR */
@@ -745,10 +736,7 @@ public class Log extends RapidoidThing {
 	}
 
 	public static void error(String msg, Throwable err) {
-		if (isErrorEnabled()) {
-			error(msg, "type", err.getClass().getName(), "message", err.getMessage());
-			err.printStackTrace();
-		}
+		error(msg, "error", err);
 	}
 
 	/* FATAL */
@@ -791,10 +779,7 @@ public class Log extends RapidoidThing {
 	}
 
 	public static void fatal(String msg, Throwable err) {
-		if (isFatalEnabled()) {
-			fatal(msg, "message", err.getMessage());
-			err.printStackTrace();
-		}
+		fatal(msg, "error", err);
 	}
 
 }
