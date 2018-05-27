@@ -44,8 +44,8 @@ public class Main {
 		// now bootstrap some components, e.g. classpath scanning (beans)
 		App.scan();
 
-		Boot.jmx(App.setup());
-		Boot.adminCenter(App.setup());
+		Boot.jmx()
+			.adminCenter();
 
 		// continue with normal setup
 		On.get("/x").json("x");

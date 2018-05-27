@@ -187,6 +187,7 @@ org.rapidoid.expire.Expire
 org.rapidoid.expire.Expiring
 org.rapidoid.goodies.BeansHandler
 org.rapidoid.goodies.Boot
+org.rapidoid.goodies.Booter
 org.rapidoid.goodies.ClasspathHandler
 org.rapidoid.goodies.ConfigHandler
 org.rapidoid.goodies.DetailsHandler

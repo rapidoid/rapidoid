@@ -20,211 +20,71 @@
 
 package org.rapidoid.goodies;
 
-import org.rapidoid.ModuleBootstrapParams;
-import org.rapidoid.RapidoidModules;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.BasicConfig;
-import org.rapidoid.gui.GUI;
-import org.rapidoid.http.HttpUtils;
-import org.rapidoid.insight.Metrics;
-import org.rapidoid.jpa.JPA;
-import org.rapidoid.security.Role;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.Setup;
-import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
-import org.rapidoid.util.MscOpts;
 
 @Authors("Nikolche Mihajlovski")
 @Since("6.0.0")
 @SuppressWarnings("WeakerAccess")
 public class Boot extends RapidoidThing {
 
-	public static final JMXGoodies JMX = new JMXGoodies();
-
-	public static final String CENTER = "center";
-
-	public static void adminCenter(Setup setup) {
-		Msc.logSection("Registering Admin Center:");
-
-		overview(setup);
-		entities(setup);
-		application(setup);
-		lifecycle(setup);
-		jmx(setup);
-		metrics(setup);
-		auth(setup);
+	public static Booter on(Setup setup) {
+		return new Booter(setup);
 	}
 
-	public static void auth(Setup setup) {
-		setup.post(uri("login"))
-			.roles()
-			.json(new LoginHandler());
-
-		setup.get(uri("logout"))
-			.roles(Role.LOGGED_IN)
-			.json(new LogoutHandler());
+	private static Booter main() {
+		return on(App.setup());
 	}
 
-	public static void lifecycle(Setup setup) {
-		setup.page(uri("terminate"))
-			.roles(Role.ADMINISTRATOR)
-			.zone(CENTER)
-			.menu("System", "Terminate / Restart")
-			.mvc(new TerminateHandler());
+	public static Booter adminCenter() {
+		return main().adminCenter();
 	}
 
-	public static void overview(Setup setup) {
-		setup.page(uri(""))
-			.roles(Role.ADMINISTRATOR)
-			.zone(CENTER)
-			.menu("System", "Overview")
-			.mvc(new OverviewHandler());
+	public static Booter auth() {
+		return main().auth();
 	}
 
-	public static void application(Setup setup) {
-		setup.page(uri("routes"))
-			.roles(Role.ADMINISTRATOR)
-			.zone(CENTER)
-			.menu("Routes")
-			.mvc(new RoutesHandler());
-
-		setup.page(uri("config"))
-			.roles(Role.ADMINISTRATOR)
-			.zone(CENTER)
-			.menu("Configuration")
-			.mvc(new ConfigHandler());
-
-		setup.page(uri("beans"))
-			.roles(Role.ADMINISTRATOR)
-			.zone(CENTER)
-			.menu("Application", "Beans")
-			.mvc(new BeansHandler());
-
-		setup.get(uri("classpath"))
-			.roles(Role.ADMINISTRATOR)
-			.zone(CENTER)
-			.menu("Application", "Classpath")
-			.mvc(new ClasspathHandler());
+	public static Booter lifecycle() {
+		return main().lifecycle();
 	}
 
-	public static void metrics(Setup setup) {
-		Metrics.bootstrap();
-
-		setup.page(uri("metrics"))
-			.roles(Role.ADMINISTRATOR)
-			.zone(CENTER)
-			.menu("Metrics")
-			.mvc(new GraphsHandler());
-
-		setup.get(uri("graphs/{id:.*}"))
-			.roles(Role.ADMINISTRATOR)
-			.json(new GraphDataHandler());
+	public static Booter overview() {
+		return main().overview();
 	}
 
-	public static void jmx(Setup setup) {
-		setup.page(uri("jmx/mempool"))
-			.roles(Role.ADMINISTRATOR)
-			.zone(CENTER)
-			.menu("System", "Memory pool")
-			.mvc(JMX.memoryPool());
-
-		setup.page(uri("jmx/threads"))
-			.roles(Role.ADMINISTRATOR)
-			.zone(CENTER)
-			.menu("System", "JVM Threads")
-			.mvc(JMX.threads());
-
-		setup.page(uri("jmx/os"))
-			.roles(Role.ADMINISTRATOR)
-			.zone(CENTER)
-			.menu("System", "Operating system")
-			.mvc(JMX.os());
-
-		setup.page(uri("jmx/gc"))
-			.roles(Role.ADMINISTRATOR)
-			.zone(CENTER)
-			.menu("System", "Garbage collection")
-			.mvc(JMX.gc());
-
-		setup.page(uri("jmx/memory"))
-			.roles(Role.ADMINISTRATOR)
-			.zone(CENTER)
-			.menu("System", "Memory")
-			.mvc(JMX.memory());
-
-		setup.page(uri("jmx/runtime"))
-			.roles(Role.ADMINISTRATOR)
-			.zone(CENTER)
-			.menu("System", "Runtime")
-			.mvc(JMX.runtime());
-
-		setup.page(uri("jmx/classes"))
-			.roles(Role.ADMINISTRATOR)
-			.zone(CENTER)
-			.menu("System", "Classes")
-			.mvc(JMX.classes());
-
-		setup.page(uri("jmx/compilation"))
-			.roles(Role.ADMINISTRATOR)
-			.zone(CENTER)
-			.menu("System", "Compilation")
-			.mvc(JMX.compilation());
+	public static Booter application() {
+		return main().application();
 	}
 
-	public static void entities(Setup setup) {
-		setup.page(uri("entities"))
-			.roles(Role.ADMINISTRATOR)
-			.zone(CENTER)
-			.menu("System", "Entities")
-			.mvc(new EntitiesHandler());
-
-		if (MscOpts.hasJPA()) {
-			for (Class<?> type : JPA.getEntityJavaTypes()) {
-				String uri = GUI.typeUri(type);
-
-				BasicConfig zone = HttpUtils.zone(setup.custom(), setup.zone());
-				String contextPath = zone.entry("home").or(uri(""));
-
-				X.scaffold(type)
-					.baseUri(Msc.uri(contextPath, uri))
-					.roles(Role.ADMINISTRATOR)
-					.on(setup);
-			}
-		}
+	public static Booter metrics() {
+		return main().metrics();
 	}
 
-	public static void oauth(Setup setup) {
-		ModuleBootstrapParams params = new ModuleBootstrapParams().setup(setup);
-		RapidoidModules.get("OAuth").bootstrap(params);
+	public static Booter jmx() {
+		return main().jmx();
 	}
 
-	public static void openapi(Setup setup) {
-		ModuleBootstrapParams params = new ModuleBootstrapParams().setup(setup);
-		RapidoidModules.get("OpenAPI").bootstrap(params);
+	public static Booter entities() {
+		return main().entities();
 	}
 
-	public static void jpa(String... packages) {
-		if (U.isEmpty(packages)) packages = App.path();
-
-		JPA.bootstrap(packages);
+	public static Booter oauth() {
+		return main().oauth();
 	}
 
-	public static void all() {
-		Setup setup = App.setup();
-
-		jpa();
-		auth(setup);
-		oauth(setup);
-		openapi(setup);
-
-		adminCenter(setup);
+	public static Booter openapi() {
+		return main().openapi();
 	}
 
-	private static String uri(String path) {
-		return Msc.specialUri(path);
+	public static Booter jpa(String... packages) {
+		return main().jpa(packages);
+	}
+
+	public static Booter all() {
+		return main().all();
 	}
 
 }

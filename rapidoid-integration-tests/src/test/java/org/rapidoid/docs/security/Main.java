@@ -30,7 +30,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		App.bootstrap(args);
-		Boot.auth(App.setup());
+
+		Boot.auth();
 
 		On.get("/").html((req, resp) -> "this is public!");
 

@@ -35,10 +35,10 @@ public class Main extends GUI {
 	public static void main(String[] args) {
 		App.run(args, "users.admin.password=a"); // demo-only password
 
-		Boot.jpa();
-		Boot.auth(App.setup());
-		Boot.entities(App.setup());
-		Boot.overview(App.setup());
+		Boot.jpa()
+			.auth()
+			.entities()
+			.overview();
 
 		App.gui()
 			.search(true)
