@@ -32,7 +32,7 @@ public class Main {
 	public static void main(String[] args) {
 		App.bootstrap(args);
 
-		Boot.jpa(App.path());
+		Boot.jpa();
 
 		On.get("/books").json(() -> JPA.of(Book.class).all());
 		On.get("/books/{id}").json((Integer id) -> JPA.get(Book.class, id));

@@ -33,6 +33,7 @@ import org.rapidoid.jpa.JPA;
 import org.rapidoid.security.Role;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.Setup;
+import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.MscOpts;
 
@@ -206,13 +207,15 @@ public class Boot extends RapidoidThing {
 	}
 
 	public static void jpa(String... packages) {
+		if (U.isEmpty(packages)) packages = App.path();
+
 		JPA.bootstrap(packages);
 	}
 
 	public static void all() {
 		Setup setup = App.setup();
 
-		jpa(App.path());
+		jpa();
 		auth(setup);
 		oauth(setup);
 		openapi(setup);

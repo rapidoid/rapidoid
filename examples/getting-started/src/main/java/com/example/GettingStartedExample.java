@@ -18,7 +18,7 @@ public class GettingStartedExample {
 		Log.info("Starting application");
 
 		App.scan(); // bootstrap beans (controllers, services etc.)
-		Boot.jpa(App.path()); // bootstrap JPA
+		Boot.jpa(); // bootstrap JPA
 		Boot.auth(App.setup()); // bootstrap Auth
 
 		On.get("/books").json(() -> JPA.of(Book.class).all()); // get all books

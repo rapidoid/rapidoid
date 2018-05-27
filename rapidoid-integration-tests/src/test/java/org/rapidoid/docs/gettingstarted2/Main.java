@@ -31,7 +31,7 @@ public class Main {
 	public static void main(String[] args) {
 		App.bootstrap(args);
 
-		Boot.jpa(App.path());
+		Boot.jpa();
 
 		On.get("/books").json(() -> JPA.of(Book.class).all()); // get all books
 
