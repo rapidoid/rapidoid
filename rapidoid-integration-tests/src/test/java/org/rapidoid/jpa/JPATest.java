@@ -21,7 +21,7 @@
 package org.rapidoid.jpa;
 
 import org.essentials4j.Do;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.IsolatedIntegrationTest;

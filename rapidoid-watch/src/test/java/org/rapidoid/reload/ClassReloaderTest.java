@@ -20,7 +20,7 @@
 
 package org.rapidoid.reload;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;

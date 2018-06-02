@@ -20,12 +20,16 @@
 
 package org.rapidoid.http;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
+
+import java.time.Duration;
+
+import static org.junit.jupiter.api.Assertions.assertTimeout;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.4.0")
@@ -33,7 +37,7 @@ public class HttpChunkedResponseTest extends IsolatedIntegrationTest {
 
 	private static final int REQUESTS = Msc.normalOrHeavy(100, 10000);
 
-	@Test(timeout = 20000)
+	@Test
 	public void testChunkedEncoding() {
 		On.req((req, resp) -> {
 
@@ -46,12 +50,14 @@ public class HttpChunkedResponseTest extends IsolatedIntegrationTest {
 
 		getReq("/");
 
-		Self.get("/").expect("abcd").execute();
-		Self.get("/").expect("abcd").benchmark(1, 100, REQUESTS);
-		Self.post("/").expect("abcd").benchmark(1, 100, REQUESTS);
+		assertTimeout(Duration.ofSeconds(20), () -> {
+			Self.get("/").expect("abcd").execute();
+			Self.get("/").expect("abcd").benchmark(1, 100, REQUESTS);
+			Self.post("/").expect("abcd").benchmark(1, 100, REQUESTS);
+		});
 	}
 
-	@Test(timeout = 20000)
+	@Test
 	public void testChunkedEncodingAsync() {
 		On.req((req, resp) -> {
 			U.must(!req.isAsync());
@@ -76,9 +82,11 @@ public class HttpChunkedResponseTest extends IsolatedIntegrationTest {
 
 		getReq("/");
 
-		Self.get("/").expect("abcd").execute();
-		Self.get("/").expect("abcd").benchmark(1, 100, REQUESTS);
-		Self.post("/").expect("abcd").benchmark(1, 100, REQUESTS);
+		assertTimeout(Duration.ofSeconds(20), () -> {
+			Self.get("/").expect("abcd").execute();
+			Self.get("/").expect("abcd").benchmark(1, 100, REQUESTS);
+			Self.post("/").expect("abcd").benchmark(1, 100, REQUESTS);
+		});
 	}
 
 }

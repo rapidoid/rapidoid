@@ -20,7 +20,7 @@
 
 package org.rapidoid.test;
 
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 
 import java.util.Objects;
 
@@ -40,7 +40,7 @@ public class TestComparator {
 			System.out.println("FAILURE: " + desc);
 		}
 
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 	public static String platformNeutral(String httpResponse) {

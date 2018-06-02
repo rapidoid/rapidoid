@@ -20,8 +20,8 @@
 
 package org.rapidoid.http;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Arr;
@@ -51,7 +51,7 @@ public abstract class HttpTestCommons extends TestCommons {
 
 	public static final int DEFAULT_PORT = 8080;
 
-	@Before
+	@BeforeEach
 	public void openContext() {
 		Msc.reset();
 
@@ -70,7 +70,7 @@ public abstract class HttpTestCommons extends TestCommons {
 		verifyNoRoutes();
 	}
 
-	@After
+	@AfterEach
 	public void closeContext() {
 		if (Admin.setup().isRunning()) {
 			if (Admin.setup().port() == On.setup().port()) {

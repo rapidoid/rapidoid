@@ -20,7 +20,7 @@
 
 package org.rapidoid.dates;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.commons.Dates;
 import org.rapidoid.test.AbstractCommonsTest;
 

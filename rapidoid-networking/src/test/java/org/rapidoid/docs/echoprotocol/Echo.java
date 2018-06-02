@@ -20,7 +20,7 @@
 
 package org.rapidoid.docs.echoprotocol;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.net.Server;
 import org.rapidoid.net.TCP;
 import org.rapidoid.test.Doc;

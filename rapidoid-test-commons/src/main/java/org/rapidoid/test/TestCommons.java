@@ -20,10 +20,10 @@
 
 package org.rapidoid.test;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -67,12 +67,12 @@ public abstract class TestCommons {
 
 	private final TestComparator comparator = new TestComparator();
 
-	@BeforeClass
+	@BeforeAll
 	public static void beforeTests() {
 		initialized = false;
 	}
 
-	@Before
+	@BeforeEach
 	public final void initTest() {
 		System.out.println("--------------------------------------------------------------------------------");
 		String info = getTestInfo();
@@ -109,13 +109,14 @@ public abstract class TestCommons {
 		return info;
 	}
 
-	@After
+	@AfterEach
 	public void checkForErrors() {
 		if (hasError) {
-			Assert.fail("Assertion error(s) occurred, probably were caught or were thrown on non-main thread!");
+
+			Assertions.fail("Assertion error(s) occurred, probably were caught or were thrown on non-main thread!");
 
 		} else if (getTestAnnotation(ExpectErrors.class) == null && hasErrorsLogged()) {
-			Assert.fail("Unexpected errors were logged!");
+			Assertions.fail("Unexpected errors were logged!");
 		}
 	}
 
@@ -142,7 +143,7 @@ public abstract class TestCommons {
 
 	protected void fail(String msg) {
 		try {
-			Assert.fail(msg);
+			Assertions.fail(msg);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -151,7 +152,7 @@ public abstract class TestCommons {
 
 	protected void isNull(Object value) {
 		try {
-			Assert.assertNull(value);
+			Assertions.assertNull(value);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -160,7 +161,7 @@ public abstract class TestCommons {
 
 	protected void notNull(Object value) {
 		try {
-			Assert.assertNotNull(value);
+			Assertions.assertNotNull(value);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -175,7 +176,7 @@ public abstract class TestCommons {
 
 	protected void isTrue(boolean cond) {
 		try {
-			Assert.assertTrue(cond);
+			Assertions.assertTrue(cond);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -184,7 +185,7 @@ public abstract class TestCommons {
 
 	protected void isFalse(boolean cond) {
 		try {
-			Assert.assertFalse(cond);
+			Assertions.assertFalse(cond);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -199,7 +200,7 @@ public abstract class TestCommons {
 
 	protected void neq(Object actual, Object unexpected) {
 		try {
-			Assert.assertNotEquals(unexpected, actual);
+			Assertions.assertNotEquals(unexpected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -208,7 +209,7 @@ public abstract class TestCommons {
 
 	protected void eq(Object actual, Object expected) {
 		try {
-			Assert.assertEquals(expected, actual);
+			Assertions.assertEquals(expected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -217,7 +218,7 @@ public abstract class TestCommons {
 
 	protected void eq(String actual, String expected) {
 		try {
-			Assert.assertEquals(expected, actual);
+			Assertions.assertEquals(expected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -226,7 +227,7 @@ public abstract class TestCommons {
 
 	protected void eq(char actual, char expected) {
 		try {
-			Assert.assertEquals(expected, actual);
+			Assertions.assertEquals(expected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -235,7 +236,7 @@ public abstract class TestCommons {
 
 	protected void eq(long actual, long expected) {
 		try {
-			Assert.assertEquals(expected, actual);
+			Assertions.assertEquals(expected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -243,12 +244,12 @@ public abstract class TestCommons {
 	}
 
 	protected void eq(double actual, double expected) {
-		eq(actual, expected, 0);
+		eq(actual, expected, 0.0000001);
 	}
 
 	protected void eq(double actual, double expected, double delta) {
 		try {
-			Assert.assertEquals(expected, actual, delta);
+			Assertions.assertEquals(expected, actual, delta);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -257,7 +258,7 @@ public abstract class TestCommons {
 
 	protected void eq(byte[] actual, byte[] expected) {
 		try {
-			Assert.assertArrayEquals(expected, actual);
+			Assertions.assertArrayEquals(expected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -266,7 +267,7 @@ public abstract class TestCommons {
 
 	protected void eq(char[] actual, char[] expected) {
 		try {
-			Assert.assertArrayEquals(expected, actual);
+			Assertions.assertArrayEquals(expected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -275,7 +276,7 @@ public abstract class TestCommons {
 
 	protected void eq(int[] actual, int[] expected) {
 		try {
-			Assert.assertArrayEquals(expected, actual);
+			Assertions.assertArrayEquals(expected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -284,7 +285,7 @@ public abstract class TestCommons {
 
 	protected void eq(long[] actual, long[] expected) {
 		try {
-			Assert.assertArrayEquals(expected, actual);
+			Assertions.assertArrayEquals(expected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -293,7 +294,7 @@ public abstract class TestCommons {
 
 	protected void eq(float[] actual, float[] expected, float delta) {
 		try {
-			Assert.assertArrayEquals(expected, actual, delta);
+			Assertions.assertArrayEquals(expected, actual, delta);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -302,7 +303,7 @@ public abstract class TestCommons {
 
 	protected void eq(double[] actual, double[] expected, double delta) {
 		try {
-			Assert.assertArrayEquals(expected, actual, delta);
+			Assertions.assertArrayEquals(expected, actual, delta);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -311,7 +312,7 @@ public abstract class TestCommons {
 
 	protected void eq(boolean[] actual, boolean[] expected) {
 		try {
-			Assert.assertArrayEquals(expected, actual);
+			Assertions.assertArrayEquals(expected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -320,7 +321,7 @@ public abstract class TestCommons {
 
 	protected void eq(Object[] actual, Object[] expected) {
 		try {
-			Assert.assertArrayEquals(expected, actual);
+			Assertions.assertArrayEquals(expected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -338,7 +339,7 @@ public abstract class TestCommons {
 
 	protected void expectedException() {
 		try {
-			Assert.fail("Expected exception!");
+			Assertions.fail("Expected exception!");
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -347,7 +348,7 @@ public abstract class TestCommons {
 
 	protected void hasType(Object instance, Class<?> expectedClass) {
 		try {
-			Assert.assertEquals(expectedClass, instance.getClass());
+			Assertions.assertEquals(expectedClass, instance.getClass());
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;

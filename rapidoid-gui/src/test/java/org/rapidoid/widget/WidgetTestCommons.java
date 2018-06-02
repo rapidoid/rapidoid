@@ -20,7 +20,7 @@
 
 package org.rapidoid.widget;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.reqinfo.MockReqInfo;
@@ -35,7 +35,7 @@ import java.util.regex.Pattern;
 @Since("2.0.0")
 public class WidgetTestCommons extends TestCommons {
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		MockReqInfo.set("GET /");
 	}

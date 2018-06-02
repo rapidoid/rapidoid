@@ -20,8 +20,8 @@
 
 package org.rapidoid.security;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
@@ -112,7 +112,7 @@ public class MethodSecurityTest extends SecurityTestCommons {
 	private Method ee2;
 	private Method[] methods2;
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		aa = Cls.getMethod(MyService.class, "aa");
 		bb = Cls.getMethod(MyService.class, "bb");

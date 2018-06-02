@@ -21,7 +21,7 @@
 package org.rapidoid.jpa.impl;
 
 import org.hibernate.internal.util.config.ConfigurationException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.jdbc.JDBC;
@@ -32,7 +32,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Map;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Authors({"Florian Boulay", "Nikolche Mihajlovski"})
 @Since("5.5.4")
@@ -49,11 +50,11 @@ public class CustomHibernatePersistenceProviderTest {
 		assertNotNull(emf);
 	}
 
-	@Test(expected = ConfigurationException.class)
+	@Test
 	public void shouldFailOnWrongConfigFile() {
 		Map props = U.map(CFG_FILE, "non-existing.xml");
 
-		provider().createEMF(props);
+		assertThrows(ConfigurationException.class, () -> provider().createEMF(props));
 	}
 
 	private CustomHibernatePersistenceProvider provider() {

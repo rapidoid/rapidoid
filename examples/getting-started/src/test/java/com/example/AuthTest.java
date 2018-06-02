@@ -1,6 +1,6 @@
 package com.example;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.http.Self;
 import org.rapidoid.security.AuthResponse;
 import org.rapidoid.u.U;
@@ -19,7 +19,7 @@ public class AuthTest extends AbstractIntegrationTest {
 	}
 
 	@Test
-	public void testIncorrentLogin() {
+	public void testIncorrectLogin() {
 		AuthResponse login = Self.post(Msc.specialUri("login"))
 			.data(U.map("username", "foo", "password", "wrong"))
 			.toBean(AuthResponse.class);

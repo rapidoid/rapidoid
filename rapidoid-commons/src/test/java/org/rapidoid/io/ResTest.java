@@ -20,10 +20,13 @@
 
 package org.rapidoid.io;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.test.AbstractCommonsTest;
+
+import java.time.Duration;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -56,18 +59,21 @@ public class ResTest extends AbstractCommonsTest {
 		eq(file.getContent(), "ABC1");
 	}
 
-	// typically 1M reads should take less than a second
-	@Test(timeout = 5000)
+	@Test
 	public void shouldBeFast() {
-		for (int i = 0; i < 900; i++) {
-			// fill-in the cache (with non-existing resources)
-			Res.from("abc", "x-location");
-		}
+		// typically 1M reads should take less than a second
+		Assertions.assertTimeout(Duration.ofSeconds(5), () -> {
 
-		// should be fast
-		multiThreaded(100, 1000000, () -> {
-			Res file = Res.from("abc.txt", "");
-			notNull(file.getBytes());
+			for (int i = 0; i < 900; i++) {
+				// fill-in the cache (with non-existing resources)
+				Res.from("abc", "x-location");
+			}
+
+			// should be fast
+			multiThreaded(100, 1000000, () -> {
+				Res file = Res.from("abc.txt", "");
+				notNull(file.getBytes());
+			});
 		});
 	}
 

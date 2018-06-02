@@ -20,7 +20,7 @@
 
 package org.rapidoid.http;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.io.IO;
@@ -30,6 +30,9 @@ import org.rapidoid.util.Msc;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.time.Duration;
+
+import static org.junit.jupiter.api.Assertions.assertTimeout;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -37,7 +40,7 @@ public class AsyncHttpServerTest extends IsolatedIntegrationTest {
 
 	private static final int REQUESTS = Msc.normalOrHeavy(100, 10000);
 
-	@Test(timeout = 20000)
+	@Test
 	public void testAsyncHttpServer() {
 		On.req(req -> {
 			U.must(!req.isAsync());
@@ -62,12 +65,14 @@ public class AsyncHttpServerTest extends IsolatedIntegrationTest {
 			return req;
 		});
 
-		Self.get("/").expect("OK").execute();
-		Self.get("/").expect("OK").benchmark(1, 100, REQUESTS);
-		Self.post("/").expect("OK").benchmark(1, 100, REQUESTS);
+		assertTimeout(Duration.ofSeconds(20), () -> {
+			Self.get("/").expect("OK").execute();
+			Self.get("/").expect("OK").benchmark(1, 100, REQUESTS);
+			Self.post("/").expect("OK").benchmark(1, 100, REQUESTS);
+		});
 	}
 
-	@Test(timeout = 20000)
+	@Test
 	public void testAsyncHttpServerNested() {
 		On.req(req -> {
 			U.must(!req.isAsync());
@@ -82,12 +87,14 @@ public class AsyncHttpServerTest extends IsolatedIntegrationTest {
 			return req;
 		});
 
-		Self.get("/").expect("OK").execute();
-		Self.get("/").expect("OK").benchmark(1, 100, REQUESTS);
-		Self.post("/").expect("OK").benchmark(1, 100, REQUESTS);
+		assertTimeout(Duration.ofSeconds(20), () -> {
+			Self.get("/").expect("OK").execute();
+			Self.get("/").expect("OK").benchmark(1, 100, REQUESTS);
+			Self.post("/").expect("OK").benchmark(1, 100, REQUESTS);
+		});
 	}
 
-	@Test(timeout = 20000)
+	@Test
 	public void testAsyncHttpServer2() {
 		On.req(req -> async(() -> {
 			Resp resp = req.response();
@@ -101,9 +108,12 @@ public class AsyncHttpServerTest extends IsolatedIntegrationTest {
 			});
 		}));
 
-		Self.get("/").expect("ASYNC").execute();
-		Self.get("/").expect("ASYNC").benchmark(1, 100, REQUESTS);
-		Self.post("/").expect("ASYNC").benchmark(1, 100, REQUESTS);
+		assertTimeout(Duration.ofSeconds(20), () -> {
+			Self.get("/").expect("ASYNC").execute();
+			Self.get("/").expect("ASYNC").benchmark(1, 100, REQUESTS);
+			Self.post("/").expect("ASYNC").benchmark(1, 100, REQUESTS);
+		});
+
 	}
 
 	private void appendTo(Req req, String data, boolean complete, Runnable then) {

@@ -20,7 +20,7 @@
 
 package org.rapidoid.docs.guidocs.page;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.test.Doc;
 import org.rapidoid.test.TestCommons;

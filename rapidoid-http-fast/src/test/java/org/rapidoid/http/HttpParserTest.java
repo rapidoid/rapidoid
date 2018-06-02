@@ -20,8 +20,8 @@
 
 package org.rapidoid.http;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
@@ -177,13 +177,13 @@ public class HttpParserTest extends TestCommons {
 	}
 
 	protected void eq(BufRange range, int start, int length) {
-		Assert.assertEquals(range.start, start);
-		Assert.assertEquals(range.length, length);
+		Assertions.assertEquals(range.start, start);
+		Assertions.assertEquals(range.length, length);
 	}
 
 	protected void isNone(BufRange range) {
-		Assert.assertEquals(range.start, -1);
-		Assert.assertEquals(range.length, 0);
+		Assertions.assertEquals(range.start, -1);
+		Assertions.assertEquals(range.length, 0);
 	}
 
 	protected void eq(Buf buf, String expected) {

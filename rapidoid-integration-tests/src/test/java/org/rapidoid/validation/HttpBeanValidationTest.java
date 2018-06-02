@@ -20,7 +20,7 @@
 
 package org.rapidoid.validation;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.*;
 import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.jpa.AbstractEntity;

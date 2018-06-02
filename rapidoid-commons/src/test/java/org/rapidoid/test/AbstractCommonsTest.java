@@ -20,13 +20,13 @@
 
 package org.rapidoid.test;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.rapidoid.config.Conf;
 import org.rapidoid.util.Msc;
 
 public abstract class AbstractCommonsTest extends TestCommons {
 
-	@Before
+	@BeforeEach
 	public final void resetContext() {
 		Msc.reset();
 

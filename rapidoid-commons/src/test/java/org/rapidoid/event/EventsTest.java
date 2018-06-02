@@ -20,12 +20,14 @@
 
 package org.rapidoid.event;
 
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.log.Log;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 
+import java.time.Duration;
 import java.util.List;
 
 /**
@@ -34,7 +36,7 @@ import java.util.List;
  */
 public class EventsTest extends TestCommons {
 
-	@After
+	@AfterEach
 	public void cleanUp() {
 		Events.reset();
 	}
@@ -55,11 +57,13 @@ public class EventsTest extends TestCommons {
 		eq(warnings, U.list("WRN!"));
 	}
 
-	@Test(timeout = 1000)
+	@Test
 	public void firingUnusedEventsMustBeFast() {
-		for (int i = 0; i < 100 * 1000 * 1000; i++) {
-			Fire.event(Events.LOG_TRACE);
-		}
+		Assertions.assertTimeout(Duration.ofSeconds(1), () -> {
+			for (int i = 0; i < 100 * 1000 * 1000; i++) {
+				Fire.event(Events.LOG_TRACE);
+			}
+		});
 	}
 
 }

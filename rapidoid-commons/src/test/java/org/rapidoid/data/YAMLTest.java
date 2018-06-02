@@ -21,7 +21,7 @@
 package org.rapidoid.data;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.test.TestIO;
 import org.rapidoid.u.U;

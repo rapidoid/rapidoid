@@ -20,8 +20,8 @@
 
 package org.rapidoid.config;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.env.Env;
@@ -36,7 +36,7 @@ public class ConfigurationTest extends IsolatedIntegrationTest {
 
 	private static boolean TLS_ENABLED = MscOpts.isTLSEnabled();
 
-	@Before
+	@BeforeEach
 	public void reset() {
 		Env.reset();
 		Conf.reset();
@@ -180,23 +180,5 @@ public class ConfigurationTest extends IsolatedIntegrationTest {
 
 		verifyJson("root", Conf.ROOT.toMap());
 	}
-
-//	private Map<String, Object> rootCfgMasked() {
-//		Map<String, Object> root = Conf.ROOT.toMap();
-//
-//		Map<String, Object> rapidoid = U.cast(root.get("rapidoid"));
-//		Map<String, Object> system = U.cast(root.get("system"));
-//
-//		maskEntries(rapidoid, U.set("snapshot", "builtOn", "version", "nameAndInfo"));
-//		maskEntries(system, U.set("cpus"));
-//
-//		return root;
-//	}
-//
-//	private void maskEntries(Map<String, Object> rapidoid, Set<String> keysToMask) {
-//		for (Map.Entry<String, Object> e : rapidoid.entrySet()) {
-//			if (keysToMask.contains(e.getKey())) e.setValue("[MASKED]");
-//		}
-//	}
 
 }

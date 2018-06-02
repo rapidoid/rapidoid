@@ -20,7 +20,7 @@
 
 package org.rapidoid.http;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.*;
 import org.rapidoid.security.Role;
 import org.rapidoid.security.annotation.*;

@@ -20,7 +20,8 @@
 
 package org.rapidoid.arr;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.u.U;
@@ -51,9 +52,11 @@ public class ArrTest extends AbstractCommonsTest {
 		eq(subarr, U.array("bb", "c", "ddd"));
 	}
 
-	@Test(expected = RuntimeException.class)
+	@Test
 	public void testSubarrayException() {
-		Arr.sub(U.array("aa", "bb", "c"), 2, 1);
+		Assertions.assertThrows(RuntimeException.class, () -> {
+			Arr.sub(U.array("aa", "bb", "c"), 2, 1);
+		});
 	}
 
 }

@@ -20,7 +20,7 @@
 
 package org.rapidoid.validation;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.test.TestCommons;
@@ -28,6 +28,8 @@ import org.rapidoid.test.TestCommons;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -62,9 +64,11 @@ public class BeanValidationTest extends TestCommons {
 		eq(violations.size(), 0);
 	}
 
-	@Test(expected = ConstraintViolationException.class)
+	@Test
 	public void testValidationException() {
-		Validators.validate(new Thing(null, "ab"));
+		assertThrows(ConstraintViolationException.class, () -> {
+			Validators.validate(new Thing(null, "ab"));
+		});
 	}
 
 }

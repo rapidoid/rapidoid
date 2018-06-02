@@ -20,7 +20,8 @@
 
 package org.rapidoid.io.watch;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
@@ -30,24 +31,27 @@ import org.rapidoid.test.TestIO;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
+import java.time.Duration;
 import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
 public class MultiWatchTest extends TestCommons {
 
-	@Test(timeout = 60000)
+	@Test
 	public void shouldSupportMultipleWatchCalls() {
 		String dir = TestIO.createTempDir("watch-service-test");
 
-		if (!TestCommons.RAPIDOID_CI) {
-			for (int i = 0; i < 10; i++) {
-				exerciseMultiWatch(dir);
+		Assertions.assertTimeout(Duration.ofSeconds(60), () -> {
+			if (!TestCommons.RAPIDOID_CI) {
+				for (int i = 0; i < 10; i++) {
+					exerciseMultiWatch(dir);
+				}
 			}
-		}
+		});
 	}
 
-	public void exerciseMultiWatch(String dir) {
+	private void exerciseMultiWatch(String dir) {
 		final Set<Integer> seen = Coll.synchronizedSet();
 
 		int total = 50;

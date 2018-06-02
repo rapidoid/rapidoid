@@ -20,7 +20,7 @@
 
 package org.rapidoid.docs.httpfastest;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.net.Server;
 import org.rapidoid.test.Doc;
 import org.rapidoid.test.TestCommons;

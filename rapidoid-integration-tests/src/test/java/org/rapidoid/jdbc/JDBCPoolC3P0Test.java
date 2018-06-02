@@ -21,7 +21,7 @@
 package org.rapidoid.jdbc;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
@@ -29,15 +29,17 @@ import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
+import java.time.Duration;
 import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertTimeout;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class JDBCPoolC3P0Test extends IsolatedIntegrationTest {
 
-	@Test(timeout = 30000)
+	@Test
 	public void testJDBCPoolC3P0() {
-
 		JDBC.h2("test1");
 
 		JdbcClient jdbc = JDBC.api().poolProvider("c3p0").init();
@@ -48,16 +50,11 @@ public class JDBCPoolC3P0Test extends IsolatedIntegrationTest {
 
 		final Map<String, ?> expected = U.map("id", 123, "name", "xyz");
 
-		Msc.benchmarkMT(100, "select", 100000, () -> {
-			Map<String, Object> record = U.single(JDBC.query("select id, name from abc").all());
-			record = Msc.lowercase(record);
-			eq(record, expected);
-		});
+		runBenchmark(expected);
 	}
 
-	@Test(timeout = 30000)
+	@Test
 	public void testJDBCWithTextConfig() {
-
 		Conf.JDBC.set("poolProvider", "c3p0");
 		Conf.JDBC.set("driver", "org.h2.Driver");
 		Conf.JDBC.set("url", "jdbc:h2:mem:mydb");
@@ -79,11 +76,16 @@ public class JDBCPoolC3P0Test extends IsolatedIntegrationTest {
 
 		final Map<String, ?> expected = U.map("id", 123, "name", "xyz");
 
-		Msc.benchmarkMT(100, "select", 100000, () -> {
-			Map<String, Object> record = U.single(JDBC.query("select id, name from abc").all());
-			record = Msc.lowercase(record);
-			eq(record, expected);
-		});
+		runBenchmark(expected);
 	}
 
+	private void runBenchmark(Map<String, ?> expected) {
+		assertTimeout(Duration.ofSeconds(30), () -> {
+			Msc.benchmarkMT(100, "select", 100000, () -> {
+				Map<String, Object> record = U.single(JDBC.query("select id, name from abc").all());
+				record = Msc.lowercase(record);
+				eq(record, expected);
+			});
+		});
+	}
 }

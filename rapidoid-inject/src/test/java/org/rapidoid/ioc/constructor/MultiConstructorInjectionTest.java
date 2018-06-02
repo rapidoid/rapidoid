@@ -20,13 +20,15 @@
 
 package org.rapidoid.ioc.constructor;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ioc.AbstractInjectTest;
 import org.rapidoid.ioc.IoC;
 
 import javax.inject.Inject;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -56,9 +58,9 @@ public class MultiConstructorInjectionTest extends AbstractInjectTest {
 		}
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void shouldFailOnMultipleAnnotatedConstructors() {
-		IoC.singleton(XYZ.class);
+		assertThrows(IllegalArgumentException.class, () -> IoC.singleton(XYZ.class));
 	}
 
 }

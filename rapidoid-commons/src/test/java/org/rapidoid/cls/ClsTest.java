@@ -20,7 +20,7 @@
 
 package org.rapidoid.cls;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.*;
 import org.rapidoid.commons.Dates;
 import org.rapidoid.http.HttpVerb;

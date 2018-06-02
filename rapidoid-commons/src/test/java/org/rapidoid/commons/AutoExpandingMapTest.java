@@ -20,7 +20,8 @@
 
 package org.rapidoid.commons;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.Coll;
@@ -28,6 +29,7 @@ import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
+import java.time.Duration;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -35,16 +37,18 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Since("5.0.4")
 public class AutoExpandingMapTest extends AbstractCommonsTest {
 
-	@Test(timeout = 60000)
+	@Test
 	public void testConcurrentMapAccess() {
 		final AtomicInteger counter = new AtomicInteger();
 		final Map<Object, Object> map = autoToStr(counter);
 
 		final int k = 1000;
 
-		Msc.benchmarkMT(200, "gets", 100000000, () -> {
-			int rnd = Rnd.rnd(k);
-			eq(map.get(rnd), rnd + "");
+		Assertions.assertTimeout(Duration.ofSeconds(60), () -> {
+			Msc.benchmarkMT(200, "gets", 100000000, () -> {
+				int rnd = Rnd.rnd(k);
+				eq(map.get(rnd), rnd + "");
+			});
 		});
 
 		// it is highly unlikely to be less than K, for a small value of K

@@ -20,7 +20,8 @@
 
 package org.rapidoid.ctx;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.job.Jobs;
@@ -28,6 +29,7 @@ import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.test.TestRnd;
 import org.rapidoid.u.U;
 
+import java.time.Duration;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -36,33 +38,36 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Since("4.1.0")
 public class JobsTest extends AbstractCommonsTest {
 
-	@Test(timeout = 30000)
+	@Test
 	public void testJobsExecution() {
 
 		int total = 100000;
 		final AtomicInteger counter = new AtomicInteger();
 
-		multiThreaded(1000, total, () -> {
-			Ctxs.open("test-job");
+		Assertions.assertTimeout(Duration.ofSeconds(30), () -> {
 
-			final UserInfo user = new UserInfo(TestRnd.rndStr(50), U.set("role1"));
+			multiThreaded(1000, total, () -> {
+				Ctxs.open("test-job");
 
-			Ctxs.required().setUser(user);
-			ensureProperContext(user);
+				final UserInfo user = new UserInfo(TestRnd.rndStr(50), U.set("role1"));
 
-			ScheduledFuture<?> future = Jobs.after(100, TimeUnit.MILLISECONDS).run(() -> {
+				Ctxs.required().setUser(user);
 				ensureProperContext(user);
-				counter.incrementAndGet();
+
+				ScheduledFuture<?> future = Jobs.after(100, TimeUnit.MILLISECONDS).run(() -> {
+					ensureProperContext(user);
+					counter.incrementAndGet();
+				});
+
+				try {
+					future.get();
+				} catch (Exception e) {
+					e.printStackTrace();
+					fail("The job throwed an exception!");
+				}
+
+				Ctxs.close();
 			});
-
-			try {
-				future.get();
-			} catch (Exception e) {
-				e.printStackTrace();
-				fail("The job throwed an exception!");
-			}
-
-			Ctxs.close();
 		});
 
 		eq(counter.get(), total);

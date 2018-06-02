@@ -20,7 +20,7 @@
 
 package org.rapidoid.test;
 
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -47,7 +47,7 @@ public abstract class RapidoidTest extends RapidoidThing {
 
 	protected void fail(String msg) {
 		try {
-			Assert.fail(msg);
+			Assertions.fail(msg);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -56,7 +56,7 @@ public abstract class RapidoidTest extends RapidoidThing {
 
 	protected void isNull(Object value) {
 		try {
-			Assert.assertNull(value);
+			Assertions.assertNull(value);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -65,7 +65,7 @@ public abstract class RapidoidTest extends RapidoidThing {
 
 	protected void notNull(Object value) {
 		try {
-			Assert.assertNotNull(value);
+			Assertions.assertNotNull(value);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -74,7 +74,7 @@ public abstract class RapidoidTest extends RapidoidThing {
 
 	protected void isTrue(boolean cond) {
 		try {
-			Assert.assertTrue(cond);
+			Assertions.assertTrue(cond);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -83,7 +83,7 @@ public abstract class RapidoidTest extends RapidoidThing {
 
 	protected void isFalse(boolean cond) {
 		try {
-			Assert.assertFalse(cond);
+			Assertions.assertFalse(cond);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -92,7 +92,7 @@ public abstract class RapidoidTest extends RapidoidThing {
 
 	protected void neq(Object unexpected, Object actual) {
 		try {
-			Assert.assertNotEquals(unexpected, actual);
+			Assertions.assertNotEquals(unexpected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -101,7 +101,7 @@ public abstract class RapidoidTest extends RapidoidThing {
 
 	protected void eq(Object expected, Object actual) {
 		try {
-			Assert.assertEquals(expected, actual);
+			Assertions.assertEquals(expected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -110,7 +110,7 @@ public abstract class RapidoidTest extends RapidoidThing {
 
 	protected void eq(String expected, String actual) {
 		try {
-			Assert.assertEquals(expected, actual);
+			Assertions.assertEquals(expected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -119,7 +119,7 @@ public abstract class RapidoidTest extends RapidoidThing {
 
 	protected void eq(char expected, char actual) {
 		try {
-			Assert.assertEquals(expected, actual);
+			Assertions.assertEquals(expected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -128,7 +128,7 @@ public abstract class RapidoidTest extends RapidoidThing {
 
 	protected void eq(long expected, long actual) {
 		try {
-			Assert.assertEquals(expected, actual);
+			Assertions.assertEquals(expected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -141,7 +141,7 @@ public abstract class RapidoidTest extends RapidoidThing {
 
 	protected void eq(double expected, double actual, double delta) {
 		try {
-			Assert.assertEquals(expected, actual, delta);
+			Assertions.assertEquals(expected, actual, delta);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -150,7 +150,7 @@ public abstract class RapidoidTest extends RapidoidThing {
 
 	protected void eq(byte[] expected, byte[] actual) {
 		try {
-			Assert.assertArrayEquals(expected, actual);
+			Assertions.assertArrayEquals(expected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -159,7 +159,7 @@ public abstract class RapidoidTest extends RapidoidThing {
 
 	protected void eq(char[] expected, char[] actual) {
 		try {
-			Assert.assertArrayEquals(expected, actual);
+			Assertions.assertArrayEquals(expected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -168,7 +168,7 @@ public abstract class RapidoidTest extends RapidoidThing {
 
 	protected void eq(int[] expected, int[] actual) {
 		try {
-			Assert.assertArrayEquals(expected, actual);
+			Assertions.assertArrayEquals(expected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -177,7 +177,7 @@ public abstract class RapidoidTest extends RapidoidThing {
 
 	protected void eq(long[] expected, long[] actual) {
 		try {
-			Assert.assertArrayEquals(expected, actual);
+			Assertions.assertArrayEquals(expected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -186,7 +186,7 @@ public abstract class RapidoidTest extends RapidoidThing {
 
 	protected void eq(float[] expected, float[] actual, float delta) {
 		try {
-			Assert.assertArrayEquals(expected, actual, delta);
+			Assertions.assertArrayEquals(expected, actual, delta);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -195,7 +195,7 @@ public abstract class RapidoidTest extends RapidoidThing {
 
 	protected void eq(double[] expected, double[] actual, double delta) {
 		try {
-			Assert.assertArrayEquals(expected, actual, delta);
+			Assertions.assertArrayEquals(expected, actual, delta);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -204,7 +204,7 @@ public abstract class RapidoidTest extends RapidoidThing {
 
 	protected void eq(boolean[] expected, boolean[] actual) {
 		try {
-			Assert.assertArrayEquals(expected, actual);
+			Assertions.assertArrayEquals(expected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -213,7 +213,7 @@ public abstract class RapidoidTest extends RapidoidThing {
 
 	protected void eq(Object[] expected, Object[] actual) {
 		try {
-			Assert.assertArrayEquals(expected, actual);
+			Assertions.assertArrayEquals(expected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;

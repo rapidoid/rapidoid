@@ -20,7 +20,7 @@
 
 package org.rapidoid.http;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.*;
 import org.rapidoid.setup.App;
 import org.rapidoid.u.U;

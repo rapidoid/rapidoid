@@ -21,7 +21,7 @@
 package org.rapidoid.docs;
 
 import org.essentials4j.Do;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.commons.Str;
 import org.rapidoid.docs.blank.BlankTest;
 import org.rapidoid.http.IsolatedIntegrationTest;

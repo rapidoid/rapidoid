@@ -20,7 +20,7 @@
 
 package org.rapidoid.log;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.test.TestCommons;
 
 /**

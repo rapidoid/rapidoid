@@ -20,9 +20,9 @@
 
 package org.rapidoid.test;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.rapidoid.RapidoidModule;
 import org.rapidoid.RapidoidModules;
 import org.rapidoid.annotation.Authors;
@@ -36,7 +36,7 @@ import org.rapidoid.util.Msc;
 @Since("5.1.6")
 public abstract class RapidoidIntegrationTest extends RapidoidTest {
 
-	@Before
+	@BeforeEach
 	public final void beforeRapidoidTest() {
 
 		Log.info("--------------------------------------------------------------------------------");
@@ -51,12 +51,12 @@ public abstract class RapidoidIntegrationTest extends RapidoidTest {
 		start(this);
 	}
 
-	@After
+	@AfterEach
 	public final void afterRapidoidTest() {
 		after(this);
 
 		if (hasError()) {
-			Assert.fail("Assertion error(s) occurred, probably were caught or were thrown on non-main thread!");
+			Assertions.fail("Assertion error(s) occurred, probably were caught or were thrown on non-main thread!");
 		}
 	}
 

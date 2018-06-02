@@ -20,7 +20,7 @@
 
 package org.rapidoid.cache;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cache.impl.CacheStats;

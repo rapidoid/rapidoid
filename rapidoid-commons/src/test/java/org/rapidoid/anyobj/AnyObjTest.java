@@ -20,7 +20,7 @@
 
 package org.rapidoid.anyobj;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.commons.AnyObj;
 import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.u.U;

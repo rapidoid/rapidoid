@@ -20,8 +20,8 @@
 
 package org.rapidoid.config;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.env.Env;
@@ -34,7 +34,7 @@ import org.rapidoid.util.Msc;
 @Since("5.2.5")
 public class RootCustomizationTest extends AbstractCommonsTest {
 
-	@Before
+	@BeforeEach
 	public void reset() {
 		Env.reset();
 		Conf.reset();

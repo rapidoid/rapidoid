@@ -20,7 +20,7 @@
 
 package org.rapidoid.ioc;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.rapidoid.config.Conf;
 import org.rapidoid.data.JSON;
 import org.rapidoid.test.TestCommons;
@@ -28,7 +28,7 @@ import org.rapidoid.util.Msc;
 
 public abstract class AbstractInjectTest extends TestCommons {
 
-	@Before
+	@BeforeEach
 	public void openContext() {
 		Msc.reset();
 		Conf.ROOT.setPath(getTestNamespace());

@@ -21,8 +21,8 @@
 package org.rapidoid.http;
 
 import org.essentials4j.Do;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.rapidoid.RapidoidModules;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -72,7 +72,7 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 
 	public static final String LOCALHOST = Msc.http() + "://localhost:8080";
 
-	@Before
+	@BeforeEach
 	public void openContext() {
 		TimeZone.setDefault(TimeZone.getTimeZone("CET"));
 
@@ -110,7 +110,7 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 		RapidoidIntegrationTest.start(this);
 	}
 
-	@After
+	@AfterEach
 	public void closeContext() {
 		Jobs.shutdownNow();
 		U.sleep(200);

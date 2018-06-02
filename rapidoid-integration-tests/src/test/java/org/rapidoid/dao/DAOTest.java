@@ -20,7 +20,7 @@
 
 package org.rapidoid.dao;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.jpa.DAO;
 import org.rapidoid.test.TestCommons;
 

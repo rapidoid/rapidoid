@@ -20,7 +20,7 @@
 
 package org.rapidoid.docs.guidocs.mapgrid;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.test.Doc;
 import org.rapidoid.test.TestCommons;

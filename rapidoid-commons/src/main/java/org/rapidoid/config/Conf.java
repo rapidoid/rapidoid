@@ -46,7 +46,6 @@ public class Conf extends RapidoidThing {
 	private static final Map<String, Config> SECTIONS = Coll.autoExpandingMap(name -> createSection(name));
 
 	public static final Config RAPIDOID = section("rapidoid");
-	public static final Config RAPIDOID_ADMIN = section("rapidoid-admin");
 	public static final Config USERS = section("users");
 	public static final Config JOBS = section("jobs");
 	public static final Config OAUTH = section("oauth");

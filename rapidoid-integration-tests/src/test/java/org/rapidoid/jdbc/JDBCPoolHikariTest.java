@@ -21,7 +21,7 @@
 package org.rapidoid.jdbc;
 
 import com.zaxxer.hikari.HikariDataSource;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
@@ -29,13 +29,16 @@ import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
+import java.time.Duration;
 import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertTimeout;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.4")
 public class JDBCPoolHikariTest extends IsolatedIntegrationTest {
 
-	@Test(timeout = 30000)
+	@Test
 	public void testHikariPool() {
 
 		Conf.HIKARI.set("maximumPoolSize", 234);
@@ -49,10 +52,12 @@ public class JDBCPoolHikariTest extends IsolatedIntegrationTest {
 
 		final Map<String, ?> expected = U.map("id", 123, "name", "xyz");
 
-		Msc.benchmarkMT(100, "select", 100000, () -> {
-			Map<String, Object> record = U.single(JDBC.query("select id, name from abc").all());
-			record = Msc.lowercase(record);
-			eq(record, expected);
+		assertTimeout(Duration.ofSeconds(30), () -> {
+			Msc.benchmarkMT(100, "select", 100000, () -> {
+				Map<String, Object> record = U.single(JDBC.query("select id, name from abc").all());
+				record = Msc.lowercase(record);
+				eq(record, expected);
+			});
 		});
 
 		HikariDataSource hikari = (HikariDataSource) jdbc.dataSource();
