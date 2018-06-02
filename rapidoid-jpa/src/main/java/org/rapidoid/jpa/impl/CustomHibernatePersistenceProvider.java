@@ -23,11 +23,11 @@ package org.rapidoid.jpa.impl;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.hibernate.jpa.boot.internal.PersistenceUnitInfoDescriptor;
 import org.hibernate.jpa.boot.spi.EntityManagerFactoryBuilder;
-import org.hibernate.jpa.boot.spi.PersistenceUnitDescriptor;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
+import org.rapidoid.scan.ClasspathUtil;
 
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.spi.PersistenceUnitInfo;
 import javax.sql.DataSource;
 import java.util.List;
@@ -37,34 +37,31 @@ import java.util.Map;
 @Since("5.1.0")
 public class CustomHibernatePersistenceProvider extends HibernatePersistenceProvider {
 
+	private final String persistenceUnitName;
 	private final DataSource dataSource;
+	private final List<String> entityTypes;
+	private final ClassLoader classLoader;
 
-	private final List<String> names = U.list();
+	public CustomHibernatePersistenceProvider(DataSource dataSource, List<String> entityTypes) {
+		this("rapidoid", dataSource, entityTypes, ClasspathUtil.getDefaultClassLoader());
+	}
 
-	public CustomHibernatePersistenceProvider(DataSource dataSource) {
+	public CustomHibernatePersistenceProvider(String persistenceUnitName, DataSource dataSource,
+	                                          List<String> entityTypes, ClassLoader classLoader) {
+		this.persistenceUnitName = persistenceUnitName;
 		this.dataSource = dataSource;
+		this.entityTypes = entityTypes;
+		this.classLoader = classLoader;
 	}
 
-	@Override
-	protected EntityManagerFactoryBuilder getEntityManagerFactoryBuilder(PersistenceUnitDescriptor persistenceUnitDescriptor, Map integration, ClassLoader cl) {
-		return emfBuilder(persistenceUnitDescriptor, integration, cl);
+	public EntityManagerFactory createEMF(Map properties) {
+		PersistenceUnitInfo info = new RapidoidPersistenceUnitInfo(persistenceUnitName, dataSource, classLoader);
+		PersistenceUnitInfoDescriptor infoDescriptor = new PersistenceUnitInfoDescriptor(info);
+
+		CustomDescriptor customDescriptor = new CustomDescriptor(infoDescriptor, entityTypes);
+		EntityManagerFactoryBuilder builder = getEntityManagerFactoryBuilder(customDescriptor, properties, classLoader);
+
+		return builder.build();
 	}
 
-	@Override
-	protected EntityManagerFactoryBuilder getEntityManagerFactoryBuilderOrNull(String persistenceUnitName, Map properties, ClassLoader providedClassLoader) {
-
-		PersistenceUnitInfo info = new RapidoidPersistenceUnitInfo(persistenceUnitName, dataSource, providedClassLoader);
-		PersistenceUnitInfoDescriptor persistenceUnit = new PersistenceUnitInfoDescriptor(info);
-
-		return emfBuilder(persistenceUnit, properties, providedClassLoader);
-	}
-
-	private EntityManagerFactoryBuilder emfBuilder(PersistenceUnitDescriptor persistenceUnitDescriptor, Map integration, ClassLoader cl) {
-		CustomDescriptor descriptor = new CustomDescriptor(persistenceUnitDescriptor, names);
-		return super.getEntityManagerFactoryBuilder(descriptor, integration, cl);
-	}
-
-	public List<String> names() {
-		return names;
-	}
 }

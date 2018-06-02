@@ -55,7 +55,7 @@ public class RapidoidPersistenceUnitInfo extends RapidoidThing implements Persis
 
 	@Override
 	public String getPersistenceProviderClassName() {
-		return null;
+		return "org.rapidoid.jpa.impl.CustomHibernatePersistenceProvider";
 	}
 
 	@Override
@@ -110,7 +110,7 @@ public class RapidoidPersistenceUnitInfo extends RapidoidThing implements Persis
 
 	@Override
 	public Properties getProperties() {
-		return null;
+		return new Properties();
 	}
 
 	@Override

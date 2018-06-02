@@ -41,8 +41,8 @@ public class JPALazyEntitiesTest extends IsolatedIntegrationTest {
 		On.get("/movie/{id}").serve((Long id, Resp resp) -> resp.json(JPA.get(Movie.class, id)));
 
 		onlyGet("/movies");
-		onlyGet("/movies/1");
-		onlyGet("/movie/1");
+		onlyGet("/movies/2");
+		onlyGet("/movie/2");
 	}
 
 	@Test
@@ -55,8 +55,8 @@ public class JPALazyEntitiesTest extends IsolatedIntegrationTest {
 		On.get("/movie/{id}").transaction().serve((Long id, Resp resp) -> resp.json(JPA.get(Movie.class, id)));
 
 		onlyGet("/movies");
-		onlyGet("/movies/1");
-		onlyGet("/movie/1");
+		onlyGet("/movies/2");
+		onlyGet("/movie/2");
 	}
 
 	private void initData() {

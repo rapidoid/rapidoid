@@ -20,6 +20,7 @@
 
 package org.rapidoid.jpa.impl;
 
+import org.hibernate.bytecode.enhance.spi.EnhancementContext;
 import org.hibernate.jpa.boot.spi.PersistenceUnitDescriptor;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
@@ -123,7 +124,13 @@ public class CustomDescriptor extends RapidoidThing implements PersistenceUnitDe
 	}
 
 	@Override
-	public void pushClassTransformer(List<String> entityClassNames) {
-		descriptor.pushClassTransformer(entityClassNames);
+	public ClassLoader getTempClassLoader() {
+		return descriptor.getTempClassLoader();
 	}
+
+	@Override
+	public void pushClassTransformer(EnhancementContext enhancementContext) {
+		descriptor.pushClassTransformer(enhancementContext);
+	}
+
 }

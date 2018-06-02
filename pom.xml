@@ -64,7 +64,7 @@
 
 		<hikari.version>3.2.0</hikari.version>
 		<c3p0.version>0.9.5.2</c3p0.version>
-		<hibernate.version>4.3.11.Final</hibernate.version>
+		<hibernate.version>5.3.1.Final</hibernate.version>
 
 		<validation-api.version>2.0.1.Final</validation-api.version>
 		<validator.version>6.0.10.Final</validator.version>

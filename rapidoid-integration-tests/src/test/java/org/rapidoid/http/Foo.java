@@ -20,38 +20,15 @@
 
 package org.rapidoid.http;
 
-import org.junit.Test;
-import org.rapidoid.annotation.*;
-import org.rapidoid.jpa.JPA;
-import org.rapidoid.setup.App;
-import org.rapidoid.setup.On;
-import org.rapidoid.u.U;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
-@Authors("Nikolche Mihajlovski")
-@Since("5.4.2")
-public class TxErrorHandlerTest extends IsolatedIntegrationTest {
+@Entity
+public class Foo {
+	@Id
+	@GeneratedValue
+	public Integer id;
 
-	@Test
-	public void txWrapperShouldNotDisruptCustomErrorHandling() {
-		JPA.bootstrap(path());
-
-		App.beans(new TxCtrl());
-
-		On.error(IllegalArgumentException.class).handler((req, resp, e) -> {
-			resp.code(400);
-			return U.map("error", "Invalid data!");
-		});
-
-		onlyGet("/x");
-	}
-
-	@Controller
-	static class TxCtrl {
-		@Transaction
-		@GET
-		public void x() {
-			throw new IllegalArgumentException();
-		}
-	}
-
+	public String name;
 }

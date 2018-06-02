@@ -20,7 +20,7 @@
 
 package org.rapidoid.jpa.impl;
 
-import org.hibernate.jpa.boot.spi.EntityManagerFactoryBuilder;
+import org.hibernate.internal.util.config.ConfigurationException;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -28,24 +28,39 @@ import org.rapidoid.jdbc.JDBC;
 import org.rapidoid.jdbc.JdbcClient;
 import org.rapidoid.u.U;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Map;
 
 import static org.junit.Assert.assertNotNull;
 
-@Authors("Florian Boulay")
+@Authors({"Florian Boulay", "Nikolche Mihajlovski"})
 @Since("5.5.4")
 public class CustomHibernatePersistenceProviderTest {
 
+	private static final String CFG_FILE = "hibernate.ejb.cfgfile";
+
 	@Test
 	public void testAlternativeHibernateConfigFile() {
+		Map props = U.map(CFG_FILE, "hibernate.xml");
+
+		EntityManagerFactory emf = provider().createEMF(props);
+
+		assertNotNull(emf);
+	}
+
+	@Test(expected = ConfigurationException.class)
+	public void shouldFailOnWrongConfigFile() {
+		Map props = U.map(CFG_FILE, "non-existing.xml");
+
+		provider().createEMF(props);
+	}
+
+	private CustomHibernatePersistenceProvider provider() {
 		JdbcClient h2 = JDBC.h2("test").init();
 		DataSource dataSource = h2.bootstrapDatasource();
-		CustomHibernatePersistenceProvider provider = new CustomHibernatePersistenceProvider(dataSource);
 
-		Map props = U.map("hibernate.ejb.cfgfile", "hibernate.xml");
-		EntityManagerFactoryBuilder emfBuilder = provider.getEntityManagerFactoryBuilderOrNull("test", props, this.getClass().getClassLoader());
-		assertNotNull(emfBuilder);
+		return new CustomHibernatePersistenceProvider(dataSource, U.list());
 	}
 
 }

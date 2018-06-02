@@ -107,8 +107,7 @@ public class JPAUtil extends RapidoidThing {
 
 		Msc.logSection("Starting Hibernate:");
 
-		CustomHibernatePersistenceProvider provider = new CustomHibernatePersistenceProvider(dataSource);
-		provider.names().addAll(entityTypes);
+		CustomHibernatePersistenceProvider provider = new CustomHibernatePersistenceProvider(dataSource, entityTypes);
 
 		EntityManagerFactory emf = createEMF(props, provider);
 
@@ -120,7 +119,9 @@ public class JPAUtil extends RapidoidThing {
 	private static EntityManagerFactory createEMF(Properties props, CustomHibernatePersistenceProvider provider) {
 		while (true) {
 			try {
-				return provider.createEntityManagerFactory("rapidoid", props);
+				EntityManagerFactory emf = provider.createEMF(props);
+				U.must(emf != null, "Failed to initialize EntityManagerFactory with Hibernate!");
+				return emf;
 
 			} catch (Exception e) {
 				if (Msc.rootCause(e) instanceof ConnectException) {
