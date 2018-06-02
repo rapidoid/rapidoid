@@ -66,9 +66,9 @@
 		<c3p0.version>0.9.5.2</c3p0.version>
 		<hibernate.version>4.3.11.Final</hibernate.version>
 
-		<validation-api.version>1.1.0.Final</validation-api.version>
-		<validator.version>5.2.4.Final</validator.version>
-		<el.version>2.2.5</el.version>
+		<validation-api.version>2.0.1.Final</validation-api.version>
+		<validator.version>6.0.10.Final</validator.version>
+		<el-api.version>3.0.0</el-api.version>
 
 		<mysql-connector.version>5.1.41</mysql-connector.version>
 		<h2.version>1.4.187</h2.version>

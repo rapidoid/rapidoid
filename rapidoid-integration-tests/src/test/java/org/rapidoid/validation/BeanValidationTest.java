@@ -40,7 +40,7 @@ public class BeanValidationTest extends TestCommons {
 		Set<ConstraintViolation<Thing>> violations = Validators.factory().getValidator().validate(thing);
 
 		eq(violations.size(), 1);
-		eq(violations.iterator().next().getMessage(), "may not be null");
+		eq(violations.iterator().next().getMessage(), "must not be null");
 	}
 
 	@Test
