@@ -54,7 +54,11 @@ public class HttpAdminAndDevServerTest extends IsolatedIntegrationTest {
 	private void sameSetup() {
 		On.get("/a").html((Req x) -> "default " + U.join(":", x.uri(), x.zone(), x.contextPath()));
 
-		Admin.get("/b").zone("admin").roles().json((Req x) -> "admin " + U.join(":", x.uri(), x.zone(), x.contextPath()));
+		Admin.get("/b")
+			.zone("admin")
+			.roles()
+			.json((Req x) -> "admin " + U.join(":", x.uri(), x.zone(), x.contextPath()));
+
 		Admin.get("/c").json((Req x) -> "unauthorized");
 		Admin.get("/d").html((Req x) -> "unauthorized");
 	}

@@ -13,14 +13,13 @@ import org.rapidoid.u.U;
 public class GettingStartedExample {
 
 	public static void main(String[] args) {
-		App.init(args);
+		App.init(args, "secret=YOUR-SECRET");
 
 		Log.info("Starting application");
 
-		App.scan(); // bootstrap beans (controllers, services etc.)
+		App.scan(); // scan and bootstrap beans (controllers, services etc.)
 
-		Boot.jpa() // bootstrap JPA
-			.auth(); // bootstrap Auth
+		Boot.all(); // boot all built-in components and services
 
 		On.get("/books").json(() -> JPA.of(Book.class).all()); // get all books
 

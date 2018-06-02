@@ -35,7 +35,7 @@ public class HttpAdminServerTest extends IsolatedIntegrationTest {
 
 		Admin.get("/").json(() -> "ok");
 
-		onlyGet(9898, "/");
+		onlyGet(9898, "/"); // forbidden
 	}
 
 }
