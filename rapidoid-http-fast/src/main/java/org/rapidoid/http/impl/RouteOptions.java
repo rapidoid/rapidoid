@@ -61,6 +61,8 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 
 	private volatile int cacheCapacity = 100;
 
+	private volatile boolean internal;
+
 	private volatile RouteMeta meta = new RouteMeta();
 
 	@Override
@@ -77,6 +79,7 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 			", wrappers=" + Arrays.toString(wrappers) +
 			", cacheTTL=" + cacheTTL +
 			", cacheCapacity=" + cacheCapacity +
+			", internal=" + internal +
 			", meta=" + meta +
 			'}';
 	}
@@ -204,6 +207,17 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 		return this;
 	}
 
+	@Override
+	public boolean internal() {
+		return internal;
+	}
+
+	@Override
+	public RouteOptions internal(boolean internal) {
+		this.internal = internal;
+		return this;
+	}
+
 	public RouteOptions copy() {
 		RouteOptions copy = new RouteOptions();
 
@@ -217,6 +231,7 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 		copy.managed = this.managed;
 		copy.cacheTTL = this.cacheTTL;
 		copy.cacheCapacity = this.cacheCapacity;
+		copy.internal = this.internal;
 		copy.meta = this.meta.copy();
 
 		return copy;
@@ -231,12 +246,12 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		RouteOptions that = (RouteOptions) o;
-
 		return contentTypeCustomized == that.contentTypeCustomized &&
 			mvc == that.mvc &&
 			managed == that.managed &&
 			cacheTTL == that.cacheTTL &&
 			cacheCapacity == that.cacheCapacity &&
+			internal == that.internal &&
 			Objects.equals(contentType, that.contentType) &&
 			Objects.equals(view, that.view) &&
 			Objects.equals(zone, that.zone) &&
@@ -248,7 +263,7 @@ public class RouteOptions extends RapidoidThing implements RouteConfig {
 
 	@Override
 	public int hashCode() {
-		int result = Objects.hash(contentType, contentTypeCustomized, view, mvc, zone, managed, transaction, roles, cacheTTL, cacheCapacity, meta);
+		int result = Objects.hash(contentType, contentTypeCustomized, view, mvc, zone, managed, transaction, roles, cacheTTL, cacheCapacity, internal, meta);
 		result = 31 * result + Arrays.hashCode(wrappers);
 		return result;
 	}

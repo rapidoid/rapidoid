@@ -565,13 +565,13 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 	}
 
 	@Override
-	public Set<Route> allAdmin() {
-		return U.set(Do.findIn(all()).all(Route::isAdminOnly));
+	public Set<Route> allInternal() {
+		return U.set(Do.findIn(all()).all(Route::isInternal));
 	}
 
 	@Override
-	public Set<Route> allNonAdmin() {
-		return U.set(Do.findIn(all()).all(route -> !route.isAdminOnly()));
+	public Set<Route> allExceptInternal() {
+		return U.set(Do.findIn(all()).all(route -> !route.isInternal()));
 	}
 
 	@Override

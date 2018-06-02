@@ -72,6 +72,10 @@ public interface RouteConfig {
 
 	RouteOptions cacheCapacity(int cacheCapacity);
 
+	boolean internal();
+
+	RouteOptions internal(boolean internal);
+
 	RouteMeta meta();
 
 	RouteOptions meta(RouteMeta meta);

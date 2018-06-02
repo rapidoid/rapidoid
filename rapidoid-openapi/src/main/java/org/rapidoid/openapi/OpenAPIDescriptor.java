@@ -82,16 +82,15 @@ public class OpenAPIDescriptor extends RapidoidThing {
 
 	private List<Route> findPublishableRoutes() {
 		// admin zone routes are considered private, don't publish them
-		Set<Route> nonAdmin = setup.routes().allNonAdmin();
+		Set<Route> nonAdmin = setup.routes().allExceptInternal();
 
 		return Do.findIn(nonAdmin).all(this::isPublishable);
 	}
 
 	private boolean isPublishable(Route route) {
-		RouteMeta meta = route.config().meta();
-
 		return route.isAPI() // non-API routes (e.g. pages) won't be published
-			&& meta.publish() // routes can be marked as private/public
+			&& !route.config().internal() // don't publish internal routes
+			&& route.config().meta().publish() // a route can be configured not to be published
 			&& !route.path().startsWith("/_"); // routes having paths starting with '/_' are considered private
 	}
 

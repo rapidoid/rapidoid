@@ -29,20 +29,59 @@ import org.rapidoid.setup.Setup;
 @Since("6.0.0")
 class ScaffoldUtil extends RapidoidThing {
 
-	static void scaffold(Setup setup, Class<?> entityType, String uri, String[] roles) {
+	static void scaffold(Setup setup, Class<?> entityType, String uri, String[] roles, boolean internal) {
 		// RESTful services
-		setup.get(uri).roles(roles).json(X.index(entityType));
-		setup.get(uri + "/{id}").roles(roles).json(X.read(entityType));
+		setup.get(uri)
+			.internal(internal)
+			.roles(roles)
+			.json(X.index(entityType));
 
-		setup.post(uri).transaction().roles(roles).json(X.insert(entityType));
-		setup.put(uri + "/{id}").transaction().roles(roles).json(X.update(entityType));
-		setup.delete(uri + "/{id}").transaction().roles(roles).json(X.delete(entityType));
+		setup.get(uri + "/{id}")
+			.internal(internal)
+			.roles(roles)
+			.json(X.read(entityType));
+
+		setup.post(uri)
+			.internal(internal)
+			.transaction()
+			.roles(roles)
+			.json(X.insert(entityType));
+
+		setup.put(uri + "/{id}")
+			.internal(internal)
+			.transaction()
+			.roles(roles)
+			.json(X.update(entityType));
+
+		setup.delete(uri + "/{id}")
+			.internal(internal)
+			.transaction()
+			.roles(roles)
+			.json(X.delete(entityType));
 
 		// GUI
-		setup.page(uri + "/manage").roles(roles).mvc(X.manage(entityType, uri));
-		setup.page(uri + "/add").transaction().roles(roles).mvc(X.add(entityType, uri));
-		setup.page(uri + "/{id}/view").transaction().roles(roles).mvc(X.view(entityType, uri));
-		setup.page(uri + "/{id}/edit").transaction().roles(roles).mvc(X.edit(entityType, uri));
+		setup.page(uri + "/manage")
+			.internal(internal)
+			.roles(roles)
+			.mvc(X.manage(entityType, uri));
+
+		setup.page(uri + "/add")
+			.internal(internal)
+			.transaction()
+			.roles(roles)
+			.mvc(X.add(entityType, uri));
+
+		setup.page(uri + "/{id}/view")
+			.internal(internal)
+			.transaction()
+			.roles(roles)
+			.mvc(X.view(entityType, uri));
+
+		setup.page(uri + "/{id}/edit")
+			.internal(internal)
+			.transaction()
+			.roles(roles)
+			.mvc(X.edit(entityType, uri));
 	}
 
 }

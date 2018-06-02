@@ -38,6 +38,8 @@ public class ScaffoldDSL extends RapidoidThing {
 
 	private volatile String baseUri;
 
+	private volatile boolean internal;
+
 	public ScaffoldDSL(Class<?> entityType) {
 		this.entityType = entityType;
 	}
@@ -52,6 +54,11 @@ public class ScaffoldDSL extends RapidoidThing {
 		return this;
 	}
 
+	public ScaffoldDSL internal(boolean internal) {
+		this.internal = internal;
+		return this;
+	}
+
 	public void on(Setup setup) {
 		String uri = baseUri != null ? baseUri : GUI.typeUri(entityType);
 
@@ -59,9 +66,9 @@ public class ScaffoldDSL extends RapidoidThing {
 			uri = Str.trimr(uri, "/");
 		}
 
-		String[] scafRoles = U.or(roles, new String[0]);
+		String[] scaffoldRoles = U.or(roles, new String[0]);
 
-		ScaffoldUtil.scaffold(setup, entityType, uri, scafRoles);
+		ScaffoldUtil.scaffold(setup, entityType, uri, scaffoldRoles, internal);
 	}
 
 }

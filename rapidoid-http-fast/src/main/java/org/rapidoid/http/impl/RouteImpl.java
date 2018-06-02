@@ -143,7 +143,7 @@ public class RouteImpl extends RapidoidThing implements Route {
 	}
 
 	@Override
-	public boolean isAdminOnly() {
-		return options.zone().equalsIgnoreCase("admin");
+	public boolean isInternal() {
+		return options.internal();
 	}
 }

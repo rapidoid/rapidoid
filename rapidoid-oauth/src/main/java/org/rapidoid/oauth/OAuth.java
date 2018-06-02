@@ -84,8 +84,13 @@ public class OAuth extends RapidoidThing {
 			Value<String> clientId = providerConfig.entry("clientId").str();
 			Value<String> clientSecret = providerConfig.entry("clientSecret").str();
 
-			setup.get(loginUri).html(new OAuthLoginHandler(provider, DOMAIN));
-			setup.get(callbackUri).html(new OAuthTokenHandler(provider, setup.custom(), DOMAIN, stateCheck, clientId, clientSecret, callbackUri));
+			setup.get(loginUri)
+				.internal(true)
+				.html(new OAuthLoginHandler(provider, DOMAIN));
+
+			setup.get(callbackUri)
+				.internal(true)
+				.html(new OAuthTokenHandler(provider, setup.custom(), DOMAIN, stateCheck, clientId, clientSecret, callbackUri));
 
 			loginHtml.append(LOGIN_BTN.render(U.map("uri", loginUri, "provider", provider.getName())));
 		}
@@ -93,7 +98,9 @@ public class OAuth extends RapidoidThing {
 		loginHtml.append("</div>");
 		final String loginPage = loginHtml.toString();
 
-		setup.get(Msc.specialUri("oauth")).mvc((ReqHandler) x -> GUI.hardcoded(loginPage));
+		setup.get(Msc.specialUri("oauth"))
+			.internal(true)
+			.mvc((ReqHandler) x -> GUI.hardcoded(loginPage));
 	}
 
 	public static String getLoginURL(Req req, OAuthProvider provider, String oauthDomain) {

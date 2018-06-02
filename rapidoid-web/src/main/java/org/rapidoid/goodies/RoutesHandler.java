@@ -32,6 +32,7 @@ import org.rapidoid.setup.Admin;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -45,18 +46,18 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 	public Object call() {
 		List<Object> routes = U.list();
 
-		Set<Route> appRoutes = On.setup().routes().allNonAdmin();
+		Set<Route> appRoutes = On.setup().routes().allExceptInternal();
 
-		Set<Route> adminRoutes = On.setup().routes().allAdmin();
-		adminRoutes.addAll(Admin.setup().routes().allAdmin());
+		Set<Route> internalRoutes = On.setup().routes().allInternal();
+		internalRoutes.addAll(Admin.setup().routes().allInternal());
 
 		routes.add(div(h3("Application routes:"), routesOf(appRoutes, true)));
-		routes.add(div(h3("Admin routes:"), routesOf(adminRoutes, true)));
+		routes.add(div(h3("Internal routes:"), routesOf(internalRoutes, true)));
 
 		return multi(routes);
 	}
 
-	public static TableTag routesOf(Set<Route> httpRoutes, boolean withHandler) {
+	private static TableTag routesOf(Set<Route> httpRoutes, boolean withHandler) {
 		List<Route> routes = U.list(httpRoutes);
 		sortRoutes(routes);
 
@@ -93,10 +94,7 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 	}
 
 	private static void sortRoutes(List<Route> routes) {
-		routes.sort((a, b) -> {
-			int cmpByPath = a.path().compareTo(b.path());
-			return cmpByPath != 0 ? cmpByPath : a.verb().compareTo(b.verb());
-		});
+		routes.sort(Comparator.comparing(Route::path).thenComparing(Route::verb));
 	}
 
 	private static Tag routeRow(Route route, List<HttpVerb> verbs, boolean withHandler) {

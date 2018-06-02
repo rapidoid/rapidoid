@@ -446,6 +446,11 @@ public class OnRoute extends RapidoidThing {
 		return this;
 	}
 
+	public OnRoute internal(boolean internal) {
+		options.internal(internal);
+		return this;
+	}
+
 	public OnRoute meta(RouteMeta meta) {
 		options.meta(meta);
 		return this;

@@ -47,6 +47,6 @@ public interface Route {
 
 	boolean isAPI();
 
-	boolean isAdminOnly();
+	boolean isInternal();
 
 }

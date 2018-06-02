@@ -35,8 +35,13 @@ public class OpenAPI extends RapidoidThing {
 	public static void bootstrap(Setup setup) {
 		OpenAPIDescriptor descriptor = new OpenAPIDescriptor(setup, Conf.OPENAPI);
 
-		setup.get(Msc.specialUri("api/openapi.json")).json(descriptor::getAPIDocs);
-		setup.get(Msc.specialUri("api/openapi.yaml")).plain(() -> YAML.stringify(descriptor.getAPIDocs()));
+		setup.get(Msc.specialUri("api/openapi.json"))
+			.internal(true)
+			.json(descriptor::getAPIDocs);
+
+		setup.get(Msc.specialUri("api/openapi.yaml"))
+			.internal(true)
+			.plain(() -> YAML.stringify(descriptor.getAPIDocs()));
 	}
 
 }

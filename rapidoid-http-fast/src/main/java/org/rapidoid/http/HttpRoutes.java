@@ -47,9 +47,9 @@ public interface HttpRoutes {
 
 	Set<Route> all();
 
-	Set<Route> allAdmin();
+	Set<Route> allInternal();
 
-	Set<Route> allNonAdmin();
+	Set<Route> allExceptInternal();
 
 	Customization custom();
 
