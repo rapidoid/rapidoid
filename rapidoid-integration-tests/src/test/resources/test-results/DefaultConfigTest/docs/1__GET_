@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 15132
+Content-Length: 14347
 
 <!DOCTYPE html>
 <html lang="en">
@@ -273,45 +273,6 @@ Content-Length: 15132
             </tr>
           </table>
         </td>
-      </tr>
-    </table>
-    <h4>
-      <span class="label bg-teal">c3p0</span>
-    </h4>
-    <table class="table table-striped table-hover">
-      <tr>
-        <th>Key</th>
-        <th>Value</th>
-      </tr>
-      <tr>
-        <td>debug</td>
-        <td>
-          <i class="fa fa-check-square-o"></i>
-        </td>
-      </tr>
-      <tr>
-        <td>initialPoolSize</td>
-        <td>5</td>
-      </tr>
-      <tr>
-        <td>minPoolSize</td>
-        <td>5</td>
-      </tr>
-      <tr>
-        <td>maxPoolSize</td>
-        <td>100</td>
-      </tr>
-      <tr>
-        <td>acquireIncrement</td>
-        <td>5</td>
-      </tr>
-      <tr>
-        <td>maxStatementsPerConnection</td>
-        <td>10</td>
-      </tr>
-      <tr>
-        <td>idleConnectionTestPeriod</td>
-        <td>300</td>
       </tr>
     </table>
     <h4>

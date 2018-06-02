@@ -10,8 +10,5 @@ hibernate:
   hbm2ddl:
     auto: update
 
-c3p0:
-  debug: true
-
 http:
   maxPipeline: 1000000

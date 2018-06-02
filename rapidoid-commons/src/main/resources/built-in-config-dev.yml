@@ -3,6 +3,3 @@ hibernate:
   show_sql: true
   hbm2ddl:
     auto: update
-
-c3p0:
-  debug: true

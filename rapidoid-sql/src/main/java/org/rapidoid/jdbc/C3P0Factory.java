@@ -47,7 +47,7 @@ public class C3P0Factory extends RapidoidThing {
 			throw U.rte("Cannot load JDBC driver!", e);
 		}
 
-		Conf.C3P0.applyTo(pool);
+		Conf.section("c3p0").applyTo(pool);
 
 		return pool;
 	}

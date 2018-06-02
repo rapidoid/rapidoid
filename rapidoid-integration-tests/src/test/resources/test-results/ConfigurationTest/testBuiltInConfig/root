@@ -41,15 +41,6 @@
       "auto" : "update"
     }
   },
-  "c3p0" : {
-    "debug" : true,
-    "initialPoolSize" : 5,
-    "minPoolSize" : 5,
-    "maxPoolSize" : 100,
-    "acquireIncrement" : 5,
-    "maxStatementsPerConnection" : 10,
-    "idleConnectionTestPeriod" : 300
-  },
   "oauth" : {
     "google" : {
       "scope" : "profile,email",

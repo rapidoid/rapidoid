@@ -32,15 +32,6 @@ jdbc:
 hibernate:
   dialect: UNKNOWN
 
-c3p0:
-  debug: false
-  initialPoolSize: 5
-  minPoolSize: 5
-  maxPoolSize: 100
-  acquireIncrement: 5
-  maxStatementsPerConnection: 10
-  idleConnectionTestPeriod: 300
-
 hikari: {}
 
 oauth:

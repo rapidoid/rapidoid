@@ -43,13 +43,6 @@ public class JDBCPoolC3P0Test extends IsolatedIntegrationTest {
 		JdbcClient jdbc = JDBC.api().poolProvider("c3p0").init();
 		ComboPooledDataSource c3p0 = (ComboPooledDataSource) jdbc.dataSource();
 
-		// validate default config
-		eq(c3p0.getMinPoolSize(), 5);
-		eq(c3p0.getInitialPoolSize(), 5);
-		eq(c3p0.getAcquireIncrement(), 5);
-		eq(c3p0.getMaxPoolSize(), 100);
-		eq(c3p0.getMaxStatementsPerConnection(), 10);
-
 		JDBC.execute("create table abc (id int, name varchar)");
 		JDBC.execute("insert into abc values (?, ?)", 123, "xyz");
 
@@ -69,7 +62,9 @@ public class JDBCPoolC3P0Test extends IsolatedIntegrationTest {
 		Conf.JDBC.set("driver", "org.h2.Driver");
 		Conf.JDBC.set("url", "jdbc:h2:mem:mydb");
 		Conf.JDBC.set("username", "sa");
-		Conf.C3P0.set("maxPoolSize", "123");
+
+		Conf.ROOT.set("c3p0.minPoolSize", 5);
+		Conf.ROOT.set("c3p0.maxPoolSize", "123");
 
 		JdbcClient jdbc = JDBC.api();
 		eq(jdbc.driver(), "org.h2.Driver");
