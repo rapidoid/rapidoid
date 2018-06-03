@@ -94,7 +94,7 @@
 		<module>rapidoid-jpa</module>
 		<module>rapidoid-inject</module>
 		<module>rapidoid-render</module>
-		<module>rapidoid-http-fast</module>
+		<module>rapidoid-http-server</module>
 		<module>rapidoid-http-client</module>
 		<module>rapidoid-rest</module>
 		<module>rapidoid-gui</module>

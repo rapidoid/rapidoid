@@ -8,24 +8,30 @@
 		<version>6.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>rapidoid-integrate</artifactId>
+	<artifactId>rapidoid-http-server</artifactId>
 	<packaging>jar</packaging>
-	<description>Rapidoid Integrate</description>
+	<description>Rapidoid HTTP Fast</description>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-http-server</artifactId>
+			<artifactId>rapidoid-networking</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-jpa</artifactId>
+			<artifactId>rapidoid-inject</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
-		<!-- OPTIONAL DEPENDENCIES, USED ONLY TO PROVIDE INTEGRATION -->
+		<!-- OPTIONAL -->
 
+		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-gui</artifactId>
+			<version>${project.version}</version>
+			<optional>true</optional>
+		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
@@ -38,31 +44,21 @@
 			<version>${validation-api.version}</version>
 			<optional>true</optional>
 		</dependency>
-		<dependency>
-			<groupId>com.github.spullara.mustache.java</groupId>
-			<artifactId>compiler</artifactId>
-			<version>${mustache.java.version}</version>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>com.samskivert</groupId>
-			<artifactId>jmustache</artifactId>
-			<version>${jmustache.version}</version>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${spring.version}</version>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>com.google.inject</groupId>
-			<artifactId>guice</artifactId>
-			<version>${guice.version}</version>
-			<optional>true</optional>
-		</dependency>
 
+		<!-- TEST -->
+
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpasyncclient</artifactId>
+			<version>${httpclient.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
+			<version>${httpmime.version}</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-test-commons</artifactId>
