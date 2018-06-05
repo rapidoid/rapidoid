@@ -28,9 +28,13 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.RapidoidInitializer;
 import org.rapidoid.config.Conf;
+import org.rapidoid.config.Config;
 import org.rapidoid.data.JSON;
 import org.rapidoid.env.Env;
 import org.rapidoid.group.Groups;
+import org.rapidoid.http.HttpRoutes;
+import org.rapidoid.http.customize.Customization;
+import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.io.Res;
 import org.rapidoid.ioc.Beans;
 import org.rapidoid.ioc.IoC;
@@ -364,4 +368,19 @@ public class App extends RapidoidInitializer {
 		return setup().gui();
 	}
 
+	public static Config config() {
+		return On.setup().config();
+	}
+
+	public static Customization custom() {
+		return On.setup().custom();
+	}
+
+	public static HttpRoutes routes() {
+		return On.setup().routes();
+	}
+
+	public static RouteOptions defaults() {
+		return On.setup().defaults();
+	}
 }

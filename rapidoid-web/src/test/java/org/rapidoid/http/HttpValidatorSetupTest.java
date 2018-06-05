@@ -23,7 +23,7 @@ package org.rapidoid.http;
 import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -31,7 +31,7 @@ public class HttpValidatorSetupTest extends HttpTestCommons {
 
 	@Test
 	public void testHttpServer() {
-		On.custom().validator().validate(null, new Object());
+		App.custom().validator().validate(null, new Object());
 	}
 
 }

@@ -24,13 +24,9 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
-import org.rapidoid.config.Config;
-import org.rapidoid.http.HttpRoutes;
 import org.rapidoid.http.ReqHandler;
 import org.rapidoid.http.ReqRespHandler;
-import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.handler.HttpHandler;
-import org.rapidoid.http.impl.RouteOptions;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
@@ -106,30 +102,6 @@ public class On extends RapidoidThing {
 
 	public static synchronized OnError error(Class<? extends Throwable> error) {
 		return setup().error(error);
-	}
-
-	public static Setup deregister(String verb, String path) {
-		return setup().deregister(verb, path);
-	}
-
-	public static Setup deregister(Object... controllers) {
-		return setup().deregister(controllers);
-	}
-
-	public static Config config() {
-		return setup().config();
-	}
-
-	public static Customization custom() {
-		return setup().custom();
-	}
-
-	public static HttpRoutes routes() {
-		return setup().routes();
-	}
-
-	public static RouteOptions defaults() {
-		return setup().defaults();
 	}
 
 	public static OnChanges changes() {

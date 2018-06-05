@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.render.Templates;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
@@ -34,7 +35,7 @@ public class HttpTemplatesPathTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testTemplatesPath1() {
-		On.custom().templatesPath("test-templates");
+		App.custom().templatesPath("test-templates");
 
 		Templates.setPath("something-different");
 		eq(Templates.getPath(), U.array("something-different"));
@@ -44,15 +45,15 @@ public class HttpTemplatesPathTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testTemplatesPath2() {
-		On.custom().templatesPath("test-templates");
-		eq(On.custom().templatesPath(), U.array("test-templates"));
+		App.custom().templatesPath("test-templates");
+		eq(App.custom().templatesPath(), U.array("test-templates"));
 		setupAndTest();
 	}
 
 	@Test
 	public void testTemplatesPath3() {
 		My.templatesPath("test-templates");
-		eq(On.custom().templatesPath(), U.array("test-templates"));
+		eq(App.custom().templatesPath(), U.array("test-templates"));
 		setupAndTest();
 	}
 

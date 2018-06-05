@@ -389,7 +389,7 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 	}
 
 	protected String appRoutes() {
-		List<String> routes = Do.map(On.routes().all()).toList(Object::toString);
+		List<String> routes = Do.map(App.routes().all()).toList(Object::toString);
 		Collections.sort(routes);
 		return U.join("\n", routes);
 	}
@@ -403,7 +403,7 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 	}
 
 	protected void verifyNoRoutes() {
-		isTrue(On.routes().all().isEmpty());
+		isTrue(App.routes().all().isEmpty());
 	}
 
 	protected void verifyJson(String name, Object actual) {

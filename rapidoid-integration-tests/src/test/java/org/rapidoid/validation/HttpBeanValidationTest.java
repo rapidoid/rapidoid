@@ -61,14 +61,14 @@ public class HttpBeanValidationTest extends IsolatedIntegrationTest {
 		On.get("/invalid1").html((@Valid Bar bar) -> "ok");
 		On.get("/invalid2").json((@Valid Bar bar) -> "ok");
 
-		On.custom().validator((req, bean) -> {
+		App.custom().validator((req, bean) -> {
 			throw U.rte("Invalid!");
 		});
 
 		onlyGet("/invalid1?err");
 		onlyGet("/invalid2?err");
 
-		On.custom().validator(null);
+		App.custom().validator(null);
 		My.validator((req, bean) -> {
 			throw new ValidationException("Validation failed!");
 		});
@@ -77,7 +77,7 @@ public class HttpBeanValidationTest extends IsolatedIntegrationTest {
 		onlyGet("/invalid2?val");
 
 		My.validator(null);
-		On.custom().validator((req, bean) -> {
+		App.custom().validator((req, bean) -> {
 			throw new InvalidData("Invalid data!");
 		});
 

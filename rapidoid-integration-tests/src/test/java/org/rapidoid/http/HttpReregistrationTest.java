@@ -46,7 +46,7 @@ public class HttpReregistrationTest extends IsolatedIntegrationTest {
 		onlyGet("/inc?x=5");
 		notFound("/dec");
 
-		On.deregister(ctrl1);
+		App.setup().deregister(ctrl1);
 		verifyNoRoutes();
 
 		App.beans(ctrl2);
@@ -55,7 +55,7 @@ public class HttpReregistrationTest extends IsolatedIntegrationTest {
 		onlyPost("/dec?x=12");
 		notFound("/inc");
 
-		On.deregister(ctrl2.getClass());
+		App.setup().deregister(ctrl2.getClass());
 		verifyNoRoutes();
 
 		notFound("/inc");
@@ -83,7 +83,7 @@ public class HttpReregistrationTest extends IsolatedIntegrationTest {
 		onlyGet("/inc?x=300");
 
 		// can deregister with other instance, only the class matters for deregistration, not the instance
-		On.deregister(ctrl1("invisible"));
+		App.setup().deregister(ctrl1("invisible"));
 		verifyNoRoutes();
 
 		notFound("/inc");
@@ -99,7 +99,7 @@ public class HttpReregistrationTest extends IsolatedIntegrationTest {
 
 		getAndPost("/foo?a=12&x=3");
 
-		On.deregister("GET,POST", "/foo");
+		App.setup().deregister("GET,POST", "/foo");
 		verifyNoRoutes();
 
 		notFound("/foo");

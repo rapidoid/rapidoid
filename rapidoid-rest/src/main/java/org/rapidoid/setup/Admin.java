@@ -31,11 +31,7 @@ import org.rapidoid.util.LazyInit;
 @Since("5.1.0")
 public class Admin extends RapidoidThing {
 
-	private static final LazyInit<Setup> setup = new LazyInit<>(Admin::createAdminSetup);
-
-	private static Setup createAdminSetup() {
-		return Setups.create("admin");
-	}
+	private static final LazyInit<Setup> setup = new LazyInit<>(() -> Setups.create("admin"));
 
 	public static synchronized Setup setup() {
 		return setup.get();

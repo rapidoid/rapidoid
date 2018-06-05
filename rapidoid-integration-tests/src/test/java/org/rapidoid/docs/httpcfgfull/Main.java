@@ -53,7 +53,7 @@ public class Main extends GUI {
 
 		/* Wrap every result into a renderPage */
 
-		On.defaults().wrappers((data, next) ->
+		App.defaults().wrappers((data, next) ->
 			next.invokeAndTransformResult(x -> {
 				return page(x).menu(menu).brand(cfg.get("title"));
 			})

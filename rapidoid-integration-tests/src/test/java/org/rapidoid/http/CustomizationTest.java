@@ -39,22 +39,22 @@ public class CustomizationTest extends IsolatedIntegrationTest {
 
 	@Test
 	public void testSerializationConfig() {
-		On.custom().jsonResponseRenderer((req, value, out) -> JSON.prettify(value, out));
+		App.custom().jsonResponseRenderer((req, value, out) -> JSON.prettify(value, out));
 
 		On.get("/").json(() -> U.map("foo", 12, "bar", 345));
 		On.get("/a").json(() -> U.map("foo", 12, "bar", 345));
 
 		onlyGet("/");
 
-		On.custom().jsonResponseRenderer((req, value, out) -> JSON.stringify(value, out));
+		App.custom().jsonResponseRenderer((req, value, out) -> JSON.stringify(value, out));
 
 		onlyGet("/a");
 	}
 
 	@Test
 	public void testAuthConfig() {
-		On.custom().loginProvider((req, username, password) -> password.equals(username + "!"));
-		On.custom().rolesProvider((req, username) -> username.equals("root") ? U.set("admin") : U.set());
+		App.custom().loginProvider((req, username, password) -> password.equals(username + "!"));
+		App.custom().rolesProvider((req, username) -> username.equals("root") ? U.set("admin") : U.set());
 		// FIXME complete the test
 	}
 
@@ -75,7 +75,7 @@ public class CustomizationTest extends IsolatedIntegrationTest {
 
 		// customization
 		ObjectMapper mapper = new ObjectMapper();
-		On.custom().beanParameterFactory((req, type, name, props) -> mapper.convertValue(req.posted(), type));
+		App.custom().beanParameterFactory((req, type, name, props) -> mapper.convertValue(req.posted(), type));
 
 		// after customization
 		onlyPost("/aa?id=3", U.map("the-name", "three"));

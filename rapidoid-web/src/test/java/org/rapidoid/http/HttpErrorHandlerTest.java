@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.customize.defaults.Defaults;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 import org.rapidoid.test.ExpectErrors;
 
@@ -34,7 +35,7 @@ public class HttpErrorHandlerTest extends HttpTestCommons {
 
 	@Test
 	public void testErrorHandler1() {
-		On.custom().errorHandler((req, resp, e) -> {
+		App.custom().errorHandler((req, resp, e) -> {
 			if (e instanceof NotFound)
 				return Defaults.errorHandler().handleError(req, resp, e); // default error processing
 			return req + ":err:" + e;
@@ -50,7 +51,7 @@ public class HttpErrorHandlerTest extends HttpTestCommons {
 
 	@Test
 	public void testErrorHandler2() {
-		On.custom().errorHandler((req, resp, e) -> {
+		App.custom().errorHandler((req, resp, e) -> {
 			if (e instanceof NotFound)
 				return Defaults.errorHandler().handleError(req, resp, e); // default error processing
 			return resp.code(200).result(req + ":err2:" + e);

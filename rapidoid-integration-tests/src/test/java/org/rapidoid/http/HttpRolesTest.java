@@ -35,7 +35,7 @@ public class HttpRolesTest extends IsolatedIntegrationTest {
 	public void testRoles() {
 		App.scan(path());
 
-		On.defaults().roles("aa", "bb");
+		App.defaults().roles("aa", "bb");
 
 		On.get("/a").json(() -> "ok");
 		On.get("/ok").roles().json(() -> "ok");

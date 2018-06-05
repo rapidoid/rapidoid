@@ -290,7 +290,7 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	protected String appRoutes() {
-		return U.join("\n", On.routes().all());
+		return U.join("\n", App.routes().all());
 	}
 
 	protected void verifyRoutes() {
@@ -302,7 +302,7 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	protected void verifyNoRoutes() {
-		isTrue(On.routes().all().isEmpty());
+		isTrue(App.routes().all().isEmpty());
 	}
 
 }
