@@ -6,6 +6,7 @@ import org.rapidoid.http.Self;
 import org.rapidoid.test.RapidoidIntegrationTest;
 import org.rapidoid.u.U;
 
+import java.nio.charset.Charset;
 import java.util.Map;
 
 /**
@@ -23,4 +24,10 @@ public class DslJsonTest extends RapidoidIntegrationTest {
 		eq(resp, U.map("msg", "Hello, world!"));
 	}
 
+	@Test
+	public void testPost() {
+		Map<String, Object> resp = Self.post("/compiled").body("{\"x\":3,\"s\":\"a\"}".getBytes(Charset.forName("UTF-8"))).toMap();
+
+		eq(resp, U.map("x", 6, "s", "a"));
+	}
 }

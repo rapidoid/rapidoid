@@ -17,6 +17,11 @@
 			<artifactId>rapidoid-quick</artifactId>
 			<version>${rapidoid.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.dslplatform</groupId>
+			<artifactId>dsl-json-java8</artifactId>
+			<version>1.7.4</version>
+		</dependency>
 
 		<!-- Test dependencies -->
 		<dependency>
