@@ -30,10 +30,10 @@ public class Main {
 			.brand("Cool app!")
 			.title("the head title")
 			.search(true)
-			.addMenuItem("/", "Home")
-			.addMenuItem("/portfolio", "Portfolio")
-			.addMenuItem("/about", "About", "About Us")
-			.addMenuItem("/", "About", "About You");
+			.addMenuItem("/", 10, "Home")
+			.addMenuItem("/portfolio", 20, "Portfolio")
+			.addSubMenuItem("/about", 30, "About", 1, "About Us")
+			.addSubMenuItem("/", 30, "About", 2, "About You");
 
 		/* On [GET /hi] or [POST /hi] return a "Hello World" web page */
 

@@ -85,7 +85,7 @@ public class Booter extends RapidoidThing {
 			.internal(true)
 			.roles(Role.ADMINISTRATOR)
 			.zone(CENTER)
-			.menu("System", "Terminate / Restart")
+			.menu(90, "System", 5, "Terminate / Restart")
 			.mvc(new TerminateHandler());
 
 		return this;
@@ -96,7 +96,7 @@ public class Booter extends RapidoidThing {
 			.internal(true)
 			.roles(Role.ADMINISTRATOR)
 			.zone(CENTER)
-			.menu("System", "Overview")
+			.menu(10, "Overview")
 			.mvc(new OverviewHandler());
 
 		return this;
@@ -107,28 +107,28 @@ public class Booter extends RapidoidThing {
 			.internal(true)
 			.roles(Role.ADMINISTRATOR)
 			.zone(CENTER)
-			.menu("Routes")
+			.menu(20, "Routes")
 			.mvc(new RoutesHandler());
 
 		setup.page(uri("config"))
 			.internal(true)
 			.roles(Role.ADMINISTRATOR)
 			.zone(CENTER)
-			.menu("Configuration")
+			.menu(30, "Configuration")
 			.mvc(new ConfigHandler());
 
 		setup.page(uri("beans"))
 			.internal(true)
 			.roles(Role.ADMINISTRATOR)
 			.zone(CENTER)
-			.menu("Application", "Beans")
+			.menu(50, "Application", 10, "Beans")
 			.mvc(new BeansHandler());
 
 		setup.get(uri("classpath"))
 			.internal(true)
 			.roles(Role.ADMINISTRATOR)
 			.zone(CENTER)
-			.menu("Application", "Classpath")
+			.menu(50, "Application", 50, "Classpath")
 			.mvc(new ClasspathHandler());
 
 		return this;
@@ -141,7 +141,7 @@ public class Booter extends RapidoidThing {
 			.internal(true)
 			.roles(Role.ADMINISTRATOR)
 			.zone(CENTER)
-			.menu("Metrics")
+			.menu(40, "Metrics")
 			.mvc(new GraphsHandler());
 
 		setup.get(uri("graphs/{id:.*}"))
@@ -157,56 +157,56 @@ public class Booter extends RapidoidThing {
 			.internal(true)
 			.roles(Role.ADMINISTRATOR)
 			.zone(CENTER)
-			.menu("System", "Memory pool")
+			.menu(90, "System", 10, "Memory pool")
 			.mvc(JMX.memoryPool());
 
 		setup.page(uri("jmx/threads"))
 			.internal(true)
 			.roles(Role.ADMINISTRATOR)
 			.zone(CENTER)
-			.menu("System", "JVM Threads")
+			.menu(90, "System", 20, "JVM Threads")
 			.mvc(JMX.threads());
 
 		setup.page(uri("jmx/os"))
 			.internal(true)
 			.roles(Role.ADMINISTRATOR)
 			.zone(CENTER)
-			.menu("System", "Operating system")
+			.menu(90, "System", 30, "Operating system")
 			.mvc(JMX.os());
 
 		setup.page(uri("jmx/gc"))
 			.internal(true)
 			.roles(Role.ADMINISTRATOR)
 			.zone(CENTER)
-			.menu("System", "Garbage collection")
+			.menu(90, "System", 40, "Garbage collection")
 			.mvc(JMX.gc());
 
 		setup.page(uri("jmx/memory"))
 			.internal(true)
 			.roles(Role.ADMINISTRATOR)
 			.zone(CENTER)
-			.menu("System", "Memory")
+			.menu(90, "System", 50, "Memory")
 			.mvc(JMX.memory());
 
 		setup.page(uri("jmx/runtime"))
 			.internal(true)
 			.roles(Role.ADMINISTRATOR)
 			.zone(CENTER)
-			.menu("System", "Runtime")
+			.menu(90, "System", 60, "Runtime")
 			.mvc(JMX.runtime());
 
 		setup.page(uri("jmx/classes"))
 			.internal(true)
 			.roles(Role.ADMINISTRATOR)
 			.zone(CENTER)
-			.menu("System", "Classes")
+			.menu(90, "System", 70, "Classes")
 			.mvc(JMX.classes());
 
 		setup.page(uri("jmx/compilation"))
 			.internal(true)
 			.roles(Role.ADMINISTRATOR)
 			.zone(CENTER)
-			.menu("System", "Compilation")
+			.menu(90, "System", 80, "Compilation")
 			.mvc(JMX.compilation());
 
 		return this;
@@ -217,7 +217,7 @@ public class Booter extends RapidoidThing {
 			.internal(true)
 			.roles(Role.ADMINISTRATOR)
 			.zone(CENTER)
-			.menu("System", "Entities")
+			.menu(50, "Application", 30, "Entities")
 			.mvc(new EntitiesHandler());
 
 		if (MscOpts.hasJPA()) {

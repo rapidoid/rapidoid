@@ -86,9 +86,14 @@ public interface Screen {
 	Map<String, Object> menu();
 
 	/**
-	 * Adds menu item.
+	 * Adds menu item, positioned by the specified order.
 	 */
-	Screen addMenuItem(String targetUrl, String... nav);
+	Screen addMenuItem(String targetUrl, int order, String caption);
+
+	/**
+	 * Adds sub-menu item, positioned by the specified order.
+	 */
+	Screen addSubMenuItem(String targetUrl, int order, String caption, int subItemOrder, String subItemCaption);
 
 	/**
 	 * Sets the "<b>search</b>" attribute in the MVC model of the response, used for GUI page rendering.
@@ -169,4 +174,5 @@ public interface Screen {
 	 * Resets all properties to their defaults.
 	 */
 	void reset();
+
 }

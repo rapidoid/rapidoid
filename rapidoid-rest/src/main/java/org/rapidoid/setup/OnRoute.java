@@ -502,8 +502,13 @@ public class OnRoute extends RapidoidThing {
 		return this;
 	}
 
-	public OnRoute menu(String... menuItems) {
-		setup.gui().addMenuItem(path, menuItems);
+	public OnRoute menu(int order, String caption) {
+		setup.gui().addMenuItem(path, order, caption);
+		return this;
+	}
+
+	public OnRoute menu(int order, String caption, int subItemOrder, String subItemCaption) {
+		setup.gui().addSubMenuItem(path, order, caption, subItemOrder, subItemCaption);
 		return this;
 	}
 

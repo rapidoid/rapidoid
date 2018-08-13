@@ -38,7 +38,6 @@ public class ScreenBean extends RapidoidThing implements Screen {
 	private volatile Object brand;
 	private volatile String title;
 	private volatile Object[] content;
-	private volatile Map<String, Object> menu;
 	private volatile boolean embedded;
 	private volatile boolean search;
 	private volatile boolean navbar;
@@ -47,6 +46,7 @@ public class ScreenBean extends RapidoidThing implements Screen {
 
 	private final Set<String> js = Coll.synchronizedSet();
 	private final Set<String> css = Coll.synchronizedSet();
+	private final Map<String, Object> menu = Coll.synchronizedMap();
 
 	public ScreenBean() {
 		reset();
@@ -58,7 +58,6 @@ public class ScreenBean extends RapidoidThing implements Screen {
 		brand = "Rapidoid";
 		title = null;
 		content = null;
-		menu = null;
 		embedded = false;
 		search = false;
 		navbar = true;
@@ -67,6 +66,7 @@ public class ScreenBean extends RapidoidThing implements Screen {
 
 		js.clear();
 		css.clear();
+		menu.clear();
 	}
 
 	@Override
@@ -129,8 +129,34 @@ public class ScreenBean extends RapidoidThing implements Screen {
 	}
 
 	@Override
+	public synchronized Screen addMenuItem(String targetUrl, int order, String caption) {
+		String key = menuKey(order, caption);
+
+		menu.put(key, targetUrl);
+
+		return this;
+	}
+
+	@Override
+	public synchronized Screen addSubMenuItem(String targetUrl, int order, String caption, int subItemOrder, String subItemCaption) {
+		U.must(U.notEmpty(targetUrl), "The target URL cannot be empty!");
+
+		String key = menuKey(order, caption);
+		Map<String, Object> subMenu = U.cast(menu.computeIfAbsent(key, x -> Coll.synchronizedMap()));
+
+		String subKey = menuKey(subItemOrder, subItemCaption);
+		subMenu.put(subKey, targetUrl);
+
+		return this;
+	}
+
+	private String menuKey(int order, String caption) {
+		return order + caption;
+	}
+
+	@Override
 	public Screen menu(Map<String, ?> menu) {
-		this.menu = U.cast(menu);
+		Coll.assign(this.menu, U.cast(menu));
 		return this;
 	}
 
@@ -197,26 +223,6 @@ public class ScreenBean extends RapidoidThing implements Screen {
 	@Override
 	public Set<String> css() {
 		return css;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public synchronized Screen addMenuItem(String targetUrl, String... nav) {
-		U.must(U.notEmpty(targetUrl), "The target URL cannot be empty!");
-		U.must(U.notEmpty(nav), "The menu navigation elements cannot be empty!");
-
-		if (menu == null) {
-			menu = Coll.synchronizedMap();
-		}
-
-		Map<String, Object> subMenu = menu;
-		for (int i = 0; i < nav.length - 1; i++) {
-			subMenu = (Map<String, Object>) subMenu.computeIfAbsent(nav[i], x -> Coll.synchronizedMap());
-		}
-
-		subMenu.put(nav[nav.length - 1], targetUrl);
-
-		return this;
 	}
 
 	@Override
