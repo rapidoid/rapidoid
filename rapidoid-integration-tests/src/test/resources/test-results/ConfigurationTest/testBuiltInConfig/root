@@ -106,6 +106,7 @@
   },
   "tls" : {
     "selfSigned" : true,
+    "needClientAuth" : false,
     "enabled" : false,
     "keystore" : "",
     "keystorePassword" : "",
