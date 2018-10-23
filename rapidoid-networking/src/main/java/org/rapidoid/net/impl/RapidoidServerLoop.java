@@ -24,14 +24,10 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Rnd;
 import org.rapidoid.log.Log;
-import org.rapidoid.net.NetworkingParams;
-import org.rapidoid.net.Protocol;
-import org.rapidoid.net.Server;
-import org.rapidoid.net.TCPServerInfo;
+import org.rapidoid.net.*;
 import org.rapidoid.thread.RapidoidThread;
 import org.rapidoid.u.U;
 
-import javax.net.ssl.SSLContext;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -46,7 +42,7 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 	private static final int MAX_PENDING_CONNECTIONS = 16 * 1024;
 
 	private final NetworkingParams net;
-	private final SSLContext sslContext;
+	private final TLSParams tlsParams;
 
 	private final Selector selector;
 	private ServerSocketChannel serverSocketChannel;
@@ -55,11 +51,11 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 
 	private RapidoidWorker currentWorker;
 
-	public RapidoidServerLoop(NetworkingParams net, SSLContext sslContext) {
+	public RapidoidServerLoop(NetworkingParams net, TLSParams tlsParams) {
 		super("server");
 
 		this.net = net;
-		this.sslContext = sslContext;
+		this.tlsParams = tlsParams;
 
 		try {
 			this.selector = Selector.open();
@@ -127,7 +123,7 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 
 		for (int i = 0; i < ioWorkers.length; i++) {
 
-			RapidoidWorkerThread workerThread = new RapidoidWorkerThread(i, net, sslContext);
+			RapidoidWorkerThread workerThread = new RapidoidWorkerThread(i, net, tlsParams);
 
 			workerThread.start();
 

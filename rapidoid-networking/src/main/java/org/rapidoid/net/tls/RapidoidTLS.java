@@ -40,6 +40,7 @@ public class RapidoidTLS extends RapidoidThing {
 	private static boolean debugging = false;
 
 	private final SSLContext sslContext;
+	private final boolean needClientAuth;
 	private final RapidoidConnection conn;
 
 	private volatile SSLEngine engine;
@@ -48,9 +49,10 @@ public class RapidoidTLS extends RapidoidThing {
 	public final ByteBuffer netIn;
 	final ByteBuffer netOut;
 
-	public RapidoidTLS(SSLContext sslContext, RapidoidConnection conn) {
+	public RapidoidTLS(SSLContext sslContext, RapidoidConnection conn, boolean needClientAuth) {
 
 		this.sslContext = sslContext;
+		this.needClientAuth = needClientAuth;
 		this.conn = conn;
 		this.engine = createServerEngine();
 
@@ -67,6 +69,7 @@ public class RapidoidTLS extends RapidoidThing {
 	private SSLEngine createServerEngine() {
 		SSLEngine engine = sslContext.createSSLEngine();
 		engine.setUseClientMode(false);
+		engine.setNeedClientAuth(needClientAuth);
 		return engine;
 	}
 

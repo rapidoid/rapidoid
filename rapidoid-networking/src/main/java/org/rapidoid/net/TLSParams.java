@@ -46,6 +46,8 @@ public class TLSParams extends RapidoidThing {
 
 	private volatile SSLContext tlsContext;
 
+	private volatile boolean needClientAuth = Conf.TLS.is("needClientAuth");
+
 	public boolean tls() {
 		return tls;
 	}
@@ -106,6 +108,15 @@ public class TLSParams extends RapidoidThing {
 
 	public TLSParams selfSignedTLS(boolean selfSignedTLS) {
 		this.selfSignedTLS = selfSignedTLS;
+		return this;
+	}
+
+	public boolean needClientAuth() {
+		return needClientAuth;
+	}
+
+	public TLSParams needClientAuth(boolean needClientAuth) {
+		this.needClientAuth = needClientAuth;
 		return this;
 	}
 

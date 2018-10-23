@@ -143,7 +143,7 @@ public class ServerBuilder extends RapidoidThing {
 	public synchronized Server build() {
 		U.must(!built, "This builder was already used! Please instantiate a new one!");
 		built = true;
-		return new RapidoidServerLoop(netParams, tlsParams.buildTLSContext());
+		return new RapidoidServerLoop(netParams, tlsParams);
 	}
 
 }

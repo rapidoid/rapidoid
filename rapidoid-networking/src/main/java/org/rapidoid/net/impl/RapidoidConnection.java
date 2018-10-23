@@ -124,11 +124,11 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 	private volatile boolean autoReconnect;
 
-	public RapidoidConnection(NetWorker worker, BufGroup bufs) {
+	public RapidoidConnection(NetWorker worker, BufGroup bufs, boolean needClientAuth) {
 		this.worker = worker;
 
 		this.hasTLS = worker.sslContext() != null;
-		this.tls = hasTLS ? new RapidoidTLS(worker.sslContext(), this) : null;
+		this.tls = hasTLS ? new RapidoidTLS(worker.sslContext(), this, needClientAuth) : null;
 
 		this.input = bufs.newBuf("input#" + serialN);
 		this.output = bufs.newBuf("output#" + serialN);

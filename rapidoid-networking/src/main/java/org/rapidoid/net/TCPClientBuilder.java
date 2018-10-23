@@ -157,7 +157,7 @@ public class TCPClientBuilder extends RapidoidThing {
 	public synchronized TCPClient build() {
 		U.must(!built, "This builder was already used! Please instantiate a new one!");
 		built = true;
-		return new RapidoidClientLoop(netParams, reconnecting, connections, tlsParams.buildTLSContext());
+		return new RapidoidClientLoop(netParams, reconnecting, connections, tlsParams);
 	}
 
 }
