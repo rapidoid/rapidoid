@@ -99,7 +99,7 @@ log:
 
 tls:
   selfSigned: true
-  needClientAuth: true
+  needClientAuth: false
   enabled: false
   keystore: ''
   keystorePassword: ''
