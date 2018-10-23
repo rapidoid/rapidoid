@@ -135,6 +135,11 @@ public class ServerBuilder extends RapidoidThing {
 		return this;
 	}
 
+	public ServerBuilder needClientAuth(boolean needClientAuth) {
+		tlsParams.needClientAuth(needClientAuth);
+		return this;
+	}
+
 	public ServerBuilder tlsContext(SSLContext tlsContext) {
 		tlsParams.tlsContext(tlsContext);
 		return this;
