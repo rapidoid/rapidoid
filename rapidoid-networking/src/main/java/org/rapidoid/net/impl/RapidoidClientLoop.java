@@ -57,6 +57,7 @@ public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements 
 		this.connections = connections;
 		this.tlsParams = tlsParams;
 		this.tlsParams.needClientAuth(false);		// set to false as client need not have this set to true.
+		this.tlsParams.wantClientAuth(false);		// set to false as client need not have this set to true.
 	}
 
 	@Override

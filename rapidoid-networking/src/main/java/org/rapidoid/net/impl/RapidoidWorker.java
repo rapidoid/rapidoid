@@ -87,7 +87,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> implements
 
 	private final SSLContext sslContext;
 
-	private final boolean needClientAuth;
+	private final TLSParams tlsParams;
 
 	RapidoidWorker next;
 
@@ -113,7 +113,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> implements
 		this.serverProtocol = net.protocol();
 		this.helper = helper;
 		this.sslContext = tlsParams.buildTLSContext();
-		this.needClientAuth = tlsParams.needClientAuth();
+		this.tlsParams = tlsParams;
 
 		this.maxPipeline = net.maxPipeline();
 
@@ -553,7 +553,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> implements
 	@Override
 	public RapidoidConnection newConnection(boolean client) {
 		U.must(!client, "Client connections are not supported by this worker!");
-		RapidoidConnection conn = new RapidoidConnection(RapidoidWorker.this, bufs, this.needClientAuth);
+		RapidoidConnection conn = new RapidoidConnection(RapidoidWorker.this, bufs, this.tlsParams);
 		allConnections.add(conn);
 		return conn;
 	}

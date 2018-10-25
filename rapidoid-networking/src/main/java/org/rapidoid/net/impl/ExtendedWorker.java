@@ -101,7 +101,7 @@ public class ExtendedWorker extends AbstractEventLoop<ExtendedWorker> implements
 
 	private final SSLContext sslContext;
 
-	private final boolean needClientAuth;
+	private final TLSParams tlsParams;
 
 	private final StatsMeasure dataIn;
 
@@ -130,7 +130,7 @@ public class ExtendedWorker extends AbstractEventLoop<ExtendedWorker> implements
 		this.serverProtocol = net.protocol();
 		this.helper = helper;
 		this.sslContext = tlsParams.buildTLSContext();
-		this.needClientAuth = tlsParams.needClientAuth();
+		this.tlsParams = tlsParams;
 
 		this.maxPipeline = net.maxPipeline();
 
@@ -692,7 +692,7 @@ public class ExtendedWorker extends AbstractEventLoop<ExtendedWorker> implements
 
 	@Override
 	public RapidoidConnection newConnection(boolean client) {
-		RapidoidConnection conn = new RapidoidConnection(ExtendedWorker.this, bufs, this.needClientAuth);
+		RapidoidConnection conn = new RapidoidConnection(ExtendedWorker.this, bufs, this.tlsParams);
 		allConnections.add(conn);
 		return conn;
 	}
