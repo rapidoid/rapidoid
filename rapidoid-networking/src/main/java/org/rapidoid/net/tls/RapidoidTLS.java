@@ -70,8 +70,8 @@ public class RapidoidTLS extends RapidoidThing {
 	private SSLEngine createServerEngine() {
 		SSLEngine engine = sslContext.createSSLEngine();
 		engine.setUseClientMode(false);
-		engine.setNeedClientAuth(tlsParams.needClientAuth());
-		engine.setWantClientAuth(tlsParams.wantClientAuth());
+		if(tlsParams.needClientAuth()) engine.setNeedClientAuth(tlsParams.needClientAuth());
+		if(tlsParams.wantClientAuth()) engine.setWantClientAuth(tlsParams.wantClientAuth());
 		return engine;
 	}
 
