@@ -1,0 +1,19 @@
+POST /users/create HTTP/1.1
+Connection: Upgrade, HTTP2-Settings
+Host: localhost:8080
+HTTP2-Settings: AAEAAEAAAAIAAAABAAMAAABkAAQBAAAAAAUAAEAA
+Transfer-encoding: chunked
+Upgrade: h2c
+User-Agent: Java-http-client/11
+Content-Type: multipart/form-data; boundary=boundary
+
+46
+--boundary
+Content-Disposition: form-data; name="username"
+
+jezza
+
+e
+--boundary--
+
+0
