@@ -24,10 +24,7 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.TransactionMode;
-import org.rapidoid.http.HttpWrapper;
-import org.rapidoid.http.MediaType;
-import org.rapidoid.http.ReqHandler;
-import org.rapidoid.http.ReqRespHandler;
+import org.rapidoid.http.*;
 import org.rapidoid.http.impl.RouteMeta;
 import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.lambda.*;
@@ -36,6 +33,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.function.Function;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
@@ -75,6 +73,10 @@ public class OnRoute extends RapidoidThing {
 	}
 
 	public <T> void serve(Callable<T> handler) {
+		HttpHandlers.register(setup, verb, path, options, handler);
+	}
+
+	public <T> void serve(Function<Req, T> handler) {
 		HttpHandlers.register(setup, verb, path, options, handler);
 	}
 
@@ -132,6 +134,10 @@ public class OnRoute extends RapidoidThing {
 		HttpHandlers.register(setup, verb, path, htmlOpts(), handler);
 	}
 
+	public <T> void html(Function<Req, T> handler) {
+		HttpHandlers.register(setup, verb, path, options, handler);
+	}
+
 	public void html(Method method, Object instance) {
 		HttpHandlers.register(setup, verb, path, htmlOpts(), method, instance);
 	}
@@ -184,6 +190,10 @@ public class OnRoute extends RapidoidThing {
 
 	public <T> void json(Callable<T> handler) {
 		HttpHandlers.register(setup, verb, path, jsonOpts(), handler);
+	}
+
+	public <T> void json(Function<Req, T> handler) {
+		HttpHandlers.register(setup, verb, path, options, handler);
 	}
 
 	public void json(Method method, Object instance) {
@@ -240,6 +250,10 @@ public class OnRoute extends RapidoidThing {
 		HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
 	}
 
+	public <T> void xml(Function<Req, T> handler) {
+		HttpHandlers.register(setup, verb, path, options, handler);
+	}
+
 	public void xml(Method method, Object instance) {
 		HttpHandlers.register(setup, verb, path, xmlOpts(), method, instance);
 	}
@@ -292,6 +306,10 @@ public class OnRoute extends RapidoidThing {
 
 	public <T> void plain(Callable<T> handler) {
 		HttpHandlers.register(setup, verb, path, plainOpts(), handler);
+	}
+
+	public <T> void plain(Function<Req, T> handler) {
+		HttpHandlers.register(setup, verb, path, options, handler);
 	}
 
 	public void plain(Method method, Object instance) {
@@ -350,6 +368,10 @@ public class OnRoute extends RapidoidThing {
 
 	public <T> void mvc(Callable<T> handler) {
 		HttpHandlers.register(setup, verb, path, mvcOpts(), handler);
+	}
+
+	public <T> void mvc(Function<Req, T> handler) {
+		HttpHandlers.register(setup, verb, path, options, handler);
 	}
 
 	public void mvc(Method method, Object instance) {

@@ -39,7 +39,7 @@ public class Manageables extends RapidoidThing {
 
 	public static <T extends Manageable> T find(Class<? extends T> itemType, String id) {
 
-		for (GroupOf<T> group : Groups.find(itemType)) {
+		for (GroupOf<? extends T> group : Groups.find(itemType)) {
 			T member = group.find(id);
 			if (member != null) {
 				return member;

@@ -31,15 +31,13 @@ import org.rapidoid.http.handler.MethodReqHandler;
 import org.rapidoid.http.handler.PredefinedResponseHandler;
 import org.rapidoid.http.handler.StaticHttpHandler;
 import org.rapidoid.http.handler.lambda.*;
-import org.rapidoid.http.handler.optimized.CallableHttpHandler;
-import org.rapidoid.http.handler.optimized.DelegatingParamsAwareReqHandler;
-import org.rapidoid.http.handler.optimized.DelegatingParamsAwareReqRespHandler;
-import org.rapidoid.http.handler.optimized.DelegatingParamsAwareRespHandler;
+import org.rapidoid.http.handler.optimized.*;
 import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.lambda.*;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
+import java.util.function.Function;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -121,6 +119,13 @@ class HttpHandlers extends RapidoidThing {
 		setup.autoActivate();
 	}
 
+	static void register(SetupImpl setup, String verb, String path, RouteOptions options, Function<Req,?> handler) {
+		FastHttp http = setup.http();
+		HttpRoutes routes = setup.routes();
+		routes.on(verb, path, new FunctionHttpHandler(http, routes, options, handler));
+		setup.autoActivate();
+	}
+
 	static void register(SetupImpl setup, String verb, String path, RouteOptions options, NParamLambda lambda) {
 		HttpHandler handler = HttpHandlers.from(setup, lambda, options);
 		setup.routes().on(verb, path, handler);
@@ -133,5 +138,6 @@ class HttpHandlers extends RapidoidThing {
 		routes.on(verb, path, new MethodReqHandler(http, routes, options, method, instance));
 		setup.autoActivate();
 	}
+
 
 }
