@@ -9,6 +9,7 @@
 	<properties>
 		<!-- please change this to the latest non-snapshot version: -->
 		<rapidoid.version>6.0.0-SNAPSHOT</rapidoid.version>
+		<exec.mainClass>com.example.HelloWorldExample</exec.mainClass>
 	</properties>
 
 	<dependencies>
