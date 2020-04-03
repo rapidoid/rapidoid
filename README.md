@@ -15,7 +15,7 @@ Everyone has to start somewhere and, although you may not need the steps below i
 
 1. Open a terminal in the root directory (the folder with the rapidoid-gui, rapidoid-http-client, rapidoid-http-fast, etc.). To do this, navigate to the rapidoid folder in a file browser, copy the folder path, type <code>cd *(path goes here)*</code> into the Bash terminal, and press <kbd>Enter</kbd>.
 2. One time only, run `./bin/build.sh && ./bin/build/build-examples.sh` in the terminal.
-3. Run `cd ./examples/hello-world/ && (./app.sh deploy; cd ../..)` in the terminal to start the hello-world on the localhost.
+3. Run `cd ./examples/hello-world/ && (mvn exec:java; cd ../..)` in the terminal to start the hello-world on the localhost.
 4. Open your web browser to localhost:8888
 
 # Apache License v2
