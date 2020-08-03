@@ -36,6 +36,7 @@ import org.rapidoid.insight.StatsMeasure;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.NetworkingParams;
 import org.rapidoid.net.Protocol;
+import org.rapidoid.net.TLSParams;
 import org.rapidoid.pool.Pool;
 import org.rapidoid.pool.Pools;
 import org.rapidoid.u.U;
@@ -100,6 +101,8 @@ public class ExtendedWorker extends AbstractEventLoop<ExtendedWorker> implements
 
 	private final SSLContext sslContext;
 
+	private final TLSParams tlsParams;
+
 	private final StatsMeasure dataIn;
 
 	private final StatsMeasure dataOut;
@@ -115,7 +118,7 @@ public class ExtendedWorker extends AbstractEventLoop<ExtendedWorker> implements
 		}
 	}
 
-	public ExtendedWorker(String name, RapidoidHelper helper, NetworkingParams net, SSLContext sslContext) {
+	public ExtendedWorker(String name, RapidoidHelper helper, NetworkingParams net, TLSParams tlsParams) {
 
 		super(name);
 
@@ -126,7 +129,8 @@ public class ExtendedWorker extends AbstractEventLoop<ExtendedWorker> implements
 
 		this.serverProtocol = net.protocol();
 		this.helper = helper;
-		this.sslContext = sslContext;
+		this.sslContext = tlsParams.buildTLSContext();
+		this.tlsParams = tlsParams;
 
 		this.maxPipeline = net.maxPipeline();
 
@@ -688,7 +692,7 @@ public class ExtendedWorker extends AbstractEventLoop<ExtendedWorker> implements
 
 	@Override
 	public RapidoidConnection newConnection(boolean client) {
-		RapidoidConnection conn = new RapidoidConnection(ExtendedWorker.this, bufs);
+		RapidoidConnection conn = new RapidoidConnection(ExtendedWorker.this, bufs, this.tlsParams);
 		allConnections.add(conn);
 		return conn;
 	}

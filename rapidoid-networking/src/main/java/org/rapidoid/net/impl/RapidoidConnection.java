@@ -32,6 +32,7 @@ import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.AsyncLogic;
 import org.rapidoid.net.Protocol;
+import org.rapidoid.net.TLSParams;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.abstracts.ChannelHolder;
 import org.rapidoid.net.abstracts.IRequest;
@@ -124,11 +125,11 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 	private volatile boolean autoReconnect;
 
-	public RapidoidConnection(NetWorker worker, BufGroup bufs) {
+	public RapidoidConnection(NetWorker worker, BufGroup bufs, TLSParams tlsParams) {
 		this.worker = worker;
 
 		this.hasTLS = worker.sslContext() != null;
-		this.tls = hasTLS ? new RapidoidTLS(worker.sslContext(), this) : null;
+		this.tls = hasTLS ? new RapidoidTLS(worker.sslContext(), this, tlsParams) : null;
 
 		this.input = bufs.newBuf("input#" + serialN);
 		this.output = bufs.newBuf("output#" + serialN);

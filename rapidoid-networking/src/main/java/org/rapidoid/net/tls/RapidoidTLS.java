@@ -26,6 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.BufUtil;
 import org.rapidoid.commons.Err;
 import org.rapidoid.log.Log;
+import org.rapidoid.net.TLSParams;
 import org.rapidoid.net.impl.RapidoidConnection;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -40,6 +41,7 @@ public class RapidoidTLS extends RapidoidThing {
 	private static boolean debugging = false;
 
 	private final SSLContext sslContext;
+	private final TLSParams tlsParams;
 	private final RapidoidConnection conn;
 
 	private volatile SSLEngine engine;
@@ -48,9 +50,10 @@ public class RapidoidTLS extends RapidoidThing {
 	public final ByteBuffer netIn;
 	final ByteBuffer netOut;
 
-	public RapidoidTLS(SSLContext sslContext, RapidoidConnection conn) {
+	public RapidoidTLS(SSLContext sslContext, RapidoidConnection conn, TLSParams tlsParams) {
 
 		this.sslContext = sslContext;
+		this.tlsParams = tlsParams;
 		this.conn = conn;
 		this.engine = createServerEngine();
 
@@ -67,6 +70,8 @@ public class RapidoidTLS extends RapidoidThing {
 	private SSLEngine createServerEngine() {
 		SSLEngine engine = sslContext.createSSLEngine();
 		engine.setUseClientMode(false);
+		if(tlsParams.needClientAuth()) engine.setNeedClientAuth(tlsParams.needClientAuth());
+		if(tlsParams.wantClientAuth()) engine.setWantClientAuth(tlsParams.wantClientAuth());
 		return engine;
 	}
 

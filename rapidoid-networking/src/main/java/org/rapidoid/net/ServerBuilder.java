@@ -135,6 +135,16 @@ public class ServerBuilder extends RapidoidThing {
 		return this;
 	}
 
+	public ServerBuilder needClientAuth(boolean needClientAuth) {
+		tlsParams.needClientAuth(needClientAuth);
+		return this;
+	}
+
+	public ServerBuilder wantClientAuth(boolean wantClientAuth) {
+		tlsParams.wantClientAuth(wantClientAuth);
+		return this;
+	}
+
 	public ServerBuilder tlsContext(SSLContext tlsContext) {
 		tlsParams.tlsContext(tlsContext);
 		return this;
@@ -143,7 +153,7 @@ public class ServerBuilder extends RapidoidThing {
 	public synchronized Server build() {
 		U.must(!built, "This builder was already used! Please instantiate a new one!");
 		built = true;
-		return new RapidoidServerLoop(netParams, tlsParams.buildTLSContext());
+		return new RapidoidServerLoop(netParams, tlsParams);
 	}
 
 }

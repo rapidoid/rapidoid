@@ -23,6 +23,7 @@ package org.rapidoid.net;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.config.Conf;
 import org.rapidoid.net.tls.TLSUtil;
+import org.rapidoid.u.U;
 import org.rapidoid.util.MscOpts;
 
 import javax.net.ssl.SSLContext;
@@ -45,6 +46,13 @@ public class TLSParams extends RapidoidThing {
 	private volatile boolean selfSignedTLS = Conf.TLS.is("selfSigned");
 
 	private volatile SSLContext tlsContext;
+
+	private volatile boolean needClientAuth = Conf.TLS.is("needClientAuth");
+	private volatile boolean wantClientAuth = Conf.TLS.is("wantClientAuth");
+
+	public TLSParams() {
+		U.must(!(needClientAuth && wantClientAuth),"Both needClientAuth and wantClientAuth cannot be true!");
+	}
 
 	public boolean tls() {
 		return tls;
@@ -106,6 +114,32 @@ public class TLSParams extends RapidoidThing {
 
 	public TLSParams selfSignedTLS(boolean selfSignedTLS) {
 		this.selfSignedTLS = selfSignedTLS;
+		return this;
+	}
+
+	public boolean needClientAuth() {
+		return needClientAuth;
+	}
+
+	/*
+	 * Similar to javax.net.ssl.SSLParameters#setNeedClientAuth
+	 */
+	public TLSParams needClientAuth(boolean needClientAuth) {
+		this.needClientAuth = needClientAuth;
+		this.wantClientAuth = false;
+		return this;
+	}
+
+	public boolean wantClientAuth() {
+		return wantClientAuth;
+	}
+
+	/*
+	* Similar to javax.net.ssl.SSLParameters#setWantClientAuth
+	*/
+	public TLSParams wantClientAuth(boolean wantClientAuth) {
+		this.wantClientAuth = wantClientAuth;
+		this.needClientAuth = false;
 		return this;
 	}
 

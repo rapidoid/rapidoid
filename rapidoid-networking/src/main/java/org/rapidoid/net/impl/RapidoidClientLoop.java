@@ -23,14 +23,10 @@ package org.rapidoid.net.impl;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.net.NetworkingParams;
-import org.rapidoid.net.Protocol;
-import org.rapidoid.net.TCPClient;
-import org.rapidoid.net.TCPClientInfo;
+import org.rapidoid.net.*;
 import org.rapidoid.net.abstracts.ChannelHolder;
 import org.rapidoid.u.U;
 
-import javax.net.ssl.SSLContext;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
@@ -46,20 +42,22 @@ public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements 
 
 	private final boolean autoReconnect;
 
-	private final SSLContext sslContext;
+	private final TLSParams tlsParams;
 
 	private volatile ExtendedWorker[] ioWorkers;
 
 	// round-robin workers for new connections
 	private int currentWorkerInd = 0;
 
-	public RapidoidClientLoop(NetworkingParams net, boolean autoReconnect, int connections, SSLContext sslContext) {
+	public RapidoidClientLoop(NetworkingParams net, boolean autoReconnect, int connections, TLSParams tlsParams) {
 		super("client");
 
 		this.net = net;
 		this.autoReconnect = autoReconnect;
 		this.connections = connections;
-		this.sslContext = sslContext;
+		this.tlsParams = tlsParams;
+		this.tlsParams.needClientAuth(false);		// set to false as client need not have this set to true.
+		this.tlsParams.wantClientAuth(false);		// set to false as client need not have this set to true.
 	}
 
 	@Override
@@ -77,7 +75,7 @@ public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements 
 		for (int i = 0; i < ioWorkers.length; i++) {
 			RapidoidHelper helper = Cls.newInstance(net.helperClass(), net.exchangeClass());
 			String workerName = "client" + (i + 1);
-			ioWorkers[i] = new ExtendedWorker(workerName, helper, net, sslContext);
+			ioWorkers[i] = new ExtendedWorker(workerName, helper, net, tlsParams);
 
 			new Thread(ioWorkers[i], workerName).start();
 		}

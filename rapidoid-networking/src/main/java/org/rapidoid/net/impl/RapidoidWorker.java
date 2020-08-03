@@ -34,6 +34,7 @@ import org.rapidoid.expire.Expire;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.NetworkingParams;
 import org.rapidoid.net.Protocol;
+import org.rapidoid.net.TLSParams;
 import org.rapidoid.pool.Pool;
 import org.rapidoid.pool.Pools;
 import org.rapidoid.u.U;
@@ -86,6 +87,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> implements
 
 	private final SSLContext sslContext;
 
+	private final TLSParams tlsParams;
+
 	RapidoidWorker next;
 
 	static {
@@ -99,7 +102,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> implements
 		}
 	}
 
-	public RapidoidWorker(String name, final RapidoidHelper helper, NetworkingParams net, SSLContext sslContext) {
+	public RapidoidWorker(String name, final RapidoidHelper helper, NetworkingParams net, TLSParams tlsParams) {
 
 		super(name);
 
@@ -109,7 +112,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> implements
 
 		this.serverProtocol = net.protocol();
 		this.helper = helper;
-		this.sslContext = sslContext;
+		this.sslContext = tlsParams.buildTLSContext();
+		this.tlsParams = tlsParams;
 
 		this.maxPipeline = net.maxPipeline();
 
@@ -549,7 +553,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> implements
 	@Override
 	public RapidoidConnection newConnection(boolean client) {
 		U.must(!client, "Client connections are not supported by this worker!");
-		RapidoidConnection conn = new RapidoidConnection(RapidoidWorker.this, bufs);
+		RapidoidConnection conn = new RapidoidConnection(RapidoidWorker.this, bufs, this.tlsParams);
 		allConnections.add(conn);
 		return conn;
 	}

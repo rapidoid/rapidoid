@@ -24,10 +24,9 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.net.NetworkingParams;
+import org.rapidoid.net.TLSParams;
 import org.rapidoid.thread.RapidoidThread;
 import org.rapidoid.u.U;
-
-import javax.net.ssl.SSLContext;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -35,16 +34,16 @@ public class RapidoidWorkerThread extends RapidoidThread {
 
 	private final int workerIndex;
 	private final NetworkingParams net;
-	private final SSLContext sslContext;
+	private final TLSParams tlsParams;
 
 	private volatile RapidoidWorker worker;
 
-	RapidoidWorkerThread(int workerIndex, NetworkingParams net, SSLContext sslContext) {
+	RapidoidWorkerThread(int workerIndex, NetworkingParams net, TLSParams tlsParams) {
 		super("server" + (workerIndex + 1));
 
 		this.workerIndex = workerIndex;
 		this.net = net;
-		this.sslContext = sslContext;
+		this.tlsParams = tlsParams;
 	}
 
 	@Override
@@ -52,7 +51,7 @@ public class RapidoidWorkerThread extends RapidoidThread {
 		RapidoidHelper helper = Cls.newInstance(net.helperClass(), net.exchangeClass());
 		helper.requestIdGen = workerIndex; // to generate UNIQUE request ID (+= MAX_IO_WORKERS)
 
-		worker = new RapidoidWorker("server" + (workerIndex + 1), helper, net, sslContext);
+		worker = new RapidoidWorker("server" + (workerIndex + 1), helper, net, tlsParams);
 
 		worker.run();
 	}
