@@ -38,7 +38,7 @@ public class RapidoidInfoTest extends AbstractCommonsTest {
 	@Test
 	public void testBuiltOn() {
 		notNull(RapidoidInfo.builtOn());
-		isTrue(RapidoidInfo.builtOn().matches("201\\d-\\d{2}-\\d{2}\\s\\d{2}:\\d{2}\\s\\w{3}"));
+		isTrue(RapidoidInfo.builtOn().matches("202\\d-\\d{2}-\\d{2}\\s\\d{2}:\\d{2}\\s\\w{3}"));
 	}
 
 }

@@ -31,74 +31,74 @@ import java.util.List;
 @Since("5.3.5")
 public class Manageables extends RapidoidThing {
 
-	public static String kindOf(Class<?> cls) {
-		ManageableBean mb = cls.getAnnotation(ManageableBean.class);
-		U.must(mb != null, "The type '%s' must be annotated with @%s", ManageableBean.class.getSimpleName());
-		return mb.kind();
-	}
+    public static String kindOf(Class<?> cls) {
+        ManageableBean mb = cls.getAnnotation(ManageableBean.class);
+        U.must(mb != null, "The type '%s' must be annotated with @%s", ManageableBean.class.getSimpleName());
+        return mb.kind();
+    }
 
-	public static <T extends Manageable> T find(Class<? extends T> itemType, String id) {
+    public static <T extends Manageable> T find(Class<? extends T> itemType, String id) {
 
-		for (GroupOf<T> group : Groups.find(itemType)) {
-			T member = group.find(id);
-			if (member != null) {
-				return member;
-			}
-		}
+        for (GroupOf<?> group : Groups.find(itemType)) {
+            T member = (T) group.find(id);
+            if (member != null) {
+                return member;
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	public static Manageable find(String itemType, String id) {
+    public static Manageable find(String itemType, String id) {
 
-		for (GroupOf<Manageable> group : Groups.find(itemType)) {
-			Manageable member = group.find(id);
-			if (member != null) {
-				return member;
-			}
-		}
+        for (GroupOf<Manageable> group : Groups.find(itemType)) {
+            Manageable member = group.find(id);
+            if (member != null) {
+                return member;
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	public static Manageable find(String kind, String id, String sub) {
+    public static Manageable find(String kind, String id, String sub) {
 
-		Manageable target = find(kind, id);
-		U.must(target != null, "Cannot find the manageable!");
-		target.reloadManageable();
+        Manageable target = find(kind, id);
+        U.must(target != null, "Cannot find the manageable!");
+        target.reloadManageable();
 
-		if (U.isEmpty(sub)) {
-			return target;
-		}
+        if (U.isEmpty(sub)) {
+            return target;
+        }
 
-		return findSub(target, sub);
-	}
+        return findSub(target, sub);
+    }
 
-	private static Manageable findSub(Manageable target, String sub) {
+    private static Manageable findSub(Manageable target, String sub) {
 
-		String[] parts = sub.split("/", 3);
-		String seg = parts[0];
-		String id = parts[1];
+        String[] parts = sub.split("/", 3);
+        String seg = parts[0];
+        String id = parts[1];
 
-		List<? extends Manageable> segment = target.getManageableChildren().get(seg);
-		U.must(segment != null, "Cannot find the manageable segment: %s", seg);
+        List<? extends Manageable> segment = target.getManageableChildren().get(seg);
+        U.must(segment != null, "Cannot find the manageable segment: %s", seg);
 
-		target = findById(segment, id);
-		U.must(target != null, "Cannot find the sub-manageable with id: %s in segment: %s", id, seg);
+        target = findById(segment, id);
+        U.must(target != null, "Cannot find the sub-manageable with id: %s in segment: %s", id, seg);
 
-		target.reloadManageable();
+        target.reloadManageable();
 
-		return parts.length > 2 ? findSub(target, parts[2]) : target;
-	}
+        return parts.length > 2 ? findSub(target, parts[2]) : target;
+    }
 
-	private static Manageable findById(List<? extends Manageable> items, String id) {
-		U.notNull(id, "id");
+    private static Manageable findById(List<? extends Manageable> items, String id) {
+        U.notNull(id, "id");
 
-		for (Manageable item : items) {
-			if (U.eq(id, item.id())) return item;
-		}
+        for (Manageable item : items) {
+            if (U.eq(id, item.id())) return item;
+        }
 
-		return null;
-	}
+        return null;
+    }
 
 }
