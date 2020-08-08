@@ -18,26 +18,9 @@
 			<artifactId>rapidoid-networking</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-inject</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 
 		<!-- OPTIONAL -->
 
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-gui</artifactId>
-			<version>${project.version}</version>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>${hibernate.version}</version>
-			<optional>true</optional>
-		</dependency>
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>

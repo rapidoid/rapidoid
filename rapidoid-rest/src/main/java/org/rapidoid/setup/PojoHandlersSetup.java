@@ -25,7 +25,6 @@ import org.rapidoid.annotation.*;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.cache.Cached;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.log.Log;
 import org.rapidoid.security.Secure;
 import org.rapidoid.u.U;
@@ -42,253 +41,226 @@ import java.util.Set;
 @Since("5.1.0")
 public class PojoHandlersSetup extends RapidoidThing {
 
-	private static final Set<String> CONTROLLER_ANNOTATIONS = U.set(
-		Page.class.getName(), GET.class.getName(), POST.class.getName(),
-		PUT.class.getName(), DELETE.class.getName(), PATCH.class.getName(),
-		OPTIONS.class.getName(), HEAD.class.getName(), TRACE.class.getName()
-	);
+    private static final Set<String> CONTROLLER_ANNOTATIONS = U.set(
+            Page.class.getName(), GET.class.getName(), POST.class.getName(),
+            PUT.class.getName(), DELETE.class.getName(), PATCH.class.getName(),
+            OPTIONS.class.getName(), HEAD.class.getName(), TRACE.class.getName()
+    );
 
-	private final Setup setup;
-	private final Object[] beans;
+    private final Setup setup;
 
-	private PojoHandlersSetup(Setup setup, Object[] beans) {
-		this.setup = setup;
-		this.beans = beans;
-	}
+    private final Object[] beans;
 
-	public static PojoHandlersSetup from(Setup setup, Object[] beans) {
-		return new PojoHandlersSetup(setup, beans);
-	}
+    private PojoHandlersSetup(Setup setup, Object[] beans) {
+        this.setup = setup;
+        this.beans = beans;
+    }
 
-	public void register() {
-		process(true);
-	}
+    public static PojoHandlersSetup from(Setup setup, Object[] beans) {
+        return new PojoHandlersSetup(setup, beans);
+    }
 
-	public void deregister() {
-		process(false);
-	}
+    public void register() {
+        process(true);
+    }
 
-	private void process(boolean register) {
-		for (Object bean : beans) {
-			processBean(register, bean);
-		}
-	}
+    public void deregister() {
+        process(false);
+    }
 
-	private void processBean(boolean register, Object bean) {
-		Class<?> clazz;
-		U.notNull(bean, "bean");
-		IoCContext context = setup.context();
+    private void process(boolean register) {
+        for (Object bean : beans) {
+            processBean(register, bean);
+        }
+    }
 
-		if (bean instanceof Class<?>) {
-			clazz = (Class<?>) bean;
-			bean = null;
-		} else {
-			clazz = bean.getClass();
-		}
+    private void processBean(boolean register, Object bean) {
+        U.notNull(bean, "bean");
+        U.must(!((bean instanceof Class<?>)), "The bean must be an instance, not a class!");
 
-		if (!Cls.isAppBeanType(clazz)) {
-			throw new RuntimeException("Expected a bean, but found value of type: " + clazz.getName());
-		}
+        Class<?> clazz = bean.getClass();
 
-		if (!Msc.matchingProfile(clazz)) {
-			return;
-		}
+        if (!Cls.isAppBeanType(clazz)) {
+            throw new RuntimeException("Expected a bean, but found value of type: " + clazz.getName());
+        }
 
-		Log.debug("Processing bean", "class", clazz, "instance", bean);
+        if (!Msc.matchingProfile(clazz)) {
+            return;
+        }
 
-		List<String> componentPaths = getControllerUris(clazz);
+        Log.debug("Processing bean", "class", clazz, "instance", bean);
 
-		for (String ctxPath : componentPaths) {
-			for (Method method : Cls.getMethods(clazz)) {
-				if (shouldExpose(method)) {
+        List<String> componentPaths = getControllerUris(clazz);
 
-					if (bean == null) {
-						bean = register ? context.singleton(clazz) : null;
-					}
+        for (String ctxPath : componentPaths) {
+            for (Method method : Cls.getMethods(clazz)) {
+                if (shouldExpose(method)) {
+                    registerOrDeregister(register, bean, ctxPath, method);
+                }
+            }
+        }
+    }
 
-					registerOrDeregister(register, bean, ctxPath, method);
-				}
-			}
-		}
-	}
+    private boolean shouldExpose(Method method) {
+        boolean isUserDefined = !method.getDeclaringClass().equals(Object.class);
 
-	private boolean shouldExpose(Method method) {
-		boolean isUserDefined = !method.getDeclaringClass().equals(Object.class);
+        int modifiers = method.getModifiers();
 
-		int modifiers = method.getModifiers();
+        boolean isAbstract = Modifier.isAbstract(modifiers);
+        boolean isStatic = Modifier.isStatic(modifiers);
+        boolean isPrivate = Modifier.isPrivate(modifiers);
+        boolean isProtected = Modifier.isProtected(modifiers);
 
-		boolean isAbstract = Modifier.isAbstract(modifiers);
-		boolean isStatic = Modifier.isStatic(modifiers);
-		boolean isPrivate = Modifier.isPrivate(modifiers);
-		boolean isProtected = Modifier.isProtected(modifiers);
+        if (isUserDefined && !isAbstract && !isStatic && !isPrivate && !isProtected && method.getAnnotations().length > 0) {
+            for (Annotation ann : method.getAnnotations()) {
+                String annoName = ann.annotationType().getName();
+                if (CONTROLLER_ANNOTATIONS.contains(annoName)) {
+                    return true;
+                }
+            }
+        }
 
-		if (isUserDefined && !isAbstract && !isStatic && !isPrivate && !isProtected && method.getAnnotations().length > 0) {
-			for (Annotation ann : method.getAnnotations()) {
-				String annoName = ann.annotationType().getName();
-				if (CONTROLLER_ANNOTATIONS.contains(annoName)) {
-					return true;
-				}
-			}
-		}
+        return false;
+    }
 
-		return false;
-	}
+    protected List<String> getControllerUris(Class<?> component) {
+        Controller controller = Metadata.classAnnotation(component, Controller.class);
 
-	protected List<String> getControllerUris(Class<?> component) {
-		Controller controller = Metadata.classAnnotation(component, Controller.class);
+        if (controller != null) {
+            return U.list(controller.value());
+        } else {
+            return U.list("/");
+        }
+    }
 
-		if (controller != null) {
-			return U.list(controller.value());
-		} else {
-			return U.list("/");
-		}
-	}
+    private void registerOrDeregister(boolean register, Object bean, String ctxPath, Method method) {
 
-	private void registerOrDeregister(boolean register, Object bean, String ctxPath, Method method) {
+        for (Annotation ann : method.getAnnotations()) {
 
-		for (Annotation ann : method.getAnnotations()) {
+            if (ann instanceof Page) {
+                Page page = (Page) ann;
 
-			if (ann instanceof Page) {
-				Page page = (Page) ann;
+                String verb = page.verb().verb();
+                String path = pathOf(method, ctxPath, uriOf(ann));
 
-				String verb = page.verb().verb();
-				String path = pathOf(method, ctxPath, uriOf(ann));
+                if (register) {
+                    OnRoute route = route(setup.on(verb, path), method);
+                    route.html(method, bean);
 
-				if (register) {
-					OnRoute route = route(setup.on(verb, path), method);
+                } else {
+                    setup.deregister(verb, path);
+                }
 
-					if (U.notEmpty(page.view())) {
-						route.view(page.view());
-					}
+            } else if (ann instanceof GET) {
+                String path = pathOf(method, ctxPath, uriOf(ann));
 
-					if (page.raw()) {
-						route.html(method, bean);
-					} else {
-						route.mvc(method, bean);
-					}
+                if (register) {
+                    route(setup.get(path), method).json(method, bean);
+                } else {
+                    setup.deregister(Constants.GET, path);
+                }
 
-				} else {
-					setup.deregister(verb, path);
-				}
+            } else if (ann instanceof POST) {
+                String path = pathOf(method, ctxPath, uriOf(ann));
 
-			} else if (ann instanceof GET) {
-				String path = pathOf(method, ctxPath, uriOf(ann));
+                if (register) {
+                    route(setup.post(path), method).json(method, bean);
+                } else {
+                    setup.deregister(Constants.POST, path);
+                }
 
-				if (register) {
-					route(setup.get(path), method).json(method, bean);
-				} else {
-					setup.deregister(Constants.GET, path);
-				}
+            } else if (ann instanceof PUT) {
+                String path = pathOf(method, ctxPath, uriOf(ann));
 
-			} else if (ann instanceof POST) {
-				String path = pathOf(method, ctxPath, uriOf(ann));
+                if (register) {
+                    route(setup.put(path), method).json(method, bean);
+                } else {
+                    setup.deregister(Constants.PUT, path);
+                }
 
-				if (register) {
-					route(setup.post(path), method).json(method, bean);
-				} else {
-					setup.deregister(Constants.POST, path);
-				}
+            } else if (ann instanceof DELETE) {
+                String path = pathOf(method, ctxPath, uriOf(ann));
 
-			} else if (ann instanceof PUT) {
-				String path = pathOf(method, ctxPath, uriOf(ann));
+                if (register) {
+                    route(setup.delete(path), method).json(method, bean);
+                } else {
+                    setup.deregister(Constants.DELETE, path);
+                }
 
-				if (register) {
-					route(setup.put(path), method).json(method, bean);
-				} else {
-					setup.deregister(Constants.PUT, path);
-				}
+            } else if (ann instanceof PATCH) {
+                String path = pathOf(method, ctxPath, uriOf(ann));
 
-			} else if (ann instanceof DELETE) {
-				String path = pathOf(method, ctxPath, uriOf(ann));
+                if (register) {
+                    route(setup.patch(path), method).json(method, bean);
+                } else {
+                    setup.deregister(Constants.PATCH, path);
+                }
 
-				if (register) {
-					route(setup.delete(path), method).json(method, bean);
-				} else {
-					setup.deregister(Constants.DELETE, path);
-				}
+            } else if (ann instanceof OPTIONS) {
+                String path = pathOf(method, ctxPath, uriOf(ann));
 
-			} else if (ann instanceof PATCH) {
-				String path = pathOf(method, ctxPath, uriOf(ann));
+                if (register) {
+                    route(setup.options(path), method).json(method, bean);
+                } else {
+                    setup.deregister(Constants.OPTIONS, path);
+                }
 
-				if (register) {
-					route(setup.patch(path), method).json(method, bean);
-				} else {
-					setup.deregister(Constants.PATCH, path);
-				}
+            } else if (ann instanceof HEAD) {
+                String path = pathOf(method, ctxPath, uriOf(ann));
 
-			} else if (ann instanceof OPTIONS) {
-				String path = pathOf(method, ctxPath, uriOf(ann));
+                if (register) {
+                    route(setup.head(path), method).json(method, bean);
+                } else {
+                    setup.deregister(Constants.HEAD, path);
+                }
 
-				if (register) {
-					route(setup.options(path), method).json(method, bean);
-				} else {
-					setup.deregister(Constants.OPTIONS, path);
-				}
+            } else if (ann instanceof TRACE) {
+                String path = pathOf(method, ctxPath, uriOf(ann));
 
-			} else if (ann instanceof HEAD) {
-				String path = pathOf(method, ctxPath, uriOf(ann));
+                if (register) {
+                    route(setup.trace(path), method).json(method, bean);
+                } else {
+                    setup.deregister(Constants.TRACE, path);
+                }
+            }
+        }
+    }
 
-				if (register) {
-					route(setup.head(path), method).json(method, bean);
-				} else {
-					setup.deregister(Constants.HEAD, path);
-				}
+    private OnRoute route(OnRoute route, Method method) {
 
-			} else if (ann instanceof TRACE) {
-				String path = pathOf(method, ctxPath, uriOf(ann));
+        // ROLES
 
-				if (register) {
-					route(setup.trace(path), method).json(method, bean);
-				} else {
-					setup.deregister(Constants.TRACE, path);
-				}
-			}
-		}
-	}
+        Set<String> rolesAllowed = Secure.getRolesAllowed(method);
+        String[] roles = U.arrayOf(String.class, rolesAllowed);
 
-	private OnRoute route(OnRoute route, Method method) {
+        route.roles(roles);
 
-		// TRANSACTION
+        // CACHE
 
-		Transaction transaction = method.getAnnotation(Transaction.class);
+        Cached cached = method.getAnnotation(Cached.class);
 
-		if (transaction != null) {
-			route.transaction(transaction.value());
-		}
+        if (cached != null) {
+            route.cacheTTL(cached.ttl());
+        }
 
-		// ROLES
+        return route;
+    }
 
-		Set<String> rolesAllowed = Secure.getRolesAllowed(method);
-		String[] roles = U.arrayOf(String.class, rolesAllowed);
+    private String uriOf(Annotation ann) {
+        Method valueMethod = Cls.getMethod(ann.getClass(), "value");
+        String uri = Cls.invoke(valueMethod, ann);
 
-		route.roles(roles);
+        if (U.isEmpty(uri)) {
+            Method uriMethod = Cls.getMethod(ann.getClass(), "uri");
+            uri = Cls.invoke(uriMethod, ann);
+        }
 
-		// CACHE
+        return uri;
+    }
 
-		Cached cached = method.getAnnotation(Cached.class);
-
-		if (cached != null) {
-			route.cacheTTL(cached.ttl());
-		}
-
-		return route;
-	}
-
-	private String uriOf(Annotation ann) {
-		Method valueMethod = Cls.getMethod(ann.getClass(), "value");
-		String uri = Cls.invoke(valueMethod, ann);
-
-		if (U.isEmpty(uri)) {
-			Method uriMethod = Cls.getMethod(ann.getClass(), "uri");
-			uri = Cls.invoke(uriMethod, ann);
-		}
-
-		return uri;
-	}
-
-	private String pathOf(Method method, String ctxPath, String uri) {
-		String path = !U.isEmpty(uri) ? uri : method.getName();
-		return Msc.uri(ctxPath, path);
-	}
+    private String pathOf(Method method, String ctxPath, String uri) {
+        String path = !U.isEmpty(uri) ? uri : method.getName();
+        return Msc.uri(ctxPath, path);
+    }
 
 }

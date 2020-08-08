@@ -88,7 +88,7 @@ public class TLSUtil extends RapidoidThing {
 				Log.warn("Keystore doesn't exist, creating a keystore with self-signed certificate",
 					"keystore", keystore, "alias", info.alias());
 
-				SelfSignedCertGen.generate(info, keystore, keystorePassword);
+//				SelfSignedCertGen.generate(info, keystore, keystorePassword);
 			}
 
 			Log.info("Initializing TLS context", "keystore", keystore, "truststore", truststore);

@@ -14,11 +14,16 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-quick</artifactId>
+			<artifactId>rapidoid-rest</artifactId>
 			<version>${rapidoid.version}</version>
 		</dependency>
 
 		<!-- Test dependencies -->
+		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-http-client</artifactId>
+			<version>${rapidoid.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>

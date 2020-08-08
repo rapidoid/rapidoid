@@ -1,0 +1,8 @@
+HTTP/1.1 403 Forbidden
+Connection: keep-alive
+Server: Rapidoid
+Date: XXXXX GMT
+Content-Type: application/json
+Content-Length: 85
+
+{"error":"The user doesn't have the required roles!","code":403,"status":"Forbidden"}

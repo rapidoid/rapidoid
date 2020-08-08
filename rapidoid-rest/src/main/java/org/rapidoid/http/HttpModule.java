@@ -25,9 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.RapidoidModuleDesc;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.env.Env;
-import org.rapidoid.setup.App;
 import org.rapidoid.setup.My;
-import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setups;
 
 @Authors("Nikolche Mihajlovski")
@@ -35,15 +33,13 @@ import org.rapidoid.setup.Setups;
 @RapidoidModuleDesc(name = "HTTP", order = 700)
 public class HttpModule extends AbstractRapidoidModule {
 
-	@Override
-	public void cleanUp() {
-		My.reset();
-		App.resetGlobalState();
-		On.changes().ignore();
+    @Override
+    public void cleanUp() {
+        My.reset();
 
-		Setups.clear();
+        Setups.clear();
 
-		Env.reset();
-	}
+        Env.reset();
+    }
 
 }

@@ -20,6 +20,11 @@
 
 		<!-- Test dependencies -->
 		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-http-client</artifactId>
+			<version>${rapidoid.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
 			<version>5.1.1</version>

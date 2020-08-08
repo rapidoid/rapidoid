@@ -1,8 +1,0 @@
-HTTP/1.1 302 Found
-Connection: keep-alive
-Server: Rapidoid
-Date: XXXXX GMT
-Content-Type: application/json
-Location: /target2
-Content-Length: 0
-

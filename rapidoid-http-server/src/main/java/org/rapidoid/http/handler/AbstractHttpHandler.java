@@ -34,72 +34,72 @@ import java.util.Map;
 @Since("4.3.0")
 public abstract class AbstractHttpHandler extends RapidoidThing implements HttpHandler {
 
-	protected final RouteOptions options;
+    protected final RouteOptions options;
 
-	protected final MediaType contentType;
+    protected final MediaType contentType;
 
-	protected volatile Route route;
+    protected volatile Route route;
 
-	public AbstractHttpHandler(RouteOptions options) {
-		this.options = options;
-		this.contentType = options.contentType();
-	}
+    public AbstractHttpHandler(RouteOptions options) {
+        this.options = options;
+        this.contentType = options.contentType();
+    }
 
-	@Override
-	public boolean needsParams() {
-		return false;
-	}
+    @Override
+    public boolean needsParams() {
+        return false;
+    }
 
-	@Override
-	public MediaType contentType() {
-		return contentType;
-	}
+    @Override
+    public MediaType contentType() {
+        return contentType;
+    }
 
-	@Override
-	public Map<String, String> getParams() {
-		return null;
-	}
+    @Override
+    public Map<String, String> getParams() {
+        return null;
+    }
 
-	@Override
-	public HttpHandler getHandler() {
-		return this;
-	}
+    @Override
+    public HttpHandler getHandler() {
+        return this;
+    }
 
-	@Override
-	public RouteOptions options() {
-		return options;
-	}
+    @Override
+    public RouteOptions options() {
+        return options;
+    }
 
-	protected String contentTypeInfo(String inside) {
-		String type;
+    protected String contentTypeInfo(String inside) {
+        String type;
 
-		if (contentType == MediaType.HTML_UTF_8) {
-			type = options.mvc() ? "mvc" : "html";
+        if (contentType == MediaType.HTML_UTF_8) {
+            type = "html";
 
-		} else if (contentType == MediaType.JSON) {
-			type = "json";
+        } else if (contentType == MediaType.JSON) {
+            type = "json";
 
-		} else if (contentType == MediaType.PLAIN_TEXT_UTF_8) {
-			type = "plain";
+        } else if (contentType == MediaType.PLAIN_TEXT_UTF_8) {
+            type = "plain";
 
-		} else if (contentType == MediaType.BINARY) {
-			type = "binary";
+        } else if (contentType == MediaType.BINARY) {
+            type = "binary";
 
-		} else {
-			return inside;
-		}
+        } else {
+            return inside;
+        }
 
-		return U.frmt("%s(%s)", type, inside);
-	}
+        return U.frmt("%s(%s)", type, inside);
+    }
 
-	@Override
-	public void setRoute(Route route) {
-		this.route = route;
-	}
+    @Override
+    public void setRoute(Route route) {
+        this.route = route;
+    }
 
-	@Override
-	public Route getRoute() {
-		return route;
-	}
+    @Override
+    public Route getRoute() {
+        return route;
+    }
 
 }

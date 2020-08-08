@@ -1,8 +1,0 @@
-Route GET /abc [zone main] roles [] (TTL=0) : html((Req, Resp) -> ...)
-Route GET /defaults [zone main] roles [] (TTL=0) : mvc((Req) -> ...)
-Route GET /piece [zone main] roles [] (TTL=0) : mvc((Resp respo, Screen screen) -> ...)
-Route GET /view1 [zone main] roles [] (TTL=0) : html((Req, Resp) -> ...)
-Route GET /view2 [zone main] roles [] (TTL=0) : mvc((Req, Resp) -> ...)
-Route GET /view3 [zone main] roles [] (TTL=0) : mvc((Req, Resp) -> ...)
-Route GET /views/sub [zone main] roles [] (TTL=0) : html((Req, Resp) -> ...)
-Route POST /view2 [zone main] roles [] (TTL=0) : mvc((Req, Resp) -> ...)

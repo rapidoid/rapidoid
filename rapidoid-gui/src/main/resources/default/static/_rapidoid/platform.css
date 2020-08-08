@@ -1,9 +1,0 @@
-code {
-    color: blue;
-}
-
-body.rapidoid .navbar-default .navbar-nav>.active>a, body.rapidoid .navbar-default .navbar-nav>.active>a:hover,
-	body.rapidoid .navbar-default .navbar-nav>.active>a:focus {
-	color: #FFF;
-	background-color: #974 !important;
-}

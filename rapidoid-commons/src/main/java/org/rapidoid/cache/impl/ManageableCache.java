@@ -24,68 +24,63 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cache.Cache;
 import org.rapidoid.commons.Nums;
-import org.rapidoid.group.Action;
-import org.rapidoid.group.AutoManageable;
-import org.rapidoid.group.ManageableBean;
 import org.rapidoid.u.U;
 
 import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-@ManageableBean(kind = "cache")
-public class ManageableCache extends AutoManageable<ManageableCache> {
+public class ManageableCache {
 
-	private final Cache<?, ?> cache;
+    private final Cache<?, ?> cache;
 
-	public ManageableCache(Cache<?, ?> cache) {
-		super(cache.name());
-		this.cache = cache;
-	}
+    public ManageableCache(Cache<?, ?> cache) {
+//		super(cache.name());
+        this.cache = cache;
+    }
 
-	@Override
-	public List<String> getManageableProperties() {
-		return U.list("id", "size", "capacity", "requests", "hitRate", "hits", "misses", "bypassed", "errors", "ttl");
-	}
+    public List<String> getManageableProperties() {
+        return U.list("id", "size", "capacity", "requests", "hitRate", "hits", "misses", "bypassed", "errors", "ttl");
+    }
 
-	@Action(name = "!purge")
-	public void purge() {
-		cache.clear();
-	}
+    //    @Action(name = "!purge")
+    public void purge() {
+        cache.clear();
+    }
 
-	public long ttl() {
-		return cache.ttl();
-	}
+    public long ttl() {
+        return cache.ttl();
+    }
 
-	public long requests() {
-		return cache.stats().requests();
-	}
+    public long requests() {
+        return cache.stats().requests();
+    }
 
-	public long misses() {
-		return cache.stats().misses();
-	}
+    public long misses() {
+        return cache.stats().misses();
+    }
 
-	public long hits() {
-		return cache.stats().hits();
-	}
+    public long hits() {
+        return cache.stats().hits();
+    }
 
-	public long errors() {
-		return cache.stats().errors();
-	}
+    public long errors() {
+        return cache.stats().errors();
+    }
 
-	public long bypassed() {
-		return cache.stats().bypassed();
-	}
+    public long bypassed() {
+        return cache.stats().bypassed();
+    }
 
-	public String hitRate() {
-		return Nums.percent(cache.stats().hitRate()) + " %";
-	}
+    public String hitRate() {
+        return Nums.percent(cache.stats().hitRate()) + " %";
+    }
 
-	public long size() {
-		return cache.size();
-	}
+    public long size() {
+        return cache.size();
+    }
 
-	public int capacity() {
-		return cache.capacity();
-	}
+    public int capacity() {
+        return cache.capacity();
+    }
 }

@@ -12,6 +12,10 @@
 	<packaging>jar</packaging>
 	<description>Rapidoid HTTP Server</description>
 
+	<properties>
+		<tests.exclude>org.rapidoid.docs.**</tests.exclude>
+	</properties>
+
 	<dependencies>
 		<!-- MAIN -->
 		<dependency>
@@ -27,24 +31,6 @@
 			<version>${project.version}</version>
 			<optional>true</optional>
 		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-sql</artifactId>
-			<version>${project.version}</version>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-watch</artifactId>
-			<version>${project.version}</version>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>${hibernate.version}</version>
-			<optional>true</optional>
-		</dependency>
 
 		<!-- TEST -->
 		<dependency>
@@ -53,6 +39,33 @@
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>${validation-api.version}</version>
+			<optional>true</optional>
+		</dependency>
 	</dependencies>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.19.1</version>
+				<configuration>
+					<argLine>${jdk9.modules} -Xms512m -Xmx1024m -Dfile.encoding=${project.build.sourceEncoding}</argLine>
+					<forkCount>1</forkCount>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.junit.platform</groupId>
+						<artifactId>junit-platform-surefire-provider</artifactId>
+						<version>1.1.1</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
 </project>

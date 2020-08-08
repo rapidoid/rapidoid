@@ -38,112 +38,110 @@ import java.util.Date;
 @Since("5.1.0")
 public class RouteImpl extends RapidoidThing implements Route {
 
-	private final HttpVerb verb;
+    private final HttpVerb verb;
 
-	private final String path;
+    private final String path;
 
-	private volatile HttpHandler handler;
+    private volatile HttpHandler handler;
 
-	private final RouteOptions options;
+    private final RouteOptions options;
 
-	private volatile Date lastChangedAt = new Date();
+    private volatile Date lastChangedAt = new Date();
 
-	private final Cache<HTTPCacheKey, CachedResp> cache;
+    private final Cache<HTTPCacheKey, CachedResp> cache;
 
-	public RouteImpl(HttpVerb verb, String path, HttpHandler handler, RouteOptions options) {
-		this.verb = verb;
-		this.path = path;
-		this.handler = handler;
-		this.options = options;
-		this.cache = createCache();
-	}
+    public RouteImpl(HttpVerb verb, String path, HttpHandler handler, RouteOptions options) {
+        this.verb = verb;
+        this.path = path;
+        this.handler = handler;
+        this.options = options;
+        this.cache = createCache();
+    }
 
-	public static RouteImpl matching(HttpVerb verb, String path) {
-		return new RouteImpl(verb, path, null, null);
-	}
+    public static RouteImpl matching(HttpVerb verb, String path) {
+        return new RouteImpl(verb, path, null, null);
+    }
 
-	@SuppressWarnings("unchecked")
-	protected Cache<HTTPCacheKey, CachedResp> createCache() {
-		if (options == null || options.cacheTTL() <= 0) return null;
+    @SuppressWarnings("unchecked")
+    protected Cache<HTTPCacheKey, CachedResp> createCache() {
+        if (options == null || options.cacheTTL() <= 0) return null;
 
-		return Caching.of(HTTPCacheKey.class, CachedResp.class)
-			.name(verb + " " + path)
-			.ttl(options.cacheTTL())
-			.capacity(options.cacheCapacity())
-			.manageable(true)
-			.statistics(true)
-			.build();
-	}
+        return Caching.of(HTTPCacheKey.class, CachedResp.class)
+                .name(verb + " " + path)
+                .ttl(options.cacheTTL())
+                .capacity(options.cacheCapacity())
+                .manageable(true)
+                .statistics(true)
+                .build();
+    }
 
-	@Override
-	public HttpVerb verb() {
-		return verb;
-	}
+    @Override
+    public HttpVerb verb() {
+        return verb;
+    }
 
-	@Override
-	public String path() {
-		return path;
-	}
+    @Override
+    public String path() {
+        return path;
+    }
 
-	@Override
-	public HttpHandler handler() {
-		return handler;
-	}
+    @Override
+    public HttpHandler handler() {
+        return handler;
+    }
 
-	@Override
-	public RouteConfig config() {
-		return options;
-	}
+    @Override
+    public RouteConfig config() {
+        return options;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-		RouteImpl route = (RouteImpl) o;
+        RouteImpl route = (RouteImpl) o;
 
-		if (verb != route.verb) return false;
-		return path.equals(route.path);
-	}
+        if (verb != route.verb) return false;
+        return path.equals(route.path);
+    }
 
-	@Override
-	public String toString() {
-		RouteConfig cfg = config();
-		return U.frmt("Route %s %s [zone %s] roles %s (TTL=%s) : %s",
-			verb, path, cfg.zone(), cfg.roles(), cfg.cacheTTL(), handler);
-	}
+    @Override
+    public String toString() {
+        RouteConfig cfg = config();
+        return U.frmt("Route %s %s [zone %s] roles %s (TTL=%s) : %s",
+                verb, path, cfg.zone(), cfg.roles(), cfg.cacheTTL(), handler);
+    }
 
-	@Override
-	public int hashCode() {
-		int result = verb.hashCode();
-		result = 31 * result + path.hashCode();
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        int result = verb.hashCode();
+        result = 31 * result + path.hashCode();
+        return result;
+    }
 
-	public RouteImpl handler(HttpHandler handler) {
-		this.handler = handler;
-		return this;
-	}
+    public RouteImpl handler(HttpHandler handler) {
+        this.handler = handler;
+        return this;
+    }
 
-	@Override
-	public Cache<HTTPCacheKey, CachedResp> cache() {
-		return cache;
-	}
+    @Override
+    public Cache<HTTPCacheKey, CachedResp> cache() {
+        return cache;
+    }
 
-	@Override
-	public Date lastChangedAt() {
-		return lastChangedAt;
-	}
+    @Override
+    public Date lastChangedAt() {
+        return lastChangedAt;
+    }
 
-	@Override
-	public boolean isAPI() {
-		if (options.mvc()) return false;
+    @Override
+    public boolean isAPI() {
+        return options.contentType() != MediaType.HTML_UTF_8;
+    }
 
-		return options.contentType() != MediaType.HTML_UTF_8;
-	}
-
-	@Override
-	public boolean isInternal() {
-		return options.internal();
-	}
+    @Override
+    public boolean isInternal() {
+        return options.internal();
+    }
 }

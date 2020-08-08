@@ -27,18 +27,13 @@ import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.RapidoidInitializer;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
-import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.data.JSON;
 import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.impl.HttpRoutesImpl;
-import org.rapidoid.ioc.IoC;
-import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.u.U;
 import org.rapidoid.util.LazyInit;
-import org.rapidoid.web.Screen;
-import org.rapidoid.web.ScreenBean;
 
 import java.util.Collections;
 import java.util.List;
@@ -47,103 +42,93 @@ import java.util.List;
 @Since("6.0.0")
 public class Setups extends RapidoidInitializer {
 
-	private static final LazyInit<DefaultSetup> DEFAULT = new LazyInit<>(DefaultSetup::new);
+    private static final LazyInit<DefaultSetup> DEFAULT = new LazyInit<>(DefaultSetup::new);
 
-	private static final List<Setup> instances = Coll.synchronizedList();
+    private static final List<Setup> instances = Coll.synchronizedList();
 
-	static {
-		init();
-	}
+    static {
+        init();
+    }
 
-	private static void init() {
-		if (Ctxs.getPersisterProvider() == null) {
-			Ctxs.setPersisterProvider(new CustomizableSetupAwarePersisterProvider());
-		}
+    private static void init() {
+        JSON.warmUp();
 
-		JSON.warmUp();
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            shutdownAll();
+            Jobs.shutdownNow();
+        }));
+    }
 
-		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-			shutdownAll();
-			Jobs.shutdownNow();
-		}));
-	}
+    public static Setup create(String name) {
+        Config config = Conf.section(name);
 
-	public static Setup create(String name) {
-		IoCContext ioc = IoC.createContext().name(name);
-		Config config = Conf.section(name);
+        Customization customization = new Customization(name, My.custom(), config);
+        HttpRoutesImpl routes = new HttpRoutesImpl(name, customization);
+        FastHttp http = new FastHttp(routes, config);
 
-		Customization customization = new Customization(name, My.custom(), config);
-		HttpRoutesImpl routes = new HttpRoutesImpl(name, customization);
-		Screen gui = new ScreenBean();
-		FastHttp http = new FastHttp(routes, config, gui);
+        Setup setup = new SetupImpl(name, "main", http, config, customization, routes, false);
 
-		Setup setup = new SetupImpl(name, "main", http, ioc, config, customization, routes, gui, false);
+        instances.add(setup);
+        return setup;
+    }
 
-		instances.add(setup);
-		return setup;
-	}
+    public static Setup main() {
+        return DEFAULT.get().main;
+    }
 
-	public static Setup main() {
-		return DEFAULT.get().main;
-	}
+    public static synchronized void haltAll() {
+        instances().forEach(Setup::halt);
+    }
 
-	public static synchronized void haltAll() {
-		instances().forEach(Setup::halt);
-	}
+    public static synchronized void shutdownAll() {
+        instances().forEach(Setup::shutdown);
+    }
 
-	public static synchronized void shutdownAll() {
-		instances().forEach(Setup::shutdown);
-	}
+    public static synchronized boolean isAnyRunning() {
+        return Do.findIn(instances()).exists(Setup::isRunning);
+    }
 
-	public static synchronized boolean isAnyRunning() {
-		return Do.findIn(instances()).exists(Setup::isRunning);
-	}
+    static List<Setup> instances() {
+        return Collections.unmodifiableList(instances);
+    }
 
-	static List<Setup> instances() {
-		return Collections.unmodifiableList(instances);
-	}
+    static void register(Setup setup) {
+        instances.add(setup);
+    }
 
-	static void register(Setup setup) {
-		instances.add(setup);
-	}
+    static void deregister(Setup setup) {
+        instances.remove(setup);
+    }
 
-	static void deregister(Setup setup) {
-		instances.remove(setup);
-	}
+    static void initDefaults() {
+        DefaultSetup defaultSetup = DEFAULT.getValue();
 
-	static void initDefaults() {
-		DefaultSetup defaultSetup = DEFAULT.getValue();
+        if (defaultSetup != null) {
+            defaultSetup.initDefaults();
+        }
+    }
 
-		if (defaultSetup != null) {
-			defaultSetup.initDefaults();
-		}
-	}
+    public static void ready() {
+        instances().forEach(Setup::activate);
+    }
 
-	public static void ready() {
-		instances().forEach(Setup::activate);
-	}
+    public static void clear() {
+        synchronized (Setups.class) {
+            for (Setup setup : Setups.instances()) {
+                setup.routes().reset();
+                U.must(setup.routes().all().isEmpty());
+            }
 
-	static boolean isAppSetupAtomic() {
-		return App.status() == AppStatus.INITIALIZING;
-	}
+            Setups.instances.clear();
+        }
+    }
 
-	public static void clear() {
-		synchronized (Setups.class) {
-			for (Setup setup : Setups.instances()) {
-				setup.routes().reset();
-				U.must(setup.routes().all().isEmpty());
-			}
-
-			Setups.instances.clear();
-		}
-	}
-
-	static void reloadAll() {
-		synchronized (Setups.class) {
-			for (Setup setup : Setups.instances()) {
-				setup.reload();
-			}
-		}
-	}
+    static void reloadAll() {
+        synchronized (Setups.class) {
+            for (Setup setup : Setups.instances()) {
+                setup.reload();
+            }
+        }
+    }
 
 }

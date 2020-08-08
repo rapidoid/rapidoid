@@ -29,106 +29,94 @@ import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.handler.HttpHandler;
 import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.http.processor.HttpProcessor;
-import org.rapidoid.ioc.Beans;
-import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.net.Server;
-import org.rapidoid.web.Screen;
-import org.rapidoid.web.WebSetup;
 
 import java.util.Map;
 
-public interface Setup extends WebSetup {
+public interface Setup {
 
-	void destroy();
+    void destroy();
 
-	FastHttp http();
+    FastHttp http();
 
-	void activate();
+    void activate();
 
-	OnRoute on(String verb, String path);
+    OnRoute on(String verb, String path);
 
-	OnRoute any(String path);
+    OnRoute any(String path);
 
-	OnRoute get(String path);
+    OnRoute get(String path);
 
-	OnRoute post(String path);
+    OnRoute post(String path);
 
-	OnRoute put(String path);
+    OnRoute put(String path);
 
-	OnRoute delete(String path);
+    OnRoute delete(String path);
 
-	OnRoute patch(String path);
+    OnRoute patch(String path);
 
-	OnRoute options(String path);
+    OnRoute options(String path);
 
-	OnRoute head(String path);
+    OnRoute head(String path);
 
-	OnRoute trace(String path);
+    OnRoute trace(String path);
 
-	OnRoute page(String path);
+    OnRoute page(String path);
 
-	Setup req(ReqHandler handler);
+    Setup req(ReqHandler handler);
 
-	Setup req(ReqRespHandler handler);
+    Setup req(ReqRespHandler handler);
 
-	Setup req(HttpHandler handler);
+    Setup req(HttpHandler handler);
 
-	Setup beans(Object... beans);
+    Setup beans(Object... beans);
 
-	Setup port(int port);
+    Setup port(int port);
 
-	Setup address(String address);
+    Setup address(String address);
 
-	Setup processor(HttpProcessor processor);
+    Setup processor(HttpProcessor processor);
 
-	Setup shutdown();
+    Setup shutdown();
 
-	Setup halt();
+    Setup halt();
 
-	void reset();
+    void reset();
 
-	Server server();
+    Server server();
 
-	Map<String, Object> attributes();
+    Map<String, Object> attributes();
 
-	Setup scan(String... packages);
+    Setup deregister(String verb, String path);
 
-	Setup deregister(String verb, String path);
+    Setup deregister(Object... controllers);
 
-	Setup deregister(Object... controllers);
+    void reload();
 
-	IoCContext context();
+    Config config();
 
-	void reload();
+    Customization custom();
 
-	Config config();
+    HttpRoutes routes();
 
-	Customization custom();
+    String name();
 
-	HttpRoutes routes();
+    RouteOptions defaults();
 
-	String name();
+    String zone();
 
-	RouteOptions defaults();
+    boolean isRunning();
 
-	String zone();
+    int port();
 
-	Screen gui();
+    String address();
 
-	boolean isRunning();
+    OnError error(Class<? extends Throwable> error);
 
-	int port();
+    void onInit(Runnable onInit);
 
-	String address();
+    boolean autoActivating();
 
-	OnError error(Class<? extends Throwable> error);
-
-	void register(Beans beans);
-
-	void onInit(Runnable onInit);
-
-	boolean autoActivating();
-
-	Setup autoActivating(boolean autoActivating);
+    Setup autoActivating(boolean autoActivating);
 
 }

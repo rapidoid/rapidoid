@@ -1,8 +1,0 @@
-HTTP/1.1 200 OK
-Connection: keep-alive
-Server: Rapidoid
-Date: XXXXX GMT
-Content-Type: text/html; charset=utf-8
-Content-Length: 36
-
-1:2:3:4:5:12.345:9.81:true:false:abc

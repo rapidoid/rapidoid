@@ -1,4 +1,0 @@
-Route GET /custom-page [zone main] roles [] (TTL=0) : mvc((Req) -> ...)
-Route GET /my/custom [zone main] roles [] (TTL=0) : mvc(() -> ...)
-Route POST /custom-page [zone main] roles [] (TTL=0) : mvc((Req) -> ...)
-Route POST /my/custom [zone main] roles [] (TTL=0) : mvc(() -> ...)

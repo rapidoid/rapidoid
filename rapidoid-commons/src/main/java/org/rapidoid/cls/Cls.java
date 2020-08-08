@@ -61,8 +61,6 @@ public class Cls extends RapidoidThing {
 		Byte.class, char.class, Character.class, double.class, Double.class, float.class, Float.class, int.class,
 		Integer.class, long.class, Long.class, short.class, Short.class, void.class, Void.class);
 
-	private static Set<String> RAPIDOID_CLASSES = U.set(IO.loadLines("rapidoid-classes.txt"));
-
 	private static final Object[] EMPTY_ARRAY = {};
 
 	private Cls() {
@@ -759,21 +757,8 @@ public class Cls extends RapidoidThing {
 		return JRE_CLASS_PATTERN.matcher(className).matches();
 	}
 
-	public static boolean isRapidoidClass(String className) {
-		className = className.split("\\$")[0]; // without inner classes
-		return RAPIDOID_CLASSES.contains(className);
-	}
-
 	public static boolean isIdeOrToolClass(String className) {
 		return className.startsWith("com.intellij.rt.execution.");
-	}
-
-	public static Set<String> getRapidoidClasses() {
-		return RAPIDOID_CLASSES;
-	}
-
-	public static boolean isRapidoidClass(Class<?> clazz) {
-		return isRapidoidClass(clazz.getName());
 	}
 
 	public static boolean isJREType(Class<?> type) {

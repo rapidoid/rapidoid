@@ -1,8 +1,0 @@
-HTTP/1.1 200 OK
-Connection: keep-alive
-Server: Rapidoid
-Date: XXXXX GMT
-Content-Type: application/json
-Content-Length: 5
-
-"foo"

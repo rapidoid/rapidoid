@@ -31,9 +31,9 @@ import org.rapidoid.util.Msc;
 @RapidoidModuleDesc(name = "Commons", order = 100)
 public class CommonsModule extends AbstractRapidoidModule {
 
-	@Override
-	public void cleanUp() {
-		Msc.reset();
-	}
+    @Override
+    public void cleanUp() {
+        Msc.reset();
+    }
 
 }

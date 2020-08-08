@@ -9,7 +9,6 @@
 
 	<modules>
 		<module>getting-started</module>
-		<module>guice-integration</module>
 		<module>hello-world</module>
 		<module>rest-api</module>
 		<module>dsl-json-integration</module>

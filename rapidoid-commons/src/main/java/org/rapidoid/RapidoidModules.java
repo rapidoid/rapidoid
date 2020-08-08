@@ -24,6 +24,7 @@ import org.essentials4j.Do;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.CommonsModule;
 import org.rapidoid.u.U;
 
 import java.lang.reflect.Modifier;
@@ -33,81 +34,81 @@ import java.util.*;
 @Since("5.3.0")
 public class RapidoidModules extends RapidoidThing {
 
-	private static final Comparator<RapidoidModule> MODULE_COMPARATOR = (mod1, mod2) -> mod1.order() - mod2.order();
+    private static final Comparator<RapidoidModule> MODULE_COMPARATOR = (mod1, mod2) -> mod1.order() - mod2.order();
 
-	public static RapidoidModule get(String name) {
-		return Do.findIn(getAllAvailable())
-			.first(module -> module.name().equals(name))
-			.orElseThrow(() -> U.rte("Can't find Rapidoid module with name: ''!", name));
-	}
+    public static RapidoidModule get(String name) {
+        return Do.findIn(getAllAvailable())
+                .first(module -> module.name().equals(name))
+                .orElseThrow(() -> U.rte("Can't find Rapidoid module with name: ''!", name));
+    }
 
-	public static List<RapidoidModule> getAll() {
-		return all(false);
-	}
+    public static List<RapidoidModule> getAll() {
+        return all(false);
+    }
 
-	public static List<RapidoidModule> getAllAvailable() {
-		return all(true);
-	}
+    public static List<RapidoidModule> getAllAvailable() {
+        return all(true);
+    }
 
-	private static List<RapidoidModule> all(boolean availableOnly) {
-		List<RapidoidModule> modules = U.list();
+    private static List<RapidoidModule> all(boolean availableOnly) {
+        List<RapidoidModule> modules = U.list();
 
-		addServiceLoaderModules(availableOnly, modules);
+        addServiceLoaderModules(availableOnly, modules);
 
-		addBuiltInModules(modules);
+        addBuiltInModules(modules);
 
-		validate(modules);
+        validate(modules);
 
-		modules.sort(MODULE_COMPARATOR);
+        modules.sort(MODULE_COMPARATOR);
 
-		return modules;
-	}
+        return modules;
+    }
 
-	private static void addBuiltInModules(List<RapidoidModule> modules) {
-		for (String clsName : Cls.getRapidoidClasses()) {
+    private static void addBuiltInModules(List<RapidoidModule> modules) {
+        modules.add(new CommonsModule());
+        addModuleIfExists(modules, "org.rapidoid.http.HttpModule");
+    }
 
-			if (clsName.endsWith("Module")) {
-				Class<?> cls = Cls.getClassIfExists(clsName);
+    private static void addModuleIfExists(List<RapidoidModule> modules, String clsName) {
+        Class<?> cls = Cls.getClassIfExists(clsName);
 
-				boolean isModule = cls != null
-					&& !cls.isInterface()
-					&& RapidoidModule.class.isAssignableFrom(cls)
-					&& !Modifier.isAbstract(cls.getModifiers());
+        boolean isModule = cls != null
+                && !cls.isInterface()
+                && RapidoidModule.class.isAssignableFrom(cls)
+                && !Modifier.isAbstract(cls.getModifiers());
 
-				if (isModule) {
-					modules.add((RapidoidModule) Cls.newInstance(cls));
-				}
-			}
-		}
-	}
+        if (isModule) {
+            modules.add((RapidoidModule) Cls.newInstance(cls));
+        }
+    }
 
-	private static void addServiceLoaderModules(boolean availableOnly, List<RapidoidModule> modules) {
-		Iterator<RapidoidModule> it = ServiceLoader.load(RapidoidModule.class).iterator();
+    private static void addServiceLoaderModules(boolean availableOnly, List<RapidoidModule> modules) {
+        Iterator<RapidoidModule> it = ServiceLoader.load(RapidoidModule.class).iterator();
 
-		while (it.hasNext()) {
-			RapidoidModule mod;
+        while (it.hasNext()) {
+            RapidoidModule mod;
 
-			if (availableOnly) {
-				try {
-					mod = it.next();
-				} catch (ServiceConfigurationError e) {
-					mod = null;
-					// ignore it
-				}
-			} else {
-				mod = it.next();
-			}
+            if (availableOnly) {
+                try {
+                    mod = it.next();
+                } catch (ServiceConfigurationError e) {
+                    mod = null;
+                    // ignore it
+                }
+            } else {
+                mod = it.next();
+            }
 
-			if (mod != null) {
-				modules.add(mod);
-			}
-		}
-	}
+            if (mod != null) {
+                modules.add(mod);
+            }
+        }
+    }
 
-	private static void validate(List<RapidoidModule> modules) {
-		for (RapidoidModule module : modules) {
-			U.notNull(module.name(), "the name of module %s", module.getClass().getSimpleName());
-		}
-	}
+    private static void validate(List<RapidoidModule> modules) {
+        for (RapidoidModule module : modules) {
+            U.notNull(module.name(), "the name of module %s", module.getClass().getSimpleName());
+        }
+    }
 
 }

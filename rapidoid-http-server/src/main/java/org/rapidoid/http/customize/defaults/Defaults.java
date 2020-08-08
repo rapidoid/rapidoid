@@ -30,10 +30,7 @@ import org.rapidoid.data.XML;
 import org.rapidoid.env.Env;
 import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.customize.*;
-import org.rapidoid.render.Templates;
-import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
-import org.rapidoid.util.MscOpts;
 
 import java.util.List;
 
@@ -41,133 +38,96 @@ import java.util.List;
 @Since("5.1.7")
 public class Defaults extends RapidoidThing {
 
-	private static final String[] staticFilesPath = {"static", "default/static"};
+    private static final String[] staticFilesPath = {"static", "default/static"};
 
-	private static final HttpWrapper[] wrappers = {};
+    private static final HttpWrapper[] wrappers = {};
 
-	private static final ErrorHandler errorHandler = new DefaultErrorHandler();
+    private static final ErrorHandler errorHandler = new DefaultErrorHandler();
 
-	private static final HttpResponseRenderer jsonResponseRenderer = new DefaultJsonResponseRenderer();
+    private static final HttpResponseRenderer jsonResponseRenderer = new DefaultJsonResponseRenderer();
 
-	private static final HttpResponseRenderer xmlResponseRenderer = new DefaultXmlResponseRenderer();
+    private static final HttpResponseRenderer xmlResponseRenderer = new DefaultXmlResponseRenderer();
 
-	private static final BeanParameterFactory beanParameterFactory = new DefaultBeanParameterFactory();
+    private static final BeanParameterFactory beanParameterFactory = new DefaultBeanParameterFactory();
 
-	private static final BeanValidator validator = new DefaultBeanValidator();
+    private static final BeanValidator validator = new DefaultBeanValidator();
 
-	private static final LoginProvider loginProvider = new DefaultLoginProvider();
+    private static final LoginProvider loginProvider = new DefaultLoginProvider();
 
-	private static final RolesProvider rolesProvider = new DefaultRolesProvider();
+    private static final RolesProvider rolesProvider = new DefaultRolesProvider();
 
-	private static final PageDecorator pageDecorator = new DefaultPageDecorator();
+    private static final ObjectMapper objectMapper = JSON.newMapper();
 
-	private static final ResourceLoader templateLoader = MscOpts.hasRapidoidRender() ? new DefaultTemplateLoader() : null;
+    private static final XmlMapper xmlMapper = XML.newMapper();
 
-	private static final ViewResolver viewResolver = MscOpts.hasRapidoidRender() ? new DefaultViewResolver() : null;
+    private static final HttpRequestBodyParser jsonRequestBodyParser = new DefaultJsonRequestBodyParser();
 
-	private static final ObjectMapper objectMapper = JSON.newMapper();
+    private static final HttpRequestBodyParser xmlRequestBodyParser = new DefaultXmlRequestBodyParser();
 
-	private static final XmlMapper xmlMapper = XML.newMapper();
+    private static final SessionManager sessionManager = new DefaultSessionManager();
 
-	private static final EntityManagerProvider entityManagerProvider = null;
+    private static final StaticFilesSecurity staticFilesSecurity = new DefaultStaticFilesSecurity();
 
-	private static final EntityManagerFactoryProvider entityManagerFactoryProvider = new DefaultEntityManagerFactoryProvider();
+    public static String[] staticFilesPath() {
+        List<String> path = U.list(staticFilesPath);
 
-	private static final HttpRequestBodyParser jsonRequestBodyParser = new DefaultJsonRequestBodyParser();
+        return U.arrayOf(path);
+    }
 
-	private static final HttpRequestBodyParser xmlRequestBodyParser = new DefaultXmlRequestBodyParser();
+    public static ErrorHandler errorHandler() {
+        return errorHandler;
+    }
 
-	private static final SessionManager sessionManager = new DefaultSessionManager();
+    public static HttpResponseRenderer jsonResponseRenderer() {
+        return jsonResponseRenderer;
+    }
 
-	private static final StaticFilesSecurity staticFilesSecurity = new DefaultStaticFilesSecurity();
+    public static HttpResponseRenderer xmlResponseRenderer() {
+        return xmlResponseRenderer;
+    }
 
-	public static String[] staticFilesPath() {
-		List<String> path = U.list(staticFilesPath);
+    public static BeanParameterFactory beanParameterFactory() {
+        return beanParameterFactory;
+    }
 
-		if (Env.isInitialized() && Env.dev()) {
-			path.addAll(0, ClasspathUtil.getClasspathStaticFolders());
-		}
+    public static BeanValidator validator() {
+        return validator;
+    }
 
-		return U.arrayOf(path);
-	}
+    public static LoginProvider loginProvider() {
+        return loginProvider;
+    }
 
-	public static ErrorHandler errorHandler() {
-		return errorHandler;
-	}
+    public static RolesProvider rolesProvider() {
+        return rolesProvider;
+    }
 
-	public static HttpResponseRenderer jsonResponseRenderer() {
-		return jsonResponseRenderer;
-	}
+    public static ObjectMapper objectMapper() {
+        return objectMapper;
+    }
 
-	public static HttpResponseRenderer xmlResponseRenderer() {
-		return xmlResponseRenderer;
-	}
+    public static XmlMapper xmlMapper() {
+        return xmlMapper;
+    }
 
-	public static BeanParameterFactory beanParameterFactory() {
-		return beanParameterFactory;
-	}
+    public static HttpRequestBodyParser jsonRequestBodyParser() {
+        return jsonRequestBodyParser;
+    }
 
-	public static BeanValidator validator() {
-		return validator;
-	}
+    public static HttpRequestBodyParser xmlRequestBodyParser() {
+        return xmlRequestBodyParser;
+    }
 
-	public static LoginProvider loginProvider() {
-		return loginProvider;
-	}
+    public static SessionManager sessionManager() {
+        return sessionManager;
+    }
 
-	public static RolesProvider rolesProvider() {
-		return rolesProvider;
-	}
+    public static StaticFilesSecurity staticFilesSecurity() {
+        return staticFilesSecurity;
+    }
 
-	public static PageDecorator pageDecorator() {
-		return pageDecorator;
-	}
+    public static HttpWrapper[] wrappers() {
+        return wrappers;
+    }
 
-	public static ViewResolver viewResolver() {
-		return viewResolver;
-	}
-
-	public static ObjectMapper objectMapper() {
-		return objectMapper;
-	}
-
-	public static XmlMapper xmlMapper() {
-		return xmlMapper;
-	}
-
-	public static EntityManagerProvider entityManagerProvider() {
-		return entityManagerProvider;
-	}
-
-	public static EntityManagerFactoryProvider entityManagerFactoryProvider() {
-		return entityManagerFactoryProvider;
-	}
-
-	public static String[] templatesPath() {
-		return Templates.getPath();
-	}
-
-	public static HttpRequestBodyParser jsonRequestBodyParser() {
-		return jsonRequestBodyParser;
-	}
-
-	public static HttpRequestBodyParser xmlRequestBodyParser() {
-		return xmlRequestBodyParser;
-	}
-
-	public static SessionManager sessionManager() {
-		return sessionManager;
-	}
-
-	public static StaticFilesSecurity staticFilesSecurity() {
-		return staticFilesSecurity;
-	}
-
-	public static HttpWrapper[] wrappers() {
-		return wrappers;
-	}
-
-	public static ResourceLoader templateLoader() {
-		return templateLoader;
-	}
 }

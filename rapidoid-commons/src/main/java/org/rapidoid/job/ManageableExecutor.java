@@ -22,8 +22,6 @@ package org.rapidoid.job;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.group.AutoManageable;
-import org.rapidoid.group.ManageableBean;
 import org.rapidoid.u.U;
 
 import java.util.List;
@@ -31,51 +29,50 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
-@ManageableBean(kind = "jobs")
-public class ManageableExecutor extends AutoManageable<ManageableExecutor> {
+public class ManageableExecutor {
 
-	private final ThreadPoolExecutor executor;
+    private final ThreadPoolExecutor executor;
 
-	public ManageableExecutor(String id, ThreadPoolExecutor executor) {
-		super(id);
-		this.executor = executor;
-	}
+    public ManageableExecutor(String id, ThreadPoolExecutor executor) {
+//		super(id);
+        this.executor = executor;
+    }
 
-	@Override
-	public List<String> getManageableProperties() {
-		return U.list("id", "activeCount", "taskCount", "completedTaskCount",
-			"maximumPoolSize", "corePoolSize", "largestPoolSize");
-	}
+    //	@Override
+    public List<String> getManageableProperties() {
+        return U.list("id", "activeCount", "taskCount", "completedTaskCount",
+                "maximumPoolSize", "corePoolSize", "largestPoolSize");
+    }
 
-	public boolean isShutdown() {
-		return executor.isShutdown();
-	}
+    public boolean isShutdown() {
+        return executor.isShutdown();
+    }
 
-	public int getCorePoolSize() {
-		return executor.getCorePoolSize();
-	}
+    public int getCorePoolSize() {
+        return executor.getCorePoolSize();
+    }
 
-	public int getMaximumPoolSize() {
-		return executor.getMaximumPoolSize();
-	}
+    public int getMaximumPoolSize() {
+        return executor.getMaximumPoolSize();
+    }
 
-	public int getPoolSize() {
-		return executor.getPoolSize();
-	}
+    public int getPoolSize() {
+        return executor.getPoolSize();
+    }
 
-	public int getActiveCount() {
-		return executor.getActiveCount();
-	}
+    public int getActiveCount() {
+        return executor.getActiveCount();
+    }
 
-	public int getLargestPoolSize() {
-		return executor.getLargestPoolSize();
-	}
+    public int getLargestPoolSize() {
+        return executor.getLargestPoolSize();
+    }
 
-	public long getTaskCount() {
-		return executor.getTaskCount();
-	}
+    public long getTaskCount() {
+        return executor.getTaskCount();
+    }
 
-	public long getCompletedTaskCount() {
-		return executor.getCompletedTaskCount();
-	}
+    public long getCompletedTaskCount() {
+        return executor.getCompletedTaskCount();
+    }
 }

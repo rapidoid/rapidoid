@@ -22,7 +22,6 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.http.impl.RouteMeta;
 import org.rapidoid.http.impl.RouteOptions;
 
@@ -35,18 +34,6 @@ public interface RouteConfig {
 	MediaType contentType();
 
 	RouteConfig contentType(MediaType contentType);
-
-	String view();
-
-	RouteOptions view(String view);
-
-	boolean mvc();
-
-	RouteOptions mvc(boolean mvc);
-
-	TransactionMode transaction();
-
-	RouteOptions transaction(TransactionMode transactionMode);
 
 	Set<String> roles();
 

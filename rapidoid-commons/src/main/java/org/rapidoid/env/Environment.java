@@ -26,7 +26,6 @@ import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.Err;
 import org.rapidoid.commons.RapidoidInitializer;
 import org.rapidoid.log.Log;
-import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
 import org.rapidoid.util.LazyInit;
 import org.rapidoid.util.Msc;
@@ -41,193 +40,193 @@ import java.util.concurrent.Callable;
 @Since("5.2.0")
 public class Environment extends RapidoidInitializer {
 
-	private volatile Set<String> profiles;
+    private volatile Set<String> profiles;
 
-	private volatile Set<String> profilesView;
+    private volatile Set<String> profilesView;
 
-	private volatile EnvMode mode;
+    private volatile EnvMode mode;
 
-	private volatile List<String> args;
+    private volatile List<String> args;
 
-	private volatile List<String> argsView;
+    private volatile List<String> argsView;
 
-	private final EnvProperties properties = new EnvProperties();
+    private final EnvProperties properties = new EnvProperties();
 
-	private final LazyInit<Map<String, String>> argsAsMap = new LazyInit<>(new Callable<Map<String, String>>() {
-		@Override
-		public Map<String, String> call() {
-			U.notNull(args, "environment args");
-			return Msc.parseArgs(args);
-		}
-	});
+    private final LazyInit<Map<String, String>> argsAsMap = new LazyInit<>(new Callable<Map<String, String>>() {
+        @Override
+        public Map<String, String> call() {
+            U.notNull(args, "environment args");
+            return Msc.parseArgs(args);
+        }
+    });
 
-	public Environment() {
-		reset();
-	}
+    public Environment() {
+        reset();
+    }
 
-	public Set<String> profiles() {
-		makeSureIsInitialized();
-		return profilesView;
-	}
+    public Set<String> profiles() {
+        makeSureIsInitialized();
+        return profilesView;
+    }
 
-	public EnvMode mode() {
-		makeSureIsInitialized();
-		return mode;
-	}
+    public EnvMode mode() {
+        makeSureIsInitialized();
+        return mode;
+    }
 
-	private void makeSureIsInitialized() {
-		if (profiles == null || mode == null) {
-			synchronized (this) {
-				if (profiles == null || mode == null) {
-					initModeAndProfiles();
-				}
-			}
-		}
-	}
+    private void makeSureIsInitialized() {
+        if (profiles == null || mode == null) {
+            synchronized (this) {
+                if (profiles == null || mode == null) {
+                    initModeAndProfiles();
+                }
+            }
+        }
+    }
 
-	public synchronized void reset() {
-		profiles = null;
-		mode = null;
-		argsAsMap.reset();
-		setArgs(); // no args
-	}
+    public synchronized void reset() {
+        profiles = null;
+        mode = null;
+        argsAsMap.reset();
+        setArgs(); // no args
+    }
 
-	@SuppressWarnings("ConstantConditions")
-	private void initModeAndProfiles() {
+    @SuppressWarnings("ConstantConditions")
+    private void initModeAndProfiles() {
 
-		if (U.isEmpty(profiles)) {
-			profiles = Coll.synchronizedSet();
-			profiles.addAll(retrieveProfiles());
-			profilesView = Collections.unmodifiableSet(profiles);
-		}
+        if (U.isEmpty(profiles)) {
+            profiles = Coll.synchronizedSet();
+            profiles.addAll(retrieveProfiles());
+            profilesView = Collections.unmodifiableSet(profiles);
+        }
 
-		boolean production = Env.hasInitial("mode", "production") || profiles.contains("production");
-		boolean test = Env.hasInitial("mode", "test") || profiles.contains("test");
-		boolean dev = Env.hasInitial("mode", "dev") || profiles.contains("dev");
+        boolean production = Env.hasInitial("mode", "production") || profiles.contains("production");
+        boolean test = Env.hasInitial("mode", "test") || profiles.contains("test");
+        boolean dev = Env.hasInitial("mode", "dev") || profiles.contains("dev");
 
-		if (!production && !test && !dev) {
-			mode = inferMode();
-			if (!silent()) Log.info("No production/dev/test mode was configured, inferring mode", "!mode", mode);
+        if (!production && !test && !dev) {
+            mode = inferMode();
+            if (!silent()) Log.info("No production/dev/test mode was configured, inferring mode", "!mode", mode);
 
-		} else {
-			boolean onlyOne = (!production || !dev) && (!dev || !test) && (!production || !test);
-			U.must(onlyOne, "Only one of the ('production', 'dev', 'test') profiles can be specified!");
+        } else {
+            boolean onlyOne = (!production || !dev) && (!dev || !test) && (!production || !test);
+            U.must(onlyOne, "Only one of the ('production', 'dev', 'test') profiles can be specified!");
 
-			if (production) {
-				mode = EnvMode.PRODUCTION;
+            if (production) {
+                mode = EnvMode.PRODUCTION;
 
-			} else if (dev) {
-				mode = EnvMode.DEV;
+            } else if (dev) {
+                mode = EnvMode.DEV;
 
-			} else if (test) {
-				mode = EnvMode.TEST;
+            } else if (test) {
+                mode = EnvMode.TEST;
 
-			} else {
-				throw Err.notExpected();
-			}
-		}
+            } else {
+                throw Err.notExpected();
+            }
+        }
 
-		String modeProfile = mode.name().toLowerCase();
-		if (!silent()) Log.debug("Automatically activating mode-specific profile", "!profile", modeProfile);
-		profiles.add(modeProfile);
+        String modeProfile = mode.name().toLowerCase();
+        if (!silent()) Log.debug("Automatically activating mode-specific profile", "!profile", modeProfile);
+        profiles.add(modeProfile);
 
-		if (Msc.isPlatform()) {
-			profiles.add("platform");
-		}
+        if (Msc.isPlatform()) {
+            profiles.add("platform");
+        }
 
-		RapidoidEnv.touch();
+        RapidoidEnv.touch();
 
-		if (!silent()) {
-			Log.info("Initialized environment", "!mode", mode, "!profiles", profiles);
-		}
-	}
+        if (!silent()) {
+            Log.info("Initialized environment", "!mode", mode, "!profiles", profiles);
+        }
+    }
 
-	private static boolean silent() {
-		return Msc.isSilent();
-	}
+    private static boolean silent() {
+        return Msc.isSilent();
+    }
 
-	private static EnvMode inferMode() {
-		if (Msc.isInsideTest()) {
-			return EnvMode.TEST;
+    private static EnvMode inferMode() {
+        if (Msc.isInsideTest()) {
+            return EnvMode.TEST;
 
-		} else {
-			return ClasspathUtil.getClasspathFolders().isEmpty() ? EnvMode.PRODUCTION : EnvMode.DEV;
-		}
-	}
+        } else {
+            return EnvMode.DEV;
+        }
+    }
 
-	private static List<String> retrieveProfiles() {
-		List<String> profiles;
+    private static List<String> retrieveProfiles() {
+        List<String> profiles;
 
-		String profilesLst = Env.initial("profiles");
+        String profilesLst = Env.initial("profiles");
 
-		if (U.notEmpty(profilesLst)) {
-			profiles = U.list(profilesLst.split("\\s*\\,\\s*"));
-			if (!silent()) Log.info("Configuring active profiles", "!profiles", profiles);
-			return profiles;
+        if (U.notEmpty(profilesLst)) {
+            profiles = U.list(profilesLst.split("\\s*\\,\\s*"));
+            if (!silent()) Log.info("Configuring active profiles", "!profiles", profiles);
+            return profiles;
 
-		} else {
-			if (!Msc.isPlatform()) {
-				if (!silent()) Log.info("No profiles were specified, activating 'default' profile");
-				profiles = U.list("default");
-			} else {
-				profiles = U.list();
-			}
-		}
+        } else {
+            if (!Msc.isPlatform()) {
+                if (!silent()) Log.info("No profiles were specified, activating 'default' profile");
+                profiles = U.list("default");
+            } else {
+                profiles = U.list();
+            }
+        }
 
-		return profiles;
-	}
+        return profiles;
+    }
 
-	public void setArgs(String... args) {
-		this.args = Coll.synchronizedList(args);
-		this.argsView = Collections.unmodifiableList(this.args);
-		this.argsAsMap.reset();
-	}
+    public void setArgs(String... args) {
+        this.args = Coll.synchronizedList(args);
+        this.argsView = Collections.unmodifiableList(this.args);
+        this.argsAsMap.reset();
+    }
 
-	public List<String> args() {
-		return argsView;
-	}
+    public List<String> args() {
+        return argsView;
+    }
 
-	public boolean hasProfile(String profileName) {
-		return profiles().contains(profileName);
-	}
+    public boolean hasProfile(String profileName) {
+        return profiles().contains(profileName);
+    }
 
-	public boolean hasAnyProfile(String... profileNames) {
-		for (String profileName : profileNames) {
-			if (hasProfile(profileName)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    public boolean hasAnyProfile(String... profileNames) {
+        for (String profileName : profileNames) {
+            if (hasProfile(profileName)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	public synchronized void setProfiles(String... activeProfiles) {
+    public synchronized void setProfiles(String... activeProfiles) {
 
-		if (U.isEmpty(profiles)) {
-			profiles = Coll.synchronizedSet();
-			profilesView = Collections.unmodifiableSet(profiles);
-		}
+        if (U.isEmpty(profiles)) {
+            profiles = Coll.synchronizedSet();
+            profilesView = Collections.unmodifiableSet(profiles);
+        }
 
-		Collections.addAll(this.profiles, activeProfiles);
+        Collections.addAll(this.profiles, activeProfiles);
 
-		this.mode = null;
-		initModeAndProfiles();
+        this.mode = null;
+        initModeAndProfiles();
 
-		if (!silent())
-			Log.info("Activating custom profiles", "!activating", activeProfiles, "!resulting profiles", this.profiles, "!resulting mode", this.mode);
-	}
+        if (!silent())
+            Log.info("Activating custom profiles", "!activating", activeProfiles, "!resulting profiles", this.profiles, "!resulting mode", this.mode);
+    }
 
-	public boolean isInitialized() {
-		return mode != null;
-	}
+    public boolean isInitialized() {
+        return mode != null;
+    }
 
-	public EnvProperties properties() {
-		RapidoidEnv.touch();
-		return properties;
-	}
+    public EnvProperties properties() {
+        RapidoidEnv.touch();
+        return properties;
+    }
 
-	public Map<String, String> argsAsMap() {
-		RapidoidEnv.touch();
-		return argsAsMap.get();
-	}
+    public Map<String, String> argsAsMap() {
+        RapidoidEnv.touch();
+        return argsAsMap.get();
+    }
 
 }

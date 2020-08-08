@@ -23,7 +23,6 @@ package org.rapidoid.http.handler;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.HttpWrapper;
@@ -37,31 +36,26 @@ import java.util.List;
 @Since("5.5.1")
 public class HttpWrappers extends RapidoidThing {
 
-	static HttpWrapper[] assembleWrappers(FastHttp http, RouteOptions options) {
-		List<HttpWrapper> wrappers = U.list();
+    static HttpWrapper[] assembleWrappers(FastHttp http, RouteOptions options) {
+        List<HttpWrapper> wrappers = U.list();
 
-		wrappers.add(new HttpAuthWrapper(options.roles()));
+        wrappers.add(new HttpAuthWrapper(options.roles()));
 
-		TransactionMode txMode = U.or(options.transaction(), TransactionMode.NONE);
-		if (txMode != TransactionMode.NONE) {
-			wrappers.add(new HttpTxWrapper(txMode));
-		}
+        Collections.addAll(wrappers, getConfiguredWrappers(http, options));
 
-		Collections.addAll(wrappers, getConfiguredWrappers(http, options));
+        return U.arrayOf(HttpWrapper.class, wrappers);
+    }
 
-		return U.arrayOf(HttpWrapper.class, wrappers);
-	}
+    private static HttpWrapper[] getConfiguredWrappers(FastHttp http, RouteOptions options) {
+        return U.or(
+                options.wrappers(), // wrappers specific to the route
+                http.custom().wrappers(), // or wrappers for the http setup
+                new HttpWrapper[0] // or no wrappers
+        );
+    }
 
-	private static HttpWrapper[] getConfiguredWrappers(FastHttp http, RouteOptions options) {
-		return U.or(
-			options.wrappers(), // wrappers specific to the route
-			http.custom().wrappers(), // or wrappers for the http setup
-			new HttpWrapper[0] // or no wrappers
-		);
-	}
-
-	static boolean shouldTransform(Object result) {
-		return !HttpUtils.isSpecialResult(result);
-	}
+    static boolean shouldTransform(Object result) {
+        return !HttpUtils.isSpecialResult(result);
+    }
 
 }

@@ -36,105 +36,81 @@ import java.util.Map;
 @Since("5.1.0")
 public class DefaultErrorHandler extends RapidoidThing implements ErrorHandler {
 
-	@Override
-	public Object handleError(Req req, Resp resp, Throwable error) {
+    @Override
+    public Object handleError(Req req, Resp resp, Throwable error) {
 
-		resp.result(null);
+        resp.result(null);
 
-		Customization custom = Customization.of(req);
+        Customization custom = Customization.of(req);
 
-		Object result = handleError(req, resp, error, custom);
+        Object result = handleError(req, resp, error, custom);
 
-		if (result instanceof Throwable) {
-			Throwable errResult = (Throwable) result;
-			return renderError(req, resp, errResult);
+        if (result instanceof Throwable) {
+            Throwable errResult = (Throwable) result;
+            return renderError(req, resp, errResult);
 
-		} else {
-			return result;
-		}
-	}
+        } else {
+            return result;
+        }
+    }
 
-	private Object renderError(Req req, Resp resp, Throwable error) {
+    private Object renderError(Req req, Resp resp, Throwable error) {
 
-		if (resp.contentType() == MediaType.JSON) {
-			return HttpUtils.getErrorInfo(resp, error);
+        if (resp.contentType() == MediaType.JSON) {
+            return HttpUtils.getErrorInfo(resp, error);
 
-		} else if (resp.contentType() == MediaType.PLAIN_TEXT_UTF_8) {
-			return HttpUtils.getErrorMessageAndSetCode(resp, error);
+        } else {
+            return HttpUtils.getErrorMessageAndSetCode(resp, error);
+        }
+    }
 
-		} else {
-			return page(req, resp, error);
-		}
-	}
+    protected Object handleError(Req req, Resp resp, Throwable error, Customization custom) {
+        // if the handler throws error -> process it
+        for (int i = 0; ; i++) {
 
-	protected Object handleError(Req req, Resp resp, Throwable error, Customization custom) {
-		// if the handler throws error -> process it
-		for (int i = 0; ; i++) {
+            resp.result(null);
 
-			resp.result(null);
+            ErrorHandler handler = custom.findErrorHandlerByType(error);
 
-			ErrorHandler handler = custom.findErrorHandlerByType(error);
+            try {
 
-			try {
+                Object result = null;
 
-				Object result = null;
+                if (handler != null) {
+                    result = handler.handleError(req, resp, error);
+                }
 
-				if (handler != null) {
-					result = handler.handleError(req, resp, error);
-				}
+                return result != null ? result : defaultErrorHandling(req, error);
 
-				return result != null ? result : defaultErrorHandling(req, error);
+            } catch (Exception e) {
 
-			} catch (Exception e) {
+                if (i >= getMaxReThrowCount(req)) {
+                    return U.rte("Too many times an error was re-thrown by the error handler(s)!");
+                }
 
-				if (i >= getMaxReThrowCount(req)) {
-					return U.rte("Too many times an error was re-thrown by the error handler(s)!");
-				}
+                error = e;
+            }
+        }
+    }
 
-				error = e;
-			}
-		}
-	}
+    protected int getMaxReThrowCount(@SuppressWarnings("UnusedParameters") Req req) {
+        return 5; // override to customize
+    }
 
-	protected int getMaxReThrowCount(@SuppressWarnings("UnusedParameters") Req req) {
-		return 5; // override to customize
-	}
+    protected Object defaultErrorHandling(Req req, Throwable error) {
 
-	protected Object defaultErrorHandling(Req req, Throwable error) {
+        if (error instanceof NotFound) {
+            Resp resp = req.response().code(404);
 
-		if (error instanceof NotFound) {
-			Resp resp = req.response().code(404);
+            if (resp.contentType() == MediaType.JSON) {
+                return error;
+            } else {
+                return "";
+            }
+        }
 
-			if (resp.contentType() == MediaType.JSON) {
-				return error;
-			} else {
-				return resp.view("404").result(U.map("req", req));
-			}
-		}
+        return error;
+    }
 
-		return error;
-	}
-
-	protected Object page(Req req, Resp resp, Throwable error) {
-
-		if (error instanceof SecurityException) {
-			resp.model("embedded", req.attr("_embedded", false));
-			resp.model("req", req);
-			resp.model("loginUri", Msc.specialUri("login"));
-			return resp.code(403).view("login").mvc(true);
-
-		} else {
-
-			BasicConfig zone = HttpUtils.zone(req);
-			String home = zone.entry("home").or("/");
-
-			Map<String, ?> errorInfo = HttpUtils.getErrorInfo(resp, error);
-			resp.model("req", req);
-			resp.model("error", errorInfo);
-			resp.model("home", home);
-
-			return resp.mvc(true).view("error");
-		}
-	}
 
 }

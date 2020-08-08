@@ -31,93 +31,72 @@ import org.rapidoid.u.U;
 @Since("4.1.0")
 public class Ctxs extends RapidoidThing {
 
-	private static volatile ThreadLocal<Ctx> CTXS = new ThreadLocal<>();
+    private static volatile ThreadLocal<Ctx> CTXS = new ThreadLocal<>();
 
-	private static volatile PersisterProvider persisterProvider;
+    private Ctxs() {
+    }
 
-	private Ctxs() {
-	}
+    public static Ctx get() {
+        return CTXS.get();
+    }
 
-	public static Ctx get() {
-		return CTXS.get();
-	}
+    public static Ctx required() {
+        Ctx ctx = get();
 
-	public static Ctx required() {
-		Ctx ctx = get();
+        if (ctx == null) {
+            throw new IllegalStateException("No context is available!");
+        }
 
-		if (ctx == null) {
-			throw new IllegalStateException("No context is available!");
-		}
+        return ctx;
+    }
 
-		return ctx;
-	}
+    public static boolean hasContext() {
+        return get() != null;
+    }
 
-	public static boolean hasContext() {
-		return get() != null;
-	}
+    public static void attach(Ctx ctx) {
+        if (!hasContext()) {
+            if (ctx != null) {
+                CTXS.set(ctx);
+            }
+        } else {
+            throw new IllegalStateException("The context was already opened: " + required());
+        }
+    }
 
-	public static void attach(Ctx ctx) {
-		if (!hasContext()) {
-			if (ctx != null) {
-				CTXS.set(ctx);
-			}
-		} else {
-			throw new IllegalStateException("The context was already opened: " + required());
-		}
-	}
+    public static Ctx open(WithContext context) {
+        Ctx ctx = Ctxs.open(context.tag());
 
-	public static Ctx open(WithContext context) {
-		Ctx ctx = Ctxs.open(context.tag());
+        ctx.setExchange(context.exchange());
+        ctx.setUser(context.user());
+        Coll.assign(ctx.extras(), U.safe(context.extras()));
 
-		ctx.setExchange(context.exchange());
-		ctx.setPersister(context.persister());
-		ctx.setUser(context.user());
-		Coll.assign(ctx.extras(), U.safe(context.extras()));
+        return ctx;
+    }
 
-		return ctx;
-	}
+    public static Ctx open(String tag) {
+        Ctx ctx = new Ctx(tag);
+        Log.debug("Opening context", "ctx", ctx);
+        attach(ctx);
+        return ctx;
+    }
 
-	public static Ctx open(String tag) {
-		Ctx ctx = new Ctx(tag);
-		Log.debug("Opening context", "ctx", ctx);
-		attach(ctx);
-		return ctx;
-	}
+    public static void close() {
+        try {
+            Ctx ctx = get();
 
-	public static void close() {
-		try {
-			Ctx ctx = get();
+            if (ctx != null) {
+                ctx.close();
+            } else {
+                // don't throw error here, the context might be "double-closed" on shutdown
+                Log.warn("The context was already closed!");
+            }
+        } finally {
+            CTXS.remove();
+        }
+    }
 
-			if (ctx != null) {
-				ctx.close();
-			} else {
-				// don't throw error here, the context might be "double-closed" on shutdown
-				Log.warn("The context was already closed!");
-			}
-		} finally {
-			CTXS.remove();
-		}
-	}
-
-	public static PersisterProvider getPersisterProvider() {
-		return persisterProvider;
-	}
-
-	public static void setPersisterProvider(PersisterProvider persisterProvider) {
-		Ctxs.persisterProvider = persisterProvider;
-	}
-
-	public static Object createPersister(Ctx ctx) {
-		U.notNull(persisterProvider, "Ctxs.persisterProvider");
-		return persisterProvider.openPersister(ctx);
-	}
-
-	public static void closePersister(Ctx ctx, Object persister) {
-		U.notNull(persisterProvider, "Ctxs.persisterProvider");
-		persisterProvider.closePersister(ctx, persister);
-	}
-
-	public static void reset() {
-		CTXS = new ThreadLocal<>();
-	}
+    public static void reset() {
+        CTXS = new ThreadLocal<>();
+    }
 }

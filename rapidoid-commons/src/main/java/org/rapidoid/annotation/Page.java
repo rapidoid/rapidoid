@@ -34,20 +34,20 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 public @interface Page {
 
-	/**
-	 * Alias of the uri() attribute.
-	 */
-	String value() default "";
+    /**
+     * Alias of the uri() attribute.
+     */
+    String value() default "";
 
-	/**
-	 * Alias of the value() attribute.
-	 */
-	String uri() default "";
+    /**
+     * Alias of the value() attribute.
+     */
+    String uri() default "";
 
-	String view() default "";
+    String view() default "";
 
-	boolean raw() default false;
+    boolean raw() default true;
 
-	PageVerb verb() default PageVerb.GET_OR_POST;
+    PageVerb verb() default PageVerb.GET_OR_POST;
 
 }

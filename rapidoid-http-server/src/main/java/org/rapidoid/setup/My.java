@@ -44,8 +44,6 @@ public class My extends RapidoidThing {
 			GLOBAL.reset();
 			GLOBAL.staticFilesPath(Defaults.staticFilesPath());
 			GLOBAL.errorHandler(Defaults.errorHandler());
-			GLOBAL.viewResolver(Defaults.viewResolver());
-			GLOBAL.pageDecorator(Defaults.pageDecorator());
 			GLOBAL.jsonResponseRenderer(Defaults.jsonResponseRenderer());
 			GLOBAL.jsonRequestBodyParser(Defaults.jsonRequestBodyParser());
 			GLOBAL.xmlResponseRenderer(Defaults.xmlResponseRenderer());
@@ -56,12 +54,9 @@ public class My extends RapidoidThing {
 			GLOBAL.validator(Defaults.validator());
 			GLOBAL.objectMapper(Defaults.objectMapper());
 			GLOBAL.xmlMapper(Defaults.xmlMapper());
-			GLOBAL.entityManagerFactoryProvider(Defaults.entityManagerFactoryProvider());
-			GLOBAL.entityManagerProvider(Defaults.entityManagerProvider());
 			GLOBAL.sessionManager(Defaults.sessionManager());
 			GLOBAL.staticFilesSecurity(Defaults.staticFilesSecurity());
 			GLOBAL.wrappers(Defaults.wrappers());
-			GLOBAL.templateLoader(Defaults.templateLoader());
 		}
 	}
 
@@ -75,14 +70,6 @@ public class My extends RapidoidThing {
 
 	public static void staticFilesPath(String... staticFilesPath) {
 		GLOBAL.staticFilesPath(staticFilesPath);
-	}
-
-	public static String[] templatesPath() {
-		return GLOBAL.templatesPath();
-	}
-
-	public static void templatesPath(String... templatesPath) {
-		GLOBAL.templatesPath(templatesPath);
 	}
 
 	public static HttpWrapper[] wrappers() {
@@ -125,10 +112,6 @@ public class My extends RapidoidThing {
 		GLOBAL.pageDecorator(pageDecorator);
 	}
 
-	public static void viewResolver(ViewResolver viewResolver) {
-		GLOBAL.viewResolver(viewResolver);
-	}
-
 	public static void objectMapper(ObjectMapper jackson) {
 		GLOBAL.objectMapper(jackson);
 	}
@@ -169,28 +152,8 @@ public class My extends RapidoidThing {
 		return GLOBAL.pageDecorator();
 	}
 
-	public static ViewResolver viewResolver() {
-		return GLOBAL.viewResolver();
-	}
-
 	public static ObjectMapper objectMapper() {
 		return GLOBAL.objectMapper();
-	}
-
-	public static EntityManagerProvider entityManagerProvider() {
-		return GLOBAL.entityManagerProvider();
-	}
-
-	public static void entityManagerProvider(EntityManagerProvider entityManagerProvider) {
-		GLOBAL.entityManagerProvider(entityManagerProvider);
-	}
-
-	public static EntityManagerFactoryProvider entityManagerFactoryProvider() {
-		return GLOBAL.entityManagerFactoryProvider();
-	}
-
-	public static void entityManagerFactoryProvider(EntityManagerFactoryProvider entityManagerFactoryProvider) {
-		GLOBAL.entityManagerFactoryProvider(entityManagerFactoryProvider);
 	}
 
 	public static HttpRequestBodyParser jsonRequestBodyParser() {

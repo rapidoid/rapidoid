@@ -1,7 +1,0 @@
-  {{#items}}${.}{{/items}}
-  {{?items}} yes{{/items}}
-  {{!abc}} no{{/abc}}
-  {{^abc}}no{{/abc}}
-  {{#items}} ${.}{{/items}}
-  {{#items}} - ${.}{{/items}}
-  {{#items}}:${.}{{/items}}

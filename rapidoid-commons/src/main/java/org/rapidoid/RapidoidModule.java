@@ -27,24 +27,18 @@ import org.rapidoid.annotation.Since;
 @Since("5.3.0")
 public interface RapidoidModule {
 
-	String name();
+    String name();
 
-	int order();
+    int order();
 
-	void boot();
+    void boot();
 
-	void cleanUp();
+    void cleanUp();
 
-	void beforeTest(Object test);
+    void beforeTest(Object test);
 
-	void initTest(Object test);
+    void initTest(Object test);
 
-	void afterTest(Object test);
-
-	void restartApp();
-
-	void bootstrap(ModuleBootstrapParams params);
-
-	boolean preventsClassReload(String classname);
+    void afterTest(Object test);
 
 }

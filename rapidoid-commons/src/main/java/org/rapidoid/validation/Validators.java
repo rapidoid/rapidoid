@@ -32,28 +32,28 @@ import java.util.Set;
 @Since("5.1.0")
 public class Validators extends RapidoidThing {
 
-	private static final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    private static final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 
-	private static final Validator validator = factory.getValidator();
+    private static final Validator validator = factory.getValidator();
 
-	public static ValidatorFactory factory() {
-		return factory;
-	}
+    public static ValidatorFactory factory() {
+        return factory;
+    }
 
-	public static Validator get() {
-		return validator;
-	}
+    public static Validator get() {
+        return validator;
+    }
 
-	public static <T> Set<ConstraintViolation<T>> getViolations(T bean) {
-		return validator.validate(bean);
-	}
+    public static <T> Set<ConstraintViolation<T>> getViolations(T bean) {
+        return validator.validate(bean);
+    }
 
-	public static void validate(Object bean) {
-		Set<ConstraintViolation<Object>> violations = getViolations(bean);
+    public static void validate(Object bean) {
+        Set<ConstraintViolation<Object>> violations = getViolations(bean);
 
-		if (U.notEmpty(violations)) {
-			throw new ConstraintViolationException(violations);
-		}
-	}
+        if (U.notEmpty(violations)) {
+            throw new ConstraintViolationException(violations);
+        }
+    }
 
 }

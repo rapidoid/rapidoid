@@ -23,7 +23,6 @@ package org.rapidoid.setup;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.MediaType;
 import org.rapidoid.http.ReqHandler;
@@ -33,486 +32,381 @@ import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.lambda.*;
 
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.Map;
 import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
 public class OnRoute extends RapidoidThing {
 
-	private final SetupImpl setup;
-
-	private final String verb;
+    private final SetupImpl setup;
+
+    private final String verb;
 
-	private final String path;
-
-	private final RouteOptions options;
+    private final String path;
+
+    private final RouteOptions options;
 
-	public OnRoute(SetupImpl setup, String verb, String path) {
-		this.setup = setup;
-		this.verb = verb;
-		this.path = path;
-		this.options = setup.defaults().copy();
-	}
-
-	/* GENERIC */
+    public OnRoute(SetupImpl setup, String verb, String path) {
+        this.setup = setup;
+        this.verb = verb;
+        this.path = path;
+        this.options = setup.defaults().copy();
+    }
+
+    /* GENERIC */
 
-	public void serve(String response) {
-		if (options.managed()) {
-			HttpHandlers.registerPredefined(setup, verb, path, options, response);
-		} else {
-			HttpHandlers.registerStatic(setup, verb, path, options, response.getBytes());
-		}
-	}
+    public void serve(String response) {
+        if (options.managed()) {
+            HttpHandlers.registerPredefined(setup, verb, path, options, response);
+        } else {
+            HttpHandlers.registerStatic(setup, verb, path, options, response.getBytes());
+        }
+    }
 
-	public void serve(byte[] response) {
-		if (options.managed()) {
-			HttpHandlers.registerPredefined(setup, verb, path, options, response);
-		} else {
-			HttpHandlers.registerStatic(setup, verb, path, options, response);
-		}
-	}
+    public void serve(byte[] response) {
+        if (options.managed()) {
+            HttpHandlers.registerPredefined(setup, verb, path, options, response);
+        } else {
+            HttpHandlers.registerStatic(setup, verb, path, options, response);
+        }
+    }
 
-	public <T> void serve(Callable<T> handler) {
-		HttpHandlers.register(setup, verb, path, options, handler);
-	}
+    public <T> void serve(Callable<T> handler) {
+        HttpHandlers.register(setup, verb, path, options, handler);
+    }
 
-	public void serve(Method method, Object instance) {
-		HttpHandlers.register(setup, verb, path, options, method, instance);
-	}
+    public void serve(Method method, Object instance) {
+        HttpHandlers.register(setup, verb, path, options, method, instance);
+    }
 
-	public void serve(ReqHandler handler) {
-		HttpHandlers.register(setup, verb, path, options, handler);
-	}
+    public void serve(ReqHandler handler) {
+        HttpHandlers.register(setup, verb, path, options, handler);
+    }
 
-	public void serve(ReqRespHandler handler) {
-		HttpHandlers.register(setup, verb, path, options, handler);
-	}
+    public void serve(ReqRespHandler handler) {
+        HttpHandlers.register(setup, verb, path, options, handler);
+    }
 
-	public void serve(OneParamLambda<?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, options, handler);
-	}
+    public void serve(OneParamLambda<?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, options, handler);
+    }
 
-	public void serve(TwoParamLambda<?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, options, handler);
-	}
+    public void serve(TwoParamLambda<?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, options, handler);
+    }
 
-	public void serve(ThreeParamLambda<?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, options, handler);
-	}
+    public void serve(ThreeParamLambda<?, ?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, options, handler);
+    }
 
-	public void serve(FourParamLambda<?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, options, handler);
-	}
+    public void serve(FourParamLambda<?, ?, ?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, options, handler);
+    }
 
-	public void serve(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, options, handler);
-	}
+    public void serve(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, options, handler);
+    }
 
-	public void serve(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, options, handler);
-	}
+    public void serve(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, options, handler);
+    }
 
-	public void serve(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, options, handler);
-	}
+    public void serve(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, options, handler);
+    }
 
-	/* HTML */
+    /* HTML */
 
-	public void html(String response) {
-		HttpHandlers.registerPredefined(setup, verb, path, htmlOpts(), response);
-	}
+    public void html(String response) {
+        HttpHandlers.registerPredefined(setup, verb, path, htmlOpts(), response);
+    }
 
-	public void html(byte[] response) {
-		HttpHandlers.registerPredefined(setup, verb, path, htmlOpts(), response);
-	}
+    public void html(byte[] response) {
+        HttpHandlers.registerPredefined(setup, verb, path, htmlOpts(), response);
+    }
 
-	public <T> void html(Callable<T> handler) {
-		HttpHandlers.register(setup, verb, path, htmlOpts(), handler);
-	}
+    public <T> void html(Callable<T> handler) {
+        HttpHandlers.register(setup, verb, path, htmlOpts(), handler);
+    }
 
-	public void html(Method method, Object instance) {
-		HttpHandlers.register(setup, verb, path, htmlOpts(), method, instance);
-	}
+    public void html(Method method, Object instance) {
+        HttpHandlers.register(setup, verb, path, htmlOpts(), method, instance);
+    }
 
-	public void html(ReqHandler handler) {
-		HttpHandlers.register(setup, verb, path, htmlOpts(), handler);
-	}
+    public void html(ReqHandler handler) {
+        HttpHandlers.register(setup, verb, path, htmlOpts(), handler);
+    }
 
-	public void html(ReqRespHandler handler) {
-		HttpHandlers.register(setup, verb, path, htmlOpts(), handler);
-	}
+    public void html(ReqRespHandler handler) {
+        HttpHandlers.register(setup, verb, path, htmlOpts(), handler);
+    }
 
-	public void html(OneParamLambda<?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, htmlOpts(), handler);
-	}
+    public void html(OneParamLambda<?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, htmlOpts(), handler);
+    }
 
-	public void html(TwoParamLambda<?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, htmlOpts(), handler);
-	}
+    public void html(TwoParamLambda<?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, htmlOpts(), handler);
+    }
 
-	public void html(ThreeParamLambda<?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, htmlOpts(), handler);
-	}
+    public void html(ThreeParamLambda<?, ?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, htmlOpts(), handler);
+    }
 
-	public void html(FourParamLambda<?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, htmlOpts(), handler);
-	}
+    public void html(FourParamLambda<?, ?, ?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, htmlOpts(), handler);
+    }
 
-	public void html(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, htmlOpts(), handler);
-	}
+    public void html(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, htmlOpts(), handler);
+    }
 
-	public void html(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, htmlOpts(), handler);
-	}
+    public void html(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, htmlOpts(), handler);
+    }
 
-	public void html(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, htmlOpts(), handler);
-	}
+    public void html(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, htmlOpts(), handler);
+    }
 
-	/* JSON */
+    /* JSON */
 
-	public void json(String response) {
-		HttpHandlers.registerPredefined(setup, verb, path, jsonOpts(), response);
-	}
+    public void json(String response) {
+        HttpHandlers.registerPredefined(setup, verb, path, jsonOpts(), response);
+    }
 
-	public void json(byte[] response) {
-		HttpHandlers.registerPredefined(setup, verb, path, jsonOpts(), response);
-	}
+    public void json(byte[] response) {
+        HttpHandlers.registerPredefined(setup, verb, path, jsonOpts(), response);
+    }
 
-	public <T> void json(Callable<T> handler) {
-		HttpHandlers.register(setup, verb, path, jsonOpts(), handler);
-	}
+    public <T> void json(Callable<T> handler) {
+        HttpHandlers.register(setup, verb, path, jsonOpts(), handler);
+    }
 
-	public void json(Method method, Object instance) {
-		HttpHandlers.register(setup, verb, path, jsonOpts(), method, instance);
-	}
+    public void json(Method method, Object instance) {
+        HttpHandlers.register(setup, verb, path, jsonOpts(), method, instance);
+    }
 
-	public void json(ReqHandler handler) {
-		HttpHandlers.register(setup, verb, path, jsonOpts(), handler);
-	}
+    public void json(ReqHandler handler) {
+        HttpHandlers.register(setup, verb, path, jsonOpts(), handler);
+    }
 
-	public void json(ReqRespHandler handler) {
-		HttpHandlers.register(setup, verb, path, jsonOpts(), handler);
-	}
+    public void json(ReqRespHandler handler) {
+        HttpHandlers.register(setup, verb, path, jsonOpts(), handler);
+    }
 
-	public void json(OneParamLambda<?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, jsonOpts(), handler);
-	}
+    public void json(OneParamLambda<?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, jsonOpts(), handler);
+    }
 
-	public void json(TwoParamLambda<?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, jsonOpts(), handler);
-	}
+    public void json(TwoParamLambda<?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, jsonOpts(), handler);
+    }
 
-	public void json(ThreeParamLambda<?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, jsonOpts(), handler);
-	}
+    public void json(ThreeParamLambda<?, ?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, jsonOpts(), handler);
+    }
 
-	public void json(FourParamLambda<?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, jsonOpts(), handler);
-	}
+    public void json(FourParamLambda<?, ?, ?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, jsonOpts(), handler);
+    }
 
-	public void json(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, jsonOpts(), handler);
-	}
+    public void json(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, jsonOpts(), handler);
+    }
 
-	public void json(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, jsonOpts(), handler);
-	}
+    public void json(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, jsonOpts(), handler);
+    }
 
-	public void json(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, jsonOpts(), handler);
-	}
+    public void json(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, jsonOpts(), handler);
+    }
 
-	/* XML */
+    /* XML */
 
-	public void xml(String response) {
-		HttpHandlers.registerPredefined(setup, verb, path, xmlOpts(), response);
-	}
+    public void xml(String response) {
+        HttpHandlers.registerPredefined(setup, verb, path, xmlOpts(), response);
+    }
 
-	public void xml(byte[] response) {
-		HttpHandlers.registerPredefined(setup, verb, path, xmlOpts(), response);
-	}
+    public void xml(byte[] response) {
+        HttpHandlers.registerPredefined(setup, verb, path, xmlOpts(), response);
+    }
 
-	public <T> void xml(Callable<T> handler) {
-		HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
-	}
+    public <T> void xml(Callable<T> handler) {
+        HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
+    }
 
-	public void xml(Method method, Object instance) {
-		HttpHandlers.register(setup, verb, path, xmlOpts(), method, instance);
-	}
+    public void xml(Method method, Object instance) {
+        HttpHandlers.register(setup, verb, path, xmlOpts(), method, instance);
+    }
 
-	public void xml(ReqHandler handler) {
-		HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
-	}
+    public void xml(ReqHandler handler) {
+        HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
+    }
 
-	public void xml(ReqRespHandler handler) {
-		HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
-	}
+    public void xml(ReqRespHandler handler) {
+        HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
+    }
 
-	public void xml(OneParamLambda<?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
-	}
+    public void xml(OneParamLambda<?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
+    }
 
-	public void xml(TwoParamLambda<?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
-	}
+    public void xml(TwoParamLambda<?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
+    }
 
-	public void xml(ThreeParamLambda<?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
-	}
+    public void xml(ThreeParamLambda<?, ?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
+    }
 
-	public void xml(FourParamLambda<?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
-	}
+    public void xml(FourParamLambda<?, ?, ?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
+    }
 
-	public void xml(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
-	}
+    public void xml(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
+    }
 
-	public void xml(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
-	}
+    public void xml(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
+    }
 
-	public void xml(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
-	}
+    public void xml(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, xmlOpts(), handler);
+    }
 
-	/* PLAIN */
+    /* PLAIN */
 
-	public void plain(String response) {
-		HttpHandlers.registerPredefined(setup, verb, path, plainOpts(), response);
-	}
+    public void plain(String response) {
+        HttpHandlers.registerPredefined(setup, verb, path, plainOpts(), response);
+    }
 
-	public void plain(byte[] response) {
-		HttpHandlers.registerPredefined(setup, verb, path, plainOpts(), response);
-	}
+    public void plain(byte[] response) {
+        HttpHandlers.registerPredefined(setup, verb, path, plainOpts(), response);
+    }
 
-	public <T> void plain(Callable<T> handler) {
-		HttpHandlers.register(setup, verb, path, plainOpts(), handler);
-	}
+    public <T> void plain(Callable<T> handler) {
+        HttpHandlers.register(setup, verb, path, plainOpts(), handler);
+    }
 
-	public void plain(Method method, Object instance) {
-		HttpHandlers.register(setup, verb, path, plainOpts(), method, instance);
-	}
+    public void plain(Method method, Object instance) {
+        HttpHandlers.register(setup, verb, path, plainOpts(), method, instance);
+    }
 
-	public void plain(ReqHandler handler) {
-		HttpHandlers.register(setup, verb, path, plainOpts(), handler);
-	}
+    public void plain(ReqHandler handler) {
+        HttpHandlers.register(setup, verb, path, plainOpts(), handler);
+    }
 
-	public void plain(ReqRespHandler handler) {
-		HttpHandlers.register(setup, verb, path, plainOpts(), handler);
-	}
+    public void plain(ReqRespHandler handler) {
+        HttpHandlers.register(setup, verb, path, plainOpts(), handler);
+    }
 
-	public void plain(OneParamLambda<?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, plainOpts(), handler);
-	}
+    public void plain(OneParamLambda<?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, plainOpts(), handler);
+    }
 
-	public void plain(TwoParamLambda<?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, plainOpts(), handler);
-	}
+    public void plain(TwoParamLambda<?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, plainOpts(), handler);
+    }
 
-	public void plain(ThreeParamLambda<?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, plainOpts(), handler);
-	}
+    public void plain(ThreeParamLambda<?, ?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, plainOpts(), handler);
+    }
 
-	public void plain(FourParamLambda<?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, plainOpts(), handler);
-	}
+    public void plain(FourParamLambda<?, ?, ?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, plainOpts(), handler);
+    }
 
-	public void plain(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, plainOpts(), handler);
-	}
+    public void plain(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, plainOpts(), handler);
+    }
 
-	public void plain(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, plainOpts(), handler);
-	}
+    public void plain(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, plainOpts(), handler);
+    }
 
-	public void plain(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, plainOpts(), handler);
-	}
+    public void plain(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
+        HttpHandlers.register(setup, verb, path, plainOpts(), handler);
+    }
 
-	/* MVC */
+    /* CONTENT TYPE */
 
-	public void mvc(String response) {
-		HttpHandlers.registerPredefined(setup, verb, path, mvcOpts(), response);
-	}
+    private RouteOptions htmlOpts() {
+        return opts(MediaType.HTML_UTF_8);
+    }
 
-	public void mvc(Collection<?> response) {
-		HttpHandlers.registerPredefined(setup, verb, path, mvcOpts(), response);
-	}
+    private RouteOptions jsonOpts() {
+        return opts(MediaType.JSON);
+    }
 
-	public void mvc(Map<?, ?> response) {
-		HttpHandlers.registerPredefined(setup, verb, path, mvcOpts(), response);
-	}
+    private RouteOptions xmlOpts() {
+        return opts(MediaType.XML_UTF_8);
+    }
 
-	public <T> void mvc(Callable<T> handler) {
-		HttpHandlers.register(setup, verb, path, mvcOpts(), handler);
-	}
+    private RouteOptions plainOpts() {
+        return opts(MediaType.PLAIN_TEXT_UTF_8);
+    }
 
-	public void mvc(Method method, Object instance) {
-		HttpHandlers.register(setup, verb, path, mvcOpts(), method, instance);
-	}
+    private RouteOptions opts(MediaType contentType) {
 
-	public void mvc(ReqHandler handler) {
-		HttpHandlers.register(setup, verb, path, mvcOpts(), handler);
-	}
+        // don't change if already customized
+        if (options.contentType() == null || !options.contentTypeCustomized()) {
+            options.contentType(contentType);
+        }
 
-	public void mvc(ReqRespHandler handler) {
-		HttpHandlers.register(setup, verb, path, mvcOpts(), handler);
-	}
+        return options;
+    }
 
-	public void mvc(OneParamLambda<?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, mvcOpts(), handler);
-	}
+    /* ROUTE OPTIONS */
 
-	public void mvc(TwoParamLambda<?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, mvcOpts(), handler);
-	}
-
-	public void mvc(ThreeParamLambda<?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, mvcOpts(), handler);
-	}
-
-	public void mvc(FourParamLambda<?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, mvcOpts(), handler);
-	}
-
-	public void mvc(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, mvcOpts(), handler);
-	}
-
-	public void mvc(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, mvcOpts(), handler);
-	}
-
-	public void mvc(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(setup, verb, path, mvcOpts(), handler);
-	}
-
-	/* CONTENT TYPE */
-
-	private RouteOptions htmlOpts() {
-		return opts(MediaType.HTML_UTF_8);
-	}
-
-	private RouteOptions jsonOpts() {
-		return opts(MediaType.JSON);
-	}
-
-	private RouteOptions xmlOpts() {
-		return opts(MediaType.XML_UTF_8);
-	}
-
-	private RouteOptions plainOpts() {
-		return opts(MediaType.PLAIN_TEXT_UTF_8);
-	}
-
-	private RouteOptions mvcOpts() {
-		return opts(MediaType.HTML_UTF_8).mvc(true);
-	}
-
-	private RouteOptions opts(MediaType contentType) {
-
-		// don't change if already customized
-		if (options.contentType() == null || !options.contentTypeCustomized()) {
-			options.contentType(contentType);
-		}
-
-		return options;
-	}
-
-	/* ROUTE OPTIONS */
-
-	public OnRoute wrappers(HttpWrapper... wrappers) {
-		options.wrappers(wrappers);
-		return this;
-	}
-
-	public OnRoute roles(String... roles) {
-		options.roles(roles);
-		return this;
-	}
-
-	public OnRoute view(String viewName) {
-		options.view(viewName);
-		return this;
-	}
-
-	public OnRoute contentType(MediaType contentType) {
-		options.contentType(contentType);
-		return this;
-	}
-
-	public OnRoute internal(boolean internal) {
-		options.internal(internal);
-		return this;
-	}
-
-	public OnRoute meta(RouteMeta meta) {
-		options.meta(meta);
-		return this;
-	}
-
-	/**
-	 * Use transaction(...) instead.
-	 */
-	@Deprecated
-	public OnRoute tx(TransactionMode txMode) {
-		options.transaction(txMode);
-		return this;
-	}
-
-	/**
-	 * Use transaction() instead.
-	 */
-	@Deprecated
-	public OnRoute tx() {
-		return transaction();
-	}
-
-	public OnRoute transaction(TransactionMode txMode) {
-		options.transaction(txMode);
-		return this;
-	}
-
-	public OnRoute transaction() {
-		return transaction(TransactionMode.AUTO);
-	}
-
-	public OnRoute zone(String zone) {
-		options.zone(zone);
-		return this;
-	}
-
-	public OnRoute managed(boolean managed) {
-		options.managed(managed);
-		return this;
-	}
-
-	public OnRoute cacheTTL(long cacheTTL) {
-		options.cacheTTL(cacheTTL);
-		return this;
-	}
-
-	public OnRoute cacheCapacity(int cacheCapacity) {
-		options.cacheCapacity(cacheCapacity);
-		return this;
-	}
-
-	public OnRoute menu(int order, String caption) {
-		setup.gui().addMenuItem(path, order, caption);
-		return this;
-	}
-
-	public OnRoute menu(int order, String caption, int subItemOrder, String subItemCaption) {
-		setup.gui().addSubMenuItem(path, order, caption, subItemOrder, subItemCaption);
-		return this;
-	}
-
-	public RouteOptions options() {
-		return options;
-	}
+    public OnRoute wrappers(HttpWrapper... wrappers) {
+        options.wrappers(wrappers);
+        return this;
+    }
+
+    public OnRoute roles(String... roles) {
+        options.roles(roles);
+        return this;
+    }
+
+    public OnRoute contentType(MediaType contentType) {
+        options.contentType(contentType);
+        return this;
+    }
+
+    public OnRoute internal(boolean internal) {
+        options.internal(internal);
+        return this;
+    }
+
+    public OnRoute meta(RouteMeta meta) {
+        options.meta(meta);
+        return this;
+    }
+
+    public OnRoute zone(String zone) {
+        options.zone(zone);
+        return this;
+    }
+
+    public OnRoute managed(boolean managed) {
+        options.managed(managed);
+        return this;
+    }
+
+    public OnRoute cacheTTL(long cacheTTL) {
+        options.cacheTTL(cacheTTL);
+        return this;
+    }
+
+    public OnRoute cacheCapacity(int cacheCapacity) {
+        options.cacheCapacity(cacheCapacity);
+        return this;
+    }
+
+    public RouteOptions options() {
+        return options;
+    }
 }

@@ -23,7 +23,6 @@ package org.rapidoid.http.impl;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.collection.Coll;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.HttpWrapper;
@@ -39,232 +38,183 @@ import java.util.Set;
 @Since("5.1.0")
 public class RouteOptions extends RapidoidThing implements RouteConfig {
 
-	private volatile MediaType contentType = HttpUtils.getDefaultContentType();
+    private volatile MediaType contentType = HttpUtils.getDefaultContentType();
 
-	private volatile boolean contentTypeCustomized;
+    private volatile boolean contentTypeCustomized;
 
-	private volatile String view;
+    private volatile String zone;
 
-	private volatile boolean mvc;
+    private volatile boolean managed = true;
 
-	private volatile String zone;
+    private final Set<String> roles = Coll.synchronizedSet();
 
-	private volatile boolean managed = true;
+    private volatile HttpWrapper[] wrappers;
 
-	private volatile TransactionMode transaction = TransactionMode.NONE;
+    private volatile long cacheTTL;
 
-	private final Set<String> roles = Coll.synchronizedSet();
+    private volatile int cacheCapacity = 100;
 
-	private volatile HttpWrapper[] wrappers;
+    private volatile boolean internal;
 
-	private volatile long cacheTTL;
+    private volatile RouteMeta meta = new RouteMeta();
 
-	private volatile int cacheCapacity = 100;
+    @Override
+    public String toString() {
+        return "RouteOptions{" +
+                "contentType=" + contentType +
+                ", contentTypeCustomized=" + contentTypeCustomized +
+                ", zone='" + zone + '\'' +
+                ", managed=" + managed +
+                ", roles=" + roles +
+                ", wrappers=" + Arrays.toString(wrappers) +
+                ", cacheTTL=" + cacheTTL +
+                ", cacheCapacity=" + cacheCapacity +
+                ", internal=" + internal +
+                ", meta=" + meta +
+                '}';
+    }
 
-	private volatile boolean internal;
+    @Override
+    public MediaType contentType() {
+        return contentType;
+    }
 
-	private volatile RouteMeta meta = new RouteMeta();
+    @Override
+    public RouteOptions contentType(MediaType contentType) {
+        this.contentType = contentType;
+        this.contentTypeCustomized = true;
+        return this;
+    }
 
-	@Override
-	public String toString() {
-		return "RouteOptions{" +
-			"contentType=" + contentType +
-			", contentTypeCustomized=" + contentTypeCustomized +
-			", view='" + view + '\'' +
-			", mvc=" + mvc +
-			", zone='" + zone + '\'' +
-			", managed=" + managed +
-			", transaction=" + transaction +
-			", roles=" + roles +
-			", wrappers=" + Arrays.toString(wrappers) +
-			", cacheTTL=" + cacheTTL +
-			", cacheCapacity=" + cacheCapacity +
-			", internal=" + internal +
-			", meta=" + meta +
-			'}';
-	}
+    @Override
+    public Set<String> roles() {
+        return roles;
+    }
 
-	@Override
-	public MediaType contentType() {
-		return contentType;
-	}
+    @Override
+    public RouteOptions roles(String... roles) {
+        Coll.assign(this.roles, roles);
+        return this;
+    }
 
-	@Override
-	public RouteOptions contentType(MediaType contentType) {
-		this.contentType = contentType;
-		this.contentTypeCustomized = true;
-		return this;
-	}
+    @Override
+    public HttpWrapper[] wrappers() {
+        return wrappers;
+    }
 
-	@Override
-	public String view() {
-		return view;
-	}
+    @Override
+    public RouteOptions wrappers(HttpWrapper... wrappers) {
+        this.wrappers = wrappers;
+        return this;
+    }
 
-	@Override
-	public RouteOptions view(String view) {
-		HttpUtils.validateViewName(view);
-		this.view = view;
-		return this;
-	}
+    @Override
+    public String zone() {
+        return zone;
+    }
 
-	@Override
-	public boolean mvc() {
-		return mvc;
-	}
+    @Override
+    public RouteOptions zone(String zone) {
+        this.zone = zone;
+        return this;
+    }
 
-	@Override
-	public RouteOptions mvc(boolean mvc) {
-		this.mvc = mvc;
-		return this;
-	}
+    @Override
+    public boolean managed() {
+        return managed;
+    }
 
-	@Override
-	public TransactionMode transaction() {
-		return transaction;
-	}
+    @Override
+    public RouteOptions managed(boolean managed) {
+        this.managed = managed;
+        return this;
+    }
 
-	@Override
-	public RouteOptions transaction(TransactionMode transaction) {
-		this.transaction = transaction;
-		return this;
-	}
+    @Override
+    public long cacheTTL() {
+        return cacheTTL;
+    }
 
-	@Override
-	public Set<String> roles() {
-		return roles;
-	}
+    @Override
+    public RouteOptions cacheTTL(long cacheTTL) {
+        this.cacheTTL = cacheTTL;
+        return this;
+    }
 
-	@Override
-	public RouteOptions roles(String... roles) {
-		Coll.assign(this.roles, roles);
-		return this;
-	}
+    @Override
+    public int cacheCapacity() {
+        return cacheCapacity;
+    }
 
-	@Override
-	public HttpWrapper[] wrappers() {
-		return wrappers;
-	}
+    @Override
+    public RouteOptions cacheCapacity(int cacheCapacity) {
+        this.cacheCapacity = cacheCapacity;
+        return this;
+    }
 
-	@Override
-	public RouteOptions wrappers(HttpWrapper... wrappers) {
-		this.wrappers = wrappers;
-		return this;
-	}
+    @Override
+    public RouteMeta meta() {
+        return meta;
+    }
 
-	@Override
-	public String zone() {
-		return zone;
-	}
+    @Override
+    public RouteOptions meta(RouteMeta meta) {
+        this.meta = meta;
+        return this;
+    }
 
-	@Override
-	public RouteOptions zone(String zone) {
-		this.zone = zone;
-		return this;
-	}
+    @Override
+    public boolean internal() {
+        return internal;
+    }
 
-	@Override
-	public boolean managed() {
-		return managed;
-	}
+    @Override
+    public RouteOptions internal(boolean internal) {
+        this.internal = internal;
+        return this;
+    }
 
-	@Override
-	public RouteOptions managed(boolean managed) {
-		this.managed = managed;
-		return this;
-	}
+    public RouteOptions copy() {
+        RouteOptions copy = new RouteOptions();
 
-	@Override
-	public long cacheTTL() {
-		return cacheTTL;
-	}
+        copy.contentType = this.contentType;
+        Coll.assign(copy.roles, this.roles);
+        copy.wrappers = U.array(this.wrappers);
+        copy.zone = this.zone;
+        copy.managed = this.managed;
+        copy.cacheTTL = this.cacheTTL;
+        copy.cacheCapacity = this.cacheCapacity;
+        copy.internal = this.internal;
+        copy.meta = this.meta.copy();
 
-	@Override
-	public RouteOptions cacheTTL(long cacheTTL) {
-		this.cacheTTL = cacheTTL;
-		return this;
-	}
+        return copy;
+    }
 
-	@Override
-	public int cacheCapacity() {
-		return cacheCapacity;
-	}
+    public boolean contentTypeCustomized() {
+        return contentTypeCustomized;
+    }
 
-	@Override
-	public RouteOptions cacheCapacity(int cacheCapacity) {
-		this.cacheCapacity = cacheCapacity;
-		return this;
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RouteOptions that = (RouteOptions) o;
+        return contentTypeCustomized == that.contentTypeCustomized &&
+                managed == that.managed &&
+                cacheTTL == that.cacheTTL &&
+                cacheCapacity == that.cacheCapacity &&
+                internal == that.internal &&
+                Objects.equals(contentType, that.contentType) &&
+                Objects.equals(zone, that.zone) &&
+                Objects.equals(roles, that.roles) &&
+                Arrays.equals(wrappers, that.wrappers) &&
+                Objects.equals(meta, that.meta);
+    }
 
-	@Override
-	public RouteMeta meta() {
-		return meta;
-	}
-
-	@Override
-	public RouteOptions meta(RouteMeta meta) {
-		this.meta = meta;
-		return this;
-	}
-
-	@Override
-	public boolean internal() {
-		return internal;
-	}
-
-	@Override
-	public RouteOptions internal(boolean internal) {
-		this.internal = internal;
-		return this;
-	}
-
-	public RouteOptions copy() {
-		RouteOptions copy = new RouteOptions();
-
-		copy.contentType = this.contentType;
-		copy.view = this.view;
-		copy.mvc = this.mvc;
-		copy.transaction = this.transaction;
-		Coll.assign(copy.roles, this.roles);
-		copy.wrappers = U.array(this.wrappers);
-		copy.zone = this.zone;
-		copy.managed = this.managed;
-		copy.cacheTTL = this.cacheTTL;
-		copy.cacheCapacity = this.cacheCapacity;
-		copy.internal = this.internal;
-		copy.meta = this.meta.copy();
-
-		return copy;
-	}
-
-	public boolean contentTypeCustomized() {
-		return contentTypeCustomized;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		RouteOptions that = (RouteOptions) o;
-		return contentTypeCustomized == that.contentTypeCustomized &&
-			mvc == that.mvc &&
-			managed == that.managed &&
-			cacheTTL == that.cacheTTL &&
-			cacheCapacity == that.cacheCapacity &&
-			internal == that.internal &&
-			Objects.equals(contentType, that.contentType) &&
-			Objects.equals(view, that.view) &&
-			Objects.equals(zone, that.zone) &&
-			transaction == that.transaction &&
-			Objects.equals(roles, that.roles) &&
-			Arrays.equals(wrappers, that.wrappers) &&
-			Objects.equals(meta, that.meta);
-	}
-
-	@Override
-	public int hashCode() {
-		int result = Objects.hash(contentType, contentTypeCustomized, view, mvc, zone, managed, transaction, roles, cacheTTL, cacheCapacity, internal, meta);
-		result = 31 * result + Arrays.hashCode(wrappers);
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(contentType, contentTypeCustomized, zone, managed, roles, cacheTTL, cacheCapacity, internal, meta);
+        result = 31 * result + Arrays.hashCode(wrappers);
+        return result;
+    }
 }

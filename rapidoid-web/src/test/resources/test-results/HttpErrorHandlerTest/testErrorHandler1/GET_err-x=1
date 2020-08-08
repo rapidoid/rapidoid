@@ -1,8 +1,0 @@
-HTTP/1.1 500 Internal Server Error
-Connection: keep-alive
-Server: Rapidoid
-Date: XXXXX GMT
-Content-Type: text/html; charset=utf-8
-Content-Length: 47
-
-GET /err?x=1:err:java.lang.NullPointerException

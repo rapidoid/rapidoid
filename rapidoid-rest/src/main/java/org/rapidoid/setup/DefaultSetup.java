@@ -28,37 +28,31 @@ import org.rapidoid.config.Config;
 import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.impl.HttpRoutesImpl;
-import org.rapidoid.ioc.IoC;
 import org.rapidoid.util.Msc;
-import org.rapidoid.web.Screen;
-import org.rapidoid.web.ScreenBean;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.2")
 public class DefaultSetup extends RapidoidInitializer {
 
-	private static final String MAIN_ZONE = Msc.isPlatform() ? "platform" : "main";
+    private static final String MAIN_ZONE = Msc.isPlatform() ? "platform" : "main";
 
-	private static final Config MAIN_CFG = Msc.isPlatform() ? Conf.RAPIDOID : Conf.ON;
+    private static final Config MAIN_CFG = Msc.isPlatform() ? Conf.RAPIDOID : Conf.ON;
 
-	private static final Screen gui = new ScreenBean();
+    final Setup main;
 
-	final Setup main;
+    DefaultSetup() {
+        Customization customization = new Customization("main", My.custom(), Conf.ROOT);
+        HttpRoutesImpl routes = new HttpRoutesImpl("main", customization);
 
-	DefaultSetup() {
-		Customization customization = new Customization("main", My.custom(), Conf.ROOT);
-		HttpRoutesImpl routes = new HttpRoutesImpl("main", customization);
+        FastHttp http = new FastHttp(routes, MAIN_CFG);
 
-		FastHttp http = new FastHttp(routes, MAIN_CFG, gui);
+        main = new SetupImpl("main", MAIN_ZONE, http, MAIN_CFG, customization, routes, true);
+        Setups.register(main);
 
-		main = new SetupImpl("main", MAIN_ZONE, http, IoC.defaultContext(), MAIN_CFG, customization, routes, gui, true);
-		Setups.register(main);
+        initDefaults();
+    }
 
-		initDefaults();
-	}
-
-	void initDefaults() {
-		gui.reset();
-	}
+    void initDefaults() {
+    }
 
 }
