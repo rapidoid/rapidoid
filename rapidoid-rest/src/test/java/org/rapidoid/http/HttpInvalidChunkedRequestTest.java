@@ -23,8 +23,6 @@ package org.rapidoid.http;
 import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.data.BufRange;
-import org.rapidoid.data.BufRanges;
 import org.rapidoid.io.IO;
 import org.rapidoid.net.TCP;
 import org.rapidoid.net.abstracts.Channel;
@@ -33,7 +31,7 @@ import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Authors({"Nikolche Mihajlovski", "Jezza"})
@@ -44,9 +42,9 @@ public class HttpInvalidChunkedRequestTest extends IsolatedIntegrationTest {
 
     private static final String RESP_BODY = "Hello";
 
-    private static final int CONNECTIONS = 10;
+    private static final int CONNECTIONS = 100;
 
-    private final AtomicBoolean err = new AtomicBoolean();
+    private final CountDownLatch latch = new CountDownLatch(CONNECTIONS);
 
     @Test
     public void testChunkedRequests() throws InterruptedException {
@@ -54,8 +52,8 @@ public class HttpInvalidChunkedRequestTest extends IsolatedIntegrationTest {
 
         int responsesForChunkedReq = sendChunkedRequests();
 
-        // no response is received for the (problematic) chunked requests
-        eq(responsesForChunkedReq, 0);
+        // the connectino is closed for the (problematic) chunked requests
+        eq(responsesForChunkedReq, CONNECTIONS);
 
         // normal requests can still be processed
         for (int i = 0; i < 10; i++) {
@@ -64,9 +62,7 @@ public class HttpInvalidChunkedRequestTest extends IsolatedIntegrationTest {
     }
 
     private int sendChunkedRequests() throws InterruptedException {
-        final AtomicInteger responsesForChunkedReq = new AtomicInteger();
-
-        CountDownLatch latch = new CountDownLatch(CONNECTIONS);
+        final AtomicInteger emptyResponsesForChunkedReq = new AtomicInteger();
 
         TCP.client()
                 .host("localhost")
@@ -86,9 +82,13 @@ public class HttpInvalidChunkedRequestTest extends IsolatedIntegrationTest {
 
                     @Override
                     protected int state1(Channel ctx) {
-                        verifyHttpResponse(ctx);
+                        String s = ctx.input().asText();
 
-                        responsesForChunkedReq.incrementAndGet();
+                        if (s.isEmpty()) {
+                            emptyResponsesForChunkedReq.incrementAndGet();
+                        } else {
+                            U.print(s); // for debugging
+                        }
 
                         ctx.close();
 
@@ -97,29 +97,11 @@ public class HttpInvalidChunkedRequestTest extends IsolatedIntegrationTest {
 
                 }).build().start();
 
-        latch.await();
+        latch.await(10, TimeUnit.SECONDS);
 
-        U.sleep(5000); // wait a bit more, to make sure the server has time to process the requests
+        U.sleep(3000); // wait extra time
 
-        isFalse(err.get());
-
-        return responsesForChunkedReq.get();
-    }
-
-    private void verifyHttpResponse(Channel ctx) {
-        final BufRanges lines = ctx.helper().ranges1;
-        final BufRange resp = ctx.helper().ranges2.ranges[0];
-
-        ctx.input().scanLnLn(lines.reset()); // read lines
-
-        ctx.input().scanN(RESP_BODY.length(), resp); // read response body
-
-        String respBody = ctx.input().asText();
-
-        if (U.neq(respBody, RESP_BODY)) {
-            U.print(U.frmt("EXPECTED: [%s] but received [%s]", RESP_BODY, respBody));
-            err.set(true);
-        }
+        return emptyResponsesForChunkedReq.get();
     }
 
 }

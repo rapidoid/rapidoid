@@ -30,6 +30,7 @@ import org.rapidoid.data.JSON;
 import org.rapidoid.expire.Expiring;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
+import org.rapidoid.log.LogHP;
 import org.rapidoid.net.AsyncLogic;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.TLSParams;
@@ -273,7 +274,8 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
             // the current response might be already marked as processed (e.g. in non-async handlers)
             long writeSeqN = writeSeq.get();
             if (writeSeqN != processedHandle) {
-				throw U.rte("Error in the response order control! Expected handle: %s, real: %s", processedHandle - 1, writeSeqN);
+                LogHP.warn("Invalid response order!", "expected", processedHandle - 1, "real", writeSeqN);
+                close(false);
             }
         }
     }

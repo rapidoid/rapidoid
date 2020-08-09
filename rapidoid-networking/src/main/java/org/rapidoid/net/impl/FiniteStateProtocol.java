@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,6 +23,7 @@ package org.rapidoid.net.impl;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.log.Log;
 import org.rapidoid.log.LogHP;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
@@ -48,7 +49,10 @@ public abstract class FiniteStateProtocol extends RapidoidThing implements Const
     public final void process(Channel ctx) {
         ConnState state = ctx.state();
 
-        U.must(state.n != STOP, "The protocol was terminated!");
+        if (state.n == STOP) {
+            Log.warn("Cannot process incoming data, the protocol has terminated!");
+            return;
+        }
 
         U.must(state.n >= 0 && state.n < statesCount, "Invalid state number!");
 
