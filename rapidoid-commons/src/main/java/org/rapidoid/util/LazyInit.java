@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,99 +33,99 @@ import java.util.function.Consumer;
 @Since("5.2.4")
 public final class LazyInit<T> extends RapidoidThing {
 
-	private final Callable<T> initializer;
+    private final Callable<T> initializer;
 
-	private volatile T initializedValue;
+    private volatile T initializedValue;
 
-	public LazyInit(Callable<T> initializer) {
-		this.initializer = initializer;
-	}
+    public LazyInit(Callable<T> initializer) {
+        this.initializer = initializer;
+    }
 
-	public LazyInit(final Class<T> clazz) {
-		this(clazz::newInstance);
-	}
+    public LazyInit(final Class<T> clazz) {
+        this(clazz::newInstance);
+    }
 
-	public T get() {
-		T value = initializedValue;
+    public T get() {
+        T value = initializedValue;
 
-		if (value == null) {
-			synchronized (this) {
-				value = initializedValue;
+        if (value == null) {
+            synchronized (this) {
+                value = initializedValue;
 
-				if (value == null) {
-					initializedValue = initialize();
-					value = initializedValue;
-				}
-			}
-		}
+                if (value == null) {
+                    initializedValue = initialize();
+                    value = initializedValue;
+                }
+            }
+        }
 
-		return value;
-	}
+        return value;
+    }
 
-	private T initialize() {
-		try {
-			return initializer.call();
-		} catch (Exception e) {
-			throw new RuntimeException("Lazy initialization error!", e);
-		}
-	}
+    private T initialize() {
+        try {
+            return initializer.call();
+        } catch (Exception e) {
+            throw new RuntimeException("Lazy initialization error!", e);
+        }
+    }
 
-	public T reset() {
-		T value = initializedValue;
+    public T reset() {
+        T value = initializedValue;
 
-		if (value != null) {
-			synchronized (this) {
-				value = initializedValue;
+        if (value != null) {
+            synchronized (this) {
+                value = initializedValue;
 
-				if (value != null) {
-					initializedValue = null;
-				}
-			}
-		}
+                if (value != null) {
+                    initializedValue = null;
+                }
+            }
+        }
 
-		return value;
-	}
+        return value;
+    }
 
-	public T resetAndClose() {
-		T value = reset();
+    public T resetAndClose() {
+        T value = reset();
 
-		if (value != null) {
-			if (value instanceof Closeable) {
-				close((Closeable) value);
-			} else {
-				throw new IllegalStateException("Cannot close the lazily initialized value, it's not Closeable!");
-			}
-		}
+        if (value != null) {
+            if (value instanceof Closeable) {
+                close((Closeable) value);
+            } else {
+                throw new IllegalStateException("Cannot close the lazily initialized value, it's not Closeable!");
+            }
+        }
 
-		return value;
-	}
+        return value;
+    }
 
-	private static void close(Closeable closeable) {
-		try {
-			closeable.close();
-		} catch (IOException e) {
-			throw new RuntimeException("Error occurred while closing the lazily initialized value!", e);
-		}
-	}
+    private static void close(Closeable closeable) {
+        try {
+            closeable.close();
+        } catch (IOException e) {
+            throw new RuntimeException("Error occurred while closing the lazily initialized value!", e);
+        }
+    }
 
-	public void setValue(T value) {
-		this.initializedValue = value;
-	}
+    public void setValue(T value) {
+        this.initializedValue = value;
+    }
 
-	public T getValue() {
-		return initializedValue;
-	}
+    public T getValue() {
+        return initializedValue;
+    }
 
-	public boolean isInitialized() {
-		return initializedValue != null;
-	}
+    public boolean isInitialized() {
+        return initializedValue != null;
+    }
 
-	public synchronized void ifPresent(Consumer<? super T> action) {
-		T value = initializedValue;
+    public synchronized void ifPresent(Consumer<? super T> action) {
+        T value = initializedValue;
 
-		if (value != null) {
-			action.accept(value);
-		}
-	}
+        if (value != null) {
+            action.accept(value);
+        }
+    }
 
 }

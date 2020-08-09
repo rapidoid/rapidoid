@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,25 +32,25 @@ import java.util.concurrent.TimeUnit;
 @Since("5.1.0")
 public class JobsDSL extends RapidoidThing {
 
-	private final long after;
-	private final long every;
-	private final TimeUnit timeUnit;
+    private final long after;
+    private final long every;
+    private final TimeUnit timeUnit;
 
-	public JobsDSL(long after, long every, TimeUnit timeUnit) {
-		this.after = after;
-		this.every = every;
-		this.timeUnit = timeUnit;
-	}
+    public JobsDSL(long after, long every, TimeUnit timeUnit) {
+        this.after = after;
+        this.every = every;
+        this.timeUnit = timeUnit;
+    }
 
-	@SuppressWarnings("unchecked")
-	public ScheduledFuture<Void> run(Runnable action) {
-		if (after >= 0) {
-			return (ScheduledFuture<Void>) Jobs.schedule(action, after, timeUnit);
-		} else if (every >= 0) {
-			return (ScheduledFuture<Void>) Jobs.scheduleAtFixedRate(action, 0, every, timeUnit);
-		} else {
-			throw Err.notExpected();
-		}
-	}
+    @SuppressWarnings("unchecked")
+    public ScheduledFuture<Void> run(Runnable action) {
+        if (after >= 0) {
+            return (ScheduledFuture<Void>) Jobs.schedule(action, after, timeUnit);
+        } else if (every >= 0) {
+            return (ScheduledFuture<Void>) Jobs.scheduleAtFixedRate(action, 0, every, timeUnit);
+        } else {
+            throw Err.notExpected();
+        }
+    }
 
 }

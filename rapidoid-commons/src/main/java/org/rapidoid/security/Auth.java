@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,65 +37,65 @@ import java.util.Set;
 @Since("5.1.0")
 public class Auth extends RapidoidThing {
 
-	@SuppressWarnings("unchecked")
-	public static Set<String> getRolesFor(String username) {
-		if (U.isEmpty(username)) {
-			return U.set();
-		}
+    @SuppressWarnings("unchecked")
+    public static Set<String> getRolesFor(String username) {
+        if (U.isEmpty(username)) {
+            return U.set();
+        }
 
-		Config user = Conf.USERS.sub(username);
+        Config user = Conf.USERS.sub(username);
 
-		if (user.isEmpty()) {
-			return U.set();
-		}
+        if (user.isEmpty()) {
+            return U.set();
+        }
 
-		Object roles = user.entry("roles").getOrNull();
+        Object roles = user.entry("roles").getOrNull();
 
-		if (Coll.isCollection(roles)) {
-			Set<String> roleSet = U.set();
+        if (Coll.isCollection(roles)) {
+            Set<String> roleSet = U.set();
 
-			for (String role : (Collection<String>) roles) {
-				roleSet.add(role.toLowerCase());
-			}
+            for (String role : (Collection<String>) roles) {
+                roleSet.add(role.toLowerCase());
+            }
 
-			return roleSet;
+            return roleSet;
 
-		} else if (roles instanceof String) {
-			Set<String> roleSet = U.set();
+        } else if (roles instanceof String) {
+            Set<String> roleSet = U.set();
 
-			for (String role : ((String) roles).toLowerCase().split("\\s*\\,\\s*")) {
-				role = role.trim();
-				if (U.notEmpty(role)) {
-					roleSet.add(role);
-				}
-			}
+            for (String role : ((String) roles).toLowerCase().split("\\s*\\,\\s*")) {
+                role = role.trim();
+                if (U.notEmpty(role)) {
+                    roleSet.add(role);
+                }
+            }
 
-			return roleSet;
+            return roleSet;
 
-		} else {
-			return Collections.emptySet();
-		}
-	}
+        } else {
+            return Collections.emptySet();
+        }
+    }
 
-	public static boolean login(String username, String password) {
-		if (U.isEmpty(username) || password == null) {
-			return false;
-		}
+    public static boolean login(String username, String password) {
+        if (U.isEmpty(username) || password == null) {
+            return false;
+        }
 
-		if (!Conf.USERS.has(username)) {
-			return false;
-		}
+        if (!Conf.USERS.has(username)) {
+            return false;
+        }
 
-		Config user = Conf.USERS.sub(username);
+        Config user = Conf.USERS.sub(username);
 
-		if (user.isEmpty()) {
-			return false;
-		}
+        if (user.isEmpty()) {
+            return false;
+        }
 
-		String pass = user.entry("password").str().getOrNull();
-		String hash = user.entry("hash").str().getOrNull();
+        String pass = user.entry("password").str().getOrNull();
+        String hash = user.entry("hash").str().getOrNull();
 
-		return (pass != null && U.eq(password, pass)) || (hash != null && Crypto.passwordMatches(password, hash));
-	}
+        return (pass != null && U.eq(password, pass)) || (hash != null && Crypto.passwordMatches(password, hash));
+    }
 
 }

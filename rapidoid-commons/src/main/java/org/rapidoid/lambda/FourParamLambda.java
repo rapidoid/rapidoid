@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,6 +27,6 @@ import org.rapidoid.annotation.Since;
 @Since("5.1.0")
 public interface FourParamLambda<R, P1, P2, P3, P4> extends NParamLambda {
 
-	R execute(P1 param1, P2 param2, P3 param3, P4 param4) throws Exception;
+    R execute(P1 param1, P2 param2, P3 param3, P4 param4) throws Exception;
 
 }

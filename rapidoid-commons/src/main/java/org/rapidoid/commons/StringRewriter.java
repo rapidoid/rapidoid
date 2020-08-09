@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,26 +32,26 @@ import java.util.regex.Pattern;
 @Since("5.3.0")
 public class StringRewriter extends RapidoidThing {
 
-	public static final String MASK_QUOTES = "'[^']*'";
+    public static final String MASK_QUOTES = "'[^']*'";
 
-	public static final String MASK_DOUBLE_QUOTES = "\"[^\"]*\"";
+    public static final String MASK_DOUBLE_QUOTES = "\"[^\"]*\"";
 
-	public static final String MASK_BACKTICKS = "`[^`]*`";
+    public static final String MASK_BACKTICKS = "`[^`]*`";
 
-	public static final String[] ALL_QUOTES = {MASK_QUOTES, MASK_DOUBLE_QUOTES, MASK_BACKTICKS};
+    public static final String[] ALL_QUOTES = {MASK_QUOTES, MASK_DOUBLE_QUOTES, MASK_BACKTICKS};
 
-	private final Pattern escape;
+    private final Pattern escape;
 
-	private final Pattern regex;
+    private final Pattern regex;
 
-	public StringRewriter(String[] escape, String regex) {
-		this.escape = Pattern.compile("(?:" + U.join("|", escape) + ")");
-		this.regex = Pattern.compile(regex);
-	}
+    public StringRewriter(String[] escape, String regex) {
+        this.escape = Pattern.compile("(?:" + U.join("|", escape) + ")");
+        this.regex = Pattern.compile(regex);
+    }
 
-	public String rewrite(String target, Mapper<String[], String> replacer) {
-		String mask = Str.mask(target, escape);
-		return Str.replace(target, mask, regex, replacer);
-	}
+    public String rewrite(String target, Mapper<String[], String> replacer) {
+        String mask = Str.mask(target, escape);
+        return Str.replace(target, mask, regex, replacer);
+    }
 
 }

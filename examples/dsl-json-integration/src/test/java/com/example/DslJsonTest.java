@@ -15,19 +15,19 @@ import java.util.Map;
 @IntegrationTest(main = DslJsonExample.class)
 public class DslJsonTest extends RapidoidIntegrationTest {
 
-	@Test
-	public void testHelloWorld() {
-		// connects to the local server that was started by the Main class (http://localhost:8080)
-		// then sends HTTP request GET /hello and parses the JSON result as Map
-		Map<String, Object> resp = Self.get("/hello").toMap();
+    @Test
+    public void testHelloWorld() {
+        // connects to the local server that was started by the Main class (http://localhost:8080)
+        // then sends HTTP request GET /hello and parses the JSON result as Map
+        Map<String, Object> resp = Self.get("/hello").toMap();
 
-		eq(resp, U.map("msg", "Hello, world!"));
-	}
+        eq(resp, U.map("msg", "Hello, world!"));
+    }
 
-	@Test
-	public void testPost() {
-		Map<String, Object> resp = Self.post("/compiled").body("{\"x\":3,\"s\":\"a\"}".getBytes(Charset.forName("UTF-8"))).toMap();
+    @Test
+    public void testPost() {
+        Map<String, Object> resp = Self.post("/compiled").body("{\"x\":3,\"s\":\"a\"}".getBytes(Charset.forName("UTF-8"))).toMap();
 
-		eq(resp, U.map("x", 6, "s", "a"));
-	}
+        eq(resp, U.map("x", 6, "s", "a"));
+    }
 }

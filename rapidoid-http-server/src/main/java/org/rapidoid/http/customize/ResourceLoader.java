@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,13 +27,13 @@ import org.rapidoid.annotation.Since;
 @Since("5.2.0")
 public interface ResourceLoader {
 
-	/**
-	 * Loads and retrieves a resource with the specified name, if such resource exists.
-	 *
-	 * @param resourceName the resource name e.g. "templates/index.html" or "abc.txt"
-	 * @return the resource content (as bytes) if found, <code>null</code> otherwise
-	 * @throws Exception unexpected exceptions could happen, so the caller is forced to handle them
-	 */
-	byte[] load(String resourceName) throws Exception;
+    /**
+     * Loads and retrieves a resource with the specified name, if such resource exists.
+     *
+     * @param resourceName the resource name e.g. "templates/index.html" or "abc.txt"
+     * @return the resource content (as bytes) if found, <code>null</code> otherwise
+     * @throws Exception unexpected exceptions could happen, so the caller is forced to handle them
+     */
+    byte[] load(String resourceName) throws Exception;
 
 }

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,49 +30,49 @@ import org.rapidoid.test.TestRnd;
 @Since("2.0.0")
 public class BufRangeTest extends BufferTestCommons {
 
-	@Test
-	public void shouldBackupAndRestore() {
-		BufRange range = new BufRange(10, 3);
-		eq(range, 10, 3);
+    @Test
+    public void shouldBackupAndRestore() {
+        BufRange range = new BufRange(10, 3);
+        eq(range, 10, 3);
 
-		long backup = range.backup();
+        long backup = range.backup();
 
-		range.set(7, 17);
-		eq(range, 7, 17);
+        range.set(7, 17);
+        eq(range, 7, 17);
 
-		range.restore(backup);
-		eq(range, 10, 3);
-	}
+        range.restore(backup);
+        eq(range, 10, 3);
+    }
 
-	@Test
-	public void statisticalTest() {
-		BufRange rng = new BufRange();
-		isTrue(rng.isEmpty());
+    @Test
+    public void statisticalTest() {
+        BufRange rng = new BufRange();
+        isTrue(rng.isEmpty());
 
-		int[] borders = {Integer.MIN_VALUE, -1111, -1, 0, 1, 1111, Integer.MAX_VALUE};
+        int[] borders = {Integer.MIN_VALUE, -1111, -1, 0, 1, 1111, Integer.MAX_VALUE};
 
-		for (int i = 0; i < borders.length; i++) {
-			for (int j = 0; j < borders.length; j++) {
-				check(rng, borders[i], borders[j]);
-			}
-		}
+        for (int i = 0; i < borders.length; i++) {
+            for (int j = 0; j < borders.length; j++) {
+                check(rng, borders[i], borders[j]);
+            }
+        }
 
-		for (int i = 0; i < 1000000; i++) {
-			check(rng, TestRnd.rnd(), TestRnd.rnd());
-		}
-	}
+        for (int i = 0; i < 1000000; i++) {
+            check(rng, TestRnd.rnd(), TestRnd.rnd());
+        }
+    }
 
-	private void check(BufRange rng, int a, int b) {
-		rng.set(a, b);
+    private void check(BufRange rng, int a, int b) {
+        rng.set(a, b);
 
-		eq(rng, a, b);
-		eq(rng.limit(), rng.start + rng.length);
+        eq(rng, a, b);
+        eq(rng.limit(), rng.start + rng.length);
 
-		long backup = rng.backup();
-		rng.set(TestRnd.rnd(), TestRnd.rnd());
+        long backup = rng.backup();
+        rng.set(TestRnd.rnd(), TestRnd.rnd());
 
-		rng.restore(backup);
-		eq(rng, a, b);
-	}
+        rng.restore(backup);
+        eq(rng, a, b);
+    }
 
 }

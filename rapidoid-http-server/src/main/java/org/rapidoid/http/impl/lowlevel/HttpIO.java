@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,63 +41,63 @@ import java.util.Map;
 @Since("5.1.0")
 public class HttpIO extends RapidoidThing {
 
-	public static final HttpIO INSTANCE = new HttpIO();
+    public static final HttpIO INSTANCE = new HttpIO();
 
-	private final LowLevelHttpIO impl = new LowLevelHttpIO();
+    private final LowLevelHttpIO impl = new LowLevelHttpIO();
 
-	public void removeTrailingSlash(Buf buf, BufRange range) {
-		impl.removeTrailingSlash(buf, range);
-	}
+    public void removeTrailingSlash(Buf buf, BufRange range) {
+        impl.removeTrailingSlash(buf, range);
+    }
 
-	public void writeResponse(MaybeReq req, Channel ctx, boolean isKeepAlive, int code, MediaType contentTypeHeader, byte[] content) {
-		impl.writeResponse(req, ctx, isKeepAlive, code, contentTypeHeader, content);
-	}
+    public void writeResponse(MaybeReq req, Channel ctx, boolean isKeepAlive, int code, MediaType contentTypeHeader, byte[] content) {
+        impl.writeResponse(req, ctx, isKeepAlive, code, contentTypeHeader, content);
+    }
 
-	public void write200(MaybeReq req, Channel ctx, boolean isKeepAlive, MediaType contentTypeHeader, byte[] content) {
-		impl.write200(req, ctx, isKeepAlive, contentTypeHeader, content);
-	}
+    public void write200(MaybeReq req, Channel ctx, boolean isKeepAlive, MediaType contentTypeHeader, byte[] content) {
+        impl.write200(req, ctx, isKeepAlive, contentTypeHeader, content);
+    }
 
-	public void error(Req req, Throwable error, LogLevel logLevel) {
-		impl.error(req, error, logLevel);
-	}
+    public void error(Req req, Throwable error, LogLevel logLevel) {
+        impl.error(req, error, logLevel);
+    }
 
-	public HttpStatus errorAndDone(Req req, Throwable error, LogLevel logLevel) {
-		return impl.errorAndDone(req, error, logLevel);
-	}
+    public HttpStatus errorAndDone(Req req, Throwable error, LogLevel logLevel) {
+        return impl.errorAndDone(req, error, logLevel);
+    }
 
-	public void writeContentLengthAndBody(MaybeReq req, Channel ctx, ByteArrayOutputStream body) {
-		impl.writeContentLengthAndBody(req, ctx, body);
-	}
+    public void writeContentLengthAndBody(MaybeReq req, Channel ctx, ByteArrayOutputStream body) {
+        impl.writeContentLengthAndBody(req, ctx, body);
+    }
 
-	public void writeContentLengthHeader(Channel ctx, int len) {
-		impl.writeContentLengthHeader(ctx, len);
-	}
+    public void writeContentLengthHeader(Channel ctx, int len) {
+        impl.writeContentLengthHeader(ctx, len);
+    }
 
-	public void writeHttpResp(MaybeReq req, Channel ctx, boolean isKeepAlive, int code, MediaType contentType, Object value) {
-		impl.writeHttpResp(req, ctx, isKeepAlive, code, contentType, value);
-	}
+    public void writeHttpResp(MaybeReq req, Channel ctx, boolean isKeepAlive, int code, MediaType contentType, Object value) {
+        impl.writeHttpResp(req, ctx, isKeepAlive, code, contentType, value);
+    }
 
-	public void done(Req req) {
-		impl.done(req);
-	}
+    public void done(Req req) {
+        impl.done(req);
+    }
 
-	public void resume(MaybeReq maybeReq, Channel channel, AsyncLogic logic) {
-		impl.resume(maybeReq, channel, logic);
-	}
+    public void resume(MaybeReq maybeReq, Channel channel, AsyncLogic logic) {
+        impl.resume(maybeReq, channel, logic);
+    }
 
-	public void writeBadRequest(Channel channel) {
-		impl.writeBadRequest(channel);
-	}
+    public void writeBadRequest(Channel channel) {
+        impl.writeBadRequest(channel);
+    }
 
-	public void respond(MaybeReq maybeReq, Channel channel, long connId, long handle,
-	                    int code, boolean isKeepAlive, MediaType contentType,
-	                    RespBody body, Map<String, String> headers, Map<String, String> cookies) {
+    public void respond(MaybeReq maybeReq, Channel channel, long connId, long handle,
+                        int code, boolean isKeepAlive, MediaType contentType,
+                        RespBody body, Map<String, String> headers, Map<String, String> cookies) {
 
-		impl.respond(maybeReq, channel, connId, handle, code, isKeepAlive, contentType, body, headers, cookies);
-	}
+        impl.respond(maybeReq, channel, connId, handle, code, isKeepAlive, contentType, body, headers, cookies);
+    }
 
-	public void closeHeaders(MaybeReq req, Buf out) {
-		impl.closeHeaders(req, out);
-	}
+    public void closeHeaders(MaybeReq req, Buf out) {
+        impl.closeHeaders(req, out);
+    }
 
 }

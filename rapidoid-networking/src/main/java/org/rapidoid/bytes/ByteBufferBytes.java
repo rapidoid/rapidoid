@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,32 +30,32 @@ import java.nio.ByteBuffer;
 @Since("2.0.0")
 public class ByteBufferBytes extends RapidoidThing implements Bytes {
 
-	private ByteBuffer buf;
+    private ByteBuffer buf;
 
-	private int offset;
-	private int limit;
+    private int offset;
+    private int limit;
 
-	public ByteBufferBytes() {
-	}
+    public ByteBufferBytes() {
+    }
 
-	public ByteBufferBytes(ByteBuffer buf) {
-		setTarget(buf, buf.position(), buf.limit());
-	}
+    public ByteBufferBytes(ByteBuffer buf) {
+        setTarget(buf, buf.position(), buf.limit());
+    }
 
-	@Override
-	public byte get(int position) {
-		return buf.get(position + offset);
-	}
+    @Override
+    public byte get(int position) {
+        return buf.get(position + offset);
+    }
 
-	@Override
-	public int limit() {
-		return limit;
-	}
+    @Override
+    public int limit() {
+        return limit;
+    }
 
-	public void setTarget(ByteBuffer buf, int offset, int limit) {
-		this.buf = buf;
-		this.offset = offset;
-		this.limit = limit;
-	}
+    public void setTarget(ByteBuffer buf, int offset, int limit) {
+        this.buf = buf;
+        this.offset = offset;
+        this.limit = limit;
+    }
 
 }

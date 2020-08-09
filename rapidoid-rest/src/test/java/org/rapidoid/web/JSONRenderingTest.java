@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,29 +32,29 @@ import org.rapidoid.setup.On;
 @Since("5.1.0")
 public class JSONRenderingTest extends IsolatedIntegrationTest {
 
-	@Test
-	public void testJSONRendering() {
-		On.get("/").json(() -> new Movie("Rambo", 1990));
+    @Test
+    public void testJSONRendering() {
+        On.get("/").json(() -> new Movie("Rambo", 1990));
 
-		onlyGet("/");
-	}
+        onlyGet("/");
+    }
 
-	@Test
-	public void testJSONParsingWithoutJsonHeaderPOST() {
-		// simply return the same object
-		On.post("/movie").json((Movie m) -> m);
+    @Test
+    public void testJSONParsingWithoutJsonHeaderPOST() {
+        // simply return the same object
+        On.post("/movie").json((Movie m) -> m);
 
-		Movie movie = new Movie("test title", 1999);
-		onlyPost("/movie", JSON.stringify(movie));
-	}
+        Movie movie = new Movie("test title", 1999);
+        onlyPost("/movie", JSON.stringify(movie));
+    }
 
-	@Test
-	public void testJSONParsingWithoutJsonHeaderPUT() {
-		// simply return the same object
-		On.put("/movie").json((Movie m) -> m);
+    @Test
+    public void testJSONParsingWithoutJsonHeaderPUT() {
+        // simply return the same object
+        On.put("/movie").json((Movie m) -> m);
 
-		Movie movie = new Movie("test title", 1999);
-		onlyPut("/movie", JSON.stringify(movie));
-	}
+        Movie movie = new Movie("test title", 1999);
+        onlyPut("/movie", JSON.stringify(movie));
+    }
 
 }

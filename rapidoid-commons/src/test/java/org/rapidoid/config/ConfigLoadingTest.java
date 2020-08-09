@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,42 +31,42 @@ import org.rapidoid.u.U;
 @Since("5.2.0")
 public class ConfigLoadingTest extends AbstractCommonsTest {
 
-	@Test
-	public void testPureConfig() {
-		Config config = new ConfigImpl(); // no loading
-		eq(config.toMap(), U.map());
-	}
+    @Test
+    public void testPureConfig() {
+        Config config = new ConfigImpl(); // no loading
+        eq(config.toMap(), U.map());
+    }
 
-	@Test
-	public void testCustomFileConfig() {
-		Config config = new ConfigImpl("mycfg");
+    @Test
+    public void testCustomFileConfig() {
+        Config config = new ConfigImpl("mycfg");
 
-		eq(config.toMap(), U.map());
+        eq(config.toMap(), U.map());
 
-		config.setPath("my-cfg");
+        config.setPath("my-cfg");
 
-		eq(config.toMap(), U.map("z", "foo", "k", "hey"));
+        eq(config.toMap(), U.map("z", "foo", "k", "hey"));
 
-		Env.setProfiles("prof1", "prof2");
-		config.invalidate();
+        Env.setProfiles("prof1", "prof2");
+        config.invalidate();
 
-		eq(config.toMap(), U.map("z", "bar", "k", "hey"));
-	}
+        eq(config.toMap(), U.map("z", "bar", "k", "hey"));
+    }
 
-	@Test
-	public void testJsonFileConfig() {
-		Config config = new ConfigImpl("cfg");
+    @Test
+    public void testJsonFileConfig() {
+        Config config = new ConfigImpl("cfg");
 
-		eq(config.toMap(), U.map());
+        eq(config.toMap(), U.map());
 
-		config.setPath("my-cfg");
+        config.setPath("my-cfg");
 
-		eq(config.toMap(), U.map("z", "foo2", "k", "hey2"));
+        eq(config.toMap(), U.map("z", "foo2", "k", "hey2"));
 
-		Env.setProfiles("prof1", "prof2");
-		config.invalidate();
+        Env.setProfiles("prof1", "prof2");
+        config.invalidate();
 
-		eq(config.toMap(), U.map("z", "bar2", "k", "hey2"));
-	}
+        eq(config.toMap(), U.map("z", "bar2", "k", "hey2"));
+    }
 
 }

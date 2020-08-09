@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -38,30 +38,30 @@ class Persons extends TypeReference<List<User>> {
  */
 public class YAMLTest extends TestCommons {
 
-	private final TypeReference<List<User>> personList = new TypeReference<List<User>>() {
-	};
+    private final TypeReference<List<User>> personList = new TypeReference<List<User>>() {
+    };
 
-	@Test
-	public void parseMap() {
-		String yaml = new String(TestIO.loadRes("test.yaml"));
-		Map<String, Object> data = YAML.parseMap(yaml);
-		eq(data, U.map("aa", 1, "bb", "2am", "cc", U.map("x", true, "z", false)));
-	}
+    @Test
+    public void parseMap() {
+        String yaml = new String(TestIO.loadRes("test.yaml"));
+        Map<String, Object> data = YAML.parseMap(yaml);
+        eq(data, U.map("aa", 1, "bb", "2am", "cc", U.map("x", true, "z", false)));
+    }
 
-	@Test
-	public void parseBeans() {
-		String yaml = new String(TestIO.loadRes("persons.yaml"));
+    @Test
+    public void parseBeans() {
+        String yaml = new String(TestIO.loadRes("persons.yaml"));
 
-		List<User> persons = YAML.parse(yaml, personList);
-		eq(persons.size(), 2);
+        List<User> persons = YAML.parse(yaml, personList);
+        eq(persons.size(), 2);
 
-		User p1 = persons.get(0);
-		eq(p1.id, 123);
-		eq(p1.name, "John Doe");
-		eq(p1.age, 50);
+        User p1 = persons.get(0);
+        eq(p1.id, 123);
+        eq(p1.name, "John Doe");
+        eq(p1.age, 50);
 
-		User p2 = persons.get(1);
-		eq(p2.name, "Highlander");
-		eq(p2.age, 900);
-	}
+        User p2 = persons.get(1);
+        eq(p2.name, "Highlander");
+        eq(p2.age, 900);
+    }
 }

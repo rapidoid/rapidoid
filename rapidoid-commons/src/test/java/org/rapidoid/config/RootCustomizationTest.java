@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,32 +34,32 @@ import org.rapidoid.util.Msc;
 @Since("5.2.5")
 public class RootCustomizationTest extends AbstractCommonsTest {
 
-	@BeforeEach
-	public void reset() {
-		Env.reset();
-		Conf.reset();
-	}
+    @BeforeEach
+    public void reset() {
+        Env.reset();
+        Conf.reset();
+    }
 
-	@Test
-	public void testConfigRootSetup() {
-		String dir = TestIO.createTempDir("app");
+    @Test
+    public void testConfigRootSetup() {
+        String dir = TestIO.createTempDir("app");
 
-		IO.save(Msc.path(dir, "config.yml"), "id: abc1");
+        IO.save(Msc.path(dir, "config.yml"), "id: abc1");
 
-		Env.setArgs("root=" + dir, "config=config");
+        Env.setArgs("root=" + dir, "config=config");
 
-		eq(Conf.ROOT.entry("id").getOrNull(), "abc1");
-	}
+        eq(Conf.ROOT.entry("id").getOrNull(), "abc1");
+    }
 
-	@Test
-	public void testConfigRootAndFileSetup() {
-		String dir = TestIO.createTempDir("app");
+    @Test
+    public void testConfigRootAndFileSetup() {
+        String dir = TestIO.createTempDir("app");
 
-		IO.save(Msc.path(dir, "the-config.yml"), "id: abc2");
+        IO.save(Msc.path(dir, "the-config.yml"), "id: abc2");
 
-		Env.setArgs("root=" + dir, "config=the-config");
+        Env.setArgs("root=" + dir, "config=the-config");
 
-		eq(Conf.ROOT.entry("id").getOrNull(), "abc2");
-	}
+        eq(Conf.ROOT.entry("id").getOrNull(), "abc2");
+    }
 
 }

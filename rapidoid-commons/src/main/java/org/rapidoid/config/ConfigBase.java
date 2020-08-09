@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,96 +36,96 @@ import java.util.Set;
 @Since("5.2.0")
 public class ConfigBase extends RapidoidInitializer {
 
-	private final String defaultFilenameBase;
+    private final String defaultFilenameBase;
 
-	private final boolean useBuiltInDefaults;
+    private final boolean useBuiltInDefaults;
 
-	final Map<String, Object> properties = Coll.synchronizedMap();
+    final Map<String, Object> properties = Coll.synchronizedMap();
 
-	final Map<String, Object> initial = Coll.synchronizedMap();
+    final Map<String, Object> initial = Coll.synchronizedMap();
 
-	final Set<ConfigChangeListener> configChangesListeners = Coll.synchronizedSet();
+    final Set<ConfigChangeListener> configChangesListeners = Coll.synchronizedSet();
 
-	volatile boolean initializing;
+    volatile boolean initializing;
 
-	volatile boolean initialized;
+    volatile boolean initialized;
 
-	volatile String path = "";
+    volatile String path = "";
 
-	volatile String filenameBase;
+    volatile String filenameBase;
 
-	public ConfigBase(String defaultFilenameBase, boolean useBuiltInDefaults) {
-		this.defaultFilenameBase = defaultFilenameBase;
-		this.filenameBase = defaultFilenameBase;
-		this.useBuiltInDefaults = useBuiltInDefaults;
-	}
+    public ConfigBase(String defaultFilenameBase, boolean useBuiltInDefaults) {
+        this.defaultFilenameBase = defaultFilenameBase;
+        this.filenameBase = defaultFilenameBase;
+        this.useBuiltInDefaults = useBuiltInDefaults;
+    }
 
-	synchronized void reset() {
-		this.properties.clear();
-		this.initial.clear();
-		this.configChangesListeners.clear();
+    synchronized void reset() {
+        this.properties.clear();
+        this.initial.clear();
+        this.configChangesListeners.clear();
 
-		this.filenameBase = this.defaultFilenameBase;
-		this.path = "";
+        this.filenameBase = this.defaultFilenameBase;
+        this.path = "";
 
-		this.initialized = false;
-		this.initializing = false;
-	}
+        this.initialized = false;
+        this.initializing = false;
+    }
 
-	synchronized void invalidate() {
-		RapidoidEnv.touch();
-		this.properties.clear();
+    synchronized void invalidate() {
+        RapidoidEnv.touch();
+        this.properties.clear();
 
-		this.initialized = false;
-		this.initializing = false;
-	}
+        this.initialized = false;
+        this.initializing = false;
+    }
 
-	String getFilenameBase() {
-		return filenameBase;
-	}
+    String getFilenameBase() {
+        return filenameBase;
+    }
 
-	synchronized boolean setFilenameBase(String filenameBase) {
-		RapidoidEnv.touch();
+    synchronized boolean setFilenameBase(String filenameBase) {
+        RapidoidEnv.touch();
 
-		if (U.neq(this.filenameBase, filenameBase)) {
-			if (!Msc.isSilent()) {
-				Log.info("Changing configuration filename base", "!from", this.filenameBase, "!to", filenameBase);
-			}
+        if (U.neq(this.filenameBase, filenameBase)) {
+            if (!Msc.isSilent()) {
+                Log.info("Changing configuration filename base", "!from", this.filenameBase, "!to", filenameBase);
+            }
 
-			this.filenameBase = filenameBase;
-			return true;
-		}
+            this.filenameBase = filenameBase;
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	synchronized boolean setPath(String path) {
-		RapidoidEnv.touch();
+    synchronized boolean setPath(String path) {
+        RapidoidEnv.touch();
 
-		if (U.neq(this.path, path)) {
-			if (!Msc.isSilent()) Log.info("Changing configuration path", "!from", this.path, "!to", path);
+        if (U.neq(this.path, path)) {
+            if (!Msc.isSilent()) Log.info("Changing configuration path", "!from", this.path, "!to", path);
 
-			this.path = path;
-			return true;
-		}
+            this.path = path;
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	String getPath() {
-		return path;
-	}
+    String getPath() {
+        return path;
+    }
 
-	public boolean useBuiltInDefaults() {
-		return useBuiltInDefaults;
-	}
+    public boolean useBuiltInDefaults() {
+        return useBuiltInDefaults;
+    }
 
-	void setInitial(String name, Object value) {
-		initial.put(name, value);
-	}
+    void setInitial(String name, Object value) {
+        initial.put(name, value);
+    }
 
-	synchronized void applyInitialConfig(Config config) {
-		config.update(initial);
-	}
+    synchronized void applyInitialConfig(Config config) {
+        config.update(initial);
+    }
 
 }

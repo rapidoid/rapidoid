@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -38,58 +38,58 @@ import java.io.IOException;
  */
 public class XML extends RapidoidThing {
 
-	private XML() {
-	}
+    private XML() {
+    }
 
-	public static XmlMapper newMapper() {
-		XmlMapper mapper = new XmlMapper();
-		mapper.setBase64Variant(Base64Variants.MODIFIED_FOR_URL);
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    public static XmlMapper newMapper() {
+        XmlMapper mapper = new XmlMapper();
+        mapper.setBase64Variant(Base64Variants.MODIFIED_FOR_URL);
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-		if (!Env.dev()) {
-			mapper.registerModule(new AfterburnerModule());
-		}
+        if (!Env.dev()) {
+            mapper.registerModule(new AfterburnerModule());
+        }
 
-		return mapper;
-	}
+        return mapper;
+    }
 
-	public static String stringify(Object obj) {
-		XmlMapper mapper = newMapper();
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
+    public static String stringify(Object obj) {
+        XmlMapper mapper = newMapper();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-		try {
-			mapper.writeValue(out, obj);
-		} catch (IOException ex) {
-			throw new RuntimeException(ex);
-		}
+        try {
+            mapper.writeValue(out, obj);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
 
-		return out.toString();
-	}
+        return out.toString();
+    }
 
-	public static void stringify(Object value, ReusableWritable out) {
-		XmlMapper mapper = newMapper();
+    public static void stringify(Object value, ReusableWritable out) {
+        XmlMapper mapper = newMapper();
 
-		try {
-			mapper.writeValue(out, value);
-		} catch (IOException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
+        try {
+            mapper.writeValue(out, value);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
-	public static <T> T parse(String xml, Class<T> valueType) {
-		return parse(xml.getBytes(), valueType);
-	}
+    public static <T> T parse(String xml, Class<T> valueType) {
+        return parse(xml.getBytes(), valueType);
+    }
 
-	@SuppressWarnings("unchecked")
-	public static <T> T parse(byte[] xml, Class<T> valueType) {
-		try {
+    @SuppressWarnings("unchecked")
+    public static <T> T parse(byte[] xml, Class<T> valueType) {
+        try {
 
-			XmlMapper mapper = newMapper();
-			return mapper.readValue(xml, valueType);
+            XmlMapper mapper = newMapper();
+            return mapper.readValue(xml, valueType);
 
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

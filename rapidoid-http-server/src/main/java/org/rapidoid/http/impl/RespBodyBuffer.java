@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,24 +33,24 @@ import java.nio.ByteBuffer;
 @Since("5.5.1")
 public class RespBodyBuffer extends RapidoidThing implements RespBody {
 
-	private final ByteBuffer buffer;
+    private final ByteBuffer buffer;
 
-	public RespBodyBuffer(ByteBuffer buffer) {
-		this.buffer = buffer;
-	}
+    public RespBodyBuffer(ByteBuffer buffer) {
+        this.buffer = buffer;
+    }
 
-	@Override
-	public int length() {
-		return buffer.remaining();
-	}
+    @Override
+    public int length() {
+        return buffer.remaining();
+    }
 
-	@Override
-	public void writeTo(Channel channel) {
-		channel.write(buffer);
-	}
+    @Override
+    public void writeTo(Channel channel) {
+        channel.write(buffer);
+    }
 
-	@Override
-	public String toString() {
-		return U.frmt("RespBodyBuffer(%s bytes)", length());
-	}
+    @Override
+    public String toString() {
+        return U.frmt("RespBodyBuffer(%s bytes)", length());
+    }
 }

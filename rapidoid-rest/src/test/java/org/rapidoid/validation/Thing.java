@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,15 +30,15 @@ import javax.validation.constraints.Size;
 @Since("5.1.0")
 public class Thing {
 
-	@NotNull
-	private String name;
+    @NotNull
+    private String name;
 
-	@Size(min = 3, max = 5)
-	private String desc;
+    @Size(min = 3, max = 5)
+    private String desc;
 
-	public Thing(String name, String desc) {
-		this.name = name;
-		this.desc = desc;
-	}
+    public Thing(String name, String desc) {
+        this.name = name;
+        this.desc = desc;
+    }
 
 }

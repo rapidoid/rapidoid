@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,28 +36,28 @@ import java.util.Set;
 @Since("6.0.0")
 public class TokenAuth extends RapidoidThing {
 
-	public static UserInfo login(Req req, String username, String password) {
+    public static UserInfo login(Req req, String username, String password) {
 
-		LoginProvider loginProvider = Customization.of(req).loginProvider();
-		U.must(loginProvider != null, "A login provider wasn't set!");
+        LoginProvider loginProvider = Customization.of(req).loginProvider();
+        U.must(loginProvider != null, "A login provider wasn't set!");
 
-		RolesProvider rolesProvider = Customization.of(req).rolesProvider();
-		U.must(rolesProvider != null, "A roles provider wasn't set!");
+        RolesProvider rolesProvider = Customization.of(req).rolesProvider();
+        U.must(rolesProvider != null, "A roles provider wasn't set!");
 
-		try {
-			boolean success = loginProvider.login(req, username, password);
+        try {
+            boolean success = loginProvider.login(req, username, password);
 
-			if (success) {
-				Set<String> roles = rolesProvider.getRolesForUser(req, username);
+            if (success) {
+                Set<String> roles = rolesProvider.getRolesForUser(req, username);
 
-				return new UserInfo(username, roles);
-			}
+                return new UserInfo(username, roles);
+            }
 
-		} catch (Throwable e) {
-			throw U.rte("Login error!", e);
-		}
+        } catch (Throwable e) {
+            throw U.rte("Login error!", e);
+        }
 
-		return null;
-	}
+        return null;
+    }
 
 }

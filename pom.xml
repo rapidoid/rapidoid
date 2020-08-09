@@ -1,287 +1,288 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.rapidoid</groupId>
-	<artifactId>rapidoid</artifactId>
-	<version>6.0.0-SNAPSHOT</version>
-	<packaging>pom</packaging>
+    <groupId>org.rapidoid</groupId>
+    <artifactId>rapidoid</artifactId>
+    <version>6.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
-	<name>Rapidoid</name>
-	<url>http://www.rapidoid.org</url>
-	<description>High-performance network protocol framework, web server and web framework</description>
+    <name>Rapidoid</name>
+    <url>http://www.rapidoid.org</url>
+    <description>High-performance network protocol framework, web server and web framework</description>
 
-	<organization>
-		<name>Nikolche Mihajlovski and contributors</name>
-		<url>http://www.nikolche.com</url>
-	</organization>
+    <organization>
+        <name>Nikolche Mihajlovski and contributors</name>
+        <url>http://www.nikolche.com</url>
+    </organization>
 
-	<inceptionYear>2014</inceptionYear>
+    <inceptionYear>2014</inceptionYear>
 
-	<developers>
-		<developer>
-			<name>Nikolche Mihajlovski</name>
-			<email>nikolce.mihajlovski@gmail.com</email>
-			<url>http://www.nikolche.com</url>
-		</developer>
-	</developers>
+    <developers>
+        <developer>
+            <name>Nikolche Mihajlovski</name>
+            <email>nikolce.mihajlovski@gmail.com</email>
+            <url>http://www.nikolche.com</url>
+        </developer>
+    </developers>
 
-	<licenses>
-		<license>
-			<name>The Apache Software License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-		</license>
-	</licenses>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
 
-	<scm>
-		<connection>scm:git:git://github.com/rapidoid/rapidoid.git</connection>
-		<developerConnection>scm:git:git@github.com:rapidoid/rapidoid.git</developerConnection>
-		<url>https://github.com/rapidoid/rapidoid</url>
-		<tag>HEAD</tag>
-	</scm>
+    <scm>
+        <connection>scm:git:git://github.com/rapidoid/rapidoid.git</connection>
+        <developerConnection>scm:git:git@github.com:rapidoid/rapidoid.git</developerConnection>
+        <url>https://github.com/rapidoid/rapidoid</url>
+        <tag>HEAD</tag>
+    </scm>
 
-	<properties>
-		<java.version>1.8</java.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<test.jvm.argLine>-server -verbose:gc</test.jvm.argLine>
-		<jdk9.modules/>
+    <properties>
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <test.jvm.argLine>-server -verbose:gc</test.jvm.argLine>
+        <jdk9.modules/>
 
-		<timestamp>${maven.build.timestamp}</timestamp>
-		<maven.build.timestamp.format>yyyy-MM-dd HH:mm z</maven.build.timestamp.format>
+        <timestamp>${maven.build.timestamp}</timestamp>
+        <maven.build.timestamp.format>yyyy-MM-dd HH:mm z</maven.build.timestamp.format>
 
-		<jackson.version>2.9.5</jackson.version>
-		<javassist.version>3.22.0-GA</javassist.version>
-		<caffeine.version>2.6.2</caffeine.version>
+        <jackson.version>2.9.5</jackson.version>
+        <javassist.version>3.22.0-GA</javassist.version>
+        <caffeine.version>2.6.2</caffeine.version>
 
-		<slf4j.version>1.7.25</slf4j.version>
-		<logback.version>1.2.3</logback.version>
+        <slf4j.version>1.7.25</slf4j.version>
+        <logback.version>1.2.3</logback.version>
 
-		<commons-logging.version>1.2</commons-logging.version>
-		<httpclient.version>4.1.3</httpclient.version>
-		<httpmime.version>4.5.5</httpmime.version>
+        <commons-logging.version>1.2</commons-logging.version>
+        <httpclient.version>4.1.3</httpclient.version>
+        <httpmime.version>4.5.5</httpmime.version>
 
-		<junit.jupiter.version>5.1.1</junit.jupiter.version>
-		<junit.platform.version>1.1.1</junit.platform.version>
-		<mockito.version>2.18.3</mockito.version>
+        <junit.jupiter.version>5.1.1</junit.jupiter.version>
+        <junit.platform.version>1.1.1</junit.platform.version>
+        <mockito.version>2.18.3</mockito.version>
 
-	</properties>
+    </properties>
 
-	<modules>
-		<module>rapidoid-commons</module>
-		<module>rapidoid-test-commons</module>
-		<module>rapidoid-networking</module>
-		<module>rapidoid-http-server</module>
-		<module>rapidoid-http-client</module>
-		<module>rapidoid-rest</module>
-	</modules>
+    <modules>
+        <module>rapidoid-commons</module>
+        <module>rapidoid-test-commons</module>
+        <module>rapidoid-networking</module>
+        <module>rapidoid-http-server</module>
+        <module>rapidoid-http-client</module>
+        <module>rapidoid-rest</module>
+    </modules>
 
-	<build>
-		<plugins>
+    <build>
+        <plugins>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.7.0</version>
-				<configuration>
-					<source>${java.version}</source>
-					<target>${java.version}</target>
-					<encoding>${project.build.sourceEncoding}</encoding>
-					<compilerArgs>
-						<arg>-parameters</arg>
-						<arg>-XDignore.symbol.file</arg>
-					</compilerArgs>
-					<fork>true</fork>
-				</configuration>
-			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                        <arg>-XDignore.symbol.file</arg>
+                    </compilerArgs>
+                    <fork>true</fork>
+                </configuration>
+            </plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.7</version>
-				<configuration>
-					<encoding>${project.build.sourceEncoding}</encoding>
-				</configuration>
-			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
 
-			<plugin>
-				<groupId>org.sonatype.plugins</groupId>
-				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6</version>
-				<extensions>true</extensions>
-				<configuration>
-					<serverId>sonatype-nexus-snapshots</serverId>
-					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-					<autoReleaseAfterClose>true</autoReleaseAfterClose>
-				</configuration>
-			</plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>sonatype-nexus-snapshots</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.19.1</version>
-				<configuration>
-					<argLine>${jdk9.modules} -Xms512m -Xmx1024m -Dfile.encoding=${project.build.sourceEncoding}</argLine>
-				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>org.junit.platform</groupId>
-						<artifactId>junit-platform-surefire-provider</artifactId>
-						<version>1.1.1</version>
-					</dependency>
-				</dependencies>
-			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.19.1</version>
+                <configuration>
+                    <argLine>${jdk9.modules} -Xms512m -Xmx1024m -Dfile.encoding=${project.build.sourceEncoding}
+                    </argLine>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.junit.platform</groupId>
+                        <artifactId>junit-platform-surefire-provider</artifactId>
+                        <version>1.1.1</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>2.5.3</version>
-				<configuration>
-					<goals>deploy</goals>
-					<autoVersionSubmodules>true</autoVersionSubmodules>
-					<useReleaseProfile>false</useReleaseProfile>
-					<releaseProfiles>release</releaseProfiles>
-					<tagNameFormat>@{project.version}</tagNameFormat>
-					<scmCommentPrefix>[maven-release-plugin] [ci skip]</scmCommentPrefix>
-				</configuration>
-			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <goals>deploy</goals>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <releaseProfiles>release</releaseProfiles>
+                    <tagNameFormat>@{project.version}</tagNameFormat>
+                    <scmCommentPrefix>[maven-release-plugin] [ci skip]</scmCommentPrefix>
+                </configuration>
+            </plugin>
 
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>cobertura-maven-plugin</artifactId>
-				<version>2.7</version>
-				<configuration>
-					<check/>
-					<formats>
-						<format>html</format>
-						<format>xml</format>
-					</formats>
-					<aggregate>true</aggregate>
-				</configuration>
-			</plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <check/>
+                    <formats>
+                        <format>html</format>
+                        <format>xml</format>
+                    </formats>
+                    <aggregate>true</aggregate>
+                </configuration>
+            </plugin>
 
-		</plugins>
+        </plugins>
 
-		<pluginManagement>
-			<plugins>
+        <pluginManagement>
+            <plugins>
 
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>license-maven-plugin</artifactId>
-					<version>1.13</version>
-					<configuration>
-						<licenseName>apache_v2</licenseName>
-						<verbose>false</verbose>
-						<canUpdateCopyright>true</canUpdateCopyright>
-						<canUpdateDescription>true</canUpdateDescription>
-						<addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
-						<emptyLineAfterHeader>true</emptyLineAfterHeader>
-						<includes>
-							<include>**/*.java</include>
-						</includes>
-						<skipUpdateLicense>false</skipUpdateLicense>
-					</configuration>
-					<executions>
-						<execution>
-							<id>first</id>
-							<goals>
-								<goal>update-file-header</goal>
-							</goals>
-							<phase>process-sources</phase>
-						</execution>
-					</executions>
-				</plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>license-maven-plugin</artifactId>
+                    <version>1.13</version>
+                    <configuration>
+                        <licenseName>apache_v2</licenseName>
+                        <verbose>false</verbose>
+                        <canUpdateCopyright>true</canUpdateCopyright>
+                        <canUpdateDescription>true</canUpdateDescription>
+                        <addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
+                        <emptyLineAfterHeader>true</emptyLineAfterHeader>
+                        <includes>
+                            <include>**/*.java</include>
+                        </includes>
+                        <skipUpdateLicense>false</skipUpdateLicense>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>first</id>
+                            <goals>
+                                <goal>update-file-header</goal>
+                            </goals>
+                            <phase>process-sources</phase>
+                        </execution>
+                    </executions>
+                </plugin>
 
-			</plugins>
-		</pluginManagement>
-	</build>
+            </plugins>
+        </pluginManagement>
+    </build>
 
-	<profiles>
-		<profile>
-			<id>jdk9</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<properties>
-				<jdk9.modules>--add-modules java.xml.bind,java.xml.ws.annotation</jdk9.modules>
-			</properties>
-		</profile>
+    <profiles>
+        <profile>
+            <id>jdk9</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <jdk9.modules>--add-modules java.xml.bind,java.xml.ws.annotation</jdk9.modules>
+            </properties>
+        </profile>
 
-		<profile>
-			<id>release</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-source-plugin</artifactId>
-						<version>3.0.1</version>
-						<executions>
-							<execution>
-								<id>attach-sources</id>
-								<goals>
-									<goal>jar-no-fork</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.0.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
 
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-javadoc-plugin</artifactId>
-						<version>2.10.4</version>
-						<configuration>
-							<failOnError>false</failOnError>
-							<version>false</version>
-							<author>false</author>
-							<keywords>true</keywords>
-							<breakiterator>false</breakiterator>
-							<detectOfflineLinks>false</detectOfflineLinks>
-						</configuration>
-						<executions>
-							<execution>
-								<id>attach-javadocs</id>
-								<goals>
-									<goal>jar</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.10.4</version>
+                        <configuration>
+                            <failOnError>false</failOnError>
+                            <version>false</version>
+                            <author>false</author>
+                            <keywords>true</keywords>
+                            <breakiterator>false</breakiterator>
+                            <detectOfflineLinks>false</detectOfflineLinks>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
 
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-gpg-plugin</artifactId>
-						<version>1.5</version>
-						<executions>
-							<execution>
-								<id>sign-artifacts</id>
-								<phase>verify</phase>
-								<goals>
-									<goal>sign</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
-	<distributionManagement>
-		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.javassist</groupId>
-				<artifactId>javassist</artifactId>
-				<version>${javassist.version}</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.javassist</groupId>
+                <artifactId>javassist</artifactId>
+                <version>${javassist.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>

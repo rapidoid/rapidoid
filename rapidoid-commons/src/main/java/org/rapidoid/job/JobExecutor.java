@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,33 +37,33 @@ import java.util.concurrent.TimeUnit;
 @Since("5.5.1")
 public class JobExecutor extends RapidoidThing implements Closeable {
 
-	private static final Config CONFIG = Conf.JOBS.sub("executor");
+    private static final Config CONFIG = Conf.JOBS.sub("executor");
 
-	private final ThreadPoolExecutor executor;
+    private final ThreadPoolExecutor executor;
 
-	public JobExecutor() {
-		this.executor = newExecutor();
-		new ManageableExecutor("executor", executor);
-		Jobs.init();
-	}
+    public JobExecutor() {
+        this.executor = newExecutor();
+        new ManageableExecutor("executor", executor);
+        Jobs.init();
+    }
 
-	private static ThreadPoolExecutor newExecutor() {
-		int threads = CONFIG.entry("threads").or(64);
-		int maxThreads = CONFIG.entry("maxThreads").or(1024);
-		int maxQueueSize = CONFIG.entry("maxQueueSize").or(1000000);
+    private static ThreadPoolExecutor newExecutor() {
+        int threads = CONFIG.entry("threads").or(64);
+        int maxThreads = CONFIG.entry("maxThreads").or(1024);
+        int maxQueueSize = CONFIG.entry("maxQueueSize").or(1000000);
 
-		BlockingQueue<Runnable> queue = new ArrayBlockingQueue<>(maxQueueSize);
+        BlockingQueue<Runnable> queue = new ArrayBlockingQueue<>(maxQueueSize);
 
-		return new ThreadPoolExecutor(threads, maxThreads, 300, TimeUnit.SECONDS, queue, new RapidoidThreadFactory("executor", true));
-	}
+        return new ThreadPoolExecutor(threads, maxThreads, 300, TimeUnit.SECONDS, queue, new RapidoidThreadFactory("executor", true));
+    }
 
-	@Override
-	public void close() {
-		executor.shutdown();
-		Jobs.awaitTermination(executor);
-	}
+    @Override
+    public void close() {
+        executor.shutdown();
+        Jobs.awaitTermination(executor);
+    }
 
-	public ThreadPoolExecutor executor() {
-		return executor;
-	}
+    public ThreadPoolExecutor executor() {
+        return executor;
+    }
 }

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,27 +31,27 @@ import org.rapidoid.util.Msc;
 @Since("5.3.0")
 public class HttpSyncAsyncMixTest extends IsolatedIntegrationTest {
 
-	private static final int ROUNDS = Msc.normalOrHeavy(10, 1000);
+    private static final int ROUNDS = Msc.normalOrHeavy(10, 1000);
 
-	@Test
-	public void testSyncAsyncMix() {
+    @Test
+    public void testSyncAsyncMix() {
 
-		On.get("/").plain((Resp resp, Integer n) -> {
-			if (n % 2 == 0) return n;
+        On.get("/").plain((Resp resp, Integer n) -> {
+            if (n % 2 == 0) return n;
 
-			return Jobs.after(3).milliseconds(() -> resp.result(n * 10).done());
-		});
+            return Jobs.after(3).milliseconds(() -> resp.result(n * 10).done());
+        });
 
-		// it is important to use only 1 connection
-		HttpClient client = HTTP.client().reuseConnections(true).keepAlive(true).maxConnTotal(1);
+        // it is important to use only 1 connection
+        HttpClient client = HTTP.client().reuseConnections(true).keepAlive(true).maxConnTotal(1);
 
-		for (int i = 0; i < ROUNDS; i++) {
-			int expected = i % 2 == 0 ? i : i * 10;
-			client.get(localhost("/?n=" + i)).expect("" + expected);
-			client.get(localhost("/abcd.txt")).expect("ABCD");
-		}
+        for (int i = 0; i < ROUNDS; i++) {
+            int expected = i % 2 == 0 ? i : i * 10;
+            client.get(localhost("/?n=" + i)).expect("" + expected);
+            client.get(localhost("/abcd.txt")).expect("ABCD");
+        }
 
-		client.close();
-	}
+        client.close();
+    }
 
 }

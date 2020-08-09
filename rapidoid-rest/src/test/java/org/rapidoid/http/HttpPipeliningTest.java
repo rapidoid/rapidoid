@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,56 +36,56 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Since("5.3.0")
 public class HttpPipeliningTest extends IsolatedIntegrationTest {
 
-	private static final int ROUNDS = Msc.normalOrHeavy(1, 100);
+    private static final int ROUNDS = Msc.normalOrHeavy(1, 100);
 
-	private static final int REQ_COUNT = 100;
+    private static final int REQ_COUNT = 100;
 
-	private static final AtomicInteger COUNTER = new AtomicInteger();
+    private static final AtomicInteger COUNTER = new AtomicInteger();
 
-	@Test
-	public void testSyncPipeline() {
+    @Test
+    public void testSyncPipeline() {
 
-		On.get("/").json((Req req, Integer n) -> {
-			COUNTER.incrementAndGet();
-			return U.frmt("n=%s, handle=%s", n, req.handle());
-		});
+        On.get("/").json((Req req, Integer n) -> {
+            COUNTER.incrementAndGet();
+            return U.frmt("n=%s, handle=%s", n, req.handle());
+        });
 
-		String req = "GET /?n=%s _\r\n\r\n";
-		testReqResp(req, REQ_COUNT);
-	}
+        String req = "GET /?n=%s _\r\n\r\n";
+        testReqResp(req, REQ_COUNT);
+    }
 
-	private void testReqResp(String req, int multiply) {
-		Msc.startMeasure();
+    private void testReqResp(String req, int multiply) {
+        Msc.startMeasure();
 
-		for (int i = 0; i < ROUNDS; i++) {
-			Log.info("ROUND " + i);
-			COUNTER.set(0);
+        for (int i = 0; i < ROUNDS; i++) {
+            Log.info("ROUND " + i);
+            COUNTER.set(0);
 
-			connect((in, reader, out) -> {
+            connect((in, reader, out) -> {
 
-				for (int n = 1; n <= multiply; n++) {
-					out.writeBytes(String.format(req, n));
-				}
+                for (int n = 1; n <= multiply; n++) {
+                    out.writeBytes(String.format(req, n));
+                }
 
-				String resp = new String(IO.readWithTimeoutUntil(in, this::isComplete));
+                String resp = new String(IO.readWithTimeoutUntil(in, this::isComplete));
 
-				eq(COUNTER.get(), REQ_COUNT);
-				verify(maskHttpResponse(resp));
+                eq(COUNTER.get(), REQ_COUNT);
+                verify(maskHttpResponse(resp));
 
-				return null;
-			});
-		}
+                return null;
+            });
+        }
 
-		Msc.endMeasure(ROUNDS, "rounds");
-	}
+        Msc.endMeasure(ROUNDS, "rounds");
+    }
 
-	private boolean isComplete(byte[] bytes) {
-		String resp = new String(bytes);
+    private boolean isComplete(byte[] bytes) {
+        String resp = new String(bytes);
 
-		int count = Str.find(resp, "HTTP/1.1 200 OK", found -> {
-		});
+        int count = Str.find(resp, "HTTP/1.1 200 OK", found -> {
+        });
 
-		return count == REQ_COUNT;
-	}
+        return count == REQ_COUNT;
+    }
 
 }

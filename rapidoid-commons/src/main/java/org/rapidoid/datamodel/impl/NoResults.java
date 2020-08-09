@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,27 +31,27 @@ import java.util.List;
 @Since("5.4.6")
 public class NoResults<T> extends ResultsImpl<T> {
 
-	public NoResults() {
-		super(noData());
-	}
+    public NoResults() {
+        super(noData());
+    }
 
-	private static <T> PageableData<T> noData() {
-		return new PageableData<T>() {
+    private static <T> PageableData<T> noData() {
+        return new PageableData<T>() {
 
-			@Override
-			public List<T> getPage(long skip, long limit) {
-				return U.list();
-			}
+            @Override
+            public List<T> getPage(long skip, long limit) {
+                return U.list();
+            }
 
-			@Override
-			public long getCount() {
-				return 0;
-			}
-		};
-	}
+            @Override
+            public long getCount() {
+                return 0;
+            }
+        };
+    }
 
-	@Override
-	public String toString() {
-		return "[N/A]";
-	}
+    @Override
+    public String toString() {
+        return "[N/A]";
+    }
 }

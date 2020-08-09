@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,25 +28,25 @@ import org.rapidoid.annotation.Since;
 @Since("5.1.0")
 public class SimpleValueStore<T> extends RapidoidThing implements ValueStore<T> {
 
-	private volatile T value;
+    private volatile T value;
 
-	public SimpleValueStore(T value) {
-		this.value = value;
-	}
+    public SimpleValueStore(T value) {
+        this.value = value;
+    }
 
-	@Override
-	public T get() {
-		return value;
-	}
+    @Override
+    public T get() {
+        return value;
+    }
 
-	@Override
-	public void set(T value) {
-		this.value = value;
-	}
+    @Override
+    public void set(T value) {
+        this.value = value;
+    }
 
-	@Override
-	public String desc() {
-		return null;
-	}
+    @Override
+    public String desc() {
+        return null;
+    }
 
 }

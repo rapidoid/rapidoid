@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,18 +23,10 @@ package org.rapidoid.util;
 import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.*;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.cls.TypeKind;
-import org.rapidoid.http.HttpVerb;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 
 import java.lang.reflect.Method;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 
 @Authors("Nikolche Mihajlovski")
 @Since("6.0.0")

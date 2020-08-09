@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,319 +41,319 @@ import java.util.Map;
 @Since("2.0.0")
 public class IO extends RapidoidThing {
 
-	public static URL resource(String filename) {
-		return classLoader().getResource(filename);
-	}
+    public static URL resource(String filename) {
+        return classLoader().getResource(filename);
+    }
 
-	public static InputStream resourceAsStream(String filename) {
-		return classLoader().getResourceAsStream(filename.replace('\\', '/'));
-	}
+    public static InputStream resourceAsStream(String filename) {
+        return classLoader().getResourceAsStream(filename.replace('\\', '/'));
+    }
 
-	public static ClassLoader classLoader() {
-		Thread thread = Thread.currentThread();
+    public static ClassLoader classLoader() {
+        Thread thread = Thread.currentThread();
 
-		ClassLoader classLoader = thread != null ? thread.getContextClassLoader() : null;
+        ClassLoader classLoader = thread != null ? thread.getContextClassLoader() : null;
 
-		if (classLoader == null) {
-			classLoader = IO.class.getClassLoader();
-		}
+        if (classLoader == null) {
+            classLoader = IO.class.getClassLoader();
+        }
 
-		return classLoader;
-	}
+        return classLoader;
+    }
 
-	public static String name(String resourceName) {
-		int urlPos = resourceName.indexOf(":/");
-		if (urlPos > 0) {
-			return resourceName;
-		} else {
-			return resourceName.replace('/', File.separatorChar).replace('\\', File.separatorChar);
-		}
-	}
+    public static String name(String resourceName) {
+        int urlPos = resourceName.indexOf(":/");
+        if (urlPos > 0) {
+            return resourceName;
+        } else {
+            return resourceName.replace('/', File.separatorChar).replace('\\', File.separatorChar);
+        }
+    }
 
-	public static File file(String filename) {
-		filename = name(filename);
+    public static File file(String filename) {
+        filename = name(filename);
 
-		File file = new File(filename);
-
-		if (!file.exists()) {
-			URL res = resource(filename);
-			if (res != null) {
-				return new File(res.getFile());
-			}
-		}
+        File file = new File(filename);
+
+        if (!file.exists()) {
+            URL res = resource(filename);
+            if (res != null) {
+                return new File(res.getFile());
+            }
+        }
 
-		return file;
-	}
-
-	public static byte[] loadBytes(InputStream input) {
-
-		ByteArrayOutputStream output = new ByteArrayOutputStream();
-		byte[] buffer = new byte[16 * 1024];
+        return file;
+    }
+
+    public static byte[] loadBytes(InputStream input) {
+
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        byte[] buffer = new byte[16 * 1024];
 
-		try {
-			int readN;
+        try {
+            int readN;
 
-			while ((readN = input.read(buffer)) != -1) {
-				output.write(buffer, 0, readN);
-			}
+            while ((readN = input.read(buffer)) != -1) {
+                output.write(buffer, 0, readN);
+            }
 
-		} catch (IOException e) {
-			throw U.rte(e);
-		}
+        } catch (IOException e) {
+            throw U.rte(e);
+        }
 
-		return output.toByteArray();
-	}
+        return output.toByteArray();
+    }
 
-	public static byte[] readWithTimeout(InputStream input) {
-		return readWithTimeoutUntil(input, null);
-	}
+    public static byte[] readWithTimeout(InputStream input) {
+        return readWithTimeoutUntil(input, null);
+    }
 
-	public static byte[] readWithTimeoutUntil(InputStream input, Mapper<byte[], Boolean> finish) {
-		ByteArrayOutputStream output = new ByteArrayOutputStream();
-		byte[] buffer = new byte[16 * 1024];
+    public static byte[] readWithTimeoutUntil(InputStream input, Mapper<byte[], Boolean> finish) {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        byte[] buffer = new byte[16 * 1024];
 
-		try {
-			int readN;
+        try {
+            int readN;
 
-			while ((readN = input.read(buffer)) != -1) {
-				output.write(buffer, 0, readN);
+            while ((readN = input.read(buffer)) != -1) {
+                output.write(buffer, 0, readN);
 
-				byte[] bytes = output.toByteArray();
+                byte[] bytes = output.toByteArray();
 
-				if (finish != null && Lmbd.eval(finish, bytes)) break;
-			}
+                if (finish != null && Lmbd.eval(finish, bytes)) break;
+            }
 
-		} catch (SocketTimeoutException e) {
-			// do nothing
+        } catch (SocketTimeoutException e) {
+            // do nothing
 
-		} catch (IOException e) {
-			throw U.rte(e);
-		}
-
-		return output.toByteArray();
-	}
-
-	public static String loadResourceAsString(String filename) {
-		byte[] bytes = loadBytes(filename);
-		return bytes != null ? new String(bytes) : null;
-	}
-
-	public static byte[] loadBytes(String filename) {
-		InputStream input = null;
-		try {
-			input = resourceAsStream(filename);
-
-			if (input == null) {
-				File file = new File(filename);
-
-				if (file.exists()) {
-					try {
-						input = new FileInputStream(filename);
-					} catch (FileNotFoundException e) {
-						throw U.rte(e);
-					}
-				}
-			}
-
-			return input != null ? loadBytes(input) : null;
-		} finally {
-			close(input, true);
-		}
-	}
-
-	public static byte[] classBytes(String fullClassName) {
-		return loadBytes(fullClassName.replace('.', '/') + ".class");
-	}
-
-	public static List<String> readLines(BufferedReader reader) {
-		List<String> lines = U.list();
-
-		try {
-			String line;
-			while ((line = reader.readLine()) != null) {
-				lines.add(line);
-			}
-		} catch (IOException e) {
-			throw U.rte(e);
-		}
-
-		return lines;
-	}
-
-	public static String load(String filename) {
-		byte[] bytes = loadBytes(filename);
-		return bytes != null ? new String(bytes) : null;
-	}
-
-	public static List<String> loadLines(String filename) {
-		byte[] bytes = loadBytes(filename);
-
-		if (bytes == null) {
-			return null;
-		}
-
-		return readLines(new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes))));
-	}
-
-	public static List<String> loadLines(String filename, final boolean filterEmpty, final String commentPrefix) {
-
-		List<String> lines = loadLines(filename);
-
-		List<String> lines2 = U.list();
-
-		for (String line : lines) {
-			String s = line.trim();
-			if ((!filterEmpty || !s.isEmpty()) && (commentPrefix == null || !s.startsWith(commentPrefix))) {
-				lines2.add(s);
-			}
-		}
-
-		return lines2;
-	}
-
-	public static Map<String, String> loadMap(String filename) {
-		InputStream input = resourceAsStream(filename);
-		if (input == null) {
-			return null;
-		}
-
-		BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-		Map<String, String> linesMap = U.map();
-
-		try {
-			String line;
-			while ((line = reader.readLine()) != null) {
-				if (!U.isEmpty(line)) {
-					String[] parts = line.split("=", 2);
-					linesMap.put(parts[0], parts.length > 1 ? parts[1] : "");
-				}
-			}
-		} catch (IOException e) {
-			throw U.rte(e);
-		}
-
-		return linesMap;
-	}
-
-	public static void save(String filename, String content) {
-		save(filename, content.getBytes());
-	}
-
-	public static void save(String filename, byte[] content) {
-		save(filename, content, 3);
-	}
-
-	public static void append(String filename, byte[] content) {
-		writeToFile(filename, content, true, 3);
-	}
-
-	public static void save(String filename, byte[] content, int retries) {
-		writeToFile(filename, content, false, retries);
-	}
-
-	private static void writeToFile(String filename, byte[] content, boolean append, int retries) {
-		U.notNull(filename, "filename");
-		U.notNull(content, "content");
-
-		FileOutputStream out = null;
-		try {
-			out = new FileOutputStream(filename, append);
-			out.write(content);
-			close(out, false);
-
-		} catch (FileNotFoundException e) {
-			if (retries > 0) {
-
-				try {
-					new File(filename).getCanonicalFile().getParentFile().mkdirs();
-				} catch (IOException e1) {
-					throw U.rte(e1);
-				}
-
-				U.sleep(200);
-				save(filename, content, retries - 1);
-
-			} else {
-				close(out, true);
-				throw U.rte(e);
-			}
-
-		} catch (Exception e) {
-			close(out, true);
-			throw U.rte(e);
-		}
-	}
-
-	public static void close(Closeable closeable, boolean quiet) {
-		try {
-			if (closeable != null) {
-				closeable.close();
-			}
-		} catch (IOException e) {
-			if (!quiet) {
-				throw U.rte(e);
-			}
-		}
-	}
-
-	public static void delete(String filename) {
-		new File(filename).delete();
-	}
-
-	@SuppressWarnings("resource")
-	public static MappedByteBuffer mmap(String filename, MapMode mode, long position, long size) {
-		try {
-			File file = new File(filename);
-			FileChannel fc = new RandomAccessFile(file, "rw").getChannel();
-			return fc.map(mode, position, size);
-		} catch (Exception e) {
-			throw U.rte(e);
-		}
-	}
-
-	public static MappedByteBuffer mmap(String filename, MapMode mode) {
-		File file = new File(filename);
-		U.must(file.exists());
-		return mmap(filename, mode, 0, file.length());
-	}
-
-	public static String getDefaultFilename(String filename) {
-		int lastDotPos = filename.lastIndexOf('.');
-
-		if (lastDotPos > 0) {
-			return Str.insert(filename, lastDotPos, ".default");
-		} else {
-			return filename + ".default";
-		}
-	}
-
-	public static String getRealOrDefaultFilename(String filename) {
-		if (resource(filename) != null) {
-			return filename;
-		} else {
-			String name = getDefaultFilename(filename);
-			return resource(name) != null ? name : filename;
-		}
-	}
-
-	public static void write(OutputStream out, byte[] content) {
-		try {
-			out.write(content);
-		} catch (IOException e) {
-			throw U.rte(e);
-		}
-	}
-
-	public static void write(OutputStream out, String content) {
-		write(out, content.getBytes());
-	}
-
-	public static FileSearch find(String name) {
-		return find().name(name);
-	}
-
-	public static FileSearch find() {
-		return new FileSearch();
-	}
+        } catch (IOException e) {
+            throw U.rte(e);
+        }
+
+        return output.toByteArray();
+    }
+
+    public static String loadResourceAsString(String filename) {
+        byte[] bytes = loadBytes(filename);
+        return bytes != null ? new String(bytes) : null;
+    }
+
+    public static byte[] loadBytes(String filename) {
+        InputStream input = null;
+        try {
+            input = resourceAsStream(filename);
+
+            if (input == null) {
+                File file = new File(filename);
+
+                if (file.exists()) {
+                    try {
+                        input = new FileInputStream(filename);
+                    } catch (FileNotFoundException e) {
+                        throw U.rte(e);
+                    }
+                }
+            }
+
+            return input != null ? loadBytes(input) : null;
+        } finally {
+            close(input, true);
+        }
+    }
+
+    public static byte[] classBytes(String fullClassName) {
+        return loadBytes(fullClassName.replace('.', '/') + ".class");
+    }
+
+    public static List<String> readLines(BufferedReader reader) {
+        List<String> lines = U.list();
+
+        try {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+        } catch (IOException e) {
+            throw U.rte(e);
+        }
+
+        return lines;
+    }
+
+    public static String load(String filename) {
+        byte[] bytes = loadBytes(filename);
+        return bytes != null ? new String(bytes) : null;
+    }
+
+    public static List<String> loadLines(String filename) {
+        byte[] bytes = loadBytes(filename);
+
+        if (bytes == null) {
+            return null;
+        }
+
+        return readLines(new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes))));
+    }
+
+    public static List<String> loadLines(String filename, final boolean filterEmpty, final String commentPrefix) {
+
+        List<String> lines = loadLines(filename);
+
+        List<String> lines2 = U.list();
+
+        for (String line : lines) {
+            String s = line.trim();
+            if ((!filterEmpty || !s.isEmpty()) && (commentPrefix == null || !s.startsWith(commentPrefix))) {
+                lines2.add(s);
+            }
+        }
+
+        return lines2;
+    }
+
+    public static Map<String, String> loadMap(String filename) {
+        InputStream input = resourceAsStream(filename);
+        if (input == null) {
+            return null;
+        }
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+        Map<String, String> linesMap = U.map();
+
+        try {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (!U.isEmpty(line)) {
+                    String[] parts = line.split("=", 2);
+                    linesMap.put(parts[0], parts.length > 1 ? parts[1] : "");
+                }
+            }
+        } catch (IOException e) {
+            throw U.rte(e);
+        }
+
+        return linesMap;
+    }
+
+    public static void save(String filename, String content) {
+        save(filename, content.getBytes());
+    }
+
+    public static void save(String filename, byte[] content) {
+        save(filename, content, 3);
+    }
+
+    public static void append(String filename, byte[] content) {
+        writeToFile(filename, content, true, 3);
+    }
+
+    public static void save(String filename, byte[] content, int retries) {
+        writeToFile(filename, content, false, retries);
+    }
+
+    private static void writeToFile(String filename, byte[] content, boolean append, int retries) {
+        U.notNull(filename, "filename");
+        U.notNull(content, "content");
+
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(filename, append);
+            out.write(content);
+            close(out, false);
+
+        } catch (FileNotFoundException e) {
+            if (retries > 0) {
+
+                try {
+                    new File(filename).getCanonicalFile().getParentFile().mkdirs();
+                } catch (IOException e1) {
+                    throw U.rte(e1);
+                }
+
+                U.sleep(200);
+                save(filename, content, retries - 1);
+
+            } else {
+                close(out, true);
+                throw U.rte(e);
+            }
+
+        } catch (Exception e) {
+            close(out, true);
+            throw U.rte(e);
+        }
+    }
+
+    public static void close(Closeable closeable, boolean quiet) {
+        try {
+            if (closeable != null) {
+                closeable.close();
+            }
+        } catch (IOException e) {
+            if (!quiet) {
+                throw U.rte(e);
+            }
+        }
+    }
+
+    public static void delete(String filename) {
+        new File(filename).delete();
+    }
+
+    @SuppressWarnings("resource")
+    public static MappedByteBuffer mmap(String filename, MapMode mode, long position, long size) {
+        try {
+            File file = new File(filename);
+            FileChannel fc = new RandomAccessFile(file, "rw").getChannel();
+            return fc.map(mode, position, size);
+        } catch (Exception e) {
+            throw U.rte(e);
+        }
+    }
+
+    public static MappedByteBuffer mmap(String filename, MapMode mode) {
+        File file = new File(filename);
+        U.must(file.exists());
+        return mmap(filename, mode, 0, file.length());
+    }
+
+    public static String getDefaultFilename(String filename) {
+        int lastDotPos = filename.lastIndexOf('.');
+
+        if (lastDotPos > 0) {
+            return Str.insert(filename, lastDotPos, ".default");
+        } else {
+            return filename + ".default";
+        }
+    }
+
+    public static String getRealOrDefaultFilename(String filename) {
+        if (resource(filename) != null) {
+            return filename;
+        } else {
+            String name = getDefaultFilename(filename);
+            return resource(name) != null ? name : filename;
+        }
+    }
+
+    public static void write(OutputStream out, byte[] content) {
+        try {
+            out.write(content);
+        } catch (IOException e) {
+            throw U.rte(e);
+        }
+    }
+
+    public static void write(OutputStream out, String content) {
+        write(out, content.getBytes());
+    }
+
+    public static FileSearch find(String name) {
+        return find().name(name);
+    }
+
+    public static FileSearch find() {
+        return new FileSearch();
+    }
 
 }

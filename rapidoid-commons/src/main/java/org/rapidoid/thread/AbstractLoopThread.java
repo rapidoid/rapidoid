@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,42 +31,42 @@ import java.util.concurrent.CancellationException;
 @Since("4.1.0")
 public abstract class AbstractLoopThread extends RapidoidThread {
 
-	private volatile long sleepMs = 5;
+    private volatile long sleepMs = 5;
 
-	public AbstractLoopThread() {
-	}
+    public AbstractLoopThread() {
+    }
 
-	public AbstractLoopThread(String name) {
-		super(name);
-	}
+    public AbstractLoopThread(String name) {
+        super(name);
+    }
 
-	public AbstractLoopThread(long sleepMs) {
-		this.sleepMs = sleepMs;
-	}
+    public AbstractLoopThread(long sleepMs) {
+        this.sleepMs = sleepMs;
+    }
 
-	@Override
-	public final void run() {
-		while (!interrupted()) {
-			try {
+    @Override
+    public final void run() {
+        while (!interrupted()) {
+            try {
 
-				loop();
+                loop();
 
-				if (sleepMs > 0) U.sleep(sleepMs);
+                if (sleepMs > 0) U.sleep(sleepMs);
 
-			} catch (ThreadDeath e) {
-				Log.error("Received ThreadDeath error, terminating!", e);
-				return;
+            } catch (ThreadDeath e) {
+                Log.error("Received ThreadDeath error, terminating!", e);
+                return;
 
-			} catch (CancellationException e) {
-				Log.info("The thread was interrupted.");
-				return;
+            } catch (CancellationException e) {
+                Log.info("The thread was interrupted.");
+                return;
 
-			} catch (Throwable e) {
-				Log.error("Exception occurred inside the thread loop!", e);
-			}
-		}
-	}
+            } catch (Throwable e) {
+                Log.error("Exception occurred inside the thread loop!", e);
+            }
+        }
+    }
 
-	protected abstract void loop() throws Exception;
+    protected abstract void loop() throws Exception;
 
 }

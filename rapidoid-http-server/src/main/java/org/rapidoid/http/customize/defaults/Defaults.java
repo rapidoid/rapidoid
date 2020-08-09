@@ -27,7 +27,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.JSON;
 import org.rapidoid.data.XML;
-import org.rapidoid.env.Env;
 import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.customize.*;
 import org.rapidoid.u.U;

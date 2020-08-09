@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,80 +34,80 @@ import java.util.List;
 @Since("5.3.0")
 public class ResultsImpl<T> extends RapidoidThing implements Results<T> {
 
-	private final PageableData<T> data;
+    private final PageableData<T> data;
 
-	public ResultsImpl(PageableData<T> data) {
-		this.data = data;
-	}
+    public ResultsImpl(PageableData<T> data) {
+        this.data = data;
+    }
 
-	protected PageableData<T> data() {
-		return data;
-	}
+    protected PageableData<T> data() {
+        return data;
+    }
 
-	@Override
-	public final Iterator<T> iterator() {
-		return new PagingIterator<>(data);
-	}
+    @Override
+    public final Iterator<T> iterator() {
+        return new PagingIterator<>(data);
+    }
 
-	@Override
-	public final List<T> all() {
-		return retrievePage(0, -1);
-	}
+    @Override
+    public final List<T> all() {
+        return retrievePage(0, -1);
+    }
 
-	@Override
-	public final List<T> page(long skip, long limit) {
-		return retrievePage(skip, limit);
-	}
+    @Override
+    public final List<T> page(long skip, long limit) {
+        return retrievePage(skip, limit);
+    }
 
-	@Override
-	public T single() {
-		return U.single(retrievePage(0, 2));
-	}
+    @Override
+    public T single() {
+        return U.single(retrievePage(0, 2));
+    }
 
-	@Override
-	public final T first() {
-		return U.single(retrievePage(0, 1));
-	}
+    @Override
+    public final T first() {
+        return U.single(retrievePage(0, 1));
+    }
 
-	@Override
-	public final T last() {
-		return U.single(retrievePage(count() - 1, 1));
-	}
+    @Override
+    public final T last() {
+        return U.single(retrievePage(count() - 1, 1));
+    }
 
-	private List<T> retrievePage(long skip, long limit) {
-		return data().getPage(skip, limit);
-	}
+    private List<T> retrievePage(long skip, long limit) {
+        return data().getPage(skip, limit);
+    }
 
-	@Override
-	public boolean isLoaded() {
-		return data().getCount() >= 0;
-	}
+    @Override
+    public boolean isLoaded() {
+        return data().getCount() >= 0;
+    }
 
-	@Override
-	public long count() {
-		long count = data().getCount();
+    @Override
+    public long count() {
+        long count = data().getCount();
 
-		if (count < 0) {
-			// it is unknown, so count manually
-			count = 0;
+        if (count < 0) {
+            // it is unknown, so count manually
+            count = 0;
 
-			for (T item : this) {
-				count++;
-			}
-		}
+            for (T item : this) {
+                count++;
+            }
+        }
 
-		return count;
-	}
+        return count;
+    }
 
-	@Override
-	public boolean isSingle() {
-		long count = data().getCount();
+    @Override
+    public boolean isSingle() {
+        long count = data().getCount();
 
-		if (count >= 0) {
-			return count == 1;
+        if (count >= 0) {
+            return count == 1;
 
-		} else {
-			return retrievePage(0, 2).size() == 1;
-		}
-	}
+        } else {
+            return retrievePage(0, 2).size() == 1;
+        }
+    }
 }

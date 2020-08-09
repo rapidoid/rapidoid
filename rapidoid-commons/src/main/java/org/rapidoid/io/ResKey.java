@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,31 +30,31 @@ import java.util.Arrays;
 @Since("5.0.11")
 public class ResKey extends RapidoidThing {
 
-	final String filename;
-	final String[] possibleLocations;
+    final String filename;
+    final String[] possibleLocations;
 
-	public ResKey(String filename, String[] possibleLocations) {
-		this.filename = filename;
-		this.possibleLocations = possibleLocations;
-	}
+    public ResKey(String filename, String[] possibleLocations) {
+        this.filename = filename;
+        this.possibleLocations = possibleLocations;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-		ResKey resKey = (ResKey) o;
+        ResKey resKey = (ResKey) o;
 
-		if (!filename.equals(resKey.filename)) return false;
+        if (!filename.equals(resKey.filename)) return false;
 
-		return Arrays.equals(possibleLocations, resKey.possibleLocations);
-	}
+        return Arrays.equals(possibleLocations, resKey.possibleLocations);
+    }
 
-	@Override
-	public int hashCode() {
-		int result = filename.hashCode();
-		result = 31 * result + Arrays.hashCode(possibleLocations);
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        int result = filename.hashCode();
+        result = 31 * result + Arrays.hashCode(possibleLocations);
+        return result;
+    }
 
 }

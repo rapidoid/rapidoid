@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,25 +27,25 @@ import org.rapidoid.annotation.Since;
 @Since("4.1.0")
 public class RapidoidThread extends Thread {
 
-	private final RapidoidThreadLocals locals = new RapidoidThreadLocals();
+    private final RapidoidThreadLocals locals = new RapidoidThreadLocals();
 
-	public RapidoidThread() {
-	}
+    public RapidoidThread() {
+    }
 
-	public RapidoidThread(Runnable runnable) {
-		super(runnable);
-	}
+    public RapidoidThread(Runnable runnable) {
+        super(runnable);
+    }
 
-	public RapidoidThread(String name) {
-		super(name);
-	}
+    public RapidoidThread(String name) {
+        super(name);
+    }
 
-	public <T> RapidoidThread(Runnable runnable, String name) {
-		super(runnable, name);
-	}
+    public <T> RapidoidThread(Runnable runnable, String name) {
+        super(runnable, name);
+    }
 
-	public RapidoidThreadLocals locals() {
-		return locals;
-	}
+    public RapidoidThreadLocals locals() {
+        return locals;
+    }
 
 }

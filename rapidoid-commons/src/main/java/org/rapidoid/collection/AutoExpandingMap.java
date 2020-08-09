@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,41 +29,41 @@ import org.rapidoid.u.U;
 @Since("5.1.0")
 public class AutoExpandingMap<K, V> extends AbstractMapDecorator<K, V> {
 
-	private final Mapper<K, V> valueFactory;
+    private final Mapper<K, V> valueFactory;
 
-	public AutoExpandingMap(Mapper<K, V> valueFactory) {
-		super(Coll.synchronizedMap());
-		this.valueFactory = valueFactory;
-	}
+    public AutoExpandingMap(Mapper<K, V> valueFactory) {
+        super(Coll.synchronizedMap());
+        this.valueFactory = valueFactory;
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public V get(Object key) {
-		V val = decorated.get(key);
+    @SuppressWarnings("unchecked")
+    @Override
+    public V get(Object key) {
+        V val = decorated.get(key);
 
-		if (val == null) {
-			synchronized (decorated) {
-				val = decorated.get(key);
+        if (val == null) {
+            synchronized (decorated) {
+                val = decorated.get(key);
 
-				if (val == null) {
-					try {
-						val = valueFactory.map((K) key);
-					} catch (Exception e) {
-						throw U.rte(e);
-					}
+                if (val == null) {
+                    try {
+                        val = valueFactory.map((K) key);
+                    } catch (Exception e) {
+                        throw U.rte(e);
+                    }
 
-					decorated.put((K) key, val);
-				}
+                    decorated.put((K) key, val);
+                }
 
-				return val;
-			}
-		}
+                return val;
+            }
+        }
 
-		return val;
-	}
+        return val;
+    }
 
-	public AutoExpandingMap<K, V> copy() {
-		return new AutoExpandingMap<>(valueFactory);
-	}
+    public AutoExpandingMap<K, V> copy() {
+        return new AutoExpandingMap<>(valueFactory);
+    }
 
 }

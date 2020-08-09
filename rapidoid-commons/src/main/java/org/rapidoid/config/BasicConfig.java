@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,12 +29,12 @@ import org.rapidoid.value.Value;
 @Since("5.2.0")
 public interface BasicConfig extends ToMap<String, Object> {
 
-	Value<Object> entry(String key);
+    Value<Object> entry(String key);
 
-	boolean has(String key);
+    boolean has(String key);
 
-	BasicConfig sub(String... keys);
+    BasicConfig sub(String... keys);
 
-	BasicConfig or(BasicConfig alternative);
+    BasicConfig or(BasicConfig alternative);
 
 }

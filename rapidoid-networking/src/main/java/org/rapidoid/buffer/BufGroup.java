@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,59 +34,59 @@ import java.nio.ByteBuffer;
 @Since("2.0.0")
 public class BufGroup extends RapidoidThing {
 
-	private final int factor;
+    private final int factor;
 
-	private final Pool<ByteBuffer> pool;
+    private final Pool<ByteBuffer> pool;
 
-	private final boolean synchronizedBuffers;
+    private final boolean synchronizedBuffers;
 
-	public BufGroup(final int capacity, boolean synchronizedBuffers) {
-		this.synchronizedBuffers = synchronizedBuffers;
+    public BufGroup(final int capacity, boolean synchronizedBuffers) {
+        this.synchronizedBuffers = synchronizedBuffers;
 
-		U.must(capacity >= 2, "The capacity must >= 2!");
-		U.must((capacity & (capacity - 1)) == 0, "The capacity must be a power of 2!");
+        U.must(capacity >= 2, "The capacity must >= 2!");
+        U.must((capacity & (capacity - 1)) == 0, "The capacity must be a power of 2!");
 
-		this.factor = Nums.log2(capacity);
+        this.factor = Nums.log2(capacity);
 
-		U.must(capacity == Math.pow(2, factor));
+        U.must(capacity == Math.pow(2, factor));
 
-		pool = Pools.create("buffers", () -> ByteBuffer.allocateDirect(capacity), 1000);
-	}
+        pool = Pools.create("buffers", () -> ByteBuffer.allocateDirect(capacity), 1000);
+    }
 
-	public BufGroup(int capacity) {
-		this(capacity, true);
-	}
+    public BufGroup(int capacity) {
+        this(capacity, true);
+    }
 
-	public Buf newBuf(String name) {
-		Buf buf = new MultiBuf(pool, factor, name);
+    public Buf newBuf(String name) {
+        Buf buf = new MultiBuf(pool, factor, name);
 
-		if (synchronizedBuffers) {
-			buf = new SynchronizedBuf(buf);
-		}
+        if (synchronizedBuffers) {
+            buf = new SynchronizedBuf(buf);
+        }
 
-		return buf;
-	}
+        return buf;
+    }
 
-	public Buf newBuf() {
-		return newBuf("no-name");
-	}
+    public Buf newBuf() {
+        return newBuf("no-name");
+    }
 
-	public Buf from(String s, String name) {
-		return from(ByteBuffer.wrap(s.getBytes()), name);
-	}
+    public Buf from(String s, String name) {
+        return from(ByteBuffer.wrap(s.getBytes()), name);
+    }
 
-	public Buf from(ByteBuffer bbuf, String name) {
-		Buf buf = newBuf(name);
-		buf.append(bbuf);
-		return buf;
-	}
+    public Buf from(ByteBuffer bbuf, String name) {
+        Buf buf = newBuf(name);
+        buf.append(bbuf);
+        return buf;
+    }
 
-	public int instances() {
-		return pool.objectsCreated();
-	}
+    public int instances() {
+        return pool.objectsCreated();
+    }
 
-	public void clear() {
-		pool.clear();
-	}
+    public void clear() {
+        pool.clear();
+    }
 
 }

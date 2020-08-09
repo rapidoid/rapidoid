@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,25 +28,25 @@ import org.rapidoid.annotation.Since;
 @Since("5.1.0")
 public class Upload extends RapidoidThing {
 
-	private final String filename;
+    private final String filename;
 
-	private final byte[] content;
+    private final byte[] content;
 
-	public Upload(String filename, byte[] content) {
-		this.filename = filename;
-		this.content = content;
-	}
+    public Upload(String filename, byte[] content) {
+        this.filename = filename;
+        this.content = content;
+    }
 
-	public String filename() {
-		return filename;
-	}
+    public String filename() {
+        return filename;
+    }
 
-	public byte[] content() {
-		return content;
-	}
+    public byte[] content() {
+        return content;
+    }
 
-	public static Upload from(String filename) {
-		return new Upload(filename, IO.loadBytes(filename));
-	}
+    public static Upload from(String filename) {
+        return new Upload(filename, IO.loadBytes(filename));
+    }
 
 }

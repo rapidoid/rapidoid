@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,28 +28,28 @@ import org.rapidoid.annotation.Since;
 @Since("5.0.2")
 public class ConfigOption extends RapidoidThing {
 
-	public final String name;
+    public final String name;
 
-	public final String desc;
+    public final String desc;
 
-	public final Object defaultValue;
+    public final Object defaultValue;
 
-	public ConfigOption(String name, String desc, Object defaultValue) {
-		this.name = name;
-		this.desc = desc;
-		this.defaultValue = defaultValue;
-	}
+    public ConfigOption(String name, String desc, Object defaultValue) {
+        this.name = name;
+        this.desc = desc;
+        this.defaultValue = defaultValue;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getDesc() {
-		return desc;
-	}
+    public String getDesc() {
+        return desc;
+    }
 
-	public Object getDefaultValue() {
-		return defaultValue;
-	}
+    public Object getDefaultValue() {
+        return defaultValue;
+    }
 
 }

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,28 +33,28 @@ import org.rapidoid.u.U;
 @Since("4.3.0")
 public abstract class AbstractDecoratingHttpHandler extends AbstractHttpHandler {
 
-	private final AbstractHttpHandlerDecorator decorator;
+    private final AbstractHttpHandlerDecorator decorator;
 
-	public AbstractDecoratingHttpHandler(FastHttp http, RouteOptions options) {
-		super(options);
+    public AbstractDecoratingHttpHandler(FastHttp http, RouteOptions options) {
+        super(options);
 
-		U.notNull(http, "http");
+        U.notNull(http, "http");
 
-		this.decorator = options.managed()
-			? new HttpManagedHandlerDecorator(this, http, options)
-			: new HttpUnmanagedHandlerDecorator(this, http, options.contentType());
-	}
+        this.decorator = options.managed()
+                ? new HttpManagedHandlerDecorator(this, http, options)
+                : new HttpUnmanagedHandlerDecorator(this, http, options.contentType());
+    }
 
-	@Override
-	public boolean needsParams() {
-		return true;
-	}
+    @Override
+    public boolean needsParams() {
+        return true;
+    }
 
-	@Override
-	public final HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req) {
-		return decorator.handle(ctx, isKeepAlive, req);
-	}
+    @Override
+    public final HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req) {
+        return decorator.handle(ctx, isKeepAlive, req);
+    }
 
-	protected abstract Object handleReq(Channel ctx, boolean isKeepAlive, Req req) throws Throwable;
+    protected abstract Object handleReq(Channel ctx, boolean isKeepAlive, Req req) throws Throwable;
 
 }

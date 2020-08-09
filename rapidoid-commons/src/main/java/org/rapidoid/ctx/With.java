@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,24 +30,24 @@ import java.util.Map;
 @Since("2.5.0")
 public class With extends RapidoidThing {
 
-	public static WithContext tag(String tag) {
-		return new WithContext().tag(tag);
-	}
+    public static WithContext tag(String tag) {
+        return new WithContext().tag(tag);
+    }
 
-	public static WithContext user(UserInfo user) {
-		return new WithContext().user(user);
-	}
+    public static WithContext user(UserInfo user) {
+        return new WithContext().user(user);
+    }
 
-	public static WithContext persister(Object persister) {
-		return new WithContext().persister(persister);
-	}
+    public static WithContext persister(Object persister) {
+        return new WithContext().persister(persister);
+    }
 
-	public static WithContext exchange(Object exchange) {
-		return new WithContext().exchange(exchange);
-	}
+    public static WithContext exchange(Object exchange) {
+        return new WithContext().exchange(exchange);
+    }
 
-	public static WithContext extras(Map<String, Object> extras) {
-		return new WithContext().extras(extras);
-	}
+    public static WithContext extras(Map<String, Object> extras) {
+        return new WithContext().extras(extras);
+    }
 
 }

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,57 +36,57 @@ import java.util.Map;
 @Since("2.0.0")
 public class DefaultMultiData extends RapidoidThing implements MultiData {
 
-	private final BufProvider src;
+    private final BufProvider src;
 
-	private final KeyValueRanges ranges;
+    private final KeyValueRanges ranges;
 
-	private Map<String, String> values;
+    private Map<String, String> values;
 
-	public DefaultMultiData(BufProvider src, KeyValueRanges ranges) {
-		this.src = src;
-		this.ranges = ranges;
-	}
+    public DefaultMultiData(BufProvider src, KeyValueRanges ranges) {
+        this.src = src;
+        this.ranges = ranges;
+    }
 
-	@Override
-	public synchronized Map<String, String> get() {
-		if (values == null) {
-			values = ranges.toMap(src.buffer(), true, true, false);
-		}
+    @Override
+    public synchronized Map<String, String> get() {
+        if (values == null) {
+            values = ranges.toMap(src.buffer(), true, true, false);
+        }
 
-		return values;
-	}
+        return values;
+    }
 
-	@Override
-	public KeyValueRanges ranges() {
-		return ranges;
-	}
+    @Override
+    public KeyValueRanges ranges() {
+        return ranges;
+    }
 
-	@Override
-	public String toString() {
-		return "MultiData [ranges=" + ranges + "]";
-	}
+    @Override
+    public String toString() {
+        return "MultiData [ranges=" + ranges + "]";
+    }
 
-	@Override
-	public String get(String name) {
-		Data data = get_(name);
-		return data != null ? data.get() : null;
-	}
+    @Override
+    public String get(String name) {
+        Data data = get_(name);
+        return data != null ? data.get() : null;
+    }
 
-	@Override
-	public Data get_(String name) {
-		Buf buf = src.buffer();
-		BufRange range = ranges.get(buf, name.getBytes(), false);
-		return range != null ? new DecodedData(src, range) : null;
-	}
+    @Override
+    public Data get_(String name) {
+        Buf buf = src.buffer();
+        BufRange range = ranges.get(buf, name.getBytes(), false);
+        return range != null ? new DecodedData(src, range) : null;
+    }
 
-	@Override
-	public synchronized void reset() {
-		values = null;
-	}
+    @Override
+    public synchronized void reset() {
+        values = null;
+    }
 
-	@Override
-	public void putExtras(Map<String, String> extras) {
-		get().putAll(extras);
-	}
+    @Override
+    public void putExtras(Map<String, String> extras) {
+        get().putAll(extras);
+    }
 
 }

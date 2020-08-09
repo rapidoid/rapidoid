@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -38,100 +38,100 @@ import java.security.cert.X509Certificate;
 @Since("5.4.0")
 public class TLSUtil extends RapidoidThing {
 
-	public static SSLContext createTrustingContext() {
-		SSLContext sslContext;
+    public static SSLContext createTrustingContext() {
+        SSLContext sslContext;
 
-		try {
-			sslContext = SSLContext.getInstance("TLS");
-		} catch (NoSuchAlgorithmException e) {
-			throw U.rte(e);
-		}
+        try {
+            sslContext = SSLContext.getInstance("TLS");
+        } catch (NoSuchAlgorithmException e) {
+            throw U.rte(e);
+        }
 
-		TrustManager tm = new X509TrustManager() {
-			public void checkClientTrusted(X509Certificate[] chain, String authType) {
-			}
+        TrustManager tm = new X509TrustManager() {
+            public void checkClientTrusted(X509Certificate[] chain, String authType) {
+            }
 
-			public void checkServerTrusted(X509Certificate[] chain, String authType) {
-			}
+            public void checkServerTrusted(X509Certificate[] chain, String authType) {
+            }
 
-			public X509Certificate[] getAcceptedIssuers() {
-				return null;
-			}
-		};
+            public X509Certificate[] getAcceptedIssuers() {
+                return null;
+            }
+        };
 
-		try {
-			sslContext.init(null, new TrustManager[]{tm}, null);
-		} catch (KeyManagementException e) {
-			throw U.rte(e);
-		}
+        try {
+            sslContext.init(null, new TrustManager[]{tm}, null);
+        } catch (KeyManagementException e) {
+            throw U.rte(e);
+        }
 
-		return sslContext;
-	}
+        return sslContext;
+    }
 
-	public static SSLContext createContext(String keystore, char[] keystorePassword, char[] keyManagerPassword,
-	                                       String truststore, char[] truststorePassword, boolean selfSignedTLS) {
+    public static SSLContext createContext(String keystore, char[] keystorePassword, char[] keyManagerPassword,
+                                           String truststore, char[] truststorePassword, boolean selfSignedTLS) {
 
-		U.must(U.notEmpty(keystore), "The TLS keystore filename isn't configured!");
+        U.must(U.notEmpty(keystore), "The TLS keystore filename isn't configured!");
 
-		boolean keystoreExists = new File(keystore).exists();
+        boolean keystoreExists = new File(keystore).exists();
 
-		U.must(keystoreExists || selfSignedTLS,
-			"The keystore '%s' doesn't exist and self-signed certificate generation is disabled!", keystore);
+        U.must(keystoreExists || selfSignedTLS,
+                "The keystore '%s' doesn't exist and self-signed certificate generation is disabled!", keystore);
 
-		try {
-			if (!keystoreExists && selfSignedTLS) {
-				SelfSignedCertInfo info = new SelfSignedCertInfo();
+        try {
+            if (!keystoreExists && selfSignedTLS) {
+                SelfSignedCertInfo info = new SelfSignedCertInfo();
 
-				info.alias("rapidoid");
-				info.password(keystorePassword);
+                info.alias("rapidoid");
+                info.password(keystorePassword);
 
-				Log.warn("Keystore doesn't exist, creating a keystore with self-signed certificate",
-					"keystore", keystore, "alias", info.alias());
+                Log.warn("Keystore doesn't exist, creating a keystore with self-signed certificate",
+                        "keystore", keystore, "alias", info.alias());
 
 //				SelfSignedCertGen.generate(info, keystore, keystorePassword);
-			}
+            }
 
-			Log.info("Initializing TLS context", "keystore", keystore, "truststore", truststore);
+            Log.info("Initializing TLS context", "keystore", keystore, "truststore", truststore);
 
-			KeyManager[] keyManagers = initKeyManagers(keystore, keystorePassword, keyManagerPassword);
-			TrustManager[] trustManagers = initTrustManagers(truststore, truststorePassword);
+            KeyManager[] keyManagers = initKeyManagers(keystore, keystorePassword, keyManagerPassword);
+            TrustManager[] trustManagers = initTrustManagers(truststore, truststorePassword);
 
-			SSLContext context = SSLContext.getInstance("TLS");
-			context.init(keyManagers, trustManagers, null);
+            SSLContext context = SSLContext.getInstance("TLS");
+            context.init(keyManagers, trustManagers, null);
 
-			return context;
+            return context;
 
-		} catch (Exception e) {
-			throw U.rte(e);
-		}
-	}
+        } catch (Exception e) {
+            throw U.rte(e);
+        }
+    }
 
-	private static KeyManager[] initKeyManagers(String keystore, char[] keystorePassword, char[] keyManagerPassword) throws Exception {
-		KeyStore keyStore = KeyStore.getInstance("JKS");
-		keyStore.load(new FileInputStream(keystore), keystorePassword);
+    private static KeyManager[] initKeyManagers(String keystore, char[] keystorePassword, char[] keyManagerPassword) throws Exception {
+        KeyStore keyStore = KeyStore.getInstance("JKS");
+        keyStore.load(new FileInputStream(keystore), keystorePassword);
 
-		KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509");
-		keyManagerFactory.init(keyStore, keyManagerPassword);
+        KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509");
+        keyManagerFactory.init(keyStore, keyManagerPassword);
 
-		return keyManagerFactory.getKeyManagers();
-	}
+        return keyManagerFactory.getKeyManagers();
+    }
 
-	private static TrustManager[] initTrustManagers(String trustStoreFilename, char[] trustStorePassword) throws Exception {
-		if (U.notEmpty(trustStoreFilename)) {
+    private static TrustManager[] initTrustManagers(String trustStoreFilename, char[] trustStorePassword) throws Exception {
+        if (U.notEmpty(trustStoreFilename)) {
 
-			U.notNull(trustStorePassword, "trustStorePassword");
+            U.notNull(trustStorePassword, "trustStorePassword");
 
-			KeyStore trustStore = KeyStore.getInstance("JKS");
-			trustStore.load(new FileInputStream(trustStoreFilename), trustStorePassword);
+            KeyStore trustStore = KeyStore.getInstance("JKS");
+            trustStore.load(new FileInputStream(trustStoreFilename), trustStorePassword);
 
-			TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance("SunX509");
-			trustManagerFactory.init(trustStore);
+            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance("SunX509");
+            trustManagerFactory.init(trustStore);
 
-			return trustManagerFactory.getTrustManagers();
+            return trustManagerFactory.getTrustManagers();
 
-		} else {
-			return null;
-		}
-	}
+        } else {
+            return null;
+        }
+    }
 
 }

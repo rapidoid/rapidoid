@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -38,51 +38,51 @@ import org.rapidoid.wrap.IntWrap;
 @Since("2.0.0")
 public class MaxHttpPerfTest {
 
-	protected static final byte[] PREFIX = "Connection:".getBytes();
+    protected static final byte[] PREFIX = "Connection:".getBytes();
 
-	protected static final byte[] RESP = "HTTP/1.1 200 OK\r\nConnection: keep-alive\r\nContent-Length: 1\r\n\r\nX"
-		.getBytes();
+    protected static final byte[] RESP = "HTTP/1.1 200 OK\r\nConnection: keep-alive\r\nContent-Length: 1\r\n\r\nX"
+            .getBytes();
 
-	public static void main(String[] args) {
-		Env.setArgs(args);
+    public static void main(String[] args) {
+        Env.setArgs(args);
 
-		String req = "GET /plaintext HTTP/1.1\r\nHost:www.test.com\r\n\r\n";
+        String req = "GET /plaintext HTTP/1.1\r\nHost:www.test.com\r\n\r\n";
 
-		BufGroup gr = new BufGroup(16 * 1024);
-		final Buf buf = gr.newBuf();
-		buf.append(req);
+        BufGroup gr = new BufGroup(16 * 1024);
+        final Buf buf = gr.newBuf();
+        buf.append(req);
 
-		final RapidoidHelper helper = new RapidoidHelper();
+        final RapidoidHelper helper = new RapidoidHelper();
 
-		final HttpParser parser = new HttpParser();
+        final HttpParser parser = new HttpParser();
 
-		for (int i = 0; i < 10; i++) {
-			Msc.benchmark("HTTP parse", 3000000, () -> {
-				buf.position(0);
+        for (int i = 0; i < 10; i++) {
+            Msc.benchmark("HTTP parse", 3000000, () -> {
+                buf.position(0);
 
-				parser.parse(buf, helper);
-			});
-		}
+                parser.parse(buf, helper);
+            });
+        }
 
-		TCP.server(Conf.HTTP).protocol(ctx -> {
-			if (ctx.isInitial()) {
-				return;
-			}
+        TCP.server(Conf.HTTP).protocol(ctx -> {
+            if (ctx.isInitial()) {
+                return;
+            }
 
-			BufRanges lines = ctx.helper().ranges1;
-			lines.count = 0;
+            BufRanges lines = ctx.helper().ranges1;
+            lines.count = 0;
 
-			Buf in = ctx.input();
+            Buf in = ctx.input();
 
-			IntWrap pos = ctx.helper().integers[0];
+            IntWrap pos = ctx.helper().integers[0];
 
-			int poss = BytesUtil.parseLines(in.bytes(), lines, pos, in.position(), in.size(), (byte) 'v',
-				(byte) 'e');
+            int poss = BytesUtil.parseLines(in.bytes(), lines, pos, in.position(), in.size(), (byte) 'v',
+                    (byte) 'e');
 
-			in.position(poss);
+            in.position(poss);
 
-			ctx.write(RESP);
-		}).build().start();
-	}
+            ctx.write(RESP);
+        }).build().start();
+    }
 
 }

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,34 +32,34 @@ import org.rapidoid.u.U;
 @Since("5.1.0")
 public class PredefinedContextJobWrapper extends RapidoidThing implements Runnable {
 
-	private final Runnable job;
-	private final WithContext context;
+    private final Runnable job;
+    private final WithContext context;
 
-	public PredefinedContextJobWrapper(WithContext context, Runnable job) {
-		this.context = context;
-		this.job = job;
-	}
+    public PredefinedContextJobWrapper(WithContext context, Runnable job) {
+        this.context = context;
+        this.job = job;
+    }
 
-	@Override
-	public void run() {
-		U.must(!Ctxs.hasContext(), "Detected context leak!");
+    @Override
+    public void run() {
+        U.must(!Ctxs.hasContext(), "Detected context leak!");
 
-		try {
-			Ctxs.open(context);
-		} catch (Throwable e) {
-			Log.error("Job context initialization failed!", e);
-			throw U.rte("Job context initialization failed!", e);
-		}
+        try {
+            Ctxs.open(context);
+        } catch (Throwable e) {
+            Log.error("Job context initialization failed!", e);
+            throw U.rte("Job context initialization failed!", e);
+        }
 
-		try {
-			job.run();
-		} catch (Throwable e) {
-			Log.error("Job execution failed!", e);
-			throw U.rte("Job execution failed!", e);
+        try {
+            job.run();
+        } catch (Throwable e) {
+            Log.error("Job execution failed!", e);
+            throw U.rte("Job execution failed!", e);
 
-		} finally {
-			Ctxs.close();
-		}
-	}
+        } finally {
+            Ctxs.close();
+        }
+    }
 
 }

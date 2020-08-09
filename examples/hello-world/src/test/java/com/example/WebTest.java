@@ -14,20 +14,20 @@ import java.util.Map;
 @IntegrationTest(main = HelloWorldExample.class)
 public class WebTest extends RapidoidIntegrationTest {
 
-	@Test
-	public void testHelloWorld() {
-		// connects to the local server that was started by the Main class (http://localhost:8080)
-		// then sends HTTP request GET /hello and parses the JSON result as Map
-		Map<String, Object> resp = Self.get("/hello").toMap();
+    @Test
+    public void testHelloWorld() {
+        // connects to the local server that was started by the Main class (http://localhost:8080)
+        // then sends HTTP request GET /hello and parses the JSON result as Map
+        Map<String, Object> resp = Self.get("/hello").toMap();
 
-		eq(resp, U.map("msg", "Hello, world!"));
-	}
+        eq(resp, U.map("msg", "Hello, world!"));
+    }
 
-	@Test
-	public void testHomeNotFound() {
-		int code = Self.get("/").execute().code();
+    @Test
+    public void testHomeNotFound() {
+        int code = Self.get("/").execute().code();
 
-		eq(code, 404);
-	}
+        eq(code, 404);
+    }
 
 }

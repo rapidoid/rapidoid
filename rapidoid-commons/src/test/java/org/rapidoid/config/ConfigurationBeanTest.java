@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,13 +32,13 @@ import java.util.Map;
 @Since("5.3.0")
 public class ConfigurationBeanTest extends AbstractCommonsTest {
 
-	@Test
-	public void testBasicConfig() {
-		Conf.ROOT.setFilenameBase("beans");
+    @Test
+    public void testBasicConfig() {
+        Conf.ROOT.setFilenameBase("beans");
 
-		Map<String, Platform> platforms = Conf.ROOT.sub("platforms").toMap(Platform.class);
+        Map<String, Platform> platforms = Conf.ROOT.sub("platforms").toMap(Platform.class);
 
-		verify(JSON.stringify(platforms));
-	}
+        verify(JSON.stringify(platforms));
+    }
 
 }

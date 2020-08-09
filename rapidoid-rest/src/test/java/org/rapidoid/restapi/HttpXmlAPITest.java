@@ -27,7 +27,6 @@ import org.rapidoid.http.ReqHandler;
 import org.rapidoid.http.Self;
 import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;
-import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 
 import java.util.Map;

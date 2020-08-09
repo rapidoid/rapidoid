@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,28 +33,28 @@ import java.util.List;
 @Since("2.1.0")
 public class Classes extends LinkedHashMap<String, Class<?>> {
 
-	private static final long serialVersionUID = 8987037790459772014L;
+    private static final long serialVersionUID = 8987037790459772014L;
 
-	public static Classes from(Iterable<Class<?>> classes) {
-		Classes clss = new Classes();
+    public static Classes from(Iterable<Class<?>> classes) {
+        Classes clss = new Classes();
 
-		for (Class<?> cls : classes) {
-			clss.put(cls.getSimpleName(), cls);
-		}
+        for (Class<?> cls : classes) {
+            clss.put(cls.getSimpleName(), cls);
+        }
 
-		return clss;
-	}
+        return clss;
+    }
 
-	public Classes annotated(Class<? extends Annotation> annotation) {
-		List<Class<?>> selected = U.list();
+    public Classes annotated(Class<? extends Annotation> annotation) {
+        List<Class<?>> selected = U.list();
 
-		for (Class<?> cls : values()) {
-			if (Metadata.isAnnotated(cls, annotation)) {
-				selected.add(cls);
-			}
-		}
+        for (Class<?> cls : values()) {
+            if (Metadata.isAnnotated(cls, annotation)) {
+                selected.add(cls);
+            }
+        }
 
-		return from(selected);
-	}
+        return from(selected);
+    }
 
 }

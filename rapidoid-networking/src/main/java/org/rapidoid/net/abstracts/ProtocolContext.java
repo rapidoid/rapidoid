@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,95 +36,95 @@ import java.nio.ByteBuffer;
 @Since("2.0.0")
 public interface ProtocolContext<T> {
 
-	/* CONNECTION */
+    /* CONNECTION */
 
-	String address();
+    String address();
 
-	InetSocketAddress getAddress();
+    InetSocketAddress getAddress();
 
-	long connId();
+    long connId();
 
-	boolean isAsync();
+    boolean isAsync();
 
-	T close();
+    T close();
 
-	T closeIf(boolean condition);
+    T closeIf(boolean condition);
 
-	boolean isClosing();
+    boolean isClosing();
 
-	boolean isClosed();
+    boolean isClosed();
 
-	void waitUntilClosing();
+    void waitUntilClosing();
 
-	void log(String msg);
+    void log(String msg);
 
-	long requestId();
+    long requestId();
 
-	void setRequest(IRequest request);
+    void setRequest(IRequest request);
 
-	long handle();
+    long handle();
 
-	boolean onSameThread();
+    boolean onSameThread();
 
-	/* PROTOCOL */
+    /* PROTOCOL */
 
-	boolean isInitial();
+    boolean isInitial();
 
-	/* WRITE */
+    /* WRITE */
 
-	T write(String s);
+    T write(String s);
 
-	T writeln(String s);
+    T writeln(String s);
 
-	T write(byte[] bytes);
+    T write(byte[] bytes);
 
-	T write(byte[] bytes, int offset, int length);
+    T write(byte[] bytes, int offset, int length);
 
-	T write(ByteBuffer buf);
+    T write(ByteBuffer buf);
 
-	T write(File file);
+    T write(File file);
 
-	T writeJSON(Object value);
+    T writeJSON(Object value);
 
-	T send();
+    T send();
 
-	/* ASYNC */
+    /* ASYNC */
 
-	// due to async() web handling option, it ain't over till the fat lady sings "done"
-	long async();
+    // due to async() web handling option, it ain't over till the fat lady sings "done"
+    long async();
 
-	void resume(long connId, long handle, AsyncLogic asyncLogic);
+    void resume(long connId, long handle, AsyncLogic asyncLogic);
 
-	/* READ */
+    /* READ */
 
-	String readln();
+    String readln();
 
-	String readN(int count);
+    String readN(int count);
 
-	/* IO */
+    /* IO */
 
-	Buf input();
+    Buf input();
 
-	Buf output();
+    Buf output();
 
-	OutputStream outputStream();
+    OutputStream outputStream();
 
-	RapidoidHelper helper();
+    RapidoidHelper helper();
 
-	/* EXTRAS */
+    /* EXTRAS */
 
-	ConnState state();
+    ConnState state();
 
-	/* EXTENDED NET */
+    /* EXTENDED NET */
 
-	Channel nextOp(int nextOp);
+    Channel nextOp(int nextOp);
 
-	Channel nextWrite();
+    Channel nextWrite();
 
-	Channel mode(int mode);
+    Channel mode(int mode);
 
-	T restart();
+    T restart();
 
-	ChannelHolder createHolder();
+    ChannelHolder createHolder();
 
 }

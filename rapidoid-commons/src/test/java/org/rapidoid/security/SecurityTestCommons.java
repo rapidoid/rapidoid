@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,25 +31,25 @@ import java.util.Set;
 @Since("2.0.0")
 public abstract class SecurityTestCommons extends AbstractCommonsTest {
 
-	protected void checkPermissions(String username, Class<?> clazz, Object target, String propertyName,
-	                                boolean canRead, boolean canChange) {
+    protected void checkPermissions(String username, Class<?> clazz, Object target, String propertyName,
+                                    boolean canRead, boolean canChange) {
 
-		Set<String> roles = roles(username);
+        Set<String> roles = roles(username);
 
-		DataPermissions perms = Secure.getPropertyPermissions(username, roles, clazz, target, propertyName);
+        DataPermissions perms = Secure.getPropertyPermissions(username, roles, clazz, target, propertyName);
 
-		eq(perms.read, canRead);
-		eq(perms.change, canChange);
-	}
+        eq(perms.read, canRead);
+        eq(perms.change, canChange);
+    }
 
-	protected Set<String> roles(String username) {
-		return Auth.getRolesFor(username);
-	}
+    protected Set<String> roles(String username) {
+        return Auth.getRolesFor(username);
+    }
 
-	protected void checkPermissions(String username, Class<?> clazz, String propertyName, boolean canRead,
-	                                boolean canUpdate) {
-		U.print("CHECKING PERMISSION", username, clazz, propertyName, canRead, canUpdate);
-		checkPermissions(username, clazz, null, propertyName, canRead, canUpdate);
-	}
+    protected void checkPermissions(String username, Class<?> clazz, String propertyName, boolean canRead,
+                                    boolean canUpdate) {
+        U.print("CHECKING PERMISSION", username, clazz, propertyName, canRead, canUpdate);
+        checkPermissions(username, clazz, null, propertyName, canRead, canUpdate);
+    }
 
 }

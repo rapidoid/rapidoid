@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -38,43 +38,43 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Since("4.1.0")
 public class JobsTest extends AbstractCommonsTest {
 
-	@Test
-	public void testJobsExecution() {
+    @Test
+    public void testJobsExecution() {
 
-		int total = 100000;
-		final AtomicInteger counter = new AtomicInteger();
+        int total = 100000;
+        final AtomicInteger counter = new AtomicInteger();
 
-		Assertions.assertTimeout(Duration.ofSeconds(30), () -> {
+        Assertions.assertTimeout(Duration.ofSeconds(30), () -> {
 
-			multiThreaded(1000, total, () -> {
-				Ctxs.open("test-job");
+            multiThreaded(1000, total, () -> {
+                Ctxs.open("test-job");
 
-				final UserInfo user = new UserInfo(TestRnd.rndStr(50), U.set("role1"));
+                final UserInfo user = new UserInfo(TestRnd.rndStr(50), U.set("role1"));
 
-				Ctxs.required().setUser(user);
-				ensureProperContext(user);
+                Ctxs.required().setUser(user);
+                ensureProperContext(user);
 
-				ScheduledFuture<?> future = Jobs.after(100, TimeUnit.MILLISECONDS).run(() -> {
-					ensureProperContext(user);
-					counter.incrementAndGet();
-				});
+                ScheduledFuture<?> future = Jobs.after(100, TimeUnit.MILLISECONDS).run(() -> {
+                    ensureProperContext(user);
+                    counter.incrementAndGet();
+                });
 
-				try {
-					future.get();
-				} catch (Exception e) {
-					e.printStackTrace();
-					fail("The job throwed an exception!");
-				}
+                try {
+                    future.get();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    fail("The job throwed an exception!");
+                }
 
-				Ctxs.close();
-			});
-		});
+                Ctxs.close();
+            });
+        });
 
-		eq(counter.get(), total);
-	}
+        eq(counter.get(), total);
+    }
 
-	private void ensureProperContext(UserInfo user) {
-		eq(Ctxs.required().user(), user);
-	}
+    private void ensureProperContext(UserInfo user) {
+        eq(Ctxs.required().user(), user);
+    }
 
 }

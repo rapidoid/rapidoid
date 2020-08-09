@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,43 +32,43 @@ import java.util.List;
 @Since("5.1.0")
 public class PagingIterator<T> extends RapidoidThing implements Iterator<T> {
 
-	private final PageableData<T> data;
+    private final PageableData<T> data;
 
-	private List<T> page;
+    private List<T> page;
 
-	private int offset;
-	private int pageLength;
+    private int offset;
+    private int pageLength;
 
-	private int index;
+    private int index;
 
-	public PagingIterator(PageableData<T> data) {
-		this(data, 100);
-	}
+    public PagingIterator(PageableData<T> data) {
+        this(data, 100);
+    }
 
-	public PagingIterator(PageableData<T> data, int pageLength) {
-		this.data = data;
-		this.pageLength = pageLength;
-	}
+    public PagingIterator(PageableData<T> data, int pageLength) {
+        this.data = data;
+        this.pageLength = pageLength;
+    }
 
-	@Override
-	public boolean hasNext() {
-		if (page == null || index >= page.size()) {
-			page = data.getPage(offset, pageLength);
-			offset += page.size();
-			index = 0;
-		}
+    @Override
+    public boolean hasNext() {
+        if (page == null || index >= page.size()) {
+            page = data.getPage(offset, pageLength);
+            offset += page.size();
+            index = 0;
+        }
 
-		return index < page.size();
-	}
+        return index < page.size();
+    }
 
-	@Override
-	public T next() {
-		return page.get(index++);
-	}
+    @Override
+    public T next() {
+        return page.get(index++);
+    }
 
-	@Override
-	public void remove() {
-		throw new UnsupportedOperationException("remove");
-	}
+    @Override
+    public void remove() {
+        throw new UnsupportedOperationException("remove");
+    }
 
 }

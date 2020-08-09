@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,47 +32,47 @@ import java.util.concurrent.Callable;
 @Since("5.3.0")
 public class JMXMetrics extends RapidoidThing {
 
-	public static void bootstrap() {
+    public static void bootstrap() {
 
-		OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
+        OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
 
-		if (osBean instanceof com.sun.management.OperatingSystemMXBean) {
-			final com.sun.management.OperatingSystemMXBean os = (com.sun.management.OperatingSystemMXBean) osBean;
+        if (osBean instanceof com.sun.management.OperatingSystemMXBean) {
+            final com.sun.management.OperatingSystemMXBean os = (com.sun.management.OperatingSystemMXBean) osBean;
 
-			Metrics.measure("Total memory (MB)", (Callable<Double>) () -> os.getCommittedVirtualMemorySize() / 1024.0 / 1024.0);
-		}
+            Metrics.measure("Total memory (MB)", (Callable<Double>) () -> os.getCommittedVirtualMemorySize() / 1024.0 / 1024.0);
+        }
 
-		List<GarbageCollectorMXBean> gcs = ManagementFactory.getGarbageCollectorMXBeans();
+        List<GarbageCollectorMXBean> gcs = ManagementFactory.getGarbageCollectorMXBeans();
 
-		for (final GarbageCollectorMXBean gc : gcs) {
-			Metrics.measure(gc.getName() + " - GC count", (Callable<Long>) gc::getCollectionCount);
+        for (final GarbageCollectorMXBean gc : gcs) {
+            Metrics.measure(gc.getName() + " - GC count", (Callable<Long>) gc::getCollectionCount);
 
-			Metrics.measure(gc.getName() + " - GC time", (Callable<Long>) gc::getCollectionTime);
-		}
+            Metrics.measure(gc.getName() + " - GC time", (Callable<Long>) gc::getCollectionTime);
+        }
 
-		final MemoryMXBean mem = ManagementFactory.getMemoryMXBean();
+        final MemoryMXBean mem = ManagementFactory.getMemoryMXBean();
 
-		Metrics.measure("Heap memory used (MB)", (Callable<Double>) () -> mem.getHeapMemoryUsage().getUsed() / 1024.0 / 1024.0);
+        Metrics.measure("Heap memory used (MB)", (Callable<Double>) () -> mem.getHeapMemoryUsage().getUsed() / 1024.0 / 1024.0);
 
-		Metrics.measure("Non-heap memory used (MB)", (Callable<Double>) () -> mem.getNonHeapMemoryUsage().getUsed() / 1024.0 / 1024.0);
+        Metrics.measure("Non-heap memory used (MB)", (Callable<Double>) () -> mem.getNonHeapMemoryUsage().getUsed() / 1024.0 / 1024.0);
 
-		Metrics.measure("Heap memory committed (MB)", (Callable<Double>) () -> mem.getHeapMemoryUsage().getCommitted() / 1024.0 / 1024.0);
+        Metrics.measure("Heap memory committed (MB)", (Callable<Double>) () -> mem.getHeapMemoryUsage().getCommitted() / 1024.0 / 1024.0);
 
-		Metrics.measure("Non-heap memory committed (MB)", (Callable<Double>) () -> mem.getNonHeapMemoryUsage().getCommitted() / 1024.0 / 1024.0);
+        Metrics.measure("Non-heap memory committed (MB)", (Callable<Double>) () -> mem.getNonHeapMemoryUsage().getCommitted() / 1024.0 / 1024.0);
 
-		Metrics.measure("Heap memory max (MB)", (Callable<Double>) () -> mem.getHeapMemoryUsage().getMax() / 1024.0 / 1024.0);
+        Metrics.measure("Heap memory max (MB)", (Callable<Double>) () -> mem.getHeapMemoryUsage().getMax() / 1024.0 / 1024.0);
 
-		Metrics.measure("Non-heap memory max (MB)", (Callable<Double>) () -> mem.getNonHeapMemoryUsage().getMax() / 1024.0 / 1024.0);
+        Metrics.measure("Non-heap memory max (MB)", (Callable<Double>) () -> mem.getNonHeapMemoryUsage().getMax() / 1024.0 / 1024.0);
 
-		memDetails();
-	}
+        memDetails();
+    }
 
-	public static void memDetails() {
-		List<MemoryPoolMXBean> mems = ManagementFactory.getMemoryPoolMXBeans();
+    public static void memDetails() {
+        List<MemoryPoolMXBean> mems = ManagementFactory.getMemoryPoolMXBeans();
 
-		for (final MemoryPoolMXBean mx : mems) {
-			Metrics.measure(mx.getName() + " (MB)", (Callable<Double>) () -> mx.getUsage().getUsed() / 1024.0 / 1024.0);
-		}
-	}
+        for (final MemoryPoolMXBean mx : mems) {
+            Metrics.measure(mx.getName() + " (MB)", (Callable<Double>) () -> mx.getUsage().getUsed() / 1024.0 / 1024.0);
+        }
+    }
 
 }

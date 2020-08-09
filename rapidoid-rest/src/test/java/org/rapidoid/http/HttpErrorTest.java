@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,20 +30,20 @@ import org.rapidoid.setup.On;
 @Since("5.0.10")
 public class HttpErrorTest extends IsolatedIntegrationTest {
 
-	@Test
-	public void testWithHandlerException() {
-		On.get("/err").json(() -> {
-			Err.secure(false, "Not secure!");
-			return 123;
-		});
+    @Test
+    public void testWithHandlerException() {
+        On.get("/err").json(() -> {
+            Err.secure(false, "Not secure!");
+            return 123;
+        });
 
-		onlyGet("/err");
+        onlyGet("/err");
 
-		On.get("/err2").html(() -> {
-			throw new NullPointerException();
-		});
+        On.get("/err2").html(() -> {
+            throw new NullPointerException();
+        });
 
-		onlyGet("/err2");
-	}
+        onlyGet("/err2");
+    }
 
 }

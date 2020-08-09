@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,10 +29,10 @@ import org.rapidoid.test.AbstractCommonsTest;
 @Since("4.1.0")
 public class AOPTest extends AbstractCommonsTest {
 
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testAOP() {
-		// FIXME reuse in future when AOP is ready
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testAOP() {
+        // FIXME reuse in future when AOP is ready
 
 //		AOP.reset();
 //
@@ -67,6 +67,6 @@ public class AOPTest extends AbstractCommonsTest {
 //
 //		eq(service.hey(), "hey");
 //		eq(AOP.invoke(null, m, service), "c:ab:hey:ab:c");
-	}
+    }
 
 }

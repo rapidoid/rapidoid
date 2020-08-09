@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,57 +33,57 @@ import java.util.Map;
 @Since("5.2.5")
 public class EnvProperties extends RapidoidThing {
 
-	final Map<String, Object> props = Coll.synchronizedMap();
+    final Map<String, Object> props = Coll.synchronizedMap();
 
-	public EnvProperties() {
-		init();
-	}
+    public EnvProperties() {
+        init();
+    }
 
-	private void init() {
-		for (Map.Entry<String, String> e : System.getenv().entrySet()) {
-			set(e.getKey(), e.getValue());
-		}
+    private void init() {
+        for (Map.Entry<String, String> e : System.getenv().entrySet()) {
+            set(e.getKey(), e.getValue());
+        }
 
-		for (Map.Entry<Object, Object> e : System.getProperties().entrySet()) {
-			set(U.str(e.getKey()), e.getValue());
-		}
-	}
+        for (Map.Entry<Object, Object> e : System.getProperties().entrySet()) {
+            set(U.str(e.getKey()), e.getValue());
+        }
+    }
 
-	private void set(String key, Object value) {
-		String propKey = normalize(U.str(key));
-		props.put(propKey, value);
-	}
+    private void set(String key, Object value) {
+        String propKey = normalize(U.str(key));
+        props.put(propKey, value);
+    }
 
-	public Object get(String key) {
-		U.notNull(key, "key");
+    public Object get(String key) {
+        U.notNull(key, "key");
 
-		return props.get(normalize(key));
-	}
+        return props.get(normalize(key));
+    }
 
-	public boolean has(String key, Object value) {
-		return String.valueOf(get(key)).equalsIgnoreCase(String.valueOf(value));
-	}
+    public boolean has(String key, Object value) {
+        return String.valueOf(get(key)).equalsIgnoreCase(String.valueOf(value));
+    }
 
-	private String normalize(String key) {
-		return key.toUpperCase().replace('.', '_');
-	}
+    private String normalize(String key) {
+        return key.toUpperCase().replace('.', '_');
+    }
 
-	@Override
-	public String toString() {
-		return props.toString();
-	}
+    @Override
+    public String toString() {
+        return props.toString();
+    }
 
-	public Map<String, Object> asMap() {
-		return Collections.unmodifiableMap(props);
-	}
+    public Map<String, Object> asMap() {
+        return Collections.unmodifiableMap(props);
+    }
 
-	public boolean hasPrefix(String prefix) {
-		prefix = normalize(prefix);
+    public boolean hasPrefix(String prefix) {
+        prefix = normalize(prefix);
 
-		for (String key : props.keySet()) {
-			if (key.startsWith(prefix)) return true;
-		}
+        for (String key : props.keySet()) {
+            if (key.startsWith(prefix)) return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 }

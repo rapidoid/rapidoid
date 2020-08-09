@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,21 +32,21 @@ import org.rapidoid.net.abstracts.Channel;
 @Since("5.1.0")
 public class PredefinedResponseHandler extends AbstractDecoratingHttpHandler {
 
-	private final Object response;
+    private final Object response;
 
-	public PredefinedResponseHandler(FastHttp http, HttpRoutes routes, RouteOptions options, Object response) {
-		super(http, options);
-		this.response = response;
-	}
+    public PredefinedResponseHandler(FastHttp http, HttpRoutes routes, RouteOptions options, Object response) {
+        super(http, options);
+        this.response = response;
+    }
 
-	@Override
-	protected Object handleReq(Channel ctx, boolean isKeepAlive, Req req) {
-		return response;
-	}
+    @Override
+    protected Object handleReq(Channel ctx, boolean isKeepAlive, Req req) {
+        return response;
+    }
 
-	@Override
-	public String toString() {
-		return contentTypeInfo("() -> (predefined response)");
-	}
+    @Override
+    public String toString() {
+        return contentTypeInfo("() -> (predefined response)");
+    }
 
 }

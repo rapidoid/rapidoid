@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,29 +30,29 @@ import org.rapidoid.value.ValueStore;
 @Since("5.1.0")
 public class ConfigValueStore<T> extends RapidoidThing implements ValueStore<T> {
 
-	private final Config config;
+    private final Config config;
 
-	private final String key;
+    private final String key;
 
-	public ConfigValueStore(Config config, String key) {
-		this.config = config;
-		this.key = key;
-	}
+    public ConfigValueStore(Config config, String key) {
+        this.config = config;
+        this.key = key;
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public T get() {
-		return (T) config.get(key);
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public T get() {
+        return (T) config.get(key);
+    }
 
-	@Override
-	public void set(T value) {
-		config.set(key, value);
-	}
+    @Override
+    public void set(T value) {
+        config.set(key, value);
+    }
 
-	@Override
-	public String desc() {
-		return U.join(".", config.keys()) + "." + key;
-	}
+    @Override
+    public String desc() {
+        return U.join(".", config.keys()) + "." + key;
+    }
 
 }

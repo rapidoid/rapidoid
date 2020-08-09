@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,37 +34,37 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Since("5.3.0")
 public class Wait extends RapidoidThing {
 
-	public static void notification(Object obj) {
-		try {
-			synchronized (obj) {
-				obj.wait();
-			}
+    public static void notification(Object obj) {
+        try {
+            synchronized (obj) {
+                obj.wait();
+            }
 
-		} catch (InterruptedException e) {
-			throw new CancellationException();
-		}
-	}
+        } catch (InterruptedException e) {
+            throw new CancellationException();
+        }
+    }
 
-	public static void on(CountDownLatch latch) {
-		try {
-			latch.await();
-		} catch (InterruptedException e) {
-			throw new CancellationException();
-		}
-	}
+    public static void on(CountDownLatch latch) {
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            throw new CancellationException();
+        }
+    }
 
-	public static void on(CountDownLatch latch, long timeout, TimeUnit unit) {
-		try {
-			latch.await(timeout, unit);
-		} catch (InterruptedException e) {
-			throw new CancellationException();
-		}
-	}
+    public static void on(CountDownLatch latch, long timeout, TimeUnit unit) {
+        try {
+            latch.await(timeout, unit);
+        } catch (InterruptedException e) {
+            throw new CancellationException();
+        }
+    }
 
-	public static void until(AtomicBoolean condition) {
-		while (!condition.get()) {
-			U.sleep(10);
-		}
-	}
+    public static void until(AtomicBoolean condition) {
+        while (!condition.get()) {
+            U.sleep(10);
+        }
+    }
 
 }

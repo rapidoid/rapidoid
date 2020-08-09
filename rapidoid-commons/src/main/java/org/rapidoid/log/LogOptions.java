@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,91 +33,91 @@ import java.util.concurrent.Callable;
  */
 public class LogOptions extends RapidoidThing {
 
-	private volatile Callable<Logger> loggerFactory;
+    private volatile Callable<Logger> loggerFactory;
 
-	private volatile boolean fancy;
+    private volatile boolean fancy;
 
-	private volatile String prefix;
+    private volatile String prefix;
 
-	private volatile boolean showThread = !GlobalCfg.uniformOutput();
+    private volatile boolean showThread = !GlobalCfg.uniformOutput();
 
-	private volatile boolean showDateTime = !GlobalCfg.uniformOutput();
+    private volatile boolean showDateTime = !GlobalCfg.uniformOutput();
 
-	private volatile DateFormat dateTimeFormat = new SimpleDateFormat("dd/MMM/yyyy HH:mm:ss:SSS");
+    private volatile DateFormat dateTimeFormat = new SimpleDateFormat("dd/MMM/yyyy HH:mm:ss:SSS");
 
-	private volatile boolean inferCaller = true;
+    private volatile boolean inferCaller = true;
 
-	private volatile boolean stackTraceOnStdErr;
+    private volatile boolean stackTraceOnStdErr;
 
-	public Callable<Logger> loggerFactory() {
-		return loggerFactory;
-	}
+    public Callable<Logger> loggerFactory() {
+        return loggerFactory;
+    }
 
-	public LogOptions loggerFactory(Callable<Logger> loggerFactory) {
-		this.loggerFactory = loggerFactory;
-		return this;
-	}
+    public LogOptions loggerFactory(Callable<Logger> loggerFactory) {
+        this.loggerFactory = loggerFactory;
+        return this;
+    }
 
-	public boolean fancy() {
-		return fancy;
-	}
+    public boolean fancy() {
+        return fancy;
+    }
 
-	public LogOptions fancy(boolean fancy) {
-		this.fancy = fancy;
-		return this;
-	}
+    public LogOptions fancy(boolean fancy) {
+        this.fancy = fancy;
+        return this;
+    }
 
-	public String prefix() {
-		return prefix;
-	}
+    public String prefix() {
+        return prefix;
+    }
 
-	public LogOptions prefix(String prefix) {
-		this.prefix = prefix;
-		return this;
-	}
+    public LogOptions prefix(String prefix) {
+        this.prefix = prefix;
+        return this;
+    }
 
-	public boolean showThread() {
-		return showThread;
-	}
+    public boolean showThread() {
+        return showThread;
+    }
 
-	public LogOptions showThread(boolean showThread) {
-		this.showThread = showThread;
-		return this;
-	}
+    public LogOptions showThread(boolean showThread) {
+        this.showThread = showThread;
+        return this;
+    }
 
-	public boolean showDateTime() {
-		return showDateTime;
-	}
+    public boolean showDateTime() {
+        return showDateTime;
+    }
 
-	public LogOptions showDateTime(boolean showDateTime) {
-		this.showDateTime = showDateTime;
-		return this;
-	}
+    public LogOptions showDateTime(boolean showDateTime) {
+        this.showDateTime = showDateTime;
+        return this;
+    }
 
-	public DateFormat dateTimeFormat() {
-		return dateTimeFormat;
-	}
+    public DateFormat dateTimeFormat() {
+        return dateTimeFormat;
+    }
 
-	public LogOptions dateTimeFormat(DateFormat dateTimeFormat) {
-		this.dateTimeFormat = dateTimeFormat;
-		return this;
-	}
+    public LogOptions dateTimeFormat(DateFormat dateTimeFormat) {
+        this.dateTimeFormat = dateTimeFormat;
+        return this;
+    }
 
-	public boolean inferCaller() {
-		return inferCaller;
-	}
+    public boolean inferCaller() {
+        return inferCaller;
+    }
 
-	public LogOptions inferCaller(boolean inferCaller) {
-		this.inferCaller = inferCaller;
-		return this;
-	}
+    public LogOptions inferCaller(boolean inferCaller) {
+        this.inferCaller = inferCaller;
+        return this;
+    }
 
-	public boolean stackTraceOnStdErr() {
-		return stackTraceOnStdErr;
-	}
+    public boolean stackTraceOnStdErr() {
+        return stackTraceOnStdErr;
+    }
 
-	public LogOptions stackTraceOnStdErr(boolean stackTraceOnStdErr) {
-		this.stackTraceOnStdErr = stackTraceOnStdErr;
-		return this;
-	}
+    public LogOptions stackTraceOnStdErr(boolean stackTraceOnStdErr) {
+        this.stackTraceOnStdErr = stackTraceOnStdErr;
+        return this;
+    }
 }

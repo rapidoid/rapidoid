@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,36 +31,36 @@ import java.util.Set;
 @Since("5.1.0")
 public interface HttpRoutes {
 
-	void on(String verb, String path, HttpHandler handler);
+    void on(String verb, String path, HttpHandler handler);
 
-	void on(String verb, String path, ReqHandler handler);
+    void on(String verb, String path, ReqHandler handler);
 
-	void on(String verb, String path, ReqRespHandler handler);
+    void on(String verb, String path, ReqRespHandler handler);
 
-	void remove(String verb, String path);
+    void remove(String verb, String path);
 
-	void addGenericHandler(HttpHandler handler);
+    void addGenericHandler(HttpHandler handler);
 
-	void removeGenericHandler(HttpHandler handler);
+    void removeGenericHandler(HttpHandler handler);
 
-	void reset();
+    void reset();
 
-	Set<Route> all();
+    Set<Route> all();
 
-	Set<Route> allInternal();
+    Set<Route> allInternal();
 
-	Set<Route> allExceptInternal();
+    Set<Route> allExceptInternal();
 
-	Customization custom();
+    Customization custom();
 
-	Route find(HttpVerb verb, String path);
+    Route find(HttpVerb verb, String path);
 
-	boolean hasRouteOrResource(HttpVerb verb, String uri);
+    boolean hasRouteOrResource(HttpVerb verb, String uri);
 
-	Runnable onInit();
+    Runnable onInit();
 
-	void onInit(Runnable onInit);
+    void onInit(Runnable onInit);
 
-	boolean isEmpty();
+    boolean isEmpty();
 
 }

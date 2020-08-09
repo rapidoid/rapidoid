@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,199 +30,199 @@ import org.rapidoid.log.Log;
 @Since("5.1.6")
 public abstract class RapidoidTest extends RapidoidThing {
 
-	private volatile boolean hasError;
+    private volatile boolean hasError;
 
-	protected void clearErrors() {
-		hasError = false;
-	}
+    protected void clearErrors() {
+        hasError = false;
+    }
 
-	protected void registerError(AssertionError e) {
-		hasError = true;
-		Log.error("Error occurred while executing test!", e);
-	}
+    protected void registerError(AssertionError e) {
+        hasError = true;
+        Log.error("Error occurred while executing test!", e);
+    }
 
-	protected boolean hasError() {
-		return hasError;
-	}
+    protected boolean hasError() {
+        return hasError;
+    }
 
-	protected void fail(String msg) {
-		try {
-			Assertions.fail(msg);
-		} catch (AssertionError e) {
-			registerError(e);
-			throw e;
-		}
-	}
+    protected void fail(String msg) {
+        try {
+            Assertions.fail(msg);
+        } catch (AssertionError e) {
+            registerError(e);
+            throw e;
+        }
+    }
 
-	protected void isNull(Object value) {
-		try {
-			Assertions.assertNull(value);
-		} catch (AssertionError e) {
-			registerError(e);
-			throw e;
-		}
-	}
+    protected void isNull(Object value) {
+        try {
+            Assertions.assertNull(value);
+        } catch (AssertionError e) {
+            registerError(e);
+            throw e;
+        }
+    }
 
-	protected void notNull(Object value) {
-		try {
-			Assertions.assertNotNull(value);
-		} catch (AssertionError e) {
-			registerError(e);
-			throw e;
-		}
-	}
+    protected void notNull(Object value) {
+        try {
+            Assertions.assertNotNull(value);
+        } catch (AssertionError e) {
+            registerError(e);
+            throw e;
+        }
+    }
 
-	protected void isTrue(boolean cond) {
-		try {
-			Assertions.assertTrue(cond);
-		} catch (AssertionError e) {
-			registerError(e);
-			throw e;
-		}
-	}
+    protected void isTrue(boolean cond) {
+        try {
+            Assertions.assertTrue(cond);
+        } catch (AssertionError e) {
+            registerError(e);
+            throw e;
+        }
+    }
 
-	protected void isFalse(boolean cond) {
-		try {
-			Assertions.assertFalse(cond);
-		} catch (AssertionError e) {
-			registerError(e);
-			throw e;
-		}
-	}
+    protected void isFalse(boolean cond) {
+        try {
+            Assertions.assertFalse(cond);
+        } catch (AssertionError e) {
+            registerError(e);
+            throw e;
+        }
+    }
 
-	protected void neq(Object unexpected, Object actual) {
-		try {
-			Assertions.assertNotEquals(unexpected, actual);
-		} catch (AssertionError e) {
-			registerError(e);
-			throw e;
-		}
-	}
+    protected void neq(Object unexpected, Object actual) {
+        try {
+            Assertions.assertNotEquals(unexpected, actual);
+        } catch (AssertionError e) {
+            registerError(e);
+            throw e;
+        }
+    }
 
-	protected void eq(Object expected, Object actual) {
-		try {
-			Assertions.assertEquals(expected, actual);
-		} catch (AssertionError e) {
-			registerError(e);
-			throw e;
-		}
-	}
+    protected void eq(Object expected, Object actual) {
+        try {
+            Assertions.assertEquals(expected, actual);
+        } catch (AssertionError e) {
+            registerError(e);
+            throw e;
+        }
+    }
 
-	protected void eq(String expected, String actual) {
-		try {
-			Assertions.assertEquals(expected, actual);
-		} catch (AssertionError e) {
-			registerError(e);
-			throw e;
-		}
-	}
+    protected void eq(String expected, String actual) {
+        try {
+            Assertions.assertEquals(expected, actual);
+        } catch (AssertionError e) {
+            registerError(e);
+            throw e;
+        }
+    }
 
-	protected void eq(char expected, char actual) {
-		try {
-			Assertions.assertEquals(expected, actual);
-		} catch (AssertionError e) {
-			registerError(e);
-			throw e;
-		}
-	}
+    protected void eq(char expected, char actual) {
+        try {
+            Assertions.assertEquals(expected, actual);
+        } catch (AssertionError e) {
+            registerError(e);
+            throw e;
+        }
+    }
 
-	protected void eq(long expected, long actual) {
-		try {
-			Assertions.assertEquals(expected, actual);
-		} catch (AssertionError e) {
-			registerError(e);
-			throw e;
-		}
-	}
+    protected void eq(long expected, long actual) {
+        try {
+            Assertions.assertEquals(expected, actual);
+        } catch (AssertionError e) {
+            registerError(e);
+            throw e;
+        }
+    }
 
-	protected void eq(double expected, double actual) {
-		eq(actual, expected, 0);
-	}
+    protected void eq(double expected, double actual) {
+        eq(actual, expected, 0);
+    }
 
-	protected void eq(double expected, double actual, double delta) {
-		try {
-			Assertions.assertEquals(expected, actual, delta);
-		} catch (AssertionError e) {
-			registerError(e);
-			throw e;
-		}
-	}
+    protected void eq(double expected, double actual, double delta) {
+        try {
+            Assertions.assertEquals(expected, actual, delta);
+        } catch (AssertionError e) {
+            registerError(e);
+            throw e;
+        }
+    }
 
-	protected void eq(byte[] expected, byte[] actual) {
-		try {
-			Assertions.assertArrayEquals(expected, actual);
-		} catch (AssertionError e) {
-			registerError(e);
-			throw e;
-		}
-	}
+    protected void eq(byte[] expected, byte[] actual) {
+        try {
+            Assertions.assertArrayEquals(expected, actual);
+        } catch (AssertionError e) {
+            registerError(e);
+            throw e;
+        }
+    }
 
-	protected void eq(char[] expected, char[] actual) {
-		try {
-			Assertions.assertArrayEquals(expected, actual);
-		} catch (AssertionError e) {
-			registerError(e);
-			throw e;
-		}
-	}
+    protected void eq(char[] expected, char[] actual) {
+        try {
+            Assertions.assertArrayEquals(expected, actual);
+        } catch (AssertionError e) {
+            registerError(e);
+            throw e;
+        }
+    }
 
-	protected void eq(int[] expected, int[] actual) {
-		try {
-			Assertions.assertArrayEquals(expected, actual);
-		} catch (AssertionError e) {
-			registerError(e);
-			throw e;
-		}
-	}
+    protected void eq(int[] expected, int[] actual) {
+        try {
+            Assertions.assertArrayEquals(expected, actual);
+        } catch (AssertionError e) {
+            registerError(e);
+            throw e;
+        }
+    }
 
-	protected void eq(long[] expected, long[] actual) {
-		try {
-			Assertions.assertArrayEquals(expected, actual);
-		} catch (AssertionError e) {
-			registerError(e);
-			throw e;
-		}
-	}
+    protected void eq(long[] expected, long[] actual) {
+        try {
+            Assertions.assertArrayEquals(expected, actual);
+        } catch (AssertionError e) {
+            registerError(e);
+            throw e;
+        }
+    }
 
-	protected void eq(float[] expected, float[] actual, float delta) {
-		try {
-			Assertions.assertArrayEquals(expected, actual, delta);
-		} catch (AssertionError e) {
-			registerError(e);
-			throw e;
-		}
-	}
+    protected void eq(float[] expected, float[] actual, float delta) {
+        try {
+            Assertions.assertArrayEquals(expected, actual, delta);
+        } catch (AssertionError e) {
+            registerError(e);
+            throw e;
+        }
+    }
 
-	protected void eq(double[] expected, double[] actual, double delta) {
-		try {
-			Assertions.assertArrayEquals(expected, actual, delta);
-		} catch (AssertionError e) {
-			registerError(e);
-			throw e;
-		}
-	}
+    protected void eq(double[] expected, double[] actual, double delta) {
+        try {
+            Assertions.assertArrayEquals(expected, actual, delta);
+        } catch (AssertionError e) {
+            registerError(e);
+            throw e;
+        }
+    }
 
-	protected void eq(boolean[] expected, boolean[] actual) {
-		try {
-			Assertions.assertArrayEquals(expected, actual);
-		} catch (AssertionError e) {
-			registerError(e);
-			throw e;
-		}
-	}
+    protected void eq(boolean[] expected, boolean[] actual) {
+        try {
+            Assertions.assertArrayEquals(expected, actual);
+        } catch (AssertionError e) {
+            registerError(e);
+            throw e;
+        }
+    }
 
-	protected void eq(Object[] expected, Object[] actual) {
-		try {
-			Assertions.assertArrayEquals(expected, actual);
-		} catch (AssertionError e) {
-			registerError(e);
-			throw e;
-		}
-	}
+    protected void eq(Object[] expected, Object[] actual) {
+        try {
+            Assertions.assertArrayEquals(expected, actual);
+        } catch (AssertionError e) {
+            registerError(e);
+            throw e;
+        }
+    }
 
-	protected void contains(String expectedSubstring, String actual) {
-		notNull(actual);
-		isTrue(actual.contains(expectedSubstring));
-	}
+    protected void contains(String expectedSubstring, String actual) {
+        notNull(actual);
+        isTrue(actual.contains(expectedSubstring));
+    }
 
 }

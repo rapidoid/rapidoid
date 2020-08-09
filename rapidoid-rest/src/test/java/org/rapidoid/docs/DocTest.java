@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,168 +45,168 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public abstract class DocTest extends IsolatedIntegrationTest {
 
-	private static final String LICENSE_HEADER = "(?sm)(^|\\n)\\Q/*-\n * #" + "%L\\E(.*?)\\Q * #L%\n */\n\\E";
+    private static final String LICENSE_HEADER = "(?sm)(^|\\n)\\Q/*-\n * #" + "%L\\E(.*?)\\Q * #L%\n */\n\\E";
 
-	private final AtomicInteger order = new AtomicInteger();
+    private final AtomicInteger order = new AtomicInteger();
 
-	@Test
-	public void docs() {
-		if (this instanceof BlankTest) {
-			return; // not a real test
-		}
+    @Test
+    public void docs() {
+        if (this instanceof BlankTest) {
+            return; // not a real test
+        }
 
-		order.set(0);
-		exercise();
-		generateDocs();
-	}
+        order.set(0);
+        exercise();
+        generateDocs();
+    }
 
-	private void generateDocs() {
+    private void generateDocs() {
 
-		Doc doc = getTestAnnotation(Doc.class);
-		U.notNull(doc, "@Doc");
+        Doc doc = getTestAnnotation(Doc.class);
+        U.notNull(doc, "@Doc");
 
-		if (!doc.show()) return;
+        if (!doc.show()) return;
 
-		Map<String, String> files = scanFiles();
+        Map<String, String> files = scanFiles();
 
-		String pkg = getTestPackageName();
-		pkg = Str.triml(pkg, "org.rapidoid.docs.");
+        String pkg = getTestPackageName();
+        pkg = Str.triml(pkg, "org.rapidoid.docs.");
 
-		String dir = System.getProperty("user.dir");
-		dir = Str.cutToFirst(dir, "org/rapidoid") + "rapidoid-docs";
+        String dir = System.getProperty("user.dir");
+        dir = Str.cutToFirst(dir, "org/rapidoid") + "rapidoid-docs";
 
-		String examplesDir = Msc.path(dir, "docs", "examples");
+        String examplesDir = Msc.path(dir, "docs", "examples");
 
-		if (!new File(examplesDir).exists()) {
-			Msc.logSection("Skipping docs generation - cannot find: " + examplesDir);
-			return;
-		}
+        if (!new File(examplesDir).exists()) {
+            Msc.logSection("Skipping docs generation - cannot find: " + examplesDir);
+            return;
+        }
 
-		generateAsciiDoc(doc, pkg, examplesDir, files);
-	}
+        generateAsciiDoc(doc, pkg, examplesDir, files);
+    }
 
-	private void generateAsciiDoc(Doc doc, String id, String examplesDir, Map<String, String> files) {
-		StringBuilder sb = new StringBuilder();
+    private void generateAsciiDoc(Doc doc, String id, String examplesDir, Map<String, String> files) {
+        StringBuilder sb = new StringBuilder();
 
-		sb.append(U.frmt("### %s\n\n", doc.title()));
+        sb.append(U.frmt("### %s\n\n", doc.title()));
 
-		files.forEach((name, content) -> {
-			String ext = Str.cutFromLast(name, ".");
+        files.forEach((name, content) -> {
+            String ext = Str.cutFromLast(name, ".");
 
-			sb.append("[[app-listing]]\n");
-			sb.append(U.frmt("[source,%s]\n", ext));
-			sb.append("." + name + "\n");
-			sb.append("----\n");
-			sb.append(cleanCode(content, ext));
-			sb.append("\n----\n\n");
-		});
+            sb.append("[[app-listing]]\n");
+            sb.append(U.frmt("[source,%s]\n", ext));
+            sb.append("." + name + "\n");
+            sb.append("----\n");
+            sb.append(cleanCode(content, ext));
+            sb.append("\n----\n\n");
+        });
 
-		String filename = id + ".adoc";
+        String filename = id + ".adoc";
 
-		IO.save(Msc.path(examplesDir, filename), sb.toString());
+        IO.save(Msc.path(examplesDir, filename), sb.toString());
 
-		if (GlobalCfg.is("DOCS")) {
-			appendToIndex(examplesDir, filename);
-		}
-	}
+        if (GlobalCfg.is("DOCS")) {
+            appendToIndex(examplesDir, filename);
+        }
+    }
 
-	private void appendToIndex(String examplesDir, String filename) {
-		String toIndex = U.frmt("include::%s[]\n\n", filename);
+    private void appendToIndex(String examplesDir, String filename) {
+        String toIndex = U.frmt("include::%s[]\n\n", filename);
 
-		String index = Msc.path(examplesDir, "index.adoc");
+        String index = Msc.path(examplesDir, "index.adoc");
 
-		IO.append(index, toIndex.getBytes());
-	}
+        IO.append(index, toIndex.getBytes());
+    }
 
-	private String cleanCode(String code, String ext) {
-		if (ext.equals("java")) {
-			code = code.replaceAll(LICENSE_HEADER, "");
-		}
+    private String cleanCode(String code, String ext) {
+        if (ext.equals("java")) {
+            code = code.replaceAll(LICENSE_HEADER, "");
+        }
 
-		code = code.replaceAll("(?s)\\n{3,}", "\n\n");
+        code = code.replaceAll("(?s)\\n{3,}", "\n\n");
 
-		return code.trim();
-	}
+        return code.trim();
+    }
 
-	private Map<String, String> scanFiles() {
-		List<FileSearchResult> filenames = U.list();
+    private Map<String, String> scanFiles() {
+        List<FileSearchResult> filenames = U.list();
 
-		String dir = System.getProperty("user.dir");
+        String dir = System.getProperty("user.dir");
 
-		if (!dir.endsWith("rapidoid-integration-tests")) {
-			dir = Msc.path(dir, "rapidoid-integration-tests");
-		}
+        if (!dir.endsWith("rapidoid-integration-tests")) {
+            dir = Msc.path(dir, "rapidoid-integration-tests");
+        }
 
-		String pkg = getTestPackageName().replace('.', File.separatorChar);
+        String pkg = getTestPackageName().replace('.', File.separatorChar);
 
-		String javaDir = Msc.path(dir, "src", "test", "java", pkg);
-		String resDir = Msc.path(dir, "src", "test", "resources", pkg);
+        String javaDir = Msc.path(dir, "src", "test", "java", pkg);
+        String resDir = Msc.path(dir, "src", "test", "resources", pkg);
 
-		List<FileSearchResult> java = IO.find().files().in(javaDir).recursive().ignoreRegex(".*Test\\.java").getResults();
-		Collections.sort(java);
-		filenames.addAll(java);
+        List<FileSearchResult> java = IO.find().files().in(javaDir).recursive().ignoreRegex(".*Test\\.java").getResults();
+        Collections.sort(java);
+        filenames.addAll(java);
 
-		List<FileSearchResult> res = IO.find().files().in(resDir).recursive().getResults();
-		Collections.sort(res);
-		filenames.addAll(res);
+        List<FileSearchResult> res = IO.find().files().in(resDir).recursive().getResults();
+        Collections.sort(res);
+        filenames.addAll(res);
 
-		return Do.map(filenames).toMap(FileSearchResult::relativeName, f -> IO.load(f.absoluteName()));
-	}
+        return Do.map(filenames).toMap(FileSearchResult::relativeName, f -> IO.load(f.absoluteName()));
+    }
 
-	protected void exercise() {
-		// by default do nothing
-	}
+    protected void exercise() {
+        // by default do nothing
+    }
 
-	private String order() {
-		return "#" + order.incrementAndGet();
-	}
+    private String order() {
+        return "#" + order.incrementAndGet();
+    }
 
-	protected void GET(String uri) {
-		getReq(uri + order());
-	}
+    protected void GET(String uri) {
+        getReq(uri + order());
+    }
 
-	protected void GET(int port, String uri) {
-		getReq(port, uri + order());
-	}
+    protected void GET(int port, String uri) {
+        getReq(port, uri + order());
+    }
 
-	protected void POST(String uri) {
-		postJson(uri + order(), U.map());
-	}
+    protected void POST(String uri) {
+        postJson(uri + order(), U.map());
+    }
 
-	protected void POST(int port, String uri) {
-		postJson(port, uri + order(), U.map());
-	}
+    protected void POST(int port, String uri) {
+        postJson(port, uri + order(), U.map());
+    }
 
-	protected void POST(String uri, Map<String, ?> data) {
-		postJson(uri + order(), data);
-	}
+    protected void POST(String uri, Map<String, ?> data) {
+        postJson(uri + order(), data);
+    }
 
-	protected void POST(int port, String uri, Map<String, ?> data) {
-		postJson(port, uri + order(), data);
-	}
+    protected void POST(int port, String uri, Map<String, ?> data) {
+        postJson(port, uri + order(), data);
+    }
 
-	protected void PUT(String uri) {
-		putData(uri + order(), U.map());
-	}
+    protected void PUT(String uri) {
+        putData(uri + order(), U.map());
+    }
 
-	protected void PUT(int port, String uri) {
-		putData(port, uri + order(), U.map());
-	}
+    protected void PUT(int port, String uri) {
+        putData(port, uri + order(), U.map());
+    }
 
-	protected void PUT(String uri, Map<String, ?> data) {
-		putData(uri + order(), data);
-	}
+    protected void PUT(String uri, Map<String, ?> data) {
+        putData(uri + order(), data);
+    }
 
-	protected void PUT(int port, String uri, Map<String, ?> data) {
-		putData(port, uri + order(), data);
-	}
+    protected void PUT(int port, String uri, Map<String, ?> data) {
+        putData(port, uri + order(), data);
+    }
 
-	protected void DELETE(String uri) {
-		deleteReq(uri + order());
-	}
+    protected void DELETE(String uri) {
+        deleteReq(uri + order());
+    }
 
-	protected void DELETE(int port, String uri) {
-		deleteReq(port, uri + order());
-	}
+    protected void DELETE(int port, String uri) {
+        deleteReq(port, uri + order());
+    }
 
 }

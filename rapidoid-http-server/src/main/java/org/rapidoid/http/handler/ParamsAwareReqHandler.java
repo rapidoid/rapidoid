@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,16 +33,16 @@ import org.rapidoid.net.abstracts.Channel;
 @Since("5.1.0")
 public class ParamsAwareReqHandler extends AbstractDecoratingHttpHandler {
 
-	private final ReqHandler handler;
+    private final ReqHandler handler;
 
-	public ParamsAwareReqHandler(FastHttp http, HttpRoutes routes, RouteOptions options, ReqHandler handler) {
-		super(http, options);
-		this.handler = handler;
-	}
+    public ParamsAwareReqHandler(FastHttp http, HttpRoutes routes, RouteOptions options, ReqHandler handler) {
+        super(http, options);
+        this.handler = handler;
+    }
 
-	@Override
-	protected Object handleReq(Channel ctx, boolean isKeepAlive, Req req) throws Exception {
-		return handler.execute(req);
-	}
+    @Override
+    protected Object handleReq(Channel ctx, boolean isKeepAlive, Req req) throws Exception {
+        return handler.execute(req);
+    }
 
 }

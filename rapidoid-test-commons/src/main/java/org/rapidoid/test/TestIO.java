@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,71 +33,71 @@ import java.nio.file.Path;
  */
 public class TestIO {
 
-	public static byte[] loadRes(String filename) {
-		InputStream input = TestIO.class.getClassLoader().getResourceAsStream(filename);
+    public static byte[] loadRes(String filename) {
+        InputStream input = TestIO.class.getClassLoader().getResourceAsStream(filename);
 
-		if (input == null) {
-			throw new RuntimeException("Cannot find resource: " + filename);
-		}
+        if (input == null) {
+            throw new RuntimeException("Cannot find resource: " + filename);
+        }
 
-		return readBytes(input);
-	}
+        return readBytes(input);
+    }
 
-	public static byte[] readBytes(InputStream input) {
-		ByteArrayOutputStream output = new ByteArrayOutputStream();
+    public static byte[] readBytes(InputStream input) {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
 
-		byte[] buffer = new byte[16 * 1024];
+        byte[] buffer = new byte[16 * 1024];
 
-		try {
-			int readN;
-			while ((readN = input.read(buffer)) != -1) {
-				output.write(buffer, 0, readN);
-			}
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+        try {
+            int readN;
+            while ((readN = input.read(buffer)) != -1) {
+                output.write(buffer, 0, readN);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-		return output.toByteArray();
-	}
+        return output.toByteArray();
+    }
 
-	public static void delete(File file) {
-		if (file.isDirectory()) {
-			File[] files = file.listFiles();
-			if (files != null) {
-				for (File f : files) {
-					delete(f);
-				}
-			}
-		}
+    public static void delete(File file) {
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            if (files != null) {
+                for (File f : files) {
+                    delete(f);
+                }
+            }
+        }
 
-		if (!file.delete()) {
-			throw new RuntimeException("Couldn't delete: " + file);
-		}
-	}
+        if (!file.delete()) {
+            throw new RuntimeException("Couldn't delete: " + file);
+        }
+    }
 
-	public static File createTempFile() {
-		File file;
-		try {
-			file = File.createTempFile("temp", "" + System.nanoTime());
-		} catch (IOException e) {
-			throw new RuntimeException("Couldn't create temporary file!", e);
-		}
+    public static File createTempFile() {
+        File file;
+        try {
+            file = File.createTempFile("temp", "" + System.nanoTime());
+        } catch (IOException e) {
+            throw new RuntimeException("Couldn't create temporary file!", e);
+        }
 
-		file.deleteOnExit();
-		return file;
-	}
+        file.deleteOnExit();
+        return file;
+    }
 
-	public static String createTempDir(String name) {
-		Path tmpDir;
-		try {
-			tmpDir = Files.createTempDirectory(name);
-		} catch (IOException e) {
-			throw new RuntimeException("Couldn't create temporary directory!", e);
-		}
+    public static String createTempDir(String name) {
+        Path tmpDir;
+        try {
+            tmpDir = Files.createTempDirectory(name);
+        } catch (IOException e) {
+            throw new RuntimeException("Couldn't create temporary directory!", e);
+        }
 
-		String tmpPath = tmpDir.toAbsolutePath().toString();
-		tmpDir.toFile().deleteOnExit();
-		return tmpPath;
-	}
+        String tmpPath = tmpDir.toAbsolutePath().toString();
+        tmpDir.toFile().deleteOnExit();
+        return tmpPath;
+    }
 
 }

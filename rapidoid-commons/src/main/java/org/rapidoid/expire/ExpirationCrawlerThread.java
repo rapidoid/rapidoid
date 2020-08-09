@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,59 +33,59 @@ import java.util.List;
 @Since("5.1.7")
 public class ExpirationCrawlerThread extends RapidoidThread {
 
-	private final int resolution;
+    private final int resolution;
 
-	@SuppressWarnings("unchecked")
-	private final List<Iterable<? extends Expiring>> collections = Coll.synchronizedList();
+    @SuppressWarnings("unchecked")
+    private final List<Iterable<? extends Expiring>> collections = Coll.synchronizedList();
 
-	public ExpirationCrawlerThread(String name, int resolution) {
-		super(name);
-		this.resolution = resolution;
-		setPriority(Thread.MIN_PRIORITY);
-		setDaemon(true);
-	}
+    public ExpirationCrawlerThread(String name, int resolution) {
+        super(name);
+        this.resolution = resolution;
+        setPriority(Thread.MIN_PRIORITY);
+        setDaemon(true);
+    }
 
-	public void register(Iterable<? extends Expiring> collection) {
-		collections.add(collection);
-	}
+    public void register(Iterable<? extends Expiring> collection) {
+        collections.add(collection);
+    }
 
-	public void deregister(Iterable<? extends Expiring> collection) {
-		collections.remove(collection);
-	}
+    public void deregister(Iterable<? extends Expiring> collection) {
+        collections.remove(collection);
+    }
 
-	@Override
-	public void run() {
-		long startedAt = U.time();
+    @Override
+    public void run() {
+        long startedAt = U.time();
 
-		while (!Thread.interrupted()) {
+        while (!Thread.interrupted()) {
 
-			long timeSpent = U.time() - startedAt;
-			U.sleep(Math.max(resolution - timeSpent, 0));
-			startedAt = U.time();
+            long timeSpent = U.time() - startedAt;
+            U.sleep(Math.max(resolution - timeSpent, 0));
+            startedAt = U.time();
 
-			crawl();
-		}
-	}
+            crawl();
+        }
+    }
 
-	private void crawl() {
-		for (Iterable<? extends Expiring> coll : Coll.copyOf(collections)) {
-			long now = U.time();
+    private void crawl() {
+        for (Iterable<? extends Expiring> coll : Coll.copyOf(collections)) {
+            long now = U.time();
 
-			for (Expiring target : coll) {
+            for (Expiring target : coll) {
 
-				try {
-					long expiresAt = target.getExpiresAt();
+                try {
+                    long expiresAt = target.getExpiresAt();
 
-					if (expiresAt > 0 && expiresAt < now) {
-						target.expire();
-						target.setExpiresAt(0);
-					}
+                    if (expiresAt > 0 && expiresAt < now) {
+                        target.expire();
+                        target.setExpiresAt(0);
+                    }
 
-				} catch (Exception e) {
-					Log.error("Error on expiration!", e);
-				}
-			}
-		}
-	}
+                } catch (Exception e) {
+                    Log.error("Error on expiration!", e);
+                }
+            }
+        }
+    }
 
 }

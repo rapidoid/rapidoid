@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,15 +31,15 @@ import org.rapidoid.io.IO;
 @Since("5.1.0")
 public class Lorem extends RapidoidThing {
 
-	private static final String LOREM_IPSUM = IO.load("lorem-ipsum.txt") + " ";
+    private static final String LOREM_IPSUM = IO.load("lorem-ipsum.txt") + " ";
 
-	public static String ipsum(int length) {
-		int times = (int) Math.ceil(length / (double) LOREM_IPSUM.length());
-		return Str.mul(LOREM_IPSUM, times).substring(0, length);
-	}
+    public static String ipsum(int length) {
+        int times = (int) Math.ceil(length / (double) LOREM_IPSUM.length());
+        return Str.mul(LOREM_IPSUM, times).substring(0, length);
+    }
 
-	public static String ipsum(int minLength, int maxLength) {
-		int len = minLength + Rnd.rnd(maxLength - minLength + 1);
-		return ipsum(len);
-	}
+    public static String ipsum(int minLength, int maxLength) {
+        int len = minLength + Rnd.rnd(maxLength - minLength + 1);
+        return ipsum(len);
+    }
 }

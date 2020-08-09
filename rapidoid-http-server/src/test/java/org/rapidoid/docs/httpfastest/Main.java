@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,14 +27,14 @@ import org.rapidoid.test.TestCommons;
 
 public class Main extends TestCommons {
 
-	@Test
-	@Doc(title = "Building the fastest HTTP server")
-	public void docs() {
-		Server server = new CustomHttpServer().listen(5050);
+    @Test
+    @Doc(title = "Building the fastest HTTP server")
+    public void docs() {
+        Server server = new CustomHttpServer().listen(5050);
 
-		/* Not doing any work now, so shutdown */
+        /* Not doing any work now, so shutdown */
 
-		server.shutdown();
-	}
+        server.shutdown();
+    }
 
 }

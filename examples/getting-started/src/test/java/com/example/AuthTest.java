@@ -8,24 +8,24 @@ import org.rapidoid.util.Msc;
 
 public class AuthTest extends AbstractIntegrationTest {
 
-	@Test
-	public void testSuccessfulLogin() {
-		AuthResponse login = Self.post(Msc.specialUri("login"))
-			.data(U.map("username", "foo", "password", "foo"))
-			.toBean(AuthResponse.class);
+    @Test
+    public void testSuccessfulLogin() {
+        AuthResponse login = Self.post(Msc.specialUri("login"))
+                .data(U.map("username", "foo", "password", "foo"))
+                .toBean(AuthResponse.class);
 
-		isTrue(login.success);
-		isTrue(U.notEmpty(login.token));
-	}
+        isTrue(login.success);
+        isTrue(U.notEmpty(login.token));
+    }
 
-	@Test
-	public void testIncorrectLogin() {
-		AuthResponse login = Self.post(Msc.specialUri("login"))
-			.data(U.map("username", "foo", "password", "wrong"))
-			.toBean(AuthResponse.class);
+    @Test
+    public void testIncorrectLogin() {
+        AuthResponse login = Self.post(Msc.specialUri("login"))
+                .data(U.map("username", "foo", "password", "wrong"))
+                .toBean(AuthResponse.class);
 
-		isFalse(login.success);
-		isTrue(U.isEmpty(login.token));
-	}
+        isFalse(login.success);
+        isTrue(U.isEmpty(login.token));
+    }
 
 }

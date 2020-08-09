@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,41 +32,41 @@ import java.util.Map;
 @Since("5.0.4")
 public class JS extends RapidoidThing {
 
-	public static boolean compiles(String js) {
-		try {
-			JS.compile(js);
-			return true;
+    public static boolean compiles(String js) {
+        try {
+            JS.compile(js);
+            return true;
 
-		} catch (ScriptException e) {
-			return false;
-		}
-	}
+        } catch (ScriptException e) {
+            return false;
+        }
+    }
 
-	public static <T> T eval(String js) throws ScriptException {
-		return eval(js, null);
-	}
+    public static <T> T eval(String js) throws ScriptException {
+        return eval(js, null);
+    }
 
-	@SuppressWarnings("unchecked")
-	public static <T> T eval(String js, Map<String, ?> bindings) throws ScriptException {
-		ScriptEngineManager factory = new ScriptEngineManager();
-		ScriptEngine engine = factory.getEngineByName("JavaScript");
+    @SuppressWarnings("unchecked")
+    public static <T> T eval(String js, Map<String, ?> bindings) throws ScriptException {
+        ScriptEngineManager factory = new ScriptEngineManager();
+        ScriptEngine engine = factory.getEngineByName("JavaScript");
 
-		if (bindings != null) {
-			Map<String, Object> map = U.cast(bindings);
-			return (T) engine.eval(js, new SimpleBindings(map));
-		} else {
-			return (T) engine.eval(js);
-		}
-	}
+        if (bindings != null) {
+            Map<String, Object> map = U.cast(bindings);
+            return (T) engine.eval(js, new SimpleBindings(map));
+        } else {
+            return (T) engine.eval(js);
+        }
+    }
 
-	public static CompiledScript compile(String js) throws ScriptException {
-		ScriptEngineManager factory = new ScriptEngineManager();
-		ScriptEngine engine = factory.getEngineByName("JavaScript");
+    public static CompiledScript compile(String js) throws ScriptException {
+        ScriptEngineManager factory = new ScriptEngineManager();
+        ScriptEngine engine = factory.getEngineByName("JavaScript");
 
-		U.must(engine instanceof Compilable, "The JavaScript engine cannot compile!");
+        U.must(engine instanceof Compilable, "The JavaScript engine cannot compile!");
 
-		Compilable compilable = (Compilable) engine;
-		return compilable.compile(js);
-	}
+        Compilable compilable = (Compilable) engine;
+        return compilable.compile(js);
+    }
 
 }

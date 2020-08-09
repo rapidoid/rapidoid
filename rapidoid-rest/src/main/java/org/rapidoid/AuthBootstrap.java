@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,26 +32,26 @@ import org.rapidoid.util.Msc;
 @Since("5.2.3")
 public class AuthBootstrap extends RapidoidThing {
 
-	private static volatile String randomAdminPassword;
+    private static volatile String randomAdminPassword;
 
-	public static synchronized void bootstrapAdminCredentials() {
-		Config admin = Conf.USERS.sub("admin");
+    public static synchronized void bootstrapAdminCredentials() {
+        Config admin = Conf.USERS.sub("admin");
 
-		if (!admin.has("password") && !admin.has("hash")) {
-			String pass = randomAdminPassword();
-			admin.set("password", pass);
+        if (!admin.has("password") && !admin.has("hash")) {
+            String pass = randomAdminPassword();
+            admin.set("password", pass);
 
-			String maybePass = "" + Msc.maybeMasked(pass);
-			Msc.logSection(AnsiColor.lightBlue("ADMIN CREDENTIALS:") + " username = admin, password = " + maybePass);
-		}
-	}
+            String maybePass = "" + Msc.maybeMasked(pass);
+            Msc.logSection(AnsiColor.lightBlue("ADMIN CREDENTIALS:") + " username = admin, password = " + maybePass);
+        }
+    }
 
-	private static synchronized String randomAdminPassword() {
-		if (randomAdminPassword == null) {
-			randomAdminPassword = Crypto.randomStr(16);
-		}
+    private static synchronized String randomAdminPassword() {
+        if (randomAdminPassword == null) {
+            randomAdminPassword = Crypto.randomStr(16);
+        }
 
-		return randomAdminPassword;
-	}
+        return randomAdminPassword;
+    }
 
 }

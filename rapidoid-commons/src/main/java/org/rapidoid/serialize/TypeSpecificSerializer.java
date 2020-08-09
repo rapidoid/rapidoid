@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,246 +36,246 @@ import java.util.*;
 @Since("5.1.0")
 public class TypeSpecificSerializer extends AbstractTypeSpecificVisitor<ByteBuffer, Void> {
 
-	public void serialize(ByteBuffer buf, Object value) {
-		dispatch(buf, value);
-	}
+    public void serialize(ByteBuffer buf, Object value) {
+        dispatch(buf, value);
+    }
 
-	@Override
-	public Void dispatch(ByteBuffer buf, Object value) {
-		TypeKind kind = Cls.kindOf(value);
-		buf.put(Msc.sbyte(Ser.code(kind)));
-		return dispatch(buf, kind, value);
-	}
+    @Override
+    public Void dispatch(ByteBuffer buf, Object value) {
+        TypeKind kind = Cls.kindOf(value);
+        buf.put(Msc.sbyte(Ser.code(kind)));
+        return dispatch(buf, kind, value);
+    }
 
-	@Override
-	public Void processNull(ByteBuffer buf) {
-		return null; // only the kind is enough
-	}
+    @Override
+    public Void processNull(ByteBuffer buf) {
+        return null; // only the kind is enough
+    }
 
-	@Override
-	public Void processNone(ByteBuffer context) {
-		return null; // only the kind is enough
-	}
+    @Override
+    public Void processNone(ByteBuffer context) {
+        return null; // only the kind is enough
+    }
 
-	@Override
-	public Void processDeleted(ByteBuffer context) {
-		return null; // only the kind is enough
-	}
+    @Override
+    public Void processDeleted(ByteBuffer context) {
+        return null; // only the kind is enough
+    }
 
-	@Override
-	public Void processUnknown(ByteBuffer buf, Object value) {
-		throw U.rte("Cannot serialize a value of type: " + Cls.of(value).getName());
-	}
+    @Override
+    public Void processUnknown(ByteBuffer buf, Object value) {
+        throw U.rte("Cannot serialize a value of type: " + Cls.of(value).getName());
+    }
 
-	/* PRIMITIVES */
+    /* PRIMITIVES */
 
-	@Override
-	public Void process(ByteBuffer buf, boolean value) {
-		buf.put(Ser.bool2byte(value));
-		return null;
-	}
+    @Override
+    public Void process(ByteBuffer buf, boolean value) {
+        buf.put(Ser.bool2byte(value));
+        return null;
+    }
 
-	@Override
-	public Void process(ByteBuffer buf, byte value) {
-		buf.put(value);
-		return null;
-	}
+    @Override
+    public Void process(ByteBuffer buf, byte value) {
+        buf.put(value);
+        return null;
+    }
 
-	@Override
-	public Void process(ByteBuffer buf, short value) {
-		buf.putShort(value);
-		return null;
-	}
+    @Override
+    public Void process(ByteBuffer buf, short value) {
+        buf.putShort(value);
+        return null;
+    }
 
-	@Override
-	public Void process(ByteBuffer buf, char value) {
-		buf.putChar(value);
-		return null;
-	}
+    @Override
+    public Void process(ByteBuffer buf, char value) {
+        buf.putChar(value);
+        return null;
+    }
 
-	@Override
-	public Void process(ByteBuffer buf, int value) {
-		buf.putInt(value);
-		return null;
-	}
+    @Override
+    public Void process(ByteBuffer buf, int value) {
+        buf.putInt(value);
+        return null;
+    }
 
-	@Override
-	public Void process(ByteBuffer buf, long value) {
-		buf.putLong(value);
-		return null;
-	}
+    @Override
+    public Void process(ByteBuffer buf, long value) {
+        buf.putLong(value);
+        return null;
+    }
 
-	@Override
-	public Void process(ByteBuffer buf, float value) {
-		buf.putFloat(value);
-		return null;
-	}
+    @Override
+    public Void process(ByteBuffer buf, float value) {
+        buf.putFloat(value);
+        return null;
+    }
 
-	@Override
-	public Void process(ByteBuffer buf, double value) {
-		buf.putDouble(value);
-		return null;
-	}
+    @Override
+    public Void process(ByteBuffer buf, double value) {
+        buf.putDouble(value);
+        return null;
+    }
 
-	/* OBJECTS */
+    /* OBJECTS */
 
-	@Override
-	public Void process(ByteBuffer buf, String value) {
-		Ser.writeBytes(buf, value.getBytes());
-		return null;
-	}
+    @Override
+    public Void process(ByteBuffer buf, String value) {
+        Ser.writeBytes(buf, value.getBytes());
+        return null;
+    }
 
-	@Override
-	public Void process(ByteBuffer buf, Date value) {
-		process(buf, value.getTime());
-		return null;
-	}
+    @Override
+    public Void process(ByteBuffer buf, Date value) {
+        process(buf, value.getTime());
+        return null;
+    }
 
-	@Override
-	public Void process(ByteBuffer buf, UUID value) {
-		process(buf, value.getMostSignificantBits());
-		process(buf, value.getLeastSignificantBits());
-		return null;
-	}
+    @Override
+    public Void process(ByteBuffer buf, UUID value) {
+        process(buf, value.getMostSignificantBits());
+        process(buf, value.getLeastSignificantBits());
+        return null;
+    }
 
-	@Override
-	public Void process(ByteBuffer buf, TUUID value) {
-		process(buf, value.time());
-		process(buf, value.uuidHigh());
-		process(buf, value.uuidLow());
-		return null;
-	}
+    @Override
+    public Void process(ByteBuffer buf, TUUID value) {
+        process(buf, value.time());
+        process(buf, value.uuidHigh());
+        process(buf, value.uuidLow());
+        return null;
+    }
 
-	/* COLLECTIONS */
+    /* COLLECTIONS */
 
-	@Override
-	public Void process(ByteBuffer buf, List<?> list) {
-		Ser.writeNum(buf, list.size());
+    @Override
+    public Void process(ByteBuffer buf, List<?> list) {
+        Ser.writeNum(buf, list.size());
 
-		for (Object x : list) {
-			dispatch(buf, x);
-		}
+        for (Object x : list) {
+            dispatch(buf, x);
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	@Override
-	public Void process(ByteBuffer buf, Set<?> set) {
-		Ser.writeNum(buf, set.size());
+    @Override
+    public Void process(ByteBuffer buf, Set<?> set) {
+        Ser.writeNum(buf, set.size());
 
-		for (Object x : set) {
-			dispatch(buf, x);
-		}
+        for (Object x : set) {
+            dispatch(buf, x);
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	@Override
-	public Void process(ByteBuffer buf, Map<?, ?> map) {
-		Ser.writeNum(buf, map.size());
+    @Override
+    public Void process(ByteBuffer buf, Map<?, ?> map) {
+        Ser.writeNum(buf, map.size());
 
-		for (Map.Entry<?, ?> e : map.entrySet()) {
-			dispatch(buf, e.getKey());
-			dispatch(buf, e.getValue());
-		}
+        for (Map.Entry<?, ?> e : map.entrySet()) {
+            dispatch(buf, e.getKey());
+            dispatch(buf, e.getValue());
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	/* ARRAYS */
+    /* ARRAYS */
 
-	@Override
-	public Void process(ByteBuffer buf, boolean[] arr) {
-		Ser.writeNum(buf, arr.length);
+    @Override
+    public Void process(ByteBuffer buf, boolean[] arr) {
+        Ser.writeNum(buf, arr.length);
 
-		for (boolean x : arr) {
-			process(buf, x);
-		}
+        for (boolean x : arr) {
+            process(buf, x);
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	@Override
-	public Void process(ByteBuffer buf, byte[] arr) {
-		Ser.writeBytes(buf, arr);
-		return null;
-	}
+    @Override
+    public Void process(ByteBuffer buf, byte[] arr) {
+        Ser.writeBytes(buf, arr);
+        return null;
+    }
 
-	@Override
-	public Void process(ByteBuffer buf, short[] arr) {
-		Ser.writeNum(buf, arr.length);
+    @Override
+    public Void process(ByteBuffer buf, short[] arr) {
+        Ser.writeNum(buf, arr.length);
 
-		for (short x : arr) {
-			process(buf, x);
-		}
+        for (short x : arr) {
+            process(buf, x);
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	@Override
-	public Void process(ByteBuffer buf, char[] arr) {
-		Ser.writeNum(buf, arr.length);
+    @Override
+    public Void process(ByteBuffer buf, char[] arr) {
+        Ser.writeNum(buf, arr.length);
 
-		for (char x : arr) {
-			process(buf, x);
-		}
+        for (char x : arr) {
+            process(buf, x);
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	@Override
-	public Void process(ByteBuffer buf, int[] arr) {
-		Ser.writeNum(buf, arr.length);
+    @Override
+    public Void process(ByteBuffer buf, int[] arr) {
+        Ser.writeNum(buf, arr.length);
 
-		for (int x : arr) {
-			process(buf, x);
-		}
+        for (int x : arr) {
+            process(buf, x);
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	@Override
-	public Void process(ByteBuffer buf, long[] arr) {
-		Ser.writeNum(buf, arr.length);
+    @Override
+    public Void process(ByteBuffer buf, long[] arr) {
+        Ser.writeNum(buf, arr.length);
 
-		for (long x : arr) {
-			process(buf, x);
-		}
+        for (long x : arr) {
+            process(buf, x);
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	@Override
-	public Void process(ByteBuffer buf, float[] arr) {
-		Ser.writeNum(buf, arr.length);
+    @Override
+    public Void process(ByteBuffer buf, float[] arr) {
+        Ser.writeNum(buf, arr.length);
 
-		for (float x : arr) {
-			process(buf, x);
-		}
+        for (float x : arr) {
+            process(buf, x);
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	@Override
-	public Void process(ByteBuffer buf, double[] arr) {
-		Ser.writeNum(buf, arr.length);
+    @Override
+    public Void process(ByteBuffer buf, double[] arr) {
+        Ser.writeNum(buf, arr.length);
 
-		for (double x : arr) {
-			process(buf, x);
-		}
+        for (double x : arr) {
+            process(buf, x);
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	@Override
-	public Void processArray(ByteBuffer buf, Object[] arr) {
-		Ser.writeNum(buf, arr.length);
+    @Override
+    public Void processArray(ByteBuffer buf, Object[] arr) {
+        Ser.writeNum(buf, arr.length);
 
-		for (Object x : arr) {
-			dispatch(buf, x);
-		}
+        for (Object x : arr) {
+            dispatch(buf, x);
+        }
 
-		return null;
-	}
+        return null;
+    }
 
 }

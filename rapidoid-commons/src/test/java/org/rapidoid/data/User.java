@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,24 +32,24 @@ import java.util.Set;
  */
 public class User {
 
-	public long id;
+    public long id;
 
-	public String name;
+    public String name;
 
-	public int age;
+    public int age;
 
-	public String[] tags = {"aa", "bbb"};
+    public String[] tags = {"aa", "bbb"};
 
-	public Set<?> ss = U.set(1, "bn", false);
+    public Set<?> ss = U.set(1, "bn", false);
 
-	public List<?> lst = U.list(1, "bn", false);
+    public List<?> lst = U.list(1, "bn", false);
 
-	public User() {
-	}
+    public User() {
+    }
 
-	public User(String name, int age) {
-		this.name = name;
-		this.age = age;
-	}
+    public User(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
 
 }

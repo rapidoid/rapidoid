@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,148 +35,148 @@ import java.nio.channels.SocketChannel;
 @Since("5.5.0")
 public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements TCPClient, TCPClientInfo {
 
-	private final NetworkingParams net;
+    private final NetworkingParams net;
 
-	// initial number of connections to the default server
-	private final int connections;
+    // initial number of connections to the default server
+    private final int connections;
 
-	private final boolean autoReconnect;
+    private final boolean autoReconnect;
 
-	private final TLSParams tlsParams;
+    private final TLSParams tlsParams;
 
-	private volatile ExtendedWorker[] ioWorkers;
+    private volatile ExtendedWorker[] ioWorkers;
 
-	// round-robin workers for new connections
-	private int currentWorkerInd = 0;
+    // round-robin workers for new connections
+    private int currentWorkerInd = 0;
 
-	public RapidoidClientLoop(NetworkingParams net, boolean autoReconnect, int connections, TLSParams tlsParams) {
-		super("client");
+    public RapidoidClientLoop(NetworkingParams net, boolean autoReconnect, int connections, TLSParams tlsParams) {
+        super("client");
 
-		this.net = net;
-		this.autoReconnect = autoReconnect;
-		this.connections = connections;
-		this.tlsParams = tlsParams;
-		this.tlsParams.needClientAuth(false);		// set to false as client need not have this set to true.
-		this.tlsParams.wantClientAuth(false);		// set to false as client need not have this set to true.
-	}
+        this.net = net;
+        this.autoReconnect = autoReconnect;
+        this.connections = connections;
+        this.tlsParams = tlsParams;
+        this.tlsParams.needClientAuth(false);        // set to false as client need not have this set to true.
+        this.tlsParams.wantClientAuth(false);        // set to false as client need not have this set to true.
+    }
 
-	@Override
-	protected void doProcessing() {
-	}
+    @Override
+    protected void doProcessing() {
+    }
 
-	@Override
-	protected final void beforeLoop() {
-		openSockets();
-	}
+    @Override
+    protected final void beforeLoop() {
+        openSockets();
+    }
 
-	private void openSockets() {
-		ioWorkers = new ExtendedWorker[net.workers()];
+    private void openSockets() {
+        ioWorkers = new ExtendedWorker[net.workers()];
 
-		for (int i = 0; i < ioWorkers.length; i++) {
-			RapidoidHelper helper = Cls.newInstance(net.helperClass(), net.exchangeClass());
-			String workerName = "client" + (i + 1);
-			ioWorkers[i] = new ExtendedWorker(workerName, helper, net, tlsParams);
+        for (int i = 0; i < ioWorkers.length; i++) {
+            RapidoidHelper helper = Cls.newInstance(net.helperClass(), net.exchangeClass());
+            String workerName = "client" + (i + 1);
+            ioWorkers[i] = new ExtendedWorker(workerName, helper, net, tlsParams);
 
-			new Thread(ioWorkers[i], workerName).start();
-		}
+            new Thread(ioWorkers[i], workerName).start();
+        }
 
-		for (int i = 0; i < ioWorkers.length; i++) {
-			ioWorkers[i].waitToStart();
-		}
-	}
+        for (int i = 0; i < ioWorkers.length; i++) {
+            ioWorkers[i].waitToStart();
+        }
+    }
 
-	@Override
-	public synchronized ChannelHolder connect(String serverHost, int serverPort, Protocol clientProtocol,
-	                                          boolean autoreconnecting, ConnState state) {
+    @Override
+    public synchronized ChannelHolder connect(String serverHost, int serverPort, Protocol clientProtocol,
+                                              boolean autoreconnecting, ConnState state) {
 
-		InetSocketAddress addr = new InetSocketAddress(serverHost, serverPort);
-		SocketChannel socketChannel = openSocket();
+        InetSocketAddress addr = new InetSocketAddress(serverHost, serverPort);
+        SocketChannel socketChannel = openSocket();
 
-		ChannelHolderImpl holder = new ChannelHolderImpl();
+        ChannelHolderImpl holder = new ChannelHolderImpl();
 
-		try {
-			ExtendedWorker targetWorker = ioWorkers[currentWorkerInd];
-			ConnectionTarget target = new ConnectionTarget(socketChannel, addr, clientProtocol, holder, autoreconnecting, state);
-			targetWorker.connect(target);
+        try {
+            ExtendedWorker targetWorker = ioWorkers[currentWorkerInd];
+            ConnectionTarget target = new ConnectionTarget(socketChannel, addr, clientProtocol, holder, autoreconnecting, state);
+            targetWorker.connect(target);
 
-		} catch (IOException e) {
-			throw U.rte("Cannot create a TCP client connection!", e);
-		}
+        } catch (IOException e) {
+            throw U.rte("Cannot create a TCP client connection!", e);
+        }
 
-		switchToNextWorker();
-		return holder;
-	}
+        switchToNextWorker();
+        return holder;
+    }
 
-	@Override
-	public synchronized ChannelHolder[] connect(String serverHost, int serverPort, Protocol clientProtocol,
-	                                            int connectionsN, boolean autoreconnecting, ConnState state) {
+    @Override
+    public synchronized ChannelHolder[] connect(String serverHost, int serverPort, Protocol clientProtocol,
+                                                int connectionsN, boolean autoreconnecting, ConnState state) {
 
-		ChannelHolder[] holders = new ChannelHolder[connectionsN];
+        ChannelHolder[] holders = new ChannelHolder[connectionsN];
 
-		for (int i = 0; i < connectionsN; i++) {
-			holders[i] = connect(serverHost, serverPort, clientProtocol, autoreconnecting, state);
-		}
+        for (int i = 0; i < connectionsN; i++) {
+            holders[i] = connect(serverHost, serverPort, clientProtocol, autoreconnecting, state);
+        }
 
-		return holders;
-	}
+        return holders;
+    }
 
-	private synchronized void switchToNextWorker() {
-		currentWorkerInd++;
-		if (currentWorkerInd == ioWorkers.length) {
-			currentWorkerInd = 0;
-		}
-	}
+    private synchronized void switchToNextWorker() {
+        currentWorkerInd++;
+        if (currentWorkerInd == ioWorkers.length) {
+            currentWorkerInd = 0;
+        }
+    }
 
-	protected static SocketChannel openSocket() {
-		try {
-			SocketChannel socketChannel = SocketChannel.open();
+    protected static SocketChannel openSocket() {
+        try {
+            SocketChannel socketChannel = SocketChannel.open();
 
-			if (!socketChannel.isOpen()) {
-				throw U.rte("Cannot open socket!");
-			}
+            if (!socketChannel.isOpen()) {
+                throw U.rte("Cannot open socket!");
+            }
 
-			return socketChannel;
-		} catch (IOException e) {
-			throw U.rte("Cannot open socket!", e);
-		}
-	}
+            return socketChannel;
+        } catch (IOException e) {
+            throw U.rte("Cannot open socket!", e);
+        }
+    }
 
-	@Override
-	public synchronized TCPClient start() {
-		new Thread(this, "client").start();
+    @Override
+    public synchronized TCPClient start() {
+        new Thread(this, "client").start();
 
-		super.start();
+        super.start();
 
-		connect(net.address(), net.port(), net.protocol(), connections, autoReconnect, null);
+        connect(net.address(), net.port(), net.protocol(), connections, autoReconnect, null);
 
-		return this;
-	}
+        return this;
+    }
 
-	@Override
-	public synchronized TCPClient shutdown() {
-		stopLoop();
+    @Override
+    public synchronized TCPClient shutdown() {
+        stopLoop();
 
-		for (ExtendedWorker worker : ioWorkers) {
-			worker.stopLoop();
-		}
+        for (ExtendedWorker worker : ioWorkers) {
+            worker.stopLoop();
+        }
 
-		return super.shutdown();
-	}
+        return super.shutdown();
+    }
 
-	@Override
-	public TCPClientInfo info() {
-		return this;
-	}
+    @Override
+    public TCPClientInfo info() {
+        return this;
+    }
 
-	@Override
-	public long messagesProcessed() {
-		long total = 0;
+    @Override
+    public long messagesProcessed() {
+        long total = 0;
 
-		for (int i = 0; i < ioWorkers.length; i++) {
-			total += ioWorkers[i].getMessagesProcessed();
-		}
+        for (int i = 0; i < ioWorkers.length; i++) {
+            total += ioWorkers[i].getMessagesProcessed();
+        }
 
-		return total;
-	}
+        return total;
+    }
 
 }

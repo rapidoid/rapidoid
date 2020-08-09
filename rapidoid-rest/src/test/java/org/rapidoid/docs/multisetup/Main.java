@@ -23,7 +23,6 @@ package org.rapidoid.docs.multisetup;
 import org.rapidoid.docs.multisetup.barsetup.BarSetupCtrl;
 import org.rapidoid.docs.multisetup.foosetup.FooSetupCtrl;
 import org.rapidoid.http.HTTP;
-import org.rapidoid.setup.App;
 import org.rapidoid.setup.Setup;
 import org.rapidoid.setup.Setups;
 

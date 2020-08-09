@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,49 +31,49 @@ import java.util.List;
 @Since("2.0.0")
 public class ConnState extends RapidoidThing implements Resetable {
 
-	public volatile long n;
+    public volatile long n;
 
-	public volatile Object obj;
+    public volatile Object obj;
 
-	public ConnState() {
-	}
+    public ConnState() {
+    }
 
-	public ConnState(long n, Object obj) {
-		this.n = n;
-		this.obj = obj;
-	}
+    public ConnState(long n, Object obj) {
+        this.n = n;
+        this.obj = obj;
+    }
 
-	/* COMMENTED OUT FOR PRODUCTION (the log is used for debugging during development): */
+    /* COMMENTED OUT FOR PRODUCTION (the log is used for debugging during development): */
 
-	// private final List<String> log = Collections.synchronizedList(U.<String> list());
+    // private final List<String> log = Collections.synchronizedList(U.<String> list());
 
-	public void reset() {
-		n = 0;
-		obj = null;
-		log("<<< RESET >>>");
-	}
+    public void reset() {
+        n = 0;
+        obj = null;
+        log("<<< RESET >>>");
+    }
 
-	/* The log is used for debugging during development. */
-	public void log(String msg) {
-		/* COMMENTED OUT FOR PRODUCTION: */
-		// log.add(msg);
-	}
+    /* The log is used for debugging during development. */
+    public void log(String msg) {
+        /* COMMENTED OUT FOR PRODUCTION: */
+        // log.add(msg);
+    }
 
-	/* The log is used for debugging during development. */
-	public List<String> log() {
-		return null;
+    /* The log is used for debugging during development. */
+    public List<String> log() {
+        return null;
 
-		/* COMMENTED OUT FOR PRODUCTION: */
-		// return log;
-	}
+        /* COMMENTED OUT FOR PRODUCTION: */
+        // return log;
+    }
 
-	public ConnState copy() {
-		return new ConnState(n, obj);
-	}
+    public ConnState copy() {
+        return new ConnState(n, obj);
+    }
 
-	public void copyFrom(ConnState state) {
-		this.n = state.n;
-		this.obj = state.obj;
-	}
+    public void copyFrom(ConnState state) {
+        this.n = state.n;
+        this.obj = state.obj;
+    }
 
 }

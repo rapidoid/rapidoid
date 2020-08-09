@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,32 +29,32 @@ import org.rapidoid.setup.On;
 @Since("5.1.0")
 public class HttpHandlerTypesTest extends IsolatedIntegrationTest {
 
-	@Test
-	public void testHandlerTypes() {
-		On.get("/a").html(req -> "a");
+    @Test
+    public void testHandlerTypes() {
+        On.get("/a").html(req -> "a");
 
-		On.get("/b").html((req, resp) -> "b");
+        On.get("/b").html((req, resp) -> "b");
 
-		On.get("/c").html((ReqHandler) req -> "c");
+        On.get("/c").html((ReqHandler) req -> "c");
 
-		On.get("/d").html((ReqRespHandler) (req, resp) -> "d");
+        On.get("/d").html((ReqRespHandler) (req, resp) -> "d");
 
-		On.get("/e").html((Req req) -> "e");
+        On.get("/e").html((Req req) -> "e");
 
-		On.get("/f").html((Req req, Integer x) -> "f");
+        On.get("/f").html((Req req, Integer x) -> "f");
 
-		On.get("/g").html((Req req, Resp resp) -> "g");
+        On.get("/g").html((Req req, Resp resp) -> "g");
 
-		On.get("/h").html((Resp yy, Integer tt, Resp xx, Req rrr, Boolean b) -> "h");
+        On.get("/h").html((Resp yy, Integer tt, Resp xx, Req rrr, Boolean b) -> "h");
 
-		onlyGet("/a");
-		onlyGet("/b");
-		onlyGet("/c");
-		onlyGet("/d");
-		onlyGet("/e");
-		onlyGet("/f");
-		onlyGet("/g");
-		onlyGet("/h");
-	}
+        onlyGet("/a");
+        onlyGet("/b");
+        onlyGet("/c");
+        onlyGet("/d");
+        onlyGet("/e");
+        onlyGet("/f");
+        onlyGet("/g");
+        onlyGet("/h");
+    }
 
 }

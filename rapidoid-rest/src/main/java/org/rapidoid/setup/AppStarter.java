@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,24 +33,24 @@ import org.rapidoid.u.U;
 @Since("5.4.6")
 class AppStarter extends RapidoidThing {
 
-	private static boolean started = false;
+    private static boolean started = false;
 
-	static synchronized void reset() {
-		started = false;
-	}
+    static synchronized void reset() {
+        started = false;
+    }
 
-	static synchronized void startUp(String[] args, String... extraArgs) {
+    static synchronized void startUp(String[] args, String... extraArgs) {
 
-		U.must(!started, "The application was already started!");
-		started = true;
+        U.must(!started, "The application was already started!");
+        started = true;
 
-		args = Arr.concat(extraArgs, args);
+        args = Arr.concat(extraArgs, args);
 
-		ConfigHelp.processHelp(args);
+        ConfigHelp.processHelp(args);
 
-		Env.setArgs(args);
+        Env.setArgs(args);
 
-		U.must(!Conf.isInitialized(), "The configuration shouldn't be initialized yet!");
-	}
+        U.must(!Conf.isInitialized(), "The configuration shouldn't be initialized yet!");
+    }
 
 }

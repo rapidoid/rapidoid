@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,85 +36,85 @@ import java.util.concurrent.atomic.AtomicLong;
 @Since("5.5.1")
 public class JobsService extends RapidoidInitializer {
 
-	private final Once init = new Once();
+    private final Once init = new Once();
 
-	private final AtomicLong errorCounter = new AtomicLong();
+    private final AtomicLong errorCounter = new AtomicLong();
 
-	private final LazyInit<JobScheduler> scheduler = new LazyInit<>(JobScheduler.class);
+    private final LazyInit<JobScheduler> scheduler = new LazyInit<>(JobScheduler.class);
 
-	private final LazyInit<JobExecutor> executor = new LazyInit<>(JobExecutor.class);
+    private final LazyInit<JobExecutor> executor = new LazyInit<>(JobExecutor.class);
 
-	private final AtomicBoolean active = new AtomicBoolean(true);
+    private final AtomicBoolean active = new AtomicBoolean(true);
 
-	public synchronized void reset() {
-		errorCounter.set(0);
-		executor.resetAndClose();
-		scheduler.resetAndClose();
-		active.set(true);
-	}
+    public synchronized void reset() {
+        errorCounter.set(0);
+        executor.resetAndClose();
+        scheduler.resetAndClose();
+        active.set(true);
+    }
 
-	void init() {
-		active.set(true); // activate
+    void init() {
+        active.set(true); // activate
 
-		if (init.go()) {
-			Runtime.getRuntime().addShutdownHook(new Thread(this::shutdownNow));
-		}
-	}
+        if (init.go()) {
+            Runtime.getRuntime().addShutdownHook(new Thread(this::shutdownNow));
+        }
+    }
 
-	public boolean isActive() {
-		return active.get();
-	}
+    public boolean isActive() {
+        return active.get();
+    }
 
-	public Opt<ThreadPoolExecutor> executor() {
-		return Opt.maybe(isActive() ? executor.get().executor() : null);
-	}
+    public Opt<ThreadPoolExecutor> executor() {
+        return Opt.maybe(isActive() ? executor.get().executor() : null);
+    }
 
-	public Opt<ScheduledThreadPoolExecutor> scheduler() {
-		return Opt.maybe(isActive() ? scheduler.get().scheduler() : null);
-	}
+    public Opt<ScheduledThreadPoolExecutor> scheduler() {
+        return Opt.maybe(isActive() ? scheduler.get().scheduler() : null);
+    }
 
-	public AtomicLong errorCounter() {
-		return errorCounter;
-	}
+    public AtomicLong errorCounter() {
+        return errorCounter;
+    }
 
-	public synchronized void shutdown() {
-		active.set(false);
+    public synchronized void shutdown() {
+        active.set(false);
 
-		if (executor.isInitialized()) {
-			Opt<ThreadPoolExecutor> exe = executor();
-			if (exe.exists()) {
-				exe.get().shutdown();
-				Jobs.awaitTermination(exe.get());
-			}
-		}
+        if (executor.isInitialized()) {
+            Opt<ThreadPoolExecutor> exe = executor();
+            if (exe.exists()) {
+                exe.get().shutdown();
+                Jobs.awaitTermination(exe.get());
+            }
+        }
 
-		if (scheduler.isInitialized()) {
-			Opt<ScheduledThreadPoolExecutor> sch = scheduler();
-			if (sch.exists()) {
-				sch.get().shutdown();
-				Jobs.awaitTermination(sch.get());
-			}
-		}
-	}
+        if (scheduler.isInitialized()) {
+            Opt<ScheduledThreadPoolExecutor> sch = scheduler();
+            if (sch.exists()) {
+                sch.get().shutdown();
+                Jobs.awaitTermination(sch.get());
+            }
+        }
+    }
 
-	public synchronized void shutdownNow() {
-		active.set(false);
+    public synchronized void shutdownNow() {
+        active.set(false);
 
-		if (executor.isInitialized()) {
-			Opt<ThreadPoolExecutor> exe = executor();
-			if (exe.exists()) {
-				exe.get().shutdownNow();
-				Jobs.awaitTermination(exe.get());
-			}
-		}
+        if (executor.isInitialized()) {
+            Opt<ThreadPoolExecutor> exe = executor();
+            if (exe.exists()) {
+                exe.get().shutdownNow();
+                Jobs.awaitTermination(exe.get());
+            }
+        }
 
-		if (scheduler.isInitialized()) {
-			Opt<ScheduledThreadPoolExecutor> sch = scheduler();
-			if (sch.exists()) {
-				sch.get().shutdownNow();
-				Jobs.awaitTermination(sch.get());
-			}
-		}
-	}
+        if (scheduler.isInitialized()) {
+            Opt<ScheduledThreadPoolExecutor> sch = scheduler();
+            if (sch.exists()) {
+                sch.get().shutdownNow();
+                Jobs.awaitTermination(sch.get());
+            }
+        }
+    }
 
 }

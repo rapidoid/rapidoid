@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,34 +37,34 @@ import static org.rapidoid.security.Role.*;
 @CanChange({ANYBODY})
 class AbstrEntity {
 
-	@CanChange({})
-	public long id;
+    @CanChange({})
+    public long id;
 
-	@CanRead("abc")
-	@CanChange({"OTHER_ROLE"})
-	public String notes;
+    @CanRead("abc")
+    @CanChange({"OTHER_ROLE"})
+    public String notes;
 
 }
 
 class Category {
-	public String name;
+    public String name;
 
-	@CanChange("OTHER_ROLE")
-	public String desc;
+    @CanChange("OTHER_ROLE")
+    public String desc;
 }
 
 @CanRead({ANYBODY, "OTHER_ROLE"})
 class Comment {
 
-	@CanChange({MODERATOR, OWNER})
-	public String content;
+    @CanChange({MODERATOR, OWNER})
+    public String content;
 
-	@CanRead({MANAGER})
-	@CanChange({MANAGER})
-	public boolean visible = true;
+    @CanRead({MANAGER})
+    @CanChange({MANAGER})
+    public boolean visible = true;
 
-	@Programmatic
-	public String createdBy;
+    @Programmatic
+    public String createdBy;
 
 }
 
@@ -72,23 +72,23 @@ class Comment {
 @CanChange({OWNER})
 class Issue extends AbstrEntity {
 
-	public String title;
+    public String title;
 
-	public int year;
+    public int year;
 
-	public User author;
+    public User author;
 
-	public String description;
+    public String description;
 
-	@Composite
-	@CanChange({OWNER, SHARED_WITH})
-	public List<Comment> comments;
+    @Composite
+    @CanChange({OWNER, SHARED_WITH})
+    public List<Comment> comments;
 
-	@Programmatic
-	public String createdBy;
+    @Programmatic
+    public String createdBy;
 
-	@CanChange({OWNER})
-	public List<User> sharedWith;
+    @CanChange({OWNER})
+    public List<User> sharedWith;
 
 }
 
@@ -96,77 +96,77 @@ class Issue extends AbstrEntity {
 @Since("2.0.0")
 public class DataPermissionsTest extends SecurityTestCommons {
 
-	private static final String[] USERS = {null, "", "abc", "adm1", "adm2", "mng1", "mod1", "mod2"};
+    private static final String[] USERS = {null, "", "abc", "adm1", "adm2", "mng1", "mod1", "mod2"};
 
-	@Test
-	public void testCommentPermissions() {
-		checkPermissions(null, Comment.class, "content", true, false);
-		checkPermissions(null, Comment.class, "visible", false, false);
-		checkPermissions(null, Comment.class, "createdBy", true, false);
+    @Test
+    public void testCommentPermissions() {
+        checkPermissions(null, Comment.class, "content", true, false);
+        checkPermissions(null, Comment.class, "visible", false, false);
+        checkPermissions(null, Comment.class, "createdBy", true, false);
 
-		checkPermissions("", Comment.class, "content", true, false);
-		checkPermissions("", Comment.class, "visible", false, false);
-		checkPermissions("", Comment.class, "createdBy", true, false);
+        checkPermissions("", Comment.class, "content", true, false);
+        checkPermissions("", Comment.class, "visible", false, false);
+        checkPermissions("", Comment.class, "createdBy", true, false);
 
-		checkPermissions("abc", Comment.class, "content", true, false);
-		checkPermissions("abc", Comment.class, "visible", false, false);
-		checkPermissions("abc", Comment.class, "createdBy", true, false);
-	}
+        checkPermissions("abc", Comment.class, "content", true, false);
+        checkPermissions("abc", Comment.class, "visible", false, false);
+        checkPermissions("abc", Comment.class, "createdBy", true, false);
+    }
 
-	@Test
-	public void testIssuePermissions() {
-		String[] fields = {"title", "year", "author", "description", "comments", "createdBy", "sharedWith"};
+    @Test
+    public void testIssuePermissions() {
+        String[] fields = {"title", "year", "author", "description", "comments", "createdBy", "sharedWith"};
 
-		for (String field : fields) {
-			for (String user : USERS) {
-				checkPermissions(user, Issue.class, field, false, false);
-			}
-			checkPermissions("foo", Issue.class, field, false, false);
-			checkPermissions("bar", Issue.class, field, false, false);
-			checkPermissions("other", Issue.class, field, true, false);
-		}
+        for (String field : fields) {
+            for (String user : USERS) {
+                checkPermissions(user, Issue.class, field, false, false);
+            }
+            checkPermissions("foo", Issue.class, field, false, false);
+            checkPermissions("bar", Issue.class, field, false, false);
+            checkPermissions("other", Issue.class, field, true, false);
+        }
 
-		Issue issue = new Issue();
+        Issue issue = new Issue();
 
-		for (String field : fields) {
-			for (String user : USERS) {
-				checkPermissions(user, Issue.class, issue, field, false, false);
-			}
-			checkPermissions("foo", Issue.class, issue, field, false, false);
-			checkPermissions("bar", Issue.class, issue, field, false, false);
-			checkPermissions("other", Issue.class, issue, field, true, false);
-		}
+        for (String field : fields) {
+            for (String user : USERS) {
+                checkPermissions(user, Issue.class, issue, field, false, false);
+            }
+            checkPermissions("foo", Issue.class, issue, field, false, false);
+            checkPermissions("bar", Issue.class, issue, field, false, false);
+            checkPermissions("other", Issue.class, issue, field, true, false);
+        }
 
-		issue.createdBy = "the-owner";
-		issue.sharedWith = U.list(new User("bar"));
+        issue.createdBy = "the-owner";
+        issue.sharedWith = U.list(new User("bar"));
 
-		for (String field : fields) {
-			for (String user : USERS) {
-				checkPermissions(user, Issue.class, issue, field, false, false);
-			}
-			checkPermissions("the-owner", Issue.class, issue, field, true, true);
-			if (field.equals("comments")) {
-				checkPermissions("bar", Issue.class, issue, field, true, true);
-			} else {
-				checkPermissions("bar", Issue.class, issue, field, true, false);
-			}
-			checkPermissions("other", Issue.class, issue, field, true, false);
-		}
+        for (String field : fields) {
+            for (String user : USERS) {
+                checkPermissions(user, Issue.class, issue, field, false, false);
+            }
+            checkPermissions("the-owner", Issue.class, issue, field, true, true);
+            if (field.equals("comments")) {
+                checkPermissions("bar", Issue.class, issue, field, true, true);
+            } else {
+                checkPermissions("bar", Issue.class, issue, field, true, false);
+            }
+            checkPermissions("other", Issue.class, issue, field, true, false);
+        }
 
-		for (String user : USERS) {
-			checkPermissions(user, Issue.class, issue, "id", true, false);
-			checkPermissions(user, Issue.class, issue, "notes", U.eq(user, "abc"), U.eq(user, "other"));
-		}
-	}
+        for (String user : USERS) {
+            checkPermissions(user, Issue.class, issue, "id", true, false);
+            checkPermissions(user, Issue.class, issue, "notes", U.eq(user, "abc"), U.eq(user, "other"));
+        }
+    }
 
-	@Test
-	public void testCategoryPermissions() {
-		for (String user : USERS) {
-			checkPermissions(user, Category.class, "name", true, true);
-			checkPermissions(user, Category.class, "desc", true, false);
-		}
+    @Test
+    public void testCategoryPermissions() {
+        for (String user : USERS) {
+            checkPermissions(user, Category.class, "name", true, true);
+            checkPermissions(user, Category.class, "desc", true, false);
+        }
 
-		checkPermissions("other", Category.class, "desc", true, true);
-	}
+        checkPermissions("other", Category.class, "desc", true, true);
+    }
 
 }

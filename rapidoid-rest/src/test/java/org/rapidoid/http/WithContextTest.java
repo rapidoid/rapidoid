@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,48 +37,48 @@ import java.util.concurrent.TimeUnit;
 @Since("5.1.0")
 public class WithContextTest extends IsolatedIntegrationTest {
 
-	private static final int JOB_COUNT = 1000;
+    private static final int JOB_COUNT = 1000;
 
-	@Test
-	public void testNestedContext() {
-		CountDownLatch latch = new CountDownLatch(JOB_COUNT + 1);
+    @Test
+    public void testNestedContext() {
+        CountDownLatch latch = new CountDownLatch(JOB_COUNT + 1);
 
-		eq(ctxInfo(), "null:[]:false");
+        eq(ctxInfo(), "null:[]:false");
 
-		With.user(new UserInfo("root", U.set("admin"))).run(() -> {
-			eq(ctxInfo(), "root:[admin]:true");
+        With.user(new UserInfo("root", U.set("admin"))).run(() -> {
+            eq(ctxInfo(), "root:[admin]:true");
 
-			for (int i = 0; i < JOB_COUNT; i++) {
-				int n = i;
+            for (int i = 0; i < JOB_COUNT; i++) {
+                int n = i;
 
-				With.user(new UserInfo("user" + n, U.set("manager" + n))).run(() -> {
-					eq(ctxInfo(), U.frmt("user%s:[manager%s]:true", n, n));
-					latch.countDown();
-				});
-			}
+                With.user(new UserInfo("user" + n, U.set("manager" + n))).run(() -> {
+                    eq(ctxInfo(), U.frmt("user%s:[manager%s]:true", n, n));
+                    latch.countDown();
+                });
+            }
 
-			eq(ctxInfo(), "root:[admin]:true");
-			latch.countDown();
-		});
+            eq(ctxInfo(), "root:[admin]:true");
+            latch.countDown();
+        });
 
-		eq(ctxInfo(), "null:[]:false");
+        eq(ctxInfo(), "null:[]:false");
 
-		Wait.on(latch, 10, TimeUnit.SECONDS);
+        Wait.on(latch, 10, TimeUnit.SECONDS);
 
-		eq(latch.getCount(), 0);
+        eq(latch.getCount(), 0);
 
-		eq(ctxInfo(), "null:[]:false");
-	}
+        eq(ctxInfo(), "null:[]:false");
+    }
 
-	@Test
-	public void testErrorHandling() {
-		With.exchange("req1").run(() -> {
-			throw Err.intentional();
-		});
-	}
+    @Test
+    public void testErrorHandling() {
+        With.exchange("req1").run(() -> {
+            throw Err.intentional();
+        });
+    }
 
-	private String ctxInfo() {
-		return U.join(":", Contextual.username(), Contextual.roles(), Contextual.isLoggedIn());
-	}
+    private String ctxInfo() {
+        return U.join(":", Contextual.username(), Contextual.roles(), Contextual.isLoggedIn());
+    }
 
 }

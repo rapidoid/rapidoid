@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,21 +36,21 @@ import org.rapidoid.u.U;
 @Since("5.1.0")
 public class DelegatingParamsAwareReqRespHandler extends AbstractDecoratingHttpHandler {
 
-	private final TwoParamLambda<Object, Req, Resp> handler;
+    private final TwoParamLambda<Object, Req, Resp> handler;
 
-	public DelegatingParamsAwareReqRespHandler(FastHttp http, HttpRoutes routes, RouteOptions options, TwoParamLambda<?, ?, ?> handler) {
-		super(http, options);
-		this.handler = U.cast(handler);
-	}
+    public DelegatingParamsAwareReqRespHandler(FastHttp http, HttpRoutes routes, RouteOptions options, TwoParamLambda<?, ?, ?> handler) {
+        super(http, options);
+        this.handler = U.cast(handler);
+    }
 
-	@Override
-	protected Object handleReq(Channel channel, boolean isKeepAlive, Req req) throws Exception {
-		return handler.execute(req, req.response());
-	}
+    @Override
+    protected Object handleReq(Channel channel, boolean isKeepAlive, Req req) throws Exception {
+        return handler.execute(req, req.response());
+    }
 
-	@Override
-	public String toString() {
-		return contentTypeInfo("(Req, Resp) -> ...");
-	}
+    @Override
+    public String toString() {
+        return contentTypeInfo("(Req, Resp) -> ...");
+    }
 
 }

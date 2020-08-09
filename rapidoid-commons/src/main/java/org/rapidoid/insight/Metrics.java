@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,121 +45,121 @@ import java.util.concurrent.TimeUnit;
 @Since("5.1.0")
 public class Metrics extends RapidoidThing implements Runnable {
 
-	public static final Map<String, TimeSeries> METRICS = Coll.synchronizedMap();
+    public static final Map<String, TimeSeries> METRICS = Coll.synchronizedMap();
 
-	public static final TimeSeries SYSTEM_CPU = new TimeSeries().title("System CPU");
-	public static final TimeSeries PROCESS_CPU = new TimeSeries().title("Process CPU");
+    public static final TimeSeries SYSTEM_CPU = new TimeSeries().title("System CPU");
+    public static final TimeSeries PROCESS_CPU = new TimeSeries().title("Process CPU");
 
-	public static final TimeSeries MEM_USED = new TimeSeries().title("Used JVM memory (MB)");
-	public static final TimeSeries MEM_TOTAL = new TimeSeries().title("Total JVM memory (MB)");
+    public static final TimeSeries MEM_USED = new TimeSeries().title("Used JVM memory (MB)");
+    public static final TimeSeries MEM_TOTAL = new TimeSeries().title("Total JVM memory (MB)");
 
-	public static final TimeSeries NUM_THREADS = new TimeSeries().title("Number of JVM threads");
-	public static final TimeSeries NUM_FILE_DESC = new TimeSeries().title("Open files and connections");
+    public static final TimeSeries NUM_THREADS = new TimeSeries().title("Number of JVM threads");
+    public static final TimeSeries NUM_FILE_DESC = new TimeSeries().title("Open files and connections");
 
-	private static volatile OperatingSystemMXBean os;
-	private static volatile Method sysCpuM;
-	private static volatile Method procCpuM;
-	private static volatile Method openFileDescriptorCount;
+    private static volatile OperatingSystemMXBean os;
+    private static volatile Method sysCpuM;
+    private static volatile Method procCpuM;
+    private static volatile Method openFileDescriptorCount;
 
-	private static volatile ThreadMXBean threads;
+    private static volatile ThreadMXBean threads;
 
-	private static final Once once = new Once();
+    private static final Once once = new Once();
 
-	public static void bootstrap() {
-		if (!once.go()) return;
+    public static void bootstrap() {
+        if (!once.go()) return;
 
-		Log.info("Bootstraping metrics");
+        Log.info("Bootstraping metrics");
 
-		os = ManagementFactory.getOperatingSystemMXBean();
-		sysCpuM = Cls.findMethod(os.getClass(), "getSystemCpuLoad");
-		procCpuM = Cls.findMethod(os.getClass(), "getProcessCpuLoad");
-		openFileDescriptorCount = Cls.findMethod(os.getClass(), "getOpenFileDescriptorCount");
+        os = ManagementFactory.getOperatingSystemMXBean();
+        sysCpuM = Cls.findMethod(os.getClass(), "getSystemCpuLoad");
+        procCpuM = Cls.findMethod(os.getClass(), "getProcessCpuLoad");
+        openFileDescriptorCount = Cls.findMethod(os.getClass(), "getOpenFileDescriptorCount");
 
-		threads = ManagementFactory.getThreadMXBean();
+        threads = ManagementFactory.getThreadMXBean();
 
-		register("cpu/system", SYSTEM_CPU);
-		register("cpu/process", PROCESS_CPU);
+        register("cpu/system", SYSTEM_CPU);
+        register("cpu/process", PROCESS_CPU);
 
-		register("mem/used", MEM_USED);
-		register("mem/total", MEM_TOTAL);
+        register("mem/used", MEM_USED);
+        register("mem/total", MEM_TOTAL);
 
-		register("threads", NUM_THREADS);
-		register("descriptors", NUM_FILE_DESC);
+        register("threads", NUM_THREADS);
+        register("descriptors", NUM_FILE_DESC);
 
-		// FIXME there are too many metrics
+        // FIXME there are too many metrics
 //		JMXMetrics.bootstrap();
 
-		Metrics updateMetrics = new Metrics();
-		updateMetrics.run();
-		Jobs.scheduleAtFixedRate(updateMetrics, 1, 1, TimeUnit.SECONDS);
-	}
+        Metrics updateMetrics = new Metrics();
+        updateMetrics.run();
+        Jobs.scheduleAtFixedRate(updateMetrics, 1, 1, TimeUnit.SECONDS);
+    }
 
-	public static TimeSeries get(String uri) {
-		return METRICS.get(uri);
-	}
+    public static TimeSeries get(String uri) {
+        return METRICS.get(uri);
+    }
 
-	public static TimeSeries register(String uri, TimeSeries metric) {
-		return METRICS.put(uri, metric);
-	}
+    public static TimeSeries register(String uri, TimeSeries metric) {
+        return METRICS.put(uri, metric);
+    }
 
-	@Override
-	public void run() {
-		Runtime rt = Runtime.getRuntime();
+    @Override
+    public void run() {
+        Runtime rt = Runtime.getRuntime();
 
-		long totalMem = rt.totalMemory();
-		long maxMem = rt.maxMemory();
-		long freeMem = rt.freeMemory();
-		long usedMem = totalMem - freeMem;
+        long totalMem = rt.totalMemory();
+        long maxMem = rt.maxMemory();
+        long freeMem = rt.freeMemory();
+        long usedMem = totalMem - freeMem;
 
-		double megs = 1024.0 * 1024;
+        double megs = 1024.0 * 1024;
 
-		MEM_TOTAL.put(U.time(), totalMem / megs);
-		MEM_USED.put(U.time(), usedMem / megs);
+        MEM_TOTAL.put(U.time(), totalMem / megs);
+        MEM_USED.put(U.time(), usedMem / megs);
 
-		if (sysCpuM != null) {
-			SYSTEM_CPU.put(U.time(), ((Number) Cls.invoke(sysCpuM, os)).doubleValue());
-		}
+        if (sysCpuM != null) {
+            SYSTEM_CPU.put(U.time(), ((Number) Cls.invoke(sysCpuM, os)).doubleValue());
+        }
 
-		if (procCpuM != null) {
-			PROCESS_CPU.put(U.time(), ((Number) Cls.invoke(procCpuM, os)).doubleValue());
-		}
+        if (procCpuM != null) {
+            PROCESS_CPU.put(U.time(), ((Number) Cls.invoke(procCpuM, os)).doubleValue());
+        }
 
-		if (openFileDescriptorCount != null) {
-			NUM_FILE_DESC.put(U.time(), ((Number) Cls.invoke(openFileDescriptorCount, os)).doubleValue());
-		}
+        if (openFileDescriptorCount != null) {
+            NUM_FILE_DESC.put(U.time(), ((Number) Cls.invoke(openFileDescriptorCount, os)).doubleValue());
+        }
 
-		NUM_THREADS.put(U.time(), threads.getThreadCount());
-	}
+        NUM_THREADS.put(U.time(), threads.getThreadCount());
+    }
 
-	public static Map<String, TimeSeries> all() {
-		return METRICS;
-	}
+    public static Map<String, TimeSeries> all() {
+        return METRICS;
+    }
 
-	public static TimeSeries measure(String title, final Number var) {
-		return measure(title, var, 1, TimeUnit.SECONDS);
-	}
+    public static TimeSeries measure(String title, final Number var) {
+        return measure(title, var, 1, TimeUnit.SECONDS);
+    }
 
-	public static TimeSeries measure(String title, final Number var, long period, TimeUnit timeUnit) {
-		return measure(title, () -> var, period, timeUnit);
-	}
+    public static TimeSeries measure(String title, final Number var, long period, TimeUnit timeUnit) {
+        return measure(title, () -> var, period, timeUnit);
+    }
 
-	public static TimeSeries measure(String title, Callable<? extends Number> var) {
-		return measure(title, var, 1, TimeUnit.SECONDS);
-	}
+    public static TimeSeries measure(String title, Callable<? extends Number> var) {
+        return measure(title, var, 1, TimeUnit.SECONDS);
+    }
 
-	public static TimeSeries measure(String title, final Callable<? extends Number> var, long period, TimeUnit timeUnit) {
+    public static TimeSeries measure(String title, final Callable<? extends Number> var, long period, TimeUnit timeUnit) {
 
-		final TimeSeries ts = new TimeSeries();
-		ts.title(title);
+        final TimeSeries ts = new TimeSeries();
+        ts.title(title);
 
-		Jobs.every(period, timeUnit).run(() -> {
-			Number value = Lmbd.call(var);
-			if (value != null) ts.put(U.time(), value.doubleValue());
-		});
+        Jobs.every(period, timeUnit).run(() -> {
+            Number value = Lmbd.call(var);
+            if (value != null) ts.put(U.time(), value.doubleValue());
+        });
 
-		register("/" + Str.textToId(title), ts);
+        register("/" + Str.textToId(title), ts);
 
-		return ts;
-	}
+        return ts;
+    }
 
 }

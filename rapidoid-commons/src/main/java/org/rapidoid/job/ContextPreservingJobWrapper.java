@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,68 +34,68 @@ import java.util.concurrent.CancellationException;
 @Since("4.1.0")
 public class ContextPreservingJobWrapper extends RapidoidThing implements Runnable {
 
-	private final Runnable job;
+    private final Runnable job;
 
-	private final Ctx ctx;
+    private final Ctx ctx;
 
-	private volatile boolean done;
+    private volatile boolean done;
 
-	public ContextPreservingJobWrapper(Runnable job, Ctx ctx) {
-		this.job = job;
-		this.ctx = ctx;
-	}
+    public ContextPreservingJobWrapper(Runnable job, Ctx ctx) {
+        this.job = job;
+        this.ctx = ctx;
+    }
 
-	@Override
-	public void run() {
-		try {
+    @Override
+    public void run() {
+        try {
 
-			Ctx existingCtx = Ctxs.get();
-			if (existingCtx != null) {
-				throw U.rte("Detected context leak! Found open context (%s) on thread: %s",
-					existingCtx.tag(), Thread.currentThread().getName());
-			}
+            Ctx existingCtx = Ctxs.get();
+            if (existingCtx != null) {
+                throw U.rte("Detected context leak! Found open context (%s) on thread: %s",
+                        existingCtx.tag(), Thread.currentThread().getName());
+            }
 
-			try {
-				if (ctx != null) {
-					Ctxs.attach(ctx);
-				} else {
-					Ctxs.open("job");
-					Log.debug("Opening new context");
-				}
+            try {
+                if (ctx != null) {
+                    Ctxs.attach(ctx);
+                } else {
+                    Ctxs.open("job");
+                    Log.debug("Opening new context");
+                }
 
-			} catch (CancellationException e) {
-				Log.warn("Job context initialization was canceled!");
-				return;
+            } catch (CancellationException e) {
+                Log.warn("Job context initialization was canceled!");
+                return;
 
-			} catch (Throwable e) {
-				Jobs.errorCounter().incrementAndGet();
-				Log.error("Job context initialization failed!", e);
-				throw U.rte("Job context initialization failed!", e);
-			}
+            } catch (Throwable e) {
+                Jobs.errorCounter().incrementAndGet();
+                Log.error("Job context initialization failed!", e);
+                throw U.rte("Job context initialization failed!", e);
+            }
 
-			try {
-				job.run();
+            try {
+                job.run();
 
-			} catch (CancellationException e) {
-				Log.warn("Job execution was canceled!");
-				return;
+            } catch (CancellationException e) {
+                Log.warn("Job execution was canceled!");
+                return;
 
-			} catch (Throwable e) {
-				Jobs.errorCounter().incrementAndGet();
-				Log.error("Job execution failed!", e);
-				throw U.rte("Job execution failed!", e);
+            } catch (Throwable e) {
+                Jobs.errorCounter().incrementAndGet();
+                Log.error("Job execution failed!", e);
+                throw U.rte("Job execution failed!", e);
 
-			} finally {
-				Ctxs.close();
-			}
+            } finally {
+                Ctxs.close();
+            }
 
-		} finally {
-			done = true;
-		}
-	}
+        } finally {
+            done = true;
+        }
+    }
 
-	public boolean isDone() {
-		return done;
-	}
+    public boolean isDone() {
+        return done;
+    }
 
 }

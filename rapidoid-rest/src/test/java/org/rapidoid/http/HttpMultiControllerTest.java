@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,46 +31,46 @@ import org.rapidoid.setup.On;
 @Since("5.0.11")
 public class HttpMultiControllerTest extends IsolatedIntegrationTest {
 
-	@Test
-	public void testSequentialControllerRegistration() {
+    @Test
+    public void testSequentialControllerRegistration() {
 
-		// this will be overwritten by the third
-		App.beans(new Object() {
-			@GET
-			public String foo(Req req) {
-				return "FOO";
-			}
-		});
+        // this will be overwritten by the third
+        App.beans(new Object() {
+            @GET
+            public String foo(Req req) {
+                return "FOO";
+            }
+        });
 
-		App.beans(new Object() {
-			@GET
-			public String bar(Req req, Resp resp) {
-				return "BAR";
-			}
-		});
+        App.beans(new Object() {
+            @GET
+            public String bar(Req req, Resp resp) {
+                return "BAR";
+            }
+        });
 
-		// this will overwrite the first
-		App.beans(new Object() {
-			@GET
-			public String foo() {
-				return "FOO2";
-			}
-		});
+        // this will overwrite the first
+        App.beans(new Object() {
+            @GET
+            public String foo() {
+                return "FOO2";
+            }
+        });
 
-		On.req((ReqHandler) req -> req.verb().equals("GET") ? "generic:" + req.uri() : null);
+        On.req((ReqHandler) req -> req.verb().equals("GET") ? "generic:" + req.uri() : null);
 
-		onlyGet("/baz?x=123");
+        onlyGet("/baz?x=123");
 
-		App.beans(new Object() {
-			@GET
-			public String baz() {
-				return "BAZZZZZZ";
-			}
-		});
+        App.beans(new Object() {
+            @GET
+            public String baz() {
+                return "BAZZZZZZ";
+            }
+        });
 
-		onlyGet("/foo");
-		onlyGet("/bar");
-		onlyGet("/baz");
-	}
+        onlyGet("/foo");
+        onlyGet("/bar");
+        onlyGet("/baz");
+    }
 
 }

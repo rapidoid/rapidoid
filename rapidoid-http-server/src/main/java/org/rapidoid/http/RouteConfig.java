@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,39 +31,39 @@ import java.util.Set;
 @Since("5.1.0")
 public interface RouteConfig {
 
-	MediaType contentType();
+    MediaType contentType();
 
-	RouteConfig contentType(MediaType contentType);
+    RouteConfig contentType(MediaType contentType);
 
-	Set<String> roles();
+    Set<String> roles();
 
-	RouteOptions roles(String... roles);
+    RouteOptions roles(String... roles);
 
-	HttpWrapper[] wrappers();
+    HttpWrapper[] wrappers();
 
-	RouteOptions wrappers(HttpWrapper... wrappers);
+    RouteOptions wrappers(HttpWrapper... wrappers);
 
-	String zone();
+    String zone();
 
-	RouteOptions zone(String zone);
+    RouteOptions zone(String zone);
 
-	boolean managed();
+    boolean managed();
 
-	RouteOptions managed(boolean managed);
+    RouteOptions managed(boolean managed);
 
-	long cacheTTL();
+    long cacheTTL();
 
-	RouteOptions cacheTTL(long cacheTTL);
+    RouteOptions cacheTTL(long cacheTTL);
 
-	int cacheCapacity();
+    int cacheCapacity();
 
-	RouteOptions cacheCapacity(int cacheCapacity);
+    RouteOptions cacheCapacity(int cacheCapacity);
 
-	boolean internal();
+    boolean internal();
 
-	RouteOptions internal(boolean internal);
+    RouteOptions internal(boolean internal);
 
-	RouteMeta meta();
+    RouteMeta meta();
 
-	RouteOptions meta(RouteMeta meta);
+    RouteOptions meta(RouteMeta meta);
 }

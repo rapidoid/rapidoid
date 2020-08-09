@@ -1,6 +1,6 @@
 /*-
  * #%L
- * rapidoid-http-server
+ * rapidoid-rest
  * %%
  * Copyright (C) 2014 - 2020 Nikolche Mihajlovski and contributors
  * %%
@@ -27,7 +27,10 @@ import org.rapidoid.http.Req;
 import org.rapidoid.http.customize.BeanValidator;
 import org.rapidoid.u.U;
 
-import javax.validation.*;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.util.Iterator;
 import java.util.Set;
 

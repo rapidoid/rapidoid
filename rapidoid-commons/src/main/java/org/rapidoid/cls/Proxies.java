@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,37 +30,37 @@ import java.util.Arrays;
 
 public class Proxies extends RapidoidThing {
 
-	@SuppressWarnings("unchecked")
-	public static <T> T createProxy(InvocationHandler handler, Class<?>... interfaces) {
-		return ((T) Proxy.newProxyInstance(interfaces[0].getClassLoader(), interfaces, handler));
-	}
+    @SuppressWarnings("unchecked")
+    public static <T> T createProxy(InvocationHandler handler, Class<?>... interfaces) {
+        return ((T) Proxy.newProxyInstance(interfaces[0].getClassLoader(), interfaces, handler));
+    }
 
-	public static <T> T implement(final Object target, final InvocationHandler handler, Class<?>... interfaces) {
-		final Class<?> targetClass = target.getClass();
+    public static <T> T implement(final Object target, final InvocationHandler handler, Class<?>... interfaces) {
+        final Class<?> targetClass = target.getClass();
 
-		return createProxy((proxy, method, args) -> {
+        return createProxy((proxy, method, args) -> {
 
-			if (method.getDeclaringClass().isAssignableFrom(targetClass)) {
-				return method.invoke(target, args);
-			}
+            if (method.getDeclaringClass().isAssignableFrom(targetClass)) {
+                return method.invoke(target, args);
+            }
 
-			return handler.invoke(proxy, method, args);
-		}, interfaces);
-	}
+            return handler.invoke(proxy, method, args);
+        }, interfaces);
+    }
 
-	public static <T> T tracer(Object target) {
-		return implementInterfaces(target, (target1, method, args) -> {
-			Log.trace("intercepting", "method", method.getName(), "args", Arrays.toString(args));
-			return method.invoke(target1, args);
-		});
-	}
+    public static <T> T tracer(Object target) {
+        return implementInterfaces(target, (target1, method, args) -> {
+            Log.trace("intercepting", "method", method.getName(), "args", Arrays.toString(args));
+            return method.invoke(target1, args);
+        });
+    }
 
-	public static <T> T implement(InvocationHandler handler, Class<?>... classes) {
-		return implement(new InterceptorProxy(U.str(classes)), handler, classes);
-	}
+    public static <T> T implement(InvocationHandler handler, Class<?>... classes) {
+        return implement(new InterceptorProxy(U.str(classes)), handler, classes);
+    }
 
-	public static <T> T implementInterfaces(Object target, InvocationHandler handler) {
-		return implement(target, handler, Cls.getImplementedInterfaces(target.getClass()));
-	}
+    public static <T> T implementInterfaces(Object target, InvocationHandler handler) {
+        return implement(target, handler, Cls.getImplementedInterfaces(target.getClass()));
+    }
 
 }
