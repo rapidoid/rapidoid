@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,7 +20,8 @@
 
 package org.rapidoid.setup;
 
-import org.rapidoid.annotation.*;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.AnyObj;
 import org.rapidoid.commons.RapidoidInitializer;
 import org.rapidoid.config.Config;
@@ -43,9 +44,6 @@ import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.Once;
 
-import javax.inject.Named;
-import javax.inject.Singleton;
-import java.lang.annotation.Annotation;
 import java.util.Map;
 
 import static org.rapidoid.util.Constants.*;
@@ -56,10 +54,6 @@ public class SetupImpl extends RapidoidInitializer implements Setup {
 
     private static final String DEFAULT_ADDRESS = "0.0.0.0";
     private static final int DEFAULT_PORT = Msc.isPlatform() ? 8888 : 8080;
-
-    private static final Class<? extends Annotation>[] IOC_ANNOTATIONS = new Class[]{
-            Controller.class, Service.class, Run.class, Named.class, Singleton.class
-    };
 
     private final String name;
 

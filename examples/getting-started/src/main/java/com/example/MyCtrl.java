@@ -5,7 +5,6 @@ import org.rapidoid.annotation.GET;
 import org.rapidoid.security.annotation.Roles;
 import org.rapidoid.u.U;
 
-import javax.inject.Inject;
 import java.util.List;
 
 @Controller
