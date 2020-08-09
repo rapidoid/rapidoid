@@ -20,12 +20,12 @@
 
 package org.rapidoid.docs.restjson;
 
-import org.rapidoid.setup.App;
+import org.rapidoid.setup.Apps;
 
 public class Main {
 
     public static void main(String[] args) {
-        App.beans(new TextTools());
+        Apps.beans(new TextTools());
     }
 
 }

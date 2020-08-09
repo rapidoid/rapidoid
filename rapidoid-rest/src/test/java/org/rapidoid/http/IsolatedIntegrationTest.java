@@ -38,7 +38,7 @@ import org.rapidoid.lambda.F3;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.util.NetUtil;
-import org.rapidoid.setup.App;
+import org.rapidoid.setup.Apps;
 import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;
 import org.rapidoid.test.RapidoidIntegrationTest;
@@ -102,7 +102,7 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
         Jobs.shutdownNow();
         U.sleep(200);
 
-        App.shutdown();
+        Apps.shutdown();
 
         RapidoidIntegrationTest.after(this);
     }

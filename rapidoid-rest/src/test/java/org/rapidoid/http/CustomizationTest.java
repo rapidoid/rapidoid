@@ -28,7 +28,7 @@ import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.JSON;
-import org.rapidoid.setup.App;
+import org.rapidoid.setup.Apps;
 import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
@@ -39,28 +39,28 @@ public class CustomizationTest extends IsolatedIntegrationTest {
 
     @Test
     public void testSerializationConfig() {
-        App.custom().jsonResponseRenderer((req, value, out) -> JSON.prettify(value, out));
+        Apps.custom().jsonResponseRenderer((req, value, out) -> JSON.prettify(value, out));
 
         On.get("/").json(() -> U.map("foo", 12, "bar", 345));
         On.get("/a").json(() -> U.map("foo", 12, "bar", 345));
 
         onlyGet("/");
 
-        App.custom().jsonResponseRenderer((req, value, out) -> JSON.stringify(value, out));
+        Apps.custom().jsonResponseRenderer((req, value, out) -> JSON.stringify(value, out));
 
         onlyGet("/a");
     }
 
     @Test
     public void testAuthConfig() {
-        App.custom().loginProvider((req, username, password) -> password.equals(username + "!"));
-        App.custom().rolesProvider((req, username) -> username.equals("root") ? U.set("admin") : U.set());
+        Apps.custom().loginProvider((req, username, password) -> password.equals(username + "!"));
+        Apps.custom().rolesProvider((req, username) -> username.equals("root") ? U.set("admin") : U.set());
         // FIXME complete the test
     }
 
     @Test
     public void testBeanParamFactoryConfig() {
-        App.beans(new Object() {
+        Apps.beans(new Object() {
             @POST
             Object aa(Num num) {
                 return num;
@@ -75,7 +75,7 @@ public class CustomizationTest extends IsolatedIntegrationTest {
 
         // customization
         ObjectMapper mapper = new ObjectMapper();
-        App.custom().beanParameterFactory((req, type, name, props) -> mapper.convertValue(req.posted(), type));
+        Apps.custom().beanParameterFactory((req, type, name, props) -> mapper.convertValue(req.posted(), type));
 
         // after customization
         onlyPost("/aa?id=3", U.map("the-name", "three"));
@@ -108,7 +108,7 @@ public class CustomizationTest extends IsolatedIntegrationTest {
     @Test
     public void customErrorHandlerByType() {
 
-        App.beans(new Object() {
+        Apps.beans(new Object() {
             @GET
             public void err5() {
                 throw new SecurityException("INTENTIONAL - Access denied!");

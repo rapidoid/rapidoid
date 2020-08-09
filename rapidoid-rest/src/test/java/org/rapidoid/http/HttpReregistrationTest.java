@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.App;
+import org.rapidoid.setup.Apps;
 import org.rapidoid.setup.On;
 
 @Authors("Nikolche Mihajlovski")
@@ -40,22 +40,22 @@ public class HttpReregistrationTest extends IsolatedIntegrationTest {
         notFound("/inc");
         notFound("/dec");
 
-        App.beans(ctrl1);
+        Apps.beans(ctrl1);
         verifyRoutes("ctrl1");
 
         onlyGet("/inc?x=5");
         notFound("/dec");
 
-        App.setup().deregister(ctrl1);
+        Apps.setup().deregister(ctrl1);
         verifyNoRoutes();
 
-        App.beans(ctrl2);
+        Apps.beans(ctrl2);
         verifyRoutes("ctrl2");
 
         onlyPost("/dec?x=12");
         notFound("/inc");
 
-        App.setup().deregister(ctrl2);
+        Apps.setup().deregister(ctrl2);
         verifyNoRoutes();
 
         notFound("/inc");
@@ -67,23 +67,23 @@ public class HttpReregistrationTest extends IsolatedIntegrationTest {
         notFound("/inc");
         notFound("/dec");
 
-        App.beans(ctrl1("nextA"));
+        Apps.beans(ctrl1("nextA"));
         verifyRoutes("ctrl1");
 
         onlyGet("/inc?x=100");
 
-        App.beans(ctrl1("nextB"));
+        Apps.beans(ctrl1("nextB"));
         verifyRoutes("ctrl1");
 
         onlyGet("/inc?x=200");
 
-        App.beans(ctrl1("nextC"));
+        Apps.beans(ctrl1("nextC"));
         verifyRoutes("ctrl1");
 
         onlyGet("/inc?x=300");
 
         // can deregister with other instance, only the class matters for deregistration, not the instance
-        App.setup().deregister(ctrl1("invisible"));
+        Apps.setup().deregister(ctrl1("invisible"));
         verifyNoRoutes();
 
         notFound("/inc");
@@ -99,7 +99,7 @@ public class HttpReregistrationTest extends IsolatedIntegrationTest {
 
         getAndPost("/foo?a=12&x=3");
 
-        App.setup().deregister("GET,POST", "/foo");
+        Apps.setup().deregister("GET,POST", "/foo");
         verifyNoRoutes();
 
         notFound("/foo");

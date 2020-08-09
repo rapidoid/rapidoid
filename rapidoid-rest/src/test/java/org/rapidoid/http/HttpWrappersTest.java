@@ -23,7 +23,7 @@ package org.rapidoid.http;
 import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.App;
+import org.rapidoid.setup.Apps;
 import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
@@ -37,20 +37,20 @@ public class HttpWrappersTest extends IsolatedIntegrationTest {
         HttpWrapper hey = wrapper("hey");
         My.wrappers(hey);
 
-        App.defaults().wrappers(wrapper("on-def"));
+        Apps.defaults().wrappers(wrapper("on-def"));
 
         On.get("/def").plain("D");
 
-        App.defaults().wrappers((HttpWrapper[]) null); // reset the default wrappers
+        Apps.defaults().wrappers((HttpWrapper[]) null); // reset the default wrappers
 
-        HttpWrapper[] wrappers = App.custom().wrappers();
+        HttpWrapper[] wrappers = Apps.custom().wrappers();
         eq(U.array(hey), wrappers);
 
         On.get("/").wrappers(wrapper("index")).plain("home");
         On.post("/x").wrappers(wrapper("x"), wrapper("x2")).json("X");
         On.get("/y").html("YYY");
 
-        App.custom().wrappers(wrapper("on"));
+        Apps.custom().wrappers(wrapper("on"));
 
         onlyGet("/");
         onlyPost("/x");

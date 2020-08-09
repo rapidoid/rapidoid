@@ -23,7 +23,7 @@ package org.rapidoid.validation;
 import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.*;
 import org.rapidoid.http.IsolatedIntegrationTest;
-import org.rapidoid.setup.App;
+import org.rapidoid.setup.Apps;
 import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;
 
@@ -36,7 +36,7 @@ public class HttpBeanValidationTest extends IsolatedIntegrationTest {
     @Test
     public void testValidation() {
         My.validator(new JavaxBeanValidator());
-        App.beans(new FooCtrl());
+        Apps.beans(new FooCtrl());
 
         onlyGet("/echo?num=123");
         onlyGet("/echo");

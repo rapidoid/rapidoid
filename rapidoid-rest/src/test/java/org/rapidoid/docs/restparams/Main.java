@@ -20,12 +20,12 @@
 
 package org.rapidoid.docs.restparams;
 
-import org.rapidoid.setup.App;
+import org.rapidoid.setup.Apps;
 
 public class Main {
 
     public static void main(String[] args) {
-        App.beans(new SubUrlParamsCtrl());
+        Apps.beans(new SubUrlParamsCtrl());
     }
 
 }

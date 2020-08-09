@@ -1,7 +1,7 @@
 package com.example;
 
 import com.dslplatform.json.CompiledJson;
-import org.rapidoid.setup.App;
+import org.rapidoid.setup.Apps;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
@@ -10,9 +10,9 @@ public class DslJsonExample {
     public static void main(String[] args) {
         DslJsonConverter dslJsonConverter = new DslJsonConverter();
 
-        App.custom().jsonResponseRenderer(dslJsonConverter);
-        App.custom().jsonRequestBodyParser(dslJsonConverter);
-        App.custom().beanParameterFactory(dslJsonConverter);
+        Apps.custom().jsonResponseRenderer(dslJsonConverter);
+        Apps.custom().jsonRequestBodyParser(dslJsonConverter);
+        Apps.custom().beanParameterFactory(dslJsonConverter);
 
         On.get("/hello").json(() -> U.map("msg", "Hello, world!"));
         On.post("/reflection").json((HelloReflection h) -> {

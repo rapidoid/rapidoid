@@ -20,7 +20,7 @@
 
 package org.rapidoid.docs.httpwrap;
 
-import org.rapidoid.setup.App;
+import org.rapidoid.setup.Apps;
 import org.rapidoid.setup.On;
 
 public class Main {
@@ -28,7 +28,7 @@ public class Main {
     public static void main(String[] args) {
         /* A wrapper executes before the handler */
 
-        App.defaults().wrappers((req, next) -> next.invokeAndTransformResult(result -> "Hey: " + result));
+        Apps.defaults().wrappers((req, next) -> next.invokeAndTransformResult(result -> "Hey: " + result));
 
         /* and provides transformation for the result */
 

@@ -23,7 +23,7 @@ package org.rapidoid.http;
 import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.App;
+import org.rapidoid.setup.Apps;
 import org.rapidoid.setup.On;
 
 @Authors("Nikolche Mihajlovski")
@@ -32,8 +32,8 @@ public class HttpWrapTest extends IsolatedIntegrationTest {
 
     @Test
     public void testWrap() {
-        App.defaults().wrappers((req, invocation) -> invocation.invokeAndTransformResult(x -> x + "!"));
-        App.defaults().contentType(MediaType.BINARY);
+        Apps.defaults().wrappers((req, invocation) -> invocation.invokeAndTransformResult(x -> x + "!"));
+        Apps.defaults().contentType(MediaType.BINARY);
 
         On.get("/").html(() -> "a");
 

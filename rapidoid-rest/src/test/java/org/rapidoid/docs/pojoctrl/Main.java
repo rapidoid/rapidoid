@@ -25,7 +25,7 @@ import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.Param;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
-import org.rapidoid.setup.App;
+import org.rapidoid.setup.Apps;
 
 public class Main {
 
@@ -35,7 +35,7 @@ public class Main {
      * , <b>@PUT</b>, <b>@DELETE</b> etc.
      */
     public static void main(String[] args) {
-        App.beans(new Object() {
+        Apps.beans(new Object() {
 
             @GET
             public String upper(@Param("s") String s) {

@@ -3,7 +3,7 @@ package com.example;
 import org.rapidoid.annotation.Valid;
 import org.rapidoid.log.Log;
 import org.rapidoid.security.Auth;
-import org.rapidoid.setup.App;
+import org.rapidoid.setup.Apps;
 import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
@@ -11,11 +11,11 @@ import org.rapidoid.u.U;
 public class GettingStartedExample {
 
     public static void main(String[] args) {
-        App.init(args, "secret=YOUR-SECRET");
+        Apps.init(args, "secret=YOUR-SECRET");
 
         Log.info("Starting application");
 
-        App.beans(new MyCtrl()); // provide beans (controllers, services etc.)
+        Apps.beans(new MyCtrl()); // provide beans (controllers, services etc.)
 
         On.get("/books").json(() -> {
             // TODO get all books
@@ -43,7 +43,7 @@ public class GettingStartedExample {
         // Gives the 'manager' role to every logged-in user except 'admin'
         My.rolesProvider((req, username) -> U.eq(username, "admin") ? Auth.getRolesFor(username) : U.set("manager"));
 
-        App.ready(); // now everything is ready, so start the application
+        Apps.ready(); // now everything is ready, so start the application
     }
 
 }
