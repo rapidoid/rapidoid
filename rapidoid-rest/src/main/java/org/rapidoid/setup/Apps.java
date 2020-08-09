@@ -25,9 +25,7 @@ import org.rapidoid.RapidoidModules;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.RapidoidInitializer;
-import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
-import org.rapidoid.env.Env;
 import org.rapidoid.http.HttpRoutes;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.impl.RouteOptions;
@@ -61,15 +59,6 @@ public class Apps extends RapidoidInitializer {
                 module.boot();
             }
         }
-    }
-
-    public static synchronized void profiles(String... profiles) {
-        Env.setProfiles(profiles);
-        Conf.reset();
-    }
-
-    public static void beans(Object... beans) {
-        setup().beans(beans);
     }
 
     public static synchronized void shutdown() {

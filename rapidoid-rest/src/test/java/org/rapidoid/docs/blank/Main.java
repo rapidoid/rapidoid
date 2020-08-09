@@ -20,12 +20,13 @@
 
 package org.rapidoid.docs.blank;
 
-import org.rapidoid.setup.Apps;
+import org.rapidoid.setup.App;
 
 public class Main {
 
     public static void main(String[] args) {
-        Apps.beans(new MyCtrl());
+        App app = new App(args);
+        app.beans(new MyCtrl());
     }
 
 }

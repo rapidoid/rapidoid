@@ -28,6 +28,7 @@ import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.JSON;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.Apps;
 import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;
@@ -60,7 +61,8 @@ public class CustomizationTest extends IsolatedIntegrationTest {
 
     @Test
     public void testBeanParamFactoryConfig() {
-        Apps.beans(new Object() {
+        App app = new App();
+        app.beans(new Object() {
             @POST
             Object aa(Num num) {
                 return num;
@@ -75,7 +77,7 @@ public class CustomizationTest extends IsolatedIntegrationTest {
 
         // customization
         ObjectMapper mapper = new ObjectMapper();
-        Apps.custom().beanParameterFactory((req, type, name, props) -> mapper.convertValue(req.posted(), type));
+        app.custom().beanParameterFactory((req, type, name, props) -> mapper.convertValue(req.posted(), type));
 
         // after customization
         onlyPost("/aa?id=3", U.map("the-name", "three"));
@@ -107,37 +109,36 @@ public class CustomizationTest extends IsolatedIntegrationTest {
 
     @Test
     public void customErrorHandlerByType() {
+        App app = new App();
 
-        Apps.beans(new Object() {
+        app.beans(new Object() {
             @GET
             public void err5() {
                 throw new SecurityException("INTENTIONAL - Access denied!");
             }
         });
 
-        My.error(NullPointerException.class).handler((req1, resp, e) -> "MY NPE");
-        My.error(RuntimeException.class).handler((req1, resp, e) -> e instanceof NotFound ? null : "MY RTE");
+        app.error(NullPointerException.class).handler((req1, resp, e) -> "MY NPE");
+        app.error(RuntimeException.class).handler((req1, resp, e) -> e instanceof NotFound ? null : "MY RTE");
 
-        On.error(SecurityException.class).handler((req1, resp, e) -> {
+        app.error(SecurityException.class).handler((req1, resp, e) -> {
             resp.code(403);
             return U.map("error", "Access denied!");
         });
 
-        My.error(SecurityException.class).handler((req1, resp, e) -> "MY SEC");
-
-        On.get("/err1").json(req -> {
+        app.get("/err1").json(req -> {
             throw new NullPointerException();
         });
 
-        On.post("/err2").json(req -> {
+        app.post("/err2").json(req -> {
             throw new RuntimeException();
         });
 
-        On.get("/err3").json(req -> {
+        app.get("/err3").json(req -> {
             throw new SecurityException("INTENTIONAL - Access denied!");
         });
 
-        On.get("/err4").json(req -> {
+        app.get("/err4").json(req -> {
             throw new OutOfMemoryError("INTENTIONAL - Out of memory!");
         });
 

@@ -24,8 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.*;
 import org.rapidoid.security.Role;
 import org.rapidoid.security.annotation.*;
-import org.rapidoid.setup.Apps;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -33,12 +32,13 @@ public class HttpRolesTest extends IsolatedIntegrationTest {
 
     @Test
     public void testRoles() {
-        Apps.beans(new Ctrl());
+        App app = new App();
+        app.beans(new Ctrl());
 
-        Apps.defaults().roles("aa", "bb");
+        app.defaults().roles("aa", "bb");
 
-        On.get("/a").json(() -> "ok");
-        On.get("/ok").roles().json(() -> "ok");
+        app.get("/a").json(() -> "ok");
+        app.get("/ok").roles().json(() -> "ok");
 
         onlyGet("/a");
         onlyGet("/ok");

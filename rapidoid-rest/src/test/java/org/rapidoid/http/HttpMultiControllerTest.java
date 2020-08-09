@@ -24,8 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.Apps;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.11")
@@ -33,16 +32,17 @@ public class HttpMultiControllerTest extends IsolatedIntegrationTest {
 
     @Test
     public void testSequentialControllerRegistration() {
+        App app = new App();
 
         // this will be overwritten by the third
-        Apps.beans(new Object() {
+        app.beans(new Object() {
             @GET
             public String foo(Req req) {
                 return "FOO";
             }
         });
 
-        Apps.beans(new Object() {
+        app.beans(new Object() {
             @GET
             public String bar(Req req, Resp resp) {
                 return "BAR";
@@ -50,18 +50,18 @@ public class HttpMultiControllerTest extends IsolatedIntegrationTest {
         });
 
         // this will overwrite the first
-        Apps.beans(new Object() {
+        app.beans(new Object() {
             @GET
             public String foo() {
                 return "FOO2";
             }
         });
 
-        On.req((ReqHandler) req -> req.verb().equals("GET") ? "generic:" + req.uri() : null);
+        app.req((ReqHandler) req -> req.verb().equals("GET") ? "generic:" + req.uri() : null);
 
         onlyGet("/baz?x=123");
 
-        Apps.beans(new Object() {
+        app.beans(new Object() {
             @GET
             public String baz() {
                 return "BAZZZZZZ";

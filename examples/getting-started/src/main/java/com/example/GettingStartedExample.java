@@ -3,6 +3,7 @@ package com.example;
 import org.rapidoid.annotation.Valid;
 import org.rapidoid.log.Log;
 import org.rapidoid.security.Auth;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.Apps;
 import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;
@@ -15,7 +16,8 @@ public class GettingStartedExample {
 
         Log.info("Starting application");
 
-        Apps.beans(new MyCtrl()); // provide beans (controllers, services etc.)
+        App app = new App();
+        app.beans(new MyCtrl()); // provide beans (controllers, services etc.)
 
         On.get("/books").json(() -> {
             // TODO get all books

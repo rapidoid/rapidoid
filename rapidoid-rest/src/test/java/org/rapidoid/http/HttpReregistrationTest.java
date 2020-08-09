@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.Apps;
 import org.rapidoid.setup.On;
 
@@ -37,25 +38,27 @@ public class HttpReregistrationTest extends IsolatedIntegrationTest {
         Object ctrl1 = ctrl1("next");
         Object ctrl2 = ctrl2();
 
+        App app = new App();
+
         notFound("/inc");
         notFound("/dec");
 
-        Apps.beans(ctrl1);
+        app.beans(ctrl1);
         verifyRoutes("ctrl1");
 
         onlyGet("/inc?x=5");
         notFound("/dec");
 
-        Apps.setup().deregister(ctrl1);
+        app.setup().deregister(ctrl1);
         verifyNoRoutes();
 
-        Apps.beans(ctrl2);
+        app.beans(ctrl2);
         verifyRoutes("ctrl2");
 
         onlyPost("/dec?x=12");
         notFound("/inc");
 
-        Apps.setup().deregister(ctrl2);
+        app.setup().deregister(ctrl2);
         verifyNoRoutes();
 
         notFound("/inc");
@@ -67,23 +70,25 @@ public class HttpReregistrationTest extends IsolatedIntegrationTest {
         notFound("/inc");
         notFound("/dec");
 
-        Apps.beans(ctrl1("nextA"));
+        App app = new App();
+
+        app.beans(ctrl1("nextA"));
         verifyRoutes("ctrl1");
 
         onlyGet("/inc?x=100");
 
-        Apps.beans(ctrl1("nextB"));
+        app.beans(ctrl1("nextB"));
         verifyRoutes("ctrl1");
 
         onlyGet("/inc?x=200");
 
-        Apps.beans(ctrl1("nextC"));
+        app.beans(ctrl1("nextC"));
         verifyRoutes("ctrl1");
 
         onlyGet("/inc?x=300");
 
         // can deregister with other instance, only the class matters for deregistration, not the instance
-        Apps.setup().deregister(ctrl1("invisible"));
+        app.setup().deregister(ctrl1("invisible"));
         verifyNoRoutes();
 
         notFound("/inc");

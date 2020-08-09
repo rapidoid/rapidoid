@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cache.Cached;
-import org.rapidoid.setup.Apps;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
@@ -63,7 +63,8 @@ public class HttpCachingTest extends IsolatedIntegrationTest {
 
     @Test
     public void testHttpCachingWithAnnotations() {
-        Apps.beans(new CachingCtrl());
+        App app = new App();
+        app.beans(new CachingCtrl());
 
         exerciseCaching();
     }

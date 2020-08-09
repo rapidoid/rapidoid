@@ -20,59 +20,67 @@
 
 package org.rapidoid.setup;
 
-import org.rapidoid.RapidoidModule;
-import org.rapidoid.RapidoidModules;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Arr;
 import org.rapidoid.commons.RapidoidInitializer;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
 import org.rapidoid.env.Env;
 import org.rapidoid.http.HttpRoutes;
+import org.rapidoid.http.ReqHandler;
+import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.customize.Customization;
+import org.rapidoid.http.handler.HttpHandler;
 import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Once;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class App extends RapidoidInitializer {
 
-    private static volatile AppStatus status = AppStatus.NOT_STARTED;
+    private final Setup setup = Setups.main();
 
-    private static final Once boot = new Once();
+    private final ServerSetup serverSetup = new ServerSetup(Conf.APP);
+
+    private volatile AppStatus status = AppStatus.NOT_STARTED;
 
     /**
      * Initializes the app in atomic way.
      * Won't serve requests until App.ready() is called.
      */
-    public static synchronized void init(String[] args, String... extraArgs) {
-        AppStarter.startUp(args, extraArgs);
+    public App() {
+        this(new String[0]);
+    }
+
+    /**
+     * Initializes the app in atomic way.
+     * Won't serve requests until App.ready() is called.
+     */
+    public App(String[] args, String... extraArgs) {
+//        AppStarter.startUp(args, extraArgs);
+
+        args = Arr.concat(extraArgs, args);
+
+//        Env.setArgs(args); // FIXME should not be global!
+//        U.must(!Conf.isInitialized(), "The configuration shouldn't be initialized yet!");  // FIXME should not be global!
 
         status = AppStatus.INITIALIZING;
 
-        boot();
+        Apps.boot();
     }
 
-    public synchronized static void boot() {
-        if (boot.go()) {
-            for (RapidoidModule module : RapidoidModules.getAll()) {
-                module.boot();
-            }
-        }
-    }
-
-    public static synchronized void profiles(String... profiles) {
+    public synchronized void profiles(String... profiles) {
         Env.setProfiles(profiles);
         Conf.reset();
     }
 
-    public static void beans(Object... beans) {
-        setup().beans(beans);
+    public void beans(Object... beans) {
+        setup.beans(beans);
     }
 
-    public static synchronized void shutdown() {
+    public synchronized void shutdown() {
         status = AppStatus.STOPPING;
 
         Setups.shutdownAll();
@@ -83,40 +91,108 @@ public class App extends RapidoidInitializer {
     /**
      * Completes the initialization and starts the application.
      */
-    public static synchronized void ready() {
-        U.must(status == AppStatus.INITIALIZING, "App.init() must be called before App.ready()!");
+    public synchronized void start() {
+        U.must(status == AppStatus.INITIALIZING, "The application is not initializing!");
 
         onAppReady();
     }
 
-    private static void onAppReady() {
+    private void onAppReady() {
         status = AppStatus.RUNNING;
-//		IoC.ready();
-        Setups.ready();
+        setup.activate();
         Log.info("!Ready.");
     }
 
-    public static AppStatus status() {
+    public AppStatus status() {
         return status;
     }
 
-    public static Setup setup() {
-        return Setups.main();
+    public Setup setup() {
+        return setup;
     }
 
-    public static Config config() {
-        return On.setup().config();
+    public Config config() {
+        return setup.config();
     }
 
-    public static Customization custom() {
-        return On.setup().custom();
+    public Customization custom() {
+        return setup.custom();
     }
 
-    public static HttpRoutes routes() {
-        return On.setup().routes();
+    public HttpRoutes routes() {
+        return setup.routes();
     }
 
-    public static RouteOptions defaults() {
-        return On.setup().defaults();
+    public RouteOptions defaults() {
+        return setup.defaults();
     }
+
+    public OnRoute route(String verb, String path) {
+        return setup.on(verb, path);
+    }
+
+    public OnRoute any(String path) {
+        return setup.any(path);
+    }
+
+    public OnRoute get(String path) {
+        return setup.get(path);
+    }
+
+    public OnRoute post(String path) {
+        return setup.post(path);
+    }
+
+    public OnRoute put(String path) {
+        return setup.put(path);
+    }
+
+    public OnRoute delete(String path) {
+        return setup.delete(path);
+    }
+
+    public OnRoute patch(String path) {
+        return setup.patch(path);
+    }
+
+    public OnRoute options(String path) {
+        return setup.options(path);
+    }
+
+    public OnRoute head(String path) {
+        return setup.head(path);
+    }
+
+    public OnRoute trace(String path) {
+        return setup.trace(path);
+    }
+
+    public OnRoute page(String path) {
+        return setup.page(path);
+    }
+
+    public Setup req(ReqHandler handler) {
+        return setup.req(handler);
+    }
+
+    public Setup req(ReqRespHandler handler) {
+        return setup.req(handler);
+    }
+
+    public Setup req(HttpHandler handler) {
+        return setup.req(handler);
+    }
+
+    public ServerSetup port(int port) {
+        return serverSetup.port(port);
+    }
+
+    public ServerSetup address(String address) {
+        return serverSetup.address(address);
+    }
+
+    public OnError error(Class<? extends Throwable> error) {
+        return setup.error(error);
+    }
+
 }

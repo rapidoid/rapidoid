@@ -23,9 +23,8 @@ package org.rapidoid.validation;
 import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.*;
 import org.rapidoid.http.IsolatedIntegrationTest;
-import org.rapidoid.setup.Apps;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.My;
-import org.rapidoid.setup.On;
 
 import javax.validation.constraints.NotNull;
 
@@ -36,7 +35,10 @@ public class HttpBeanValidationTest extends IsolatedIntegrationTest {
     @Test
     public void testValidation() {
         My.validator(new JavaxBeanValidator());
-        Apps.beans(new FooCtrl());
+
+        App app = new App();
+        app.beans(new FooCtrl());
+        app.start();
 
         onlyGet("/echo?num=123");
         onlyGet("/echo");
@@ -50,8 +52,10 @@ public class HttpBeanValidationTest extends IsolatedIntegrationTest {
 
     @Test
     public void testCustomValidation() {
-        On.get("/invalid1").html((Bar bar) -> "ok");
-        On.get("/invalid2").json((Bar bar) -> "ok");
+        App app = new App();
+
+        app.get("/invalid1").html((Bar bar) -> "ok");
+        app.get("/invalid2").json((Bar bar) -> "ok");
 
         My.validator(new JavaxBeanValidator());
 
