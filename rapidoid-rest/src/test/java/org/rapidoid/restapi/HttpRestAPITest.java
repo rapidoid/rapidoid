@@ -25,16 +25,16 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.JSON;
 import org.rapidoid.http.HttpResp;
+import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.http.ReqHandler;
 import org.rapidoid.http.Self;
 import org.rapidoid.setup.On;
 import org.rapidoid.test.ExpectErrors;
-import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.9")
-public class HttpRestAPITest extends TestCommons {
+public class HttpRestAPITest extends IsolatedIntegrationTest {
 
     private void initAPI() {
         On.get("/inc/{x}").json((ReqHandler) req -> U.num(req.param("x")) + 1);
