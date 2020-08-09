@@ -190,10 +190,6 @@ public class Beany extends RapidoidThing {
 			prop = new JSProp(property);
 		}
 
-		if (prop == null && ActionsProp.is(property)) {
-			prop = new ActionsProp();
-		}
-
 		if (mandatory && prop == null) {
 			throw U.rte("Cannot find the property '%s' in the class '%s'", property, clazz);
 		}

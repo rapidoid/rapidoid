@@ -19,15 +19,6 @@
 			<version>${project.version}</version>
 		</dependency>
 
-		<!-- OPTIONAL -->
-
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<version>${validation-api.version}</version>
-			<optional>true</optional>
-		</dependency>
-
 		<!-- TEST -->
 
 		<dependency>
