@@ -3,6 +3,6 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: application/json
-Content-Length: 18
+Content-Length: 21
 
-{"id":1,"num":123}
+{"id":null,"num":123}

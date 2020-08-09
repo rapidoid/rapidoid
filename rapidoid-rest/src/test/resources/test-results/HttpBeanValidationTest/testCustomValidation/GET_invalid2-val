@@ -3,6 +3,6 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: application/json
-Content-Length: 73
+Content-Length: 75
 
-{"error":"Validation failed!","code":422,"status":"Unprocessable Entity"}
+{"error":"My validation error!","code":422,"status":"Unprocessable Entity"}

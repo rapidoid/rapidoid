@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,6 +46,8 @@ public class ParamRetrievers extends RapidoidThing {
         Param param = Metadata.get(annotations, Param.class);
         Valid valid = Metadata.get(annotations, Valid.class);
         Required required = Metadata.get(annotations, Required.class);
+
+        boolean isAnnotatedValid = valid != null || Metadata.isAnnotated(type, Valid.class);
 
         int annotationsCount = Msc.countNonNull(cookie, header, param);
         U.must(annotationsCount <= 1, "Expected maximum one of the @Cookie, @Header, @Param, @P annotations on the same parameter!");
@@ -91,7 +93,7 @@ public class ParamRetrievers extends RapidoidThing {
 
         } else {
             if (Cls.isAppBeanType(type)) {
-                return new BeanParamRetriever(customization, type, name, valid != null);
+                return new BeanParamRetriever(customization, type, name, isAnnotatedValid);
 
             } else if (Cls.kindOf(type).isConcrete()) {
                 return new DataParamRetriever(type, name, required != null);

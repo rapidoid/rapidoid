@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,53 +23,42 @@ package org.rapidoid.validation;
 import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.customize.BeanValidator;
 import org.rapidoid.test.TestCommons;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class BeanValidationTest extends TestCommons {
 
-	@Test
-	public void testNotNull() {
-		Thing thing = new Thing(null, "desc");
+    @Test
+    public void testNotNull() {
+        Thing thing = new Thing(null, "desc");
 
-		Set<ConstraintViolation<Thing>> violations = Validators.factory().getValidator().validate(thing);
+        BeanValidator validator = new JavaxBeanValidator();
+        String msg = validator.validate(null, thing);
 
-		eq(violations.size(), 1);
-		eq(violations.iterator().next().getMessage(), "must not be null");
-	}
+        eq(msg, "Validation failed: Thing.name (must not be null)");
+    }
 
-	@Test
-	public void testSize() {
-		Thing thing = new Thing("foo", "ab");
+    @Test
+    public void testSize() {
+        Thing thing = new Thing("foo", "ab");
 
-		Set<ConstraintViolation<Thing>> violations = Validators.getViolations(thing);
+        BeanValidator validator = new JavaxBeanValidator();
+        String msg = validator.validate(null, thing);
 
-		eq(violations.size(), 1);
-		eq(violations.iterator().next().getMessage(), "size must be between 3 and 5");
-	}
+        eq(msg, "Validation failed: Thing.desc (size must be between 3 and 5)");
+    }
 
-	@Test
-	public void testNoViolations() {
-		Thing thing = new Thing("foo", "bar");
+    @Test
+    public void testNoViolations() {
+        Thing thing = new Thing("foo", "bar");
 
-		Set<ConstraintViolation<Thing>> violations = Validators.get().validate(thing);
+        BeanValidator validator = new JavaxBeanValidator();
+        String msg = validator.validate(null, thing);
 
-		eq(violations.size(), 0);
-	}
-
-	@Test
-	public void testValidationException() {
-		assertThrows(ConstraintViolationException.class, () -> {
-			Validators.validate(new Thing(null, "ab"));
-		});
-	}
+        isNull(msg);
+    }
 
 }
 

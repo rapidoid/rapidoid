@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -50,12 +50,10 @@ import org.rapidoid.thread.RapidoidThread;
 import org.rapidoid.thread.RapidoidThreadFactory;
 import org.rapidoid.thread.RapidoidThreadLocals;
 import org.rapidoid.u.U;
-import org.rapidoid.validation.InvalidData;
+import org.rapidoid.validation.RapidoidValidationError;
 import org.rapidoid.wrap.BoolWrap;
 import org.rapidoid.writable.ReusableWritable;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.management.ManagementFactory;
@@ -571,7 +569,7 @@ public class Msc extends RapidoidThing {
     }
 
     public static boolean isValidationError(Throwable error) {
-        return (error instanceof InvalidData) || error.getClass().getName().startsWith("javax.validation.");
+        return (error instanceof RapidoidValidationError);
     }
 
     public static <T> List<T> page(Iterable<T> items, int page, int pageSize) {
@@ -938,7 +936,7 @@ public class Msc extends RapidoidThing {
 
         if (cause instanceof SecurityException) {
             code = 403;
-            defaultMsg = "Access Denied!";
+            defaultMsg = "Access denied!";
 
         } else if (cause.getClass().getSimpleName().equals("NotFound")) {
             code = 404;
@@ -946,35 +944,11 @@ public class Msc extends RapidoidThing {
 
         } else if (Msc.isValidationError(cause)) {
             code = 422;
-            defaultMsg = "Validation Error!";
-
-            if (cause.getClass().getName().equals("javax.validation.ConstraintViolationException")) {
-                Set<ConstraintViolation<?>> violations = ((ConstraintViolationException) cause).getConstraintViolations();
-
-                StringBuilder sb = new StringBuilder();
-                sb.append("Validation failed: ");
-
-                for (Iterator<ConstraintViolation<?>> it = U.safe(violations).iterator(); it.hasNext(); ) {
-                    ConstraintViolation<?> v = it.next();
-
-                    sb.append(v.getRootBeanClass().getSimpleName());
-                    sb.append(".");
-                    sb.append(v.getPropertyPath());
-                    sb.append(" (");
-                    sb.append(v.getMessage());
-                    sb.append(")");
-
-                    if (it.hasNext()) {
-                        sb.append(", ");
-                    }
-                }
-
-                msg = sb.toString();
-            }
+            defaultMsg = "Validation error!";
 
         } else {
             code = 500;
-            defaultMsg = "Internal Server Error!";
+            defaultMsg = "Internal server error!";
         }
 
         msg = U.or(msg, defaultMsg);

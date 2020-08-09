@@ -20,40 +20,15 @@
 
 package org.rapidoid.validation;
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
-
-import javax.validation.*;
-import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class Validators extends RapidoidThing {
+public class RapidoidValidationError extends RuntimeException {
 
-    private static final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-
-    private static final Validator validator = factory.getValidator();
-
-    public static ValidatorFactory factory() {
-        return factory;
-    }
-
-    public static Validator get() {
-        return validator;
-    }
-
-    public static <T> Set<ConstraintViolation<T>> getViolations(T bean) {
-        return validator.validate(bean);
-    }
-
-    public static void validate(Object bean) {
-        Set<ConstraintViolation<Object>> violations = getViolations(bean);
-
-        if (U.notEmpty(violations)) {
-            throw new ConstraintViolationException(violations);
-        }
-    }
+	public RapidoidValidationError(String msg) {
+		super(msg);
+	}
 
 }

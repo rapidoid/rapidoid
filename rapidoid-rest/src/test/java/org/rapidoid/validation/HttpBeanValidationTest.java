@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,9 +26,7 @@ import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.setup.App;
 import org.rapidoid.setup.My;
 import org.rapidoid.setup.On;
-import org.rapidoid.u.U;
 
-import javax.validation.ValidationException;
 import javax.validation.constraints.NotNull;
 
 @Authors("Nikolche Mihajlovski")
@@ -37,7 +35,8 @@ public class HttpBeanValidationTest extends IsolatedIntegrationTest {
 
     @Test
     public void testValidation() {
-        App.beans(new FooService());
+        My.validator(new JavaxBeanValidator());
+        App.beans(new FooCtrl());
 
         onlyGet("/echo?num=123");
         onlyGet("/echo");
@@ -51,28 +50,20 @@ public class HttpBeanValidationTest extends IsolatedIntegrationTest {
 
     @Test
     public void testCustomValidation() {
-        On.get("/invalid1").html((@Valid Bar bar) -> "ok");
-        On.get("/invalid2").json((@Valid Bar bar) -> "ok");
+        On.get("/invalid1").html((Bar bar) -> "ok");
+        On.get("/invalid2").json((Bar bar) -> "ok");
 
-        App.custom().validator((req, bean) -> {
-            throw U.rte("Invalid!");
-        });
+        My.validator(new JavaxBeanValidator());
 
         onlyGet("/invalid1?err");
         onlyGet("/invalid2?err");
 
-        App.custom().validator(null);
-        My.validator((req, bean) -> {
-            throw new ValidationException("Validation failed!");
-        });
+        My.validator((req, bean) -> "My validation error!");
 
         onlyGet("/invalid1?val");
         onlyGet("/invalid2?val");
 
         My.validator(null);
-        App.custom().validator((req, bean) -> {
-            throw new InvalidData("Invalid data!");
-        });
 
         onlyGet("/invalid1?inv");
         onlyGet("/invalid2?inv");
@@ -96,8 +87,7 @@ class Foo {
     }
 }
 
-@Service
-class FooService {
+class FooCtrl {
 
     @GET
     public Foo echo(Foo foo) {
@@ -110,12 +100,14 @@ class FooService {
     }
 
     @POST
-    public Foo save(Foo foo) {
+    public Foo save(@Valid Foo foo) {
         return foo;
     }
 
 }
 
+@Valid
 class Bar {
+    @NotNull
     public Long x;
 }

@@ -1,4 +1,4 @@
-package org.rapidoid.restapi;/*-
+/*-
  * #%L
  * rapidoid-rest
  * %%
@@ -18,6 +18,8 @@ package org.rapidoid.restapi;/*-
  * #L%
  */
 
+package org.rapidoid.restapi;
+
 import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -29,7 +31,6 @@ import org.rapidoid.setup.On;
 import org.rapidoid.test.ExpectErrors;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
-import org.rapidoid.util.MscOpts;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.9")
@@ -37,12 +38,6 @@ public class HttpRestAPITest extends TestCommons {
 
 	private void initAPI() {
 		On.get("/inc/{x}").json((ReqHandler) req -> U.num(req.param("x")) + 1);
-	}
-
-	@Test
-	public void testIncludedModules() {
-		isFalse(MscOpts.hasRapidoidGUI());
-		isFalse(MscOpts.hasRapidoidRender());
 	}
 
 	@Test
