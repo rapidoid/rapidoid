@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,25 +20,23 @@
 
 package org.rapidoid.docs.restjson;
 
-import org.rapidoid.annotation.Controller;
 import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.POST;
 import org.rapidoid.u.U;
 
 import java.util.Map;
 
-@Controller
 public class TextTools {
 
-	@GET("/upper/{s}")
-	public Map<String, String> upper(String s) {
-		String big = s.toUpperCase();
-		return U.map("normal", s, "big", big);
-	}
+    @GET("/upper/{s}")
+    public Map<String, String> upper(String s) {
+        String big = s.toUpperCase();
+        return U.map("normal", s, "big", big);
+    }
 
-	@POST
-	public String[] parts(String text) {
-		return text.split("-");
-	}
+    @POST
+    public String[] parts(String text) {
+        return text.split("-");
+    }
 
 }

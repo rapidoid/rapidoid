@@ -3,6 +3,6 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: application/json
-Content-Length: 2
+Content-Length: 55
 
-{uri=/abc2?custom, parsed={x=13579, foo=bar}}
+{"uri":"/abc2?custom","parsed":{"x":13579,"foo":"bar"}}
