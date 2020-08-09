@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,29 +21,26 @@
 package org.rapidoid.docs.httpchunked;
 
 import org.rapidoid.job.Jobs;
-import org.rapidoid.setup.App;
 import org.rapidoid.setup.On;
 
 public class Main {
 
-	public static void main(String[] args) {
-		App.run(args);
+    public static void main(String[] args) {
+        On.get("/hello").plain((req, resp) -> {
 
-		On.get("/hello").plain((req, resp) -> {
+            req.async(); // mark asynchronous request processing
 
-			req.async(); // mark asynchronous request processing
+            // send part 1
+            resp.chunk("part 1".getBytes());
 
-			// send part 1
-			resp.chunk("part 1".getBytes());
+            // after some time, send part 2 and finish
+            Jobs.after(100).milliseconds(() -> {
+                resp.chunk(" & part 2".getBytes());
+                resp.done();
+            });
 
-			// after some time, send part 2 and finish
-			Jobs.after(100).milliseconds(() -> {
-				resp.chunk(" & part 2".getBytes());
-				resp.done();
-			});
-
-			return resp;
-		});
-	}
+            return resp;
+        });
+    }
 
 }

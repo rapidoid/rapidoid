@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -55,539 +55,539 @@ import java.util.concurrent.ArrayBlockingQueue;
 @Since("2.0.0")
 public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> implements NetWorker {
 
-	public static int MAX_IO_WORKERS = 1024;
+    public static int MAX_IO_WORKERS = 1024;
 
-	public static boolean EXTRA_SAFE = false;
+    public static boolean EXTRA_SAFE = false;
 
-	private static final ExpirationCrawlerThread idleConnectionsCrawler;
+    private static final ExpirationCrawlerThread idleConnectionsCrawler;
 
-	private static final int connTimeout;
+    private static final int connTimeout;
 
-	private final Queue<SocketChannel> connected;
+    private final Queue<SocketChannel> connected;
 
-	private final SimpleList<RapidoidConnection> done;
+    private final SimpleList<RapidoidConnection> done;
 
-	private final Pool<RapidoidConnection> connections;
+    private final Pool<RapidoidConnection> connections;
 
-	private final Set<RapidoidConnection> allConnections = Coll.concurrentSet();
+    private final Set<RapidoidConnection> allConnections = Coll.concurrentSet();
 
-	final Protocol serverProtocol;
+    final Protocol serverProtocol;
 
-	final RapidoidHelper helper;
+    final RapidoidHelper helper;
 
-	private final int bufSize;
+    private final int bufSize;
 
-	private final boolean noDelay;
+    private final boolean noDelay;
 
-	private final long maxPipeline;
+    private final long maxPipeline;
 
-	private final BufGroup bufs;
+    private final BufGroup bufs;
 
-	private volatile long messagesProcessed;
+    private volatile long messagesProcessed;
 
-	private final SSLContext sslContext;
+    private final SSLContext sslContext;
 
-	private final TLSParams tlsParams;
+    private final TLSParams tlsParams;
 
-	RapidoidWorker next;
+    RapidoidWorker next;
 
-	static {
-		int timeoutResolution = Conf.HTTP.entry("timeoutResolution").or(5000);
-		connTimeout = Conf.HTTP.entry("timeout").or(30000);
+    static {
+        int timeoutResolution = Conf.HTTP.entry("timeoutResolution").or(5000);
+        connTimeout = Conf.HTTP.entry("timeout").or(30000);
 
-		if (timeoutResolution > 0 && connTimeout > 0) {
-			idleConnectionsCrawler = Expire.crawler("idleConnections", timeoutResolution);
-		} else {
-			idleConnectionsCrawler = null;
-		}
-	}
+        if (timeoutResolution > 0 && connTimeout > 0) {
+            idleConnectionsCrawler = Expire.crawler("idleConnections", timeoutResolution);
+        } else {
+            idleConnectionsCrawler = null;
+        }
+    }
 
-	public RapidoidWorker(String name, final RapidoidHelper helper, NetworkingParams net, TLSParams tlsParams) {
+    public RapidoidWorker(String name, final RapidoidHelper helper, NetworkingParams net, TLSParams tlsParams) {
 
-		super(name);
+        super(name);
 
-		this.bufSize = net.bufSizeKB() * 1024;
-		this.noDelay = net.noDelay();
-		this.bufs = new BufGroup(bufSize, net.syncBufs());
+        this.bufSize = net.bufSizeKB() * 1024;
+        this.noDelay = net.noDelay();
+        this.bufs = new BufGroup(bufSize, net.syncBufs());
 
-		this.serverProtocol = net.protocol();
-		this.helper = helper;
-		this.sslContext = tlsParams.buildTLSContext();
-		this.tlsParams = tlsParams;
+        this.serverProtocol = net.protocol();
+        this.helper = helper;
+        this.sslContext = tlsParams.buildTLSContext();
+        this.tlsParams = tlsParams;
 
-		this.maxPipeline = net.maxPipeline();
+        this.maxPipeline = net.maxPipeline();
 
-		final int queueSize = ConfigUtil.micro() ? 1000 : 1000000;
-		final int growFactor = ConfigUtil.micro() ? 2 : 10;
+        final int queueSize = ConfigUtil.micro() ? 1000 : 1000000;
+        final int growFactor = ConfigUtil.micro() ? 2 : 10;
 
-		this.connected = new ArrayBlockingQueue<>(queueSize);
-		this.done = new SimpleList<>(queueSize / 10, growFactor);
+        this.connected = new ArrayBlockingQueue<>(queueSize);
+        this.done = new SimpleList<>(queueSize / 10, growFactor);
 
-		connections = Pools.create("connections", () -> newConnection(false), 100000);
+        connections = Pools.create("connections", () -> newConnection(false), 100000);
 
-		if (idleConnectionsCrawler != null) {
-			idleConnectionsCrawler.register(allConnections);
-		}
-	}
+        if (idleConnectionsCrawler != null) {
+            idleConnectionsCrawler.register(allConnections);
+        }
+    }
 
-	@Override
-	public void accept(SocketChannel socketChannel) {
-		connected.add(socketChannel);
-		selector.wakeup();
-	}
+    @Override
+    public void accept(SocketChannel socketChannel) {
+        connected.add(socketChannel);
+        selector.wakeup();
+    }
 
-	private void configureSocket(SocketChannel socketChannel) throws IOException {
-		socketChannel.configureBlocking(false);
+    private void configureSocket(SocketChannel socketChannel) throws IOException {
+        socketChannel.configureBlocking(false);
 
-		Socket socket = socketChannel.socket();
-		socket.setTcpNoDelay(noDelay);
-		socket.setReceiveBufferSize(bufSize);
-		socket.setSendBufferSize(bufSize);
-		socket.setReuseAddress(true);
-	}
+        Socket socket = socketChannel.socket();
+        socket.setTcpNoDelay(noDelay);
+        socket.setReceiveBufferSize(bufSize);
+        socket.setSendBufferSize(bufSize);
+        socket.setReuseAddress(true);
+    }
 
-	@Override
-	protected void readOP(SelectionKey key) {
-		SocketChannel socketChannel = (SocketChannel) key.channel();
-		RapidoidConnection conn = (RapidoidConnection) key.attachment();
+    @Override
+    protected void readOP(SelectionKey key) {
+        SocketChannel socketChannel = (SocketChannel) key.channel();
+        RapidoidConnection conn = (RapidoidConnection) key.attachment();
 
-		readInto(socketChannel, conn);
+        readInto(socketChannel, conn);
 
-		process(conn);
+        process(conn);
 
-		if (conn.closing) {
-			close(key);
-		}
-	}
+        if (conn.closing) {
+            close(key);
+        }
+    }
 
-	private void readInto(SocketChannel socketChannel, RapidoidConnection conn) {
-		int read;
-		try {
+    private void readInto(SocketChannel socketChannel, RapidoidConnection conn) {
+        int read;
+        try {
 
-			if (conn.hasTLS) {
-				if (conn.tls.netIn.hasRemaining()) {
-					read = socketChannel.read(conn.tls.netIn);
+            if (conn.hasTLS) {
+                if (conn.tls.netIn.hasRemaining()) {
+                    read = socketChannel.read(conn.tls.netIn);
 
-				} else {
-					read = 0;
-				}
-			} else {
-				read = conn.input.append(socketChannel);
-			}
+                } else {
+                    read = 0;
+                }
+            } else {
+                read = conn.input.append(socketChannel);
+            }
 
-		} catch (Exception e) {
-			Log.debug("Connection error", e);
-			read = -1;
-		}
+        } catch (Exception e) {
+            Log.debug("Connection error", e);
+            read = -1;
+        }
 
-		if (read == -1) {
-			// the connection was closed
-			Log.debug("The connection was closed!");
-			conn.closing = true;
+        if (read == -1) {
+            // the connection was closed
+            Log.debug("The connection was closed!");
+            conn.closing = true;
 
-			if (conn.hasTLS) {
-				conn.tls.closeInbound();
-			}
+            if (conn.hasTLS) {
+                conn.tls.closeInbound();
+            }
 
-		} else {
+        } else {
 
-			if (conn.hasTLS) {
-				if (read > 0) {
-					boolean success = conn.tls.unwrapInput();
-					if (success) wantToWrite(conn);
-				}
-			}
-		}
-	}
+            if (conn.hasTLS) {
+                if (read > 0) {
+                    boolean success = conn.tls.unwrapInput();
+                    if (success) wantToWrite(conn);
+                }
+            }
+        }
+    }
 
-	@Override
-	public void process(RapidoidConnection conn) {
-		messagesProcessed += processMsgs(conn);
+    @Override
+    public void process(RapidoidConnection conn) {
+        messagesProcessed += processMsgs(conn);
 
-		conn.completedInputPos = conn.input.position();
-	}
+        conn.completedInputPos = conn.input.position();
+    }
 
-	private long processMsgs(RapidoidConnection conn) {
-		long reqN = 0;
+    private long processMsgs(RapidoidConnection conn) {
+        long reqN = 0;
 
-		while ((reqN < maxPipeline || maxPipeline <= 0) && conn.input().hasRemaining() && processNext(conn, false)) {
-			reqN++;
-		}
+        while ((reqN < maxPipeline || maxPipeline <= 0) && conn.input().hasRemaining() && processNext(conn, false)) {
+            reqN++;
+        }
 
-		touch(conn);
+        touch(conn);
 
-		return reqN;
-	}
+        return reqN;
+    }
 
-	private boolean processNext(RapidoidConnection conn, boolean initial) {
+    private boolean processNext(RapidoidConnection conn, boolean initial) {
 
-		long seq;
+        long seq;
 
-		if (initial) {
-			// conn.log("<< INIT >>");
+        if (initial) {
+            // conn.log("<< INIT >>");
 
-			seq = 0;
-			conn.requestId = -1;
-		} else {
+            seq = 0;
+            conn.requestId = -1;
+        } else {
 
-			seq = conn.readSeq.incrementAndGet();
+            seq = conn.readSeq.incrementAndGet();
 
-			// conn.log("<< PROCESS >>");
-			U.must(conn.input().hasRemaining());
+            // conn.log("<< PROCESS >>");
+            U.must(conn.input().hasRemaining());
 
-			conn.requestId = helper.requestIdGen;
-			helper.requestIdGen += MAX_IO_WORKERS;
-			helper.requestCounter++;
-		}
+            conn.requestId = helper.requestIdGen;
+            helper.requestIdGen += MAX_IO_WORKERS;
+            helper.requestCounter++;
+        }
 
-		// prepare for a rollback in case the message isn't complete yet
-		conn.input().checkpoint(conn.input().position());
+        // prepare for a rollback in case the message isn't complete yet
+        conn.input().checkpoint(conn.input().position());
 
-		int limit = conn.input().limit();
-		int osize = conn.output().size();
+        int limit = conn.input().limit();
+        int osize = conn.output().size();
 
-		BufUtil.doneWriting(conn.input());
+        BufUtil.doneWriting(conn.input());
 
-		ConnState state = conn.state();
-		long stateN = state.n;
-		Object stateObj = state.obj;
+        ConnState state = conn.state();
+        long stateN = state.n;
+        Object stateObj = state.obj;
 
-		try {
-			conn.done = false;
-			conn.async = false;
+        try {
+            conn.done = false;
+            conn.async = false;
 
-			if (EXTRA_SAFE) {
-				processNextExtraSafe(conn);
-			} else {
-				Protocol protocol = conn.getProtocol();
+            if (EXTRA_SAFE) {
+                processNextExtraSafe(conn);
+            } else {
+                Protocol protocol = conn.getProtocol();
 
-				if (protocol == null) {
-					return false;
-				}
+                if (protocol == null) {
+                    return false;
+                }
 
-				protocol.process(conn);
-			}
+                protocol.process(conn);
+            }
 
-			BufUtil.startWriting(conn.input());
+            BufUtil.startWriting(conn.input());
 
-			if (!conn.isAsync()) {
-				if (!conn.closed) {
-					conn.done();
-				}
+            if (!conn.isAsync()) {
+                if (!conn.closed) {
+                    conn.done();
+                }
 
-				conn.processedSeq(seq);
-			}
+                conn.processedSeq(seq);
+            }
 
-			conn.input().deleteBefore(conn.input().checkpoint());
+            conn.input().deleteBefore(conn.input().checkpoint());
 
-			// Log.debug("Completed message processing");
-			return true;
+            // Log.debug("Completed message processing");
+            return true;
 
-		} catch (IncompleteReadException e) {
+        } catch (IncompleteReadException e) {
 
-			// Log.debug("Incomplete message");
-			conn.log("<< ROLLBACK >>");
+            // Log.debug("Incomplete message");
+            conn.log("<< ROLLBACK >>");
 
-			// input not complete, so rollback
-			conn.input().position(conn.input().checkpoint());
-			conn.input().limit(limit);
-			BufUtil.startWriting(conn.input());
+            // input not complete, so rollback
+            conn.input().position(conn.input().checkpoint());
+            conn.input().limit(limit);
+            BufUtil.startWriting(conn.input());
 
-			state.n = stateN;
-			state.obj = stateObj;
+            state.n = stateN;
+            state.obj = stateObj;
 
-			boolean decreased = conn.readSeq.compareAndSet(seq, seq - 1);
-			U.must(decreased, "Error in the request order control! Handle: %s", seq);
+            boolean decreased = conn.readSeq.compareAndSet(seq, seq - 1);
+            U.must(decreased, "Error in the request order control! Handle: %s", seq);
 
-		} catch (ProtocolException e) {
+        } catch (ProtocolException e) {
 
-			conn.log("<< PROTOCOL ERROR >>");
-			Log.warn("Protocol error", "error", e);
+            conn.log("<< PROTOCOL ERROR >>");
+            Log.warn("Protocol error", "error", e);
 
-			conn.output().deleteAfter(osize);
-			conn.write(U.or(e.getMessage(), "Protocol error!"));
-			conn.error();
+            conn.output().deleteAfter(osize);
+            conn.write(U.or(e.getMessage(), "Protocol error!"));
+            conn.error();
 
-			conn.processedSeq(seq);
-			conn.close(true);
+            conn.processedSeq(seq);
+            conn.close(true);
 
-		} catch (Throwable e) {
+        } catch (Throwable e) {
 
-			conn.log("<< ERROR >>");
-			Log.error("Failed to process message!", e);
+            conn.log("<< ERROR >>");
+            Log.error("Failed to process message!", e);
 
-			conn.processedSeq(seq);
-			conn.close(true);
-		}
+            conn.processedSeq(seq);
+            conn.close(true);
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	private void processNextExtraSafe(RapidoidConnection conn) {
-		if (Ctxs.hasContext()) {
-			Log.warn("Detected unclosed context before processing message!");
-			Ctxs.close();
-		}
+    private void processNextExtraSafe(RapidoidConnection conn) {
+        if (Ctxs.hasContext()) {
+            Log.warn("Detected unclosed context before processing message!");
+            Ctxs.close();
+        }
 
-		try {
-			conn.getProtocol().process(conn);
-		} finally {
-			if (Ctxs.hasContext()) {
-				Log.warn("Detected unclosed context after processing message!");
-				Ctxs.close();
-			}
-		}
-	}
+        try {
+            conn.getProtocol().process(conn);
+        } finally {
+            if (Ctxs.hasContext()) {
+                Log.warn("Detected unclosed context after processing message!");
+                Ctxs.close();
+            }
+        }
+    }
 
-	@Override
-	public void close(RapidoidConnection conn) {
-		close(conn.key);
-	}
+    @Override
+    public void close(RapidoidConnection conn) {
+        close(conn.key);
+    }
 
-	private void close(SelectionKey key) {
-		try {
-			if (key != null) {
+    private void close(SelectionKey key) {
+        try {
+            if (key != null) {
 
-				Object attachment = key.attachment();
+                Object attachment = key.attachment();
 
-				clearKey(key);
+                clearKey(key);
 
-				if (attachment instanceof RapidoidConnection) {
-					RapidoidConnection conn = (RapidoidConnection) attachment;
+                if (attachment instanceof RapidoidConnection) {
+                    RapidoidConnection conn = (RapidoidConnection) attachment;
 
-					if (!conn.closed) {
-						Log.trace("Closing connection", "connection", conn);
-						assert conn.key == key;
-						conn.reset();
-						connections.release(conn);
-					}
-				}
-			}
-		} catch (IOException e) {
-			Log.warn("Error while closing connection!", e);
-		}
-	}
+                    if (!conn.closed) {
+                        Log.trace("Closing connection", "connection", conn);
+                        assert conn.key == key;
+                        conn.reset();
+                        connections.release(conn);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            Log.warn("Error while closing connection!", e);
+        }
+    }
 
-	private void clearKey(SelectionKey key) throws IOException {
-		if (key.isValid()) {
-			SocketChannel socketChannel = (SocketChannel) key.channel();
-			socketChannel.close();
-			key.attach(null);
-			key.cancel();
-		}
-	}
+    private void clearKey(SelectionKey key) throws IOException {
+        if (key.isValid()) {
+            SocketChannel socketChannel = (SocketChannel) key.channel();
+            socketChannel.close();
+            key.attach(null);
+            key.cancel();
+        }
+    }
 
-	@Override
-	protected void writeOP(SelectionKey key) {
-		RapidoidConnection conn = (RapidoidConnection) key.attachment();
-		SocketChannel socketChannel = (SocketChannel) key.channel();
+    @Override
+    protected void writeOP(SelectionKey key) {
+        RapidoidConnection conn = (RapidoidConnection) key.attachment();
+        SocketChannel socketChannel = (SocketChannel) key.channel();
 
-		checkOnSameThread();
+        checkOnSameThread();
 
-		touch(conn);
+        touch(conn);
 
-		try {
-			synchronized (conn) {
-				synchronized (conn.outgoing) {
+        try {
+            synchronized (conn) {
+                synchronized (conn.outgoing) {
 
-					if (conn.hasTLS) {
-						synchronized (conn.output) {
-							conn.tls.wrapToOutgoing();
-						}
-					}
+                    if (conn.hasTLS) {
+                        synchronized (conn.output) {
+                            conn.tls.wrapToOutgoing();
+                        }
+                    }
 
-					writeOp(key, conn, socketChannel);
-				}
-			}
+                    writeOp(key, conn, socketChannel);
+                }
+            }
 
-		} catch (IOException e) {
-			close(conn);
+        } catch (IOException e) {
+            close(conn);
 
-		} catch (CancelledKeyException cke) {
-			Log.debug("Tried to write on canceled selector key!");
-		}
-	}
+        } catch (CancelledKeyException cke) {
+            Log.debug("Tried to write on canceled selector key!");
+        }
+    }
 
-	private void writeOp(SelectionKey key, RapidoidConnection conn, SocketChannel socketChannel) throws IOException {
+    private void writeOp(SelectionKey key, RapidoidConnection conn, SocketChannel socketChannel) throws IOException {
 
-		synchronized (conn.outgoing) {
-			if (conn.outgoing.hasRemaining()) {
-				conn.log("WRITING");
+        synchronized (conn.outgoing) {
+            if (conn.outgoing.hasRemaining()) {
+                conn.log("WRITING");
 //					conn.log(conn.outgoing.asText());
-				BufUtil.startWriting(conn.outgoing);
-				int wrote = conn.outgoing.writeTo(socketChannel);
-				conn.outgoing.deleteBefore(wrote);
-				BufUtil.doneWriting(conn.outgoing);
-				conn.log("DONE WRITING");
-			}
-		}
+                BufUtil.startWriting(conn.outgoing);
+                int wrote = conn.outgoing.writeTo(socketChannel);
+                conn.outgoing.deleteBefore(wrote);
+                BufUtil.doneWriting(conn.outgoing);
+                conn.log("DONE WRITING");
+            }
+        }
 
-		boolean finishedWriting, closeAfterWrite;
-		synchronized (conn) {
-			finishedWriting = conn.finishedWriting();
-			closeAfterWrite = conn.closeAfterWrite();
-		}
+        boolean finishedWriting, closeAfterWrite;
+        synchronized (conn) {
+            finishedWriting = conn.finishedWriting();
+            closeAfterWrite = conn.closeAfterWrite();
+        }
 
-		if (finishedWriting && closeAfterWrite) {
-			close(conn);
+        if (finishedWriting && closeAfterWrite) {
+            close(conn);
 
-		} else {
-			if (finishedWriting) {
-				key.interestOps(SelectionKey.OP_READ);
-			} else {
-				key.interestOps(SelectionKey.OP_READ + SelectionKey.OP_WRITE);
-			}
-			conn.wrote(finishedWriting);
-		}
-	}
+        } else {
+            if (finishedWriting) {
+                key.interestOps(SelectionKey.OP_READ);
+            } else {
+                key.interestOps(SelectionKey.OP_READ + SelectionKey.OP_WRITE);
+            }
+            conn.wrote(finishedWriting);
+        }
+    }
 
-	@Override
-	public void wantToWrite(RapidoidConnection conn) {
-		touch(conn);
+    @Override
+    public void wantToWrite(RapidoidConnection conn) {
+        touch(conn);
 
-		if (onSameThread()) {
-			conn.key.interestOps(SelectionKey.OP_WRITE);
-		} else {
-			wantToWriteAsync(conn);
-		}
-	}
+        if (onSameThread()) {
+            conn.key.interestOps(SelectionKey.OP_WRITE);
+        } else {
+            wantToWriteAsync(conn);
+        }
+    }
 
-	private void wantToWriteAsync(RapidoidConnection conn) {
-		touch(conn);
+    private void wantToWriteAsync(RapidoidConnection conn) {
+        touch(conn);
 
-		synchronized (done) {
-			done.add(conn);
-		}
+        synchronized (done) {
+            done.add(conn);
+        }
 
-		selector.wakeup();
-	}
+        selector.wakeup();
+    }
 
-	@Override
-	protected void doProcessing() {
+    @Override
+    protected void doProcessing() {
 
-		SocketChannel schannel;
+        SocketChannel schannel;
 
-		while ((schannel = connected.poll()) != null) {
+        while ((schannel = connected.poll()) != null) {
 
-			try {
-				configureSocket(schannel);
-			} catch (IOException e) {
-				Log.error("Cannot configure channel!", e);
-				continue;
-			}
+            try {
+                configureSocket(schannel);
+            } catch (IOException e) {
+                Log.error("Cannot configure channel!", e);
+                continue;
+            }
 
-			RapidoidChannel channel = new RapidoidChannel(schannel, false, serverProtocol);
+            RapidoidChannel channel = new RapidoidChannel(schannel, false, serverProtocol);
 
-			SocketChannel socketChannel = channel.socketChannel;
-			Log.debug("connected", "address", socketChannel.socket().getRemoteSocketAddress());
+            SocketChannel socketChannel = channel.socketChannel;
+            Log.debug("connected", "address", socketChannel.socket().getRemoteSocketAddress());
 
-			try {
-				SelectionKey newKey = socketChannel.register(selector, SelectionKey.OP_READ);
-				U.notNull(channel.protocol, "protocol");
-				RapidoidConnection conn = attachConn(newKey, channel.protocol);
+            try {
+                SelectionKey newKey = socketChannel.register(selector, SelectionKey.OP_READ);
+                U.notNull(channel.protocol, "protocol");
+                RapidoidConnection conn = attachConn(newKey, channel.protocol);
 
-				conn.setClient(channel.isClient);
+                conn.setClient(channel.isClient);
 
-				try {
-					processNext(conn, true);
-				} finally {
-					conn.setInitial(false);
-				}
+                try {
+                    processNext(conn, true);
+                } finally {
+                    conn.setInitial(false);
+                }
 
-			} catch (ClosedChannelException e) {
-				Log.warn("Closed channel", e);
-			}
-		}
+            } catch (ClosedChannelException e) {
+                Log.warn("Closed channel", e);
+            }
+        }
 
-		synchronized (done) {
-			for (int i = 0; i < done.size(); i++) {
-				RapidoidConnection conn = done.get(i);
-				if (conn.key != null && conn.key.isValid()) {
-					conn.key.interestOps(SelectionKey.OP_WRITE);
-				}
-			}
-			done.clear();
-		}
-	}
+        synchronized (done) {
+            for (int i = 0; i < done.size(); i++) {
+                RapidoidConnection conn = done.get(i);
+                if (conn.key != null && conn.key.isValid()) {
+                    conn.key.interestOps(SelectionKey.OP_WRITE);
+                }
+            }
+            done.clear();
+        }
+    }
 
-	private RapidoidConnection attachConn(SelectionKey key, Protocol protocol) {
-		U.notNull(key, "protocol");
-		U.notNull(protocol, "protocol");
+    private RapidoidConnection attachConn(SelectionKey key, Protocol protocol) {
+        U.notNull(key, "protocol");
+        U.notNull(protocol, "protocol");
 
-		assert key.attachment() == null;
+        assert key.attachment() == null;
 
-		RapidoidConnection conn = connections.get();
+        RapidoidConnection conn = connections.get();
 
-		// the connection is reset when closed
-		// but a protocol can modify the connection after closing it
-		// so it is reset again before reuse
-		conn.reset();
+        // the connection is reset when closed
+        // but a protocol can modify the connection after closing it
+        // so it is reset again before reuse
+        conn.reset();
 
-		U.must(conn.closed);
-		conn.closed = false;
+        U.must(conn.closed);
+        conn.closed = false;
 
-		conn.key = key;
-		conn.setProtocol(protocol);
+        conn.key = key;
+        conn.setProtocol(protocol);
 
 //		if (protocol instanceof CtxListener) {
 //			conn.setListener((CtxListener) protocol);
 //		}
 
-		key.attach(conn);
+        key.attach(conn);
 
-		touch(conn);
+        touch(conn);
 
-		return conn;
-	}
+        return conn;
+    }
 
-	private void touch(RapidoidConnection conn) {
-		conn.setExpiresAt(approxTime + connTimeout);
-	}
+    private void touch(RapidoidConnection conn) {
+        conn.setExpiresAt(approxTime + connTimeout);
+    }
 
-	@Override
-	protected void failedOP(SelectionKey key, Throwable e) {
-		Log.error("Network error", e);
-		close(key);
-	}
+    @Override
+    protected void failedOP(SelectionKey key, Throwable e) {
+        Log.error("Network error", e);
+        close(key);
+    }
 
-	@Override
-	public RapidoidConnection newConnection(boolean client) {
-		U.must(!client, "Client connections are not supported by this worker!");
-		RapidoidConnection conn = new RapidoidConnection(RapidoidWorker.this, bufs, this.tlsParams);
-		allConnections.add(conn);
-		return conn;
-	}
+    @Override
+    public RapidoidConnection newConnection(boolean client) {
+        U.must(!client, "Client connections are not supported by this worker!");
+        RapidoidConnection conn = new RapidoidConnection(RapidoidWorker.this, bufs, this.tlsParams);
+        allConnections.add(conn);
+        return conn;
+    }
 
-	@Override
-	public long getMessagesProcessed() {
-		return messagesProcessed;
-	}
+    @Override
+    public long getMessagesProcessed() {
+        return messagesProcessed;
+    }
 
-	@Override
-	protected synchronized void stopLoop() {
-		super.stopLoop();
+    @Override
+    protected synchronized void stopLoop() {
+        super.stopLoop();
 
-		done.clear();
-		connected.clear();
-		connections.clear();
-		bufs.clear();
-	}
+        done.clear();
+        connected.clear();
+        connections.clear();
+        bufs.clear();
+    }
 
-	@Override
-	public synchronized RapidoidWorker shutdown() {
-		stopLoop();
-		waitToStop();
-		return this;
-	}
+    @Override
+    public synchronized RapidoidWorker shutdown() {
+        stopLoop();
+        waitToStop();
+        return this;
+    }
 
-	@Override
-	public SSLContext sslContext() {
-		return sslContext;
-	}
+    @Override
+    public SSLContext sslContext() {
+        return sslContext;
+    }
 
-	@Override
-	public RapidoidHelper helper() {
-		return helper;
-	}
+    @Override
+    public RapidoidHelper helper() {
+        return helper;
+    }
 
 }

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,7 +24,6 @@ import org.rapidoid.RapidoidModule;
 import org.rapidoid.RapidoidModules;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.collection.Coll;
 import org.rapidoid.commons.RapidoidInitializer;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
@@ -36,17 +35,11 @@ import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Once;
 
-import java.util.Set;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class App extends RapidoidInitializer {
 
     private static volatile AppStatus status = AppStatus.NOT_STARTED;
-
-    private static final Set<Class<?>> invoked = Coll.synchronizedSet();
-
-    static volatile ClassLoader loader = App.class.getClassLoader();
 
     private static final Once boot = new Once();
 
@@ -58,41 +51,6 @@ public class App extends RapidoidInitializer {
         AppStarter.startUp(args, extraArgs);
 
         status = AppStatus.INITIALIZING;
-
-        // no implicit classpath scanning here
-        boot();
-    }
-
-    /**
-     * Initializes the app in non-atomic way.
-     * Then starts serving requests immediately when routes are configured.
-     */
-    public static synchronized void run(String[] args, String... extraArgs) {
-        AppStarter.startUp(args, extraArgs);
-
-        // no implicit classpath scanning here
-        boot();
-
-        // finish initialization and start the application
-        onAppReady();
-
-        boot();
-    }
-
-    /**
-     * Initializes the app in non-atomic way.
-     * Then scans the classpath for beans.
-     * Then starts serving requests immediately when routes are configured.
-     */
-    public static synchronized void bootstrap(String[] args, String... extraArgs) {
-        AppStarter.startUp(args, extraArgs);
-
-        boot();
-
-//		App.scan(); // scan classpath for beans
-
-        // finish initialization and start the application
-        onAppReady();
 
         boot();
     }

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -57,571 +57,571 @@ import java.util.concurrent.atomic.AtomicLong;
 @Since("2.0.0")
 public class RapidoidConnection extends RapidoidThing implements Resetable, Channel, Expiring, Constants {
 
-	private static final CtxListener IGNORE = new IgnorantConnectionListener();
+    private static final CtxListener IGNORE = new IgnorantConnectionListener();
 
-	private static final AtomicLong ID_N = new AtomicLong();
+    private static final AtomicLong ID_N = new AtomicLong();
 
-	private static final AtomicLong SERIAL_N = new AtomicLong();
+    private static final AtomicLong SERIAL_N = new AtomicLong();
 
-	final boolean hasTLS;
+    final boolean hasTLS;
 
-	final RapidoidTLS tls;
+    final RapidoidTLS tls;
 
-	final NetWorker worker;
+    final NetWorker worker;
 
-	public final Buf input;
+    public final Buf input;
 
-	public final Buf output;
+    public final Buf output;
 
-	public final Buf outgoing;
+    public final Buf outgoing;
 
-	private final ConnState state = new ConnState();
+    private final ConnState state = new ConnState();
 
-	private volatile boolean waitingToWrite = false;
+    private volatile boolean waitingToWrite = false;
 
-	public volatile SelectionKey key;
+    public volatile SelectionKey key;
 
-	private volatile boolean closeAfterWrite = false;
+    private volatile boolean closeAfterWrite = false;
 
-	volatile boolean closed = true;
+    volatile boolean closed = true;
 
-	volatile boolean closing = false;
+    volatile boolean closing = false;
 
-	volatile int completedInputPos;
+    volatile int completedInputPos;
 
-	private volatile CtxListener listener;
+    private volatile CtxListener listener;
 
-	private final long serialN = SERIAL_N.incrementAndGet();
+    private final long serialN = SERIAL_N.incrementAndGet();
 
-	private volatile long id;
+    private volatile long id;
 
-	private volatile boolean initial;
+    private volatile boolean initial;
 
-	volatile boolean async;
+    volatile boolean async;
 
-	volatile boolean done;
+    volatile boolean done;
 
-	private volatile boolean isClient;
+    private volatile boolean isClient;
 
-	private volatile Protocol protocol;
+    private volatile Protocol protocol;
 
-	volatile long requestId;
+    volatile long requestId;
 
-	final AtomicLong readSeq = new AtomicLong();
+    final AtomicLong readSeq = new AtomicLong();
 
-	final AtomicLong writeSeq = new AtomicLong();
+    final AtomicLong writeSeq = new AtomicLong();
 
-	volatile boolean resumeInProgress = false;
+    volatile boolean resumeInProgress = false;
 
-	volatile IRequest request;
+    volatile IRequest request;
 
-	private volatile long expiresAt;
+    private volatile long expiresAt;
 
-	private volatile ChannelHolderImpl holder;
+    private volatile ChannelHolderImpl holder;
 
-	public volatile int nextOp = SelectionKey.OP_READ;
+    public volatile int nextOp = SelectionKey.OP_READ;
 
-	public volatile int mode = 0;
+    public volatile int mode = 0;
 
-	private volatile boolean autoReconnect;
+    private volatile boolean autoReconnect;
 
-	public RapidoidConnection(NetWorker worker, BufGroup bufs, TLSParams tlsParams) {
-		this.worker = worker;
+    public RapidoidConnection(NetWorker worker, BufGroup bufs, TLSParams tlsParams) {
+        this.worker = worker;
 
-		this.hasTLS = worker.sslContext() != null;
-		this.tls = hasTLS ? new RapidoidTLS(worker.sslContext(), this, tlsParams) : null;
+        this.hasTLS = worker.sslContext() != null;
+        this.tls = hasTLS ? new RapidoidTLS(worker.sslContext(), this, tlsParams) : null;
 
-		this.input = bufs.newBuf("input#" + serialN);
-		this.output = bufs.newBuf("output#" + serialN);
-		this.outgoing = hasTLS ? bufs.newBuf("outgoing#" + serialN) : this.output;
+        this.input = bufs.newBuf("input#" + serialN);
+        this.output = bufs.newBuf("output#" + serialN);
+        this.outgoing = hasTLS ? bufs.newBuf("outgoing#" + serialN) : this.output;
 
-		reset();
-	}
+        reset();
+    }
 
-	@Override
-	public synchronized void reset() {
-		IRequest req = request;
-		if (req != null) {
-			req.stop();
-			request = null;
-		}
+    @Override
+    public synchronized void reset() {
+        IRequest req = request;
+        if (req != null) {
+            req.stop();
+            request = null;
+        }
 
-		id = ID_N.incrementAndGet();
-		key = null;
-		closed = true;
-		closing = false;
-		input.clear();
-		output.clear();
-		outgoing.clear();
-		closeAfterWrite = false;
-		waitingToWrite = false;
-		completedInputPos = 0;
-		listener = IGNORE;
-		initial = true;
-		async = false;
-		done = false;
-		isClient = false;
-		protocol = null;
-		requestId = 0;
-		readSeq.set(0);
-		writeSeq.set(0);
-		expiresAt = 0;
-		state.reset();
+        id = ID_N.incrementAndGet();
+        key = null;
+        closed = true;
+        closing = false;
+        input.clear();
+        output.clear();
+        outgoing.clear();
+        closeAfterWrite = false;
+        waitingToWrite = false;
+        completedInputPos = 0;
+        listener = IGNORE;
+        initial = true;
+        async = false;
+        done = false;
+        isClient = false;
+        protocol = null;
+        requestId = 0;
+        readSeq.set(0);
+        writeSeq.set(0);
+        expiresAt = 0;
+        state.reset();
 
-		if (tls != null) tls.reset();
+        if (tls != null) tls.reset();
 
-		// extended net:
-		holder = null;
-		mode = 0;
-		autoReconnect = false;
-		nextOp = SelectionKey.OP_READ;
-	}
+        // extended net:
+        holder = null;
+        mode = 0;
+        autoReconnect = false;
+        nextOp = SelectionKey.OP_READ;
+    }
 
-	@Override
-	public void log(String msg) {
-		state().log(msg);
-	}
+    @Override
+    public void log(String msg) {
+        state().log(msg);
+    }
 
-	@Override
-	public synchronized InetSocketAddress getAddress() {
-		if (key == null) return null;
+    @Override
+    public synchronized InetSocketAddress getAddress() {
+        if (key == null) return null;
 
-		SocketChannel socketChannel = (SocketChannel) key.channel();
-		SocketAddress addr = socketChannel.socket().getRemoteSocketAddress();
-		if (addr instanceof InetSocketAddress) {
-			InetSocketAddress address = (InetSocketAddress) addr;
-			return address;
-		} else {
-			throw new IllegalStateException("Cannot get remote address!");
-		}
-	}
+        SocketChannel socketChannel = (SocketChannel) key.channel();
+        SocketAddress addr = socketChannel.socket().getRemoteSocketAddress();
+        if (addr instanceof InetSocketAddress) {
+            InetSocketAddress address = (InetSocketAddress) addr;
+            return address;
+        } else {
+            throw new IllegalStateException("Cannot get remote address!");
+        }
+    }
 
-	@Override
-	public synchronized Channel write(String s) {
-		output.append(s);
-		return this;
-	}
+    @Override
+    public synchronized Channel write(String s) {
+        output.append(s);
+        return this;
+    }
 
-	@Override
-	public synchronized Channel writeln(String s) {
-		output.append(s);
-		output.append(CR_LF);
-		return this;
-	}
+    @Override
+    public synchronized Channel writeln(String s) {
+        output.append(s);
+        output.append(CR_LF);
+        return this;
+    }
 
-	@Override
-	public synchronized Channel write(byte[] bytes) {
-		return write(bytes, 0, bytes.length);
-	}
+    @Override
+    public synchronized Channel write(byte[] bytes) {
+        return write(bytes, 0, bytes.length);
+    }
 
-	@Override
-	public synchronized Channel write(byte[] bytes, int offset, int length) {
-		output.append(bytes, offset, length);
-		return this;
-	}
+    @Override
+    public synchronized Channel write(byte[] bytes, int offset, int length) {
+        output.append(bytes, offset, length);
+        return this;
+    }
 
-	@Override
-	public synchronized Channel write(ByteBuffer buf) {
-		output.append(buf);
-		return this;
-	}
+    @Override
+    public synchronized Channel write(ByteBuffer buf) {
+        output.append(buf);
+        return this;
+    }
 
-	@Override
-	public synchronized Channel write(File file) {
-		try {
-			FileInputStream stream = new FileInputStream(file);
-			FileChannel fileChannel = stream.getChannel();
-			output.append(fileChannel);
-			stream.close();
-		} catch (IOException e) {
-			throw U.rte(e);
-		}
+    @Override
+    public synchronized Channel write(File file) {
+        try {
+            FileInputStream stream = new FileInputStream(file);
+            FileChannel fileChannel = stream.getChannel();
+            output.append(fileChannel);
+            stream.close();
+        } catch (IOException e) {
+            throw U.rte(e);
+        }
 
-		return this;
-	}
+        return this;
+    }
 
-	@Override
-	public Channel writeJSON(Object value) {
-		JSON.stringify(value, output.asOutputStream());
-		return this;
-	}
+    @Override
+    public Channel writeJSON(Object value) {
+        JSON.stringify(value, output.asOutputStream());
+        return this;
+    }
 
-	public boolean closeAfterWrite() {
-		return closeAfterWrite;
-	}
+    public boolean closeAfterWrite() {
+        return closeAfterWrite;
+    }
 
-	Channel done() {
-		async = false;
+    Channel done() {
+        async = false;
 
-		if (!done) {
-			done = true;
-			askToSend();
-		}
+        if (!done) {
+            done = true;
+            askToSend();
+        }
 
-		return this;
-	}
+        return this;
+    }
 
-	void processedSeq(long processedHandle) {
+    void processedSeq(long processedHandle) {
 
-		if (processedHandle == 0) return; // a new connection
+        if (processedHandle == 0) return; // a new connection
 
-		U.must(processedHandle > 0);
+        U.must(processedHandle > 0);
 
-		boolean increased = writeSeq.compareAndSet(processedHandle - 1, processedHandle);
+        boolean increased = writeSeq.compareAndSet(processedHandle - 1, processedHandle);
 
-		if (!increased) {
-			// the current response might be already marked as processed (e.g. in non-async handlers)
-			long writeSeqN = writeSeq.get();
-			if (writeSeqN != processedHandle) {
+        if (!increased) {
+            // the current response might be already marked as processed (e.g. in non-async handlers)
+            long writeSeqN = writeSeq.get();
+            if (writeSeqN != processedHandle) {
 				throw U.rte("Error in the response order control! Expected handle: %s, real: %s", processedHandle - 1, writeSeqN);
-			}
-		}
-	}
+            }
+        }
+    }
 
-	@Override
-	public Channel send() {
-		askToSend();
-		return this;
-	}
+    @Override
+    public Channel send() {
+        askToSend();
+        return this;
+    }
 
-	public void error() {
-		askToSend();
-	}
+    public void error() {
+        askToSend();
+    }
 
-	private synchronized void askToSend() {
-		synchronized (outgoing) {
-			if (hasTLS) {
-				synchronized (output) {
-					tls.wrapToOutgoing();
-				}
-			}
+    private synchronized void askToSend() {
+        synchronized (outgoing) {
+            if (hasTLS) {
+                synchronized (output) {
+                    tls.wrapToOutgoing();
+                }
+            }
 
-			if (!waitingToWrite && outgoing.size() > 0) {
-				waitingToWrite = true;
-				worker.wantToWrite(this);
-			}
-		}
-	}
+            if (!waitingToWrite && outgoing.size() > 0) {
+                waitingToWrite = true;
+                worker.wantToWrite(this);
+            }
+        }
+    }
 
-	public synchronized void close(boolean waitToWrite) {
-		if (waitToWrite) {
-			done();
-		}
+    public synchronized void close(boolean waitToWrite) {
+        if (waitToWrite) {
+            done();
+        }
 
-		if (waitToWrite && waitingToWrite) {
-			closeAfterWrite = true;
-		} else {
-			worker.close(this);
-		}
-	}
+        if (waitToWrite && waitingToWrite) {
+            closeAfterWrite = true;
+        } else {
+            worker.close(this);
+        }
+    }
 
-	synchronized void wrote(boolean complete) {
-		if (complete) {
-			waitingToWrite = false;
-		}
+    synchronized void wrote(boolean complete) {
+        if (complete) {
+            waitingToWrite = false;
+        }
 
-		input.deleteBefore(completedInputPos);
-		completedInputPos = 0;
-	}
+        input.deleteBefore(completedInputPos);
+        completedInputPos = 0;
+    }
 
-	@Override
-	public void resume(final long expectedConnId, final long handle, final AsyncLogic asyncLogic) {
+    @Override
+    public void resume(final long expectedConnId, final long handle, final AsyncLogic asyncLogic) {
 
-		if (expectedConnId != connId()) return;
+        if (expectedConnId != connId()) return;
 
-		long seq = writeSeq.get();
+        long seq = writeSeq.get();
 
-		if (seq < handle - 1) {
-			// too early
+        if (seq < handle - 1) {
+            // too early
 
-			Jobs.execute(new Runnable() {
-				@Override
-				public void run() {
-					resume(expectedConnId, handle, asyncLogic);
-				}
+            Jobs.execute(new Runnable() {
+                @Override
+                public void run() {
+                    resume(expectedConnId, handle, asyncLogic);
+                }
 
-				@Override
-				public String toString() {
-					return U.frmt("RapidoidConnection.ResumeJob(handle=%s, expectedConnId=%s, logic=%s)", handle, expectedConnId, asyncLogic);
-				}
-			});
+                @Override
+                public String toString() {
+                    return U.frmt("RapidoidConnection.ResumeJob(handle=%s, expectedConnId=%s, logic=%s)", handle, expectedConnId, asyncLogic);
+                }
+            });
 
-		} else if (seq == handle - 1) {
+        } else if (seq == handle - 1) {
 
-			synchronized (this) {
+            synchronized (this) {
 
-				if (expectedConnId != connId()) {
-					return;
-				}
+                if (expectedConnId != connId()) {
+                    return;
+                }
 
 //				TODO investigate options for stricter flow control:
 //				U.must(!resumeInProgress, "Resume is already in progress!");
 
-				resumeInProgress = true;
+                resumeInProgress = true;
 
-				try {
-					doResume(handle, asyncLogic, seq);
+                try {
+                    doResume(handle, asyncLogic, seq);
 
-				} finally {
-					resumeInProgress = false;
-				}
-			}
+                } finally {
+                    resumeInProgress = false;
+                }
+            }
 
-		} else {
-			Log.error("Tried to resume a job that already has finished!", "handle", handle, "currentHandle", seq, "job", asyncLogic);
-			throw U.rte("Tried to resume a job that already has finished!");
-		}
-	}
+        } else {
+            Log.error("Tried to resume a job that already has finished!", "handle", handle, "currentHandle", seq, "job", asyncLogic);
+            throw U.rte("Tried to resume a job that already has finished!");
+        }
+    }
 
-	private void doResume(long handle, AsyncLogic asyncLogic, long seq) {
-		U.must(seq == writeSeq.get());
+    private void doResume(long handle, AsyncLogic asyncLogic, long seq) {
+        U.must(seq == writeSeq.get());
 
-		// execute the logic
-		boolean finished = false;
+        // execute the logic
+        boolean finished = false;
 
-		synchronized (output) {
-			BufUtil.startWriting(output);
+        synchronized (output) {
+            BufUtil.startWriting(output);
 
-			try {
-				finished = asyncLogic.resumeAsync();
-			} catch (Throwable e) {
-				Log.error("Error while resuming an asynchronous operation!", e);
-			}
+            try {
+                finished = asyncLogic.resumeAsync();
+            } catch (Throwable e) {
+                Log.error("Error while resuming an asynchronous operation!", e);
+            }
 
-			BufUtil.doneWriting(output);
-		}
+            BufUtil.doneWriting(output);
+        }
 
-		if (finished) {
-			processedSeq(handle);
-		}
-	}
+        if (finished) {
+            processedSeq(handle);
+        }
+    }
 
-	@Override
-	public Buf input() {
-		return input;
-	}
+    @Override
+    public Buf input() {
+        return input;
+    }
 
-	@Override
-	public Buf output() {
-		return output;
-	}
+    @Override
+    public Buf output() {
+        return output;
+    }
 
-	@Override
-	public OutputStream outputStream() {
-		return output.asOutputStream();
-	}
+    @Override
+    public OutputStream outputStream() {
+        return output.asOutputStream();
+    }
 
-	@Override
-	public boolean onSameThread() {
-		return worker.onSameThread();
-	}
+    @Override
+    public boolean onSameThread() {
+        return worker.onSameThread();
+    }
 
-	@Override
-	public RapidoidHelper helper() {
-		return worker.helper();
-	}
+    @Override
+    public RapidoidHelper helper() {
+        return worker.helper();
+    }
 
-	public CtxListener listener() {
-		return listener;
-	}
+    public CtxListener listener() {
+        return listener;
+    }
 
-	public void setListener(CtxListener listener) {
-		this.listener = listener;
-	}
+    public void setListener(CtxListener listener) {
+        this.listener = listener;
+    }
 
-	@Override
-	public String address() {
-		InetSocketAddress inetSocketAddress = getAddress();
-		return inetSocketAddress != null ? inetSocketAddress.getAddress().getHostAddress() : null;
-	}
+    @Override
+    public String address() {
+        InetSocketAddress inetSocketAddress = getAddress();
+        return inetSocketAddress != null ? inetSocketAddress.getAddress().getHostAddress() : null;
+    }
 
-	@Override
-	public Channel close() {
-		close(true);
-		return this;
-	}
+    @Override
+    public Channel close() {
+        close(true);
+        return this;
+    }
 
-	@Override
-	public Channel closeIf(boolean condition) {
-		if (condition) {
-			close();
-		}
-		return this;
-	}
+    @Override
+    public Channel closeIf(boolean condition) {
+        if (condition) {
+            close();
+        }
+        return this;
+    }
 
-	@Override
-	public String readln() {
-		return input().readLn();
-	}
+    @Override
+    public String readln() {
+        return input().readLn();
+    }
 
-	@Override
-	public String readN(int count) {
-		return input().readN(count);
-	}
+    @Override
+    public String readN(int count) {
+        return input().readN(count);
+    }
 
-	@Override
-	public ConnState state() {
-		return state;
-	}
+    @Override
+    public ConnState state() {
+        return state;
+    }
 
-	@Override
-	public long handle() {
-		return readSeq.get();
-	}
+    @Override
+    public long handle() {
+        return readSeq.get();
+    }
 
-	@Override
-	public boolean isInitial() {
-		return initial;
-	}
+    @Override
+    public boolean isInitial() {
+        return initial;
+    }
 
-	@Override
-	public String toString() {
-		return "conn#" + connId();
-	}
+    @Override
+    public String toString() {
+        return "conn#" + connId();
+    }
 
-	public void setInitial(boolean initial) {
-		this.initial = initial;
-	}
+    public void setInitial(boolean initial) {
+        this.initial = initial;
+    }
 
-	@Override
-	public synchronized long async() {
-		U.must(onSameThread(), "The connection can be marked as 'async' only on its I/O worker thread!");
+    @Override
+    public synchronized long async() {
+        U.must(onSameThread(), "The connection can be marked as 'async' only on its I/O worker thread!");
 
-		this.async = true;
-		this.done = false;
-		return handle();
-	}
+        this.async = true;
+        this.done = false;
+        return handle();
+    }
 
-	@Override
-	public synchronized boolean isAsync() {
-		return async;
-	}
+    @Override
+    public synchronized boolean isAsync() {
+        return async;
+    }
 
-	public boolean isClient() {
-		return isClient;
-	}
+    public boolean isClient() {
+        return isClient;
+    }
 
-	public void setClient(boolean isClient) {
-		this.isClient = isClient;
-	}
+    public void setClient(boolean isClient) {
+        this.isClient = isClient;
+    }
 
-	public void setProtocol(Protocol protocol) {
-		this.protocol = protocol;
-	}
+    public void setProtocol(Protocol protocol) {
+        this.protocol = protocol;
+    }
 
-	public Protocol getProtocol() {
-		return protocol;
-	}
+    public Protocol getProtocol() {
+        return protocol;
+    }
 
-	@Override
-	public boolean isClosing() {
-		return closing;
-	}
+    @Override
+    public boolean isClosing() {
+        return closing;
+    }
 
-	@Override
-	public boolean isClosed() {
-		return closed;
-	}
+    @Override
+    public boolean isClosed() {
+        return closed;
+    }
 
-	@Override
-	public void waitUntilClosing() {
-		if (!isClosing()) {
-			throw Buf.INCOMPLETE_READ;
-		}
-	}
+    @Override
+    public void waitUntilClosing() {
+        if (!isClosing()) {
+            throw Buf.INCOMPLETE_READ;
+        }
+    }
 
-	@Override
-	public long connId() {
-		return id;
-	}
+    @Override
+    public long connId() {
+        return id;
+    }
 
-	@Override
-	public long requestId() {
-		return requestId;
-	}
+    @Override
+    public long requestId() {
+        return requestId;
+    }
 
-	@Override
-	public void setRequest(IRequest request) {
-		this.request = request;
-	}
+    @Override
+    public void setRequest(IRequest request) {
+        this.request = request;
+    }
 
-	@Override
-	public void setExpiresAt(long expiresAt) {
-		this.expiresAt = expiresAt;
-	}
+    @Override
+    public void setExpiresAt(long expiresAt) {
+        this.expiresAt = expiresAt;
+    }
 
-	@Override
-	public long getExpiresAt() {
-		return expiresAt;
-	}
+    @Override
+    public long getExpiresAt() {
+        return expiresAt;
+    }
 
-	@Override
-	public void expire() {
-		close(false);
-	}
+    @Override
+    public void expire() {
+        close(false);
+    }
 
-	public boolean finishedWriting() {
-		return outgoing.size() == 0;
-	}
+    public boolean finishedWriting() {
+        return outgoing.size() == 0;
+    }
 
-	public ChannelHolderImpl holder() {
-		return holder;
-	}
+    public ChannelHolderImpl holder() {
+        return holder;
+    }
 
-	public RapidoidConnection holder(ChannelHolderImpl holder) {
-		this.holder = holder;
-		return this;
-	}
+    public RapidoidConnection holder(ChannelHolderImpl holder) {
+        this.holder = holder;
+        return this;
+    }
 
-	public int nextOp() {
-		return nextOp;
-	}
+    public int nextOp() {
+        return nextOp;
+    }
 
-	@Override
-	public RapidoidConnection nextOp(int nextOp) {
-		this.nextOp = nextOp;
-		return this;
-	}
+    @Override
+    public RapidoidConnection nextOp(int nextOp) {
+        this.nextOp = nextOp;
+        return this;
+    }
 
-	public int mode() {
-		return mode;
-	}
+    public int mode() {
+        return mode;
+    }
 
-	@Override
-	public RapidoidConnection mode(int mode) {
-		this.mode = mode;
-		return this;
-	}
+    @Override
+    public RapidoidConnection mode(int mode) {
+        this.mode = mode;
+        return this;
+    }
 
-	public boolean autoReconnect() {
-		return autoReconnect;
-	}
+    public boolean autoReconnect() {
+        return autoReconnect;
+    }
 
-	public RapidoidConnection autoReconnect(boolean autoReconnect) {
-		this.autoReconnect = autoReconnect;
-		return this;
-	}
+    public RapidoidConnection autoReconnect(boolean autoReconnect) {
+        this.autoReconnect = autoReconnect;
+        return this;
+    }
 
-	@Override
-	public Channel restart() {
-		return null; // FIXME
-	}
+    @Override
+    public Channel restart() {
+        return null; // FIXME
+    }
 
-	@Override
-	public ChannelHolder createHolder() {
-		return null; // FIXME
-	}
+    @Override
+    public ChannelHolder createHolder() {
+        return null; // FIXME
+    }
 
-	@Override
-	public Channel nextWrite() {
-		return null; // FIXME
-	}
+    @Override
+    public Channel nextWrite() {
+        return null; // FIXME
+    }
 
-	public ChannelHolderImpl getHolder() {
-		return holder;
-	}
+    public ChannelHolderImpl getHolder() {
+        return holder;
+    }
 
-	public void setHolder(ChannelHolderImpl holder) {
-		this.holder = holder;
-	}
+    public void setHolder(ChannelHolderImpl holder) {
+        this.holder = holder;
+    }
 }
