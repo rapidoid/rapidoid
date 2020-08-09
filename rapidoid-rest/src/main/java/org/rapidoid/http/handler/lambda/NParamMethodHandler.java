@@ -32,6 +32,7 @@ import org.rapidoid.http.handler.param.ParamRetriever;
 import org.rapidoid.http.handler.param.ParamRetrievers;
 import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.lambda.NParamLambda;
+import org.rapidoid.util.Reflect;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -54,10 +55,10 @@ public abstract class NParamMethodHandler extends AbstractDecoratingHttpHandler 
 		String[] paramNames;
 
 		if (lambda != null) {
-			paramNames = Cls.getLambdaParameterNames(lambda);
+			paramNames = Reflect.getLambdaParameterNames(lambda);
 			paramTypes = Arr.sub(paramTypes, paramTypes.length - paramNames.length, paramTypes.length);
 		} else {
-			paramNames = Cls.getMethodParameterNames(method);
+			paramNames = Reflect.getMethodParameterNames(method);
 		}
 
 		Annotation[][] annotations = method.getParameterAnnotations();

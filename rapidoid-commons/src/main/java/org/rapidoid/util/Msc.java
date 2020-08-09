@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -852,15 +852,6 @@ public class Msc extends RapidoidThing {
 
     public static String fileSizeReadable(String filename) {
         return fileSizeReadable(new File(filename).length());
-    }
-
-    public static void watchForChanges(String path, Operation<String> changeListener) {
-        Class<?> watch = Cls.getClassIfExists("org.rapidoid.io.watch.Watch");
-
-        if (watch != null) {
-            Method dir = Cls.getMethod(watch, "dir", String.class, Operation.class);
-            Cls.invokeStatic(dir, path, changeListener);
-        }
     }
 
     public static byte[] uuidToBytes(UUID uuid) {

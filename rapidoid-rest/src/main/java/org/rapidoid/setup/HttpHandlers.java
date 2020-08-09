@@ -37,6 +37,7 @@ import org.rapidoid.http.handler.optimized.DelegatingParamsAwareReqRespHandler;
 import org.rapidoid.http.handler.optimized.DelegatingParamsAwareRespHandler;
 import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.lambda.*;
+import org.rapidoid.util.Reflect;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
@@ -58,7 +59,7 @@ class HttpHandlers extends RapidoidThing {
 		} else if (handler instanceof OneParamLambda) {
 
 			OneParamLambda lambda = (OneParamLambda) handler;
-			Method method = Cls.getLambdaMethod(lambda);
+			Method method = Reflect.getLambdaMethod(lambda);
 			Class<?> paramType = method.getParameterTypes()[0];
 
 			if (paramType.equals(Req.class)) {
@@ -72,7 +73,7 @@ class HttpHandlers extends RapidoidThing {
 		} else if (handler instanceof TwoParamLambda) {
 
 			TwoParamLambda lambda = (TwoParamLambda) handler;
-			Method method = Cls.getLambdaMethod(lambda);
+			Method method = Reflect.getLambdaMethod(lambda);
 			Class<?> param1Type = method.getParameterTypes()[0];
 			Class<?> param2Type = method.getParameterTypes()[1];
 

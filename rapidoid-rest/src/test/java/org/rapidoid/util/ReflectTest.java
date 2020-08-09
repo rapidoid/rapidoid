@@ -1,6 +1,6 @@
 /*-
  * #%L
- * rapidoid-commons
+ * rapidoid-rest
  * %%
  * Copyright (C) 2014 - 2020 Nikolche Mihajlovski and contributors
  * %%
@@ -18,12 +18,14 @@
  * #L%
  */
 
-package org.rapidoid.cls;
+package org.rapidoid.util;
 
 import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.*;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.cls.TypeKind;
 import org.rapidoid.http.HttpVerb;
-import org.rapidoid.test.AbstractCommonsTest;
+import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 
 import java.lang.reflect.Method;
@@ -35,37 +37,32 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class ClsTest extends AbstractCommonsTest {
+@Since("6.0.0")
+public class ReflectTest extends TestCommons {
 
     @Test
-    public void testIsBeanType() {
-        isTrue(Cls.isBeanType(Foo.class));
-
-        isFalse(Cls.isBeanType(Object.class));
-        isFalse(Cls.isBeanType(HttpVerb.class));
-        isFalse(Cls.isBeanType(Runnable.class));
-        isFalse(Cls.isBeanType(ArrayList.class));
-        isFalse(Cls.isBeanType(HashSet.class));
-        isFalse(Cls.isBeanType(HashMap.class));
+    public void testInstanceMethodParams() {
+        Method m = U.single(Cls.getMethodsNamed(Foo.class, "abc"));
+        String[] names = Reflect.getMethodParameterNames(m);
+        eq(names, U.array("aa", "b", "чачача"));
     }
 
     @Test
-    public void testKind() {
-        eq(Cls.kindOf(String.class), TypeKind.STRING);
+    public void testStaticMethodParams() {
+        Method m = U.single(Cls.getMethodsNamed(Foo.class, "statico"));
+        String[] names = Reflect.getMethodParameterNames(m);
+        eq(names, U.array("foo", "arg1"));
+    }
 
-        eq(Cls.kindOf(double.class), TypeKind.DOUBLE);
-        eq(Cls.kindOf(Double.class), TypeKind.DOUBLE_OBJ);
+    @Test
+    public void testWithManyParams() {
+        Method m = U.single(Cls.getMethodsNamed(Foo.class, "xy"));
+        String[] names = Reflect.getMethodParameterNames(m);
+        eq(names, U.array("a", "b", "c", "d", "e", "f"));
 
-        eq(Cls.kindOf(byte[].class), TypeKind.BYTE_ARR);
-
-        eq(Cls.kindOf(HashSet.class), TypeKind.SET);
-        eq(Cls.kindOf(HashMap.class), TypeKind.MAP);
-        eq(Cls.kindOf(ArrayList.class), TypeKind.LIST);
-
-        eq(Cls.kindOf(Date.class), TypeKind.DATE);
-        eq(Cls.kindOf(Time.class), TypeKind.DATE);
-        eq(Cls.kindOf(Timestamp.class), TypeKind.DATE);
+        Method m2 = U.single(Cls.getMethodsNamed(Foo.class, "xyz"));
+        String[] names2 = Reflect.getMethodParameterNames(m2);
+        eq(names2, U.array("a", "b", "c", "d", "e", "f", "g", "hh", "ii", "j"));
     }
 
 }

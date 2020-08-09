@@ -27,13 +27,14 @@ import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.HttpRoutes;
 import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.lambda.NParamLambda;
+import org.rapidoid.util.Reflect;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public abstract class NParamLambdaHandler extends NParamMethodHandler {
 
 	public NParamLambdaHandler(FastHttp http, HttpRoutes routes, RouteOptions options, NParamLambda lambda) {
-		super(http, routes, options, Cls.getLambdaMethod(lambda), lambda);
+		super(http, routes, options, Reflect.getLambdaMethod(lambda), lambda);
 	}
 
 	@Override

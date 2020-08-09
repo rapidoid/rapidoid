@@ -30,6 +30,7 @@ import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Reflect;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -44,7 +45,7 @@ public class LambdaParamNamesTest extends IsolatedIntegrationTest {
 			return movie.getTitle() + ", " + n + ":" + x;
 		};
 
-		eq(Cls.getLambdaParameterNames(lambda), U.array("req", "x", "resp"));
+		eq(Reflect.getLambdaParameterNames(lambda), U.array("req", "x", "resp"));
 	}
 
 	@Test
@@ -53,7 +54,7 @@ public class LambdaParamNamesTest extends IsolatedIntegrationTest {
 
 		ThreeParamLambda<String, Req, Integer, Resp> lambda = (Req req, Integer x, Resp resp) -> "ok";
 
-		eq(Cls.getLambdaParameterNames(lambda), U.array("req", "x", "resp"));
+		eq(Reflect.getLambdaParameterNames(lambda), U.array("req", "x", "resp"));
 	}
 
 	@Test

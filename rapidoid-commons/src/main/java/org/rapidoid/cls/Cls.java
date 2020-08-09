@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,27 +20,20 @@
 
 package org.rapidoid.cls;
 
-import javassist.*;
-import javassist.Modifier;
-import javassist.bytecode.CodeAttribute;
-import javassist.bytecode.LocalVariableAttribute;
-import javassist.bytecode.MethodInfo;
 import org.rapidoid.RapidoidThing;
-import org.rapidoid.beany.Beany;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.collection.AutoExpandingMap;
 import org.rapidoid.collection.Coll;
-import org.rapidoid.commons.Arr;
 import org.rapidoid.commons.Dates;
 import org.rapidoid.commons.Err;
 import org.rapidoid.commons.Str;
-import org.rapidoid.io.IO;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 import org.rapidoid.util.TUUID;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
 
-import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.*;
@@ -48,10 +41,8 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Pattern;
 
-/**
- * @author Nikolche Mihajlovski
- * @since 2.0.0
- */
+@Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class Cls extends RapidoidThing {
 
     private static Pattern JRE_CLASS_PATTERN = Pattern
@@ -61,11 +52,6 @@ public class Cls extends RapidoidThing {
             Byte.class, char.class, Character.class, double.class, Double.class, float.class, Float.class, int.class,
             Integer.class, long.class, Long.class, short.class, Short.class, void.class, Void.class);
 
-    private static final Object[] EMPTY_ARRAY = {};
-
-    private Cls() {
-    }
-
     public static TypeKind kindOf(Class<?> type) {
         return TypeKind.ofType(type);
     }
@@ -74,33 +60,6 @@ public class Cls extends RapidoidThing {
         return TypeKind.of(value);
     }
 
-    public static void setFieldValue(Object instance, String fieldName, Object value) {
-        try {
-            for (Class<?> c = instance.getClass(); c.getSuperclass() != null; c = c.getSuperclass()) {
-                try {
-                    Field field = c.getDeclaredField(fieldName);
-                    field.setAccessible(true);
-                    field.set(instance, value);
-                    return;
-                } catch (NoSuchFieldException e) {
-                    // keep searching the filed in the super-class...
-                }
-            }
-        } catch (Exception e) {
-            throw U.rte("Cannot set field value!", e);
-        }
-
-        throw U.rte("Cannot find the field '%s' in the class '%s'", fieldName, instance.getClass());
-    }
-
-    public static void setFieldValue(Field field, Object instance, Object value) {
-        try {
-            field.setAccessible(true);
-            field.set(instance, value);
-        } catch (Exception e) {
-            throw U.rte("Cannot set field value!", e);
-        }
-    }
 
     @SuppressWarnings("unchecked")
     public static <T> T getFieldValue(Object instance, String fieldName, T defaultValue) {
@@ -157,43 +116,6 @@ public class Cls extends RapidoidThing {
         return allAnnotations;
     }
 
-    public static List<Field> getFields(Class<?> clazz) {
-        List<Field> allFields = U.list();
-
-        try {
-            for (Class<?> c = clazz; c.getSuperclass() != null; c = c.getSuperclass()) {
-                Field[] fields = c.getDeclaredFields();
-                for (Field field : fields) {
-                    allFields.add(field);
-                }
-            }
-
-        } catch (Exception e) {
-            throw U.rte("Cannot get fields!", e);
-        }
-
-        return allFields;
-    }
-
-    public static List<Field> getFieldsAnnotated(Class<?> clazz, Class<? extends Annotation> annotation) {
-        List<Field> annotatedFields = U.list();
-
-        try {
-            for (Class<?> c = clazz; c.getSuperclass() != null; c = c.getSuperclass()) {
-                Field[] fields = c.getDeclaredFields();
-                for (Field field : fields) {
-                    if (field.isAnnotationPresent(annotation)) {
-                        annotatedFields.add(field);
-                    }
-                }
-            }
-
-        } catch (Exception e) {
-            throw U.rte("Cannot get annotated fields!", e);
-        }
-
-        return annotatedFields;
-    }
 
     public static List<Method> getMethods(Class<?> clazz) {
         List<Method> methods = U.list();
@@ -210,26 +132,6 @@ public class Cls extends RapidoidThing {
         }
 
         return methods;
-    }
-
-    public static List<Method> getMethodsAnnotated(Class<?> clazz, Class<? extends Annotation> annotation) {
-        List<Method> annotatedMethods = U.list();
-
-        try {
-            for (Class<?> c = clazz; c.getSuperclass() != null; c = c.getSuperclass()) {
-                Method[] methods = c.getDeclaredMethods();
-                for (Method method : methods) {
-                    if (method.isAnnotationPresent(annotation)) {
-                        annotatedMethods.add(method);
-                    }
-                }
-            }
-
-        } catch (Exception e) {
-            throw U.rte("Cannot instantiate class!", e);
-        }
-
-        return annotatedMethods;
     }
 
     public static List<Method> getMethodsNamed(Class<?> clazz, String name) {
@@ -276,16 +178,6 @@ public class Cls extends RapidoidThing {
             }
         } catch (SecurityException e) {
             return null;
-        }
-    }
-
-    public static Field getField(Class<?> clazz, String name) {
-        try {
-            return clazz.getField(name);
-        } catch (NoSuchFieldException e) {
-            throw U.rte("Cannot find field: %s", e, name);
-        } catch (SecurityException e) {
-            throw U.rte("Cannot access field: %s", e, name);
         }
     }
 
@@ -358,24 +250,6 @@ public class Cls extends RapidoidThing {
         }
     }
 
-    public static boolean annotatedMethod(Object instance, String methodName, Class<Annotation> annotation) {
-        try {
-            Method method = instance.getClass().getMethod(methodName);
-            return method.getAnnotation(annotation) != null;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static <T> Constructor<T> getConstructor(Class<T> clazz, Class<?>... paramTypes) {
-        try {
-            return clazz.getConstructor(paramTypes);
-        } catch (Exception e) {
-            throw U.rte("Cannot find the constructor for %s with param types: %s", e, clazz,
-                    U.str(paramTypes));
-        }
-    }
-
     @SuppressWarnings("unchecked")
     public static <T> T newInstance(Class<T> clazz, Map<String, Object> properties) {
         if (U.isEmpty(properties)) {
@@ -426,30 +300,6 @@ public class Cls extends RapidoidThing {
         }
 
         return instance;
-    }
-
-    public static Object[] instantiateAll(Class<?>... classes) {
-        Object[] instances = new Object[classes.length];
-
-        for (int i = 0; i < instances.length; i++) {
-            instances[i] = newInstance(classes[i]);
-        }
-
-        return instances;
-    }
-
-    public static Object[] instantiateAll(Collection<Class<?>> classes) {
-        if (classes.isEmpty()) {
-            return EMPTY_ARRAY;
-        }
-        Object[] instances = new Object[classes.size()];
-
-        int i = 0;
-        for (Class<?> clazz : classes) {
-            instances[i++] = newInstance(clazz);
-        }
-
-        return instances;
     }
 
     public static ClassLoader classLoader() {
@@ -698,26 +548,6 @@ public class Cls extends RapidoidThing {
         }
     }
 
-    public static Map<String, Class<?>> classMap(Iterable<Class<?>> classes) {
-        Map<String, Class<?>> map = new LinkedHashMap<>();
-
-        for (Class<?> cls : classes) {
-            map.put(cls.getSimpleName(), cls);
-        }
-
-        return map;
-    }
-
-    public static Class<?>[] typesOf(Object[] args) {
-        Class<?>[] types = new Class<?>[args.length];
-
-        for (int i = 0; i < types.length; i++) {
-            types[i] = args[i] != null ? args[i].getClass() : null;
-        }
-
-        return types;
-    }
-
     public static Method findMethodByArgs(Class<? extends Object> clazz, String name, Object... args) {
 
         for (Method method : clazz.getMethods()) {
@@ -755,10 +585,6 @@ public class Cls extends RapidoidThing {
 
     public static boolean isJREClass(String className) {
         return JRE_CLASS_PATTERN.matcher(className).matches();
-    }
-
-    public static boolean isIdeOrToolClass(String className) {
-        return className.startsWith("com.intellij.rt.execution.");
     }
 
     public static boolean isJREType(Class<?> type) {
@@ -922,15 +748,6 @@ public class Cls extends RapidoidThing {
         }
     }
 
-    public static String entityName(Class<?> cls) {
-        return Cls.unproxy(cls).getSimpleName();
-    }
-
-    public static String entityName(Object entity) {
-        U.notNull(entity, "entity");
-        return entityName(entity.getClass());
-    }
-
     public static boolean isSimple(Object target) {
         return kindOf(target).isConcrete();
     }
@@ -1033,242 +850,12 @@ public class Cls extends RapidoidThing {
         }
     }
 
-    public static Method getLambdaMethod(Serializable lambda) {
-        return getLambdaMethod(lambda, "execute");
-    }
-
-    public static Method getLambdaMethod(Serializable lambda, String functionalMethodName) {
-        Method writeReplace = findMethod(lambda.getClass(), "writeReplace");
-
-        if (writeReplace == null) {
-            List<Method> methods = getMethodsNamed(lambda.getClass(), functionalMethodName);
-
-            U.must(U.notEmpty(methods), "Cannot find the lambda method named: %s", functionalMethodName);
-
-            for (Method method : methods) {
-                Class<?>[] paramTypes = method.getParameterTypes();
-                for (Class<?> paramType : paramTypes) {
-                    if (!paramType.getName().equals("java.lang.Object")) {
-                        return method;
-                    }
-                }
-            }
-
-            U.must(methods.size() == 1, "Expected one, but found %s lambda methods named: %s", methods.size(), functionalMethodName);
-
-            return methods.get(0);
-        }
-
-        Object serializedLambda = invoke(writeReplace, lambda);
-
-        Method getImplClass = Cls.findMethod(serializedLambda.getClass(), "getImplClass");
-
-        if (getImplClass != null) {
-            String implClass = Cls.invoke(getImplClass, serializedLambda);
-            String className = implClass.replaceAll("/", ".");
-
-            Class<?> cls;
-            try {
-                cls = Class.forName(className, true, lambda.getClass().getClassLoader());
-            } catch (ClassNotFoundException e) {
-                throw U.rte("Cannot find or load the lambda class: %s", className);
-            }
-
-            Method getImplMethodName = Cls.findMethod(serializedLambda.getClass(), "getImplMethodName");
-            String lambdaMethodName = Cls.invoke(getImplMethodName, serializedLambda);
-
-            for (Method method : cls.getDeclaredMethods()) {
-                if (method.getName().equals(lambdaMethodName)) {
-                    return method;
-                }
-            }
-
-            throw U.rte("Cannot find the lambda method: %s#%s", cls.getName(), lambdaMethodName);
-        } else {
-            throw U.rte("Cannot find the 'getImplClass' method of the serialized lambda!");
-        }
-    }
-
-    public static List<Method> getDeclaredMethods(Class<?> clazz) {
-        ClassPool cp = new ClassPool();
-        cp.insertClassPath(new ClassClassPath(clazz));
-
-        CtClass cc;
-        try {
-            cc = cp.get(clazz.getName());
-        } catch (NotFoundException e) {
-            throw U.rte("Cannot find the target class!", e);
-        }
-
-        List<Method> methods = U.list();
-
-        for (CtMethod m : cc.getDeclaredMethods()) {
-            try {
-                methods.add(getMethod(clazz, m.getName(), ctTypes(m.getParameterTypes())));
-            } catch (Exception e) {
-                throw U.rte(e);
-            }
-        }
-
-        return methods;
-    }
-
-    private static Class<?>[] ctTypes(CtClass[] types) {
-        Class<?>[] classes = new Class[types.length];
-
-        for (int i = 0; i < classes.length; i++) {
-            classes[i] = get(types[i].getName());
-        }
-
-        return classes;
-    }
-
-    public static String[] getMethodParameterNames(Method method) {
-        Class<?>[] paramTypes = method.getParameterTypes();
-        String[] names = new String[paramTypes.length];
-
-        boolean defaultNames = true;
-        Method getParameters = Cls.findMethod(method.getClass(), "getParameters");
-
-        if (getParameters != null) {
-            Object[] parameters = Cls.invoke(getParameters, method);
-
-            for (int i = 0; i < parameters.length; i++) {
-                names[i] = Beany.getPropValue(parameters[i], "name");
-                U.notNull(names[i], "parameter name");
-                if (!names[i].equals("arg" + i)) {
-                    defaultNames = false;
-                }
-            }
-        }
-
-        if (defaultNames) {
-            boolean useIndexMapping;
-            CtMethod cm;
-
-            try {
-                ClassPool cp = new ClassPool();
-                cp.insertClassPath(new ClassClassPath(method.getDeclaringClass()));
-                CtClass cc = cp.get(method.getDeclaringClass().getName());
-
-                useIndexMapping = cc.getClassFile().getMajorVersion() >= 52;
-
-                CtClass[] params = new CtClass[paramTypes.length];
-                for (int i = 0; i < params.length; i++) {
-                    params[i] = cp.get(method.getParameterTypes()[i].getName());
-                }
-
-                cm = cc.getDeclaredMethod(method.getName(), params);
-
-            } catch (NotFoundException e) {
-                throw U.rte("Cannot find the target method!", e);
-            }
-
-            MethodInfo methodInfo = cm.getMethodInfo();
-            CodeAttribute codeAttribute = methodInfo.getCodeAttribute();
-
-            if (codeAttribute != null) {
-                LocalVariableAttribute attr = (LocalVariableAttribute) codeAttribute
-                        .getAttribute(LocalVariableAttribute.tag);
-
-                int offset = Modifier.isStatic(cm.getModifiers()) ? 0 : 1;
-
-                for (int i = 0; i < names.length; i++) {
-                    names[i] = null;
-                }
-
-                for (int i = 0; i < attr.tableLength(); i++) {
-                    int index = i - offset;
-
-                    if (useIndexMapping) {
-                        index = attr.index(index);
-                    }
-
-                    String var = attr.variableName(i);
-
-                    if (index >= 0 && index < names.length && !"this".equals(var)) {
-                        names[index] = var;
-                    }
-                }
-
-                if (!validNames(names)) {
-                    for (int i = 0; i < names.length; i++) {
-                        names[i] = null;
-                    }
-
-                    for (int i = 0; i < attr.tableLength(); i++) {
-                        int index = i - offset;
-                        String var = attr.variableName(i);
-
-                        if (index >= 0 && index < names.length && !"this".equals(var)) {
-                            names[index] = var;
-                        }
-                    }
-                }
-            }
-
-            U.must(validNames(names), "Couldn't retrieve the parameter names! Please report this problem. " +
-                    "You can explicitly specify the names using @Param(\"thename\"), " +
-                    "or configure the option '-parameters' on the Java 8 compiler.");
-        }
-
-        return names;
-    }
-
-    private static boolean validNames(String[] names) {
-        for (String name : names) {
-            if (name == null) return false;
-        }
-
-        return true;
-    }
-
-    public static String[] getLambdaParameterNames(Serializable lambda) {
-        Method lambdaMethod = getLambdaMethod(lambda);
-        Class<?>[] lambdaTypes = lambdaMethod.getParameterTypes();
-        String[] names = getMethodParameterNames(lambdaMethod);
-
-        List<Method> methods = U.list();
-
-        for (Class<?> interf : lambda.getClass().getInterfaces()) {
-            for (Method m : interf.getMethods()) {
-                Class<?>[] types = m.getParameterTypes();
-
-                if (types.length <= names.length) {
-                    int diff = names.length - types.length;
-                    boolean matching = true;
-
-                    for (int i = 0; i < types.length; i++) {
-                        if (!types[i].isAssignableFrom(lambdaTypes[i + diff])) {
-                            matching = false;
-                        }
-                    }
-
-                    if (matching) {
-                        methods.add(m);
-                    }
-                }
-            }
-        }
-
-        U.must(methods.size() > 0, "Cannot find the lambda target method of the functional interface!");
-        U.must(methods.size() == 1, "Found more than one lambda target method of the functional interface: " + methods);
-
-        return Arr.sub(names, names.length - methods.get(0).getParameterTypes().length, names.length);
-    }
-
     public static Class<?> toClass(Object classOrInstance) {
         return (classOrInstance instanceof Class<?>) ? ((Class<?>) classOrInstance) : classOrInstance.getClass();
     }
 
     public static boolean isAnnotated(Class<?> type, Class<? extends Annotation> annotation) {
         return type.getAnnotation(annotation) != null;
-    }
-
-    public static Object invokeStatic(String className, String methodName, Object... args) {
-        Class<?> cls = Cls.get(className);
-        Method method = findMethodByArgs(cls, methodName, args);
-        return invokeStatic(method, args);
     }
 
 }
