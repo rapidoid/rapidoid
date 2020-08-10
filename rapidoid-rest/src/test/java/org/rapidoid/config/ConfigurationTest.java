@@ -69,8 +69,8 @@ public class ConfigurationTest extends IsolatedIntegrationTest {
     }
 
     private void checkDefaults() {
-        eq(Conf.ON.entry("port").or(0).longValue(), 8080);
-        eq(Conf.ON.entry("address").str().getOrNull(), "127.0.0.1");
+        eq(Conf.APP.entry("port").or(0).longValue(), 8080);
+        eq(Conf.APP.entry("address").str().getOrNull(), "127.0.0.1");
     }
 
     @Test
@@ -107,7 +107,7 @@ public class ConfigurationTest extends IsolatedIntegrationTest {
 
         eq(Conf.USERS.toMap().keySet(), U.set("admin", "nick"));
 
-        eq(Conf.USERS.sub("admin").toMap(), U.map("roles", "administrator", "password", "abc123"));
+        eq(Conf.USERS.sub("admin").toMap(), U.map("password", "abc123"));
 
         eq(Conf.USERS.sub("nick").toMap(), U.map("roles", "moderator", "password", pswd));
     }
@@ -146,32 +146,6 @@ public class ConfigurationTest extends IsolatedIntegrationTest {
         Conf.ROOT.set("foo.baz", "z");
 
         eq(Conf.section("foo").toMap(), U.map("bar", "b", "baz", "z"));
-    }
-
-    @Test
-    public void testMySqlProfile() {
-        if (TLS_ENABLED) return;
-
-        Env.setArgs("jdbc.port=3333", "profiles=mysql");
-
-        eq(Env.profiles(), U.set("mysql", "test"));
-
-        verifyJson("jdbc-mysql-profile", Conf.JDBC.toMap());
-        verifyJson("hibernate-mysql-profile", Conf.HIBERNATE.toMap());
-        verifyJson("root", Conf.ROOT.toMap());
-    }
-
-    @Test
-    public void testPostgresProfile() {
-        if (TLS_ENABLED) return;
-
-        Env.setArgs("profiles=postgres");
-
-        eq(Env.profiles(), U.set("postgres", "test"));
-
-        verifyJson("jdbc-postgres-profile", Conf.JDBC.toMap());
-        verifyJson("hibernate-postgres-profile", Conf.HIBERNATE.toMap());
-        verifyJson("root", Conf.ROOT.toMap());
     }
 
     @Test

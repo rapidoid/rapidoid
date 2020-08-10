@@ -36,7 +36,7 @@ public class DefaultSetup extends RapidoidInitializer {
 
     private static final String MAIN_ZONE = Msc.isPlatform() ? "platform" : "main";
 
-    private static final Config MAIN_CFG = Msc.isPlatform() ? Conf.RAPIDOID : Conf.ON;
+    private static final Config MAIN_CFG = Msc.isPlatform() ? Conf.RAPIDOID : Conf.APP;
 
     final Setup main;
 

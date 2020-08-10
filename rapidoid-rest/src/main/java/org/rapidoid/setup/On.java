@@ -93,11 +93,11 @@ public class On extends RapidoidThing {
     }
 
     public static synchronized ServerSetup port(int port) {
-        return new ServerSetup(Conf.ON).port(port);
+        return new ServerSetup(Conf.APP).port(port);
     }
 
     public static synchronized ServerSetup address(String address) {
-        return new ServerSetup(Conf.ON).address(address);
+        return new ServerSetup(Conf.APP).address(address);
     }
 
     public static synchronized OnError error(Class<? extends Throwable> error) {

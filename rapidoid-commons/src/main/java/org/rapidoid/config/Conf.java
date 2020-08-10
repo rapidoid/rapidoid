@@ -47,20 +47,12 @@ public class Conf extends RapidoidThing {
     public static final Config RAPIDOID = section("rapidoid");
     public static final Config USERS = section("users");
     public static final Config JOBS = section("jobs");
-    public static final Config OAUTH = section("oauth");
-    public static final Config JDBC = section("jdbc");
-    public static final Config HIBERNATE = section("hibernate");
-    public static final Config HIKARI = section("hikari");
     public static final Config APP = section("app");
     public static final Config HTTP = section("http");
-    public static final Config REVERSE_PROXY = section("reverse-proxy");
     public static final Config NET = section("net");
     public static final Config TLS = section("tls");
-    public static final Config ON = section("on");
-    public static final Config ADMIN = section("admin");
     public static final Config TOKEN = section("token");
     public static final Config LOG = section("log");
-    public static final Config OPENAPI = section("openapi");
 
     static void applyConfig(Config config) {
         RapidoidEnv.touch();

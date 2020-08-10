@@ -1,14 +1,5 @@
-on:
+app:
   address: 127.0.0.1
-
-admin:
-  address: 127.0.0.1
-
-hibernate:
-  format_sql: false
-  show_sql: true
-  hbm2ddl:
-    auto: update
 
 http:
   maxPipeline: 1000000
