@@ -23,7 +23,7 @@ package org.rapidoid.http;
 import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.4.7")
@@ -31,9 +31,11 @@ public class HttpMultiAsteriskTest extends IsolatedIntegrationTest {
 
     @Test
     public void multiAsterisk() {
-        On.get("/x/*").plain("X");
-        On.get("/*").plain("root");
-        On.get("/y/*").plain("Y");
+        App app = new App().start();
+
+        app.get("/x/*").plain("X");
+        app.get("/*").plain("root");
+        app.get("/y/*").plain("Y");
 
         Self.get("/x").expect("X");
         Self.get("/").expect("root");

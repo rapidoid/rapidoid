@@ -26,7 +26,6 @@ import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cache.Cached;
 import org.rapidoid.setup.App;
-import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -37,13 +36,15 @@ public class HttpCachingTest extends IsolatedIntegrationTest {
 
     @Test
     public void testHttpCaching() {
+        App app = new App().start();
+
         // without caching
         AtomicInteger x = new AtomicInteger();
-        On.get("/x").plain(x::incrementAndGet);
+        app.get("/x").plain(x::incrementAndGet);
 
         // with caching
         AtomicInteger y = new AtomicInteger();
-        On.get("/y").cacheTTL(1000).plain(y::incrementAndGet);
+        app.get("/y").cacheTTL(1000).plain(y::incrementAndGet);
 
         exerciseCaching();
     }
@@ -63,7 +64,7 @@ public class HttpCachingTest extends IsolatedIntegrationTest {
 
     @Test
     public void testHttpCachingWithAnnotations() {
-        App app = new App();
+        App app = new App().start();
         app.beans(new CachingCtrl());
 
         exerciseCaching();

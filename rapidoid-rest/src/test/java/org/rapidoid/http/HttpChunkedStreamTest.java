@@ -23,7 +23,7 @@ package org.rapidoid.http;
 import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
@@ -40,7 +40,9 @@ public class HttpChunkedStreamTest extends IsolatedIntegrationTest {
 
     @Test
     public void testChunkedEncoding() {
-        On.req(req -> {
+        App app = new App().start();
+
+        app.req(req -> {
             OutputStream out = req.out();
 
             out.write("ab".getBytes());
@@ -65,7 +67,9 @@ public class HttpChunkedStreamTest extends IsolatedIntegrationTest {
 
     @Test
     public void testChunkedEncodingAsync() {
-        On.req(req -> {
+        App app = new App().start();
+
+        app.req(req -> {
             U.must(!req.isAsync());
             req.async();
             U.must(req.isAsync());

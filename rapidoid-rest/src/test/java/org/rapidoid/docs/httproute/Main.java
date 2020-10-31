@@ -21,20 +21,24 @@
 package org.rapidoid.docs.httproute;
 
 import org.rapidoid.http.Req;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 public class Main {
 
     public static void main(String[] args) {
         /* Request handlers should match both the verb and the path: */
 
-        On.get("/").json("Hi!");
+        App app = new App(args);
 
-        On.get("/x").html("Getting X");
+        app.get("/").json("Hi!");
 
-        On.post("/x").json((Req req) -> "Posting X");
+        app.get("/x").html("Getting X");
 
-        On.delete("/x").html((Req req) -> "<b>Deleting X</b>");
+        app.post("/x").json((Req req) -> "Posting X");
+
+        app.delete("/x").html((Req req) -> "<b>Deleting X</b>");
+
+        app.start();
     }
 
 }

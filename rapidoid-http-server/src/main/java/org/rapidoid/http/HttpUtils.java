@@ -268,7 +268,8 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 
     public static BasicConfig zone(Req req) {
         Customization custom = Customization.of(req);
-        return zone(custom, req.zone());
+        return custom.config();
+//        return zone(custom, req.zone());
     }
 
     public static void setResponseTokenCookie(Resp resp, String token) {

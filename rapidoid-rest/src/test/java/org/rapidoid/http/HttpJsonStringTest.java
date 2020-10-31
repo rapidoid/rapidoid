@@ -23,7 +23,7 @@ package org.rapidoid.http;
 import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.3.0")
@@ -31,13 +31,15 @@ public class HttpJsonStringTest extends IsolatedIntegrationTest {
 
     @Test
     public void testWithHandlerException() {
+        App app = new App().start();
+
         String list = "[\"a\", 123, true]";
 
-        On.get("/implicit-result").json((req, resp) -> list);
+        app.get("/implicit-result").json((req, resp) -> list);
 
-        On.get("/explicit-result").json((req, resp) -> resp.result(list));
+        app.get("/explicit-result").json((req, resp) -> resp.result(list));
 
-        On.get("/explicit-body").json((req, resp) -> resp.body(list.getBytes()));
+        app.get("/explicit-body").json((req, resp) -> resp.body(list.getBytes()));
 
         onlyGet("/implicit-result");
         onlyGet("/explicit-result");

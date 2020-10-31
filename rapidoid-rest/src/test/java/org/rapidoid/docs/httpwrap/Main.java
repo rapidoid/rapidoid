@@ -20,20 +20,23 @@
 
 package org.rapidoid.docs.httpwrap;
 
-import org.rapidoid.setup.Apps;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 public class Main {
 
     public static void main(String[] args) {
+        App app = new App(args);
+
         /* A wrapper executes before the handler */
 
-        Apps.defaults().wrappers((req, next) -> next.invokeAndTransformResult(result -> "Hey: " + result));
+        app.defaults().wrappers((req, next) -> next.invokeAndTransformResult(result -> "Hey: " + result));
 
         /* and provides transformation for the result */
 
-        On.get("/size").json((String s) -> s.length());
-        On.get("/upper").json((String s) -> s.toUpperCase());
+        app.get("/size").json((String s) -> s.length());
+        app.get("/upper").json((String s) -> s.toUpperCase());
+
+        app.start();
     }
 
 }

@@ -23,7 +23,7 @@ package org.rapidoid.http;
 import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 import org.rapidoid.u.U;
 
 import java.util.Map;
@@ -34,7 +34,9 @@ public class HttpClientJSONParamsTest extends IsolatedIntegrationTest {
 
     @Test
     public void testHttpReqWithJsonParams() {
-        On.post("/echo").json((Req req, ReqData data) -> data);
+        App app = new App().start();
+
+        app.post("/echo").json((Req req, ReqData data) -> data);
 
         long[] arr = {-10, 0, 20, 9090909090909090909L};
         Map<String, Object> map = U.map("x", 1, "t", true);

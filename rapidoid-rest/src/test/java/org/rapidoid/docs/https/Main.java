@@ -20,12 +20,16 @@
 
 package org.rapidoid.docs.https;
 
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 public class Main {
 
     public static void main(String[] args) {
-        On.get("/hello").plain("hello!");
+        App app = new App(args);
+
+        app.get("/hello").plain("hello!");
+
+        app.start();
     }
 
 }

@@ -26,7 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Str;
 import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
@@ -44,8 +44,9 @@ public class HttpPipeliningTest extends IsolatedIntegrationTest {
 
     @Test
     public void testSyncPipeline() {
+        App app = new App().start();
 
-        On.get("/").json((Req req, Integer n) -> {
+        app.get("/").json((Req req, Integer n) -> {
             COUNTER.incrementAndGet();
             return U.frmt("n=%s, handle=%s", n, req.handle());
         });

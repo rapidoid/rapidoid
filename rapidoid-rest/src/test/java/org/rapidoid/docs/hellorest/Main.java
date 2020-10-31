@@ -25,8 +25,9 @@ import org.rapidoid.setup.App;
 public class Main {
 
     public static void main(String[] args) {
-        App app = new App(args);
+        App app = new App();
         app.beans(new MyCtrl());
+        app.start();
     }
 
 }

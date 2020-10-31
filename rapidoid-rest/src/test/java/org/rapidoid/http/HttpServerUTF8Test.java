@@ -23,6 +23,7 @@ package org.rapidoid.http;
 import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.setup.App;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
@@ -34,7 +35,7 @@ public class HttpServerUTF8Test extends IsolatedIntegrationTest {
 
     @Test
     public void shouldHandleUTF8() {
-        defaultServerSetup();
+        App app = TestApps.defaultTestApp();
 
         System.out.println("file.encoding = " + System.getProperty("file.encoding"));
         System.out.println("Charset.defaultCharset() = " + Charset.defaultCharset());

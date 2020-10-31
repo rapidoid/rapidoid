@@ -43,7 +43,7 @@ public abstract class AbstractInsightful extends RapidoidThing implements Insigh
         Log.debug("Creating object", "kind", kind, "name", name, "creatorThread", creatorThread.getName(), "class",
                 getClass().getSimpleName());
 
-        Insights.register(this);
+//        Insights.register(this); // CAREFUL: memory leak!
     }
 
     @Override

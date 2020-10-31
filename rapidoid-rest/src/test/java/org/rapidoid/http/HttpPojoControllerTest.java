@@ -26,7 +26,6 @@ import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.setup.App;
-import org.rapidoid.setup.Apps;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.10")
@@ -35,7 +34,7 @@ public class HttpPojoControllerTest extends IsolatedIntegrationTest {
     @SuppressWarnings("unchecked")
     @Test
     public void testPojoHandlers() {
-        App app = new App();
+        App app = new App().start();
 
         app.beans(new Object() {
 
@@ -59,19 +58,6 @@ public class HttpPojoControllerTest extends IsolatedIntegrationTest {
         onlyGet("/a");
         onlyGet("/b");
         onlyPost("/x");
-    }
-
-    @SuppressWarnings("unchecked")
-    @Test
-    public void testPojoHandlersWithIoC() {
-        notFound("/b");
-
-        App app = new App();
-        app.beans(new Ctrl1());
-
-        onlyGet("/b");
-        onlyGet("/x");
-        notFound("/x");
     }
 
 }

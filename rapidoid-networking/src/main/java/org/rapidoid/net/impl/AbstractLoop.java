@@ -77,6 +77,8 @@ public abstract class AbstractLoop<T> extends LifecycleActivity<T> implements Ru
 
         afterLoop();
 
+        ownerThread = null;
+
         setStatus(LoopStatus.STOPPED);
 
         Log.debug("Stopped event loop", "name", name);

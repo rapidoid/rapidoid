@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Err;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.10")
@@ -32,14 +32,16 @@ public class HttpErrorTest extends IsolatedIntegrationTest {
 
     @Test
     public void testWithHandlerException() {
-        On.get("/err").json(() -> {
+        App app = new App().start();
+
+        app.get("/err").json(() -> {
             Err.secure(false, "Not secure!");
             return 123;
         });
 
         onlyGet("/err");
 
-        On.get("/err2").html(() -> {
+        app.get("/err2").html(() -> {
             throw new NullPointerException();
         });
 

@@ -23,19 +23,23 @@ package org.rapidoid.docs.httpresptype;
 import org.rapidoid.http.MediaType;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 public class Main {
 
     public static void main(String[] args) {
         /* The response type will be JSON, instead of HTML */
 
-        On.get("/").html((Req req) -> {
+        App app = new App(args);
+
+        app.get("/").html((Req req) -> {
             Resp resp = req.response();
             resp.contentType(MediaType.JSON);
             resp.result("abc");
             return resp;
         });
+
+        app.start();
     }
 
 }

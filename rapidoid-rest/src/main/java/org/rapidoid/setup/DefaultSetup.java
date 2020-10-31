@@ -46,7 +46,7 @@ public class DefaultSetup extends RapidoidInitializer {
 
         FastHttp http = new FastHttp(routes, MAIN_CFG);
 
-        main = new SetupImpl("main", MAIN_ZONE, http, MAIN_CFG, customization, routes, true);
+        main = new SetupImpl("main", MAIN_ZONE, http, MAIN_CFG, customization, routes);
         Setups.register(main);
 
         initDefaults();

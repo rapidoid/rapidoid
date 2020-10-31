@@ -40,9 +40,9 @@ import org.rapidoid.u.U;
 @Since("5.1.0")
 public class App extends RapidoidInitializer {
 
-    private final Setup setup = Setups.main();
-
     private final ServerSetup serverSetup = new ServerSetup(Conf.APP);
+
+    private final Setup setup = Setups.create("app");
 
     private volatile AppStatus status = AppStatus.NOT_STARTED;
 
@@ -76,14 +76,15 @@ public class App extends RapidoidInitializer {
         Conf.reset();
     }
 
-    public void beans(Object... beans) {
+    public App beans(Object... beans) {
         setup.beans(beans);
+        return this;
     }
 
     public synchronized void shutdown() {
         status = AppStatus.STOPPING;
 
-        Setups.shutdownAll();
+        setup.shutdown();
 
         status = AppStatus.STOPPED;
     }
@@ -91,16 +92,16 @@ public class App extends RapidoidInitializer {
     /**
      * Completes the initialization and starts the application.
      */
-    public synchronized void start() {
+    public synchronized App start() {
         U.must(status == AppStatus.INITIALIZING, "The application is not initializing!");
 
-        onAppReady();
-    }
-
-    private void onAppReady() {
-        status = AppStatus.RUNNING;
         setup.activate();
+
+        status = AppStatus.RUNNING;
+
         Log.info("!Ready.");
+
+        return this;
     }
 
     public AppStatus status() {
@@ -171,24 +172,29 @@ public class App extends RapidoidInitializer {
         return setup.page(path);
     }
 
-    public Setup req(ReqHandler handler) {
-        return setup.req(handler);
+    public App req(ReqHandler handler) {
+        setup.req(handler);
+        return this;
     }
 
-    public Setup req(ReqRespHandler handler) {
-        return setup.req(handler);
+    public App req(ReqRespHandler handler) {
+        setup.req(handler);
+        return this;
     }
 
-    public Setup req(HttpHandler handler) {
-        return setup.req(handler);
+    public App req(HttpHandler handler) {
+        setup.req(handler);
+        return this;
     }
 
-    public ServerSetup port(int port) {
-        return serverSetup.port(port);
+    public App port(int port) {
+        serverSetup.port(port);
+        return this;
     }
 
-    public ServerSetup address(String address) {
-        return serverSetup.address(address);
+    public App address(String address) {
+        serverSetup.address(address);
+        return this;
     }
 
     public OnError error(Class<? extends Throwable> error) {

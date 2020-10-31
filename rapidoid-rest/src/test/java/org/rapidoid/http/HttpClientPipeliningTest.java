@@ -30,7 +30,7 @@ import org.rapidoid.data.BufRanges;
 import org.rapidoid.net.TCP;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.FiniteStateProtocol;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 import org.rapidoid.u.U;
 import org.rapidoid.util.D;
 import org.rapidoid.wrap.BoolWrap;
@@ -46,10 +46,11 @@ public class HttpClientPipeliningTest extends IsolatedIntegrationTest {
 
     @Test
     public void testHttpServerPipelining() {
+        App app = new App().start();
 
         Conf.NET.set("workers", 1);
 
-        On.get("/hi").plain(() -> "Hello");
+        app.get("/hi").plain(() -> "Hello");
 
         final int connections = 100;
         final int pipelining = 10;

@@ -26,6 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.crypto.Crypto;
 import org.rapidoid.io.IO;
 import org.rapidoid.io.Upload;
+import org.rapidoid.setup.App;
 import org.rapidoid.u.U;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public class HttpMultipartFormTest extends IsolatedIntegrationTest {
 
     @Test
     public void shouldHandleUploads() {
-        defaultServerSetup();
+        App app = TestApps.defaultTestApp();
 
         String hash1 = Crypto.md5(IO.loadBytes("test1.txt"));
         String hash2 = Crypto.md5(IO.loadBytes("test2.txt"));
@@ -63,7 +64,7 @@ public class HttpMultipartFormTest extends IsolatedIntegrationTest {
 
     @Test
     public void shouldHandleBigUploads() {
-        defaultServerSetup();
+        App app = TestApps.defaultTestApp();
 
         Map<String, String> cookies = U.map("foo", "bar", "COOKIE1", "a");
 

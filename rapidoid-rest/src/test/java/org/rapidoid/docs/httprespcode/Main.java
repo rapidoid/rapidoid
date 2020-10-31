@@ -21,12 +21,16 @@
 package org.rapidoid.docs.httprespcode;
 
 import org.rapidoid.http.Req;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 public class Main {
 
     public static void main(String[] args) {
-        On.get("/").html((Req req) -> req.response().result("").code(404));
+        App app = new App(args);
+
+        app.get("/").html((Req req) -> req.response().result("").code(404));
+
+        app.start();
     }
 
 }

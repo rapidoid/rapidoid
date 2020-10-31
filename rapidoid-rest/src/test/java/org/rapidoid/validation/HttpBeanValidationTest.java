@@ -36,9 +36,8 @@ public class HttpBeanValidationTest extends IsolatedIntegrationTest {
     public void testValidation() {
         My.validator(new JavaxBeanValidator());
 
-        App app = new App();
+        App app = new App().start();
         app.beans(new FooCtrl());
-        app.start();
 
         onlyGet("/echo?num=123");
         onlyGet("/echo");
@@ -52,7 +51,7 @@ public class HttpBeanValidationTest extends IsolatedIntegrationTest {
 
     @Test
     public void testCustomValidation() {
-        App app = new App();
+        App app = new App().start();
 
         app.get("/invalid1").html((Bar bar) -> "ok");
         app.get("/invalid2").json((Bar bar) -> "ok");

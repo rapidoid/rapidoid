@@ -27,7 +27,7 @@ import org.rapidoid.io.IO;
 import org.rapidoid.net.TCP;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.FiniteStateProtocol;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 import org.rapidoid.u.U;
 
 import java.util.concurrent.CountDownLatch;
@@ -48,7 +48,9 @@ public class HttpInvalidChunkedRequestTest extends IsolatedIntegrationTest {
 
     @Test
     public void testChunkedRequests() throws InterruptedException {
-        On.post("/hi").plain(() -> RESP_BODY);
+        App app = new App().start();
+
+        app.post("/hi").plain(() -> RESP_BODY);
 
         int responsesForChunkedReq = sendChunkedRequests();
 

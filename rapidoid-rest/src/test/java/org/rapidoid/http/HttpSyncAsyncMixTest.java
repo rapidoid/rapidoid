@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.job.Jobs;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")
@@ -35,8 +35,9 @@ public class HttpSyncAsyncMixTest extends IsolatedIntegrationTest {
 
     @Test
     public void testSyncAsyncMix() {
+        App app = new App().start();
 
-        On.get("/").plain((Resp resp, Integer n) -> {
+        app.get("/").plain((Resp resp, Integer n) -> {
             if (n % 2 == 0) return n;
 
             return Jobs.after(3).milliseconds(() -> resp.result(n * 10).done());

@@ -23,7 +23,7 @@ package org.rapidoid.http;
 import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -31,21 +31,23 @@ public class HttpHandlerTypesTest extends IsolatedIntegrationTest {
 
     @Test
     public void testHandlerTypes() {
-        On.get("/a").html(req -> "a");
+        App app = new App().start();
 
-        On.get("/b").html((req, resp) -> "b");
+        app.get("/a").html(req -> "a");
 
-        On.get("/c").html((ReqHandler) req -> "c");
+        app.get("/b").html((req, resp) -> "b");
 
-        On.get("/d").html((ReqRespHandler) (req, resp) -> "d");
+        app.get("/c").html((ReqHandler) req -> "c");
 
-        On.get("/e").html((Req req) -> "e");
+        app.get("/d").html((ReqRespHandler) (req, resp) -> "d");
 
-        On.get("/f").html((Req req, Integer x) -> "f");
+        app.get("/e").html((Req req) -> "e");
 
-        On.get("/g").html((Req req, Resp resp) -> "g");
+        app.get("/f").html((Req req, Integer x) -> "f");
 
-        On.get("/h").html((Resp yy, Integer tt, Resp xx, Req rrr, Boolean b) -> "h");
+        app.get("/g").html((Req req, Resp resp) -> "g");
+
+        app.get("/h").html((Resp yy, Integer tt, Resp xx, Req rrr, Boolean b) -> "h");
 
         onlyGet("/a");
         onlyGet("/b");

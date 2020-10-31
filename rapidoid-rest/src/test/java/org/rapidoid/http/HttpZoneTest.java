@@ -23,7 +23,7 @@ package org.rapidoid.http;
 import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 import java.util.TreeMap;
 
@@ -33,12 +33,14 @@ public class HttpZoneTest extends IsolatedIntegrationTest {
 
     @Test
     public void testMainZone() {
+        App app = new App().start();
+
         ReqHandler zoneHandler = req -> new TreeMap<>(HttpUtils.zone(req).toMap());
 
-        On.get("/a").json(zoneHandler);
-        On.get("/b").zone("admin").json(zoneHandler);
-        On.get("/c").zone("other").json(zoneHandler);
-        On.get("/d").zone("center").json(zoneHandler);
+        app.get("/a").json(zoneHandler);
+        app.get("/b").zone("admin").json(zoneHandler);
+        app.get("/c").zone("other").json(zoneHandler);
+        app.get("/d").zone("center").json(zoneHandler);
 
         onlyGet("/a");
         onlyGet("/b");

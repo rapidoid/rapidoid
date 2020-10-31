@@ -32,6 +32,7 @@ import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.impl.HttpRoutesImpl;
 import org.rapidoid.job.Jobs;
+import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.LazyInit;
 
@@ -66,7 +67,7 @@ public class Setups extends RapidoidInitializer {
         HttpRoutesImpl routes = new HttpRoutesImpl(name, customization);
         FastHttp http = new FastHttp(routes, config);
 
-        Setup setup = new SetupImpl(name, "main", http, config, customization, routes, false);
+        Setup setup = new SetupImpl(name, "main", http, config, customization, routes);
 
         instances.add(setup);
         return setup;
@@ -76,8 +77,9 @@ public class Setups extends RapidoidInitializer {
         return DEFAULT.get().main;
     }
 
-    public static synchronized void haltAll() {
-        instances().forEach(Setup::halt);
+    public static synchronized void destroyAll() {
+        Log.info("Destroying servers", "count", instances.size());
+        U.list(instances).forEach(Setup::destroy); // also will deregister when destroying
     }
 
     public static synchronized void shutdownAll() {
@@ -108,10 +110,6 @@ public class Setups extends RapidoidInitializer {
         }
     }
 
-    public static void ready() {
-        instances().forEach(Setup::activate);
-    }
-
     public static void clear() {
         synchronized (Setups.class) {
             for (Setup setup : Setups.instances()) {
@@ -120,14 +118,6 @@ public class Setups extends RapidoidInitializer {
             }
 
             Setups.instances.clear();
-        }
-    }
-
-    static void reloadAll() {
-        synchronized (Setups.class) {
-            for (Setup setup : Setups.instances()) {
-                setup.reload();
-            }
         }
     }
 

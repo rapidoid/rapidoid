@@ -29,18 +29,16 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.commons.Str;
 import org.rapidoid.config.Conf;
-import org.rapidoid.crypto.Crypto;
 import org.rapidoid.data.JSON;
 import org.rapidoid.env.Env;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.lambda.Executable;
 import org.rapidoid.lambda.F3;
 import org.rapidoid.lambda.Lmbd;
-import org.rapidoid.log.Log;
 import org.rapidoid.net.util.NetUtil;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.Apps;
 import org.rapidoid.setup.My;
-import org.rapidoid.setup.On;
 import org.rapidoid.test.RapidoidIntegrationTest;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
@@ -78,12 +76,10 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
         Msc.reset();
         My.reset();
 
-        On.setup().activate();
-        On.setup().reload();
-
+//        app.setup().activate();
+//        app.setup().reload();
 //        App.path(getTestPackageName());
-
-        verifyNoRoutes();
+//        verifyNoRoutes(app);
 
         U.must(Msc.isInsideTest());
 
@@ -102,7 +98,7 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
         Jobs.shutdownNow();
         U.sleep(200);
 
-        Apps.shutdown();
+        Apps.destroyAll();
 
         RapidoidIntegrationTest.after(this);
     }
@@ -113,28 +109,6 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 
     protected String localhost(int port, String uri) {
         return Msc.http() + "://localhost:" + port + uri;
-    }
-
-    protected void defaultServerSetup() {
-        On.get("/echo").serve((Req x) -> {
-            x.response().contentType(MediaType.PLAIN_TEXT_UTF_8);
-            return x.verb() + ":" + x.path() + ":" + x.query();
-        });
-
-        On.get("/hello").html("Hello");
-
-        On.post("/upload").plain((Req x) -> {
-            Log.info("Uploaded files", "files", x.files().keySet());
-
-            boolean hasF3 = x.files().containsKey("f3");
-
-            return U.join(":", x.cookies().get("foo"), x.cookies().get("COOKIE1"), x.posted().get("a"), x.files().size(),
-                    Crypto.md5(x.file("f1").content()),
-                    Crypto.md5(x.files().get("f2").get(0).content()),
-                    Crypto.md5(hasF3 ? x.file("f3").content() : new byte[0]));
-        });
-
-        On.req((Req x) -> x.response().html(U.join(":", x.verb(), x.path(), x.query())));
     }
 
     protected String get(String uri) {
@@ -366,22 +340,22 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
         return U.map("verb", req.verb(), "uri", req.uri(), "data", req.data(), "code", resp.code());
     }
 
-    protected String appRoutes() {
-        List<String> routes = Do.map(On.setup().routes().all()).toList(Object::toString);
+    protected String appRoutes(App app) {
+        List<String> routes = Do.map(app.setup().routes().all()).toList(Object::toString);
         Collections.sort(routes);
         return U.join("\n", routes);
     }
 
-    protected void verifyRoutes() {
-        verify("routes", appRoutes());
+    protected void verifyRoutes(App app) {
+        verify("routes", appRoutes(app));
     }
 
-    protected void verifyRoutes(String name) {
-        verify("routes-" + name, appRoutes());
+    protected void verifyRoutes(App app, String name) {
+        verify("routes-" + name, appRoutes(app));
     }
 
-    protected void verifyNoRoutes() {
-        isTrue(On.setup().routes().all().isEmpty());
+    protected void verifyNoRoutes(App app) {
+        isTrue(app.setup().routes().all().isEmpty());
     }
 
     protected void verifyJson(String name, Object actual) {
@@ -395,6 +369,10 @@ public abstract class IsolatedIntegrationTest extends TestCommons {
 
     protected ScheduledFuture<Void> async(Executable executable) {
         return Jobs.after(5).milliseconds(() -> Lmbd.execute(executable));
+    }
+
+    protected App newApp() {
+        return new App().start();
     }
 
 }

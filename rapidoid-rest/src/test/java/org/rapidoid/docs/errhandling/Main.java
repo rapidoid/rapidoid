@@ -21,19 +21,23 @@
 package org.rapidoid.docs.errhandling;
 
 import org.rapidoid.http.Req;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.My;
-import org.rapidoid.setup.On;
 
 public class Main {
 
     public static void main(String[] args) {
+        App app = new App(args);
+
         My.errorHandler((req, resp, error) -> {
             return resp.code(200).result("Error: " + error.getMessage());
         });
 
-        On.get("/hi").html((Req req) -> {
+        app.get("/hi").html((Req req) -> {
             throw new RuntimeException("problem!");
         });
+
+        app.start();
     }
 
 }

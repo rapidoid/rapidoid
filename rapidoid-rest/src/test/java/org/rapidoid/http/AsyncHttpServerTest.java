@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.io.IO;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
@@ -42,7 +42,9 @@ public class AsyncHttpServerTest extends IsolatedIntegrationTest {
 
     @Test
     public void testAsyncHttpServer() {
-        On.req(req -> {
+        App app = new App().start();
+
+        app.req(req -> {
             U.must(!req.isAsync());
             req.async();
             U.must(req.isAsync());
@@ -74,7 +76,9 @@ public class AsyncHttpServerTest extends IsolatedIntegrationTest {
 
     @Test
     public void testAsyncHttpServerNested() {
-        On.req(req -> {
+        App app = new App().start();
+
+        app.req(req -> {
             U.must(!req.isAsync());
             req.async();
             U.must(req.isAsync());
@@ -96,7 +100,9 @@ public class AsyncHttpServerTest extends IsolatedIntegrationTest {
 
     @Test
     public void testAsyncHttpServer2() {
-        On.req(req -> async(() -> {
+        App app = new App().start();
+
+        app.req(req -> async(() -> {
             Resp resp = req.response();
 
             resp.chunk("A".getBytes());

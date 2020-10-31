@@ -24,8 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.io.Res;
-import org.rapidoid.setup.Apps;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.11")
@@ -33,9 +32,11 @@ public class HttpStaticFilesTest extends IsolatedIntegrationTest {
 
     @Test
     public void serveStaticFiles() {
-        Apps.custom().staticFilesPath("static1", "non-existing-location", "static2");
+        App app = new App().start();
 
-        On.get("/c").managed(false).contentType(MediaType.JSON).serve("override");
+        app.custom().staticFilesPath("static1", "non-existing-location", "static2");
+
+        app.get("/c").managed(false).contentType(MediaType.JSON).serve("override");
 
         onlyGet("/"); // home page
         onlyGet("/index"); // home page
@@ -65,6 +66,8 @@ public class HttpStaticFilesTest extends IsolatedIntegrationTest {
 
     @Test
     public void serveStaticFilesFromDefaultLocations() {
+        App app = new App().start();
+
         onlyGet("/page1");
         onlyGet("/page1.html");
 

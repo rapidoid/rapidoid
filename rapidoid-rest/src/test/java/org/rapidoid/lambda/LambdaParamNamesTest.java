@@ -27,7 +27,7 @@ import org.rapidoid.domain.Movie;
 import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Reflect;
 
@@ -61,42 +61,54 @@ public class LambdaParamNamesTest extends IsolatedIntegrationTest {
         int a = 100;
         int b = 200;
 
-        On.get("/").json((Req req, Integer x, Resp resp) -> U.join(":", a, b, x));
+        App app = new App().start();
+
+        app.get("/").json((Req req, Integer x, Resp resp) -> U.join(":", a, b, x));
 
         onlyGet("/?x=10&b=33");
     }
 
     @Test
     public void testLambdaParams1() {
-        On.get("/foo").json((Double a) -> a);
+        App app = new App().start();
+
+        app.get("/foo").json((Double a) -> a);
 
         onlyGet("/foo?a=10");
     }
 
     @Test
     public void testLambdaParams2() {
-        On.get("/foo").json((Double a, Double b) -> U.join(":", a, b));
+        App app = new App().start();
+
+        app.get("/foo").json((Double a, Double b) -> U.join(":", a, b));
 
         onlyGet("/foo?a=10&b=20");
     }
 
     @Test
     public void testLambdaParams3() {
-        On.get("/foo").json((Double a, Double b, Double c) -> U.join(":", a, b, c));
+        App app = new App().start();
+
+        app.get("/foo").json((Double a, Double b, Double c) -> U.join(":", a, b, c));
 
         onlyGet("/foo?a=10&b=20&c=30");
     }
 
     @Test
     public void testLambdaParams4() {
-        On.get("/foo").json((Double a, Double b, Double c, Double d) -> U.join(":", a, b, c, d));
+        App app = new App().start();
+
+        app.get("/foo").json((Double a, Double b, Double c, Double d) -> U.join(":", a, b, c, d));
 
         onlyGet("/foo?a=10&b=20&c=30&d=40");
     }
 
     @Test
     public void testLambdaParams5() {
-        On.get("/foo").json((Double a, Double b, Double c, Double d, Double e) -> U.join(":", a, b, c, d, e));
+        App app = new App().start();
+
+        app.get("/foo").json((Double a, Double b, Double c, Double d, Double e) -> U.join(":", a, b, c, d, e));
 
         onlyGet("/foo?a=10&b=20&c=30&d=40&e=50");
     }

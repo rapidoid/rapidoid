@@ -20,12 +20,14 @@
 
 package org.rapidoid.docs.staticfiles;
 
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 public class Main {
 
     public static void main(String[] args) {
-        On.get("/").html("Home");
+        App app = new App(args);
+        app.get("/").html("Home");
+        app.start();
     }
 
 }

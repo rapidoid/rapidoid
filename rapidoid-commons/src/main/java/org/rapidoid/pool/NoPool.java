@@ -21,18 +21,44 @@
 package org.rapidoid.pool;
 
 import org.rapidoid.RapidoidThing;
+import org.rapidoid.lambda.Lmbd;
 
 import java.util.concurrent.Callable;
 
 /**
  * @author Nikolche Mihajlovski
- * @since 4.1.0
+ * @since 6.0.0
  */
-public class Pools extends RapidoidThing {
+public class NoPool<T> extends RapidoidThing implements Pool<T> {
 
-    public static <T> Pool<T> create(String name, Callable<T> factory, int capacity) {
-        return new SynchronizedArrayPool<>(name, factory, capacity);
-//        return new NoPool<>(factory);
+    private final Callable<T> factory;
+    private int objectsCreated;
+
+    public NoPool(Callable<T> factory) {
+        this.factory = factory;
+    }
+
+    public synchronized T get() {
+        objectsCreated++;
+        return Lmbd.call(factory);
+    }
+
+    public synchronized void release(T obj) {
+        // do nothing
+    }
+
+    public synchronized int objectsCreated() {
+        return objectsCreated;
+    }
+
+    @Override
+    public synchronized int size() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+        // do nothing
     }
 
 }

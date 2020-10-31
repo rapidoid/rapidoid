@@ -33,6 +33,7 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.nio.channels.*;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
@@ -48,6 +49,7 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
     private ServerSocketChannel serverSocketChannel;
 
     private volatile RapidoidWorker[] ioWorkers;
+    private final List<Thread> threads = U.list();
 
     private RapidoidWorker currentWorker;
 
@@ -126,6 +128,7 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
             RapidoidWorkerThread workerThread = new RapidoidWorkerThread(i, net, tlsParams);
 
             workerThread.start();
+            threads.add(workerThread);
 
             ioWorkers[i] = workerThread.getWorker();
 
@@ -144,7 +147,9 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 
     @Override
     public synchronized Server start() {
-        new RapidoidThread(this, "server").start();
+        Thread thread = new RapidoidThread(this, "server");
+        thread.start();
+        threads.add(thread);
 
         waitForStatusOtherThan(LoopStatus.INIT, LoopStatus.BEFORE_LOOP);
 
@@ -176,6 +181,8 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
         }
 
         super.shutdown();
+        cleanUp();
+
         Log.info("!The server is down.");
         return this;
     }
@@ -272,4 +279,18 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
         }
     }
 
+    private void cleanUp() {
+        ioWorkers = null;
+        currentWorker = null;
+
+        for (Thread thread : threads) {
+            try {
+                thread.interrupt();
+            } catch (Exception e) {
+                // do nothing
+            }
+        }
+
+        threads.clear();
+    }
 }

@@ -23,20 +23,22 @@ package org.rapidoid.docs.multisetup;
 import org.rapidoid.docs.multisetup.barsetup.BarSetupCtrl;
 import org.rapidoid.docs.multisetup.foosetup.FooSetupCtrl;
 import org.rapidoid.http.HTTP;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.Setup;
 import org.rapidoid.setup.Setups;
 
 public class Main {
 
     public static void main(String[] args) {
-        Setup setup1 = Setups.create("foo").port(2222);
-        Setup setup2 = Setups.create("bar").port(3333);
+        App app1 = new App()
+                .port(2222)
+                .beans(new FooSetupCtrl())
+                .start();
 
-        setup1.beans(new FooSetupCtrl());
-        setup2.beans(new BarSetupCtrl());
-
-        setup1.activate();
-        setup2.activate();
+        App app2 = new App()
+                .port(3333)
+                .beans(new BarSetupCtrl())
+                .start();
 
         // demo
         HTTP.get("localhost:2222/foo").print();

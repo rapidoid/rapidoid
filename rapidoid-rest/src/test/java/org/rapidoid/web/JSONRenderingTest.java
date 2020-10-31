@@ -26,7 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.data.JSON;
 import org.rapidoid.domain.Movie;
 import org.rapidoid.http.IsolatedIntegrationTest;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -34,15 +34,19 @@ public class JSONRenderingTest extends IsolatedIntegrationTest {
 
     @Test
     public void testJSONRendering() {
-        On.get("/").json(() -> new Movie("Rambo", 1990));
+        App app = new App().start();
+
+        app.get("/").json(() -> new Movie("Rambo", 1990));
 
         onlyGet("/");
     }
 
     @Test
     public void testJSONParsingWithoutJsonHeaderPOST() {
+        App app = new App().start();
+
         // simply return the same object
-        On.post("/movie").json((Movie m) -> m);
+        app.post("/movie").json((Movie m) -> m);
 
         Movie movie = new Movie("test title", 1999);
         onlyPost("/movie", JSON.stringify(movie));
@@ -50,8 +54,10 @@ public class JSONRenderingTest extends IsolatedIntegrationTest {
 
     @Test
     public void testJSONParsingWithoutJsonHeaderPUT() {
+        App app = new App().start();
+
         // simply return the same object
-        On.put("/movie").json((Movie m) -> m);
+        app.put("/movie").json((Movie m) -> m);
 
         Movie movie = new Movie("test title", 1999);
         onlyPut("/movie", JSON.stringify(movie));

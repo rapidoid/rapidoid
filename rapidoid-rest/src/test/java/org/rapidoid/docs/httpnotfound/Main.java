@@ -21,14 +21,18 @@
 package org.rapidoid.docs.httpnotfound;
 
 import org.rapidoid.http.Req;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 public class Main {
 
     public static void main(String[] args) {
         /* Returning a [null] means [NOT FOUND] */
 
-        On.get("/").json((Req req) -> req.params().size() == 1 ? req.params() : null);
+        App app = new App(args);
+
+        app.get("/").json((Req req) -> req.params().size() == 1 ? req.params() : null);
+
+        app.start();
     }
 
 }

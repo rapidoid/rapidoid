@@ -46,7 +46,7 @@ public class RapidoidThreadFactory extends RapidoidThing implements ThreadFactor
     public Thread newThread(Runnable runnable) {
         RapidoidThread thread = new RapidoidThread(runnable);
 
-        thread.setName(name + counter.incrementAndGet());
+        thread.setName(name + " #" + counter.incrementAndGet());
         thread.setDaemon(daemons);
 
         return thread;

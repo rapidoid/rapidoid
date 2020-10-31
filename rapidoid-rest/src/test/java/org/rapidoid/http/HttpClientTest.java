@@ -27,7 +27,7 @@ import org.rapidoid.http.client.HttpClient;
 import org.rapidoid.http.client.HttpClientBodyCallback;
 import org.rapidoid.http.client.HttpClientCallback;
 import org.rapidoid.lambda.ResultCounterCallback;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
@@ -42,8 +42,9 @@ public class HttpClientTest extends IsolatedIntegrationTest {
 
     @Test
     public void testHttpClientOnLocalServer() {
+        App app = new App().start();
 
-        On.get("/").plain(req -> SIMPLE_RESPONSE);
+        app.get("/").plain(req -> SIMPLE_RESPONSE);
 
         for (int k = 0; k < 3; k++) {
 

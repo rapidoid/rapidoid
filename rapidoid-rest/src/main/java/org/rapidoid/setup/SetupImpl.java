@@ -73,18 +73,14 @@ public class SetupImpl extends RapidoidInitializer implements Setup {
     private volatile boolean listening;
     private volatile Server server;
     private volatile boolean activated;
-    private volatile boolean reloaded;
     private volatile boolean autoActivating = false;
     private volatile Runnable onInit;
-
-    private final boolean isApp;
 
     private final Once bootstrappedBeans = new Once();
 
     SetupImpl(String name, String zone, FastHttp http,
               Config serverConfig, Customization customization,
-              HttpRoutesImpl routes,
-              boolean isApp) {
+              HttpRoutesImpl routes) {
 
         this.name = name;
         this.zone = zone;
@@ -93,14 +89,13 @@ public class SetupImpl extends RapidoidInitializer implements Setup {
         this.serverConfig = serverConfig;
         this.customization = customization;
         this.routes = routes;
-        this.isApp = isApp;
 
         this.defaults.zone(zone);
     }
 
     @Override
     public void destroy() {
-        halt();
+        shutdown();
         Setups.deregister(this);
     }
 
@@ -110,11 +105,11 @@ public class SetupImpl extends RapidoidInitializer implements Setup {
     }
 
     private synchronized void listen() {
-        if (!listening && !reloaded) {
+        if (!listening) {
 
             listening = true;
 
-            HttpProcessor proc = processor != null ? processor : http();
+            HttpProcessor proc = (processor != null) ? processor : http();
 
             if (server == null) {
                 int targetPort = port();
@@ -142,9 +137,13 @@ public class SetupImpl extends RapidoidInitializer implements Setup {
         Runnable initializer = onInit;
         if (initializer != null) initializer.run();
 
-        if (!reloaded) {
-            listen();
-        }
+//        bootstrappedBeans.reset();
+//        http().resetConfig();
+//        defaults = new RouteOptions();
+//        defaults.zone(zone);
+//        attributes().clear();
+
+        listen();
     }
 
     @Override
@@ -264,12 +263,13 @@ public class SetupImpl extends RapidoidInitializer implements Setup {
     public synchronized Setup shutdown() {
         if (this.server != null) {
             if (this.server.isActive()) {
+                Log.info("Shutting down server");
                 this.server.shutdown();
             }
             this.server = null;
         }
 
-        reset();
+//        reset();
 
         return this;
     }
@@ -278,12 +278,13 @@ public class SetupImpl extends RapidoidInitializer implements Setup {
     public synchronized Setup halt() {
         if (this.server != null) {
             if (this.server.isActive()) {
+                Log.info("Halting server");
                 this.server.halt();
             }
             this.server = null;
         }
 
-        reset();
+//        reset();
 
         return this;
     }
@@ -292,7 +293,6 @@ public class SetupImpl extends RapidoidInitializer implements Setup {
     public void reset() {
         http().resetConfig();
         listening = false;
-        reloaded = false;
         port = null;
         address = null;
         processor = null;
@@ -327,16 +327,6 @@ public class SetupImpl extends RapidoidInitializer implements Setup {
     public Setup deregister(Object... controllers) {
         PojoHandlersSetup.from(this, controllers).deregister();
         return this;
-    }
-
-    @Override
-    public void reload() {
-        reloaded = true;
-        bootstrappedBeans.reset();
-        http().resetConfig();
-        defaults = new RouteOptions();
-        defaults.zone(zone);
-        attributes().clear();
     }
 
     @Override
@@ -430,10 +420,6 @@ public class SetupImpl extends RapidoidInitializer implements Setup {
     public Setup autoActivating(boolean autoActivating) {
         this.autoActivating = autoActivating;
         return this;
-    }
-
-    private boolean isApp() {
-        return isApp;
     }
 
 }

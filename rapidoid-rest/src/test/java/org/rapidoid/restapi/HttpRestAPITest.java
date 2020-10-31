@@ -28,7 +28,7 @@ import org.rapidoid.http.HttpResp;
 import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.http.ReqHandler;
 import org.rapidoid.http.Self;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 import org.rapidoid.test.ExpectErrors;
 import org.rapidoid.u.U;
 
@@ -36,8 +36,12 @@ import org.rapidoid.u.U;
 @Since("5.2.9")
 public class HttpRestAPITest extends IsolatedIntegrationTest {
 
-    private void initAPI() {
-        On.get("/inc/{x}").json((ReqHandler) req -> U.num(req.param("x")) + 1);
+    private App initAPI() {
+        App app = new App().start();
+
+        app.get("/inc/{x}").json((ReqHandler) req -> U.num(req.param("x")) + 1);
+
+        return app;
     }
 
     @Test

@@ -23,7 +23,7 @@ package org.rapidoid.http;
 import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 import org.rapidoid.u.U;
 
 import java.util.Map;
@@ -38,24 +38,27 @@ public class HttpUnmanagedTest extends IsolatedIntegrationTest {
 
     @Test
     public void testUnmanagedHandlersWithPrerenderedJSON1() {
+        App app = new App().start();
 
-        On.post("/json").managed(false).json((Req req, Resp resp) -> resp.body(PRE_RENDERED));
+        app.post("/json").managed(false).json((Req req, Resp resp) -> resp.body(PRE_RENDERED));
 
         onlyPost("/json");
     }
 
     @Test
     public void testUnmanagedHandlersWithPrerenderedJSON2() {
+        App app = new App().start();
 
-        On.get("/json").managed(false).serve((Req req, Resp resp) -> resp.contentType(MediaType.JSON).body(PRE_RENDERED));
+        app.get("/json").managed(false).serve((Req req, Resp resp) -> resp.contentType(MediaType.JSON).body(PRE_RENDERED));
 
         onlyGet("/json");
     }
 
     @Test
     public void testUnmanagedHandlersWithPrerenderedJSON3() {
+        App app = new App().start();
 
-        On.post("/json").managed(false).serve((Req req, Resp resp) -> {
+        app.post("/json").managed(false).serve((Req req, Resp resp) -> {
 
             resp.header("hdr1", "val1")
                     .cookie("cook1", "the-cookie");
@@ -68,8 +71,9 @@ public class HttpUnmanagedTest extends IsolatedIntegrationTest {
 
     @Test
     public void testUnmanagedHandlersWithPrerenderedJSON4() {
+        App app = new App().start();
 
-        On.get("/json/{num}").managed(false).json((Integer num, Req req, Resp resp) -> {
+        app.get("/json/{num}").managed(false).json((Integer num, Req req, Resp resp) -> {
 
             resp.header("hdr1", "val1")
                     .cookie("cook1", "the-cookie");
@@ -83,16 +87,18 @@ public class HttpUnmanagedTest extends IsolatedIntegrationTest {
 
     @Test
     public void testUnmanagedHandlersWithNormalJSON1() {
+        App app = new App().start();
 
-        On.get("/json").managed(false).json((Req req, Resp resp) -> DATA);
+        app.get("/json").managed(false).json((Req req, Resp resp) -> DATA);
 
         onlyGet("/json");
     }
 
     @Test
     public void testUnmanagedHandlersWithNormalJSON2() {
+        App app = new App().start();
 
-        On.post("/json").managed(false).serve((Req req, Resp resp) -> {
+        app.post("/json").managed(false).serve((Req req, Resp resp) -> {
             resp.contentType(MediaType.JSON)
                     .code(500)
                     .header("hdr1", "val1")
@@ -106,16 +112,18 @@ public class HttpUnmanagedTest extends IsolatedIntegrationTest {
 
     @Test
     public void testUnmanagedHandlersWithHtml() {
+        App app = new App().start();
 
-        On.post("/").managed(false).serve((Req req, Resp resp) -> resp.html("denied!").code(403));
+        app.post("/").managed(false).serve((Req req, Resp resp) -> resp.html("denied!").code(403));
 
         onlyPost("/");
     }
 
     @Test
     public void testUnmanagedHandlersWithPlainText() {
+        App app = new App().start();
 
-        On.post("/").managed(false).json((Req req, Resp resp) -> {
+        app.post("/").managed(false).json((Req req, Resp resp) -> {
             resp.code(404)
                     .contentType(MediaType.PLAIN_TEXT_UTF_8)
                     .header("hdr1", "val1")
@@ -129,16 +137,18 @@ public class HttpUnmanagedTest extends IsolatedIntegrationTest {
 
     @Test
     public void testUnmanagedHandlersWithPlainTextSimple() {
+        App app = new App().start();
 
-        On.get("/").managed(false).plain(() -> "hi!");
+        app.get("/").managed(false).plain(() -> "hi!");
 
         onlyGet("/");
     }
 
     @Test
     public void testUnmanagedHandlersWithErrors() {
+        App app = new App().start();
 
-        On.get("/").managed(false).json(() -> {
+        app.get("/").managed(false).json(() -> {
             throw U.rte("INTENTIONAL ERROR!");
         });
 

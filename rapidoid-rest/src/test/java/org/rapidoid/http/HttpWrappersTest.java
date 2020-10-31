@@ -23,9 +23,8 @@ package org.rapidoid.http;
 import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.Apps;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.My;
-import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
@@ -34,23 +33,25 @@ public class HttpWrappersTest extends IsolatedIntegrationTest {
 
     @Test
     public void testWrappers() {
+        App app = new App().start();
+
         HttpWrapper hey = wrapper("hey");
         My.wrappers(hey);
 
-        Apps.defaults().wrappers(wrapper("on-def"));
+        app.defaults().wrappers(wrapper("on-def"));
 
-        On.get("/def").plain("D");
+        app.get("/def").plain("D");
 
-        Apps.defaults().wrappers((HttpWrapper[]) null); // reset the default wrappers
+        app.defaults().wrappers((HttpWrapper[]) null); // reset the default wrappers
 
-        HttpWrapper[] wrappers = Apps.custom().wrappers();
+        HttpWrapper[] wrappers = app.custom().wrappers();
         eq(U.array(hey), wrappers);
 
-        On.get("/").wrappers(wrapper("index")).plain("home");
-        On.post("/x").wrappers(wrapper("x"), wrapper("x2")).json("X");
-        On.get("/y").html("YYY");
+        app.get("/").wrappers(wrapper("index")).plain("home");
+        app.post("/x").wrappers(wrapper("x"), wrapper("x2")).json("X");
+        app.get("/y").html("YYY");
 
-        Apps.custom().wrappers(wrapper("on"));
+        app.custom().wrappers(wrapper("on"));
 
         onlyGet("/");
         onlyPost("/x");
@@ -60,31 +61,35 @@ public class HttpWrappersTest extends IsolatedIntegrationTest {
 
     @Test
     public void testDefaultWrappers() {
+        App app = new App().start();
+
         My.wrappers(wrapper("def"));
 
-        On.post("/z").plain("Zzz");
+        app.post("/z").plain("Zzz");
 
         onlyPost("/z");
     }
 
     @Test
     public void shouldTransformRespResult() {
+        App app = new App().start();
+
         My.wrappers(wrapper("wrap1"), wrapper("wrap2"));
 
-        On.get("/x").plain("X");
+        app.get("/x").plain("X");
 
-        On.get("/req").serve(req -> {
+        app.get("/req").serve(req -> {
             req.response().plain("FOO");
             return req;
         });
 
-        On.get("/resp").serve((Resp resp) -> resp.plain("BAR"));
+        app.get("/resp").serve((Resp resp) -> resp.plain("BAR"));
 
-        On.get("/json").json(() -> 123);
+        app.get("/json").json(() -> 123);
 
-        On.get("/html").html(req -> "<p>hello</p>");
+        app.get("/html").html(req -> "<p>hello</p>");
 
-        On.get("/null").json(req -> null);
+        app.get("/null").json(req -> null);
 
         onlyGet("/x");
         onlyGet("/req");
@@ -96,9 +101,11 @@ public class HttpWrappersTest extends IsolatedIntegrationTest {
 
     @Test
     public void shouldThrowErrorsWithNonCatchingWrappers() {
+        App app = new App().start();
+
         My.wrappers(wrapper("wrap1"), wrapper("wrap2"));
 
-        On.get("/err").plain(() -> {
+        app.get("/err").plain(() -> {
             throw U.rte("Intentional error!");
         });
 
@@ -107,9 +114,11 @@ public class HttpWrappersTest extends IsolatedIntegrationTest {
 
     @Test
     public void shouldTransformErrorsWithCatchingWrappers() {
+        App app = new App().start();
+
         My.wrappers(wrapper("wrap1"), catchingWrapper("wrap2"));
 
-        On.get("/err").plain(() -> {
+        app.get("/err").plain(() -> {
             throw U.rte("Intentional error!");
         });
 

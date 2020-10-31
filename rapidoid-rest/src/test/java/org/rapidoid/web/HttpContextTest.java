@@ -26,7 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Contextual;
 import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.http.Req;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -34,7 +34,9 @@ public class HttpContextTest extends IsolatedIntegrationTest {
 
     @Test
     public void testContextIsInitialized() {
-        On.page("/a").html((Req req) -> {
+        App app = new App().start();
+
+        app.page("/a").html((Req req) -> {
             isTrue(Contextual.hasContext());
             isTrue(Contextual.request() == req);
             return Contextual.request().toString();
@@ -42,7 +44,7 @@ public class HttpContextTest extends IsolatedIntegrationTest {
 
         getAndPost("/a");
 
-        On.get("/b").json(() -> {
+        app.get("/b").json(() -> {
             isTrue(Contextual.hasContext());
             notNull(Contextual.request());
             return Contextual.request().toString();

@@ -25,33 +25,25 @@ import org.rapidoid.RapidoidModules;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.RapidoidInitializer;
-import org.rapidoid.config.Config;
-import org.rapidoid.http.HttpRoutes;
-import org.rapidoid.http.customize.Customization;
-import org.rapidoid.http.impl.RouteOptions;
-import org.rapidoid.log.Log;
+import org.rapidoid.http.Self;
+import org.rapidoid.job.Jobs;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Once;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Authors("Nikolche Mihajlovski")
 @Since("6.0.0")
 public class Apps extends RapidoidInitializer {
 
-    private static volatile AppStatus status = AppStatus.NOT_STARTED;
-
     private static final Once boot = new Once();
-
-    /**
-     * Initializes the app in atomic way.
-     * Won't serve requests until App.ready() is called.
-     */
-    public static synchronized void init(String[] args, String... extraArgs) {
-        AppStarter.startUp(args, extraArgs);
-
-        status = AppStatus.INITIALIZING;
-
-        boot();
-    }
 
     public synchronized static void boot() {
         if (boot.go()) {
@@ -61,51 +53,8 @@ public class Apps extends RapidoidInitializer {
         }
     }
 
-    public static synchronized void shutdown() {
-        status = AppStatus.STOPPING;
-
-        Setups.shutdownAll();
-
-        status = AppStatus.STOPPED;
+    public static synchronized void destroyAll() {
+        Setups.destroyAll();
     }
 
-    /**
-     * Completes the initialization and starts the application.
-     */
-    public static synchronized void ready() {
-        U.must(status == AppStatus.INITIALIZING, "App.init() must be called before App.ready()!");
-
-        onAppReady();
-    }
-
-    private static void onAppReady() {
-        status = AppStatus.RUNNING;
-//		IoC.ready();
-        Setups.ready();
-        Log.info("!Ready.");
-    }
-
-    public static AppStatus status() {
-        return status;
-    }
-
-    public static Setup setup() {
-        return Setups.main();
-    }
-
-    public static Config config() {
-        return On.setup().config();
-    }
-
-    public static Customization custom() {
-        return On.setup().custom();
-    }
-
-    public static HttpRoutes routes() {
-        return On.setup().routes();
-    }
-
-    public static RouteOptions defaults() {
-        return On.setup().defaults();
-    }
 }

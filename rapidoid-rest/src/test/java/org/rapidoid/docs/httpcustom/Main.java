@@ -21,22 +21,26 @@
 package org.rapidoid.docs.httpcustom;
 
 import org.rapidoid.config.Conf;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 public class Main {
 
     public static void main(String[] args) {
+        App app = new App(args);
+
         // first thing to do - initializing Rapidoid, without bootstrapping anything at the moment
 
         // customizing the server address and port - before the server is bootstrapped
-        On.address("0.0.0.0").port(9998);
+        app.address("0.0.0.0").port(9998);
 
         // fine-tuning the HTTP server
         Conf.HTTP.set("maxPipeline", 32);
         Conf.NET.set("bufSizeKB", 16);
 
         // continue with normal setup
-        On.get("/x").json("x");
+        app.get("/x").json("x");
+
+        app.start();
     }
 
 }

@@ -21,20 +21,24 @@
 package org.rapidoid.docs.httpreq1;
 
 import org.rapidoid.http.Req;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 public class Main {
 
     public static void main(String[] args) {
         /* Retrieving request info from the Req parameter */
 
-        On.get("/showVerb").json(Req::verb);
+        App app = new App(args);
 
-        On.get("/showPath").json(Req::path);
+        app.get("/showVerb").json(Req::verb);
 
-        On.get("/showUri").json(Req::uri);
+        app.get("/showPath").json(Req::path);
 
-        On.get("/showData").json((Req req) -> req.data());
+        app.get("/showUri").json(Req::uri);
+
+        app.get("/showData").json((Req req) -> req.data());
+
+        app.start();
     }
 
 }

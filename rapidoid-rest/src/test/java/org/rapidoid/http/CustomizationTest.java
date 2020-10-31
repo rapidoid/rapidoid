@@ -29,9 +29,7 @@ import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.JSON;
 import org.rapidoid.setup.App;
-import org.rapidoid.setup.Apps;
 import org.rapidoid.setup.My;
-import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
@@ -40,28 +38,30 @@ public class CustomizationTest extends IsolatedIntegrationTest {
 
     @Test
     public void testSerializationConfig() {
-        Apps.custom().jsonResponseRenderer((req, value, out) -> JSON.prettify(value, out));
+        App app = new App().start();
+        app.custom().jsonResponseRenderer((req, value, out) -> JSON.prettify(value, out));
 
-        On.get("/").json(() -> U.map("foo", 12, "bar", 345));
-        On.get("/a").json(() -> U.map("foo", 12, "bar", 345));
+        app.get("/").json(() -> U.map("foo", 12, "bar", 345));
+        app.get("/a").json(() -> U.map("foo", 12, "bar", 345));
 
         onlyGet("/");
 
-        Apps.custom().jsonResponseRenderer((req, value, out) -> JSON.stringify(value, out));
+        app.custom().jsonResponseRenderer((req, value, out) -> JSON.stringify(value, out));
 
         onlyGet("/a");
     }
 
     @Test
     public void testAuthConfig() {
-        Apps.custom().loginProvider((req, username, password) -> password.equals(username + "!"));
-        Apps.custom().rolesProvider((req, username) -> username.equals("root") ? U.set("admin") : U.set());
+        App app = new App().start();
+        app.custom().loginProvider((req, username, password) -> password.equals(username + "!"));
+        app.custom().rolesProvider((req, username) -> username.equals("root") ? U.set("admin") : U.set());
         // FIXME complete the test
     }
 
     @Test
     public void testBeanParamFactoryConfig() {
-        App app = new App();
+        App app = new App().start();
         app.beans(new Object() {
             @POST
             Object aa(Num num) {
@@ -69,7 +69,7 @@ public class CustomizationTest extends IsolatedIntegrationTest {
             }
         });
 
-        On.put("/bb").json((Num f) -> f);
+        app.put("/bb").json((Num f) -> f);
 
         // before customization
         onlyPost("/aa?id=1", U.map("the-name", "one"));
@@ -93,12 +93,14 @@ public class CustomizationTest extends IsolatedIntegrationTest {
 
     @Test
     public void customJsonBodyParser() {
+        App app = new App().start();
+
         My.jsonRequestBodyParser((req, body) -> {
             return U.map("uri", req.uri(), "parsed", (Object) JSON.parse(body));
         });
 
-        On.post("/abc").json(req -> req.data());
-        On.req(req -> req.posted());
+        app.post("/abc").json(req -> req.data());
+        app.req(req -> req.posted());
 
         postData("/abc?multipart", U.map("x", 13579, "foo", "bar"));
         postData("/abc2?multipart", U.map("x", 13579, "foo", "bar"));
@@ -109,7 +111,7 @@ public class CustomizationTest extends IsolatedIntegrationTest {
 
     @Test
     public void customErrorHandlerByType() {
-        App app = new App();
+        App app = new App().start();
 
         app.beans(new Object() {
             @GET

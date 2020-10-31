@@ -23,17 +23,6 @@ package org.rapidoid.net.tls;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
-//import sun.security.tools.keytool.CertAndKeyGen;
-//import sun.security.x509.X500Name;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.security.KeyStore;
-import java.security.cert.X509Certificate;
-import java.util.Date;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.4.0")

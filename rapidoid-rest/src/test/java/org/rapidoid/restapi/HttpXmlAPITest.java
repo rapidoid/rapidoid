@@ -25,8 +25,8 @@ import org.rapidoid.data.XML;
 import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.http.ReqHandler;
 import org.rapidoid.http.Self;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.My;
-import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
 import java.util.Map;
@@ -37,16 +37,20 @@ public class HttpXmlAPITest extends IsolatedIntegrationTest {
 
     @Test
     public void testXmlAPI() {
-        On.get("/inc/{x}").xml((ReqHandler) req -> U.num(req.param("x")) + 1);
+        App app = new App().start();
+
+        app.get("/inc/{x}").xml((ReqHandler) req -> U.num(req.param("x")) + 1);
 
         eq(Self.get("/inc/99").fetch(), "<Integer>100</Integer>");
     }
 
     @Test
     public void testXmlRequestBody() {
+        App app = new App().start();
+
         My.xmlMapper(XML.newMapper());
 
-        On.post("/echo").xml((ReqHandler) req -> {
+        app.post("/echo").xml((ReqHandler) req -> {
             Point point = new Point();
             point.coordinates = req.data();
             return point;

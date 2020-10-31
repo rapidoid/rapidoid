@@ -22,20 +22,24 @@ package org.rapidoid.docs.httpasync;
 
 import org.rapidoid.http.Req;
 import org.rapidoid.job.Jobs;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 import java.util.concurrent.TimeUnit;
 
 public class Main {
 
     public static void main(String[] args) {
+        App app = new App(args);
+
         /* Wait 1 second before returning a response */
 
-        On.get("/").json((Req req) -> Jobs.schedule(() -> {
+        app.get("/").json((Req req) -> Jobs.schedule(() -> {
 
             req.response().result("OK").done();
 
         }, 1, TimeUnit.SECONDS));
+
+        app.start();
     }
 
 }

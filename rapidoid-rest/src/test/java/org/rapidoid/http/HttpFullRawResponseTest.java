@@ -23,7 +23,7 @@ package org.rapidoid.http;
 import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 import org.rapidoid.util.Bufs;
 
 @Authors("Nikolche Mihajlovski")
@@ -36,14 +36,18 @@ public class HttpFullRawResponseTest extends IsolatedIntegrationTest {
 
     @Test
     public void testBytesRawResponse() {
-        On.get("/bytes").html(req -> req.response().raw(BYTES_RESPONSE.getBytes()));
+        App app = new App().start();
+
+        app.get("/bytes").html(req -> req.response().raw(BYTES_RESPONSE.getBytes()));
 
         onlyGet("/bytes");
     }
 
     @Test
     public void testByteBufferRawResponse() {
-        On.get("/buf").html((Req req, Resp resp) -> resp.raw(Bufs.buf(BUF_RESPONSE)));
+        App app = new App().start();
+
+        app.get("/buf").html((Req req, Resp resp) -> resp.raw(Bufs.buf(BUF_RESPONSE)));
 
         onlyGet("/buf");
     }

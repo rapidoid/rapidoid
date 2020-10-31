@@ -26,7 +26,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.net.util.NetUtil;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
@@ -35,7 +35,9 @@ public class InvalidUrlDecodedParamsTest extends IsolatedIntegrationTest {
 
     @Test
     public void testWithInvalidEncoding() {
-        On.get("/").json(req -> U.map("uri", req.uri(), "query", req.query(), "data", req.data()));
+        App app = new App().start();
+
+        app.get("/").json(req -> U.map("uri", req.uri(), "query", req.query(), "data", req.data()));
 
         String resp = NetUtil.connect("localhost", 8080, (in, reader, out) -> {
             out.writeBytes("GET /?a=[%A%]&b=bb!&c=%&d=%% HTTP/1.0\n\n");

@@ -50,7 +50,6 @@ public abstract class FiniteStateProtocol extends RapidoidThing implements Const
         ConnState state = ctx.state();
 
         if (state.n == STOP) {
-            Log.warn("Cannot process incoming data, the protocol has terminated!");
             return;
         }
 

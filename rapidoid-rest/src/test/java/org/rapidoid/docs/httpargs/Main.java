@@ -21,12 +21,16 @@
 package org.rapidoid.docs.httpargs;
 
 import org.rapidoid.http.Req;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 public class Main {
 
     public static void main(String[] args) {
-        On.get("/hi").json((Req req) -> req.data("name", "unknown"));
+        App app = new App(args);
+
+        app.get("/hi").json((Req req) -> req.data("name", "unknown"));
+
+        app.start();
     }
 
 }

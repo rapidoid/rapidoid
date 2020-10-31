@@ -29,7 +29,7 @@ import org.rapidoid.ctx.Contextual;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.security.Role;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 import org.rapidoid.test.TestCtx;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -46,17 +46,18 @@ public class HttpLoginTest extends IsolatedIntegrationTest {
     @Test
     public void testLogin() {
         Log.setLogLevel(LogLevel.ERROR);
+        App app = new App().start();
 
-        On.get("/user").json(() -> U.list(Contextual.username(), Contextual.roles()));
+        app.get("/user").json(() -> U.list(Contextual.username(), Contextual.roles()));
 
-        On.get("/profile").roles(Role.LOGGED_IN).json(Contextual::username);
+        app.get("/profile").roles(Role.LOGGED_IN).json(Contextual::username);
 
-        On.post("/mylogin").json((Resp resp, String user, String pass) -> {
+        app.post("/mylogin").json((Resp resp, String user, String pass) -> {
             boolean success = resp.login(user, pass);
             return U.list(success, Contextual.username(), Contextual.roles());
         });
 
-        On.post("/mylogout").json((Resp resp, String user, String pass) -> {
+        app.post("/mylogout").json((Resp resp, String user, String pass) -> {
             resp.logout();
             return U.list(Contextual.username(), Contextual.roles());
         });

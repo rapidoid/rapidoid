@@ -46,11 +46,11 @@ public class ExpirationCrawlerThread extends RapidoidThread {
     }
 
     public void register(Iterable<? extends Expiring> collection) {
-        collections.add(collection);
+//        collections.add(collection);
     }
 
     public void deregister(Iterable<? extends Expiring> collection) {
-        collections.remove(collection);
+//        collections.remove(collection);
     }
 
     @Override

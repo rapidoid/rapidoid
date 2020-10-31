@@ -26,7 +26,6 @@ import org.rapidoid.annotation.Param;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
 import org.rapidoid.setup.App;
-import org.rapidoid.setup.Apps;
 
 public class Main {
 
@@ -51,6 +50,8 @@ public class Main {
             }
 
         });
+
+        app.start();
     }
 
 }

@@ -21,17 +21,21 @@
 package org.rapidoid.docs.httpcustomauth;
 
 import org.rapidoid.http.Self;
+import org.rapidoid.setup.App;
 import org.rapidoid.setup.My;
-import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Tokens;
 
 public class Main {
 
     public static void main(String[] args) {
+        App app = new App(args);
+
         My.rolesProvider((req, username) -> username.equals("bob") ? U.set("manager") : U.set());
 
-        On.get("/hey").roles("manager").json(() -> U.map("msg", "ok"));
+        app.get("/hey").roles("manager").json(() -> U.map("msg", "ok"));
+
+        app.start();
 
         // generate a token
         String token = Tokens.serialize(U.map("_user", "bob"));

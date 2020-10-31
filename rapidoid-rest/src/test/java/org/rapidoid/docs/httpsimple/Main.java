@@ -20,14 +20,18 @@
 
 package org.rapidoid.docs.httpsimple;
 
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 public class Main {
 
     public static void main(String[] args) {
+        App app = new App(args);
+
         /* On [GET /size] return the length of the "msg" parameter */
 
-        On.get("/size").json((String msg) -> msg.length());
+        app.get("/size").json((String msg) -> msg.length());
+
+        app.start();
     }
 
 }

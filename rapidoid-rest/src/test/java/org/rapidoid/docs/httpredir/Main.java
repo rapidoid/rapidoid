@@ -21,13 +21,17 @@
 package org.rapidoid.docs.httpredir;
 
 import org.rapidoid.http.Req;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 public class Main {
 
     public static void main(String[] args) {
-        On.get("/").html((Req x) -> x.response().redirect("/hi"));
-        On.get("/hi").html("Hi!");
+        App app = new App(args);
+
+        app.get("/").html((Req x) -> x.response().redirect("/hi"));
+        app.get("/hi").html("Hi!");
+
+        app.start();
     }
 
 }

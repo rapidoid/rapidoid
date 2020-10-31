@@ -32,7 +32,7 @@ public class HttpRolesTest extends IsolatedIntegrationTest {
 
     @Test
     public void testRoles() {
-        App app = new App();
+        App app = new App().start();
         app.beans(new Ctrl());
 
         app.defaults().roles("aa", "bb");
@@ -43,7 +43,7 @@ public class HttpRolesTest extends IsolatedIntegrationTest {
         onlyGet("/a");
         onlyGet("/ok");
 
-        verifyRoutes();
+        verifyRoutes(app);
     }
 
 }

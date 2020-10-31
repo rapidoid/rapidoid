@@ -20,19 +20,23 @@
 
 package org.rapidoid.docs.httpgeneric;
 
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 import org.rapidoid.u.U;
 
 public class Main {
 
     public static void main(String[] args) {
+        App app = new App(args);
+
         /* Generic handlers match any request (in the declaration order) */
 
-        On.req(req -> req.data().isEmpty() ? "Simple: " + req.uri() : null);
+        app.req(req -> req.data().isEmpty() ? "Simple: " + req.uri() : null);
 
         /* The next handler is executed if the previous returns [NOT FOUND] */
 
-        On.req(req -> U.list(req.verb(), req.uri(), req.data()));
+        app.req(req -> U.list(req.verb(), req.uri(), req.data()));
+
+        app.start();
     }
 
 }

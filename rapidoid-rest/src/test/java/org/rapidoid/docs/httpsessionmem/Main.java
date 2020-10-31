@@ -20,16 +20,20 @@
 
 package org.rapidoid.docs.httpsessionmem;
 
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 public class Main {
 
     public static void main(String[] args) {
-        On.req(req -> {
+        App app = new App(args);
+
+        app.req(req -> {
             int counter = req.session("n", 0) + 1;
             req.session().put("n", counter);
             return counter;
         });
+
+        app.start();
     }
 
 }

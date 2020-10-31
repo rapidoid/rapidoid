@@ -26,7 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.http.IsolatedIntegrationTest;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -34,6 +34,8 @@ public class LambdaHandlerTest extends IsolatedIntegrationTest {
 
     @Test
     public void testLambdaHandlerWithAnonymousClass() {
+        App app = new App().start();
+
         TwoParamLambda<Resp, Req, Integer> oneParamLambda = new TwoParamLambda<Resp, Req, Integer>() {
             @Override
             public Resp execute(Req param, Integer x) {
@@ -41,16 +43,18 @@ public class LambdaHandlerTest extends IsolatedIntegrationTest {
             }
         };
 
-        On.get("/test").json(oneParamLambda);
+        app.get("/test").json(oneParamLambda);
 
         onlyGet("/test?x=123");
     }
 
     @Test
     public void testLambdaHandlerWithLambda() {
+        App app = new App().start();
+
         TwoParamLambda<Resp, Req, Integer> oneParamLambda = (Req param, Integer y) -> param.response().result("y=" + y);
 
-        On.get("/test").html(oneParamLambda);
+        app.get("/test").html(oneParamLambda);
 
         onlyGet("/test?y=456");
     }

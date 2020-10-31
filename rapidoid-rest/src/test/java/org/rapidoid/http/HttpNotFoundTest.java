@@ -23,7 +23,7 @@ package org.rapidoid.http;
 import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.2.0")
@@ -31,7 +31,9 @@ public class HttpNotFoundTest extends IsolatedIntegrationTest {
 
     @Test
     public void testThrowingNotFound() {
-        On.get("/foo").json(req -> {
+        App app = new App().start();
+
+        app.get("/foo").json(req -> {
             if (req.params().isEmpty()) {
                 throw new NotFound();
             }
@@ -46,7 +48,9 @@ public class HttpNotFoundTest extends IsolatedIntegrationTest {
 
     @Test
     public void testReturningNullAsNotFound() {
-        On.post("/bar").html(req -> {
+        App app = new App().start();
+
+        app.post("/bar").html(req -> {
             if (req.params().isEmpty()) {
                 return null;
             }

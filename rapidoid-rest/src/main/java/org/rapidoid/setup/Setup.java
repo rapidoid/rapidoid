@@ -91,8 +91,6 @@ public interface Setup {
 
     Setup deregister(Object... controllers);
 
-    void reload();
-
     Config config();
 
     Customization custom();

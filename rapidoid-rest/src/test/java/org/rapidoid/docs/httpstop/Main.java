@@ -20,12 +20,17 @@
 
 package org.rapidoid.docs.httpstop;
 
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 public class Main {
 
     public static void main(String[] args) {
-        On.setup().shutdown();
+        App app = new App(args);
+        app.get("/").plain("hi!");
+        app.start();
+
+        // eventually, shutdown
+        app.shutdown();
     }
 
 }

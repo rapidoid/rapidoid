@@ -27,7 +27,7 @@ import org.rapidoid.concurrent.Promise;
 import org.rapidoid.concurrent.Promises;
 import org.rapidoid.http.*;
 import org.rapidoid.job.Jobs;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 import org.rapidoid.u.U;
 
 import java.util.concurrent.TimeUnit;
@@ -40,13 +40,15 @@ public class DynamicClientTest extends IsolatedIntegrationTest {
 
     @Test
     public void testDynamic() {
-        On.get("/test-abc").html("abc-ok");
+        App app = new App().start();
 
-        On.get("/nums").managed(false).contentType(MediaType.JSON).serve("[1, 2, 3]");
+        app.get("/test-abc").html("abc-ok");
 
-        On.get("/size").json((ReqHandler) req -> req.param("s").length());
+        app.get("/nums").managed(false).contentType(MediaType.JSON).serve("[1, 2, 3]");
 
-        On.post("/echo").json((ReqHandler) req -> {
+        app.get("/size").json((ReqHandler) req -> req.param("s").length());
+
+        app.post("/echo").json((ReqHandler) req -> {
             req.async();
 
             Jobs.schedule(() -> {

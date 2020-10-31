@@ -23,7 +23,7 @@ package org.rapidoid.http;
 import org.junit.jupiter.api.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -31,10 +31,12 @@ public class HttpPathMatchingTest extends IsolatedIntegrationTest {
 
     @Test
     public void testHttpPathMatching() {
-        On.get("/movies/{id}").json(Req::params);
-        On.post("/users/{x}/").json(Req::params);
-        On.put("/books/{__}/abc").json(Req::params);
-        On.delete("/tags/{_f}/ref{n:\\d+}/").json(Req::params);
+        App app = new App().start();
+
+        app.get("/movies/{id}").json(Req::params);
+        app.post("/users/{x}/").json(Req::params);
+        app.put("/books/{__}/abc").json(Req::params);
+        app.delete("/tags/{_f}/ref{n:\\d+}/").json(Req::params);
 
         onlyGet("/movies/123");
         onlyGet("/movies/1/");

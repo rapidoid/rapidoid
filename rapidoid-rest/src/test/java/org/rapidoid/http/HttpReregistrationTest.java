@@ -26,8 +26,6 @@ import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.setup.App;
-import org.rapidoid.setup.Apps;
-import org.rapidoid.setup.On;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -38,28 +36,28 @@ public class HttpReregistrationTest extends IsolatedIntegrationTest {
         Object ctrl1 = ctrl1("next");
         Object ctrl2 = ctrl2();
 
-        App app = new App();
+        App app = new App().start();
 
         notFound("/inc");
         notFound("/dec");
 
         app.beans(ctrl1);
-        verifyRoutes("ctrl1");
+        verifyRoutes(app, "ctrl1");
 
         onlyGet("/inc?x=5");
         notFound("/dec");
 
         app.setup().deregister(ctrl1);
-        verifyNoRoutes();
+        verifyNoRoutes(app);
 
         app.beans(ctrl2);
-        verifyRoutes("ctrl2");
+        verifyRoutes(app, "ctrl2");
 
         onlyPost("/dec?x=12");
         notFound("/inc");
 
         app.setup().deregister(ctrl2);
-        verifyNoRoutes();
+        verifyNoRoutes(app);
 
         notFound("/inc");
         notFound("/dec");
@@ -67,29 +65,29 @@ public class HttpReregistrationTest extends IsolatedIntegrationTest {
 
     @Test
     public void testControllerReregistration() {
+        App app = new App().start();
+
         notFound("/inc");
         notFound("/dec");
 
-        App app = new App();
-
         app.beans(ctrl1("nextA"));
-        verifyRoutes("ctrl1");
+        verifyRoutes(app, "ctrl1");
 
         onlyGet("/inc?x=100");
 
         app.beans(ctrl1("nextB"));
-        verifyRoutes("ctrl1");
+        verifyRoutes(app, "ctrl1");
 
         onlyGet("/inc?x=200");
 
         app.beans(ctrl1("nextC"));
-        verifyRoutes("ctrl1");
+        verifyRoutes(app, "ctrl1");
 
         onlyGet("/inc?x=300");
 
         // can deregister with other instance, only the class matters for deregistration, not the instance
         app.setup().deregister(ctrl1("invisible"));
-        verifyNoRoutes();
+        verifyNoRoutes(app);
 
         notFound("/inc");
         notFound("/dec");
@@ -97,15 +95,17 @@ public class HttpReregistrationTest extends IsolatedIntegrationTest {
 
     @Test
     public void testLambdaDeregistration() {
+        App app = new App().start();
+
         notFound("/foo");
 
-        On.page("/foo").html((Req req, Integer x) -> req.data() + ":" + x);
-        verifyRoutes("foo");
+        app.page("/foo").html((Req req, Integer x) -> req.data() + ":" + x);
+        verifyRoutes(app, "foo");
 
         getAndPost("/foo?a=12&x=3");
 
-        Apps.setup().deregister("GET,POST", "/foo");
-        verifyNoRoutes();
+        app.setup().deregister("GET,POST", "/foo");
+        verifyNoRoutes(app);
 
         notFound("/foo");
     }

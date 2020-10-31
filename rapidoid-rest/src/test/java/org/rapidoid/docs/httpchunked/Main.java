@@ -21,12 +21,14 @@
 package org.rapidoid.docs.httpchunked;
 
 import org.rapidoid.job.Jobs;
-import org.rapidoid.setup.On;
+import org.rapidoid.setup.App;
 
 public class Main {
 
     public static void main(String[] args) {
-        On.get("/hello").plain((req, resp) -> {
+        App app = new App(args);
+
+        app.get("/hello").plain((req, resp) -> {
 
             req.async(); // mark asynchronous request processing
 
@@ -41,6 +43,8 @@ public class Main {
 
             return resp;
         });
+
+        app.start();
     }
 
 }

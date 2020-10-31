@@ -32,7 +32,7 @@ public class HttpMultiControllerTest extends IsolatedIntegrationTest {
 
     @Test
     public void testSequentialControllerRegistration() {
-        App app = new App();
+        App app = new App().start();
 
         // this will be overwritten by the third
         app.beans(new Object() {
