@@ -124,6 +124,7 @@
                 <configuration>
                     <argLine>${jdk9.modules} -Xms512m -Xmx1024m -Dfile.encoding=${project.build.sourceEncoding}
                     </argLine>
+                	<forkCount>1.5C</forkCount>
                 </configuration>
                 <dependencies>
                     <dependency>
