@@ -65,7 +65,7 @@
                 <version>2.19.1</version>
                 <configuration>
                     <argLine>-Xms512m -Xmx1024m</argLine>
-                    <forkCount>1</forkCount>
+                    <forkCount>1.5C</forkCount>
                 </configuration>
                 <dependencies>
                     <dependency>
